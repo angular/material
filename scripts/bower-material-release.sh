@@ -21,12 +21,33 @@ function run {
 
   echo "-- Copying in build files..."
 
+  rm -rf bower-material/core
+  rm -rf bower-material/modules/css
+  rm -rf bower-material/modules/scss
+  rm -rf bower-material/layouts
+
   cp -Rf dist/* bower-material/
 
   cd bower-material
-  # remove stale layout files; newer ones are in `dist/layouts/`
-  rm ./angular-material.layouts.css
-  rm ./angular-material.layouts.min.css
+
+  # Remove stale files from older builds
+  rm -f ./angular-material.layouts.css
+  rm -f ./angular-material.layouts.min.css
+  rm -rf ./demos
+  rm -rf ./core
+
+  # Restructure release files
+  mkdir -p ./modules/layouts ./modules/scss
+
+  # Repackage the raw SCSS & Clone the layout CSS
+  cp ./angular-material.scss ./modules/scss/
+  cp ./layouts/*.scss ./modules/scss/
+
+  cp ./layouts/*.css ./modules/layouts/
+
+  # Cleanup
+  rm -f ./angular-material.scss
+  rm -rf ./layouts/
 
 
   echo "-- Committing and tagging..."

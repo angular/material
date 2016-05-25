@@ -33,6 +33,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     .when('/getting-started', {
       templateUrl: 'partials/getting-started.tmpl.html'
     })
+    .when('/contributors', {
+      templateUrl: 'partials/contributors.tmpl.html'
+    })
     .when('/license', {
       templateUrl: 'partials/license.tmpl.html'
     });
@@ -286,12 +289,22 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       pages: apiDocs.service.sort(sortByName),
       type: 'toggle'
     },{
+      name: 'Types',
+      pages: apiDocs.type.sort(sortByName),
+      type: 'toggle'
+    },{
       name: 'Directives',
       pages: apiDocs.directive.sort(sortByName),
       type: 'toggle'
     }]
   });
 
+  sections.push( {
+        name: 'Contributors',
+        url: 'contributors',
+        type: 'link'
+      } );
+      
   sections.push({
     name: 'License',
     url:  'license',
@@ -644,9 +657,16 @@ function($scope, $rootScope) {
 
 
 .controller('GuideCtrl', [
-  '$rootScope',
-function($rootScope) {
+  '$rootScope', '$http',
+function($rootScope, $http) {
   $rootScope.currentComponent = $rootScope.currentDoc = null;
+  if ( !$rootScope.contributors ) {
+    $http
+      .get('./contributors.json')
+      .then(function(response) {
+        $rootScope.github = response.data;
+      })
+  }
 }])
 
 .controller('LayoutCtrl', [
@@ -702,9 +722,8 @@ function($scope, doc, component, $rootScope) {
   '$scope',
   'component',
   'demos',
-  '$http',
-  '$templateCache',
-function($rootScope, $scope, component, demos, $http, $templateCache) {
+  '$templateRequest',
+function($rootScope, $scope, component, demos, $templateRequest) {
   $rootScope.currentComponent = component;
   $rootScope.currentDoc = null;
 
@@ -717,9 +736,9 @@ function($rootScope, $scope, component, demos, $http, $templateCache) {
       .concat(demo.css || [])
       .concat(demo.html || []);
     files.forEach(function(file) {
-      file.httpPromise =$http.get(file.outputPath, {cache: $templateCache})
+      file.httpPromise = $templateRequest(file.outputPath)
         .then(function(response) {
-          file.contents = response.data
+          file.contents = response
             .replace('<head/>', '');
           return file.contents;
         });

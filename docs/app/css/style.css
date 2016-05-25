@@ -34,11 +34,25 @@ body.docs-body {
   padding: 16px 32px;
   width: 100%;
 
-  text-align: left;
+  text-align: center;
   font-size: small;
   border-top: 1px solid #ddd;
 }
 
+
+.training_link {
+  color: rgb(255,82,82);
+  text-transform: none;
+}
+
+.training_site {
+  text-transform: none;
+}
+
+.training_info {
+  opacity:0.4;
+  text-transform: none;
+}
 /***************
  * TYPE DEFAULTS
  ***************/
@@ -910,4 +924,13 @@ table.md-api-table  tr  td:first-child {
     color: rgb(1, 57, 114);
     background-color: rgba(156, 204, 101,0.4);
     padding: 20px;
+}
+
+.contributor_tables {
+  padding-left: 25px;
+}
+
+.contributor_tables > table {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }

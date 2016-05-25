@@ -209,6 +209,24 @@ describe('util', function() {
       });
     });
 
+    describe('disableScrollAround', function() {
+      it('should prevent scrolling of the passed element', inject(function($mdUtil) {
+        var element = angular.element('<div style="height: 2000px">');
+        document.body.appendChild(element[0]);
+
+        var enableScrolling = $mdUtil.disableScrollAround(element);
+
+        window.scrollTo(0, 1000);
+
+        expect(window.pageYOffset).toBe(0);
+
+        // Restore the scrolling.
+        enableScrolling();
+        window.scrollTo(0, 0);
+        document.body.removeChild(element[0]);
+      }));
+    });
+
     describe('nextTick', function() {
       it('should combine multiple calls into a single digest', inject(function($mdUtil, $rootScope, $timeout) {
         var digestWatchFn = jasmine.createSpy('watchFn');
@@ -229,15 +247,76 @@ describe('util', function() {
         //-- but callback is still called more
         expect(callback.calls.count()).toBe(10);
       }));
+
       it('should return a timeout', inject(function($mdUtil) {
         var timeout = $mdUtil.nextTick(angular.noop);
         expect(timeout.$$timeoutId).toBeOfType('number');
       }));
+
       it('should return the same timeout for multiple calls', inject(function($mdUtil) {
         var a = $mdUtil.nextTick(angular.noop),
           b = $mdUtil.nextTick(angular.noop);
         expect(a).toBe(b);
       }));
+
+      it('should use scope argument and `scope.$$destroyed` to skip the callback', inject(function($mdUtil) {
+        var callback = jasmine.createSpy('callback');
+        var scope = $rootScope.$new(true);
+
+        $mdUtil.nextTick(callback, false, scope);
+        scope.$destroy();
+
+        flush(function(){
+          expect(callback).not.toHaveBeenCalled();
+        });
+      }));
+
+      it('should only skip callbacks of scopes which were destroyed', inject(function($mdUtil) {
+        var callback1 = jasmine.createSpy('callback1');
+        var callback2 = jasmine.createSpy('callback2');
+        var scope1 = $rootScope.$new(true);
+        var scope2 = $rootScope.$new(true);
+
+        $mdUtil.nextTick(callback1, false, scope1);
+        $mdUtil.nextTick(callback2, false, scope2);
+        scope1.$destroy();
+
+        flush(function() {
+          expect(callback1).not.toHaveBeenCalled();
+          expect(callback2).toHaveBeenCalled();
+        });
+      }));
+
+      it('should skip callback for destroyed scopes even if first scope registered is undefined', inject(function($mdUtil) {
+        var callback1 = jasmine.createSpy('callback1');
+        var callback2 = jasmine.createSpy('callback2');
+        var scope = $rootScope.$new(true);
+
+        $mdUtil.nextTick(callback1, false);  // no scope
+        $mdUtil.nextTick(callback2, false, scope);
+        scope.$destroy();
+
+        flush(function() {
+          expect(callback1).toHaveBeenCalled();
+          expect(callback2).not.toHaveBeenCalled();
+        });
+      }));
+
+      it('should use scope argument and `!scope.$$destroyed` to invoke the callback', inject(function($mdUtil) {
+        var callback = jasmine.createSpy('callback');
+        var scope = $rootScope.$new(true);
+
+        $mdUtil.nextTick(callback, false, scope);
+        flush(function(){
+          expect(callback).toHaveBeenCalled();
+        });
+      }));
+
+      function flush(expectation) {
+        $rootScope.$digest();
+        $timeout.flush();
+        expectation && expectation();
+      }
     });
 
     describe('hasComputedStyle', function () {
@@ -414,30 +493,6 @@ describe('util', function() {
         }));
       });
     });
-
-    it('should use scope argument and `scope.$$destroyed` to skip the callback', inject(function($mdUtil) {
-      var callBackUsed, callback = function(){ callBackUsed = true; };
-      var scope = $rootScope.$new(true);
-
-      $mdUtil.nextTick(callback,false,scope);
-      scope.$destroy();
-
-      flush(function(){ expect( callBackUsed ).toBeUndefined(); });
-    }));
-
-    it('should use scope argument and `!scope.$$destroyed` to invoke the callback', inject(function($mdUtil) {
-       var callBackUsed, callback = function(){ callBackUsed = true; };
-       var scope = $rootScope.$new(true);
-
-       $mdUtil.nextTick(callback,false,scope);
-       flush(function(){ expect( callBackUsed ).toBe(true); });
-     }));
-
-    function flush(expectation) {
-      $rootScope.$digest();
-      $timeout.flush();
-      expectation && expectation();
-    }
   });
 
   describe('processTemplate', function() {

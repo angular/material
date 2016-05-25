@@ -98,6 +98,19 @@ describe('mdProgressCircular', function() {
     expect(path.css('stroke-width')).toBe(diameter / ratio + 'px');
   });
 
+  it('should hide the element if is disabled', function() {
+    var element = buildIndicator(
+      '<md-progress-circular disabled></md-progress-circular>'
+    );
+
+    expect(element.hasClass('_md-progress-circular-disabled')).toBe(true);
+  });
+
+  it('should set the transform origin in all dimensions', function() {
+    var svg = buildIndicator('<md-progress-circular md-diameter="42px"></md-progress-circular>').find('svg').eq(0);
+    expect(svg.css('transform-origin')).toBe('21px 21px 21px');
+  });
+
   /**
    * Build a progressCircular
    */
@@ -108,4 +121,20 @@ describe('mdProgressCircular', function() {
     return element;
   }
 
+});
+
+describe('mdProgressCircularProvider', function() {
+    beforeEach(function() {
+        module('material.components.progressCircular', function($mdProgressCircularProvider) {
+          $mdProgressCircularProvider.configure({
+            progressSize: 1337,
+            strokeWidth: 42
+          });
+        });
+    });
+
+    it('should allow for the default options to be configured', inject(function($mdProgressCircular) {
+        expect($mdProgressCircular.progressSize).toBe(1337);
+        expect($mdProgressCircular.strokeWidth).toBe(42);
+    }));
 });

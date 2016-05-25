@@ -15,7 +15,6 @@
  * @property {number} durationIndeterminate Duration of the indeterminate animation.
  * @property {number} startIndeterminate Indeterminate animation start point.
  * @property {number} endIndeterminate Indeterminate animation end point.
- * @property {number} rotationDurationIndeterminate Duration of the indeterminate rotating animation.
  * @property {function} easeFnIndeterminate Easing function to be used when animating
  * between the indeterminate values.
  *
@@ -50,7 +49,6 @@ function MdProgressCircularProvider() {
     durationIndeterminate: 500,
     startIndeterminate: 3,
     endIndeterminate: 80,
-    rotationDurationIndeterminate: 2900,
     easeFnIndeterminate: materialEase,
 
     easingPresets: {

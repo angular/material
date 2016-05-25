@@ -24,6 +24,13 @@ describe('$mdDialog', function() {
     };
   }));
 
+  describe('md-dialog', function() {
+    it('should have `._md` class indicator', inject(function($compile, $rootScope) {
+      var element = $compile('<md-dialog></md-dialog>')($rootScope.$new());
+      expect(element.hasClass('_md')).toBe(true);
+    }));
+  });
+
   describe('#alert()', function() {
     hasConfigurationMethods('alert', [
       'title', 'htmlContent', 'textContent', 'ariaLabel',
@@ -159,6 +166,27 @@ describe('$mdDialog', function() {
       var content = parent[0].querySelector('md-dialog-content');
 
       expect(content.id).toBe('dialogContent_' + dialog[0].id);
+    }));
+
+    it('should not clobber the id from `md-dialog` when there is no content', inject(function ($mdDialog, $rootScope, $document) {
+      jasmine.mockElementFocus(this);
+
+      var parent = angular.element('<div>');
+
+      $mdDialog.show(
+        $mdDialog.alert({
+          template: '<md-dialog id="demoid">' +
+          '<p>Muppets are the best</p>' +
+          '</md-dialog>',
+          parent: parent
+        })
+      );
+
+      runAnimation();
+
+      var dialog = parent.find('md-dialog');
+
+      expect(dialog[0].id).toBe('demoid');
     }));
 
     it('should apply a prefixed id for `md-dialog-content`', inject(function ($mdDialog, $rootScope, $document) {
@@ -790,7 +818,7 @@ describe('$mdDialog', function() {
 
       it('should not wrap raw content with md-dialog', inject(function($mdDialog, $rootScope) {
 
-        var template = '<div id="rawContent">Hello</div>';
+        var template = '<md-dialog id="rawContent">Hello</md-dialog>';
         var parent = angular.element('<div>');
 
         $mdDialog.show({
@@ -802,7 +830,7 @@ describe('$mdDialog', function() {
         $rootScope.$apply();
 
         var container = parent[0].querySelectorAll('md-dialog');
-        expect(container.length).toBe(0);
+        expect(container.length).toBe(1); // Should not have two dialogs; but one is required
       }));
     });
 
@@ -1119,6 +1147,101 @@ describe('$mdDialog', function() {
       expect(parent[0].querySelectorAll('md-dialog.one').length).toBe(0);
       expect(parent[0].querySelectorAll('md-dialog.two').length).toBe(0);
     }));
+
+    describe('contentElement', function() {
+      var $mdDialog, $rootScope, $compile, $timeout;
+
+      beforeEach(inject(function($injector) {
+        $mdDialog = $injector.get('$mdDialog');
+        $rootScope = $injector.get('$rootScope');
+        $compile = $injector.get('$compile');
+        $timeout = $injector.get('$timeout');
+      }));
+
+      it('should correctly move the contentElement', function() {
+        var contentElement = $compile(
+          '<div class="md-dialog-container">' +
+            '<md-dialog>Dialog</md-dialog>' +
+          '</div>'
+        )($rootScope);
+        var parentEl = angular.element('<div>');
+
+        // Add the contentElement to the DOM.
+        document.body.appendChild(contentElement[0]);
+
+        $mdDialog.show({
+          contentElement: contentElement,
+          parent: parentEl,
+          escapeToClose: true
+        });
+
+        $rootScope.$apply();
+        runAnimation();
+
+        expect(contentElement[0].parentNode).toBe(parentEl[0]);
+
+        $mdDialog.hide();
+        runAnimation();
+
+        expect(contentElement[0].parentNode).toBe(document.body);
+
+        document.body.removeChild(contentElement[0]);
+      });
+
+      it('should correctly query for a contentElement', function() {
+        var contentElement = $compile(
+          '<div class="md-dialog-container" id="myId">' +
+            '<md-dialog>Dialog</md-dialog>' +
+          '</div>'
+        )($rootScope);
+        var parentEl = angular.element('<div>');
+
+        // Add the contentElement to the DOM.
+        document.body.appendChild(contentElement[0]);
+
+        $mdDialog.show({
+          contentElement: '#myId',
+          parent: parentEl,
+          escapeToClose: true
+        });
+
+        $rootScope.$apply();
+        runAnimation();
+
+        expect(contentElement[0].parentNode).toBe(parentEl[0]);
+
+        $mdDialog.hide();
+        runAnimation();
+
+        expect(contentElement[0].parentNode).toBe(document.body);
+
+        document.body.removeChild(contentElement[0]);
+      });
+
+      it('should also work with a virtual pre-compiled element', function() {
+        var contentElement = $compile(
+          '<div class="md-dialog-container" id="myId">' +
+          '<md-dialog>Dialog</md-dialog>' +
+          '</div>'
+        )($rootScope);
+        var parentEl = angular.element('<div>');
+
+        $mdDialog.show({
+          contentElement: contentElement,
+          parent: parentEl,
+          escapeToClose: true
+        });
+
+        $rootScope.$apply();
+        runAnimation();
+
+        expect(contentElement[0].parentNode).toBe(parentEl[0]);
+
+        $mdDialog.hide();
+        runAnimation();
+      });
+
+    });
 
     it('should have the dialog role', inject(function($mdDialog, $rootScope) {
       var template = '<md-dialog>Hello</md-dialog>';

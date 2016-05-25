@@ -110,7 +110,7 @@ function SliderDirective($mdTheming) {
 ```
 
 *  With the exceptions listed in this document, follow the rules contained in
-   [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
+   [Google's JavaScript Style Guide](https://google.github.io/styleguide/javascriptguide.xml).
 *  All components must have unique, understandable module names; prefixed with
    'material.components.'.
 *  All components must depend upon the 'material.core' module.

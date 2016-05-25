@@ -25,16 +25,11 @@
     }
   }
 
-  // The CSS class `md-focus` is used instead of real browser focus for accessibility reasons
-  // (the root md-calendar holds browser focus).
-  .md-calendar-date.md-focus {
-    .md-calendar-date-selection-indicator {
-      background: '{{background-hue-1}}';
+  .md-calendar-date-selection-indicator {
+    .md-calendar-date.md-focus &,
+    &:hover {
+      background: '{{background-300}}';
     }
-  }
-
-  .md-calendar-date-selection-indicator:hover {
-    background: '{{background-300}}';
   }
 
   // Selected style goes after hover and focus so that it takes priority.

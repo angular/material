@@ -261,6 +261,36 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should not show a loading progress when the items object is invalid', inject(function() {
+      var scope = createScope(null, {
+        match: function() {
+          // Return an invalid object, which is not an array, neither a promise.
+          return {}
+        }
+      });
+
+      var template =
+        '<md-autocomplete ' +
+        'md-input-id="{{inputId}}" ' +
+        'md-selected-item="selectedItem" ' +
+        'md-search-text="searchText" ' +
+        'md-items="item in match(searchText)" ' +
+        'md-item-text="item.display" ' +
+        'tabindex="3"' +
+        'placeholder="placeholder">' +
+        '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      scope.$apply('searchText = "test"');
+
+      expect(ctrl.loading).toBe(false);
+
+      element.remove();
+    }));
+
     it('should clear value when hitting escape', inject(function($mdConstant, $timeout) {
       var scope = createScope();
       var template = '\
@@ -287,6 +317,26 @@ describe('<md-autocomplete>', function() {
       });
 
       expect(scope.searchText).toBe('');
+
+      element.remove();
+    }));
+
+    it('should not show the progressbar when hitting escape on an empty input', inject(function($mdConstant, $timeout) {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)">\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      $timeout.flush();
+      scope.$apply(function() {
+        ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+      });
+
+      expect(element.find('md-progress-linear').length).toBe(0);
 
       element.remove();
     }));

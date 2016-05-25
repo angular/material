@@ -202,6 +202,40 @@ describe('$mdThemingProvider', function() {
       ).join('')).toContain('.md-test-theme {}');
     });
 
+    describe('background palette', function() {
+
+      function getRgbaBackgroundHue(hue) {
+        return themingProvider._rgba(themingProvider._PALETTES.testPalette[hue].value);
+      }
+
+      it('should parse for a light theme probably', function() {
+        testTheme.dark(false);
+
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('50') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-1}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A100') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-2}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('100') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-3}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('300') + ';');
+      });
+
+      it('should parse for a dark theme probably', function() {
+        testTheme.dark(true);
+
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A400') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-1}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('800') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-2}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('900') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-3}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A200') + ';');
+      });
+
+    });
+
     describe('parses foreground text and shadow', function() {
       it('for a light theme', function() {
         testTheme.dark(false);

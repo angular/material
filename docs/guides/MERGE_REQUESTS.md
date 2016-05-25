@@ -19,7 +19,7 @@ Then run the following to bring all of the commits from that pull request
 in on top of your branch's local history:
 
 ```sh
-curl https://github.com/angular/material/pull/143.patch | git am -3
+curl -L https://github.com/angular/material/pull/143.patch | git am -3
 ```
 
 If there are any conflicts, go to the [Dealing with conflicts](#conflicts) section below.
@@ -152,7 +152,7 @@ For example:
 > ```
 
 For more examples of how to format commit messages, see
-[the guidelines in CONTRIBUTING.md](../../CONTRIBUTING.md#-git-commit-guidelines).
+[the guidelines in CONTRIBUTING.md](../../.github/CONTRIBUTING.md#-git-commit-guidelines).
 
 ```sh
 git push origin master

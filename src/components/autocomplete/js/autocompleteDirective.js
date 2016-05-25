@@ -121,8 +121,8 @@ angular
  * </form>
  * </hljs>
  *
- * In this example, our code utilizes `md-item-template` and `md-not-found` to specify the
- *     different parts that make up our component.
+ * In this example, our code utilizes `md-item-template` and `ng-messages` to specify
+ *     input validation for the field.
  */
 
 function MdAutocomplete () {
@@ -176,8 +176,7 @@ function MdAutocomplete () {
       return '\
         <md-autocomplete-wrap\
             layout="row"\
-            ng-class="{ \'md-whiteframe-z1\': !floatingLabel, \'md-menu-showing\': !$mdAutocompleteCtrl.hidden }"\
-            role="listbox">\
+            ng-class="{ \'md-whiteframe-z1\': !floatingLabel, \'md-menu-showing\': !$mdAutocompleteCtrl.hidden }">\
           ' + getInputElement() + '\
           <md-progress-linear\
               class="' + (attr.mdFloatingLabel ? 'md-inline' : '') + '"\
@@ -232,6 +231,7 @@ function MdAutocomplete () {
       function getInputElement () {
         var commonInputAttrs = 'type="search"\
           name="{{inputName}}"\
+          role="combobox"\
           autocomplete="off"\
           ng-required="$mdAutocompleteCtrl.isRequired"\
           ng-disabled="$mdAutocompleteCtrl.isDisabled"\
@@ -266,6 +266,7 @@ function MdAutocomplete () {
                 id="{{ inputId || \'input-\' + $mdAutocompleteCtrl.id }}"\
                 ng-if="!floatingLabel"\
                 placeholder="{{placeholder}}"\
+                ' + (attr.mdSelectOnFocus != null ? 'md-select-on-focus=""' : '') + '\
                 aria-label="{{placeholder}}"/>\
             <button\
                 type="button"\

@@ -9,14 +9,14 @@ md-toast.md-THEME_NAME-theme {
 
       &.md-highlight {
         // By default the toast should use the accent color as the primary highlight color
-        color: '{{accent-A200}}';
+        color: '{{accent-color}}';
 
         &.md-primary {
-          color: '{{primary-A200}}';
+          color: '{{primary-color}}';
         }
 
         &.md-warn {
-          color: '{{warn-A200}}';
+          color: '{{warn-color}}';
         }
       }
     }

@@ -30,9 +30,20 @@ describe('<md-select>', function() {
     backdrops.remove();
   }));
 
+
+  it('should have `._md` class indicator', function() {
+    var element = setupSelect('ng-model="val"').find('md-select-menu');
+    expect(element.hasClass('_md')).toBe(true);
+  });
+
   it('should preserve tabindex', function() {
-    var select = setupSelect('tabindex="2", ng-model="val"').find('md-select');
+    var select = setupSelect('tabindex="2" ng-model="val"').find('md-select');
     expect(select.attr('tabindex')).toBe('2');
+  });
+
+  it('should set a tabindex if the element does not have one', function() {
+    var select = setupSelect('ng-model="val"').find('md-select');
+    expect(select.attr('tabindex')).toBeDefined();
   });
 
   it('supports non-disabled state', function() {
@@ -41,7 +52,7 @@ describe('<md-select>', function() {
   });
 
   it('supports disabled state', inject(function($document) {
-    var select = setupSelect('disabled="disabled", ng-model="val"').find('md-select');
+    var select = setupSelect('disabled ng-model="val"').find('md-select');
     openSelect(select);
     expectSelectClosed(select);
     expect($document.find('md-select-menu').length).toBe(0);
@@ -49,7 +60,7 @@ describe('<md-select>', function() {
   }));
 
   it('supports passing classes to the container', inject(function($document) {
-    var select = setupSelect('ng-model="val", md-container-class="test"').find('md-select');
+    var select = setupSelect('ng-model="val" md-container-class="test"').find('md-select');
     openSelect(select);
 
     var container = $document[0].querySelector('._md-select-menu-container');
@@ -58,7 +69,7 @@ describe('<md-select>', function() {
   }));
 
   it('supports passing classes to the container using `data-` attribute prefix', inject(function($document) {
-    var select = setupSelect('ng-model="val", data-md-container-class="test"').find('md-select');
+    var select = setupSelect('ng-model="val" data-md-container-class="test"').find('md-select');
     openSelect(select);
 
     var container = $document[0].querySelector('._md-select-menu-container');
@@ -67,7 +78,7 @@ describe('<md-select>', function() {
   }));
 
   it('supports passing classes to the container using `x-` attribute prefix', inject(function($document) {
-    var select = setupSelect('ng-model="val", x-md-container-class="test"').find('md-select');
+    var select = setupSelect('ng-model="val" x-md-container-class="test"').find('md-select');
     openSelect(select);
 
     var container = $document[0].querySelector('._md-select-menu-container');
@@ -77,7 +88,7 @@ describe('<md-select>', function() {
 
   it('sets aria-owns between the select and the container', function() {
     var select = setupSelect('ng-model="val"').find('md-select');
-    var ownsId = select.attr('aria-owns'); 
+    var ownsId = select.attr('aria-owns');
     expect(ownsId).toBeTruthy();
     var containerId = select[0].querySelector('._md-select-menu-container').getAttribute('id');
     expect(ownsId).toBe(containerId);
@@ -88,7 +99,7 @@ describe('<md-select>', function() {
     $rootScope.onClose = function() {
       called = true;
     };
-    var select = setupSelect('ng-model="val", md-on-close="onClose()"', [1, 2, 3]).find('md-select');
+    var select = setupSelect('ng-model="val" md-on-close="onClose()"', [1, 2, 3]).find('md-select');
     openSelect(select);
     expectSelectOpen(select);
 
@@ -132,7 +143,7 @@ describe('<md-select>', function() {
     var opts = [ { id: 1, name: 'Bob' }, { id: 2, name: 'Alice' } ];
     var select = setupSelect('ng-model="$root.val" ng-change="onChange()" ng-model-options="{trackBy: \'$value.id\'}"', opts);
     expect(changed).toBe(false);
-    
+
     openSelect(select);
     clickOption(select, 1);
     waitForSelectClose();
@@ -153,6 +164,22 @@ describe('<md-select>', function() {
     expect($rootScope.myForm.select.$touched).toBe(true);
   }));
 
+  it('should remain untouched during opening', inject(function($compile, $rootScope) {
+    var form = $compile('<form name="myForm">' +
+                        '<md-select name="select" ng-model="val">' +
+                        '<md-option>1</md-option>' +
+                        '</md-select>' +
+                        '</form>')($rootScope);
+    var unwatch = $rootScope.$watch('myForm.select.$touched',
+      function(touched) {
+        expect(touched).toBe(false);
+      });
+    var select = form.find('md-select');
+    openSelect(select);
+    unwatch();
+    closeSelect();
+    expect($rootScope.myForm.select.$touched).toBe(true);
+  }));
 
   it('restores focus to select when the menu is closed', inject(function($document) {
     var select = setupSelect('ng-model="val"').find('md-select');
@@ -166,6 +193,9 @@ describe('<md-select>', function() {
 
     // FIXME- does not work with minified, jquery
     //expect($document[0].activeElement).toBe(select[0]);
+
+    // Clean up the DOM after the test.
+    $document[0].body.removeChild(select[0]);
   }));
 
   it('should remove the input-container focus state', inject(function($rootScope, $timeout) {
@@ -184,6 +214,11 @@ describe('<md-select>', function() {
 
     expect(element.hasClass('md-input-focused')).toBe(false);
 
+  }));
+
+  it('should remove the tabindex from a disabled element', inject(function($document) {
+    var select = setupSelect('ng-model="val" disabled tabindex="1"').find('md-select');
+    expect(select.attr('tabindex')).toBeUndefined();
   }));
 
   describe('input container', function() {
@@ -210,7 +245,7 @@ describe('<md-select>', function() {
     }));
 
     it('should match label to given input id', function() {
-      var el = setupSelect('ng-model="$root.value", id="foo"');
+      var el = setupSelect('ng-model="$root.value" id="foo"');
       expect(el.find('label').attr('for')).toBe('foo');
       expect(el.find('md-select').attr('id')).toBe('foo');
     });
@@ -224,7 +259,7 @@ describe('<md-select>', function() {
 
   describe('label behavior', function() {
     it('defaults to the placeholder text', function() {
-      var select = setupSelect('ng-model="someVal", placeholder="Hello world"', null, true).find('md-select');
+      var select = setupSelect('ng-model="someVal" placeholder="Hello world"', null, true).find('md-select');
       var label = select.find('md-select-value');
       expect(label.text()).toBe('Hello world');
       expect(label.hasClass('_md-select-placeholder')).toBe(true);
@@ -258,6 +293,24 @@ describe('<md-select>', function() {
       }
     }));
 
+    it('displays md-selected-text when specified', inject(function($rootScope) {
+      $rootScope.selectedText = 'Hello World';
+
+      var select = setupSelect('ng-model="someVal", md-selected-text="selectedText"', null, true).find('md-select');
+      var label = select.find('md-select-value');
+
+      expect(label.text()).toBe($rootScope.selectedText);
+
+      $rootScope.selectedText = 'Goodbye world';
+
+      // The label update function is not called until some user action occurs.
+      openSelect(select);
+      closeSelect(select);
+      waitForSelectClose();
+
+      expect(label.text()).toBe($rootScope.selectedText);
+    }));
+
     it('supports rendering multiple', inject(function($rootScope, $compile) {
       $rootScope.val = [1, 3];
       var select = $compile('<md-input-container>' +
@@ -287,6 +340,81 @@ describe('<md-select>', function() {
         expect(checkBoxIcon).not.toBe(null);
       }
 
+    }));
+
+    describe('md-select-header behavior', function() {
+      it('supports rendering a md-select-header', inject(function($rootScope, $compile) {
+        $rootScope.val = [1];
+        var select = $compile(
+            '<md-input-container>' +
+            '  <label>Label</label>' +
+            '  <md-select multiple ng-model="val" placeholder="Hello World">' +
+            '    <md-select-header class="demo-select-header">' +
+            '      <span>Hello World</span>' +
+            '    </md-select-header>' +
+            '    <md-optgroup label="stuff">' +
+            '      <md-option value="1">One</md-option>' +
+            '      <md-option value="2">Two</md-option>' +
+            '      <md-option value="3">Three</md-option>' +
+            '    </md-optgroup>' +
+            '  </md-select>' +
+            '</md-input-container>')($rootScope);
+
+        var header = select.find('md-select-header');
+        var headerContent = header.find('span');
+
+        expect(headerContent.text()).toBe('Hello World');
+      }));
+
+      it('does not render the label in md-optgroup if md-select-header is present', inject(function($rootScope, $compile) {
+        $rootScope.val = [1];
+        var select = $compile(
+            '<md-input-container>' +
+            '  <label>Label</label>' +
+            '  <md-select multiple ng-model="val" placeholder="Hello World">' +
+            '    <md-select-header class="demo-select-header">' +
+            '      <span>Hello World</span>' +
+            '    </md-select-header>' +
+            '    <md-optgroup label="stuff">' +
+            '      <md-option value="1">One</md-option>' +
+            '      <md-option value="2">Two</md-option>' +
+            '      <md-option value="3">Three</md-option>' +
+            '    </md-optgroup>' +
+            '  </md-select>' +
+            '</md-input-container>')($rootScope);
+
+        var optgroupLabel = select[0].querySelector('._md-container-ignore');
+
+        expect(optgroupLabel).toBe(null);
+      }));
+    });
+
+    it('does not allow keydown events to propagate from inside the md-select-menu', inject(function($rootScope, $compile) {
+      $rootScope.val = [1];
+      var select = $compile(
+          '<md-input-container>' +
+          '  <label>Label</label>' +
+          '  <md-select multiple ng-model="val" placeholder="Hello World">' +
+          '    <md-option value="1">One</md-option>' +
+          '    <md-option value="2">Two</md-option>' +
+          '    <md-option value="3">Three</md-option>' +
+          '  </md-select>' +
+          '</md-input-container>')($rootScope);
+
+      var mdOption = select.find('md-option');
+      var selectMenu = select.find('md-select-menu');
+      var keydownEvent = {
+	type: 'keydown',
+	target: mdOption[0],
+	preventDefault: jasmine.createSpy(),
+	stopPropagation: jasmine.createSpy()
+      };
+
+      openSelect(select);
+      angular.element(selectMenu).triggerHandler(keydownEvent);
+
+      expect(keydownEvent.preventDefault).toHaveBeenCalled();
+      expect(keydownEvent.stopPropagation).toHaveBeenCalled();
     }));
 
     it('supports raw html', inject(function($rootScope, $compile, $sce) {
@@ -468,7 +596,7 @@ describe('<md-select>', function() {
             changesCalled = true;
           };
 
-          var selectEl = setupSelect('ng-model="myModel", ng-change="changed()"', [1, 2, 3]).find('md-select');
+          var selectEl = setupSelect('ng-model="myModel" ng-change="changed()"', [1, 2, 3]).find('md-select');
           openSelect(selectEl);
 
           var menuEl = $document.find('md-select-menu');
@@ -529,7 +657,6 @@ describe('<md-select>', function() {
   });
 
   describe('multiple', function() {
-
 
     describe('model->view', function() {
 
@@ -711,6 +838,29 @@ describe('<md-select>', function() {
 
         expect($rootScope.testForm.$pristine).toBe(true);
       }));
+
+      it('should correctly update the input containers label', inject(function($rootScope) {
+        var el = setupSelect('ng-required="isRequired" ng-model="someModel"');
+        var label = el.find('label');
+
+        expect(label).not.toHaveClass('md-required');
+
+        $rootScope.$apply('isRequired = true');
+
+        expect(label).toHaveClass('md-required');
+      }));
+
+      it('should correctly update the input containers label when asterisk is disabled', inject(function($rootScope) {
+        var el = setupSelect('ng-required="isRequired" md-no-asterisk ng-model="someModel"');
+        var label = el.find('label');
+
+        expect(label).not.toHaveClass('md-required');
+
+        $rootScope.$apply('isRequired = true');
+
+        expect(label).not.toHaveClass('md-required');
+      }));
+
     });
 
     describe('view->model', function() {
@@ -797,7 +947,7 @@ describe('<md-select>', function() {
     }));
 
     it('adds an aria-label from placeholder', function() {
-      var select = setupSelect('ng-model="someVal", placeholder="Hello world"', null, true).find('md-select');
+      var select = setupSelect('ng-model="someVal" placeholder="Hello world"', null, true).find('md-select');
       expect(select.attr('aria-label')).toBe('Hello world');
     });
 
@@ -817,7 +967,7 @@ describe('<md-select>', function() {
     }));
 
     it('preserves existing aria-label', function() {
-      var select = setupSelect('ng-model="someVal", aria-label="Hello world", placeholder="Pick"').find('md-select');
+      var select = setupSelect('ng-model="someVal" aria-label="Hello world" placeholder="Pick"').find('md-select');
       expect(select.attr('aria-label')).toBe('Hello world');
     });
 

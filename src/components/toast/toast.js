@@ -15,7 +15,9 @@ angular.module('material.components.toast', [
 function MdToastDirective($mdToast) {
   return {
     restrict: 'E',
-    link: function postLink(scope, element, attr) {
+    link: function postLink(scope, element) {
+      element.addClass('_md');     // private md component indicator for styling
+      
       // When navigation force destroys an interimElement, then
       // listen and $destroy() that interim instance...
       scope.$on('$destroy', function() {
@@ -336,10 +338,16 @@ function MdToastProvider($$interimElementProvider) {
           var templateRoot = document.createElement('md-template');
           templateRoot.innerHTML = template;
 
+          // Iterate through all root children, to detect possible md-toast directives.
           for (var i = 0; i < templateRoot.children.length; i++) {
             if (templateRoot.children[i].nodeName === 'MD-TOAST') {
               var wrapper = angular.element('<div class="md-toast-content">');
-              wrapper.append(templateRoot.children[i].children);
+
+              // Wrap the children of the `md-toast` directive in jqLite, to be able to append multiple
+              // nodes with the same execution.
+              wrapper.append(angular.element(templateRoot.children[i].childNodes));
+
+              // Append the new wrapped element to the `md-toast` directive.
               templateRoot.children[i].appendChild(wrapper[0]);
             }
           }

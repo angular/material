@@ -20,10 +20,10 @@
     }
     &:not([disabled]) {
       &:hover {
-        background-color: '{{accent-600}}';
+        background-color: '{{accent-A700}}';
       }
       &.md-focused {
-        background-color: '{{accent-600}}';
+        background-color: '{{accent-A700}}';
       }
     }
   }
@@ -60,10 +60,10 @@
         color: '{{accent-contrast}}';
       }
       &:hover {
-        background-color: '{{accent-600}}';
+        background-color: '{{accent-A700}}';
       }
       &.md-focused {
-        background-color: '{{accent-600}}';
+        background-color: '{{accent-A700}}';
       }
     }
   }
@@ -121,10 +121,10 @@
           color: '{{accent-contrast}}';
         }
         &:hover {
-          background-color: '{{accent-600}}';
+          background-color: '{{accent-A700}}';
         }
         &.md-focused {
-          background-color: '{{accent-600}}';
+          background-color: '{{accent-A700}}';
         }
       }
     }
@@ -156,26 +156,39 @@
   }
 }
 
-a.md-THEME_NAME-theme:not(.md-button) {
-  color: '{{accent-color}}';
 
-  &:hover {
-    color: '{{accent-700}}';
-  }
+._md {
+  a.md-THEME_NAME-theme:not(.md-button) {
+    &.md-primary {
+      color: '{{primary-color}}';
 
-  &.md-primary {
-    color: '{{primary-color}}';
-
-    &:hover {
-      color: '{{primary-700}}';
+      &:hover {
+        color: '{{primary-700}}';
+      }
     }
-  }
 
-  &.md-warn {
-    color: '{{warn-color}}';
+    &.md-accent {
+      color: '{{accent-color}}';
 
-    &:hover {
-      color: '{{warn-700}}';
+      &:hover {
+        color: '{{accent-700}}';
+      }
+    }
+
+    &.md-accent {
+      color: '{{accent-color}}';
+
+      &:hover {
+        color: '{{accent-A700}}';
+      }
+    }
+
+    &.md-warn {
+      color: '{{warn-color}}';
+
+      &:hover {
+        color: '{{warn-700}}';
+      }
     }
   }
 }

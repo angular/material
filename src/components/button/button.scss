@@ -1,6 +1,6 @@
 $button-border-radius: 3px !default;
 $button-fab-border-radius: 50% !default;
-$button-icon-border-radius: $button-fab-border-radius;
+$button-icon-border-radius: $button-fab-border-radius !default;
 
 $button-line-height: rem(3.60) !default;
 $button-margin: rem(0.600) rem(0.800) !default;
@@ -71,6 +71,9 @@ button.md-button::-moz-focus-inner {
     text-decoration: none;
   }
 
+  // By default $ngAnimate looks for transition durations on the element, when using ng-hide, ng-if, ng-show.
+  // The .md-button has a transition duration applied, which means, that $ngAnimate delays the hide process.
+  // To avoid this, we need to reset the transition, when $ngAnimate looks for the duration.
   &.ng-hide, &.ng-leave {
     transition: none;
   }

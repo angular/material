@@ -41,11 +41,17 @@ exports.task = function() {
       .pipe(sass())
       .pipe(util.autoprefix())
       .pipe(insert.prepend(config.banner))
-      .pipe(addsrc.append(config.cssIEPaths))       // append raw CSS for IE Fixes
       .pipe(gulp.dest(dest))                        // unminified
       .pipe(gulpif(!IS_DEV, minifyCss()))
       .pipe(rename({extname: '.min.css'}))
       .pipe(gulp.dest(dest))                        // minified
+
+  );
+
+  streams.push(
+      gulp.src( config.cssIEPaths.slice() )         // append raw CSS for IE Fixes
+        .pipe( concat('angular-material.layouts.ie_fixes.css') )
+        .pipe( gulp.dest(layoutDest) )
   );
 
   // Generate standalone SCSS (and CSS) file for Layouts API

@@ -1,12 +1,12 @@
 $select-checkbox-border-radius: 2px !default;
 $select-checkbox-border-width: 2px !default;
 $select-checkbox-width: rem(1.4) !default;
-$select-option-height: 48px;
-$select-option-padding: 16px;
-$select-container-padding: 16px;
-$select-container-transition-duration: 350ms;
+$select-option-height: 48px !default;
+$select-option-padding: 16px !default;
+$select-container-padding: 16px !default;
+$select-container-transition-duration: 350ms !default;
 
-$select-max-visible-options: 5;
+$select-max-visible-options: 5 !default;
 
 ._md-select-menu-container {
   position: fixed;
@@ -189,6 +189,7 @@ md-option {
   display: flex;
   align-items: center;
   width: auto;
+  transition: background 0.15s linear;
 
   &[disabled] {
     cursor: default;
@@ -235,7 +236,7 @@ md-optgroup {
 }
 
 md-select-menu[multiple] {
-  md-option[md-checkbox-enabled] {
+  md-option._md-checkbox-enabled {
     @include rtl(padding-left, $select-option-padding * 2.5, $select-option-padding);
     @include rtl(padding-right, $select-option-padding, $select-option-padding * 2.5);
 
