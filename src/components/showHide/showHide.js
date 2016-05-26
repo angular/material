@@ -22,12 +22,19 @@ function createDirective(name, targetValue) {
         var unregister = $scope.$on('$md-resize-enable', function() {
           unregister();
 
+          var cachedTransitionStyles = window.getComputedStyle($element[0]);
+
           $scope.$watch($attr[name], function(value) {
             if (!!value === targetValue) {
               $mdUtil.nextTick(function() {
                 $scope.$broadcast('$md-resize');
               });
-              $mdUtil.dom.animator.waitTransitionEnd($element).then(function() {
+
+              var opts = {
+                cachedTransitionStyles: cachedTransitionStyles
+              };
+
+              $mdUtil.dom.animator.waitTransitionEnd($element, opts).then(function() {
                 $scope.$broadcast('$md-resize');
               });
             }

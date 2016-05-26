@@ -245,7 +245,7 @@ function MdAutocomplete () {
                   ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                   ng-blur="$mdAutocompleteCtrl.blur()"\
                   ' + (attr.mdNoAsterisk != null ? 'md-no-asterisk="' + attr.mdNoAsterisk + '"' : '') + '\
-                  ng-focus="$mdAutocompleteCtrl.focus()"\
+                  ng-focus="$mdAutocompleteCtrl.focus($event)"\
                   aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
                   ' + (attr.mdSelectOnFocus != null ? 'md-select-on-focus=""' : '') + '\
                   aria-label="{{floatingLabel}}"\
@@ -270,7 +270,7 @@ function MdAutocomplete () {
                 ng-model="$mdAutocompleteCtrl.scope.searchText"\
                 ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                 ng-blur="$mdAutocompleteCtrl.blur()"\
-                ng-focus="$mdAutocompleteCtrl.focus()"\
+                ng-focus="$mdAutocompleteCtrl.focus($event)"\
                 placeholder="{{placeholder}}"\
                 aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
                 ' + (attr.mdSelectOnFocus != null ? 'md-select-on-focus=""' : '') + '\
@@ -284,7 +284,7 @@ function MdAutocomplete () {
                 type="button"\
                 tabindex="-1"\
                 ng-if="$mdAutocompleteCtrl.scope.searchText && !$mdAutocompleteCtrl.isDisabled"\
-                ng-click="$mdAutocompleteCtrl.clear()">\
+                ng-click="$mdAutocompleteCtrl.clear($event)">\
               <md-icon md-svg-icon="md-close"></md-icon>\
               <span class="_md-visually-hidden">Clear</span>\
             </button>\
