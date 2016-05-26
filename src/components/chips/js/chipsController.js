@@ -73,16 +73,6 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $mdUtil) {
   this.chipBuffer = '';
 
   /**
-   * Whether to use the onAppend expression to transform the chip buffer
-   * before appending it to the list.
-   * @type {boolean}
-   *
-   *
-   * @deprecated Will remove in 1.0.
-   */
-  this.useOnAppend = false;
-
-  /**
    * Whether to use the transformChip expression to transform the chip buffer
    * before appending it to the list.
    * @type {boolean}
@@ -290,25 +280,6 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
   // If they provide the md-on-add attribute, notify them of the chip addition
   if (this.useOnAdd && this.onAdd) {
     this.onAdd({ '$chip': newChip, '$index': index });
-  }
-};
-
-/**
- * Sets whether to use the md-on-append expression. This expression is
- * bound to scope and controller in {@code MdChipsDirective} as
- * {@code onAppend}. Due to the nature of directive scope bindings, the
- * controller cannot know on its own/from the scope whether an expression was
- * actually provided.
- *
- * @deprecated
- *
- * TODO: Remove deprecated md-on-append functionality in 1.0
- */
-MdChipsCtrl.prototype.useOnAppendExpression = function() {
-  this.$log.warn("md-on-append is deprecated; please use md-transform-chip or md-on-add instead");
-  if (!this.useTransformChip || !this.transformChip) {
-    this.useTransformChip = true;
-    this.transformChip = this.onAppend;
   }
 };
 

@@ -6,8 +6,6 @@ describe('<md-chips>', function() {
     '<md-chips ng-model="items"></md-chips>';
   var CHIP_TRANSFORM_TEMPLATE =
     '<md-chips ng-model="items" md-transform-chip="transformChip($chip)"></md-chips>';
-  var CHIP_APPEND_TEMPLATE =
-    '<md-chips ng-model="items" md-on-append="appendChip($chip)"></md-chips>';
   var CHIP_ADD_TEMPLATE =
     '<md-chips ng-model="items" md-on-add="addChip($chip, $index)"></md-chips>';
   var CHIP_REMOVE_TEMPLATE =
@@ -115,34 +113,6 @@ describe('<md-chips>', function() {
         expect(chips[1].innerHTML).toContain('Orange');
       });
 
-      // TODO: Remove in 1.0 release after deprecation
-      it('should warn of deprecation when using md-on-append', inject(function($log) {
-        spyOn($log, 'warn');
-        buildChips(CHIP_APPEND_TEMPLATE);
-        expect($log.warn).toHaveBeenCalled();
-      }));
-
-      // TODO: Remove in 1.0 release after deprecation
-      it('should retain the deprecated md-on-append functionality until removed', function() {
-        var element = buildChips(CHIP_APPEND_TEMPLATE);
-        var ctrl = element.controller('mdChips');
-
-        var doubleText = function(text) {
-          return "" + text + text;
-        };
-        scope.appendChip = jasmine.createSpy('appendChip').and.callFake(doubleText);
-
-        element.scope().$apply(function() {
-          ctrl.chipBuffer = 'Grape';
-          simulateInputEnterKey(ctrl);
-        });
-
-        expect(scope.appendChip).toHaveBeenCalled();
-        expect(scope.appendChip.calls.mostRecent().args[0]).toBe('Grape');
-        expect(scope.items.length).toBe(4);
-        expect(scope.items[3]).toBe('GrapeGrape');
-      });
-
       it('should call the transform method when adding a chip', function() {
         var element = buildChips(CHIP_TRANSFORM_TEMPLATE);
         var ctrl = element.controller('mdChips');
@@ -231,31 +201,6 @@ describe('<md-chips>', function() {
         expect(scope.selectChip.calls.mostRecent().args[0]).toBe('Grape');
       });
 
-      it('should handle appending an object chip', function() {
-        var element = buildChips(CHIP_APPEND_TEMPLATE);
-        var ctrl = element.controller('mdChips');
-
-        var chipObj = function(chip) {
-          return {
-            name: chip,
-            uppername: chip.toUpperCase()
-          };
-        };
-
-        scope.appendChip = jasmine.createSpy('appendChip').and.callFake(chipObj);
-
-        element.scope().$apply(function() {
-          ctrl.chipBuffer = 'Grape';
-          simulateInputEnterKey(ctrl);
-        });
-
-        expect(scope.appendChip).toHaveBeenCalled();
-        expect(scope.appendChip.calls.mostRecent().args[0]).toBe('Grape');
-        expect(scope.items.length).toBe(4);
-        expect(scope.items[3].name).toBe('Grape');
-        expect(scope.items[3].uppername).toBe('GRAPE');
-      });
-
       describe('when readonly', function() {
         var element, ctrl;
 
@@ -306,18 +251,18 @@ describe('<md-chips>', function() {
       });
 
       it('should disallow duplicate object chips', function() {
-        var element = buildChips(CHIP_APPEND_TEMPLATE);
+        var element = buildChips(CHIP_TRANSFORM_TEMPLATE);
         var ctrl = element.controller('mdChips');
 
         // Manually set the items
         ctrl.items = [{name: 'Apple', uppername: 'APPLE'}];
 
-        // Make our custom appendChip function return our existing item
+        // Make our custom transformChip function return our existing item
         var chipObj = function(chip) {
           return ctrl.items[0];
         };
 
-        scope.appendChip = jasmine.createSpy('appendChip').and.callFake(chipObj);
+        scope.transformChip = jasmine.createSpy('transformChip').and.callFake(chipObj);
 
         element.scope().$apply(function() {
           ctrl.chipBuffer = 'Apple';
@@ -325,12 +270,12 @@ describe('<md-chips>', function() {
         });
 
         expect(ctrl.items.length).toBe(1);
-        expect(scope.appendChip).toHaveBeenCalled();
-        expect(scope.appendChip.calls.mostRecent().args[0]).toBe('Apple');
+        expect(scope.transformChip).toHaveBeenCalled();
+        expect(scope.transformChip.calls.mostRecent().args[0]).toBe('Apple');
       });
 
       it('should disallow identical object chips', function() {
-        var element = buildChips(CHIP_APPEND_TEMPLATE);
+        var element = buildChips(CHIP_TRANSFORM_TEMPLATE);
         var ctrl = element.controller('mdChips');
 
         ctrl.items = [{name: 'Apple', uppername: 'APPLE'}];
@@ -341,7 +286,7 @@ describe('<md-chips>', function() {
             uppername: chip.toUpperCase()
           };
         };
-        scope.appendChip = jasmine.createSpy('appendChip').and.callFake(chipObj);
+        scope.transformChip = jasmine.createSpy('transformChip').and.callFake(chipObj);
 
         element.scope().$apply(function() {
           ctrl.chipBuffer = 'Apple';
@@ -349,8 +294,8 @@ describe('<md-chips>', function() {
         });
 
         expect(ctrl.items.length).toBe(1);
-        expect(scope.appendChip).toHaveBeenCalled();
-        expect(scope.appendChip.calls.mostRecent().args[0]).toBe('Apple');
+        expect(scope.transformChip).toHaveBeenCalled();
+        expect(scope.transformChip.calls.mostRecent().args[0]).toBe('Apple');
       });
 
       it('should prevent the default when backspace is pressed', inject(function($mdConstant) {
@@ -752,7 +697,7 @@ describe('<md-chips>', function() {
 
           // Modify the base template to add md-transform-chip
           var modifiedTemplate = AUTOCOMPLETE_CHIPS_TEMPLATE
-            .replace('<md-chips', '<md-chips md-on-append="transformChip($chip)"');
+            .replace('<md-chips', '<md-chips md-transform-chip="transformChip($chip)"');
 
           var element = buildChips(modifiedTemplate);
 
