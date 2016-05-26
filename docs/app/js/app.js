@@ -93,7 +93,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     $routeProvider.when('/' + service.url, {
       templateUrl: service.outputPath,
       resolve: {
-        component: angular.noop,
+        component: function() { return { isService: true } },
         doc: function() { return service; }
       },
       controller: 'ComponentDocCtrl'
