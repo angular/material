@@ -54,6 +54,7 @@
           // may be confusing.
           '<md-button class="md-datepicker-button md-icon-button" type="button" ' +
               'tabindex="-1" aria-hidden="true" ' +
+              'aria-label="{{::ctrl.dateLocale.msgOpenCalendar}}" ' +
               'ng-click="ctrl.openCalendarPane($event)">' +
             '<md-icon class="md-datepicker-calendar-icon" md-svg-icon="md-calendar"></md-icon>' +
           '</md-button>' +
