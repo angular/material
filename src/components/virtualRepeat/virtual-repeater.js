@@ -612,6 +612,10 @@ VirtualRepeatController.prototype.repeatListExpression_ = function(scope) {
 VirtualRepeatController.prototype.containerUpdated = function() {
   // If itemSize is unknown, attempt to measure it.
   if (!this.itemSize) {
+    // Make sure to clean up watchers if we can (see #8178)
+    if(this.unwatchItemSize_ && this.unwatchItemSize_ !== angular.noop){
+      this.unwatchItemSize_();
+    }
     this.unwatchItemSize_ = this.$scope.$watchCollection(
         this.repeatListExpression,
         angular.bind(this, function(items) {

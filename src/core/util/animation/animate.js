@@ -56,6 +56,13 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
       return $q(function(resolve, reject){
         opts = opts || { };
 
+        // If there is no transition is found, resolve immediately
+        //
+        // NOTE: using $mdUtil.nextTick() causes delays/issues
+        if (noTransitionFound(opts.cachedTransitionStyles)) {
+          TIMEOUT = 0;
+        }
+
         var timer = $timeout(finished, opts.timeout || TIMEOUT);
         element.on($mdConstant.CSS.TRANSITIONEND, finished);
 
@@ -72,6 +79,20 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
           // Never reject since ngAnimate may cause timeouts due missed transitionEnd events
           resolve();
 
+        }
+
+        /**
+         * Checks whether or not there is a transition.
+         *
+         * @param styles The cached styles to use for the calculation. If null, getComputedStyle()
+         * will be used.
+         *
+         * @returns {boolean} True if there is no transition/duration; false otherwise.
+         */
+        function noTransitionFound(styles) {
+          styles = styles || window.getComputedStyle(element[0]);
+
+          return styles.transitionDuration == '0s' || (!styles.transition && !styles.transitionProperty);
         }
 
       });
