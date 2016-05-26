@@ -89,7 +89,7 @@
    * @ngInject @constructor
    */
   function CalendarCtrl($element, $attrs, $scope, $animate, $q, $mdConstant,
-      $mdTheming, $$mdDateUtil, $mdDateLocale, $mdInkRipple, $mdUtil) {
+      $mdTheming, $$mdDateUtil, $mdDateLocale, $mdInkRipple, $mdUtil, $$rAF) {
     $mdTheming($element);
     /**
      * Dummy array-like object for virtual-repeat to iterate over. The length is the total
@@ -127,6 +127,9 @@
 
     /** @final */
     this.dateLocale = $mdDateLocale;
+
+    /** @final */
+    this.$$rAF = $$rAF;
 
     /** @final {!angular.JQLite} */
     this.$element = $element;
@@ -257,16 +260,18 @@
    */
   CalendarCtrl.prototype.hideVerticalScrollbar = function() {
     var element = this.$element[0];
-
-    var scrollMask = element.querySelector('.md-calendar-scroll-mask');
     var scroller = this.calendarScroller;
+    var scrollMask = element.querySelector('.md-calendar-scroll-mask');
+    var header = element.querySelector('.md-calendar-day-header');
 
-    var headerWidth = element.querySelector('.md-calendar-day-header').clientWidth;
-    var scrollbarWidth = scroller.offsetWidth - scroller.clientWidth;
+    this.$$rAF(function() {
+      var headerWidth = header.clientWidth;
+      var scrollbarWidth = scroller.offsetWidth - scroller.clientWidth;
 
-    scrollMask.style.width = headerWidth + 'px';
-    scroller.style.width = (headerWidth + scrollbarWidth) + 'px';
-    scroller.style.paddingRight = scrollbarWidth + 'px';
+      scrollMask.style.width = headerWidth + 'px';
+      scroller.style.width = (headerWidth + scrollbarWidth) + 'px';
+      scroller.style.paddingRight = scrollbarWidth + 'px';
+    });
   };
 
 
