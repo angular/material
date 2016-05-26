@@ -24,7 +24,7 @@
    * @param {expression=} ng-change Expression evaluated when the model value changes.
    * @param {Date=} md-min-date Expression representing a min date (inclusive).
    * @param {Date=} md-max-date Expression representing a max date (inclusive).
-   * @param {String=} md-current-view Default view for the calendar. Defalts to 'month'.
+   * @param {(function(Date): boolean)=} md-date-filter Function expecting a date and returning a boolean whether it can be selected or not.
    * @param {String=} md-placeholder The date input placeholder value.
    * @param {boolean=} ng-disabled Whether the datepicker is disabled.
    * @param {boolean=} ng-required Whether a value is required for the datepicker.
@@ -216,7 +216,7 @@
 
     /** @type {boolean} */
     this.isDisabled;
-    this.setDisabled($element[0].disabled || angular.isString($attrs.disabled));
+    this.setDisabled($element[0].disabled || angular.isString($attrs['disabled']));
 
     /** @type {boolean} Whether the date-picker's calendar pane is open. */
     this.isCalendarOpen = false;
@@ -241,7 +241,7 @@
     // Unless the user specifies so, the datepicker should not be a tab stop.
     // This is necessary because ngAria might add a tabindex to anything with an ng-model
     // (based on whether or not the user has turned that particular feature on/off).
-    if (!$attrs.tabindex) {
+    if (!$attrs['tabindex']) {
       $element.attr('tabindex', '-1');
     }
 
@@ -327,13 +327,13 @@
   DatePickerCtrl.prototype.installPropertyInterceptors = function() {
     var self = this;
 
-    if (this.$attrs.ngDisabled) {
+    if (this.$attrs['ngDisabled']) {
       // The expression is to be evaluated against the directive element's scope and not
       // the directive's isolate scope.
       var scope = this.$scope.$parent;
 
       if (scope) {
-        scope.$watch(this.$attrs.ngDisabled, function(isDisabled) {
+        scope.$watch(this.$attrs['ngDisabled'], function(isDisabled) {
           self.setDisabled(isDisabled);
         });
       }
@@ -385,7 +385,7 @@
         var maxDate = this.dateUtil.createDateAtMidnight(this.maxDate);
         this.ngModelCtrl.$setValidity('maxdate', date <= maxDate);
       }
-
+      
       if (angular.isFunction(this.dateFilter)) {
         this.ngModelCtrl.$setValidity('filtered', this.dateFilter(date));
       }
@@ -441,17 +441,17 @@
 
     this.updateErrorState(parsedDate);
   };
-
+  
   /**
    * Check whether date is in range and enabled
    * @param {Date=} opt_date
    * @return {boolean} Whether the date is enabled.
    */
   DatePickerCtrl.prototype.isDateEnabled = function(opt_date) {
-    return this.dateUtil.isDateWithinRange(opt_date, this.minDate, this.maxDate) &&
+    return this.dateUtil.isDateWithinRange(opt_date, this.minDate, this.maxDate) && 
           (!angular.isFunction(this.dateFilter) || this.dateFilter(opt_date));
   };
-
+  
   /** Position and attach the floating calendar to the document. */
   DatePickerCtrl.prototype.attachCalendarPane = function() {
     var calendarPane = this.calendarPane;
@@ -619,9 +619,7 @@
   DatePickerCtrl.prototype.handleBodyClick = function(event) {
     if (this.isCalendarOpen) {
       // TODO(jelbourn): way want to also include the md-datepicker itself in this check.
-      var closest = this.$mdUtil.getClosest;
-      var isInCalendar = closest(event.target, 'md-calendar-year') || closest(event.target, 'md-calendar-month');
-
+      var isInCalendar = this.$mdUtil.getClosest(event.target, 'md-calendar');
       if (!isInCalendar) {
         this.closeCalendarPane();
       }

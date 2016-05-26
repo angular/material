@@ -5,8 +5,8 @@ describe('md-calendar', function() {
   var JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9,
       NOV = 10, DEC = 11;
 
-  var ngElement, element, scope, pageScope, calendarMonthController, calendarYearController, calendarController;
-  var $rootScope, dateLocale, $mdUtil, $material, $compile, $$rAF, keyCodes, dateUtil;
+  var ngElement, element, scope, pageScope, controller, $material, $compile, $$rAF;
+  var $rootScope, dateLocale, $mdUtil, keyCodes, dateUtil;
 
   // List of calendar elements added to the DOM so we can remove them after every test.
   var attachedCalendarElements = [];
@@ -21,8 +21,8 @@ describe('md-calendar', function() {
 
     // Internally, the calendar sets scrollTop to scroll to the month for a change.
     // The handler for that scroll won't be invoked unless we manually trigger it.
-    if (calendarMonthController) {
-      angular.element(calendarMonthController.calendarScroller).triggerHandler('scroll');
+    if (controller) {
+      angular.element(controller.calendarScroller).triggerHandler('scroll');
     }
   }
 
@@ -36,8 +36,8 @@ describe('md-calendar', function() {
     return cellContents;
   }
 
-  /** Finds a td given a label. */
-  function findCellByLabel(monthElement, day) {
+  /** Finds a date td given a day of the month from an .md-calendar-month element. */
+  function findDateElement(monthElement, day) {
     var tds = monthElement.querySelectorAll('td');
     var td;
 
@@ -53,7 +53,7 @@ describe('md-calendar', function() {
    * Finds a month `tbody` in the calendar element given a date.
    */
   function findMonthElement(date) {
-    var months = element.querySelectorAll('[md-calendar-month-body]');
+    var months = element.querySelectorAll('[md-calendar-month]');
     var monthHeader = dateLocale.monthHeaderFormatter(date);
     var month;
 
@@ -66,29 +66,15 @@ describe('md-calendar', function() {
     return null;
   }
 
-  /** Find the `tbody` for a year in the calendar. */
-  function findYearElement(year) {
-    var years = element.querySelectorAll('[md-calendar-year-body]');
-    var yearHeader = year.toString();
-    var target;
-
-    for (var i = 0; i < years.length; i++) {
-      target = years[i];
-      if (target.querySelector('.md-calendar-month-label').textContent === yearHeader) {
-        return target;
-      }
-    }
-    return null;
-  }
-
   /**
-   * Gets the group label for a given date cell.
+   * Gets the month label for a given date cell.
    * @param {HTMLElement|DocumentView} cell
    * @returns {string}
    */
-  function getGroupLabelForDateCell(cell) {
+  function getMonthLabelForDateCell(cell) {
     return $mdUtil.getClosest(cell, 'tbody').querySelector('.md-calendar-month-label').textContent;
   }
+
 
   /** Creates and compiles an md-calendar element. */
   function createElement(parentScope) {
@@ -111,7 +97,7 @@ describe('md-calendar', function() {
   function dispatchKeyEvent(keyCode, opt_modifiers) {
     var mod = opt_modifiers || {};
 
-    angular.element(calendarController.$element).triggerHandler({
+    angular.element(controller.$element).triggerHandler({
       type: 'keydown',
       keyCode: keyCode,
       which: keyCode,
@@ -167,10 +153,7 @@ describe('md-calendar', function() {
     ngElement = createElement(pageScope);
     element = ngElement[0];
     scope = ngElement.isolateScope();
-
-    calendarController = ngElement.controller('mdCalendar');
-    calendarMonthController = ngElement.find('md-calendar-month').controller('mdCalendarMonth');
-    calendarYearController = ngElement.find('md-calendar-year').controller('mdCalendarYear');
+    controller = ngElement.controller('mdCalendar');
   }));
 
   afterEach(function() {
@@ -187,28 +170,50 @@ describe('md-calendar', function() {
 
       var selectedDate = element.querySelector('.md-calendar-selected-date');
 
-      expect(getGroupLabelForDateCell(selectedDate)).toBe('May 2014');
+      expect(getMonthLabelForDateCell(selectedDate)).toBe('May 2014');
       expect(selectedDate.textContent).toBe('30');
     });
   });
 
   describe('calendar construction', function() {
-    it('should be able to switch between views', function() {
-      expect(element.querySelector('md-calendar-month')).toBeTruthy();
+    describe('weeks header', function() {
+      it('should display the weeks header in the first row', function() {
+        var header = element.querySelector('.md-calendar-day-header tr');
 
-      calendarController.setCurrentView('year');
-      pageScope.$digest();
+        expect(extractRowText(header)).toEqual(['S', 'M', 'T', 'W', 'T', 'F' ,'S']);
+      });
 
-      expect(element.querySelector('md-calendar-month')).toBeFalsy();
-      expect(element.querySelector('md-calendar-year')).toBeTruthy();
+      it('should use $mdDateLocale.shortDays as weeks header values', function() {
+        var oldShortDays = dateLocale.shortDays;
+        dateLocale.shortDays = ['SZ', 'MZ', 'TZ', 'WZ', 'TZ', 'FZ', 'SZ'];
+
+        var newElement = createElement()[0];
+        var header = newElement.querySelector('.md-calendar-day-header tr');
+
+        expect(extractRowText(header)).toEqual(['SZ', 'MZ', 'TZ', 'WZ', 'TZ', 'FZ','SZ']);
+        dateLocale.shortDays = oldShortDays;
+      });
+
+      it('should allow changing the first day of the week to Monday', function() {
+        var oldShortDays = dateLocale.shortDays;
+        dateLocale.shortDays = ['SZ', 'MZ', 'TZ', 'WZ', 'TZ', 'FZ', 'SZ'];
+        dateLocale.firstDayOfWeek = 1;
+
+        var newElement = createElement()[0];
+        var header = newElement.querySelector('.md-calendar-day-header tr');
+
+        expect(extractRowText(header)).toEqual(['MZ', 'TZ', 'WZ', 'TZ', 'FZ','SZ', 'SZ']);
+        dateLocale.shortDays = oldShortDays;
+        dateLocale.firstDayOfWeek = 0;
+      });
     });
 
-    describe('month view', function() {
+    describe('#buildCalendarForMonth', function() {
       var monthCtrl;
 
       beforeEach(function() {
-        monthCtrl = angular.element(element.querySelector('[md-calendar-month-body]'))
-            .controller('mdCalendarMonthBody');
+        monthCtrl = angular.element(element.querySelector('[md-calendar-month]'))
+            .controller('mdCalendarMonth');
       });
 
       it('should render a month correctly as a table', function() {
@@ -282,7 +287,7 @@ describe('md-calendar', function() {
         var date = new Date(2014, MAY, 30);
         var monthElement = monthCtrl.buildCalendarForMonth(date);
         var expectedDate = new Date(2014, MAY, 5);
-        findCellByLabel(monthElement, 5).click();
+        findDateElement(monthElement, 5).click();
         expect(pageScope.myDate).toBeSameDayAs(expectedDate);
         expect(scope.$emit).toHaveBeenCalledWith('md-calendar-change', expectedDate);
       });
@@ -293,10 +298,10 @@ describe('md-calendar', function() {
         pageScope.$apply();
 
         var monthElement = monthCtrl.buildCalendarForMonth(new Date(2014, JUN, 15));
-        expect(findCellByLabel(monthElement, 5)).toHaveClass('md-calendar-date-disabled');
-        expect(findCellByLabel(monthElement, 10)).not.toHaveClass('md-calendar-date-disabled');
-        expect(findCellByLabel(monthElement, 20)).not.toHaveClass('md-calendar-date-disabled');
-        expect(findCellByLabel(monthElement, 25)).toHaveClass('md-calendar-date-disabled');
+        expect(findDateElement(monthElement, 5)).toHaveClass('md-calendar-date-disabled');
+        expect(findDateElement(monthElement, 10)).not.toHaveClass('md-calendar-date-disabled');
+        expect(findDateElement(monthElement, 20)).not.toHaveClass('md-calendar-date-disabled');
+        expect(findDateElement(monthElement, 25)).toHaveClass('md-calendar-date-disabled');
       });
 
       it('should not respond to disabled cell clicks', function() {
@@ -307,360 +312,140 @@ describe('md-calendar', function() {
         pageScope.$apply();
 
         var monthElement = monthCtrl.buildCalendarForMonth(pageScope.myDate);
-        findCellByLabel(monthElement, 5).click();
+        findDateElement(monthElement, 5).click();
         expect(pageScope.myDate).toBeSameDayAs(initialDate);
-      });
-
-      describe('weeks header', function() {
-        it('should display the weeks header in the first row', function() {
-          var header = element.querySelector('.md-calendar-day-header tr');
-          expect(extractRowText(header)).toEqual(['S', 'M', 'T', 'W', 'T', 'F' ,'S']);
-        });
-
-        it('should use $mdDateLocale.shortDays as weeks header values', function() {
-          var oldShortDays = dateLocale.shortDays;
-          dateLocale.shortDays = ['SZ', 'MZ', 'TZ', 'WZ', 'TZ', 'FZ', 'SZ'];
-
-          var newElement = createElement()[0];
-          var header = newElement.querySelector('.md-calendar-day-header tr');
-
-          expect(extractRowText(header)).toEqual(['SZ', 'MZ', 'TZ', 'WZ', 'TZ', 'FZ','SZ']);
-          dateLocale.shortDays = oldShortDays;
-        });
-
-        it('should allow changing the first day of the week to Monday', function() {
-          var oldShortDays = dateLocale.shortDays;
-          dateLocale.shortDays = ['SZ', 'MZ', 'TZ', 'WZ', 'TZ', 'FZ', 'SZ'];
-          dateLocale.firstDayOfWeek = 1;
-
-          var newElement = createElement()[0];
-          var header = newElement.querySelector('.md-calendar-day-header tr');
-
-          expect(extractRowText(header)).toEqual(['MZ', 'TZ', 'WZ', 'TZ', 'FZ','SZ', 'SZ']);
-          dateLocale.shortDays = oldShortDays;
-          dateLocale.firstDayOfWeek = 0;
-        });
-      });
-
-      it('should highlight today', function() {
-        pageScope.myDate = calendarController.today;
-        applyDateChange();
-
-        var todayElement = element.querySelector('.md-calendar-date-today');
-        expect(todayElement).not.toBeNull();
-        expect(todayElement.textContent).toBe(calendarController.today.getDate() + '');
-      });
-
-      it('should highlight the selected date', function() {
-        pageScope.myDate = calendarController.selectedDate = new Date(2014, JUN, 30);
-        applyDateChange();
-
-        var selectedElement = element.querySelector('.md-calendar-selected-date');
-        expect(selectedElement).not.toBeNull();
-        expect(selectedElement.textContent).toBe(calendarController.selectedDate.getDate() + '');
-      });
-
-      it('should block month transitions when a month transition is happening', function() {
-        var earlierDate = new Date(2014, FEB, 11);
-        var laterDate = new Date(2014, MAR, 11);
-
-        calendarMonthController.changeDisplayDate(earlierDate);
-        expect(calendarController.displayDate).toBeSameDayAs(earlierDate);
-
-        calendarMonthController.changeDisplayDate(laterDate);
-        expect(calendarController.displayDate).toBeSameDayAs(earlierDate);
-
-        $material.flushOutstandingAnimations();
-        calendarMonthController.changeDisplayDate(laterDate);
-        expect(calendarController.displayDate).toBeSameDayAs(laterDate);
-      });
-
-      it('should not render any months before the min date', function() {
-        ngElement.remove();
-        var newScope = $rootScope.$new();
-        newScope.minDate = new Date(2014, JUN, 5);
-        newScope.myDate = new Date(2014, JUN, 15);
-        newScope.$apply();
-        element = createElement(newScope)[0];
-
-        expect(findMonthElement(new Date(2014, JUL, 1))).not.toBeNull();
-        expect(findMonthElement(new Date(2014, JUN, 1))).not.toBeNull();
-        expect(findMonthElement(new Date(2014, MAY, 1))).toBeNull();
       });
     });
 
-    describe('year view', function() {
-      var yearCtrl;
+    it('should highlight today', function() {
+      pageScope.myDate = controller.today;
+      applyDateChange();
 
-      beforeEach(function() {
-        calendarController.setCurrentView('year');
-        pageScope.$digest();
-        $material.flushOutstandingAnimations();
+      var todayElement = element.querySelector('.md-calendar-date-today');
+      expect(todayElement).not.toBeNull();
+      expect(todayElement.textContent).toBe(controller.today.getDate() + '');
+    });
 
-        yearCtrl = angular.element(element.querySelector('[md-calendar-year-body]'))
-            .controller('mdCalendarYearBody');
-      });
+    it('should highlight the selected date', function() {
+      pageScope.myDate = controller.selectedDate = new Date(2014, JUN, 30);
+      applyDateChange();
 
-      it('should render a year correctly as a table', function() {
-        var date = new Date(2014, MAY, 30);
-        var yearElement = yearCtrl.buildCalendarForYear(date);
+      var selectedElement = element.querySelector('.md-calendar-selected-date');
+      expect(selectedElement).not.toBeNull();
+      expect(selectedElement.textContent).toBe(controller.selectedDate.getDate() + '');
 
-        var calendarRows = yearElement.querySelectorAll('tr');
-        var calendarDates = [];
-
-        angular.forEach(calendarRows, function(tr) {
-          calendarDates.push(extractRowText(tr));
-        });
-
-        var expectedDates = [
-          ['2014', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-          ['', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        ];
-
-        expect(calendarDates).toEqual(expectedDates);
-      });
-
-      it('should jump to the first day of the relevant month on cell click', function() {
-        var date = new Date(2014, MAY, 30);
-        var yearElement = yearCtrl.buildCalendarForYear(date);
-        var expectedDate = new Date(2014, DEC, 1);
-
-        findCellByLabel(yearElement, 'Dec').click();
-        expect(calendarController.displayDate).toBeSameDayAs(expectedDate);
-        expect(calendarController.currentView).not.toBe('year');
-      });
-
-      it('should disable any months outside the min/max date range', function() {
-        pageScope.minDate = new Date(2014, JUN, 10);
-        pageScope.maxDate = new Date(2014, SEP, 20);
-        pageScope.$apply();
-
-        var yearElement = yearCtrl.buildCalendarForYear(new Date(2014, JAN, 1));
-        var disabledClass = 'md-calendar-date-disabled';
-        expect(findCellByLabel(yearElement, 'Jan')).toHaveClass(disabledClass);
-        expect(findCellByLabel(yearElement, 'Aug')).not.toHaveClass(disabledClass);
-        expect(findCellByLabel(yearElement, 'Oct')).toHaveClass(disabledClass);
-      });
-
-      it('should not respond to disabled cell clicks', function() {
-        var initialDate = new Date(2014, JUN, 15);
-        calendarController.displayDate = initialDate;
-        pageScope.minDate = new Date(2014, FEB, 10);
-        pageScope.maxDate = new Date(2014, AUG, 20);
-        pageScope.$apply();
-
-        var yearElement = yearCtrl.buildCalendarForYear(calendarController.displayDate);
-        findCellByLabel(yearElement, 'Jan').click();
-        expect(calendarController.displayDate).toBe(initialDate);
-      });
-
-      it('should highlight the current month', function() {
-        var todayElement = element.querySelector('.md-calendar-date-today');
-        expect(todayElement).not.toBeNull();
-        expect(todayElement.textContent).toBe(dateLocale.shortMonths[calendarController.today.getMonth()]);
-      });
-
-      it('should highlight the month of the selected date', function() {
-        ngElement.remove();
-        var newScope = $rootScope.$new();
-        newScope.myDate = new Date(2014, JUN, 30);
-        element = createElement(newScope)[0];
-        angular.element(element).controller('mdCalendar').setCurrentView('year');
-        $material.flushOutstandingAnimations();
-
-        var selectedElement = element.querySelector('.md-calendar-selected-date');
-        expect(selectedElement).not.toBeNull();
-        expect(selectedElement.textContent).toBe('Jun');
-      });
-
-      it('should not render any years before the min date', function() {
-        ngElement.remove();
-        var newScope = $rootScope.$new();
-        newScope.minDate = new Date(2014, JUN, 5);
-        newScope.myDate = new Date(2014, JUL, 15);
-        element = createElement(newScope)[0];
-        angular.element(element).controller('mdCalendar').setCurrentView('year');
-        $material.flushOutstandingAnimations();
-
-        expect(findYearElement(2014)).not.toBeNull();
-        expect(findYearElement(2013)).toBeNull();
-      });
     });
 
     it('should have ids for date elements unique to the directive instance', function() {
-      var controller = ngElement.controller('mdCalendar');
-      pageScope.myDate = calendarController.today;
+      pageScope.myDate = controller.today;
       applyDateChange();
 
       var otherScope = $rootScope.$new();
 
-      otherScope.myDate = calendarController.today;
+      otherScope.myDate = controller.today;
       var otherNgElement = createElement(otherScope);
 
       var monthElement = element.querySelector('.md-calendar-month');
-      var day = calendarController.today.getDate();
-      var dateElement = findCellByLabel(monthElement, day);
+      var day = controller.today.getDate();
+      var dateElement = findDateElement(monthElement, day);
 
       var otherMonthElement = otherNgElement[0].querySelector('.md-calendar-month');
-      var otherDateElement = findCellByLabel(otherMonthElement, day);
+      var otherDateElement = findDateElement(otherMonthElement, day);
 
       expect(dateElement.id).not.toEqual(otherDateElement.id);
     });
   });
 
   describe('keyboard events', function() {
-    describe('month view', function() {
-      it('should navigate around the calendar based on key presses', function() {
-        pageScope.myDate = new Date(2014, FEB, 11);
-        applyDateChange();
+    it('should navigate around the calendar based on key presses', function() {
+      pageScope.myDate = new Date(2014, FEB, 11);
+      applyDateChange();
 
-        var selectedDate = element.querySelector('.md-calendar-selected-date');
-        selectedDate.focus();
+      var selectedDate = element.querySelector('.md-calendar-selected-date');
+      selectedDate.focus();
 
-        dispatchKeyEvent(keyCodes.LEFT_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('10');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
+      dispatchKeyEvent(keyCodes.LEFT_ARROW);
+      expect(getFocusedDateElement().textContent).toBe('10');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        dispatchKeyEvent(keyCodes.UP_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('3');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
+      dispatchKeyEvent(keyCodes.UP_ARROW);
+      expect(getFocusedDateElement().textContent).toBe('3');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        dispatchKeyEvent(keyCodes.RIGHT_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('4');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
+      dispatchKeyEvent(keyCodes.RIGHT_ARROW);
+      expect(getFocusedDateElement().textContent).toBe('4');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        dispatchKeyEvent(keyCodes.DOWN_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('11');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
+      dispatchKeyEvent(keyCodes.DOWN_ARROW);
+      expect(getFocusedDateElement().textContent).toBe('11');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        dispatchKeyEvent(keyCodes.HOME);
-        expect(getFocusedDateElement().textContent).toBe('1');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
+      dispatchKeyEvent(keyCodes.HOME);
+      expect(getFocusedDateElement().textContent).toBe('1');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        dispatchKeyEvent(keyCodes.END);
-        expect(getFocusedDateElement().textContent).toBe('28');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
+      dispatchKeyEvent(keyCodes.END);
+      expect(getFocusedDateElement().textContent).toBe('28');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        dispatchKeyEvent(keyCodes.RIGHT_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('1');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Mar 2014');
+      dispatchKeyEvent(keyCodes.RIGHT_ARROW);
+      expect(getFocusedDateElement().textContent).toBe('1');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Mar 2014');
 
-        dispatchKeyEvent(keyCodes.PAGE_UP);
-        expect(getFocusedDateElement().textContent).toBe('1');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
+      dispatchKeyEvent(keyCodes.PAGE_UP);
+      expect(getFocusedDateElement().textContent).toBe('1');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        dispatchKeyEvent(keyCodes.PAGE_DOWN);
-        expect(getFocusedDateElement().textContent).toBe('1');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Mar 2014');
+      dispatchKeyEvent(keyCodes.PAGE_DOWN);
+      expect(getFocusedDateElement().textContent).toBe('1');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Mar 2014');
 
-        dispatchKeyEvent(keyCodes.UP_ARROW, {meta: true});
-        expect(getFocusedDateElement().textContent).toBe('1');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
+      dispatchKeyEvent(keyCodes.UP_ARROW, {meta: true});
+      expect(getFocusedDateElement().textContent).toBe('1');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        dispatchKeyEvent(keyCodes.DOWN_ARROW, {meta: true});
-        expect(getFocusedDateElement().textContent).toBe('1');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Mar 2014');
+      dispatchKeyEvent(keyCodes.DOWN_ARROW, {meta: true});
+      expect(getFocusedDateElement().textContent).toBe('1');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Mar 2014');
 
-        dispatchKeyEvent(keyCodes.ENTER);
-        applyDateChange();
-        expect(calendarController.selectedDate).toBeSameDayAs(new Date(2014, MAR, 1));
-      });
-
-      it('should restrict date navigation to min/max dates', function() {
-        pageScope.minDate = new Date(2014, FEB, 5);
-        pageScope.maxDate = new Date(2014, FEB, 10);
-        pageScope.myDate = new Date(2014, FEB, 8);
-        applyDateChange();
-
-        var selectedDate = element.querySelector('.md-calendar-selected-date');
-        selectedDate.focus();
-
-        dispatchKeyEvent(keyCodes.UP_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('5');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
-
-        dispatchKeyEvent(keyCodes.LEFT_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('5');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
-
-        dispatchKeyEvent(keyCodes.DOWN_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('10');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
-
-        dispatchKeyEvent(keyCodes.RIGHT_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('10');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
-
-        dispatchKeyEvent(keyCodes.UP_ARROW, {meta: true});
-        expect(getFocusedDateElement().textContent).toBe('5');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
-
-        dispatchKeyEvent(keyCodes.DOWN_ARROW, {meta: true});
-        expect(getFocusedDateElement().textContent).toBe('10');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
-      });
+      dispatchKeyEvent(keyCodes.ENTER);
+      applyDateChange();
+      expect(controller.selectedDate).toBeSameDayAs(new Date(2014, MAR, 1));
     });
 
-    describe('year view', function() {
-      it('should navigate around the calendar based on key presses', function() {
-        pageScope.myDate = new Date(2014, JUN, 1);
-        calendarController.setCurrentView('year');
-        applyDateChange();
+    it('should restrict date navigation to min/max dates', function() {
+      pageScope.minDate = new Date(2014, FEB, 5);
+      pageScope.maxDate = new Date(2014, FEB, 10);
+      pageScope.myDate = new Date(2014, FEB, 8);
+      applyDateChange();
 
-        var selectedDate = element.querySelector('.md-calendar-selected-date');
-        selectedDate.focus();
+      var selectedDate = element.querySelector('.md-calendar-selected-date');
+      selectedDate.focus();
 
-        dispatchKeyEvent(keyCodes.LEFT_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('May');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('2014');
+      dispatchKeyEvent(keyCodes.UP_ARROW);
+      expect(getFocusedDateElement().textContent).toBe('5');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        dispatchKeyEvent(keyCodes.UP_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('Nov');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('2013');
+      dispatchKeyEvent(keyCodes.LEFT_ARROW);
+      expect(getFocusedDateElement().textContent).toBe('5');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        dispatchKeyEvent(keyCodes.RIGHT_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('Dec');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('2013');
+      dispatchKeyEvent(keyCodes.DOWN_ARROW);
+      expect(getFocusedDateElement().textContent).toBe('10');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        dispatchKeyEvent(keyCodes.DOWN_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('Jun');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('2014');
+      dispatchKeyEvent(keyCodes.RIGHT_ARROW);
+      expect(getFocusedDateElement().textContent).toBe('10');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        dispatchKeyEvent(keyCodes.ENTER);
-        applyDateChange();
-        expect(calendarController.displayDate).toBeSameDayAs(new Date(2014, JUN, 1));
-        expect(calendarController.currentView).toBe('month');
-        expect(getFocusedDateElement().textContent).toBe('1');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('Jun 2014');
-      });
+      dispatchKeyEvent(keyCodes.UP_ARROW, {meta: true});
+      expect(getFocusedDateElement().textContent).toBe('5');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-      it('should restrict date navigation to min/max dates', function() {
-        pageScope.minDate = new Date(2014, JAN, 30);
-        pageScope.maxDate = new Date(2014, SEP, 1);
-        pageScope.myDate = new Date(2014, JUN, 1);
-        calendarController.setCurrentView('year');
-        applyDateChange();
+      dispatchKeyEvent(keyCodes.DOWN_ARROW, {meta: true});
+      expect(getFocusedDateElement().textContent).toBe('10');
+      expect(getMonthLabelForDateCell(getFocusedDateElement())).toBe('Feb 2014');
 
-        var selectedDate = element.querySelector('.md-calendar-selected-date');
-        selectedDate.focus();
-
-        dispatchKeyEvent(keyCodes.UP_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('Feb');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('2014');
-
-        dispatchKeyEvent(keyCodes.LEFT_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('Feb');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('2014');
-
-        dispatchKeyEvent(keyCodes.DOWN_ARROW);
-        dispatchKeyEvent(keyCodes.RIGHT_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('Sep');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('2014');
-
-        dispatchKeyEvent(keyCodes.RIGHT_ARROW);
-        expect(getFocusedDateElement().textContent).toBe('Sep');
-        expect(getGroupLabelForDateCell(getFocusedDateElement())).toBe('2014');
-      });
     });
 
     it('should fire an event when escape is pressed', function() {
@@ -674,9 +459,36 @@ describe('md-calendar', function() {
 
       dispatchKeyEvent(keyCodes.ESCAPE);
       pageScope.$apply();
-
       expect(escapeHandler).toHaveBeenCalled();
     });
+  });
+
+  it('should block month transitions when a month transition is happening', function() {
+    var earlierDate = new Date(2014, FEB, 11);
+    var laterDate = new Date(2014, MAR, 11);
+
+    controller.changeDisplayDate(earlierDate);
+    expect(controller.displayDate).toBeSameDayAs(earlierDate);
+
+    controller.changeDisplayDate(laterDate);
+    expect(controller.displayDate).toBeSameDayAs(earlierDate);
+
+    $material.flushOutstandingAnimations();
+    controller.changeDisplayDate(laterDate);
+    expect(controller.displayDate).toBeSameDayAs(laterDate);
+  });
+
+  it('should not render any months before the min date', function() {
+    ngElement.remove();
+    var newScope = $rootScope.$new();
+    newScope.minDate = new Date(2014, JUN, 5);
+    newScope.myDate = new Date(2014, JUN, 15);
+    newScope.$apply();
+    element = createElement(newScope)[0];
+
+    expect(findMonthElement(new Date(2014, JUL, 1))).not.toBeNull();
+    expect(findMonthElement(new Date(2014, JUN, 1))).not.toBeNull();
+    expect(findMonthElement(new Date(2014, MAY, 1))).toBeNull();
   });
 
   it('should render one single-row month of disabled cells after the max date', function() {
