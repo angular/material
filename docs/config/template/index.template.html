@@ -80,7 +80,7 @@
           <div class="md-toolbar-item docs-tools" layout="row">
             <md-button class="md-icon-button"
                        aria-label="Install with Bower"
-                       ng-if="!currentComponent.docs.length"
+                       ng-if="!currentComponent.docs.length && !currentComponent.isService"
                        target="_blank"
                        ng-href="https://github.com/angular/bower-material">
               <md-tooltip md-autohide>Install with Bower</md-tooltip>
@@ -88,7 +88,7 @@
             </md-button>
             <md-button class="md-icon-button"
                        aria-label="Install with NPM"
-                       ng-if="!currentComponent.docs.length"
+                       ng-if="!currentComponent.docs.length && !currentComponent.isService"
                        target="_blank"
                        ng-href="https://www.npmjs.com/package/angular-material">
               <md-tooltip md-autohide>Install with NPM</md-tooltip>
@@ -96,7 +96,7 @@
             </md-button>
             <md-button class="md-icon-button"
                        aria-label="View Source on Github"
-                       ng-if="!currentComponent.docs.length"
+                       ng-if="!currentComponent.docs.length && !currentComponent.isService"
                        target="_blank"
                        ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}">
               <md-tooltip md-autohide>View Source on Github</md-tooltip>
