@@ -134,14 +134,14 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * @returns {*}
      */
     findFocusTarget: function(containerEl, attributeVal) {
-      var AUTO_FOCUS = '[md-autofocus]';
+      var AUTO_FOCUS = this.prefixer('md-autofocus', true);
       var elToFocus;
 
       elToFocus = scanForFocusable(containerEl, attributeVal || AUTO_FOCUS);
 
       if ( !elToFocus && attributeVal != AUTO_FOCUS) {
         // Scan for deprecated attribute
-        elToFocus = scanForFocusable(containerEl, '[md-auto-focus]');
+        elToFocus = scanForFocusable(containerEl, this.prefixer('md-auto-focus', true));
 
         if ( !elToFocus ) {
           // Scan for fallback to 'universal' API

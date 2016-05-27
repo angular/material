@@ -194,8 +194,10 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
       }
 
       function copyAttributes(item, wrapper) {
-        var copiedAttrs = ['ng-if', 'ng-click', 'ng-dblclick', 'aria-label', 'ng-disabled',
-          'ui-sref', 'href', 'ng-href', 'target', 'ng-attr-ui-sref', 'ui-sref-opts'];
+        var copiedAttrs = $mdUtil.prefixer([
+          'ng-if', 'ng-click', 'ng-dblclick', 'aria-label', 'ng-disabled', 'ui-sref',
+          'href', 'ng-href', 'target', 'ng-attr-ui-sref', 'ui-sref-opts'
+        ]);
 
         angular.forEach(copiedAttrs, function(attr) {
           if (item.hasAttribute(attr)) {
