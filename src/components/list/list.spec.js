@@ -327,6 +327,61 @@ describe('mdListItem directive', function() {
     expect(button[0].hasAttribute('ng-disabled')).toBeTruthy();
   });
 
+  describe('with a md-menu', function() {
+    it('should forward click events on the md-menu trigger button', function() {
+      var template =
+        '<md-list-item>' +
+        '<md-menu>' +
+        '<md-button ng-click="openMenu()"></md-button>' +
+        '</md-menu>' +
+        '</md-list-item>';
+
+      var listItem = setup(template);
+      var cntr = listItem[0].querySelector('div');
+      var openMenu = jasmine.createSpy('openMenu');
+
+      $rootScope.openMenu = openMenu;
+
+      if (cntr && cntr.click) {
+        cntr.click();
+        expect(openMenu).toHaveBeenCalled();
+      }
+
+    });
+
+    it('should detect the menu position mode when md-menu is aligned at right', function() {
+      var template =
+        '<md-list-item>' +
+          '<span>Menu should be aligned right</span>' +
+          '<md-menu>' +
+            '<md-button ng-click="openMenu()"></md-button>' +
+          '</md-menu>' +
+        '</md-list-item>';
+
+      var listItem = setup(template);
+
+      var mdMenu = listItem.find('md-menu');
+
+      expect(mdMenu.attr('md-position-mode')).toBe('right target');
+    });
+
+    it('should detect the menu position mode when md-menu is aligned at left', function() {
+      var template =
+        '<md-list-item>' +
+          '<md-menu>' +
+            '<md-button ng-click="openMenu()"></md-button>' +
+          '</md-menu>' +
+          '<span>Menu should be aligned left</span>' +
+        '</md-list-item>';
+
+      var listItem = setup(template);
+
+      var mdMenu = listItem.find('md-menu');
+
+      expect(mdMenu.attr('md-position-mode')).toBe('left target');
+    });
+  });
+
   describe('with a clickable item', function() {
 
     it('should wrap secondary icons in a md-button', function() {

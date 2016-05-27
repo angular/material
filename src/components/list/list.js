@@ -181,7 +181,7 @@ function mdListDirective($mdTheming) {
  *
  */
 function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
-  var proxiedTypes = ['md-checkbox', 'md-switch'];
+  var proxiedTypes = ['md-checkbox', 'md-switch', 'md-menu'];
   return {
     restrict: 'E',
     controller: 'MdListController',
@@ -210,9 +210,13 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           tEl.addClass('_md-no-proxy');
         }
       }
+
       wrapSecondaryItems();
       setupToggleAria();
 
+      if (hasProxiedElement && proxyElement.nodeName === "MD-MENU") {
+        setupProxiedMenu();
+      }
 
       function setupToggleAria() {
         var toggleTypes = ['md-switch', 'md-checkbox'];
@@ -226,6 +230,35 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
               toggle.setAttribute('aria-label', 'Toggle ' + p.textContent);
             }
           }
+        }
+      }
+
+      function setupProxiedMenu() {
+        var menuEl = angular.element(proxyElement);
+
+        var isEndAligned = menuEl.parent().hasClass('_md-secondary-container') ||
+                           proxyElement.parentNode.firstElementChild !== proxyElement;
+
+        var xAxisPosition = 'left';
+
+        if (isEndAligned) {
+          // When the proxy item is aligned at the end of the list, we have to set the origin to the end.
+          xAxisPosition = 'right';
+        }
+        
+        // Set the position mode / origin of the proxied menu.
+        if (!menuEl.attr('md-position-mode')) {
+          menuEl.attr('md-position-mode', xAxisPosition + ' target');
+        }
+
+        // Apply menu open binding to menu button
+        var menuOpenButton = menuEl.children().eq(0);
+        if (!hasClickEvent(menuOpenButton[0])) {
+          menuOpenButton.attr('ng-click', '$mdOpenMenu($event)');
+        }
+
+        if (!menuOpenButton.attr('aria-label')) {
+          menuOpenButton.attr('aria-label', 'Open List Menu');
         }
       }
 
@@ -373,6 +406,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
           }
         }
+
         function computeClickable() {
           if (proxies.length == 1 || hasClick) {
             $element.addClass('md-clickable');
@@ -409,6 +443,9 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
             if (!parentButton && clickChild.contains(e.target)) {
               angular.forEach(proxies, function(proxy) {
                 if (e.target !== proxy && !proxy.contains(e.target)) {
+                  if (proxy.nodeName === 'MD-MENU') {
+                    proxy = proxy.children[0];
+                  }
                   angular.element(proxy).triggerHandler('click');
                 }
               });

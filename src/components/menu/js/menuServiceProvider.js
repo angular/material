@@ -456,8 +456,17 @@ function MenuProvider($$interimElementProvider) {
           position.left = willFitRight ? originNodeRect.right - originNode.style.left : originNodeRect.left - originNode.style.left - openMenuNodeRect.width;
           transformOrigin += willFitRight ? 'left' : 'right';
           break;
+        case 'right':
+          if (rtl) {
+            position.left = originNodeRect.right - originNodeRect.width;
+            transformOrigin += 'left';
+          } else {
+            position.left = originNodeRect.right - openMenuNodeRect.width;
+            transformOrigin += 'right';
+          }
+          break;
         case 'left':
-          if(rtl) {
+          if (rtl) {
             position.left = originNodeRect.right - openMenuNodeRect.width;
             transformOrigin += 'right';
           } else {
