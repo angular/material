@@ -7,9 +7,30 @@ angular.module('material.core')
  */
 function MdConstantFactory($sniffer) {
 
-  var webkit = /webkit/i.test($sniffer.vendorPrefix);
+  var vendorPrefix = $sniffer.vendorPrefix;
+  var isWebkit = /webkit/i.test(vendorPrefix);
+  var SPECIAL_CHARS_REGEXP = /([:\-_]+(.))/g;
+  var prefixTestEl = document.createElement('div');
+
   function vendorProperty(name) {
-    return webkit ?  ('webkit' + name.charAt(0).toUpperCase() + name.substring(1)) : name;
+    // Add a dash between the prefix and name, to be able to transform the string into camelcase.
+    var prefixedName = vendorPrefix + '-' + name;
+    var ucPrefix = camelCase(prefixedName);
+    var lcPrefix = ucPrefix.charAt(0).toLowerCase() + ucPrefix.substring(1);
+
+    return hasStyleProperty(name)     ? name     :       // The current browser supports the un-prefixed property
+           hasStyleProperty(ucPrefix) ? ucPrefix :       // The current browser only supports the prefixed property.
+           hasStyleProperty(lcPrefix) ? lcPrefix : name; // Some browsers are only supporting the prefix in lowercase.
+  }
+
+  function hasStyleProperty(property) {
+    return angular.isDefined(prefixTestEl.style[property]);
+  }
+
+  function camelCase(input) {
+    return input.replace(SPECIAL_CHARS_REGEXP, function(matches, separator, letter, offset) {
+      return offset ? letter.toUpperCase() : letter;
+    });
   }
 
   return {
@@ -33,8 +54,8 @@ function MdConstantFactory($sniffer) {
     },
     CSS: {
       /* Constants */
-      TRANSITIONEND: 'transitionend' + (webkit ? ' webkitTransitionEnd' : ''),
-      ANIMATIONEND: 'animationend' + (webkit ? ' webkitAnimationEnd' : ''),
+      TRANSITIONEND: 'transitionend' + (isWebkit ? ' webkitTransitionEnd' : ''),
+      ANIMATIONEND: 'animationend' + (isWebkit ? ' webkitAnimationEnd' : ''),
 
       TRANSFORM: vendorProperty('transform'),
       TRANSFORM_ORIGIN: vendorProperty('transformOrigin'),
