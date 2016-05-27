@@ -579,6 +579,7 @@ describe('$mdDialog', function() {
           .title('Title')
           .textContent('Hello world')
           .placeholder('placeholder text')
+          .initialValue('initial value')
           .theme('some-theme')
           .css('someClass anotherClass')
           .ok('Next')
@@ -604,6 +605,7 @@ describe('$mdDialog', function() {
       expect(title.text()).toBe('Title');
       expect(contentBody.textContent).toBe('Hello world');
       expect(inputElement[0].placeholder).toBe('placeholder text');
+      expect(inputElement.val()).toBe('initial value');
       expect(buttons.length).toBe(2);
       expect(buttons.eq(0).text()).toBe('Next');
       expect(theme).toBe('some-theme');
