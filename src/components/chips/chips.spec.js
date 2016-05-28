@@ -256,6 +256,22 @@ describe('<md-chips>', function() {
         expect(scope.items[3].uppername).toBe('GRAPE');
       });
 
+      it('should initialize the ngModel variable if it is undefined', function() {
+        var element = buildChips('<md-chips ng-model="undefinedItems"></md-chips>');
+        var ctrl = element.controller('mdChips');
+
+        scope.undefinedItems = undefined;
+
+        element.scope().$apply(function() {
+          ctrl.chipBuffer = 'Orange';
+          simulateInputEnterKey(ctrl);
+        });
+        
+        expect(scope.undefinedItems).not.toBe(undefined);
+        expect(scope.undefinedItems.length).toBe(1);
+        expect(scope.undefinedItems[0]).toBe('Orange');
+      });
+
       describe('when readonly', function() {
         var element, ctrl;
 
