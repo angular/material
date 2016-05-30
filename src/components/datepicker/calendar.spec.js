@@ -341,12 +341,12 @@ describe('md-calendar', function() {
       applyDateChange();
 
       var otherScope = $rootScope.$new();
+      var day = 15;
 
       otherScope.myDate = controller.today;
       var otherNgElement = createElement(otherScope);
 
       var monthElement = element.querySelector('.md-calendar-month');
-      var day = controller.today.getDate();
       var dateElement = findDateElement(monthElement, day);
 
       var otherMonthElement = otherNgElement[0].querySelector('.md-calendar-month');
