@@ -131,6 +131,12 @@ describe('md-date-picker', function() {
     }).toThrowError('md-datepicker should not be placed inside md-input-container.');
   });
 
+  it('should be able open the calendar when the input is focused', function() {
+    createDatepickerInstance('<md-datepicker ng-model="myDate" md-open-on-focus></md-datepicker>');
+    controller.ngInputElement.triggerHandler('focus');
+    expect(document.querySelector('md-calendar')).toBeTruthy();
+  });
+
   describe('ngMessages suport', function() {
     it('should set the `required` $error flag', function() {
       pageScope.isRequired = true;
