@@ -138,9 +138,9 @@ describe('mdListItem directive', function() {
     var buttonWrap = listItem.children().eq(0);
     expect(listItem).toHaveClass('_md-button-wrap');
 
-    // The button wrap should contain the button executor, the inner content, flex filler and the
+    // The button wrap should contain the button executor, the inner content and the
     // secondary item container as children.
-    expect(buttonWrap.children().length).toBe(4);
+    expect(buttonWrap.children().length).toBe(3);
 
     var buttonExecutor = buttonWrap.children()[0];
 
@@ -164,9 +164,9 @@ describe('mdListItem directive', function() {
     var buttonWrap = listItem.children().eq(0);
     expect(listItem).toHaveClass('_md-button-wrap');
 
-    // The button wrap should contain the button executor, the inner content, flex filler and the
+    // The button wrap should contain the button executor, the inner content and the
     // secondary item container as children.
-    expect(buttonWrap.children().length).toBe(4);
+    expect(buttonWrap.children().length).toBe(3);
 
     var buttonExecutor = buttonWrap.children()[0];
 
@@ -190,9 +190,9 @@ describe('mdListItem directive', function() {
     var buttonWrap = listItem.children().eq(0);
     expect(listItem).toHaveClass('_md-button-wrap');
 
-    // The button wrap should contain the button executor, the inner content, flex filler and the
+    // The button wrap should contain the button executor, the inner content and the
     // secondary item container as children.
-    expect(buttonWrap.children().length).toBe(4);
+    expect(buttonWrap.children().length).toBe(3);
 
     var buttonExecutor = buttonWrap.children()[0];
 
@@ -215,9 +215,9 @@ describe('mdListItem directive', function() {
     var buttonWrap = listItem.children().eq(0);
     expect(listItem).toHaveClass('_md-button-wrap');
 
-    // The button wrap should contain the button executor, the inner content, flex filler and the
+    // The button wrap should contain the button executor, the inner content and the
     // secondary item container as children.
-    expect(buttonWrap.children().length).toBe(4);
+    expect(buttonWrap.children().length).toBe(3);
 
     var buttonExecutor = buttonWrap.children()[0];
 
@@ -256,11 +256,11 @@ describe('mdListItem directive', function() {
 
     expect(listItem).toHaveClass('_md-button-wrap');
 
-    // It should contain three elements, the button overlay, inner content, flex filler
+    // It should contain three elements, the button overlay, inner content
     // and the secondary container.
-    expect(firstChild.children().length).toBe(4);
+    expect(firstChild.children().length).toBe(3);
 
-    var secondaryContainer = firstChild.children().eq(3);
+    var secondaryContainer = firstChild.children().eq(2);
     expect(secondaryContainer).toHaveClass('_md-secondary-container');
 
     // The secondary container should contain the md-icon,
@@ -282,11 +282,11 @@ describe('mdListItem directive', function() {
 
     expect(listItem).toHaveClass('_md-button-wrap');
 
-    // It should contain three elements, the button overlay, inner content, flex filler
+    // It should contain three elements, the button overlay, inner content,
     // and the secondary container.
-    expect(firstChild.children().length).toBe(4);
+    expect(firstChild.children().length).toBe(3);
 
-    var secondaryContainer = firstChild.children().eq(3);
+    var secondaryContainer = firstChild.children().eq(2);
     expect(secondaryContainer).toHaveClass('_md-secondary-container');
 
     // The secondary container should hold the two secondary items.

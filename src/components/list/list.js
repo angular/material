@@ -170,10 +170,6 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           wrapSecondaryItem(secondaryItem, secondaryItemsWrapper);
         });
 
-        // Since the secondary item container is static we need to fill the remaing space.
-        var spaceFiller = angular.element('<div class="flex"></div>');
-        itemContainer.append(spaceFiller);
-
         itemContainer.append(secondaryItemsWrapper);
       }
 

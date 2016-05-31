@@ -294,8 +294,17 @@ md-list-item {
       display: flex;
       align-items: center;
 
-      height: 100%;
+      // The secondary container is now static and needs to be aligned at the end of its parent.
+      // - Using an absolute position will cause much issues with the overflow.
+      // - Using a flex-filler, which pushes the container to the end of the parent is working
+      //   but breaks the users list-item layout.
+      // Using margin auto to move them to the end of the list item is more elegant, because it has
+      // a lower priority than the flex filler and isn't introducing overflow issues again.
+      // The margin on the top is also important to align multiple secondary items vertical correctly.
       margin: auto;
+
+      @include rtl(margin-right, 0, auto);
+      @include rtl(margin-left, auto, 0);
 
       .md-button, .md-icon-button {
         &:last-of-type {
@@ -346,7 +355,7 @@ md-list-item {
         overflow: hidden;
 
         &.md-offset {
-        @include rtl-prop(margin-left, margin-right, $list-item-primary-width);
+          @include rtl-prop(margin-left, margin-right, $list-item-primary-width);
         }
 
         h3 {
