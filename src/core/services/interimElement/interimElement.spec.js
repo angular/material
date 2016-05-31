@@ -342,6 +342,24 @@ describe('$$interimElement service', function() {
 
       }));
 
+      it('should cancel a previous shown interim element', inject(function() {
+        var isCancelled = false;
+
+        Service.show({
+          template: '<div>First Interim</div>'
+        }).catch(function() {
+          isCancelled = true;
+        });
+
+        // Once we show the second interim, the first interim should be cancelled and the promise
+        // should be rejected with no reason.
+        Service.show({
+          template: '<div>Second Interim</div>'
+        });
+
+        expect(isCancelled).toBe(true);
+      }));
+
       it('forwards options to $mdCompiler', inject(function() {
         var options = {template: '<testing />'};
         Service.show(options);

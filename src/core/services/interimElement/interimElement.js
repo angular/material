@@ -286,7 +286,10 @@ function InterimElementProvider() {
       function show(options) {
         options = options || {};
         var interimElement = new InterimElement(options || {});
-        var hideExisting = !options.skipHide && stack.length ? service.hide() : $q.when(true);
+        // When an interim element is currently showing, we have to cancel it.
+        // Just hiding it, will resolve the InterimElement's promise, the promise should be
+        // rejected instead.
+        var hideExisting = !options.skipHide && stack.length ? service.cancel() : $q.when(true);
 
         // This hide()s only the current interim element before showing the next, new one
         // NOTE: this is not reversible (e.g. interim elements are not stackable)
