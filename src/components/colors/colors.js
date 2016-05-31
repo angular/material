@@ -58,7 +58,7 @@
      * @name $mdColors#applyThemeColors
      *
      * @description
-     * Convert the color expression into an object with scope-interpolated values
+     * Gets a color json object, keys are css properties and values are string of the wanted color
      * Then calculate the rgba() values based on the theme color parts
      *
      * @param {DOMElement} element the element to apply the styles on.
@@ -71,7 +71,7 @@
      *     return {
      *       ...
      *       link: function (scope, elem) {
-     *         $mdColors.applyThemeColors(elem, scope, {color: 'red'});
+     *         $mdColors.applyThemeColors(elem, {color: 'red'});
      *       }
      *    }
      *   });
