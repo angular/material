@@ -19,10 +19,17 @@
 
       <div>
         <p><b>Toast Position: "{{getToastPosition()}}"</b></p>
-        <md-checkbox ng-repeat="(name, isSelected) in toastPosition"
-          ng-model="toastPosition[name]">
-          {{name}}
-        </md-checkbox>
+        <div layout="row" layout-padding>
+          <md-radio-group class="md-primary" layout="row" ng-model="verticalPosition">
+            <md-radio-button value="top">top</md-radio-button>
+            <md-radio-button value="bottom">bottom</md-radio-button>
+          </md-radio-group>
+          <md-radio-group layout="row" ng-model="horizontalPosition">
+            <md-radio-button value="left">left</md-radio-button>
+            <md-radio-button value="center">center</md-radio-button>
+            <md-radio-button value="right">right</md-radio-button>
+          </md-radio-group>
+        </div>
       </div>
     </div>
     <div layout="row">
