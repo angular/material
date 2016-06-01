@@ -1249,6 +1249,11 @@ function SelectProvider($$interimElementProvider) {
         }
 
         function onMenuKeyDown(ev) {
+          // Don't swallow hotkeys like Ctrl+r
+          if (ev.ctrlKey) {
+            return;
+          }
+
           var keyCodes = $mdConstant.KEY_CODE;
           ev.preventDefault();
           ev.stopPropagation();
