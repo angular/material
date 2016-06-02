@@ -106,6 +106,7 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $mdUtil) {
  * @param event
  */
 MdChipsCtrl.prototype.inputKeydown = function(event) {
+  console.log('keydown', event);
   var chipBuffer = this.getChipBuffer();
 
   // If we have an autocomplete, and it handled the event, we have nothing to do
@@ -121,13 +122,34 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
     return;
   }
 
+  this.inputKey(event.keyCode, event);
+}
+
+/**
+ * Handles the keypress event on the input element: Search for special
+ * separator keys.
+ * @param event
+ */
+MdChipsCtrl.prototype.inputKeypress = function(event) {
+  console.log('keypress', event);
+  this.inputKey(String.fromCharCode(event.charCode), event);
+}
+
+/**
+ * Common code for both inputKeydown and inputKeypress
+ * @param key Either a numeric keyCode (keydown) or a length-one string (keypress)
+ * @param event
+ */
+MdChipsCtrl.prototype.inputKey = function(key, event) {
+  var chipBuffer = this.getChipBuffer();
+
   // By default <enter> appends the buffer to the chip list.
   if (!this.separatorKeys || this.separatorKeys.length < 1) {
     this.separatorKeys = [this.$mdConstant.KEY_CODE.ENTER];
   }
 
   // Support additional separator key codes in an array of `md-separator-keys`.
-  if (this.separatorKeys.indexOf(event.keyCode) !== -1) {
+  if (this.separatorKeys.indexOf(key) !== -1) {
     if ((this.hasAutocomplete && this.requireMatch) || !chipBuffer) return;
     event.preventDefault();
 
@@ -498,6 +520,7 @@ MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
   inputElement
       .attr({ tabindex: 0 })
       .on('keydown', function(event) { scopeApplyFn(event, ctrl.inputKeydown) })
+      .on('keypress', function(event) { scopeApplyFn(event, ctrl.inputKeypress) })
       .on('focus', function(event) { scopeApplyFn(event, ctrl.onInputFocus) })
       .on('blur', function(event) { scopeApplyFn(event, ctrl.onInputBlur) })
 };
