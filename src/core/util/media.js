@@ -61,6 +61,14 @@ angular.module('material.core')
  *      <td>print</td>
  *      <td>print</td>
  *    </tr>
+ *    <tr>
+ *      <td>landscape</td>
+ *      <td>landscape</td>
+ *    </tr>
+ *    <tr>
+ *      <td>portrait</td>
+ *      <td>portrait</td>
+ *    </tr>
  *    </tbody>
  *  </table>
  *
