@@ -242,7 +242,7 @@ InkRippleCtrl.prototype._parseColor = function parseColor (color, multiplier) {
  * Binds events to the root element for
  */
 InkRippleCtrl.prototype.bindEvents = function () {
-  this.$element.on('mousedown', angular.bind(this, this.handleMousedown));
+  this.$element.on('mousedown touchstart', angular.bind(this, this.handleMousedown));
   this.$element.on('mouseup touchend', angular.bind(this, this.handleMouseup));
   this.$element.on('mouseleave', angular.bind(this, this.handleMouseup));
   this.$element.on('touchmove', angular.bind(this, this.handleTouchmove));
@@ -261,16 +261,18 @@ InkRippleCtrl.prototype.handleMousedown = function (event) {
   if (this.options.center) {
     this.createRipple(this.container.prop('clientWidth') / 2, this.container.prop('clientWidth') / 2);
   } else {
+    // When the event was triggered by a touchstart, then we need to use the coordinates of the last touch.
+    var positionRect = event.type === 'touchstart' ? event.touches[0] : event;
 
     // We need to calculate the relative coordinates if the target is a sublayer of the ripple element
-    if (event.srcElement !== this.$element[0]) {
+    if (event.srcElement !== this.$element[0] || event.type === 'touchstart') {
       var layerRect = this.$element[0].getBoundingClientRect();
-      var layerX = event.clientX - layerRect.left;
-      var layerY = event.clientY - layerRect.top;
+      var layerX = positionRect.clientX - layerRect.left;
+      var layerY = positionRect.clientY - layerRect.top;
 
       this.createRipple(layerX, layerY);
     } else {
-      this.createRipple(event.offsetX, event.offsetY);
+      this.createRipple(positionRect.offsetX, positionRect.offsetY);
     }
   }
 };
