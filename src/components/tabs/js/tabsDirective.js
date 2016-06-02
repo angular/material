@@ -61,7 +61,7 @@
  * @param {boolean=} md-center-tabs When enabled, tabs will be centered provided there is no need for pagination
  * @param {boolean=} md-no-pagination When enabled, pagination will remain off
  * @param {boolean=} md-swipe-content When enabled, swipe gestures will be enabled for the content area to jump between tabs
- * @param {boolean=} md-enable-disconnect When enabled, scopes will be disconnected for tabs that are not being displayed.  This provides a performance boost, but may also cause unexpected issues and is not recommended for most users.
+ * @param {boolean=} md-enable-disconnect When enabled, scopes will be disconnected for tabs that are not being displayed. When a scope is disconnected it is removed from the scope hierarchy so that its events and watches are not fired, but its state is not destroyed. This can result in a performance boost but may have unexpected behaviour.
  * @param {boolean=} md-autoselect When present, any tabs added after the initial load will be automatically selected
  * @param {boolean=} md-no-select-click When enabled, click events will not be fired when selecting tabs
  *
@@ -192,7 +192,7 @@ function MdTabs () {
                 'md-tabs-template="::tab.template" ' +
                 'md-connected-if="tab.isActive()" ' +
                 'md-scope="::tab.parent" ' +
-                'ng-if="$mdTabsCtrl.enableDisconnect || tab.shouldRender()"></div> ' +
+                'ng-if="!$mdTabsCtrl.enableDisconnect || tab.shouldRender()"></div> ' +
           '</md-tab-content> ' +
         '</md-tabs-content-wrapper>';
     },
