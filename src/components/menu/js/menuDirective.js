@@ -175,8 +175,11 @@ function MenuDirective($mdUtil) {
   function compile(templateElement) {
     templateElement.addClass('md-menu');
     var triggerElement = templateElement.children()[0];
-    if (!triggerElement.hasAttribute('ng-click')) {
-      triggerElement = triggerElement.querySelector('[ng-click],[ng-mouseenter]') || triggerElement;
+    var prefixer = $mdUtil.prefixer();
+
+    if (!prefixer.hasAttribute(triggerElement, 'ng-click')) {
+      triggerElement = triggerElement
+          .querySelector(prefixer.buildSelector(['ng-click', 'ng-mouseenter'])) || triggerElement;
     }
     if (triggerElement && (
       triggerElement.nodeName == 'MD-BUTTON' ||
