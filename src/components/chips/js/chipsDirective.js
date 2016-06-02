@@ -62,6 +62,8 @@
    *  </span>
    *
    * @param {string=|object=} ng-model A model to bind the list of items to
+   * @param {expression=} md-on-select An expression to be run each time a new item got selected
+   * @param {expression=} md-on-deselect An expression to be run each time a chip got deselected
    * @param {string=} placeholder Placeholder text that will be forwarded to the input.
    * @param {string=} secondary-placeholder Placeholder text that will be forwarded to the input,
    *    displayed when there is at least one item in the list
@@ -83,7 +85,6 @@
    *    added.
    * @param {expression=} md-on-remove An expression which will be called when a chip has been
    *    removed.
-   * @param {expression=} md-on-select An expression which will be called when a chip is selected.
    * @param {boolean} md-require-match If true, and the chips template contains an autocomplete,
    *    only allow selection of pre-defined chips (i.e. you cannot add new ones).
    * @param {string=} delete-hint A string read by screen readers instructing users that pressing
@@ -206,7 +207,8 @@
         onAppend: '&mdOnAppend',
         onAdd: '&mdOnAdd',
         onRemove: '&mdOnRemove',
-        onSelect: '&mdOnSelect',
+        onChipSelect: '&mdOnSelect',
+        onChipDeselect:'&mdOnDeselect',
         deleteHint: '@',
         deleteButtonLabel: '@',
         separatorKeys: '=?mdSeparatorKeys',
@@ -310,10 +312,6 @@
           // If an `md-on-remove` attribute was set, tell the controller to use the expression
           // when removing chips.
           if (attrs.mdOnRemove) mdChipsCtrl.useOnRemoveExpression();
-
-          // If an `md-on-select` attribute was set, tell the controller to use the expression
-          // when selecting chips.
-          if (attrs.mdOnSelect) mdChipsCtrl.useOnSelectExpression();
 
           // The md-autocomplete and input elements won't be compiled until after this directive
           // is complete (due to their nested nature). Wait a tick before looking for them to

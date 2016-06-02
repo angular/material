@@ -185,20 +185,67 @@ describe('<md-chips>', function() {
         expect(scope.removeChip.calls.mostRecent().args[1]).toBe(0);       // Index
       });
 
-
-      it('should call the select method when selecting a chip', function() {
-        var element = buildChips(CHIP_SELECT_TEMPLATE);
+      it("should call the select and deselect expressions", function() {
+        var element = buildChips(
+          '<md-chips ' +
+            'ng-model="items" ' +
+            'md-on-select="onChipSelect($index)" ' +
+            'md-on-deselect="onChipDeselect($index)">' +
+          '</md-chips>'
+        );
         var ctrl = element.controller('mdChips');
+        var scope = element.scope();
 
-        scope.selectChip = jasmine.createSpy('selectChip');
+        scope.onChipSelect = jasmine.createSpy('onChipSelect');
+        scope.onChipDeselect = jasmine.createSpy('onChipDeselect');
 
-        element.scope().$apply(function() {
-          ctrl.items = ['Grape'];
+        scope.$apply(function() {
+          ctrl.items = ['Grape', 'Banana'];
           ctrl.selectChip(0);
         });
 
-        expect(scope.selectChip).toHaveBeenCalled();
-        expect(scope.selectChip.calls.mostRecent().args[0]).toBe('Grape');
+        expect(scope.onChipDeselect).toHaveBeenCalledTimes(1);
+        expect(scope.onChipSelect).toHaveBeenCalledTimes(1);
+
+        expect(scope.onChipSelect).toHaveBeenCalledWith(0);
+        expect(scope.onChipDeselect).toHaveBeenCalledWith(-1);
+
+        scope.$apply(function() {
+          ctrl.selectChip(1);
+        });
+
+        expect(scope.onChipDeselect).toHaveBeenCalledTimes(2);
+        expect(scope.onChipSelect).toHaveBeenCalledTimes(2);
+
+        expect(scope.onChipSelect).toHaveBeenCalledWith(1);
+        expect(scope.onChipDeselect).toHaveBeenCalledWith(0);
+      });
+
+      it("should call the select and deselect expressions", function() {
+        var element = buildChips(
+          '<md-chips ' +
+          'ng-model="items" ' +
+          'md-on-select="newIndex = $index" ' +
+          'md-on-deselect="oldIndex = $index">' +
+          '</md-chips>'
+        );
+        var ctrl = element.controller('mdChips');
+        var scope = element.scope();
+
+        scope.$apply(function() {
+          ctrl.items = ['Grape', 'Banana'];
+          ctrl.selectChip(0);
+        });
+
+        expect(scope.newIndex).toBe(0);
+        expect(scope.oldIndex).toBe(-1);
+
+        scope.$apply(function() {
+          ctrl.selectChip(1);
+        });
+
+        expect(scope.newIndex).toBe(1);
+        expect(scope.oldIndex).toBe(0);
       });
 
       describe('when readonly', function() {
