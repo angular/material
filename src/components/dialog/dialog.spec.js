@@ -269,7 +269,6 @@ describe('$mdDialog', function() {
 
       expect(container.length).toBe(0);
     }));
-
   });
 
   describe('#confirm()', function() {
@@ -849,6 +848,116 @@ describe('$mdDialog', function() {
       }));
     });
 
+    describe('before close', function() {
+      it('should close the dialog when beforeClose promise is placed and resolved', inject(function ($mdDialog, $mdConstant, $q) {
+        var container, parent = angular.element('<div>');
+
+        var beforeFunction = jasmine.createSpy('beforeFunction').and.callFake(
+          function() {
+            var deferred = $q.defer();
+            deferred.resolve();
+            return deferred.promise;
+          }
+        );
+
+        $mdDialog.show(
+          $mdDialog.alert({
+            template:
+              '<md-dialog>' +
+              '  <md-dialog-content tabIndex="0">' +
+              '    <p>Kermit is my king</p>' +
+              '  </md-dialog-content>' +
+              '</md-dialog>',
+            parent: parent,
+            escapeToClose: true,
+            beforeClose: beforeFunction
+          })
+        );
+
+        runAnimation();
+        parent.triggerHandler({
+          type: 'keydown',
+          keyCode: $mdConstant.KEY_CODE.ESCAPE
+        });
+        runAnimation();
+
+        container = angular.element(parent[0].querySelector('.md-dialog-container'));
+        expect(beforeFunction).toHaveBeenCalled();
+        expect(container.length).toBe(0);
+      }));
+
+      it('should not close the dialog when beforeClose promise is placed and rejected', inject(function ($mdDialog, $mdConstant, $q) {
+        var container, parent = angular.element('<div>');
+
+        var beforeFunction = jasmine.createSpy('beforeFunction').and.callFake(
+          function() {
+            var deferred = $q.defer();
+            deferred.reject();
+            return deferred.promise;
+          }
+        );
+
+        $mdDialog.show(
+          $mdDialog.alert({
+            template:
+              '<md-dialog>' +
+              '  <md-dialog-content tabIndex="0">' +
+              '    <p>Kermit is my king</p>' +
+              '  </md-dialog-content>' +
+              '</md-dialog>',
+            parent: parent,
+            escapeToClose: true,
+            beforeClose: beforeFunction
+          })
+        );
+
+        runAnimation();
+        parent.triggerHandler({
+          type: 'keydown',
+          keyCode: $mdConstant.KEY_CODE.ESCAPE
+        });
+        runAnimation();
+
+        container = angular.element(parent[0].querySelector('.md-dialog-container'));
+        expect(beforeFunction).toHaveBeenCalled();
+        expect(container.length).toBe(1);
+      }));
+
+      it('should close the dialog when beforeClose is not a promise', inject(function ($mdDialog, $mdConstant, $q) {
+        var container, parent = angular.element('<div>');
+
+        var beforeFunction = jasmine.createSpy('beforeFunction').and.callFake(
+          function() {
+            return 6;
+          }
+        );
+
+        $mdDialog.show(
+          $mdDialog.alert({
+            template:
+              '<md-dialog>' +
+              '  <md-dialog-content tabIndex="0">' +
+              '    <p>Kermit is my king</p>' +
+              '  </md-dialog-content>' +
+              '</md-dialog>',
+            parent: parent,
+            escapeToClose: true,
+            beforeClose: beforeFunction
+          })
+        );
+
+        runAnimation();
+        parent.triggerHandler({
+          type: 'keydown',
+          keyCode: $mdConstant.KEY_CODE.ESCAPE
+        });
+        runAnimation();
+
+        container = angular.element(parent[0].querySelector('.md-dialog-container'));
+        expect(beforeFunction).toHaveBeenCalled();
+        expect(container.length).toBe(0);
+      }));
+    });
 
     describe('when autoWrap parameter is false', function() {
 

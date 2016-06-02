@@ -467,6 +467,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  *   - `preserveScope` - `{boolean=}`: whether to preserve the scope when the element is removed. Default is false
  *   - `disableParentScroll` - `{boolean=}`: Whether to disable scrolling while the dialog is open.
  *     Default true.
+ *   - `beforeClose` - `{function=}`: A function that returns a promise. If the promise resolves, the dialog will close immediately.
  *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop behind the dialog.
  *     Default true.
  *   - `clickOutsideToClose` - `{boolean=}`: Whether the user can click outside the dialog to
@@ -596,7 +597,7 @@ function MdDialogProvider($$interimElementProvider) {
   }
 
   /* @ngInject */
-  function dialogDefaultOptions($mdDialog, $mdAria, $mdUtil, $mdConstant, $animate, $document, $window, $rootElement, $log, $injector) {
+  function dialogDefaultOptions($mdDialog, $mdAria, $mdUtil, $mdConstant, $animate, $document, $window, $rootElement, $log, $injector, $q) {
     return {
       hasBackdrop: true,
       isolateScope: true,
@@ -860,8 +861,18 @@ function MdDialogProvider($$interimElementProvider) {
       var smartClose = function() {
         // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
         // cancel or fallback to hide.
-        var closeFn = ( options.$type == 'alert' ) ? $mdDialog.hide : $mdDialog.cancel;
-        $mdUtil.nextTick(closeFn, true);
+        var closeFn = (options.$type == 'alert') ? $mdDialog.hide : $mdDialog.cancel;
+        var beforeClosePromise = $q.resolve();
+
+        if (options.beforeClose) {
+          beforeClosePromise = $q.when(
+            options.beforeClose(options.scope, element, options)
+          );
+        }
+        
+        beforeClosePromise.then(function(){
+          $mdUtil.nextTick(closeFn, true);
+        })
       };
 
       if (options.escapeToClose) {
