@@ -16,5 +16,21 @@
       If no <code>ng-model</code> is provided, there are no input elements in <code>md-chips</code>.
     </p>
 
+
+    <br/>
+    <h2 class="md-title">Display as static tags.</h2>
+
+    <div layout="row" layout-align="start center">
+
+      <div class="md-subhead" style="padding-right: 15px;">Tags: </div>
+
+      <md-chips class="md-static" ng-model="ctrl.chips" readonly="true"></md-chips>
+
+    </div>
+    <p class="note">
+      Input styling may be removed by using the <code>md-static</code> class on <code>md-chips</code>.<br/>
+      If using <code>ng-model</code>, use in conjunction with <code>readonly="true"</code>.
+    </p>
+
   </md-content>
 </div>

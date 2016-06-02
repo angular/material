@@ -6,5 +6,7 @@
 
   function DemoCtrl ($timeout, $q) {
     this.chipText = 'Football';
+
+    this.chips = ['XL', 'Orange', 'Cotton'];
   }
 })();
