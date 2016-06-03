@@ -1,14 +1,14 @@
 describe('mdSidenav', function() {
   beforeEach(module('material.components.sidenav'));
 
-  function setup(attrs) {
+  function setup(attrs, scope) {
     var el;
     inject(function($compile, $rootScope) {
       var parent = angular.element('<div>');
       el = angular.element('<md-sidenav ' + (attrs || '') + '>');
       parent.append(el);
-      $compile(parent)($rootScope);
-      $rootScope.$apply();
+      $compile(parent)(scope || $rootScope);
+      scope ? scope.$apply() :$rootScope.$apply();
     });
     return el;
   }
@@ -325,6 +325,57 @@ describe('mdSidenav', function() {
       scope.$apply();
 
       expect(el.hasClass('_md-closed')).toBe(true);
+    }));
+
+    it('should grab interpolated instance', inject(function($mdSidenav, $rootScope) {
+      var scope = $rootScope.$new();
+
+      scope.id = 'left';
+      scope.$apply();
+
+      var el = setup('md-component-id="{{id}}"', scope);
+
+      var instance = $mdSidenav(scope.id);
+      expect(instance).toBeTruthy();
+
+      instance.open();
+      scope.$apply();
+
+      expect(el.hasClass('md-closed')).toBe(false);
+
+      instance.close();
+      scope.$apply();
+
+      expect(el.hasClass('md-closed')).toBe(true);
+
+      scope.id = 'right';
+      scope.$apply();
+
+      instance = $mdSidenav(scope.id);
+      expect(instance).toBeTruthy();
+
+      instance.open();
+      scope.$apply();
+
+      expect(el.hasClass('md-closed')).toBe(false);
+
+      instance.close();
+      scope.$apply();
+
+      expect(el.hasClass('md-closed')).toBe(true);
+
+      instance = $mdSidenav('left');
+      expect(instance).toBeTruthy();
+
+      instance.open();
+      scope.$apply();
+
+      expect(el.hasClass('md-closed')).toBe(true);
+
+      instance.close();
+      scope.$apply();
+
+      expect(el.hasClass('md-closed')).toBe(true);
     }));
 
     it('exposes state', inject(function($mdSidenav) {
