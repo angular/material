@@ -15,6 +15,7 @@ With this release we have merged many of the pending Pull requests and added som
 #### Contributors
 
 Thanks to the great contributors who helped with this release:
+
 [<img alt="247GradLabs" src="https://avatars.githubusercontent.com/u/19302650?v=3&s=117" width="117">](https://github.com/247GradLabs) |[<img alt="AaronBuxbaum" src="https://avatars.githubusercontent.com/u/5578581?v=3&s=117" width="117">](https://github.com/AaronBuxbaum) |[<img alt="andresgottlieb" src="https://avatars.githubusercontent.com/u/1126905?v=3&s=117" width="117">](https://github.com/andresgottlieb) |[<img alt="aortyl" src="https://avatars.githubusercontent.com/u/10928389?v=3&s=117" width="117">](https://github.com/aortyl) |[<img alt="areologist" src="https://avatars.githubusercontent.com/u/4918688?v=3&s=117" width="117">](https://github.com/areologist) |[<img alt="BevanR" src="https://avatars.githubusercontent.com/u/325176?v=3&s=117" width="117">](https://github.com/BevanR) |
 :---: |:---: |:---: |:---: |:---: |:---: |
 [247GradLabs](https://github.com/247GradLabs) |[AaronBuxbaum](https://github.com/AaronBuxbaum) |[andresgottlieb](https://github.com/andresgottlieb) |[aortyl](https://github.com/aortyl) |[areologist](https://github.com/areologist) |[BevanR](https://github.com/BevanR) |
