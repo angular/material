@@ -12,13 +12,23 @@
         </div>
       </md-input-container>
 
-      <md-input-container class="md-block">
-        <label>Client Name</label>
-        <input required name="clientName" ng-model="project.clientName">
-        <div ng-messages="projectForm.clientName.$error">
-          <div ng-message="required">This is required.</div>
-        </div>
-      </md-input-container>
+      <div layout="row">
+        <md-input-container flex="50">
+          <label>Client Name</label>
+          <input required name="clientName" ng-model="project.clientName">
+          <div ng-messages="projectForm.clientName.$error">
+            <div ng-message="required">This is required.</div>
+          </div>
+        </md-input-container>
+
+        <md-input-container flex="50">
+          <label>Project Type</label>
+          <md-select name="type" ng-model="project.type" required>
+            <md-option value="app">Application</md-option>
+            <md-option value="web">Website</md-option>
+          </md-select>
+        </md-input-container>
+      </div>
 
       <md-input-container class="md-block">
         <label>Client Email</label>
@@ -58,6 +68,10 @@
           </div>
         </div>
       </md-input-container>
+
+      <div>
+        <md-button type="submit">Submit</md-button>
+      </div>
 
       <p style="font-size:.8em; width: 100%; text-align: center;">
         Make sure to include <a href="https://docs.angularjs.org/api/ngMessages" target="_blank">ngMessages</a> module when using ng-message markup.
