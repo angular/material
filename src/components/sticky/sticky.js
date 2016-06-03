@@ -68,9 +68,9 @@ angular
  *     when the user starts scrolling past the original element.
  *     If not provided, it will use the result of `element.clone()` and compiles it in the given scope.
  */
-function MdSticky($document, $mdConstant, $$rAF, $mdUtil, $compile) {
+function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
 
-  var browserStickySupport = checkStickySupport();
+  var browserStickySupport = $mdUtil.checkStickySupport();
 
   /**
    * Registers an element as sticky, used internally by directives to register themselves
@@ -315,23 +315,6 @@ function MdSticky($document, $mdConstant, $$rAF, $mdUtil, $compile) {
     }
   }
 
-  // Function to check for browser sticky support
-  function checkStickySupport($el) {
-    var stickyProp;
-    var testEl = angular.element('<div>');
-    $document[0].body.appendChild(testEl[0]);
-
-    var stickyProps = ['sticky', '-webkit-sticky'];
-    for (var i = 0; i < stickyProps.length; ++i) {
-      testEl.css({position: stickyProps[i], top: 0, 'z-index': 2});
-      if (testEl.css('position') == stickyProps[i]) {
-        stickyProp = stickyProps[i];
-        break;
-      }
-    }
-    testEl.remove();
-    return stickyProp;
-  }
 
   // Android 4.4 don't accurately give scroll events.
   // To fix this problem, we setup a fake scroll event. We say:
