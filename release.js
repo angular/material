@@ -122,7 +122,7 @@
     type = prompt();
 
     if (options[ type - 1 ]) version = options[ type - 1 ];
-    else if (type.match(/^\d+\.\d+\.\d+(-rc\d+)?$/)) version = type;
+    else if (type.match(/^\d+\.\d+\.\d+(-rc\.?\d+)?$/)) version = type;
     else throw new Error('Your entry was invalid.');
 
     log('');
@@ -131,7 +131,7 @@
     return prompt() === 'yes' ? version : getNewVersion();
 
     function getVersionOptions (version) {
-      return version.match(/-rc\d+$/)
+      return version.match(/-rc\.?\d+$/)
           ? [ increment(version, 'rc'), increment(version, 'minor') ]
           : [ increment(version, 'patch'), addRC(increment(version, 'minor')) ];
 
@@ -165,13 +165,13 @@
 
         function getVersionString (version) {
           var str = version.major + '.' + version.minor + '.' + version.patch;
-          if (version.rc) str += '-rc' + version.rc;
+          if (version.rc) str += '-rc.' + version.rc;
           return str;
         }
       }
 
       function addRC (str) {
-        return str + '-rc1';
+        return str + '-rc.1';
       }
     }
   }
@@ -249,7 +249,7 @@
       'git pull --rebase --strategy=ours',
       'git push',
       'git push --tags',
-      ( newVersion.indexOf('rc') < 0 ? 'npm publish' : '# skipped npm publish due to RC version' ),
+      'npm publish',
       'cd ..'
     );
   }
@@ -269,7 +269,6 @@
 
     //-- copy files over to site repo
     exec([
-        'rm -rf ./*-rc*',
         `cp -Rf ../dist/docs ${newVersion}`,
         'rm -rf latest && cp -Rf ../dist/docs latest',
         'git add -A',
@@ -318,9 +317,6 @@
 
     function writeDocsJson () {
       var config      = require(options.cwd + '/docs.json');
-      config.versions = config.versions.filter(function (version) {
-        return version.indexOf('rc') < 0;
-      });
       config.versions.unshift(newVersion);
 
       //-- only set to default if not a release candidate
