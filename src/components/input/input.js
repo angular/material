@@ -366,18 +366,13 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
         });
     }
 
-    //ngModelCtrl.$setTouched();
-    //if( ngModelCtrl.$invalid ) containerCtrl.setInvalid();
-
     scope.$on('$destroy', function() {
       containerCtrl.setFocused(false);
       containerCtrl.setHasValue(false);
       containerCtrl.input = null;
     });
 
-    /**
-     *
-     */
+    /** Gets run through ngModel's pipeline and set the `has-value` class on the container. */
     function ngModelPipelineCheckValue(arg) {
       containerCtrl.setHasValue(!ngModelCtrl.$isEmpty(arg));
       return arg;
@@ -556,7 +551,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
 
         function onDrag(ev) {
           if (!isDragging) return;
-          element.css('height', startHeight + (ev.pointer.y - dragStart) + 'px');
+          element.css('height', startHeight + (ev.pointer.y - dragStart) - $mdUtil.scrollTop() + 'px');
         }
 
         function onDragEnd(ev) {
