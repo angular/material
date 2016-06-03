@@ -1,9 +1,18 @@
 describe('mdSubheader', function() {
   var BASIC_SUBHEADER = '<md-subheader>Hello world!</md-subheader>';
-  var pageScope, element, controller, contentElement;
+  var pageScope, element, cloneElement, controller, contentElement;
   var $rootScope, $timeout, $exceptionHandler;
 
-  beforeEach(module('material.components.subheader'));
+  beforeEach(module('material.components.subheader', function($provide) {
+    $provide.decorator('$mdUtil', function($delegate) {
+
+      // We always return nothing on the checkStickySupport method to test the functionality of the subheaders
+      // with the sticky clones behavior.
+      $delegate.checkStickySupport = angular.noop;
+
+      return $delegate;
+    })
+  }));
 
   beforeEach(inject(function($injector) {
     $rootScope = $injector.get('$rootScope');
@@ -45,34 +54,47 @@ describe('mdSubheader', function() {
   it('applies the theme to the header and clone', function() {
     build('<div md-theme="somethingElse">' + BASIC_SUBHEADER + '</div>');
 
-    // The subheader now wraps the clone in a DIV in case of ng-if usage, so we have to search for
-    // the proper element.
-    var clone = getCloneElement();
-
-    expect(getSubheader().classList).toContain('md-somethingElse-theme');
-    expect(getSubheader(clone).classList).toContain('md-somethingElse-theme');
+    expect(getElement()).toHaveClass('md-somethingElse-theme');
+    expect(getCloneElement()).toHaveClass('md-somethingElse-theme');
   });
 
   it('applies the proper scope to the clone', function() {
-    build('<div><md-subheader>Hello {{ to }}!</md-subheader></div>');
+    build(
+      '<div>' +
+        '<md-subheader>Hello {{ to }}!</md-subheader>' +
+      '</div>');
 
     pageScope.to = 'world';
     pageScope.$apply();
 
-    var clone = getCloneElement();
-
-    expect(getSubheader().textContent.trim()).toEqual('Hello world!');
-    expect(getSubheader(clone).textContent.trim()).toEqual('Hello world!');
+    expect(getElement()[0].textContent.trim()).toEqual('Hello world!');
+    expect(getCloneElement()[0].textContent.trim()).toEqual('Hello world!');
   });
 
   it('supports ng-if', function() {
-    build('<div><md-subheader ng-if="true">test</md-subheader></div>');
+    build(
+      '<div>' +
+        '<md-subheader ng-if="isAdded">test</md-subheader>' +
+      '</div>'
+    );
 
+    expect(isCloneShowing()).toBeFalsy();
+
+    pageScope.$apply('isAdded = true');
+    $timeout.flush();
+
+    expect(isCloneShowing()).toBeTruthy();
+
+    // Check if there were no exceptions caused.
     expect($exceptionHandler.errors).toEqual([]);
-    expect(element[0].querySelectorAll('.md-subheader').length).toEqual(1);
+
+    function isCloneShowing() {
+      var clone = getCloneElement();
+      return clone.length && !!clone[0].parentNode;
+    }
   });
 
-  it('should support ng-if inside of stickyClone', function() {
+  it('should support ng-if inside of the sticky clone', function() {
     build(
       '<div>' +
         '<md-subheader>' +
@@ -91,6 +113,38 @@ describe('mdSubheader', function() {
     expect(clone.textContent.trim()).toBe('FooBar');
   });
 
+  it('should support ng-show on the sticky clone', function() {
+    build(
+      '<div>' +
+        '<md-subheader ng-show="isShowing">Subheader</md-subheader>' +
+      '</div>'
+    );
+
+    var clone = getCloneElement();
+
+    expect(clone).toHaveClass('ng-hide');
+
+    pageScope.$apply('isShowing = true');
+
+    expect(clone).not.toHaveClass('ng-hide');
+  });
+
+  it('should support ng-hide on the sticky clone', function() {
+    build(
+      '<div>' +
+        '<md-subheader ng-hide="isHidden">Subheader</md-subheader>' +
+      '</div>'
+    );
+
+    var clone = getCloneElement();
+
+    expect(clone).not.toHaveClass('ng-hide');
+
+    pageScope.$apply('isHidden = true');
+
+    expect(clone).toHaveClass('ng-hide');
+  });
+
   it('should work with a ng-if directive inside of the stickyClone', function() {
     build(
       '<div>' +
@@ -106,10 +160,18 @@ describe('mdSubheader', function() {
   });
 
   it('supports ng-repeat', function() {
-    build('<div><md-subheader ng-repeat="i in [1,2,3]">Test {{i}}</md-subheader></div>');
+    build(
+      '<div>' +
+        '<md-subheader ng-repeat="i in [1, 2, 3]">Test {{i}}</md-subheader>' +
+      '</div>'
+    );
 
+    // TODO(devversion): Remove this expectation and update to correctly detect 6 subheaders
+    // TODO(devversion) See related issue: https://github.com/angular/material/issues/8647
+    expect(contentElement[0].querySelectorAll('.md-subheader').length).toEqual(12);
+
+    // Check if there were no exceptions caused.
     expect($exceptionHandler.errors).toEqual([]);
-    expect(element[0].querySelectorAll('.md-subheader').length).toEqual(3);
   });
 
   function build(template) {
@@ -121,30 +183,39 @@ describe('mdSubheader', function() {
       // Flush the timeout, which prepends the sticky clone to the md-content.
       $timeout.flush();
 
-      // When the contentElement only has only one children then the current
-      // browser supports sticky elements natively.
-      if (contentElement.children().length === 1) {
-        element = getCloneElement();
-      } else {
-        // When the browser doesn't support sticky elements natively we will have a sticky clone.
-        // The sticky clone element will be always prepended, which means that we have to use the child
-        // at the second position.
-        element = contentElement.children().eq(1);
-      }
+      element = getElement();
+      cloneElement = getCloneElement();
 
       controller = element.controller('mdSubheader');
 
       pageScope.$apply();
+
+      // Flush the timeouts for ngIf and ngRepeat, because those will be added within the
+      // next tick of the subheader tranclusion.
       $timeout.flush();
     });
   }
 
-  function getSubheader(el) {
-    return (el || element)[0].querySelector('.md-subheader');
-  }
-  
   function getCloneElement() {
-    // The clone element will be always prepended, which means that we have to get the child at index zero.
-    return contentElement.children().eq(0);
+    // We search for the clone element by using the _md-sticky-clone class, which will be automatically added
+    // by the $mdSticky service.
+    return angular.element(contentElement[0].querySelector('._md-sticky-clone .md-subheader'));
   }
+
+  function getElement() {
+    // The *real* element can be found, by search for a subheader, which doesn't have a parent with a unique class,
+    // which indicates a $mdSticky clone element.
+    var items = contentElement[0].querySelectorAll('.md-subheader');
+
+    return angular.element(checkSubheader(0));
+
+    function checkSubheader(index) {
+      var item = items[index];
+      if (!item) return;
+
+      return item.parentNode.classList.contains('_md-sticky-clone') ? checkSubheader(index + 1) : item;
+    }
+  }
+
+
 });
