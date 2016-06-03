@@ -522,4 +522,62 @@ describe('util', function() {
       }));
     });
   });
+
+  describe('getClosest', function() {
+    var $mdUtil;
+
+    beforeEach(inject(function(_$mdUtil_) {
+      $mdUtil = _$mdUtil_;
+    }));
+
+    it('should be able to get the closest parent of a particular node type', function() {
+      var grandparent = angular.element('<h1>');
+      var parent = angular.element('<h2>');
+      var element = angular.element('<h3>');
+
+      parent.append(element);
+      grandparent.append(parent);
+
+      var result = $mdUtil.getClosest(element, 'h1');
+
+      expect(result).toBeTruthy();
+      expect(result.nodeName.toLowerCase()).toBe('h1');
+
+      grandparent.remove();
+    });
+
+    it('should be able to start from the parent of the specified node', function() {
+      var grandparent = angular.element('<div>');
+      var parent = angular.element('<span>');
+      var element = angular.element('<div>');
+
+      parent.append(element);
+      grandparent.append(parent);
+
+      var result = $mdUtil.getClosest(element, 'div', true);
+
+      expect(result).toBeTruthy();
+      expect(result).not.toBe(element[0]);
+
+      grandparent.remove();
+    });
+
+    it('should be able to take in a predicate function', function() {
+      var grandparent = angular.element('<div random-attr>');
+      var parent = angular.element('<div>');
+      var element = angular.element('<span>');
+
+      parent.append(element);
+      grandparent.append(parent);
+
+      var result = $mdUtil.getClosest(element, function(el) {
+        return el.hasAttribute('random-attr');
+      });
+
+      expect(result).toBeTruthy();
+      expect(result).toBe(grandparent[0]);
+
+      grandparent.remove();
+    });
+  });
 });
