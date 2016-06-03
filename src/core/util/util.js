@@ -232,6 +232,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
           applyStyles(body, {
             position: 'fixed',
             width: '100%',
+            height: 'auto',
             top: -scrollOffset + 'px'
           });
 
