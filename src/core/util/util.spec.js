@@ -503,6 +503,43 @@ describe('util', function() {
       })
     );
   });
+  
+  describe('isParentFormSubmitted', function() {
+    var formTemplate =
+      '<form>' +
+      '  <input type="text" name="test" ng-model="test" />' +
+      '  <input type="submit" />' +
+      '<form>';
+
+    it('returns false if you pass no element', inject(function($mdUtil) {
+      expect($mdUtil.isParentFormSubmitted()).toBe(false);
+    }));
+    
+    it('returns false if there is no form', inject(function($mdUtil) {
+      var element = angular.element('<input />');
+      
+      expect($mdUtil.isParentFormSubmitted(element)).toBe(false);
+    }));
+    
+    it('returns false if the parent form is NOT submitted', inject(function($compile, $rootScope, $mdUtil) { 
+      var scope = $rootScope.$new();
+      var form = $compile(formTemplate)(scope);
+      
+      expect($mdUtil.isParentFormSubmitted(form.find('input'))).toBe(false);
+    }));
+    
+    it('returns true if the parent form is submitted', inject(function($compile, $rootScope, $mdUtil) {
+      var scope = $rootScope.$new();
+      var form = $compile(formTemplate)(scope);
+
+      var formController = form.controller('form');
+      
+      formController.$setSubmitted();
+
+      expect(formController.$submitted).toBe(true);
+      expect($mdUtil.isParentFormSubmitted(form.find('input'))).toBe(true);
+    }));
+  });
 
   describe('with $interpolate.start/endSymbol override', function() {
 
