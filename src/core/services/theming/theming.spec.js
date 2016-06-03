@@ -345,6 +345,22 @@ describe('$mdThemingProvider', function() {
 
 });
 
+describe('$mdThemeProvider with custom styles', function() {
+  it('appends the custom styles to the end of the $MD_THEME_CSS string', function() {
+    module('material.core', function($mdThemingProvider) {
+      $mdThemingProvider.registerStyles('/*test*/');
+      $mdThemingProvider.theme('register-custom-styles');
+    });
+    
+    // Verify that $MD_THEME_CSS is still set to '/**/' in the test environment.
+    // Check angular-material-mocks.js for $MD_THEME_CSS latest value if this test starts to fail. 
+    inject(function($MD_THEME_CSS) { expect($MD_THEME_CSS).toBe('/**/'); });
+    
+    // Find the string '/**//*test*/' in the head tag.
+    expect(document.head.innerHTML).toContain('/*test*/');
+  });
+});
+
 describe('$mdThemeProvider with on-demand generation', function() {
   var $mdTheming;
 
