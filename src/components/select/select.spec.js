@@ -570,6 +570,29 @@ describe('<md-select>', function() {
         expect($rootScope.testForm.$pristine).toBe(true);
       }));
 
+
+      it('should forward the model value to the hidden select', inject(function($rootScope, $timeout, $compile) {
+        $rootScope.opts = [1, 2, 3, 4];
+        var select = $compile('<form>' +
+          '<md-select ng-model="model" name="testing-select">' +
+            '<md-option ng-repeat="opt in opts">{{ opt }}</md-option>' +
+          '</md-select></form>')($rootScope).find('select'); // not md-select
+
+        $rootScope.$digest();
+        $timeout.flush();
+
+        expect(select.val()).toBeFalsy();
+        $rootScope.$apply('model = 3');
+        expect(select.val()).toBe('3');
+      }));
+
+      it('should forward the name attribute to the hidden select', inject(function($rootScope, $timeout, $compile) {
+        var select = $compile('<form>' +
+          '<md-select ng-model="model" name="testing-select">' +
+          '</md-select></form>')($rootScope).find('select');
+
+        expect(select.attr('name')).toBe('testing-select');
+      }));
     });
 
     describe('view->model', function() {
@@ -833,7 +856,7 @@ describe('<md-select>', function() {
           '    <md-option ng-repeat="opt in opts" ng-value="opt"></md-option>' +
           '  </md-select>' +
           '</form>';
-        
+
         $rootScope.opts = [1, 2, 3, 4];
 
         $compile(template)($rootScope);
@@ -842,13 +865,13 @@ describe('<md-select>', function() {
         $rootScope.model = 0;
         $rootScope.$digest();
         expect($rootScope.testForm.$valid).toBe(false);
-        
+
         // Option 1 is available; should be true
         $rootScope.model = 1;
         $rootScope.$digest();
         expect($rootScope.testForm.$valid).toBe(true);
       }));
-      
+
       it('should keep the form pristine when model is predefined', inject(function($rootScope, $timeout, $compile) {
         $rootScope.model = [1, 2];
         $rootScope.opts = [1, 2, 3, 4];
