@@ -269,6 +269,9 @@ function labelDirective() {
  * - If a `textarea` has the `rows` attribute, it will treat the `rows` as the minimum height and will
  * continue growing as the user types. For example a textarea with `rows="3"` will be 3 lines of text
  * high initially. If no rows are specified, the directive defaults to 1.
+ * - The textarea's height gets set on initialization, as well as while the user is typing. In certain situations
+ * (e.g. while animating) the directive might have been initialized, before the element got it's final height. In
+ * those cases, you can trigger a resize manually by broadcasting a `md-resize-textarea` event on the scope.
  * - If you wan't a `textarea` to stop growing at a certain point, you can specify the `max-rows` attribute.
  * - The textarea's bottom border acts as a handle which users can drag, in order to resize the element vertically.
  * Once the user has resized a `textarea`, the autogrowing functionality becomes disabled. If you don't want a
@@ -405,6 +408,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
       // so rows attribute will take precedence if present
       var minRows = attr.hasOwnProperty('rows') ? parseInt(attr.rows) : NaN;
       var maxRows = attr.hasOwnProperty('maxRows') ? parseInt(attr.maxRows) : NaN;
+      var scopeResizeListener = scope.$on('md-resize-textarea', growTextarea);
       var lineHeight = null;
       var node = element[0];
 
@@ -488,6 +492,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
 
         isAutogrowing = false;
         angular.element($window).off('resize', growTextarea);
+        scopeResizeListener && scopeResizeListener();
         element
           .attr('md-no-autogrow', '')
           .off('input', growTextarea);
