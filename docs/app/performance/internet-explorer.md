@@ -23,8 +23,8 @@ copy([].slice
 * In the top level angular modules of the application add the following code to disable the style injection:
 ```javascript
 angular.module('myApp', ['ngMaterial'])
-	.config(function($mdThemingProvider) {
-	  $mdThemingProvider.disableTheming();
+       .config(function($mdThemingProvider) {
+	           $mdThemingProvider.disableTheming();
 	});
 ```
 
@@ -67,14 +67,14 @@ function isBrowserIE() {
 var isIE = isBrowserIE();
 
 angular.module('myApp', ['ngMaterial'])
-	.config(function($mdInkRippleProvider) {
-    	 if(isIE) {
-        $mdInkRippleProvider.disableInkRipple();
-    }
+       .config(function($mdInkRippleProvider) {
+    	 		if(isIE) {
+        			$mdInkRippleProvider.disableInkRipple();
+    			}
 	  
-	}).
-    run(function($animate){
-    	$animate.enabled(!isIE);
-    });
+		})
+       .run(function($animate){
+    		$animate.enabled(!isIE);
+    	});
 ```
 
