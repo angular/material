@@ -12,7 +12,12 @@ The Angular Material theming works by injecting inline styles to the head. The o
 * Open the chrome developer tools
 * Execute the following javascript - This copies the theming css to the clipboard
 ```javascript
-copy([].slice.call(document.styleSheets).map(e=>e.ownerNode).filter(e => e.attributes && e.attributes[0].nodeName==='md-theme-style').map(e => e.textContent).join("\n"))
+copy([].slice
+	.call(document.styleSheets)
+	.map(e=>e.ownerNode)
+	.filter(e => e.attributes && e.attributes[0].nodeName==='md-theme-style')
+	.map(e => e.textContent).join("\n")
+    )
 ```
 * Paste the content to an external css file and link it to the index.html
 * In the top level angular modules of the application add the following code to disable the style injection:
