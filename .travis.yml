@@ -1,7 +1,9 @@
 language: node_js
 sudo: false
+
 node_js:
-- 4.2.3
+  - '5.6.0'
+
 env:
   global:
   - LOGS_DIR=/tmp/angular-material1-build/logs
@@ -10,21 +12,25 @@ env:
   - BROWSER_STACK_USERNAME=angularteam1
   - BROWSER_STACK_ACCESS_KEY=BWCd4SynLzdDcv8xtzsB
   - secure: X7CNmOMemAJ9Jqrsmv6MXyeh8n8TIL5CKzE9LYsZUbsyKo0l5CyyysJq0y/AbpQS6awsSv2qP/cZ/kand6r6z0wMFbUcxa4HjMZEfRwv3sGtwj1OKJko/GvjcZQzD54FtHy1NU7wR0mYhAlE5IwH7f8bMa/nUiijgD/TOCTtKH8=
+  matrix:
+  - MODE=Default
+  - MODE=Sauce
+
 cache:
   directories:
   - node_modules
   - "$HOME/.pub-cache"
-  - "$HOME/travis-phantomjs"
+
 branches:
   only:
   - master
   - patch
   - feat/panel
-before_install:
-- "source ./scripts/travis-install-phantomjs2.sh"
+
 install:
 - npm install
 - npm rebuild node-sass
+
 before_script:
 # Necessary to run test on Travis CI that require a graphical interface.
 # See https://docs.travis-ci.com/user/gui-and-headless-browsers
@@ -33,8 +39,10 @@ before_script:
 - mkdir -p $LOGS_DIR
 - git config --global user.email "ngmaterial@googlegroups.com"
 - git config --global user.name "ngMaterial Bot"
+
 script:
 - gulp ddescribe-iit
-- gulp karma --reporters='dots'
+- "./scripts/travis-run-script.sh"
+
 after_success:
-- "./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT"
+- 'if [[ $MODE == "Default" ]]; then ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT; fi'
