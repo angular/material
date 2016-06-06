@@ -166,6 +166,18 @@ input {
   }
 }
 
+// For iOS allow disabling of momentum scrolling
+// @see issue #2640
+.md-no-momentum {
+  -webkit-overflow-scrolling: auto;
+}
+
+// Add a class to help reduce flicker
+// @see issue #7078
+.md-no-flicker {
+  -webkit-transform: translateX(0);
+}
+
 @media (min-width: $layout-breakpoint-sm) {
   .md-padding {
     padding: 16px;

@@ -1,6 +1,6 @@
 
 div.demo-content {
-    height: 600px;
+    height: 450px;
 }
 div[ng-controller] {
     height:100%;
