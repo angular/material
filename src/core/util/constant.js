@@ -5,7 +5,7 @@ angular.module('material.core')
  * Factory function that creates the grab-bag $mdConstant service.
  * @ngInject
  */
-function MdConstantFactory($sniffer) {
+function MdConstantFactory($sniffer, $window, $document) {
 
   var vendorPrefix = $sniffer.vendorPrefix;
   var isWebkit = /webkit/i.test(vendorPrefix);
@@ -34,6 +34,7 @@ function MdConstantFactory($sniffer) {
   }
 
   return {
+    IS_TOUCH: ('ontouchstart' in $window) || $window.DocumentTouch && $document[0] instanceof DocumentTouch,
     KEY_CODE: {
       COMMA: 188,
       SEMICOLON : 186,

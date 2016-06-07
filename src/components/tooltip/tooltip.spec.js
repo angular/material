@@ -1,14 +1,16 @@
 describe('<md-tooltip> directive', function() {
-  var $compile, $rootScope, $material, $timeout;
+  var $compile, $rootScope, $material, $timeout, leaveEvent, enterEvent;
   var element;
 
   beforeEach(module('material.components.tooltip'));
   beforeEach(module('material.components.button'));
-  beforeEach(inject(function(_$compile_, _$rootScope_, _$material_, _$timeout_){
+  beforeEach(inject(function(_$compile_, _$rootScope_, _$material_, _$timeout_, $mdConstant){
     $compile   = _$compile_;
     $rootScope = _$rootScope_;
     $material  = _$material_;
     $timeout   = _$timeout_;
+    leaveEvent = $mdConstant.IS_TOUCH ? 'touchend' : 'mouseleave';
+    enterEvent = $mdConstant.IS_TOUCH ? 'touchstart' : 'mouseenter';
   }));
   afterEach(function() {
     // Make sure to remove/cleanup after each test
@@ -112,7 +114,7 @@ describe('<md-tooltip> directive', function() {
       '</outer>'
     );
 
-    triggerEvent('mouseenter', true);
+    triggerEvent(enterEvent, true);
     expect($rootScope.testModel.isVisible).toBeUndefined();
 
   }));
@@ -165,7 +167,7 @@ describe('<md-tooltip> directive', function() {
       expect(findTooltip().length).toBe(0);
     });
 
-    it('should set visible on mouseenter and mouseleave', function() {
+    it('should set visible on enter and leave events', function() {
         buildTooltip(
           '<md-button>' +
              'Hello' +
@@ -175,14 +177,14 @@ describe('<md-tooltip> directive', function() {
           '</md-button>'
         );
 
-        triggerEvent('mouseenter');
+        triggerEvent(enterEvent);
         expect($rootScope.testModel.isVisible).toBe(true);
 
-        triggerEvent('mouseleave');
+        triggerEvent(leaveEvent);
         expect($rootScope.testModel.isVisible).toBe(false);
     });
 
-    it('should cancel when mouseleave was before the delay', function() {
+    it('should cancel when the leave event was before the delay', function() {
       buildTooltip(
         '<md-button>' +
           'Hello' +
@@ -193,10 +195,10 @@ describe('<md-tooltip> directive', function() {
       );
 
 
-      triggerEvent('mouseenter', true);
+      triggerEvent(enterEvent, true);
       expect($rootScope.testModel.isVisible).toBeFalsy();
 
-      triggerEvent('mouseleave', true);
+      triggerEvent(leaveEvent, true);
       expect($rootScope.testModel.isVisible).toBeFalsy();
 
       // Total 99 == tooltipDelay
@@ -249,7 +251,7 @@ describe('<md-tooltip> directive', function() {
       expect($rootScope.testModel.isVisible).toBe(false);
     });
 
-    it('should not be visible on mousedown and then mouseleave', inject(function($document) {
+    it('should not be visible when a leave event fires right after a mousedown', inject(function($document) {
       buildTooltip(
         '<md-button>' +
          'Hello' +
@@ -267,7 +269,7 @@ describe('<md-tooltip> directive', function() {
       expect($document[0].activeElement).toBe(element[0]);
       expect($rootScope.testModel.isVisible).toBe(true);
 
-      triggerEvent('mouseleave');
+      triggerEvent(leaveEvent);
       expect($rootScope.testModel.isVisible).toBe(false);
 
       // Clean up document.body.
@@ -290,7 +292,7 @@ describe('<md-tooltip> directive', function() {
       triggerEvent('focus,mousedown');
       expect(document.activeElement).toBe(element[0]);
 
-      triggerEvent('mouseleave');
+      triggerEvent(leaveEvent);
 
       // Simulate tabbing away.
       angular.element($window).triggerHandler('blur');
