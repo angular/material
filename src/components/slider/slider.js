@@ -27,6 +27,7 @@ function SliderContainerDirective() {
     controller: function () {},
     compile: function (elem) {
       var slider = elem.find('md-slider');
+
       if (!slider) {
         return;
       }
@@ -457,7 +458,13 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       var thumbPosition = (percent * 100) + '%';
       var activeTrackPercent = invert ? (1 - percent) * 100 + '%' : thumbPosition;
 
-      thumbContainer.css(vertical ? 'bottom' : 'left', thumbPosition);
+      if (vertical) {
+        thumbContainer.css('bottom', thumbPosition);
+      }
+      else {
+        $mdUtil.bidiProperty(thumbContainer, 'left', 'right', thumbPosition);
+      }
+
       
       activeTrack.css(vertical ? 'height' : 'width', activeTrackPercent);
 
@@ -562,6 +569,10 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       var offset = vertical ? sliderDimensions.top : sliderDimensions.left;
       var size = vertical ? sliderDimensions.height : sliderDimensions.width;
       var calc = (position - offset) / size;
+
+      if (!vertical && $mdUtil.bidi() === 'rtl') {
+        calc = 1 - calc;
+      }
 
       return Math.max(0, Math.min(1, vertical ? 1 - calc : calc));
     }
