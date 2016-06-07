@@ -2,7 +2,8 @@
   "SL_CHROME": {
     "base": "SauceLabs",
     "browserName": "chrome",
-    "version": "46"
+    "platform": "Windows 10",
+    "version": "50"
   },
   "SL_CHROMEBETA": {
     "base": "SauceLabs",

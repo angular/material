@@ -6,5 +6,7 @@ if [[ "$MODE" == "Sauce" ]]; then
   gulp build
   gulp karma-sauce
 else
-  gulp karma --reporters='dots'
+  # We define all our browsers for the karma runner inside of our `.travis.yml`, because we don't want
+  # to run the tests against Chrome on the Continuous Integration.
+  gulp karma --browsers="$KARMA_TEST_BROWSERS" --reporters='dots'
 fi
