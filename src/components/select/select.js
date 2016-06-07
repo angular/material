@@ -517,7 +517,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
           if (e.keyCode <= 90 && e.keyCode >= 31) {
             e.preventDefault();
             var node = selectMenuCtrl.optNodeForKeyboardSearch(e);
-            if (!node) return;
+            if (!node || node.hasAttribute('disabled')) return;
             var optionCtrl = angular.element(node).controller('mdOption');
             if (!selectMenuCtrl.isMultiple) {
               selectMenuCtrl.deselect(Object.keys(selectMenuCtrl.selected)[0]);

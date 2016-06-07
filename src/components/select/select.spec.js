@@ -1098,6 +1098,16 @@ describe('<md-select>', function() {
         pressKey(el, 50);
         expect($rootScope.someModel).toBe(2);
       }));
+
+      it('disallows selection of disabled options', inject(function($rootScope) {
+        var optsTemplate =
+          '<md-option value="1">1</md-option>' +
+          '<md-option value="2" ng-disabled="true">2</md-option>';
+        var el = setupSelect('ng-model="someModel"', optsTemplate).find('md-select');
+
+        pressKey(el, 50);
+        expect($rootScope.someModel).toBe(undefined);
+      }));
     });
 
     describe('md-select-menu', function() {
