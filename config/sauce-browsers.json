@@ -18,7 +18,8 @@
   "SL_FIREFOX": {
     "base": "SauceLabs",
     "browserName": "firefox",
-    "version": "42"
+    "platform": "Windows 10",
+    "version": "46"
   },
   "SL_FIREFOXBETA": {
     "base": "SauceLabs",
@@ -81,7 +82,7 @@
   "SL_IE11": {
     "base": "SauceLabs",
     "browserName": "internet explorer",
-    "platform": "Windows 8.1",
+    "platform": "Windows 10",
     "version": "11"
   },
   "SL_EDGE": {
