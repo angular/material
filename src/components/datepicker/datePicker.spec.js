@@ -14,6 +14,7 @@ describe('md-date-picker', function() {
     '<md-datepicker name="birthday" ' +
          'md-max-date="maxDate" ' +
          'md-min-date="minDate" ' +
+         'tabindex="1" ' +
          'md-date-filter="dateFilter"' +
          'ng-model="myDate" ' +
          'ng-change="dateChangedHandler()" ' +
@@ -311,7 +312,7 @@ describe('md-date-picker', function() {
       expect(controller.ngModelCtrl.$modelValue).toEqual(initialDate);
     });
 
-    it('shoud become touched from bluring closing the pane', function() {
+    it('should become touched from blurring closing the pane', function() {
       populateInputElement('17/1/2015');
 
       controller.openCalendarPane({
@@ -322,7 +323,7 @@ describe('md-date-picker', function() {
       expect(controller.ngModelCtrl.$touched).toBe(true);
     });
 
-    it('should become touch from bluring the input', function() {
+    it('should become touch from blurring the input', function() {
       populateInputElement('17/1/2015');
 
       var input = angular.element(controller.inputElement);
@@ -450,7 +451,7 @@ describe('md-date-picker', function() {
       body.removeChild(element);
     });
 
-    it('should shink the calendar pane when it would otherwise not fit on the screen', function() {
+    it('should shrink the calendar pane when it would otherwise not fit on the screen', function() {
       // Fake the window being very narrow so that the calendar pane won't fit on-screen.
       controller.$window = {innerWidth: 200, innherHeight: 800};
 

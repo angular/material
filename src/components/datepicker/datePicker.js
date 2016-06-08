@@ -49,11 +49,12 @@
    */
   function datePickerDirective($$mdSvgRegistry) {
     return {
-      template:
+      template: function (element, attr) {
+          var tabindex = attr.tabindex;
           // Buttons are not in the tab order because users can open the calendar via keyboard
           // interaction on the text input, and multiple tab stops for one component (picker)
           // may be confusing.
-          '<md-button class="md-datepicker-button md-icon-button" type="button" ' +
+          return '<md-button class="md-datepicker-button md-icon-button" type="button" ' +
               'tabindex="-1" aria-hidden="true" ' +
               'ng-click="ctrl.openCalendarPane($event)">' +
             '<md-icon class="md-datepicker-calendar-icon" aria-label="md-calendar" ' +
@@ -62,6 +63,7 @@
           '<div class="md-datepicker-input-container" ' +
               'ng-class="{\'md-datepicker-focused\': ctrl.isFocused}">' +
             '<input class="md-datepicker-input" aria-haspopup="true" ' +
+            (tabindex != null ? 'tabindex="' + tabindex + '"' : '') +
                 'ng-focus="ctrl.setFocused(true)" ng-blur="ctrl.setFocused(false)">' +
             '<md-button type="button" md-no-ink ' +
                 'class="md-datepicker-triangle-button md-icon-button" ' +
@@ -83,7 +85,9 @@
                   'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen">' +
               '</md-calendar>' +
             '</div>' +
-          '</div>',
+          '</div>';
+        }
+      },
       require: ['ngModel', 'mdDatepicker', '?^mdInputContainer'],
       scope: {
         minDate: '=mdMinDate',
