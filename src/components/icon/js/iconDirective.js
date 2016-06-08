@@ -185,8 +185,8 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
    */
   function postLink(scope, element, attr) {
     $mdTheming(element);
-    var lastFontIcon = scope.fontIcon;
-    var lastFontSet = $mdIcon.fontSet(scope.fontSet);
+    var lastFontIcon = attr.mdFontIcon;
+    var lastFontSet = $mdIcon.fontSet(attr.mdFontSet);
 
     prepareForFontIcon();
 
@@ -252,9 +252,9 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
     }
 
     function prepareForFontIcon() {
-      if (!scope.svgIcon && !scope.svgSrc) {
-        if (scope.fontIcon) {
-          element.addClass('md-font');
+      if (!attr.mdSvgIcon && !attr.mdSvgSrc) {
+        if (attr.mdFontIcon) {
+          element.addClass('md-font ' + attr.mdFontIcon);
         }
 
         element.addClass(lastFontSet);
@@ -262,15 +262,15 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
     }
 
     function fontIconChanged() {
-      if (!scope.svgIcon && !scope.svgSrc) {
-        if (scope.fontIcon) {
+      if (!attr.mdSvgIcon && !attr.mdSvgSrc) {
+        if (attr.mdFontIcon) {
           element.removeClass(lastFontIcon);
-          element.addClass(scope.fontIcon);
+          element.addClass(attr.mdFontIcon);
 
-          lastFontIcon = scope.fontIcon;
+          lastFontIcon = attr.mdFontIcon;
         }
 
-        var fontSet = $mdIcon.fontSet(scope.fontSet);
+        var fontSet = $mdIcon.fontSet(attr.mdFontSet);
 
         if (lastFontSet !== fontSet) {
           element.removeClass(lastFontSet);
