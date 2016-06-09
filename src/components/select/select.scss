@@ -5,8 +5,22 @@ $select-option-height: 48px !default;
 $select-option-padding: 16px !default;
 $select-container-padding: 16px !default;
 $select-container-transition-duration: 350ms !default;
+$select-value-padding-top: 6px;
+$select-value-padding-bottom: 4px;
 
 $select-max-visible-options: 5 !default;
+
+// from input.scss
+$input-container-margin-top: 18px !default;
+$input-container-padding-top: 2px !default;
+$input-padding-top: 2px !default;
+$input-padding-bottom: 1px !default;
+
+$input-alignment: ($input-padding-top + $input-padding-bottom)
+                   - ($select-value-padding-top + $select-value-padding-bottom);
+$md-inline-alignment: ($input-container-margin-top + $input-container-padding-top)
+                      + ($input-padding-top + $input-padding-bottom)
+                      - ($select-value-padding-top + $select-value-padding-bottom);
 
 // Fixes the animations with the floating label when select is inside an input container
 md-input-container {
@@ -71,9 +85,18 @@ md-input-container {
   }
 }
 
-md-input-container > md-select {
-  margin: 0;
-  order: 2;
+.md-inline-form md-select {
+  margin-top: $md-inline-alignment;
+}
+
+md-input-container {
+  > md-select,
+  .md-inline-form & > md-select {
+    margin-top: $input-alignment;
+  }
+  > md-select {
+    order: 2;
+  }
 }
 
 
@@ -102,7 +125,6 @@ md-input-container.md-input-invalid {
 
 md-select {
   display: flex;
-  margin: 2.5*$baseline-grid 0 3*$baseline-grid + 2 0;
 
   &[required], &.ng-required {
     &.ng-invalid:not(.md-no-asterisk) {
@@ -120,7 +142,12 @@ md-select {
     // to create a dotted line under the input.
     background-size: 4px 1px;
     background-repeat: repeat-x;
-    margin-bottom: -1px; // Shift downward so dotted line is positioned the same as other bottom borders
+    // Add to padding-bottom to keep dotted line aligned with other bottom borders
+    // Sub from padding-top to keep height consistent
+    // Translate text 1px up to keep in alignment
+    padding-bottom: $select-value-padding-bottom + 1;
+    padding-top: $select-value-padding-top - 1;
+    transform: translate3d(0, 1px, 0);
   }
 
   &:focus {
@@ -135,43 +162,33 @@ md-select {
     }
     &.ng-invalid.ng-touched {
       .md-select-value {
-        border-bottom-style: solid;
-        padding-bottom: 1px;
+        border-bottom: 2px solid;
       }
     }
     &:focus {
       .md-select-value {
         border-bottom-width: 2px;
         border-bottom-style: solid;
-        padding-bottom: 0;
-      }
-      &.ng-invalid.ng-touched {
-        .md-select-value {
-          padding-bottom: 0;
-        }
+        padding-bottom: $select-value-padding-bottom - 1;
       }
     }
-  }
-}
-
-// Fix value by 1px to align with standard text inputs (and spec)
-md-input-container.md-input-has-value .md-select-value {
-  > span:not(.md-select-icon) {
-    transform: translate3d(0, 1px, 0);
   }
 }
 
 .md-select-value {
   display: flex;
   align-items: center;
-  padding: 2px 2px 1px;
+  padding-top: $select-value-padding-top;
+  padding-bottom: $select-value-padding-bottom;
   border-bottom-width: 1px;
   border-bottom-style: solid;
   background-color: rgba(0,0,0,0);
   position: relative;
   box-sizing: content-box;
-  min-width: 8 * $baseline-grid;
+  min-width: 11 * $baseline-grid;
   min-height: 26px;
+  margin-bottom: auto;
+  -ms-flex-item-align: start; // workaround for margin-bottom: auto
   flex-grow: 1;
 
 
@@ -192,7 +209,6 @@ md-input-container.md-input-has-value .md-select-value {
     align-items: flex-end;
     text-align: end;
     width: 3 * $baseline-grid;
-    margin: 0 .5 * $baseline-grid;
     transform: translate3d(0, -2px, 0);
     font-size: 1.2rem;
   }
@@ -202,9 +218,11 @@ md-input-container.md-input-has-value .md-select-value {
     content: '\25BC';
     position: relative;
     top: 2px;
+    @include rtl(right, -4px, auto);
+    @include rtl(left, auto, -4px);
     speak: none;
-    font-size: 13px;
-    transform: scaleY(0.5) scaleX(1);
+    font-size: 16px;
+    transform: scaleY(0.5);
   }
 
   &.md-select-placeholder {
@@ -212,7 +230,6 @@ md-input-container.md-input-has-value .md-select-value {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
-    padding-left: 2px;
     z-index: 1;
   }
 }
