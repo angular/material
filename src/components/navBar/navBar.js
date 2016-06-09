@@ -209,9 +209,9 @@ MdNavBarController.prototype._initTabs = function() {
 MdNavBarController.prototype._updateTabs = function(newValue, oldValue) {
   var tabs = this._getTabs();
 
-  var oldIndex;
+  var oldIndex, oldTab;
   if (oldValue) {
-    var oldTab = this._getTabByName(oldValue);
+    oldTab = this._getTabByName(oldValue);
     if (oldTab) {
       oldTab.setSelected(false);
       oldIndex = tabs.indexOf(oldTab);
@@ -228,6 +228,11 @@ MdNavBarController.prototype._updateTabs = function(newValue, oldValue) {
         self._updateInkBarStyles(tab, newIndex, oldIndex);
       });
     }
+  } else {
+    var self = this;
+    this._$timeout(function(){
+      self._updateInkBarStyles(oldTab, -1, oldIndex);
+    });
   }
 };
 
@@ -240,7 +245,9 @@ MdNavBarController.prototype._updateInkBarStyles = function(tab, newIndex, oldIn
   var left = tabEl.offsetLeft;
 
   this._inkbar.toggleClass('_md-left', newIndex < oldIndex)
-      .toggleClass('_md-right', newIndex > oldIndex);
+      .toggleClass('_md-right', newIndex > oldIndex)
+      .toggleClass('md-button', newIndex === -1);
+
   this._inkbar.css({left: left + 'px', width: tabEl.offsetWidth + 'px'});
 };
 
