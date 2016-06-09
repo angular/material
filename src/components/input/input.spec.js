@@ -134,9 +134,18 @@ describe('md-input-container directive', function() {
     expect(el).not.toHaveClass('md-input-focused');
 
     el.find('input').triggerHandler('focus');
+
+    // Expect a slight delay (via $mdUtil.nextTick()) which fixes a tabbing issue in Safari, see
+    // https://github.com/angular/material/issues/4203 for more info.
+    expect(el).not.toHaveClass('md-input-focused');
+    $timeout.flush();
     expect(el).toHaveClass('md-input-focused');
 
     el.find('input').triggerHandler('blur');
+
+    // Again, expect the change to not be immediate
+    expect(el).toHaveClass('md-input-focused');
+    $timeout.flush();
     expect(el).not.toHaveClass('md-input-focused');
   });
 
@@ -150,6 +159,20 @@ describe('md-input-container directive', function() {
     el.find('input').triggerHandler('blur');
     expect(el).not.toHaveClass('md-input-focused');
   });
+
+  it('should skip a hidden input', function() {
+    var container = setup('type="hidden"');
+    var controller = container.controller('mdInputContainer');
+    var textInput = angular.element('<input type="text">');
+
+    expect(controller.input).toBeUndefined();
+
+    container.append(textInput);
+    $compile(textInput)(pageScope);
+
+    expect(controller.input[0]).toBe(textInput[0]);
+  });
+
 
   it('should set has-value class on container for non-ng-model input', function() {
     var el = setup();
@@ -174,20 +197,6 @@ describe('md-input-container directive', function() {
     expect(el).not.toHaveClass('md-input-has-value');
   });
 
-  it('should append an asterisk to the required label', function() {
-    var el = setup('required');
-    var label = el.find('label');
-
-    expect(label).toHaveClass('md-required');
-  });
-
-  it('should not show asterisk on required label if disabled', function() {
-    var el = setup('md-no-asterisk');
-    var ctrl = el.controller('mdInputContainer');
-
-    expect(ctrl.label).not.toHaveClass('md-required');
-  });
-
   it('should match label to given input id', function() {
     var el = setup('id="foo"');
     expect(el.find('label').attr('for')).toBe('foo');
@@ -198,6 +207,37 @@ describe('md-input-container directive', function() {
     var el = setup();
     expect(el.find('input').attr('id')).toBeTruthy();
     expect(el.find('label').attr('for')).toBe(el.find('input').attr('id'));
+  });
+
+  it('should set the "step" attribute to "any" if "min" and "max" are specified', function() {
+    // check #7349 for more info
+    var el = setup('type="number" min="1" max="999"');
+    expect(el.find('input').attr('step')).toBe('any');
+  });
+
+  describe('md-no-asterisk', function() {
+
+    it('should not show asterisk on required label if disabled', function() {
+      var el = setup('md-no-asterisk required');
+      var ctrl = el.controller('mdInputContainer');
+
+      expect(ctrl.label).not.toHaveClass('md-required');
+    });
+
+    it('should not show an asterisk when attribute value is `true`', function() {
+      var el = setup('md-no-asterisk="true" required');
+      var ctrl = el.controller('mdInputContainer');
+
+      expect(ctrl.label).not.toHaveClass('md-required');
+    });
+
+    it('should show an asterisk when attribute value is `false`', function() {
+      var el = setup('md-no-asterisk="false" required');
+      var ctrl = el.controller('mdInputContainer');
+
+      expect(ctrl.label).toHaveClass('md-required');
+    });
+
   });
 
   describe('md-maxlength', function() {
@@ -312,7 +352,50 @@ describe('md-input-container directive', function() {
     expect(label.textContent).toEqual('some placeholder');
   });
 
-  it('should ignore placeholder when a label element is present', inject(function($rootScope, $compile) {
+  it('should not create a floating label from a placeholder if md-no-float is empty', function () {
+    var el = compile(
+      '<md-input-container md-no-float>' +
+      '  <input placeholder="Foo" ng-model="foo">' +
+      '</md-input-container>'
+    );
+
+    expect(el.find('label').length).toBe(0);
+  });
+
+  it('should not create a floating label from a placeholder if md-no-float is truthy', function () {
+    pageScope.inputs = [{
+      placeholder: 'Name',
+      model: ''
+    }, {
+      placeholder: 'Email',
+      model: ''
+    }];
+
+    var el = compile(
+      '<div>' +
+      '  <md-input-container ng-repeat="input in inputs" md-no-float="$index !== 0">' +
+      '    <input placeholder="{{input.placeholder}}" ng-model="input.model">' +
+      '  </md-input-container>' +
+      '</div>'
+    );
+
+    var labels = el.find('label');
+
+    expect(labels.length).toBe(1);
+    expect(labels[0].textContent).toEqual('Name');
+  });
+
+  it('should create a floating label from a placeholder if md-no-float is falsey', function () {
+    var el = compile(
+      '<md-input-container md-no-float="false">' +
+      '  <input placeholder="Foo" ng-model="foo">' +
+      '</md-input-container>'
+    );
+
+    expect(el.find('label').length).toBe(1);
+  });
+
+  it('should ignore placeholder when a label element is present', function() {
     var el = $compile(
       '<md-input-container>' +
       '  <label>Hello</label>' +
@@ -325,19 +408,58 @@ describe('md-input-container directive', function() {
     expect(el.find('input')[0].hasAttribute('placeholder')).toBe(true);
     expect(label).toBeTruthy();
     expect(label.textContent).toEqual('Hello');
-  }));
+  });
 
-  it('should put an aria-label on the input when no label is present', function() {
+  it('should transfer the placeholder data binding to the newly-created label', function() {
+    var el = $compile(
+      '<md-input-container>' +
+      '  <input ng-model="foo" placeholder="{{placeholder}}" />' +
+      '</md-input-container>'
+    )(pageScope);
+
+    var label = el[0].querySelector('label');
+    var input = el[0].querySelector('input');
+
+    pageScope.placeholder = 'foo';
+    pageScope.$digest();
+
+    expect(label).toBeTruthy();
+
+    expect(input.hasAttribute('placeholder')).toBe(false);
+    expect(label.textContent).toEqual('foo');
+
+    pageScope.placeholder = 'bar';
+    pageScope.$digest();
+
+    // We should check again to make sure that Angular didn't
+    // re-add the placeholder attribute and cause double labels.
+    expect(input.hasAttribute('placeholder')).toBe(false);
+    expect(label.textContent).toEqual('bar');
+  });
+
+  it('should put an aria-label on the input when no label is present', inject(function($timeout) {
     var el = $compile('<form name="form">' +
       ' <md-input-container md-no-float>' +
-      '   <input placeholder="baz" md-maxlength="max" ng-model="foo" name="foo">' +
+      '   <input placeholder="baz" ng-model="foo" name="foo">' +
       ' </md-input-container>' +
       '</form>')(pageScope);
 
-    pageScope.$apply();
+    // Flushes the $mdUtil.nextTick
+    $timeout.flush();
 
     var input = el.find('input');
     expect(input.attr('aria-label')).toBe('baz');
+  }));
+
+  it('should evaluate the placeholder expression before setting the aria-label', function() {
+    pageScope.placeholder = 'baz';
+    var el = $compile('<form name="form">' +
+      ' <md-input-container md-no-float>' +
+      '   <input placeholder="{{placeholder}}" ng-model="foo" name="foo">' +
+      ' </md-input-container>' +
+      '</form>')(pageScope);
+
+    expect(el.find('input').attr('aria-label')).toBe('baz');
   });
 
   it('should put the container in "has value" state when input has a static value', function() {
@@ -354,7 +476,7 @@ describe('md-input-container directive', function() {
     expect(element.hasClass('md-input-has-value')).toBe(true);
   });
 
-  it('adds the md-auto-hide class to messages without a visiblity directive', inject(function() {
+  it('adds the md-auto-hide class to messages without a visiblity directive', function() {
     var el = compile(
       '<md-input-container><input ng-model="foo">' +
       '  <div ng-messages></div>' +
@@ -362,9 +484,9 @@ describe('md-input-container directive', function() {
     );
 
     expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(true);
-  }));
+  });
 
-  it('does not add the md-auto-hide class with md-auto-hide="false" on the messages', inject(function() {
+  it('does not add the md-auto-hide class with md-auto-hide="false" on the messages', function() {
     var el = compile(
       '<md-input-container><input ng-model="foo">' +
       '  <div ng-messages md-auto-hide="false">Test Message</div>' +
@@ -372,11 +494,11 @@ describe('md-input-container directive', function() {
     );
 
     expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(false);
-  }));
+  });
 
   var visibilityDirectives = ['ng-if', 'ng-show', 'ng-hide'];
   visibilityDirectives.forEach(function(vdir) {
-    it('does not add the md-auto-hide class with ' + vdir + ' on the messages', inject(function() {
+    it('does not add the md-auto-hide class with ' + vdir + ' on the messages', function() {
       var el = compile(
         '<md-input-container><input ng-model="foo">' +
         '  <div ng-messages ' + vdir + '="true">Test Message</div>' +
@@ -384,10 +506,10 @@ describe('md-input-container directive', function() {
       );
 
       expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(false);
-    }));
+    });
   });
 
-  it('does not add the md-auto-hide class with ngSwitch on the messages', inject(function() {
+  it('does not add the md-auto-hide class with ngSwitch on the messages', function() {
     pageScope.switchVal = 1;
 
     var el = compile(
@@ -400,6 +522,81 @@ describe('md-input-container directive', function() {
     );
 
     expect(el[0].querySelector("[ng-messages]").classList.contains('md-auto-hide')).toBe(false);
+  });
+
+  it('should set the animation class on the ngMessage properly', inject(function() {
+    var element = compile(
+      '<md-input-container>' +
+        '<input ng-model="inputVal">' +
+        '<div ng-messages>' +
+          '<ng-message id="requiredMessage" when="required">Field required</ng-message>' +
+        '</div>' +
+      '</md-input-container>'
+    );
+
+    var ngMessage = element.find('ng-message');
+    expect(ngMessage).toHaveClass('md-input-message-animation');
+  }));
+
+  it('should set the animation class on a transcluded ngMessage', function() {
+    // We can emulate the transclusion, by wrapping the ngMessage inside of a document fragment.
+    // It is not necessary to add a *extra* component / directive for that, since we just
+    // want to the test the DocumentFragment detection.
+    var fragment = document.createDocumentFragment();
+
+    var inputContainer = compile(
+      '<md-input-container>' +
+        '<input ng-model="inputVal">' +
+        '<div ng-messages id="messageInsertion">' +
+        '</div>' +
+      '</md-input-container>'
+    );
+
+    // We build our element, without compiling and linking it.
+    // Because we invoke those steps manually during the tests.
+    var messageElement = angular.element(
+      '<ng-message id="requiredMessage" when="required">Field Required</ng-message>'
+    );
+
+    fragment.appendChild(messageElement[0]);
+
+    // Only compile the element at this time, and link it to its scope later.
+    // Normally the directive will add the animation class upon compile.
+    var linkFn = $compile(messageElement);
+
+    expect(messageElement).not.toHaveClass('md-input-message-animation');
+
+    // Now we emulate the finish of the transclusion.
+    // We move the element from the fragment into the correct input
+    // container.
+    inputContainer[0].appendChild(messageElement[0]);
+
+    // Manually invoke the postLink function of the directive.
+    linkFn($rootScope.$new());
+
+    expect(messageElement).toHaveClass('md-input-message-animation');
+  });
+
+  it('should select the input value on focus', inject(function($timeout) {
+    var container = setup('md-select-on-focus');
+    var input = container.find('input');
+    input.val('Auto Text Select');
+
+    document.body.appendChild(container[0]);
+
+    expect(isTextSelected(input[0])).toBe(false);
+
+    input.triggerHandler('focus');
+
+    expect(isTextSelected(input[0])).toBe(true);
+
+    document.body.removeChild(container[0]);
+
+    function isTextSelected(input) {
+      // The selection happens in a timeout which needs to be flushed.
+      $timeout.flush();
+      return input.selectionStart === 0 && input.selectionEnd == input.value.length;
+    }
   }));
 
   describe('Textarea auto-sizing', function() {
@@ -433,10 +630,27 @@ describe('md-input-container directive', function() {
       var oldHeight = textarea.offsetHeight;
       ngTextarea.val('Multiple\nlines\nof\ntext');
       ngTextarea.triggerHandler('input');
-      scope.$apply();
+      expect(textarea.offsetHeight).toBeGreaterThan(oldHeight);
+    });
+
+    it('should auto-size the textarea in response to an outside ngModel change', function() {
+      createAndAppendElement('ng-model="model"');
+      var oldHeight = textarea.offsetHeight;
+      scope.model = '1\n2\n3\n';
       $timeout.flush();
-      var newHeight = textarea.offsetHeight;
-      expect(newHeight).toBeGreaterThan(oldHeight);
+      expect(textarea.offsetHeight).toBeGreaterThan(oldHeight);
+    });
+
+    it('should allow the textarea to shrink if text is being deleted', function() {
+      createAndAppendElement();
+      ngTextarea.val('Multiple\nlines\nof\ntext');
+      ngTextarea.triggerHandler('input');
+      var oldHeight = textarea.offsetHeight;
+
+      ngTextarea.val('One line of text');
+      ngTextarea.triggerHandler('input');
+
+      expect(textarea.offsetHeight).toBeLessThan(oldHeight);
     });
 
     it('should not auto-size if md-no-autogrow is present', function() {
@@ -444,8 +658,6 @@ describe('md-input-container directive', function() {
       var oldHeight = textarea.offsetHeight;
       ngTextarea.val('Multiple\nlines\nof\ntext');
       ngTextarea.triggerHandler('input');
-      scope.$apply();
-      $timeout.flush();
       var newHeight = textarea.offsetHeight;
       expect(newHeight).toEqual(oldHeight);
     });
@@ -459,7 +671,6 @@ describe('md-input-container directive', function() {
       ngTextarea.val('Multiple\nlines\nof\ntext');
       ngTextarea.triggerHandler('input');
       scope.$apply();
-      $timeout.flush();
 
       // Textarea should still be hidden.
       expect(textarea.offsetHeight).toBe(0);
@@ -467,9 +678,66 @@ describe('md-input-container directive', function() {
       scope.parentHidden = false;
       scope.$apply();
 
-      $timeout.flush();
       var newHeight = textarea.offsetHeight;
       expect(textarea.offsetHeight).toBeGreaterThan(oldHeight);
+    });
+
+    it('should set the rows attribute as the user types', function() {
+      createAndAppendElement();
+      expect(textarea.rows).toBe(1);
+
+      ngTextarea.val('1\n2\n3');
+      ngTextarea.triggerHandler('input');
+      expect(textarea.rows).toBe(3);
+    });
+
+    it('should not allow the textarea rows to be less than the minimum number of rows', function() {
+      createAndAppendElement('rows="5"');
+      ngTextarea.val('1\n2\n3\n4\n5\n6\n7');
+      ngTextarea.triggerHandler('input');
+      expect(textarea.rows).toBe(7);
+
+      ngTextarea.val('');
+      ngTextarea.triggerHandler('input');
+      expect(textarea.rows).toBe(5);
+    });
+
+    it('should not let a textarea grow past its maximum number of rows', function() {
+      createAndAppendElement('max-rows="5"');
+      ngTextarea.val('1\n2\n3');
+      ngTextarea.triggerHandler('input');
+      expect(textarea.rows).toBe(3);
+      expect(ngTextarea.attr('md-no-autogrow')).toBeUndefined();
+
+      ngTextarea.val('1\n2\n3\n4\n5\n6\n7\n8\n9');
+      ngTextarea.triggerHandler('input');
+      expect(textarea.rows).toBe(5);
+      expect(ngTextarea.attr('md-no-autogrow')).toBeDefined();
+    });
+
+    it('should add a handle for resizing the textarea', function() {
+      createAndAppendElement();
+      expect(element.querySelector('.md-resize-handle')).toBeTruthy();
+    });
+
+    it('should disable auto-sizing if the handle gets dragged', function() {
+      createAndAppendElement();
+      var handle = angular.element(element.querySelector('.md-resize-handle'));
+
+      ngTextarea.val('1\n2\n3');
+      ngTextarea.triggerHandler('input');
+      var oldHeight = textarea.offsetHeight;
+
+      handle.triggerHandler('mousedown');
+      ngElement.triggerHandler('$md.dragstart');
+      ngTextarea.val('1\n2\n3\n4\n5\n6');
+      ngTextarea.triggerHandler('input');
+      expect(textarea.offsetHeight).toBe(oldHeight);
+    });
+
+    it('should not add the handle if md-no-resize is present', function() {
+      createAndAppendElement('md-no-resize');
+      expect(element.querySelector('.md-resize-handle')).toBeFalsy();
     });
   });
 
@@ -538,6 +806,50 @@ describe('md-input-container directive', function() {
         '</md-input-container>'
       );
       expect(el.hasClass('md-icon-left md-icon-right')).toBeTruthy();
+    });
+
+    it('should add md-icon-left class when md-icon is before select', function() {
+      var el = compile(
+        '<md-input-container>' +
+          '<md-icon></md-icon>' +
+          '<md-select ng-model="foo"></md-select>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-left')).toBeTruthy();
+    });
+
+    it('should add md-icon-right class when md-icon is before select', function() {
+      var el = compile(
+        '<md-input-container>' +
+          '<md-select ng-model="foo"></md-select>' +
+          '<md-icon></md-icon>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-right')).toBeTruthy();
+    });
+
+    it('should add md-icon-left class when md-icon is before textarea', function() {
+      var el = compile(
+        '<md-input-container>' +
+          '<md-icon></md-icon>' +
+          '<textarea ng-model="foo"></textarea>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-left')).toBeTruthy();
+    });
+
+    it('should add md-icon-right class when md-icon is before textarea', function() {
+      var el = compile(
+        '<md-input-container>' +
+          '<textarea ng-model="foo"></textarea>' +
+          '<md-icon></md-icon>' +
+        '</md-input-container>'
+      );
+
+      expect(el.hasClass('md-icon-right')).toBeTruthy();
     });
   });
 });

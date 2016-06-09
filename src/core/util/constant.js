@@ -5,16 +5,39 @@ angular.module('material.core')
  * Factory function that creates the grab-bag $mdConstant service.
  * @ngInject
  */
-function MdConstantFactory($sniffer) {
+function MdConstantFactory($sniffer, $window, $document) {
 
-  var webkit = /webkit/i.test($sniffer.vendorPrefix);
+  var vendorPrefix = $sniffer.vendorPrefix;
+  var isWebkit = /webkit/i.test(vendorPrefix);
+  var SPECIAL_CHARS_REGEXP = /([:\-_]+(.))/g;
+  var prefixTestEl = document.createElement('div');
+
   function vendorProperty(name) {
-    return webkit ?  ('webkit' + name.charAt(0).toUpperCase() + name.substring(1)) : name;
+    // Add a dash between the prefix and name, to be able to transform the string into camelcase.
+    var prefixedName = vendorPrefix + '-' + name;
+    var ucPrefix = camelCase(prefixedName);
+    var lcPrefix = ucPrefix.charAt(0).toLowerCase() + ucPrefix.substring(1);
+
+    return hasStyleProperty(name)     ? name     :       // The current browser supports the un-prefixed property
+           hasStyleProperty(ucPrefix) ? ucPrefix :       // The current browser only supports the prefixed property.
+           hasStyleProperty(lcPrefix) ? lcPrefix : name; // Some browsers are only supporting the prefix in lowercase.
+  }
+
+  function hasStyleProperty(property) {
+    return angular.isDefined(prefixTestEl.style[property]);
+  }
+
+  function camelCase(input) {
+    return input.replace(SPECIAL_CHARS_REGEXP, function(matches, separator, letter, offset) {
+      return offset ? letter.toUpperCase() : letter;
+    });
   }
 
   return {
+    IS_TOUCH: ('ontouchstart' in $window) || $window.DocumentTouch && $document[0] instanceof DocumentTouch,
     KEY_CODE: {
       COMMA: 188,
+      SEMICOLON : 186,
       ENTER: 13,
       ESCAPE: 27,
       SPACE: 32,
@@ -32,8 +55,8 @@ function MdConstantFactory($sniffer) {
     },
     CSS: {
       /* Constants */
-      TRANSITIONEND: 'transitionend' + (webkit ? ' webkitTransitionEnd' : ''),
-      ANIMATIONEND: 'animationend' + (webkit ? ' webkitAnimationEnd' : ''),
+      TRANSITIONEND: 'transitionend' + (isWebkit ? ' webkitTransitionEnd' : ''),
+      ANIMATIONEND: 'animationend' + (isWebkit ? ' webkitAnimationEnd' : ''),
 
       TRANSFORM: vendorProperty('transform'),
       TRANSFORM_ORIGIN: vendorProperty('transformOrigin'),
@@ -55,15 +78,17 @@ function MdConstantFactory($sniffer) {
      *
      */
     MEDIA: {
-      'xs'    : '(max-width: 599px)'                         ,
-      'gt-xs' : '(min-width: 600px)'                         ,
-      'sm'    : '(min-width: 600px) and (max-width: 959px)'  ,
-      'gt-sm' : '(min-width: 960px)'                         ,
-      'md'    : '(min-width: 960px) and (max-width: 1279px)' ,
-      'gt-md' : '(min-width: 1280px)'                        ,
-      'lg'    : '(min-width: 1280px) and (max-width: 1919px)',
-      'gt-lg' : '(min-width: 1920px)'                        ,
-      'xl'    : '(min-width: 1920px)'                        ,
+      'xs'        : '(max-width: 599px)'                         ,
+      'gt-xs'     : '(min-width: 600px)'                         ,
+      'sm'        : '(min-width: 600px) and (max-width: 959px)'  ,
+      'gt-sm'     : '(min-width: 960px)'                         ,
+      'md'        : '(min-width: 960px) and (max-width: 1279px)' ,
+      'gt-md'     : '(min-width: 1280px)'                        ,
+      'lg'        : '(min-width: 1280px) and (max-width: 1919px)',
+      'gt-lg'     : '(min-width: 1920px)'                        ,
+      'xl'        : '(min-width: 1920px)'                        ,
+      'landscape' : '(orientation: landscape)'                   ,
+      'portrait'  : '(orientation: portrait)'                    ,
       'print' : 'print'
     },
     MEDIA_PRIORITY: [
@@ -76,6 +101,8 @@ function MdConstantFactory($sniffer) {
       'sm',
       'gt-xs',
       'xs',
+      'landscape',
+      'portrait',
       'print'
     ]
   };

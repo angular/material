@@ -47,6 +47,12 @@ describe('$mdDateLocale', function() {
       expect(dateLocale.parseDate(dateStr)).toEqual(jasmine.any(Date));
     });
 
+    it('should default to the US date formatting', function() {
+      var date = new Date(2014, 2, 25);
+      var dateStr = dateLocale.formatDate(date);
+      expect(dateStr).toBe('3/25/2014');
+    });
+
     it('should have default date completion detection', function() {
       // Valid dates.
       expect(dateLocale.isDateComplete('04/05/15')).toBe(true);

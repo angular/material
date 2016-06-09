@@ -1,0 +1,31 @@
+.section {
+  font-size: 12px;
+  padding: 16px;
+  font-weight: bold;
+}
+
+.line {
+  padding: 16px;
+}
+
+.primary, .accent {
+  margin: 4px 0;
+  height: 120px;
+}
+
+[md-colors] {
+  transition: all 0.3s cubic-bezier(0.35, 0, 0.25, 1);
+}
+
+p.footnote {
+  font-size:0.85em;
+  margin: 30px;
+  padding:5px;
+  background-color: rgba(205,205,205,0.45);
+}
+
+.componentTag {
+  font-weight: bolder;
+  font-size: 1.2em;
+  padding-left: 10px;
+}

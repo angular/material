@@ -3,17 +3,30 @@
   <md-content class="md-padding" layout="column">
     <h2 class="md-title">Use a custom chip template.</h2>
 
-    <md-chips ng-model="ctrl.roFruitNames" readonly="ctrl.readonly">
-      <md-chip-template>
-        <strong>{{$chip}}</strong>
-        <em>(fruit)</em>
-      </md-chip-template>
-    </md-chips>
+    <form name="fruitForm">
+      <md-chips ng-model="ctrl.roFruitNames" name="fruitName" readonly="ctrl.readonly" md-max-chips="5">
+        <md-chip-template>
+          <strong>{{$chip}}</strong>
+          <em>(fruit)</em>
+        </md-chip-template>
+      </md-chips>
+
+      <div class="errors" ng-messages="fruitForm.fruitName.$error">
+        <div ng-message="md-max-chips">The maxmium of chips is reached.</div>
+      </div>
+    </form>
+
 
     <br/>
     <h2 class="md-title">Use the default chip template.</h2>
 
     <md-chips ng-model="ctrl.fruitNames" readonly="ctrl.readonly"></md-chips>
+
+
+    <br/>
+    <h2 class="md-title">Make chips editable.</h2>
+
+    <md-chips ng-model="ctrl.editableFruitNames" readonly="ctrl.readonly" md-enable-chip-edit="true"></md-chips>
 
     <br/>
     <h2 class="md-title">Use Placeholders and override hint texts.</h2>

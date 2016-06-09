@@ -2,7 +2,7 @@ $dialog-border-radius: 4px !default;
 
 md-dialog.md-THEME_NAME-theme {
   border-radius: $dialog-border-radius;
-  background-color: '{{background-color}}';
+  background-color: '{{background-hue-1}}';
 
   &.md-content-overflow {
     .md-actions, md-dialog-actions {
@@ -10,4 +10,3 @@ md-dialog.md-THEME_NAME-theme {
     }
   }
 }
-

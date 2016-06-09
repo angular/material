@@ -10,7 +10,7 @@
    * The `$mdDateLocaleProvider` is the provider that creates the `$mdDateLocale` service.
    * This provider that allows the user to specify messages, formatters, and parsers for date
    * internationalization. The `$mdDateLocale` service itself is consumed by Angular Material
-   * components that that deal with dates.
+   * components that deal with dates.
    *
    * @property {(Array<string>)=} months Array of month names (in order).
    * @property {(Array<string>)=} shortMonths Array of abbreviated month names.
@@ -24,6 +24,8 @@
    * @property {(function(Date): string)=} formatDate Function to format a date object to a string.
    * @property {(function(Date): string)=} monthHeaderFormatter Function that returns the label for
    *     a month given a date.
+   * @property {(function(Date): string)=} monthFormatter Function that returns the full name of a month
+   *     for a giben date.
    * @property {(function(number): string)=} weekNumberFormatter Function that returns a label for
    *     a week given the week number.
    * @property {(string)=} msgCalendar Translation of the label "Calendar" for the current locale.
@@ -53,7 +55,8 @@
    *     };
    *
    *     $mdDateLocaleProvider.formatDate = function(date) {
-   *       return moment(date).format('L');
+   *       var m = moment(date);
+   *       return m.isValid() ? m.format('L') : '';
    *     };
    *
    *     $mdDateLocaleProvider.monthHeaderFormatter = function(date) {
@@ -148,7 +151,7 @@
      * @param $locale
      * @returns {DateLocale}
      */
-    DateLocaleProvider.prototype.$get = function($locale) {
+    DateLocaleProvider.prototype.$get = function($locale, $filter) {
       /**
        * Default date-to-string formatting function.
        * @param {!Date} date
@@ -171,7 +174,7 @@
           formatDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 1, 0, 0);
         }
 
-        return formatDate.toLocaleDateString();
+        return $filter('date')(formatDate, 'M/d/yyyy');
       }
 
       /**
@@ -208,6 +211,15 @@
        */
       function defaultMonthHeaderFormatter(date) {
         return service.shortMonths[date.getMonth()] + ' ' + date.getFullYear();
+      }
+
+      /**
+       * Default formatter for a month.
+       * @param {!Date} date
+       * @returns {string}
+       */
+      function defaultMonthFormatter(date) {
+        return service.months[date.getMonth()] + ' ' + date.getFullYear();
       }
 
       /**
@@ -261,6 +273,7 @@
         parseDate: this.parseDate || defaultParseDate,
         isDateComplete: this.isDateComplete || defaultIsDateComplete,
         monthHeaderFormatter: this.monthHeaderFormatter || defaultMonthHeaderFormatter,
+        monthFormatter: this.monthFormatter || defaultMonthFormatter,
         weekNumberFormatter: this.weekNumberFormatter || defaultWeekNumberFormatter,
         longDateFormatter: this.longDateFormatter || defaultLongDateFormatter,
         msgCalendar: this.msgCalendar || defaultMsgCalendar,

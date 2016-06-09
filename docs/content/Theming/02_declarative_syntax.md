@@ -14,7 +14,7 @@ as expected, including:
 - md-slider
 - md-switch
 - md-tabs
-- md-text-float
+- md-input-container
 - md-toolbar
 
 

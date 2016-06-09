@@ -202,6 +202,40 @@ describe('$mdThemingProvider', function() {
       ).join('')).toContain('.md-test-theme {}');
     });
 
+    describe('background palette', function() {
+
+      function getRgbaBackgroundHue(hue) {
+        return themingProvider._rgba(themingProvider._PALETTES.testPalette[hue].value);
+      }
+
+      it('should parse for a light theme probably', function() {
+        testTheme.dark(false);
+
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('50') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-1}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A100') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-2}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('100') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-3}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('300') + ';');
+      });
+
+      it('should parse for a dark theme probably', function() {
+        testTheme.dark(true);
+
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A400') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-1}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('800') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-2}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('900') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-3}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A200') + ';');
+      });
+
+    });
+
     describe('parses foreground text and shadow', function() {
       it('for a light theme', function() {
         testTheme.dark(false);
@@ -210,7 +244,7 @@ describe('$mdThemingProvider', function() {
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
           .toEqual('color: rgba(0,0,0,0.54);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
-          .toEqual('color: rgba(0,0,0,0.26);');
+          .toEqual('color: rgba(0,0,0,0.38);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
           .toEqual('color: rgba(0,0,0,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
@@ -223,7 +257,7 @@ describe('$mdThemingProvider', function() {
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.7);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
-          .toEqual('color: rgba(255,255,255,0.3);');
+          .toEqual('color: rgba(255,255,255,0.5);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
@@ -309,6 +343,22 @@ describe('$mdThemingProvider', function() {
     });
   });
 
+});
+
+describe('$mdThemeProvider with custom styles', function() {
+  it('appends the custom styles to the end of the $MD_THEME_CSS string', function() {
+    module('material.core', function($mdThemingProvider) {
+      $mdThemingProvider.registerStyles('/*test*/');
+      $mdThemingProvider.theme('register-custom-styles');
+    });
+    
+    // Verify that $MD_THEME_CSS is still set to '/**/' in the test environment.
+    // Check angular-material-mocks.js for $MD_THEME_CSS latest value if this test starts to fail. 
+    inject(function($MD_THEME_CSS) { expect($MD_THEME_CSS).toBe('/**/'); });
+    
+    // Find the string '/**//*test*/' in the head tag.
+    expect(document.head.innerHTML).toContain('/*test*/');
+  });
 });
 
 describe('$mdThemeProvider with on-demand generation', function() {

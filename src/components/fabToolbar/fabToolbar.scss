@@ -12,7 +12,7 @@ md-fab-toolbar {
   /*
    * Closed styling
    */
-  .md-fab-toolbar-wrapper {
+  ._md-fab-toolbar-wrapper {
     display: block;
     position: relative;
     overflow: hidden;
@@ -29,7 +29,7 @@ md-fab-toolbar {
       overflow: visible !important;
     }
 
-    .md-fab-toolbar-background {
+    ._md-fab-toolbar-background {
       display: block;
       position: absolute;
       z-index: $z-index-fab + 1;
@@ -51,23 +51,23 @@ md-fab-toolbar {
 
   &.md-left {
     md-fab-trigger {
-      right: 0;
+      @include rtl-prop(right, left, 0);
     }
 
     .md-toolbar-tools {
       flex-direction: row-reverse;
 
       > .md-button:first-child {
-        margin-right: 0.6rem;
+        @include rtl-prop(margin-right, margin-left, 0.6rem)
       }
 
       > .md-button:first-child {
-        margin-left: -0.8rem;
+        @include rtl-prop(margin-left, margin-right, -0.8rem);
       }
 
 
       > .md-button:last-child {
-        margin-right: 8px;
+        @include rtl-prop(margin-right, margin-left, 8px);
       }
 
     }
@@ -75,7 +75,7 @@ md-fab-toolbar {
 
   &.md-right {
     md-fab-trigger {
-      left: 0;
+      @include rtl-prop(left, right, 0);
     }
 
     .md-toolbar-tools {

@@ -8,7 +8,7 @@
 // Typography
 // ------------------------------
 $font-family: Roboto, 'Helvetica Neue', sans-serif !default;
-$font-size:   10px;
+$font-size:   10px !default;
 
 $display-4-font-size-base: rem(11.20) !default;
 $display-3-font-size-base: rem(5.600) !default;
@@ -32,20 +32,23 @@ $layout-breakpoint-sm:     960px !default;
 $layout-breakpoint-md:     1280px !default;
 $layout-breakpoint-lg:     1920px !default;
 
+// Button
+$button-left-right-padding: rem(0.600) !default;
+
 // Icon
 $icon-size: rem(2.400) !default;
 
 // App bar variables
-$app-bar-height: 64px;
+$app-bar-height: 64px !default;
 
 $toast-height: $baseline-grid * 3 !default;
 $toast-margin: $baseline-grid * 1 !default;
 
 // Whiteframes
 
-$shadow-key-umbra-opacity:      0.2;
-$shadow-key-penumbra-opacity:   0.14;
-$shadow-ambient-shadow-opacity: 0.12;
+$shadow-key-umbra-opacity:      0.2 !default;
+$shadow-key-penumbra-opacity:   0.14 !default;
+$shadow-ambient-shadow-opacity: 0.12 !default;
 
 // NOTE(shyndman): gulp-sass seems to be failing if I split the shadow defs across
 //    multiple lines. Ugly. Sorry.
@@ -80,10 +83,12 @@ $whiteframe-shadow-24dp: 0px 11px 15px -7px rgba(0, 0, 0, $shadow-key-umbra-opac
 $z-index-toast: 105 !default;
 $z-index-tooltip: 100 !default;
 $z-index-menu: 100 !default;
+$z-index-calendar-pane: 100 !default;
 $z-index-select: 90 !default;
 $z-index-dialog: 80 !default;
 $z-index-bottom-sheet: 70 !default;
-$z-index-scroll-mask: 65 !default;
+$z-index-scroll-mask: 50 !default;
+$z-index-scroll-mask-bar: 65 !default;
 $z-index-sidenav: 60 !default;
 $z-index-backdrop: 50 !default;
 $z-index-fab: 20 !default;
@@ -108,8 +113,23 @@ $swift-linear-duration: 0.08s !default;
 $swift-linear-timing-function: linear !default;
 $swift-linear: all $swift-linear-duration $swift-linear-timing-function !default;
 
+$material-enter-duration: 0.3s;
+$material-enter-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+$material-enter: all $material-enter-duration $material-enter-timing-function;
+
+$material-leave-duration: 0.3s;
+$material-leave-timing-function: cubic-bezier(0.4, 0.0, 1, 1);
+$material-leave: all $material-leave-duration $material-leave-timing-function;
+
 // Fab Buttons (shared between buttons.scss and fab*.scss)
 // -------------------------------------------
 $button-fab-width: rem(5.600) !default;
 $button-fab-height: rem(5.600) !default;
 $button-fab-padding: rem(1.60) !default;
+
+
+// Shared Checkbox variables
+$checkbox-width: 20px !default;
+$checkbox-height: $checkbox-width !default;
+$checkbox-border-radius: 2px !default;
+$checkbox-border-width: 2px !default;

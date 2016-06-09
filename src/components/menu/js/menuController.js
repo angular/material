@@ -9,6 +9,7 @@ angular
  */
 function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $rootScope, $q) {
 
+  var prefixer = $mdUtil.prefixer();
   var menuContainer;
   var self = this;
   var triggerElement;
@@ -22,8 +23,9 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
   this.init = function init(setMenuContainer, opts) {
     opts = opts || {};
     menuContainer = setMenuContainer;
+    
     // Default element for ARIA attributes has the ngClick or ngMouseenter expression
-    triggerElement = $element[0].querySelector('[ng-click],[ng-mouseenter]');
+    triggerElement = $element[0].querySelector(prefixer.buildSelector(['ng-click', 'ng-mouseenter']));
     triggerElement.setAttribute('aria-expanded', 'false');
 
     this.isInMenuBar = opts.isInMenuBar;
@@ -31,7 +33,9 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
 
     menuContainer.on('$mdInterimElementRemove', function() {
       self.isOpen = false;
+      $mdUtil.nextTick(function(){ self.onIsOpenChanged(self.isOpen);});
     });
+    $mdUtil.nextTick(function(){ self.onIsOpenChanged(self.isOpen);});
 
     var menuContainerId = 'menu_container_' + $mdUtil.nextUid();
     menuContainer.attr('id', menuContainerId);
@@ -70,7 +74,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
       deregisterScopeListeners.shift()();
     }
     menuItems && menuItems.off('mouseenter', self.handleMenuItemHover);
-    menuItems && menuItems.off('mouseleave', self.handleMenuMouseLeave);
+    menuItems && menuItems.off('mouseleave', self.handleMenuItemMouseLeave);
   };
 
   this.handleMenuItemHover = function(event) {
@@ -87,12 +91,14 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
       if (self.currentlyOpenMenu && self.currentlyOpenMenu != nestedMenu) {
         var closeTo = self.nestLevel + 1;
         self.currentlyOpenMenu.close(true, { closeTo: closeTo });
+        self.isAlreadyOpening = !!nestedMenu;
+        nestedMenu && nestedMenu.open();
       } else if (nestedMenu && !nestedMenu.isOpen && nestedMenu.open) {
-        self.isAlreadyOpening = true;
-        nestedMenu.open();
+        self.isAlreadyOpening = !!nestedMenu;
+        nestedMenu && nestedMenu.open();
       }
     }, nestedMenu ? 100 : 250);
-    var focusableTarget = event.currentTarget.querySelector('button:not([disabled])');
+    var focusableTarget = event.currentTarget.querySelector('.md-button:not([disabled])');
     focusableTarget && focusableTarget.focus();
   };
 
@@ -113,6 +119,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
     if (self.isOpen) return;
     self.enableHoverListener();
     self.isOpen = true;
+    $mdUtil.nextTick(function(){ self.onIsOpenChanged(self.isOpen);});
     triggerElement = triggerElement || (ev ? ev.target : $element[0]);
     triggerElement.setAttribute('aria-expanded', 'true');
     $scope.$emit('$mdMenuOpen', $element);
@@ -133,22 +140,24 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
   // Expose a open function to the child scope for html to use
   $scope.$mdOpenMenu = this.open;
 
-  $scope.$watch(function() { return self.isOpen; }, function(isOpen) {
+  this.onIsOpenChanged = function(isOpen) {
     if (isOpen) {
       menuContainer.attr('aria-hidden', 'false');
-      $element[0].classList.add('md-open');
+      $element[0].classList.add('_md-open');
       angular.forEach(self.nestedMenus, function(el) {
-        el.classList.remove('md-open');
+        el.classList.remove('_md-open');
       });
     } else {
       menuContainer.attr('aria-hidden', 'true');
-      $element[0].classList.remove('md-open');
+      $element[0].classList.remove('_md-open');
     }
     $scope.$mdMenuIsOpen = self.isOpen;
-  });
+  };
 
   this.focusMenuContainer = function focusMenuContainer() {
-    var focusTarget = menuContainer[0].querySelector('[md-menu-focus-target]');
+    var focusTarget = menuContainer[0]
+      .querySelector(prefixer.buildSelector(['md-menu-focus-target', 'md-autofocus']));
+
     if (!focusTarget) focusTarget = menuContainer[0].querySelector('.md-button');
     focusTarget.focus();
   };
@@ -169,6 +178,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
   this.close = function closeMenu(skipFocus, closeOpts) {
     if ( !self.isOpen ) return;
     self.isOpen = false;
+    $mdUtil.nextTick(function(){ self.onIsOpenChanged(self.isOpen);});
 
     var eventDetails = angular.extend({}, closeOpts, { skipFocus: skipFocus });
     $scope.$emit('$mdMenuClose', $element, eventDetails);

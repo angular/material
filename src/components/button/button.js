@@ -7,7 +7,36 @@
  */
 angular
     .module('material.components.button', [ 'material.core' ])
-    .directive('mdButton', MdButtonDirective);
+    .directive('mdButton', MdButtonDirective)
+    .directive('a', MdAnchorDirective);
+
+
+/**
+ * @private
+ * @restrict E
+ *
+ * @description
+ * `a` is an anchor directive used to inherit theme colors for md-primary, md-accent, etc.
+ *
+ * @usage
+ *
+ * <hljs lang="html">
+ *  <md-content md-theme="myTheme">
+ *    <a href="#chapter1" class="md-accent"></a>
+ *  </md-content>
+ * </hljs>
+ */
+function MdAnchorDirective($mdTheming) {
+  return {
+    restrict : 'E',
+    link : function postLink(scope, element) {
+      // Make sure to inherit theme so stand-alone anchors
+      // support theme colors for md-primary, md-accent, etc.
+      $mdTheming(element);
+    }
+  };
+}
+
 
 /**
  * @ngdoc directive
@@ -25,6 +54,7 @@ angular
  * the `md-primary` class.
  *
  * @param {boolean=} md-no-ink If present, disable ripple ink effects.
+ * @param {boolean=} md-no-focus-style If present, disable focus style on button
  * @param {expression=} ng-disabled En/Disable based on the expression
  * @param {string=} md-ripple-size Overrides the default ripple size logic. Options: `full`, `partial`, `auto`
  * @param {string=} aria-label Adds alternative text to button for accessibility, useful for icon buttons.
@@ -108,9 +138,10 @@ function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
       }
     });
 
-    // restrict focus styles to the keyboard
-    scope.mouseActive = false;
-    element.on('mousedown', function() {
+    if (!angular.isDefined(attr.mdNoFocusStyle)) {
+      // restrict focus styles to the keyboard
+      scope.mouseActive = false;
+      element.on('mousedown', function() {
         scope.mouseActive = true;
         $timeout(function(){
           scope.mouseActive = false;
@@ -124,6 +155,7 @@ function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
       .on('blur', function(ev) {
         element.removeClass('md-focused');
       });
+    }
   }
 
 }

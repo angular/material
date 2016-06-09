@@ -1,4 +1,3 @@
-a.md-button.md-THEME_NAME-theme,
 .md-button.md-THEME_NAME-theme {
 
   &:not([disabled]) {
@@ -21,7 +20,7 @@ a.md-button.md-THEME_NAME-theme,
     }
     &:not([disabled]) {
       &:hover {
-        background-color: '{{accent-color}}';
+        background-color: '{{accent-A700}}';
       }
       &.md-focused {
         background-color: '{{accent-A700}}';
@@ -40,7 +39,7 @@ a.md-button.md-THEME_NAME-theme,
           color: '{{primary-contrast}}';
         }
         &:hover {
-          background-color: '{{primary-color}}';
+          background-color: '{{primary-600}}';
         }
         &.md-focused {
           background-color: '{{primary-600}}';
@@ -61,7 +60,7 @@ a.md-button.md-THEME_NAME-theme,
         color: '{{accent-contrast}}';
       }
       &:hover {
-        background-color: '{{accent-color}}';
+        background-color: '{{accent-A700}}';
       }
       &.md-focused {
         background-color: '{{accent-A700}}';
@@ -97,10 +96,10 @@ a.md-button.md-THEME_NAME-theme,
           color: '{{warn-contrast}}';
         }
         &:hover {
-          background-color: '{{warn-color}}';
+          background-color: '{{warn-600}}';
         }
         &.md-focused {
-          background-color: '{{warn-700}}';
+          background-color: '{{warn-600}}';
         }
       }
     }
@@ -122,10 +121,10 @@ a.md-button.md-THEME_NAME-theme,
           color: '{{accent-contrast}}';
         }
         &:hover {
-          background-color: '{{accent-color}}';
+          background-color: '{{accent-A700}}';
         }
         &.md-focused {
-          background-color: '{{accent-700}}';
+          background-color: '{{accent-A700}}';
         }
       }
     }
@@ -141,7 +140,7 @@ a.md-button.md-THEME_NAME-theme,
   &.md-fab[disabled],
   &.md-accent[disabled],
   &.md-warn[disabled] {
-    color: '{{foreground-3}}' !important;
+    color: '{{foreground-3}}';
     cursor: default;
 
     md-icon {
@@ -154,5 +153,42 @@ a.md-button.md-THEME_NAME-theme,
   }
   &[disabled] {
     background-color: transparent;
+  }
+}
+
+
+._md {
+  a.md-THEME_NAME-theme:not(.md-button) {
+    &.md-primary {
+      color: '{{primary-color}}';
+
+      &:hover {
+        color: '{{primary-700}}';
+      }
+    }
+
+    &.md-accent {
+      color: '{{accent-color}}';
+
+      &:hover {
+        color: '{{accent-700}}';
+      }
+    }
+
+    &.md-accent {
+      color: '{{accent-color}}';
+
+      &:hover {
+        color: '{{accent-A700}}';
+      }
+    }
+
+    &.md-warn {
+      color: '{{warn-color}}';
+
+      &:hover {
+        color: '{{warn-700}}';
+      }
+    }
   }
 }

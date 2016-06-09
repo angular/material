@@ -31,12 +31,38 @@ Material is targeted for all browsers with versions n-1; where n is the current 
 - Or you can build the documentation and demos locally; see
   [Build Docs & Demos](https://github.com/angular/material/tree/master/docs/README.md) for details.
 
+
+## <a name="releasing"></a> Our Release Processes
+
+Angular Material has revised/improved its build processes. To preserve stability with applications currently using Angular Material, we will have three (3) types of releases:
+
+*  `major` :  this type of release will be the Angular 2.x efforts maintained in a separate repository called [Material2](https://github.com/angular/material2). This type of release will not be used within Angular Material 1.x.
+*  `minor`:  aka `master` contains patch release changes AND breaking changes and new features
+*  `patch`:  non-breaking changes (no API, CSS, UX changes that will cause breaks in existing ngMaterial applications)
+
+##### Patch Releases
+
+The patch builds (1.0.4, 1.0.5, 1.0.6) are prepared based on commits in the `patch` branch; which contains only non-breaking changes (eg bug fix, some API additions, minimal non-breaking CSS changes ).  We will be building `patch` releases every week.
+
+##### Minor Releases
+
+The minor build (1.1.0, 1.2.0, 1.3.0,...) are prepared based on commits in the `master` branch; which will remain the daily development branch AND will be the source for the `minor` releases.
+
+Our formal release of `minor` builds is much less frequent; probably 1x / Quarter. Developers can easily obtain the latest, full change-set from bower or npm using references to `@master`.
+
+##### Changelog
+
+The Changelog may contain releases for `patch` or `minor`. If you do not see a fix listed in the Changelog but the issue has been resolved or the PR merged, then those changes will be `master` available in the next *minor* release.
+
+> for the purposes of Angular Material 1.x, you *could* think of the patch releases as being *minor* changes and the 'minor' releases as being *major* changes.
+
+
 ## <a name="contributing"></a> Contributing
 
 Developers interested in contributing should read the following guidelines:
 
-- [Issue Guidelines](CONTRIBUTING.md#submit)
-- [Contributing Guidelines](CONTRIBUTING.md)
+- [Issue Guidelines](.github/CONTRIBUTING.md#submit)
+- [Contributing Guidelines](.github/CONTRIBUTING.md)
 - [Coding Guidelines](docs/guides/CODING.md)
 - [ChangeLog](CHANGELOG.md)
 
@@ -114,7 +140,7 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
 ```html
   <head>
 
-    <!-- Angular Material CSS now available via Google CDN; version 0.11.2 used here -->
+    <!-- Angular Material CSS now available via Google CDN; version 1.0.7 used here -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.css">
 
   </head>
@@ -126,14 +152,12 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
 
 
-    <!-- Angular Material Javascript now available via Google CDN; version 0.11.2 used here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.js"></script>
+    <!-- Angular Material Javascript now available via Google CDN; version 1.0.7 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.7/angular-material.min.js"></script>
   </body>
 ```
 
-> Note that the above sample references the 0.10.0 CDN release. Your version will change based on the latest stable release version.
-
-Developers seeking the latest, most-current build versions can use [GitCDN.xyz](//gitcdn.xyz) to
+Developers seeking the latest, most-current build versions can use [GitCDN.link](//gitcdn.link) to
 pull directly from the distribution GitHub
 [Bower-Material](https://github.com/angular/bower-material) repository:
 
@@ -141,7 +165,7 @@ pull directly from the distribution GitHub
   <head>
 
     <!-- Angular Material CSS using GitCDN to load directly from `bower-material/master` -->
-    <link rel="stylesheet" href="https://gitcdn.xyz/repo/angular/bower-material/master/angular-material.css">
+    <link rel="stylesheet" href="https://gitcdn.link/repo/angular/bower-material/master/angular-material.css">
 
   </head>
   <body>
@@ -152,7 +176,7 @@ pull directly from the distribution GitHub
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.js"></script>
 
     <!-- Angular Material Javascript using GitCDN to load directly from `bower-material/master` -->
-    <script src="https://gitcdn.xyz/repo/angular/bower-material/master/angular-material.js"></script>
+    <script src="https://gitcdn.link/repo/angular/bower-material/master/angular-material.js"></script>
 
   </body>
 ```

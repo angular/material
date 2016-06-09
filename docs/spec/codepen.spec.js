@@ -45,7 +45,7 @@ describe('CodepenDataAdapter', function() {
       it('includes the core angular css', function() {
 
         // NOTE: the release script replaces this localhost reference with
-        // 'https://gitcdn.xyz/repo/angular/bower-material/master/angular-material.css'
+        // 'https://gitcdn.link/repo/angular/bower-material/master/angular-material.css'
 
         expect(data.css_external).toBe('http://localhost:8080/angular-material.css');
       });

@@ -40,13 +40,14 @@ angular.module('dialogDemo1', ['ngMaterial'])
   $scope.showPrompt = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.prompt()
-          .title('What would you name your dog?')
-          .textContent('Bowser is a common name.')
-          .placeholder('dog name')
-          .ariaLabel('Dog name')
-          .targetEvent(ev)
-          .ok('Okay!')
-          .cancel('I\'m a cat person');
+      .title('What would you name your dog?')
+      .textContent('Bowser is a common name.')
+      .placeholder('Dog name')
+      .ariaLabel('Dog name')
+      .initialValue('Buddy')
+      .targetEvent(ev)
+      .ok('Okay!')
+      .cancel('I\'m a cat person');
 
     $mdDialog.show(confirm).then(function(result) {
       $scope.status = 'You decided to name your dog ' + result + '.';
@@ -95,6 +96,16 @@ angular.module('dialogDemo1', ['ngMaterial'])
         }, function() {
           $scope.status = 'You cancelled the dialog.';
         });
+  };
+
+  $scope.showPrerenderedDialog = function(ev) {
+    $mdDialog.show({
+      controller: DialogController,
+      contentElement: '#myDialog',
+      parent: angular.element(document.body),
+      targetEvent: ev,
+      clickOutsideToClose: true
+    });
   };
 });
 

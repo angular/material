@@ -1,5 +1,14 @@
 // See height set globally, depended on by buttons
 
+$md-toast-content-padding: 3 * $baseline-grid - $button-left-right-padding !default;
+$md-toast-button-left-margin: 3 * $baseline-grid - 2 * $button-left-right-padding !default;
+$md-toast-text-padding: $button-left-right-padding !default;
+
+
+.md-toast-text {
+  padding: 0 $md-toast-text-padding;
+}
+
 md-toast {
   position: absolute;
   z-index: $z-index-toast;
@@ -19,12 +28,15 @@ md-toast {
     display: flex;
     align-items: center;
 
-    height: 0;
     max-height: 7 * $toast-height;
     max-width: 100%;
+
     min-height: 48px;
-    padding-left: 24px;
-    padding-right: 24px;
+    // Since we're vertically centering our text by using flexbox and having a min-height, we need to apply
+    // a fix for an IE11 flexbug, otherwise the text won't be centered vertically.
+    @include ie11-min-height-flexbug(48px);
+
+    padding: 0 $md-toast-content-padding;
 
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
     border-radius: 2px;
@@ -35,6 +47,8 @@ md-toast {
     // Setup for transform transitions on inner content
     transform: translate3d(0, 0, 0) rotateZ(0deg);
     transition: $swift-ease-out;
+
+    @include rtl(justify-content, flex-start, flex-end);
   }
 
   &.md-capsule {
@@ -52,10 +66,10 @@ md-toast {
   }
 
   /* Transition differently when swiping */
-  &.md-swipeleft,
-  &.md-swiperight,
-  &.md-swipeup,
-  &.md-swipedown {
+  &._md-swipeleft,
+  &._md-swiperight,
+  &._md-swipeup,
+  &._md-swipedown {
     .md-toast-content {
       transition: $swift-ease-out;
     }
@@ -66,7 +80,7 @@ md-toast {
     .md-toast-content {
       transform: translate3d(0, 100%, 0);
     }
-    &.md-top {
+    &._md-top {
       .md-toast-content {
         transform: translate3d(0, -100%, 0);
       }
@@ -88,17 +102,17 @@ md-toast {
       transform: translate3d(0, 100%, 0);
     }
 
-    &.md-swipeup {
+    &._md-swipeup {
       .md-toast-content {
         transform: translate3d(0, -50%, 0);
       }
     }
-    &.md-swipedown {
+    &._md-swipedown {
       .md-toast-content {
         transform: translate3d(0, 50%, 0);
       }
     }
-    &.md-top {
+    &._md-top {
       .md-toast-content {
         transform: translate3d(0, -100%, 0);
       }
@@ -112,10 +126,12 @@ md-toast {
     cursor: pointer;
     text-transform: uppercase;
     float: right;
+  }
 
-    &.md-button {
-      min-width: 0;
-    }
+  .md-button {
+    min-width: 0;
+    @include rtl(margin-right, 0, $md-toast-button-left-margin);
+    @include rtl(margin-left, $md-toast-button-left-margin, 0);
   }
 }
 
@@ -128,14 +144,15 @@ md-toast {
     min-width: 0;
     border-radius: 0;
     bottom: 0;
+    padding: 0;
 
     &.ng-leave.ng-leave-active {
-      &.md-swipeup {
+      &._md-swipeup {
         .md-toast-content {
           transform: translate3d(0, -50%, 0);
         }
       }
-      &.md-swipedown {
+      &._md-swipedown {
         .md-toast-content {
           transform: translate3d(0, 50%, 0);
         }
@@ -147,17 +164,26 @@ md-toast {
 @media (min-width: $layout-breakpoint-sm) {
   md-toast {
     min-width: 288px + $toast-margin * 2;
-    &.md-bottom {
+    &._md-bottom {
       bottom: 0;
     }
-    &.md-left {
+    &._md-left {
       left: 0;
     }
-    &.md-right {
+    &._md-right {
       right: 0;
     }
-    &.md-top {
+    &._md-top {
       top: 0;
+    }
+
+    // Support for RTL alignment
+    &._md-start {
+      @include rtl-prop(left, right, 0);
+    }
+
+    &._md-end {
+      @include rtl-prop(right, left, 0);
     }
 
     /*
@@ -165,12 +191,12 @@ md-toast {
    * make it rotate when the user swipes it away
    */
     &.ng-leave.ng-leave-active {
-      &.md-swipeleft {
+      &._md-swipeleft {
         .md-toast-content {
           transform: translate3d(-50%, 0, 0);
         }
       }
-      &.md-swiperight {
+      &._md-swiperight {
         .md-toast-content {
           transform: translate3d(50%, 0, 0);
         }
@@ -195,6 +221,6 @@ md-toast {
 
 
 // While animating, set the toast parent's overflow to hidden so scrollbars do not appear
-.md-toast-animating {
+._md-toast-animating {
   overflow: hidden !important;
 }

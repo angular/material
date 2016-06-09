@@ -4,11 +4,12 @@ body {
 }
 
 hr {
-  margin-left:-20px; opacity:0.3;
+  margin-left: -20px;
+  opacity: 0.3;
 }
 
 md-radio-group {
-  width:150px;
+  width: 150px;
 }
 
 p:last-child {
@@ -17,7 +18,7 @@ p:last-child {
 
 
 [ng-controller] {
-  padding-left: 20px;
+  padding: 0 20px;
 }
 
 .radioValue {
@@ -29,10 +30,9 @@ p:last-child {
 }
 
 md-icon {
-    margin: 20px;
-    margin-top: 0;
-    width: 128px;
-    height: 128px;
+  margin: 0 20px 20px;
+  width: 128px;
+  height: 128px;
 }
 
 

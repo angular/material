@@ -1,6 +1,12 @@
 demo-include {
   display: block;
-  background-color:white;
+}
+
+/* For documentation printing purposes, set background color */
+@media print {
+  .demo-content {
+    background-color: white !important;
+  }
 }
 
 .colorNested .demo-content > div div  {

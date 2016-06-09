@@ -1,0 +1,16 @@
+md-nav-bar.md-THEME_NAME-theme {
+
+  .md-nav-bar {
+    background-color: transparent;
+    border-color: '{{foreground-4}}';
+  }
+
+  .md-button._md-nav-button.md-unselected {
+    color: '{{foreground-2}}';
+  }
+
+  md-nav-ink-bar {
+    color: '{{accent-color}}';
+    background: '{{accent-color}}';
+  }
+}

@@ -29,7 +29,7 @@
     </tr>
     <tr>
       <td>flex</td>
-      <td> integer (increments of 5 for 0%->100%)</td>
+      <td> integer (increments of 5 for 0%->100%, 100%/3, 200%/3)</td>
     </tr>
     <tr>
       <td>flex-order</td>
@@ -37,7 +37,7 @@
     </tr>
     <tr>
       <td>flex-offset</td>
-      <td>integer (increments of 5 for 0%->100%, 100%/3, 200%/3)</td>
+      <td>integer (increments of 5 for 0%->95%, 100%/3, 200%/3)</td>
     </tr>
     <tr>
       <td>layout-align</td>
@@ -218,7 +218,7 @@
       <div flex="33" flex-md="{{ vm.box1Width }}" class="one"></div>
       <div flex="33" layout="{{ vm.direction }}" layout-md="row" class="two">
 
-        <div flex="22" flex-md="10" hide-lg class="two_one"></div>
+        <div flex="20" flex-md="10" hide-lg class="two_one"></div>
         <div flex="30px" show hide-md="{{ vm.hideBox }}" flex-md="25" class="two_two"></div>
         <div flex="20" flex-md="65" class="two_three"></div>
 

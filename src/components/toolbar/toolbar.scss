@@ -30,6 +30,10 @@ md-toolbar {
   min-height: $baseline-grid * 8;
   width: 100%;
 
+  transition-duration: $swift-ease-in-out-duration;
+  transition-timing-function: $swift-ease-in-out-timing-function;
+  transition-property: background-color, fill, color;
+
   &.md-whiteframe-z1-add, &.md-whiteframe-z1-remove {
     transition: box-shadow $swift-ease-in-out-duration linear;
   }
@@ -42,6 +46,13 @@ md-toolbar {
   *:before,
   *:after {
     box-sizing: border-box;
+  }
+
+  // By default $ngAnimate looks for transition durations on the element, when using ng-hide, ng-if, ng-show.
+  // The toolbar has a transition duration applied, which means, that $ngAnimate delays the hide process.
+  // To avoid this, we need to reset the transition, when $ngAnimate looks for the duration.
+  &.ng-animate {
+    transition: none;
   }
 
   &.md-tall {
@@ -63,7 +74,7 @@ md-toolbar {
   }
 
   > .md-indent {
-    margin-left: $toolbar-indent-margin;
+    @include rtl-prop(margin-left, margin-right, $toolbar-indent-margin);
   }
 
   ~ md-content {
@@ -111,18 +122,31 @@ md-toolbar {
   .md-button {
     margin-top: 0;
     margin-bottom: 0;
+
+    &, &.md-icon-button md-icon {
+      transition-duration: $swift-ease-in-out-duration;
+      transition-timing-function: $swift-ease-in-out-timing-function;
+      transition-property: background-color, fill, color;
+
+      // Normally .md-button is already resetting the transition, when $ngAnimate looks for the duration,
+      // but in this case, the selector has a higher specificity than the `reset selector`, which means, that
+      // we need to reset the transition our self.
+      &.ng-animate {
+        transition: none;
+      }
+    }
   }
   &> .md-button:first-child {
-    margin-left: $icon-button-margin-offset;
+    @include rtl-prop(margin-left, margin-right, $icon-button-margin-offset);
   }
   &> .md-button:last-child {
-    margin-right: $icon-button-margin-offset;
+    @include rtl-prop(margin-right, margin-left, $icon-button-margin-offset);
   }
 
   &> md-menu:last-child {
-    margin-right: $icon-button-margin-offset;
+    @include rtl-prop(margin-right, margin-left, $icon-button-margin-offset);
     & > .md-button {
-      margin-right: 0;
+      @include rtl-prop(margin-right, margin-left, 0);
     }
   }
 

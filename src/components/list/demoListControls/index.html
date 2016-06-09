@@ -20,6 +20,38 @@
 
   <md-divider></md-divider>
 
+  <md-subheader class="md-no-sticky">Secondary Menus</md-subheader>
+  <md-list-item>
+    <p>Click anywhere to fire the secondary action</p>
+
+    <md-menu class="md-secondary">
+      <md-button class="md-icon-button">
+        <md-icon md-svg-icon="communication:message"></md-icon>
+      </md-button>
+      <md-menu-content width="4">
+        <md-menu-item>
+          <md-button>
+            Redial
+          </md-button>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button>
+            Check voicemail
+          </md-button>
+        </md-menu-item>
+        <md-menu-divider></md-menu-divider>
+        <md-menu-item>
+          <md-button>
+            Notifications
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
+
+  </md-list-item>
+
+  <md-divider></md-divider>
+
   <md-subheader class="md-no-sticky">Clickable Items with Secondary Controls</md-subheader>
   <md-list-item ng-click="navigateTo(setting.extraScreen, $event)" ng-repeat="setting in settings">
     <md-icon md-svg-icon="{{setting.icon}}"></md-icon>

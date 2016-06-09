@@ -2,7 +2,7 @@
 <div ng-controller="AppCtrl" class="md-padding" ng-cloak>
   <div>
     <fieldset class="standard">
-      <legend>Using <code>ng-model</code></legend>
+      <legend>Using &lt;ng-model&gt;</legend>
       <div layout="column" layout-wrap layout-gt-sm="row" >
         <div flex-xs flex="50">
           <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
@@ -41,6 +41,18 @@
         <div flex-xs flex="50">
           <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
             Checkbox (md-primary): No Ink
+          </md-checkbox>
+        </div>
+        <div flex-xs flex="50">
+          <md-checkbox md-indeterminate
+              aria-label="Checkbox Indeterminate" class="md-primary">
+            Checkbox: Indeterminate
+          </md-checkbox>
+        </div>
+        <div flex-xs flex="50">
+          <md-checkbox md-indeterminate aria-label="Checkbox Disabled Indeterminate"
+              ng-disabled="true" class="md-primary">
+            Checkbox: Disabled, Indeterminate
           </md-checkbox>
         </div>
       </div>

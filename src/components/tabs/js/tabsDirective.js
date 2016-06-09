@@ -63,6 +63,7 @@
  * @param {boolean=} md-swipe-content When enabled, swipe gestures will be enabled for the content area to jump between tabs
  * @param {boolean=} md-enable-disconnect When enabled, scopes will be disconnected for tabs that are not being displayed.  This provides a performance boost, but may also cause unexpected issues and is not recommended for most users.
  * @param {boolean=} md-autoselect When present, any tabs added after the initial load will be automatically selected
+ * @param {boolean=} md-no-select-click When enabled, click events will not be fired when selecting tabs
  *
  * @usage
  * <hljs lang="html">
@@ -89,7 +90,7 @@ angular
     .module('material.components.tabs')
     .directive('mdTabs', MdTabs);
 
-function MdTabs () {
+function MdTabs ($$mdSvgRegistry) {
   return {
     scope:            {
       selectedIndex: '=?mdSelected'
@@ -107,7 +108,7 @@ function MdTabs () {
               'ng-class="{ \'md-disabled\': !$mdTabsCtrl.canPageBack() }" ' +
               'ng-if="$mdTabsCtrl.shouldPaginate" ' +
               'ng-click="$mdTabsCtrl.previousPage()"> ' +
-            '<md-icon md-svg-icon="md-tabs-arrow"></md-icon> ' +
+            '<md-icon md-svg-src="'+ $$mdSvgRegistry.mdTabsArrow +'"></md-icon> ' +
           '</md-prev-button> ' +
           '<md-next-button ' +
               'tabindex="-1" ' +
@@ -117,7 +118,7 @@ function MdTabs () {
               'ng-class="{ \'md-disabled\': !$mdTabsCtrl.canPageForward() }" ' +
               'ng-if="$mdTabsCtrl.shouldPaginate" ' +
               'ng-click="$mdTabsCtrl.nextPage()"> ' +
-            '<md-icon md-svg-icon="md-tabs-arrow"></md-icon> ' +
+            '<md-icon md-svg-src="'+ $$mdSvgRegistry.mdTabsArrow +'"></md-icon> ' +
           '</md-next-button> ' +
           '<md-tabs-canvas ' +
               'tabindex="{{ $mdTabsCtrl.hasFocus ? -1 : 0 }}" ' +
@@ -153,7 +154,7 @@ function MdTabs () {
                   'md-scope="::tab.parent"></md-tab-item> ' +
               '<md-ink-bar></md-ink-bar> ' +
             '</md-pagination-wrapper> ' +
-            '<div class="md-visually-hidden md-dummy-wrapper"> ' +
+            '<md-tabs-dummy-wrapper class="_md-visually-hidden md-dummy-wrapper"> ' +
               '<md-dummy-tab ' +
                   'class="md-tab" ' +
                   'tabindex="-1" ' +
@@ -167,12 +168,13 @@ function MdTabs () {
                   'ng-repeat="tab in $mdTabsCtrl.tabs" ' +
                   'md-tabs-template="::tab.label" ' +
                   'md-scope="::tab.parent"></md-dummy-tab> ' +
-            '</div> ' +
+            '</md-tabs-dummy-wrapper> ' +
           '</md-tabs-canvas> ' +
         '</md-tabs-wrapper> ' +
-        '<md-tabs-content-wrapper ng-show="$mdTabsCtrl.hasContent && $mdTabsCtrl.selectedIndex >= 0"> ' +
+        '<md-tabs-content-wrapper ng-show="$mdTabsCtrl.hasContent && $mdTabsCtrl.selectedIndex >= 0" class="_md"> ' +
           '<md-tab-content ' +
               'id="tab-content-{{::tab.id}}" ' +
+              'class="_md" ' +
               'role="tabpanel" ' +
               'aria-labelledby="tab-item-{{::tab.id}}" ' +
               'md-swipe-left="$mdTabsCtrl.swipeContent && $mdTabsCtrl.incrementIndex(1)" ' +

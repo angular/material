@@ -257,7 +257,7 @@ describe('<md-virtual-repeat>', function() {
     expect(scopes[1].$digest).not.toHaveBeenCalled();
   });
 
-  it('should update when the watched array changes', function() {
+  it('should update and preserve scroll position when the watched array increases length', function() {
     createRepeater();
     scope.items = createItems(NUM_ITEMS);
     scope.$apply();
@@ -265,7 +265,37 @@ describe('<md-virtual-repeat>', function() {
     scroller[0].scrollTop = 100;
     scroller.triggerHandler('scroll');
 
-    scope.items = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+    scope.items = createItems(NUM_ITEMS+1);
+    scope.$apply();
+
+    expect(scroller[0].scrollTop).toBe(100);
+    expect(getRepeated()[0].textContent.trim()).toBe('s14s 7');
+  });
+
+  it('should update and preserve scroll position when the watched array decreases length', function() {
+    createRepeater();
+    scope.items = createItems(NUM_ITEMS+1);
+    scope.$apply();
+    $$rAF.flush();
+    scroller[0].scrollTop = 100;
+    scroller.triggerHandler('scroll');
+
+    scope.items = createItems(NUM_ITEMS);
+    scope.$apply();
+
+    expect(scroller[0].scrollTop).toBe(100);
+    expect(getRepeated()[0].textContent.trim()).toBe('s14s 7');
+  });
+
+  it('should update and alter scroll position when the watched array decreases length (the remaining items do not fill the rest of the container)', function() {
+    createRepeater();
+    scope.items = createItems(NUM_ITEMS+1);
+    scope.$apply();
+    $$rAF.flush();
+    scroller[0].scrollTop = 100;
+    scroller.triggerHandler('scroll');
+
+    scope.items = ['a', 'b', 'c'];
     scope.$apply();
 
     expect(scroller[0].scrollTop).toBe(0);
@@ -471,7 +501,7 @@ describe('<md-virtual-repeat>', function() {
     scope.items = createItems(20);
     scope.$apply();
     $$rAF.flush();
-    expect(scroller[0].scrollTop).toBe(0);
+    expect(scroller[0].scrollTop).toBe(100);
     expect(sizer[0].offsetHeight).toBe(20 * ITEM_SIZE);
 
     // Scroll down half way
@@ -506,7 +536,7 @@ describe('<md-virtual-repeat>', function() {
     scope.items = createItems(20);
     scope.$apply();
     $$rAF.flush();
-    expect(scroller[0].scrollLeft).toBe(0);
+    expect(scroller[0].scrollLeft).toBe(50);
     expect(sizer[0].offsetWidth).toBe(20 * ITEM_SIZE);
 
     // Scroll right half way
@@ -615,6 +645,69 @@ describe('<md-virtual-repeat>', function() {
     expect(component[0].clientHeight).toBe(50);
     expect(offsetter.children().length).toBe(3);
   }));
+
+  it('should not scroll past the bottom', function() {
+    scope.items = createItems(101);
+    createRepeater();
+
+    scroller[0].scrollTop = ITEM_SIZE * 91;
+    scroller.triggerHandler('scroll');
+
+    expect(getTransform(offsetter)).toBe('translateY(880px)');
+
+    scroller[0].scrollTop++;
+    scroller.triggerHandler('scroll');
+
+    expect(getTransform(offsetter)).toBe('translateY(880px)');
+  });
+
+  describe('md-on-demand', function() {
+
+    it('should validate an empty md-on-demand attribute value correctly', inject(function() {
+      repeater.attr('md-on-demand', '');
+      createRepeater();
+
+      var containerCtrl = component.controller('mdVirtualRepeatContainer');
+      expect(containerCtrl.repeater.onDemand).toBe(true);
+    }));
+
+    it('should validate md-on-demand attribute with `true` correctly', inject(function() {
+      repeater.attr('md-on-demand', 'true');
+      createRepeater();
+
+      var containerCtrl = component.controller('mdVirtualRepeatContainer');
+      expect(containerCtrl.repeater.onDemand).toBe(true);
+    }));
+
+    it('should validate md-on-demand attribute with `false` correctly', inject(function() {
+      repeater.attr('md-on-demand', 'false');
+      createRepeater();
+
+      var containerCtrl = component.controller('mdVirtualRepeatContainer');
+      expect(containerCtrl.repeater.onDemand).toBe(false);
+    }));
+  });
+
+  describe('when container scope is destroyed', function() {
+
+    it('should clean up unused blocks', function() {
+      createRepeater();
+      var containerCtrl = component.controller('mdVirtualRepeatContainer');
+      scope.items = createItems(NUM_ITEMS);
+      scope.$apply();
+
+      scope.items = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+      scope.$apply();
+
+      scope.$destroy();
+
+      var dataCount = 0;
+      angular.forEach(containerCtrl.repeater.pooledBlocks, function(block) {
+        dataCount += Object.keys(block.element.data()).length;
+      });
+      expect(dataCount).toBe(0);
+    });
+  });
 
   /**
    * Facade to access transform properly even when jQuery is used;

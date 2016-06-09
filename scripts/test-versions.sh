@@ -1,16 +1,16 @@
-# the purpose of this file is to download
+# The purpose of this file is to download
 # assigned AngularJS source files and test
 # them against this build of AngularMaterial.
 
 # This works by pulling in all of the tags
-# form angular.js, finding the highest version
+# from angular.js, finding the highest version
 # numbers for each branch (e.g. 1.3 => 1.3.X where
 # X is the highest patch release). For each
 # detected version it will then copy over each
 # of the source files to the node_modules/angular-X
 # folder and then run `gulp karma` to see if
 # they pass. If there are one or more failed tests
-# then this script will propagate a failed exit code
+# then this script will propagate a failed exit code.
 
 # [INPUT]
 # just run `./scripts/test-versions.sh`
@@ -25,7 +25,7 @@ VERSIONS=(1.3 1.4 1.5 snapshot)
 BROWSERS="Firefox,Chrome,Safari"
 
 #
-# DO NOT EDIT PASSED THIS LINE 
+# DO NOT EDIT PAST THIS LINE
 #
 CDN="https://code.angularjs.org"
 FAILED=false
@@ -53,8 +53,8 @@ if [ ! -e ./tmp/angular.js ]; then
   git clone https://github.com/angular/angular.js ./tmp/angular.js
 fi
 
-# this will gaurantee that we have the latest versions
-# of AngularJS when testing material incase the HEAD
+# this will guarantee that we have the latest versions
+# of AngularJS when testing material in case the HEAD
 # of ./tmp/angular.js is outdated.
 git --git-dir ./tmp/angular.js/.git fetch
 
@@ -74,16 +74,14 @@ for VERSION in "${VERSIONS[@]}"; do
     ZIP_URL="$CDN/$VERSION/angular-$VERSION.zip"
   fi
 
+  ZIP_FILE="angular-$VERSION.zip"
+  ZIP_FILE_PATH="./tmp/$ZIP_FILE"
   BASE_DIR="./tmp/angular-$VERSION"
 
-  if [ ! -d $BASE_DIR ]; then
-    ZIP_FILE="angular-$VERSION.zip"
-    ZIP_FILE_PATH="./tmp/$ZIP_FILE"
-
-    curl $ZIP_URL > $ZIP_FILE_PATH
-    unzip -d $BASE_DIR $ZIP_FILE_PATH
-    mv "$BASE_DIR/angular-$ZIP_FILE_SHA" "$BASE_DIR/files"
-  fi
+  rm -rf $BASE_DIR
+  curl $ZIP_URL > $ZIP_FILE_PATH
+  unzip -q -d $BASE_DIR $ZIP_FILE_PATH
+  mv "$BASE_DIR/angular-$ZIP_FILE_SHA" "$BASE_DIR/files"
 
   echo "\n\n--- Testing AngularMaterial against AngularJS (${VERSION}) ---\n"
 
@@ -95,7 +93,7 @@ for VERSION in "${VERSIONS[@]}"; do
     MIN_NODE_LIB_FILE="./node_modules/$ANGULAR_FILE/$ANGULAR_FILE.min.js"
 
     rm $NODE_LIB_FILE
-    cp $REPLACEMENT_FILE $NODE_LIB_FILE 
+    cp $REPLACEMENT_FILE $NODE_LIB_FILE
     echo "[copy] copied over $REPLACEMENT_FILE to $NODE_LIB_FILE"
 
     if [ -e $MIN_NODE_LIB_FILE ]; then
@@ -103,18 +101,19 @@ for VERSION in "${VERSIONS[@]}"; do
     fi
 
     if [ -e $MIN_REPLACEMENT_FILE ]; then
-      cp $MIN_REPLACEMENT_FILE $MIN_NODE_LIB_FILE 
+      cp $MIN_REPLACEMENT_FILE $MIN_NODE_LIB_FILE
     fi
     echo "[copy] copied over $MIN_REPLACEMENT_FILE to $MIN_NODE_LIB_FILE"
   done
 
   echo "\n"
-  node ./node_modules/gulp/bin/gulp.js karma --reporters='dots' --browsers=$BROWSERS
+  pwd
+  node ./node_modules/gulp/bin/gulp.js karma --config=config/karma-ci.conf.js --reporters='dots' --browsers=$BROWSERS
   LAST_EXIT_CODE=$?
 
   echo "\n\n--- Finished Testing AngularMaterial against AngularJS (${VERSION}) ---"
 
-  if [ $LAST_EXIT_CODE == "1" ]; then
+  if [ $LAST_EXIT_CODE != "0" ]; then
     echo "STATUS: FAILED"
     FAILED=true
   else
@@ -127,6 +126,6 @@ done
 if [ $FAILED == true ]; then
   echo "Error: One or more of the karma tests have failed..."
   exit 1
-else 
+else
   echo "All tests have passed successfully..."
 fi

@@ -1,0 +1,232 @@
+(function() {
+  'use strict';
+
+  angular.module('material.components.datepicker')
+    .directive('mdCalendarYear', calendarDirective);
+
+  /**
+   * Height of one calendar year tbody. This must be made known to the virtual-repeat and is
+   * subsequently used for scrolling to specific years.
+   */
+  var TBODY_HEIGHT = 88;
+
+  /** Private component, representing a list of years in the calendar. */
+  function calendarDirective() {
+    return {
+      template:
+        '<div class="md-calendar-scroll-mask">' +
+          '<md-virtual-repeat-container class="md-calendar-scroll-container">' +
+            '<table role="grid" tabindex="0" class="md-calendar" aria-readonly="true">' +
+              '<tbody ' +
+                  'md-calendar-year-body ' +
+                  'role="rowgroup" ' +
+                  'md-virtual-repeat="i in yearCtrl.items" ' +
+                  'md-year-offset="$index" class="md-calendar-year" ' +
+                  'md-start-index="yearCtrl.getFocusedYearIndex()" ' +
+                  'md-item-size="' + TBODY_HEIGHT + '"></tbody>' +
+            '</table>' +
+          '</md-virtual-repeat-container>' +
+        '</div>',
+      require: ['^^mdCalendar', 'mdCalendarYear'],
+      controller: CalendarYearCtrl,
+      controllerAs: 'yearCtrl',
+      bindToController: true,
+      link: function(scope, element, attrs, controllers) {
+        var calendarCtrl = controllers[0];
+        var yearCtrl = controllers[1];
+        yearCtrl.initialize(calendarCtrl);
+      }
+    };
+  }
+
+  /**
+   * Controller for the mdCalendar component.
+   * @ngInject @constructor
+   */
+  function CalendarYearCtrl($element, $scope, $animate, $q, $$mdDateUtil, $timeout) {
+
+    /** @final {!angular.JQLite} */
+    this.$element = $element;
+
+    /** @final {!angular.Scope} */
+    this.$scope = $scope;
+
+    /** @final {!angular.$animate} */
+    this.$animate = $animate;
+
+    /** @final {!angular.$q} */
+    this.$q = $q;
+
+    /** @final */
+    this.dateUtil = $$mdDateUtil;
+
+    /** @final */
+    this.$timeout = $timeout;
+
+    /** @final {HTMLElement} */
+    this.calendarScroller = $element[0].querySelector('.md-virtual-repeat-scroller');
+
+    /** @type {Date} */
+    this.firstRenderableDate = null;
+
+    /** @type {boolean} */
+    this.isInitialized = false;
+
+    /** @type {boolean} */
+    this.isMonthTransitionInProgress = false;
+
+    var self = this;
+
+    /**
+     * Handles a click event on a date cell.
+     * Created here so that every cell can use the same function instance.
+     * @this {HTMLTableCellElement} The cell that was clicked.
+     */
+    this.cellClickHandler = function() {
+      self.calendarCtrl.setCurrentView('month', $$mdDateUtil.getTimestampFromNode(this));
+    };
+  }
+
+  /**
+   * Initialize the controller by saving a reference to the calendar and
+   * setting up the object that will be iterated by the virtual repeater.
+   */
+  CalendarYearCtrl.prototype.initialize = function(calendarCtrl) {
+    var minDate = calendarCtrl.minDate;
+    var maxDate = calendarCtrl.maxDate;
+    this.calendarCtrl = calendarCtrl;
+
+    /**
+     * Dummy array-like object for virtual-repeat to iterate over. The length is the total
+     * number of months that can be viewed. This is shorter than ideal because of (potential)
+     * Firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=1181658.
+     */
+    this.items = { length: 400 };
+
+    if (maxDate && minDate) {
+      // Limit the number of years if min and max dates are set.
+      var numYears = this.dateUtil.getYearDistance(minDate, maxDate) + 1;
+      this.items.length = Math.max(numYears, 1);
+    }
+
+    this.firstRenderableDate = this.dateUtil.incrementYears(calendarCtrl.today, - (this.items.length / 2));
+
+    if (minDate && minDate > this.firstRenderableDate) {
+      this.firstRenderableDate = minDate;
+    } else if (maxDate) {
+      // Calculate the year difference between the start date and max date.
+      // Subtract 1 because it's an inclusive difference.
+      this.firstRenderableDate = this.dateUtil.incrementMonths(maxDate, - (this.items.length - 1));
+    }
+
+    // Trigger an extra digest to ensure that the virtual repeater has updated. This
+    // is necessary, because the virtual repeater doesn't update the $index the first
+    // time around since the content isn't in place yet. The case, in which this is an
+    // issues, is when the repeater has less than a page of content (e.g. there's a min
+    // and max date).
+    if (minDate || maxDate) this.$timeout();
+    this.attachScopeListeners();
+
+    // Fire the initial render, since we might have missed it the first time it fired.
+    calendarCtrl.ngModelCtrl && calendarCtrl.ngModelCtrl.$render();
+  };
+
+  /**
+   * Gets the "index" of the currently selected date as it would be in the virtual-repeat.
+   * @returns {number}
+   */
+  CalendarYearCtrl.prototype.getFocusedYearIndex = function() {
+    var calendarCtrl = this.calendarCtrl;
+    return this.dateUtil.getYearDistance(this.firstRenderableDate,
+      calendarCtrl.displayDate || calendarCtrl.selectedDate || calendarCtrl.today);
+  };
+
+  /**
+   * Change the date that is highlighted in the calendar.
+   * @param {Date} date
+   */
+  CalendarYearCtrl.prototype.changeDate = function(date) {
+    // Initialization is deferred until this function is called because we want to reflect
+    // the starting value of ngModel.
+    if (!this.isInitialized) {
+      this.calendarCtrl.hideVerticalScrollbar(this);
+      this.isInitialized = true;
+      return this.$q.when();
+    } else if (this.dateUtil.isValidDate(date) && !this.isMonthTransitionInProgress) {
+      var self = this;
+      var animationPromise = this.animateDateChange(date);
+
+      self.isMonthTransitionInProgress = true;
+      self.calendarCtrl.displayDate = date;
+
+      return animationPromise.then(function() {
+        self.isMonthTransitionInProgress = false;
+      });
+    }
+  };
+
+  /**
+   * Animates the transition from the calendar's current month to the given month.
+   * @param {Date} date
+   * @returns {angular.$q.Promise} The animation promise.
+   */
+  CalendarYearCtrl.prototype.animateDateChange = function(date) {
+    if (this.dateUtil.isValidDate(date)) {
+      var monthDistance = this.dateUtil.getYearDistance(this.firstRenderableDate, date);
+      this.calendarScroller.scrollTop = monthDistance * TBODY_HEIGHT;
+    }
+
+    return this.$q.when();
+  };
+
+  /**
+   * Handles the year-view-specific keyboard interactions.
+   * @param {Object} event Scope event object passed by the calendar.
+   * @param {String} action Action, corresponding to the key that was pressed.
+   */
+  CalendarYearCtrl.prototype.handleKeyEvent = function(event, action) {
+    var calendarCtrl = this.calendarCtrl;
+    var displayDate = calendarCtrl.displayDate;
+
+    if (action === 'select') {
+      this.changeDate(displayDate).then(function() {
+        calendarCtrl.setCurrentView('month', displayDate);
+        calendarCtrl.focus(displayDate);
+      });
+    } else {
+      var date = null;
+      var dateUtil = this.dateUtil;
+
+      switch (action) {
+        case 'move-right': date = dateUtil.incrementMonths(displayDate, 1); break;
+        case 'move-left': date = dateUtil.incrementMonths(displayDate, -1); break;
+
+        case 'move-row-down': date = dateUtil.incrementMonths(displayDate, 6); break;
+        case 'move-row-up': date = dateUtil.incrementMonths(displayDate, -6); break;
+      }
+
+      if (date) {
+        var min = calendarCtrl.minDate ? dateUtil.incrementMonths(dateUtil.getFirstDateOfMonth(calendarCtrl.minDate), 1) : null;
+        var max = calendarCtrl.maxDate ? dateUtil.getFirstDateOfMonth(calendarCtrl.maxDate) : null;
+        date = dateUtil.getFirstDateOfMonth(this.dateUtil.clampDate(date, min, max));
+
+        this.changeDate(date).then(function() {
+          calendarCtrl.focus(date);
+        });
+      }
+    }
+  };
+
+  /**
+   * Attaches listeners for the scope events that are broadcast by the calendar.
+   */
+  CalendarYearCtrl.prototype.attachScopeListeners = function() {
+    var self = this;
+
+    self.$scope.$on('md-calendar-parent-changed', function(event, value) {
+      self.changeDate(value);
+    });
+
+    self.$scope.$on('md-calendar-parent-action', angular.bind(self, self.handleKeyEvent));
+  };
+})();

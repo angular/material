@@ -94,13 +94,13 @@ angular.module('ngMaterial-mock', [
       $delegate.flush = function() {
           var args = Array.prototype.slice.call(arguments);
           try      { ngFlush.apply($delegate, args);  }
-          catch(e) { ;           }
+          catch(e) { }
       };
 
       return $delegate;
     });
 
-  }])
+  }]);
 
   /**
    * Stylesheet Mocks used by `animateCss.spec.js`
