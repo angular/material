@@ -53,6 +53,8 @@ md-list {
       &,
       ._md-list-item-inner {
         min-height: $list-item-dense-height;
+        @include ie11-min-height-flexbug($list-item-dense-height);
+
 
         // Layout for controls in primary or secondary divs, or auto-infered first child
 
@@ -99,10 +101,7 @@ md-list {
       &.md-2-line {
         &, & > ._md-no-style {
           min-height: $list-item-dense-two-line-height;
-
-          div.md-button:first-child {
-            @include ie11-min-height-flexbug($list-item-dense-two-line-height);
-          }
+          @include ie11-min-height-flexbug($list-item-dense-two-line-height);
 
           > .md-avatar, .md-avatar-icon {
             margin-top: $baseline-grid * 1.5;
@@ -112,11 +111,9 @@ md-list {
 
       &.md-3-line {
         &, & > ._md-no-style {
+          
           min-height: $list-item-dense-three-line-height;
-
-          div.md-button:first-child {
-            @include ie11-min-height-flexbug($list-item-dense-three-line-height);
-          }
+          @include ie11-min-height-flexbug($list-item-dense-three-line-height);
 
           > md-icon:first-child,
           > .md-avatar {
@@ -223,7 +220,10 @@ md-list-item {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+
     min-height: $list-item-height;
+    @include ie11-min-height-flexbug($list-item-height);
+
     height: auto;
 
     // Layout for controls in primary or secondary divs, or auto-infered first child
@@ -382,11 +382,9 @@ md-list-item {
   &.md-2-line {
     &, & > ._md-no-style {
       height: auto;
-      min-height: $list-item-two-line-height;
 
-      div.md-button:first-child {
-        @include ie11-min-height-flexbug($list-item-two-line-height);
-      }
+      min-height: $list-item-two-line-height;
+      @include ie11-min-height-flexbug($list-item-two-line-height);
 
       > .md-avatar, .md-avatar-icon {
         margin-top: $baseline-grid * 1.5;
@@ -405,11 +403,9 @@ md-list-item {
   &.md-3-line {
     &, & > ._md-no-style {
       height: auto;
-      min-height: $list-item-three-line-height;
 
-      div.md-button:first-child {
-        @include ie11-min-height-flexbug($list-item-three-line-height);
-      }
+      min-height: $list-item-three-line-height;
+      @include ie11-min-height-flexbug($list-item-three-line-height);
 
       > md-icon:first-child,
       > .md-avatar {
