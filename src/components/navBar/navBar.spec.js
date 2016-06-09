@@ -77,6 +77,34 @@ describe('mdNavBar', function() {
       expect(getTab('tab1')).not.toHaveClass('md-primary');
     });
 
+    it('does not select tabs when selectedTabRoute is empty', function() {
+      $scope.selectedTabRoute = 'tab1';
+      createTabs();
+
+      updateSelectedTabRoute('');
+
+      expect(getTab('tab3')).not.toHaveClass('md-active');
+      expect(getTab('tab3')).not.toHaveClass('md-primary');
+      expect(getTab('tab2')).not.toHaveClass('md-active');
+      expect(getTab('tab2')).not.toHaveClass('md-primary');
+      expect(getTab('tab1')).not.toHaveClass('md-active');
+      expect(getTab('tab1')).not.toHaveClass('md-primary');
+
+      expect(getInkbarEl().style.display).toBe('none');
+
+      updateSelectedTabRoute('tab1');
+
+      expect(getTab('tab3')).not.toHaveClass('md-active');
+      expect(getTab('tab3')).not.toHaveClass('md-primary');
+      expect(getTab('tab2')).not.toHaveClass('md-active');
+      expect(getTab('tab2')).not.toHaveClass('md-primary');
+      expect(getTab('tab1')).toHaveClass('md-active');
+      expect(getTab('tab1')).toHaveClass('md-primary');
+
+      expect(getInkbarEl().style.display).toBe('');
+
+    });
+
     it('requires navigation attribute to be present', function() {
       expect(function() {
         create('<md-nav-item name="fooo">footab</md-nav-item>');

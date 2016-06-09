@@ -207,28 +207,26 @@ MdNavBarController.prototype._initTabs = function() {
  * @private
  */
 MdNavBarController.prototype._updateTabs = function(newValue, oldValue) {
+  var self = this;
   var tabs = this._getTabs();
+  var oldIndex = -1;
+  var newIndex = -1;
+  var newTab = this._getTabByName(newValue);
+  var oldTab = this._getTabByName(oldValue);
 
-  var oldIndex;
-  if (oldValue) {
-    var oldTab = this._getTabByName(oldValue);
-    if (oldTab) {
-      oldTab.setSelected(false);
-      oldIndex = tabs.indexOf(oldTab);
-    }
+  if (oldTab) {
+    oldTab.setSelected(false);
+    oldIndex = tabs.indexOf(oldTab);
   }
 
-  if (newValue) {
-    var tab = this._getTabByName(newValue);
-    if (tab) {
-      tab.setSelected(true);
-      var newIndex = tabs.indexOf(tab);
-      var self = this;
-      this._$timeout(function() {
-        self._updateInkBarStyles(tab, newIndex, oldIndex);
-      });
-    }
+  if (newTab) {
+    newTab.setSelected(true);
+    newIndex = tabs.indexOf(newTab);
   }
+
+  this._$timeout(function() {
+    self._updateInkBarStyles(newTab, newIndex, oldIndex);
+  });
 };
 
 /**
@@ -236,12 +234,17 @@ MdNavBarController.prototype._updateTabs = function(newValue, oldValue) {
  * @private
  */
 MdNavBarController.prototype._updateInkBarStyles = function(tab, newIndex, oldIndex) {
-  var tabEl = tab.getButtonEl();
-  var left = tabEl.offsetLeft;
-
   this._inkbar.toggleClass('_md-left', newIndex < oldIndex)
       .toggleClass('_md-right', newIndex > oldIndex);
-  this._inkbar.css({left: left + 'px', width: tabEl.offsetWidth + 'px'});
+
+  this._inkbar.css({display: newIndex < 0 ? 'none' : ''});
+
+  if(tab){
+    var tabEl = tab.getButtonEl();
+    var left = tabEl.offsetLeft;
+
+    this._inkbar.css({left: left + 'px', width: tabEl.offsetWidth + 'px'});
+  }
 };
 
 /**
