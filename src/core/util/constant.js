@@ -34,7 +34,6 @@ function MdConstantFactory($sniffer, $window, $document) {
   }
 
   return {
-    IS_TOUCH: ('ontouchstart' in $window) || $window.DocumentTouch && $document[0] instanceof DocumentTouch,
     KEY_CODE: {
       COMMA: 188,
       SEMICOLON : 186,
