@@ -10,6 +10,9 @@ md-select.md-THEME_NAME-theme {
     }
     border-bottom-color: '{{foreground-4}}';
   }
+  &.md-no-border ._md-select-value {
+    border-bottom-color: transparent;
+  }
   &.ng-invalid.ng-dirty {
     ._md-select-value {
       color: '{{warn-A700}}' !important;
