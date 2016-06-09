@@ -203,6 +203,7 @@ md-input-container.md-input-has-value ._md-select-value {
     position: relative;
     top: 2px;
     speak: none;
+    font-size: 16px;
     transform: scaleY(0.6) scaleX(1);
   }
 
@@ -272,7 +273,6 @@ md-option {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: rem(1.6);
   }
   padding: 0 $select-option-padding 0 $select-option-padding;
   height: $select-option-height;
