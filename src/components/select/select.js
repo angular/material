@@ -622,6 +622,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
     self.init = function(ngModel, binding) {
       self.ngModel = ngModel;
       self.modelBinding = binding;
+      self.debounceSetTimeout = debounceSetTimeout;
 
       // Allow users to provide `ng-model="foo" ng-model-options="{trackBy: 'foo.id'}"` so
       // that we can properly compare objects set on the model to the available options
@@ -723,9 +724,23 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
 
       if (usingTrackBy ? !angular.equals(prevVal, newVal) : prevVal != newVal) {
         self.ngModel.$setViewValue(newVal);
-        self.ngModel.$render();
+        var debounce = angular.isObject(self.ngModel.$options.debounce) && self.ngModel.$options.debounce.default?
+            self.ngModel.$options.debounce.default:self.ngModel.$options.debounce;
+        if (angular.isNumber(debounce)){
+          self.debounceTimeout = self.debounceSetTimeout(self.ngModel.$render, debounce);
+        }else{
+          self.ngModel.$render();
+        }
       }
     };
+
+    function debounceSetTimeout(cb, time){
+      if (angular.isDefined(self.debounceTimeout))  {
+        clearTimeout(self.debounceTimeout);
+      }
+
+      self.debounceTimeout = setTimeout(cb, time);
+    }
 
     function renderMultiple() {
       var newSelectedValues = self.ngModel.$modelValue || self.ngModel.$viewValue || [];
