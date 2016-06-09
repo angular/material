@@ -799,7 +799,10 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
 
       if (usingTrackBy ? !angular.equals(prevVal, newVal) : prevVal != newVal) {
         self.ngModel.$setViewValue(newVal);
-        var debounce = angular.isObject(self.ngModel.$options.debounce) && self.ngModel.$options.debounce.default?
+        // is ngModelOptions defined?
+        var debounce = angular.isObject(self.ngModel.$options);
+        debounce = !debounce?undefined:
+            (angular.isObject(self.ngModel.$options.debounce) && self.ngModel.$options.debounce.default)?
             self.ngModel.$options.debounce.default:self.ngModel.$options.debounce;
         if (angular.isNumber(debounce)){
           self.debounceTimeout = self.debounceSetTimeout(self.ngModel.$render, debounce);
