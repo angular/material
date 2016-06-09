@@ -654,7 +654,7 @@ function mdMaxlengthDirective($animate, $mdUtil) {
 
       // Force the value into a string since it may be a number,
       // which does not have a length property.
-      charCountEl.text(String(element.val() || value || '').length + '/' + maxlength);
+      charCountEl.text(String(element.val() || value || '').length + ' / ' + maxlength);
       return value;
     }
   }
