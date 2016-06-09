@@ -1,7 +1,9 @@
 describe('$mdAria service', function() {
+
   beforeEach(module('material.core'));
 
-  describe('expecting attributes', function(){
+  describe('expecting attributes', function() {
+
     it('should warn if an invalid element is specified', inject(function($compile, $rootScope, $log, $mdAria) {
       spyOn($log, 'warn');
       var target = $compile('<div></div>')($rootScope);
@@ -28,7 +30,7 @@ describe('$mdAria service', function() {
       expect($log.warn).toHaveBeenCalled();
     }));
 
-    it('should warn if element is emtpry attribute', inject(function($compile, $rootScope, $log, $mdAria) {
+    it('should warn if element is empty attribute', inject(function($compile, $rootScope, $log, $mdAria) {
       spyOn($log, 'warn');
       var button = $compile('<button aria-label=""><md-icon></md-icon></button>')($rootScope);
 
@@ -92,5 +94,22 @@ describe('$mdAria service', function() {
     }));
 
   });
+
+  describe('with disabled warnings', function() {
+
+    beforeEach(module('material.core', function($mdAriaProvider) {
+      $mdAriaProvider.disableWarnings();
+    }));
+
+    it('should not warn if warnings are disabled', inject(function($compile, $rootScope, $log, $mdAria) {
+      spyOn($log, 'warn');
+      var button = $compile('<button aria-label><md-icon></md-icon></button>')($rootScope);
+
+      $mdAria.expect(button, 'aria-label');
+
+      expect($log.warn).not.toHaveBeenCalled();
+    }));
+
+  })
 
 });
