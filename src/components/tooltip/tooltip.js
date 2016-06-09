@@ -34,14 +34,11 @@ angular
  * @param {string=} md-direction Which direction would you like the tooltip to go?  Supports left, right, top, and bottom.  Defaults to bottom.
  */
 function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming, $rootElement,
-                            $animate, $q, $interpolate, $mdConstant) {
+                            $animate, $q, $interpolate) {
 
-  // Note that touch devices still fire mouse events, even though they don't have a
-  // mouse. We shouldn't bind them in those cases, because it causes the callbacks
-  // to fire too often.
-  var ENTER_EVENTS = 'focus ' + ($mdConstant.IS_TOUCH ? 'touchstart' : 'mouseenter');
-  var LEAVE_EVENTS = 'blur ' + ($mdConstant.IS_TOUCH ? 'touchend touchcancel' : 'mouseleave');
-  var TOOLTIP_SHOW_DELAY = $mdConstant.IS_TOUCH ? 75 : 0;
+  var ENTER_EVENTS = 'focus touchstart mouseenter';
+  var LEAVE_EVENTS = 'blur touchcancel mouseleave';
+  var TOOLTIP_SHOW_DELAY = 0;
   var TOOLTIP_WINDOW_EDGE_SPACE = 8;
 
   return {
@@ -202,9 +199,9 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
       // Store whether the element was focused when the window loses focus.
       var windowBlurHandler = function() {
-        preventNextFocus = document.activeElement === parent[0];
+        elementFocusedOnWindowBlur = document.activeElement === parent[0];
       };
-      var preventNextFocus = false;
+      var elementFocusedOnWindowBlur = false;
 
       function windowScrollHandler() {
         setVisible(false);
@@ -233,18 +230,19 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
       var enterHandler = function(e) {
         // Prevent the tooltip from showing when the window is receiving focus.
-        if (e.type === 'focus' && preventNextFocus) {
-          preventNextFocus = false;
+        if (e.type === 'focus' && elementFocusedOnWindowBlur) {
+          elementFocusedOnWindowBlur = false;
+        } else if (e.type === 'touchstart' && scope.visible) {
+          leaveHandler();
         } else if (!scope.visible) {
-          parent.on(LEAVE_EVENTS, leaveHandler );
+          parent.on(LEAVE_EVENTS, leaveHandler);
           setVisible(true);
         }
       };
       var leaveHandler = function () {
         var autohide = scope.hasOwnProperty('autohide') ? scope.autohide : attr.hasOwnProperty('mdAutohide');
 
-        if (autohide || mouseActive || ($document[0].activeElement !== parent[0]) ) {
-
+        if (autohide || mouseActive || $document[0].activeElement !== parent[0]) {
           // When a show timeout is currently in progress, then we have to cancel it.
           // Otherwise the tooltip will remain showing without focus or hover.
           if (showTimeout) {
@@ -253,22 +251,19 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
             showTimeout = null;
           }
 
-          parent.off(LEAVE_EVENTS, leaveHandler );
+          parent.off(LEAVE_EVENTS, leaveHandler);
           parent.triggerHandler('blur');
           setVisible(false);
         }
         mouseActive = false;
       };
       var mousedownHandler = function() {
-        // Don't show the tooltip when tapping on a touch device,
-        // in order to prevent the tooltip staying open after random taps.
-        preventNextFocus = $mdConstant.IS_TOUCH;
         mouseActive = true;
       };
 
       // to avoid `synthetic clicks` we listen to mousedown instead of `click`
       parent.on('mousedown', mousedownHandler);
-      parent.on(ENTER_EVENTS, enterHandler );
+      parent.on(ENTER_EVENTS, enterHandler);
     }
 
     function setVisible (value) {
