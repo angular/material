@@ -387,6 +387,25 @@ describe('$$interimElement service', function() {
         expect(autoClosed).toBe(true);
       }));
 
+      it('calls onCompiling before onShowing', inject(function() {
+        var onCompilingCalled = false;
+
+        Service.show({
+          template: '<div>My Element</div>',
+          onCompiling: beforeCompile,
+          onShowing: beforeShow
+        });
+
+        function beforeCompile() {
+          onCompilingCalled = true;
+        }
+
+        function beforeShow() {
+          expect(onCompilingCalled).toBe(true);
+        }
+
+      }));
+
       it('calls onShowing before onShow', inject(function() {
         var onShowingCalled = false;
 
