@@ -2,16 +2,27 @@
   'use strict';
 
   /**
-   * @ngdoc module
-   * @name material.components.calendar
-   * @description Calendar
+   * @ngdoc directive
+   * @name mdCalendar
+   * @module material.components.datepicker
+   *
+   * @param {Date} ng-model The component's model. Should be a Date object.
+   * @param {Date=} md-min-date Expression representing the minimum date.
+   * @param {Date=} md-max-date Expression representing the maximum date.
+   * @param {(function(Date): boolean)=} md-date-filter Function expecting a date and returning a boolean whether it can be selected or not.
+   *
+   * @description
+   * `<md-calendar>` is a component that renders a calendar that can be used to select a date.
+   * It is a part of the `<md-datepicker` pane, however it can also be used on it's own.
+   *
+   * @usage
+   *
+   * <hljs lang="html">
+   *   <md-calendar ng-model="birthday"></md-calendar>
+   * </hljs>
    */
-  angular.module('material.components.datepicker', [
-    'material.core',
-    'material.components.icon',
-    'material.components.virtualRepeat'
-  ]).directive('mdCalendar', calendarDirective);
-
+  angular.module('material.components.datepicker')
+    .directive('mdCalendar', calendarDirective);
 
   // POST RELEASE
   // TODO(jelbourn): Mac Cmd + left / right == Home / End
