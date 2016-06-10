@@ -123,6 +123,49 @@ describe('$mdDialog', function() {
       expect(resolved).toBe(true);
     }));
 
+    it('should normally use the default theme', inject(function($animate, $rootScope, $mdDialog, $compile) {
+      var dialogParent = angular.element('<div>');
+
+      $mdDialog.show(
+        $mdDialog
+          .alert()
+          .parent(dialogParent)
+          .title("Title")
+          .textContent("Themed Dialog")
+          .ok('Close')
+      );
+
+      $rootScope.$apply();
+      runAnimation();
+
+      var mdContainer = angular.element(dialogParent[0].querySelector('.md-dialog-container'));
+      var mdDialog = mdContainer.find('md-dialog');
+
+      expect(mdDialog.attr('md-theme')).toBe('default');
+    }));
+
+    it('should apply the specified theme', inject(function($animate, $rootScope, $mdDialog, $compile) {
+      var dialogParent = angular.element('<div>');
+
+      $mdDialog.show(
+        $mdDialog
+          .alert()
+          .parent(dialogParent)
+          .title("Title")
+          .theme('myTheme')
+          .textContent("Themed Dialog")
+          .ok('Close')
+      );
+
+      $rootScope.$apply();
+      runAnimation();
+
+      var mdContainer = angular.element(dialogParent[0].querySelector('.md-dialog-container'));
+      var mdDialog = mdContainer.find('md-dialog');
+
+      expect(mdDialog.attr('md-theme')).toBe('myTheme');
+    }));
+
     it('should focus `md-dialog-content` on open', inject(function($mdDialog, $rootScope, $document) {
       jasmine.mockElementFocus(this);
 
