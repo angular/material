@@ -805,7 +805,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
             (angular.isObject(self.ngModel.$options.debounce) && self.ngModel.$options.debounce.default)?
             self.ngModel.$options.debounce.default:self.ngModel.$options.debounce;
         if (angular.isNumber(debounce)){
-          self.debounceTimeout = self.debounceSetTimeout(self.ngModel.$render, debounce);
+          self.debounceSetTimeout(self.ngModel.$render, debounce);
         }else{
           self.ngModel.$render();
         }
