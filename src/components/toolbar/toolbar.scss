@@ -30,9 +30,11 @@ md-toolbar {
   min-height: $baseline-grid * 8;
   width: 100%;
 
-  transition-duration: $swift-ease-in-out-duration;
-  transition-timing-function: $swift-ease-in-out-timing-function;
-  transition-property: background-color, fill, color;
+  &._md-toolbar-transitions {
+    transition-duration: $swift-ease-in-out-duration;
+    transition-timing-function: $swift-ease-in-out-timing-function;
+    transition-property: background-color, fill, color;
+  }
 
   &.md-whiteframe-z1-add, &.md-whiteframe-z1-remove {
     transition: box-shadow $swift-ease-in-out-duration linear;
