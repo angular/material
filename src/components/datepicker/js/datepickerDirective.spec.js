@@ -1,5 +1,5 @@
 
-describe('md-date-picker', function() {
+describe('md-datepicker', function() {
   // When constructing a Date, the month is zero-based. This can be confusing, since people are
   // used to seeing them one-based. So we create these aliases to make reading the tests easier.
   var JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9,
@@ -368,6 +368,29 @@ describe('md-date-picker', function() {
 
     });
 
+    it('should open and close the floating calendar pane element via an expression on the scope', function() {
+      pageScope.isOpen = false;
+      createDatepickerInstance('<md-datepicker ng-model="myDate" md-is-open="isOpen"></md-datepicker>');
+
+      expect(controller.calendarPane.offsetHeight).toBe(0);
+      expect(controller.isCalendarOpen).toBe(false);
+
+      pageScope.$apply(function() {
+        pageScope.isOpen = true;
+      });
+
+      // Open the calendar externally
+      expect(controller.calendarPane.offsetHeight).toBeGreaterThan(0);
+      expect(controller.isCalendarOpen).toBe(true);
+
+      // Close the calendar via the datepicker
+      controller.$scope.$apply(function() {
+        controller.closeCalendarPane();
+      });
+      expect(pageScope.isOpen).toBe(false);
+      expect(controller.isCalendarOpen).toBe(false);
+    });
+
     it('should adjust the position of the floating pane if it would go off-screen', function() {
       // Absolutely position the picker near the edge of the screen.
       var bodyRect = document.body.getBoundingClientRect();
@@ -540,5 +563,26 @@ describe('md-date-picker', function() {
     createDatepickerInstance('<md-datepicker ng-model="myDate" md-open-on-focus></md-datepicker>');
     controller.ngInputElement.triggerHandler('focus');
     expect(document.querySelector('md-calendar')).toBeTruthy();
+  });
+
+  describe('hiding the icons', function() {
+    var calendarSelector = '.md-datepicker-button .md-datepicker-calendar-icon';
+    var triangleSelector = '.md-datepicker-triangle-button';
+
+    it('should be able to hide the calendar icon', function() {
+      createDatepickerInstance('<md-datepicker ng-model="myDate" md-hide-icons="calendar"></md-datepicker>');
+      expect(element.querySelector(calendarSelector)).toBeNull();
+    });
+
+    it('should be able to hide the triangle icon', function() {
+      createDatepickerInstance('<md-datepicker ng-model="myDate" md-hide-icons="triangle"></md-datepicker>');
+      expect(element.querySelector(triangleSelector)).toBeNull();
+    });
+
+    it('should be able to hide all icons', function() {
+      createDatepickerInstance('<md-datepicker ng-model="myDate" md-hide-icons="all"></md-datepicker>');
+      expect(element.querySelector(calendarSelector)).toBeNull();
+      expect(element.querySelector(triangleSelector)).toBeNull();
+    });
   });
 });
