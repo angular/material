@@ -6,6 +6,10 @@ $md-datepicker-open-animation-duration: 0.2s !default;
 $md-datepicker-triangle-button-width: 36px !default;
 $md-datepicker-input-mask-height: 40px !default;
 
+// The datepickers triangle icon uses the default button margin.
+// We need to use the margin to align the label inside of an input container properly.
+$icon-button-margin: rem(0.600) !default;
+
 md-datepicker {
   // Don't let linebreaks happen between the open icon-button and the input.
   white-space: nowrap;
