@@ -47,9 +47,10 @@ md-datepicker {
 // If the datepicker is inside of a md-input-container
 ._md-datepicker-floating-label {
   > label:not(.md-no-float):not(._md-container-ignore) {
-    $offset: $md-datepicker-triangle-button-width + $md-datepicker-button-gap + $icon-button-margin + $baseline-grid;
-    @include rtl-prop(left, right, $offset);
-    width: calc(100% - #{$offset + $md-datepicker-triangle-button-width});
+    $offset: $md-datepicker-triangle-button-width * 2 + $md-datepicker-button-gap + $icon-button-margin + $baseline-grid;
+    @include rtl(right, $icon-button-margin, auto);
+    @include rtl(left, auto, $icon-button-margin);
+    width: calc(100% - #{$offset});
   }
 
   > md-datepicker {
@@ -80,7 +81,10 @@ md-datepicker {
 
   display: inline-block;
   width: auto;
-  @include rtl-prop(margin-left, margin-right, $md-datepicker-button-gap);
+
+  .md-icon-button + & {
+    @include rtl-prop(margin-left, margin-right, $md-datepicker-button-gap);
+  }
 
   &.md-datepicker-focused {
     border-bottom-width: 2px;
@@ -209,11 +213,13 @@ md-datepicker[disabled] {
   overflow: hidden;
 
   .md-datepicker-input-container {
-    @include rtl-prop(margin-left, margin-right, -$md-datepicker-button-gap);
-
     // The negative bottom margin prevents the content around the datepicker
     // from jumping when it gets opened.
     margin-bottom: -$md-datepicker-border-bottom-gap;
+  }
+
+  .md-icon-button + .md-datepicker-input-container {
+    @include rtl-prop(margin-left, margin-right, -$md-datepicker-button-gap);
   }
 
   .md-datepicker-input,
