@@ -438,7 +438,58 @@ describe('md-colors', function () {
           expect(element[0].style.background).toContain( expectedRGBa );
         });
       });
-    })
+
+      describe('transition to empty object' , function () {
+        /**
+         * <div md-colors="{background: '{{color}}' }" >
+         */
+        it('should delete old colors when getting an empty object', function() {
+          var element = $compile( '<div md-colors="{{color}}"></div>' )(scope);
+
+          scope.color = '{background: \'red\'}';
+          scope.$apply();
+
+          var color = $mdColorPalette['red']['500'].value;
+          var expectedRGB = supplant('rgb({0}, {1}, {2})', [color[0], color[1], color[2]]);
+
+          expect(element[0].style.background).toContain( expectedRGB );
+          expect(element[0].style.color).not.toBe( '' );
+
+          scope.color = '{}';
+          scope.$apply();
+
+          expect(element[0].style.background).toBe( '' );
+
+          /**
+           * mdColors automatically sets the foreground colors according the material palette
+           * we make sure that even if the background was set (and the foreground automatically)
+           * we delete it.
+           */
+          expect(element[0].style.color).toBe( '' );
+
+        });
+      })
+    });
+
+    describe('empty values', function () {
+      /**
+       * <div md-colors="" >
+       */
+      it('should accept empty value and not color the element', function() {
+        var element = $compile( '<div md-colors=""></div>' )(scope);
+
+        expect(element[0].style.background).toBe( '' );
+      });
+
+      /**
+       * <div md-colors="{}" >
+       */
+      it('should accept empty object and not color the element', function() {
+        var element = $compile( '<div md-colors="{}"></div>' )(scope);
+
+        expect(element[0].style.background).toBe( '' );
+      });
+    });
   });
 
   describe('service', function () {
