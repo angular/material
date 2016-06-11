@@ -181,6 +181,17 @@ describe('<md-select>', function() {
     expect($rootScope.myForm.select.$touched).toBe(true);
   }));
 
+  it('applies the md-input-focused class to the container when focused with the keyboard', function() {
+    var element = setupSelect('ng-model="val"');
+    var select = element.find('md-select');
+
+    select.triggerHandler('focus');
+    expect(element.hasClass('md-input-focused')).toBe(true);
+
+    select.triggerHandler('blur');
+    expect(element.hasClass('md-input-focused')).toBe(false);
+  });
+
   it('restores focus to select when the menu is closed', inject(function($document) {
     var select = setupSelect('ng-model="val"').find('md-select');
     openSelect(select);

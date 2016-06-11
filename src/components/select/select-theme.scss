@@ -1,3 +1,29 @@
+md-input-container {
+  &.md-input-focused {
+    &:not(.md-input-has-value) {
+      md-select.md-THEME_NAME-theme {
+        ._md-select-value {
+          color: '{{primary-color}}';
+          &._md-select-placeholder {
+            color: '{{primary-color}}';
+          }
+        }
+      }
+    }
+  }
+
+  &.md-input-invalid {
+    md-select.md-THEME_NAME-theme ._md-select-value {
+      color: '{{warn-A700}}' !important;
+      border-bottom-color: '{{warn-A700}}' !important;
+    }
+
+    md-select.md-THEME_NAME-theme.md-no-underline ._md-select-value {
+      border-bottom-color: transparent !important;
+    }
+  }
+}
+
 md-select.md-THEME_NAME-theme {
   &[disabled] ._md-select-value {
     border-bottom-color: transparent;
@@ -10,10 +36,16 @@ md-select.md-THEME_NAME-theme {
     }
     border-bottom-color: '{{foreground-4}}';
   }
-  &.ng-invalid.ng-dirty {
+  &.md-no-underline ._md-select-value {
+    border-bottom-color: transparent !important;
+  }
+  &.ng-invalid.ng-touched {
     ._md-select-value {
       color: '{{warn-A700}}' !important;
       border-bottom-color: '{{warn-A700}}' !important;
+    }
+    &.md-no-underline ._md-select-value {
+      border-bottom-color: transparent !important;
     }
   }
   &:not([disabled]):focus {
@@ -23,6 +55,9 @@ md-select.md-THEME_NAME-theme {
       &._md-select-placeholder {
         color: '{{ foreground-1 }}';
       }
+    }
+    &.md-no-underline ._md-select-value {
+      border-bottom-color: transparent !important;
     }
     &.md-accent ._md-select-value {
       border-bottom-color: '{{accent-color}}';

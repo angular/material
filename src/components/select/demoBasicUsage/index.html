@@ -1,26 +1,83 @@
-<div ng-controller="AppCtrl as ctrl" class="md-padding" ng-cloak>
-  <div>
-    <h1 class="md-title">Enter an address</h1>
-    <div layout="row">
+<div ng-controller="AppCtrl as ctrl" class="md-padding" ng-cloak layout="column">
 
-      <md-input-container>
-        <label>Street Name</label>
-        <input>
-      </md-input-container>
+  <p>
+    The <code>&lt;md-select&gt;</code> component can be used within a
+    <code>&lt;md-input-container&gt;</code> or as a stand alone component by using the
+    <code>md-no-underline</code> class.
+  </p>
 
-      <md-input-container>
-        <label>City</label>
-        <input>
-      </md-input-container>
+  <md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">Account Preferences</span>
+        <span class="md-subhead">Tell us a little about you.</span>
+      </md-card-title-text>
+    </md-card-title>
 
-      <md-input-container>
-        <label>State</label>
-        <md-select ng-model="ctrl.userState">
-          <md-option ng-repeat="state in ctrl.states" value="{{state.abbrev}}" ng-disabled="$index === 1">
-            {{state.abbrev}}
-          </md-option>
+    <md-card-content>
+      <div layout="row">
+        <md-input-container>
+          <label>Street Name</label>
+          <input>
+        </md-input-container>
+
+        <md-input-container>
+          <label>City</label>
+          <input>
+        </md-input-container>
+
+        <md-input-container>
+          <label>State</label>
+          <md-select ng-model="ctrl.userState">
+            <md-option ng-repeat="state in ctrl.states" value="{{state.abbrev}}" ng-disabled="$index === 1">
+              {{state.abbrev}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+      </div>
+    </md-card-content>
+  </md-card>
+
+  <md-card>
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">Battle Preferences</span>
+        <span class="md-subhead">Choose wisely if you want to win.</span>
+      </md-card-title-text>
+    </md-card-title>
+
+    <md-card-content>
+      <div layout="row" layout-align="space-between center">
+        <span>What is your favorite weapon?</span>
+        <md-select ng-model="weapon" placeholder="Weapon" class="md-no-underline">
+          <md-option value="axe">Axe</md-option>
+          <md-option value="sword">Sword</md-option>
+          <md-option value="wand">Wand</md-option>
+          <md-option value="pen">Pen?</md-option>
         </md-select>
-      </md-input-container>
-    </div>
-  </div>
+      </div>
+
+      <div layout="row" layout-align="space-between center">
+        <span>What armor do you wear?</span>
+        <md-select ng-model="armor" placeholder="Armor" class="md-no-underline" required>
+          <md-option value="cloth">Cloth</md-option>
+          <md-option value="leather">Leather</md-option>
+          <md-option value="chain">Chainmail</md-option>
+          <md-option value="plate">Plate</md-option>
+        </md-select>
+      </div>
+
+      <div layout="row" layout-align="space-between center">
+        <span>How do you refresh your magic?</span>
+        <md-select ng-model="drink" placeholder="Drink" class="md-no-underline">
+          <md-option value="water">Water</md-option>
+          <md-option value="juice">Juice</md-option>
+          <md-option value="milk">Milk</md-option>
+          <md-option value="wine">Wine</md-option>
+          <md-option value="mead">Mead</md-option>
+        </md-select>
+      </div>
+    </md-card-content>
+  </md-card>
+
 </div>
