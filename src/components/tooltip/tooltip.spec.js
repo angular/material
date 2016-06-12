@@ -182,7 +182,7 @@ describe('<md-tooltip> directive', function() {
         expect($rootScope.testModel.isVisible).toBe(false);
     });
 
-    it('should should toggle visibility on touch start', function() {
+    it('should should toggle visibility on the next touch', inject(function($document) {
         buildTooltip(
           '<md-button>' +
              'Hello' +
@@ -194,10 +194,12 @@ describe('<md-tooltip> directive', function() {
 
         triggerEvent('touchstart');
         expect($rootScope.testModel.isVisible).toBe(true);
+        triggerEvent('touchend');
 
-        triggerEvent('touchstart');
+        $document.triggerHandler('touchend');
+        $timeout.flush();
         expect($rootScope.testModel.isVisible).toBe(false);
-    });
+    }));
 
     it('should cancel when mouseleave was before the delay', function() {
       buildTooltip(
