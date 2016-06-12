@@ -185,6 +185,18 @@ describe('md-input-container directive', function() {
     expect(el).not.toHaveClass('md-input-has-value');
   });
 
+  it('should set has-value class on container with ng-value', function() {
+    var el = setup('ng-value="value"');
+
+    pageScope.$apply('value = "My Value"');
+
+    expect(el).toHaveClass('md-input-has-value');
+
+    pageScope.$apply('value = ""');
+    
+    expect(el).not.toHaveClass('md-input-has-value');
+  });
+
   it('should set has-value class on container for ng-model input', function() {
     pageScope.value = 'test';
     var el = setup('ng-model="value"');
