@@ -126,7 +126,7 @@
 
       rgbValues = contrast ? rgbValues.contrast : rgbValues.value;
 
-      return $mdUtil.supplant('rgba( {0}, {1}, {2}, {3} )',
+      return $mdUtil.supplant('rgba({0}, {1}, {2}, {3})',
         [rgbValues[0], rgbValues[1], rgbValues[2], rgbValues[3] || color.opacity]
       );
     }

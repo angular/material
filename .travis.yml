@@ -13,8 +13,15 @@ env:
   - BROWSER_STACK_ACCESS_KEY=BWCd4SynLzdDcv8xtzsB
   - secure: X7CNmOMemAJ9Jqrsmv6MXyeh8n8TIL5CKzE9LYsZUbsyKo0l5CyyysJq0y/AbpQS6awsSv2qP/cZ/kand6r6z0wMFbUcxa4HjMZEfRwv3sGtwj1OKJko/GvjcZQzD54FtHy1NU7wR0mYhAlE5IwH7f8bMa/nUiijgD/TOCTtKH8=
   matrix:
-  - MODE=Default
-  - MODE=Sauce
+  - BROWSER=SL_CHROME
+  - BROWSER=SL_FIREFOX
+  - BROWSER=SL_IE11
+  - MODE=RELEASE
+
+matrix:
+  fast_finish: true
+  allow_failures:
+  - env: "MODE=RELEASE"
 
 cache:
   directories:
@@ -42,7 +49,8 @@ before_script:
 
 script:
 - gulp ddescribe-iit
-- "./scripts/travis-run-script.sh"
+- gulp build
+- gulp karma --config=config/karma-sauce.conf.js --browsers=$BROWSER --reporters='dots'
 
 after_success:
-- 'if [[ $MODE == "Default" ]]; then ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT; fi'
+- 'if [[ $MODE == "RELEASE" ]]; then ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT; fi'

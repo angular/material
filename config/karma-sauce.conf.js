@@ -14,7 +14,7 @@ module.exports = function(config) {
 
   config.set({
     // Maximum 10 browsers - SauceLabs limit
-    browsers: ['SL_CHROME'],
+    browsers: ['SL_CHROME', 'SL_FIREFOX', 'SL_IE11'],
     customLaunchers: require('./sauce-browsers.json'),
 
     captureTimeout: 180 * 1000,
