@@ -297,13 +297,19 @@ describe('MdIcon directive', function() {
 
       describe('with a data URL', function() {
         it('should set mdSvgSrc from a function expression', inject(function() {
-          var svgData = '<svg><g><circle r="50" cx="100" cy="100"></circle></g></svg>';
+          var svgData = '<svg><g><circle cx="100" cy="100" r="50"></circle></g></svg>';
           $scope.getData = function() {
             return 'data:image/svg+xml;base64,' + window.btoa(svgData);
           };
-          el = make('<md-icon md-svg-src="{{ getData() }}"></md-icon>');
+          el = make('<md-icon md-svg-src="{{ getData() }}"></md-icon>')[0];
           $scope.$digest();
-          expect(el[0].innerHTML).toEqual(svgData);
+
+          // Notice that we only compare the tag names here.
+          // Checking the innerHTML to be the same as the svgData variable is not working, because
+          // some browsers (like IE) are swapping some attributes, adding an SVG namespace etc.
+          expect(el.firstElementChild.tagName).toBe('svg');
+          expect(el.firstElementChild.firstElementChild.tagName).toBe('g');
+          expect(el.firstElementChild.firstElementChild.firstElementChild.tagName).toBe('circle');
         }));
       });
     });

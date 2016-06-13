@@ -433,8 +433,10 @@ describe('$mdPanel', function() {
 
       openPanel(config);
 
+      // We have to use `toMatch` here, because IE11 is sometimes returning an integer instead of
+      // an string.
       expect(document.querySelector(PANEL_WRAPPER_CLASS).style.zIndex)
-          .toEqual(zIndex);
+          .toMatch(zIndex);
     });
 
     it('should set z-index to 0', function() {
@@ -447,8 +449,10 @@ describe('$mdPanel', function() {
 
       openPanel(config);
 
+      // We have to use `toMatch` here, because IE11 is sometimes returning an integer instead of
+      // an string.
       expect(document.querySelector(PANEL_WRAPPER_CLASS).style.zIndex)
-          .toEqual(zIndex);
+          .toMatch(zIndex);
     });
 
     it('should not close when clickOutsideToClose set to false', function() {

@@ -461,7 +461,9 @@ describe('md-datepicker', function() {
       // Expect that the calendar pane is in the same position as the inline datepicker.
       var paneRect = controller.calendarPane.getBoundingClientRect();
       var triggerRect = controller.inputContainer.getBoundingClientRect();
-      expect(paneRect.top).toBe(triggerRect.top);
+
+      // We expect the offset to be close to the exact height, because on IE there are some deviations.
+      expect(paneRect.top).toBeCloseTo(triggerRect.top, 0.5);
 
       // Restore body to pre-test state.
       body.removeChild(superLongElement);
