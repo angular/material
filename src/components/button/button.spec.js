@@ -75,6 +75,15 @@ describe('md-button', function() {
     expect(button[0]).not.toHaveClass('md-focused');
   }));
 
+  it('should not set the focus state if focus is disabled', inject(function($compile, $rootScope) {
+    var button = $compile('<md-button class="md-no-focus">')($rootScope.$new());
+    $rootScope.$apply();
+
+    button.triggerHandler('focus');
+
+    expect(button).not.toHaveClass('md-focused');
+  }));
+
   describe('with href or ng-href', function() {
 
     it('should be anchor if href attr', inject(function($compile, $rootScope) {
