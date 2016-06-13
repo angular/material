@@ -314,7 +314,8 @@ describe('<md-virtual-repeat>', function() {
     $$rAF.flush();
 
     // Expect that the sizer as a whole is still exactly the height it should be.
-    expect(sizer[0].offsetHeight).toBe(numItems * ITEM_SIZE);
+    // We expect the offset to be close to the exact height, because on IE there are some deviations.
+    expect(sizer[0].offsetHeight).toBeCloseTo(numItems * ITEM_SIZE, -1);
 
     // Expect that sizer only adds as many children as it needs to.
     var numChildren = sizer[0].childNodes.length;
@@ -335,7 +336,8 @@ describe('<md-virtual-repeat>', function() {
     $$rAF.flush();
 
     // Expect that the sizer as a whole is still exactly the height it should be.
-    expect(sizer[0].offsetHeight).toBe(numItems * ITEM_SIZE);
+    // We expect the offset to be close to the exact height, because on IE there are some deviations.
+    expect(sizer[0].offsetHeight).toBeCloseTo(numItems * ITEM_SIZE, -1);
 
     // Now that the sizer is really big, change the the number of items to be very small.
     numItems = 2;
