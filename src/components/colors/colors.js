@@ -354,7 +354,7 @@
             });
           }
 
-          scope.$on('destroy', function () {
+          scope.$on('$destroy', function () {
             unregisterChanges();
           });
 
