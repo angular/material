@@ -114,6 +114,17 @@ describe('material.components.menu', function() {
       expect($document.find('md-backdrop').length).toBe(0);
     }));
 
+    it('should remove the backdrop if the container scope got destroyed', inject(function($document, $rootScope) {
+      var scope = $rootScope.$new();
+      var menu = setup(null, null, scope);
+
+      openMenu(menu);
+      expect($document.find('md-backdrop').length).not.toBe(0);
+
+      scope.$destroy();
+      expect($document.find('md-backdrop').length).toBe(0);
+    }));
+
     it('closes on backdrop click', inject(function($document) {
 
       var menu = setup();
