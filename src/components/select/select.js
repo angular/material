@@ -685,7 +685,9 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
 
       // Setup a more robust version of isEmpty to ensure value is a valid option
       self.ngModel.$isEmpty = function($viewValue) {
-        return !self.options[$viewValue];
+        // We have to transform the viewValue into the hashKey, because otherwise the
+        // OptionCtrl may not exist. Developers may have specified a trackBy function.
+        return !self.options[self.hashGetter($viewValue)];
       };
 
       // Allow users to provide `ng-model="foo" ng-model-options="{trackBy: 'foo.id'}"` so
@@ -763,11 +765,21 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
         throw new Error('Duplicate md-option values are not allowed in a select. ' +
           'Duplicate value "' + optionCtrl.value + '" found.');
       }
+
       self.options[hashKey] = optionCtrl;
 
       // If this option's value was already in our ngModel, go ahead and select it.
       if (angular.isDefined(self.selected[hashKey])) {
         self.select(hashKey, optionCtrl.value);
+
+        // When the current $modelValue of the ngModel Controller is using the same hash as
+        // the current option, which will be added, then we can be sure, that the validation
+        // of the option has occurred before the option was added properly.
+        // This means, that we have to manually trigger a new validation of the current option.
+        if (self.ngModel.$modelValue && self.hashGetter(self.ngModel.$modelValue) === hashKey) {
+          self.ngModel.$validate();
+        }
+
         self.refreshViewValue();
       }
     };
