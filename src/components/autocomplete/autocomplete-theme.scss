@@ -1,29 +1,34 @@
 md-autocomplete.md-THEME_NAME-theme {
-  background: '{{background-A100}}';
+  background-color: '{{background-default}}';
+  color: '{{background-default-contrast}}';
+  input {
+    color: '{{background-default-contrast}}';
+  }
   &[disabled]:not([md-floating-label]) {
-    background: '{{background-100}}';
+    background-color: '{{background-hue-3}}';
+    color: '{{background-default-contrast-disabled}}';;
   }
   button {
     md-icon {
       path {
-        fill: '{{background-600}}';
+        fill: '{{background-contrast-icon}}';
       }
     }
     &:after {
-      background: '{{background-600-0.3}}';
+      background-color: '{{background-600-0.3}}';
     }
   }
 }
 .md-autocomplete-suggestions-container.md-THEME_NAME-theme {
-  background: '{{background-A100}}';
+  background-color: '{{background-default}}';
   li {
-    color: '{{background-900}}';
+    color: '{{background-default-contrast}}';
     .highlight {
-      color: '{{background-600}}';
+      color: '{{background-default-contrast-hint}}';
     }
     &:hover,
     &.selected {
-      background: '{{background-200}}';
+      background-color: '{{background-hue-3}}';
     }
   }
 }

@@ -1,6 +1,5 @@
 md-content.md-THEME_NAME-theme {
-  color: '{{foreground-1}}';
+  color: '{{background-default-contrast}}';
   background-color: '{{background-default}}';
+  @include md-theme-fill-support;
 }
-
-

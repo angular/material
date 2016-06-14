@@ -1,36 +1,47 @@
-$card-border-radius: 2px !default;
-
-md-card.md-THEME_NAME-theme {
-  color: '{{foreground-1}}';
-  background-color: '{{background-hue-1}}';
-  border-radius: $card-border-radius;
-
-  .md-card-image {
-    border-radius: $card-border-radius $card-border-radius 0 0;
-  }
-
+@mixin md-card-styled-elements($colorType: 'background', $hueType: 'color') {
+  background-color: '{{' + $colorType + '-' + $hueType + '}}';
+  color: '{{' + $colorType + '-' + $hueType + '-contrast}}';
   md-card-header {
     md-card-avatar {
       md-icon {
-        color: '{{background-color}}';
+        color: '{{' + $colorType + '-color}}';
         background-color: '{{foreground-3}}';
       }
     }
-
     md-card-header-text {
       .md-subhead {
-        color: '{{foreground-2}}'
+        color: '{{' + $colorType + '-' + $hueType + '-contrast-secondary}}';
       }
     }
   }
-
   md-card-title {
     md-card-title-text {
       &:not(:only-child) {
         .md-subhead {
-          color: '{{foreground-2}}';
+          color: '{{' + $colorType + '-' + $hueType + '-contrast-secondary}}';
         }
       }
     }
+  }
+}
+
+$card-border-radius: 2px !default;
+
+md-card.md-THEME_NAME-theme {
+  border-radius: $card-border-radius;
+  .md-card-image {
+    border-radius: $card-border-radius $card-border-radius 0 0;
+  }
+
+  @include md-card-styled-elements('background', 'hue-1');
+
+  &.md-primary {
+    @include md-card-styled-elements('primary');
+  }
+  &.md-accent {
+    @include md-card-styled-elements('accent');
+  }
+  &.md-warn {
+    @include md-card-styled-elements('warn');
   }
 }

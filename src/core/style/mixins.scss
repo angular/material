@@ -284,3 +284,18 @@
     }
   }
 }
+
+@mixin md-theme-fill-support($hueColor: 'color') {
+  &.md-primary {
+    background-color: '{{primary-' + $hueColor + '}}';
+    color: '{{primary-' + $hueColor + '-contrast}}';
+  }
+  &.md-accent {
+    background-color: '{{accent-' + $hueColor + '}}';
+    color: '{{accent-' + $hueColor + '-contrast}}';
+  }
+  &.md-warn {
+    background-color: '{{warn-' + $hueColor + '}}';
+    color: '{{warn-' + $hueColor + '-contrast}}';
+  }
+}

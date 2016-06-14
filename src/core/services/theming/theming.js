@@ -118,6 +118,7 @@ angular.module('material.core.theming', ['material.core.theming.palette'])
  * {{primary-color-0.7}} - Apply 0.7 opacity to each of the above rules
  * {{primary-contrast}} - Generates .md-hue-1, .md-hue-2, .md-hue-3 with configured contrast (ie. text) color shades set for each hue
  * {{primary-contrast-0.7}} - Apply 0.7 opacity to each of the above rules
+ * {{primary-contrast-divider}} - Apply divider opacity to contrast color
  *
  * Foreground expansion: Applies rgba to black/white foreground text
  *
@@ -151,6 +152,25 @@ var LIGHT_FOREGROUND = {
   '4': 'rgba(255,255,255,0.12)'
 };
 
+// use inactive-icon opacity from  https://material.google.com/style/color.html#color-text-background-colors
+// do not system icon opacity from https://material.google.com/style/icons.html#icons-system-icons
+
+var DARK_CONTRAST_OPACITY = {
+  'icon': 0.54,
+  'secondary': 0.54,
+  'disabled': 0.38,
+  'hint': 0.38,
+  'divider': 0.12,
+};
+
+var LIGHT_CONTRAST_OPACITY = {
+  'icon': 1.0,
+  'secondary': 0.7,
+  'disabled': 0.5,
+  'hint': 0.5,
+  'divider': 0.12
+};
+
 var DARK_SHADOW = '1px 1px 0px rgba(0,0,0,0.4), -1px -1px 0px rgba(0,0,0,0.4)';
 var LIGHT_SHADOW = '';
 
@@ -159,6 +179,7 @@ var LIGHT_CONTRAST_COLOR = colorToRgbaArray('rgba(255,255,255,0.87)');
 var STRONG_LIGHT_CONTRAST_COLOR = colorToRgbaArray('rgb(255,255,255)');
 
 var THEME_COLOR_TYPES = ['primary', 'accent', 'warn', 'background'];
+var THEME_FILL_COLOR_TYPES = ['', 'primary', 'accent', 'warn'];
 var DEFAULT_COLOR_TYPE = 'primary';
 
 // A color in a theme will use these hues by default, if not specified by user.
@@ -265,7 +286,10 @@ function ThemingProvider($mdColorPalette) {
     _PALETTES: PALETTES,
     _THEMES: THEMES,
     _parseRules: parseRules,
-    _rgba: rgba
+    _generateThemeFillRules: generateThemeFillRules,
+    _parseColorRule: parseColorRule,
+    _rgba: rgba,
+    _colorToRgbaArray: colorToRgbaArray
   };
 
   // Example: $mdThemingProvider.definePalette('neonRed', { 50: '#f5fafa', ... });
@@ -439,6 +463,7 @@ function ThemingProvider($mdColorPalette) {
     applyTheme.PALETTES = angular.extend({}, PALETTES);
     applyTheme.inherit = inheritTheme;
     applyTheme.registered = registered;
+    applyTheme.isDarkTheme = isDarkTheme;
     applyTheme.defaultTheme = function() { return defaultTheme; };
     applyTheme.generateTheme = function(name) { generateTheme(THEMES[name], name, nonce); };
 
@@ -453,6 +478,15 @@ function ThemingProvider($mdColorPalette) {
     }
 
     /**
+     * Determine is specified theme name is a dark theme
+     */
+    function isDarkTheme(themeName) {
+      themeName = themeName || 'default';
+      if (!applyTheme.THEMES[themeName]) return false;
+      return applyTheme.THEMES[themeName].isDark;
+    }
+
+    /**
      * Get theme name for the element, then update with Theme CSS class
      */
     function inheritTheme (el, parent) {
@@ -462,7 +496,7 @@ function ThemingProvider($mdColorPalette) {
 
       updateThemeClass(lookupThemeName());
 
-      el.on('$destroy', watchTheme ? $rootScope.$watch(lookupThemeName, updateThemeClass) : angular.noop );
+      el.on('$destroy', watchTheme ? $rootScope.$watch(lookupThemeName, onWatchThemeChanged) : angular.noop );
 
       /**
        * Find the theme name from the parent controller or element data
@@ -474,10 +508,49 @@ function ThemingProvider($mdColorPalette) {
       }
 
       /**
+       * Called when theme changes and md-watch-theme is set
+       * Changes theme of all themed children
+       */
+      function onWatchThemeChanged(newValue, oldValue)
+      {
+        if (newValue === oldValue)
+          return;
+        var processChild = function(childElement, isDark) {
+          var oldThemeName = childElement.data('$mdThemeName');
+          if (oldThemeName) {
+            var attrThemeWatchValue = childElement.attr('md-theme-watch');
+            var watchTheme = (alwaysWatchTheme || angular.isDefined(attrThemeWatchValue)) && attrThemeWatchValue != 'false';
+            if (watchTheme)
+              return; // element watches its own theme
+            if (angular.isDefined(childElement.attr('md-theme')))
+              return; // element has programmatic theme
+            childElement.removeClass('md-' + oldThemeName + '-theme');
+            childElement.addClass('md-' + newValue + '-theme');
+            childElement.data('$mdThemeName', newValue);
+            childElement.toggleClass("md-theme-dark", isDark);
+          }
+          iterateChildren(childElement, isDark);
+        };
+        var iterateChildren = function(element, isDark) {
+          if (!element) return;
+          angular.forEach(element.children(),function (child) {
+            processChild(angular.element(child));
+          });
+        };
+        iterateChildren(el, isDarkTheme(newValue));
+        updateThemeClass(newValue);
+      }
+
+      /**
        * Remove old theme class and apply a new one
        * NOTE: if not a valid theme name, then the current name is not changed
        */
       function updateThemeClass(theme) {
+        var isDark = isDarkTheme(theme);
+        el.toggleClass("md-theme-dark", isDark);
+        if (isDark) {
+          theme = theme || 'default';
+        }
         if (!theme) return;
         if (!registered(theme)) {
           $log.warn('Attempted to use unregistered theme \'' + theme + '\'. ' +
@@ -542,45 +615,59 @@ function ThemableDirective($mdTheming) {
   return $mdTheming;
 }
 
+function parseColorRule(theme, colorType, hue, contrast, opacity) {
+  if (hue === 'color')
+    hue = 'default';
+  if (colorType === 'foreground') {
+    if (hue == 'shadow') {
+      return theme.foregroundShadow;
+    } else {
+      return theme.foregroundPalette[hue] || theme.foregroundPalette['1'];
+    }
+  }
+
+  // `default` is also accepted as a hue-value, because the background palettes are
+  // using it as a name for the default hue.
+  if (hue.indexOf('hue') === 0 || hue === 'default') {
+    hue = theme.colors[colorType].hues[hue];
+  }
+
+  if (contrast && opacity) {
+    opacity = (PALETTES[theme.colors[colorType].name][hue] || '').opacity[opacity] || opacity;
+  }
+
+  return rgba( (PALETTES[ theme.colors[colorType].name ][hue] || '')[contrast ? 'contrast' : 'value'], opacity );
+};
+
 function parseRules(theme, colorType, rules) {
   checkValidPalette(theme, colorType);
 
+  var originalRules = rules;
   rules = rules.replace(/THEME_NAME/g, theme.name);
   var generatedRules = [];
   var color = theme.colors[colorType];
 
-  var themeNameRegex = new RegExp('.md-' + theme.name + '-theme', 'g');
+  var themeNameRegex = new RegExp('\\.md-' + theme.name + '-theme', 'g');
   // Matches '{{ primary-color }}', etc
-  var hueRegex = new RegExp('(\'|")?{{\\s*(' + colorType + ')-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}(\"|\')?','g');
-  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow|default)-?(\d\.?\d*)?(contrast)?\s*\}\}'?"?/g;
+  var hueRegex = new RegExp('(\'|")?{{\\s*(' + colorType + ')-?(color|default)?-?(contrast)?-?((?:\\d\\.?\\d*)|(?:[a-zA-Z]+))?\\s*}}(\"|\')?','g');
+  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow|default)-?(contrast)?-?((?:\d\.?\d*)|(?:[a-zA-Z]+))?\s*\}\}'?"?/g;
   var palette = PALETTES[color.name];
+
 
   // find and replace simple variables where we use a specific hue, not an entire palette
   // eg. "{{primary-100}}"
   //\(' + THEME_COLOR_TYPES.join('\|') + '\)'
-  rules = rules.replace(simpleVariableRegex, function(match, colorType, hue, opacity, contrast) {
-    if (colorType === 'foreground') {
-      if (hue == 'shadow') {
-        return theme.foregroundShadow;
-      } else {
-        return theme.foregroundPalette[hue] || theme.foregroundPalette['1'];
-      }
-    }
-
-    // `default` is also accepted as a hue-value, because the background palettes are
-    // using it as a name for the default hue.
-    if (hue.indexOf('hue') === 0 || hue === 'default') {
-      hue = theme.colors[colorType].hues[hue];
-    }
-
-    return rgba( (PALETTES[ theme.colors[colorType].name ][hue] || '')[contrast ? 'contrast' : 'value'], opacity );
+  rules = rules.replace(simpleVariableRegex, function(match, colorType, hue, contrast, opacity) {
+    return parseColorRule(theme, colorType, hue, contrast, opacity);
   });
 
   // For each type, generate rules for each hue (ie. default, md-hue-1, md-hue-2, md-hue-3)
   angular.forEach(color.hues, function(hueValue, hueName) {
     var newRule = rules
-      .replace(hueRegex, function(match, _, colorType, hueType, opacity) {
-        return rgba(palette[hueValue][hueType === 'color' ? 'value' : 'contrast'], opacity);
+      .replace(hueRegex, function(match, _, colorType, hueType, contrast, opacity) {
+        if (contrast && opacity)
+          opacity = palette[hueValue].opacity[opacity] || opacity;
+        return rgba(palette[hueValue][contrast ? 'contrast' : 'value'], opacity );
       });
     if (hueName !== 'default') {
       newRule = newRule.replace(themeNameRegex, '.md-' + theme.name + '-theme.md-' + hueName);
@@ -598,6 +685,103 @@ function parseRules(theme, colorType, rules) {
   });
 
   return generatedRules;
+}
+
+function generateThemeFillRules(theme, componentColorType, fillColorType, rules) {
+  rules = rules.replace(/THEME_NAME/g, theme.name);
+  var allStylesRegex = /'?"?\{\{\s*([a-zA-Z]+)-?(A?\d+|hue\-[0-3]|shadow|default|color)?-?(contrast)?-?((?:\d\.?\d*)|(?:[a-zA-Z]+))?\s*\}\}'?"?/g;
+  var parseCSSRulesRegex = /(\/\*.+?\*\/)?(.+?)\{(.+?)\}(?!(\}|'|"|;))/g;
+  var themeNameRegex = new RegExp('\\.md-' + theme.name + '-theme', 'g');
+  var generatedRules = '';
+  var fillColorHues = fillColorType ? theme.colors[fillColorType].hues : { default:null };
+  var componentColorHues = componentColorType ? theme.colors[componentColorType].hues : { default:null };
+  var regexMatch;
+  while ((regexMatch = parseCSSRulesRegex.exec(rules)) !== null) {
+    if (regexMatch.index === parseCSSRulesRegex.lastIndex) {
+      regexMatch.lastIndex++;
+    }
+    var comments = regexMatch[1] || '';
+    var selectors = regexMatch[2];
+    var declarations = regexMatch[3];
+    var formattedRule = comments + selectors + ' {' + declarations + '}\n';
+    var parsedRule = '';
+    if (!declarations.match(allStylesRegex)) //no theme style rules present
+      continue;
+    declarations = declarations.trim();
+    if (!declarations)
+      continue;
+    // Add md-theme-fill rule
+    for(var fillHueName in fillColorHues) {
+      for(var componentHueName in componentColorHues) {
+        var colorTypeClass = fillColorType ? '.md-' + fillColorType : '';
+        var hueNameClass = fillHueName === 'default' ? '' : '.md-' + fillHueName;
+        var newPrefix = '._md-theme-fill' + colorTypeClass + hueNameClass;
+        var newSelectors = [];
+        selectors.split(/,/g).forEach(function(selector) {
+          newSelectors.push(newPrefix + ' ' + selector.trim());
+        });
+        var newDeclarations = declarations.replace(allStylesRegex, function(match, regexColorType, hue, contrast, opacity) {
+          if (!hue || hue == 'color')
+            hue = 'default';
+          if (regexColorType === 'background' && fillColorType) {
+            // replace background with filled color and hue
+            regexColorType = fillColorType;
+            if (!hue || hue === 'default') {
+              hue = fillHueName;
+            }
+            return parseColorRule(theme, regexColorType, hue, contrast, opacity);
+          }
+          if (!hue || hue === 'default') {
+            // md-hue support
+            hue = componentHueName;
+          }
+          if (regexColorType == fillColorType && fillHueName === componentHueName) {
+            // if the background color is already the fill color,
+            // return a contrasting color of either white 100% or black 54%.
+            regexColorType = 'background';
+            var newHue = fillHueName;
+            if (newHue.indexOf('hue') === 0 || newHue === 'default') {
+              newHue = theme.colors[fillColorType].hues[newHue];
+            }
+            var palette = PALETTES[theme.colors[fillColorType].name];
+            var contrastType = palette[newHue].contrastType;
+            var baseColor;
+            if (contrast) {
+              // contrast of contrast
+              if (contrastType == 'dark') {
+                if (opacity)
+                  opacity = LIGHT_CONTRAST_OPACITY[opacity] || opacity;
+                return rgba(LIGHT_CONTRAST_COLOR, opacity );
+              }
+              if (opacity)
+                opacity = DARK_CONTRAST_OPACITY[opacity] || opacity;
+                return rgba(DARK_CONTRAST_COLOR, opacity );
+            }
+            if (contrastType == 'dark') {
+              return rgba([0, 0, 0], opacity || 1.0 * 0.54);
+            }
+            return rgba([255, 255, 255], opacity);
+          }
+
+          return parseColorRule(theme, regexColorType, hue, contrast, opacity);
+        });
+        var newRule = comments + newSelectors.join(',') + "{" + newDeclarations.trim() + "}\n";
+        if (componentHueName !== 'default') {
+          newRule = newRule.replace(themeNameRegex, '.md-' + theme.name + '-theme.md-' + componentHueName);
+        }
+        // Don't apply a selector rule to the default theme, making it easier to override
+        // styles of the base-component
+        if (theme.name == 'default') {
+          var themeRuleRegex = /((?:(?:(?: |>|\.|\w|-|:|\(|\)|\[|\]|"|'|=)+) )?)((?:(?:\w|\.|-)+)?)\.md-default-theme((?: |>|\.|\w|-|:|\(|\)|\[|\]|"|'|=)*)/g;
+          newRule = newRule.replace(themeRuleRegex, function(match, prefix, target, suffix) {
+            return match + ', ' + prefix + target + suffix;
+          });
+        }
+        generatedRules += newRule;
+      }
+    }
+  }
+  return [generatedRules];
 }
 
 var rulesByType = {};
@@ -690,6 +874,45 @@ function generateAllThemes($injector, $mdTheming) {
     delete palette.contrastDarkColors;
 
     // Change { 'A100': '#fffeee' } to { 'A100': { value: '#fffeee', contrast:DARK_CONTRAST_COLOR }
+    function getContrastType(hueName) {
+      if (defaultContrast === 'light') {
+        if (darkColors.indexOf(hueName) > -1) {
+          return 'dark';
+        }
+        if (strongLightColors.indexOf(hueName) > -1) {
+          return 'strongLight'
+        }
+        return 'light';
+      }
+      if (lightColors.indexOf(hueName) > -1) {
+        if (strongLightColors.indexOf(hueName) > -1) {
+          return 'strongLight';
+        }
+        return 'light';
+      }
+      return 'dark';
+    }
+    function getContrastColor(contrastType) {
+      switch(contrastType) {
+        default:
+        case 'light':
+          return LIGHT_CONTRAST_COLOR;
+        case 'strongLight':
+          return STRONG_LIGHT_CONTRAST_COLOR;
+        case 'dark':
+          return DARK_CONTRAST_COLOR;
+        }
+    }
+    function getOpacityValues(contrastType) {
+      switch(contrastType) {
+        default:
+        case 'strongLight':
+        case 'light':
+          return LIGHT_CONTRAST_OPACITY;
+        case 'dark':
+            return DARK_CONTRAST_OPACITY;
+      }
+    }
     angular.forEach(palette, function(hueValue, hueName) {
       if (angular.isObject(hueValue)) return; // Already converted
       // Map everything to rgb colors
@@ -700,28 +923,14 @@ function generateAllThemes($injector, $mdTheming) {
                         .replace('%2', palette.name)
                         .replace('%3', hueName));
       }
+      var contrastType = getContrastType(hueName);
 
       palette[hueName] = {
         value: rgbValue,
-        contrast: getContrastColor()
+        contrast: getContrastColor(contrastType),
+        opacity: getOpacityValues(contrastType),
+        contrastType: contrastType
       };
-      function getContrastColor() {
-        if (defaultContrast === 'light') {
-          if (darkColors.indexOf(hueName) > -1) {
-            return DARK_CONTRAST_COLOR;
-          } else {
-            return strongLightColors.indexOf(hueName) > -1 ? STRONG_LIGHT_CONTRAST_COLOR
-              : LIGHT_CONTRAST_COLOR;
-          }
-        } else {
-          if (lightColors.indexOf(hueName) > -1) {
-            return strongLightColors.indexOf(hueName) > -1 ? STRONG_LIGHT_CONTRAST_COLOR
-              : LIGHT_CONTRAST_COLOR;
-          } else {
-            return DARK_CONTRAST_COLOR;
-          }
-        }
-      }
     });
   }
 }
@@ -733,20 +942,30 @@ function generateTheme(theme, name, nonce) {
   if (!GENERATED[name]) {
     // For each theme, use the color palettes specified for
     // `primary`, `warn` and `accent` to generate CSS rules.
+    function appendThemeStyle(styleContent)
+    {
+      if (!styleContent) {
+        return;
+      }
+      var style = document.createElement('style');
+      style.setAttribute('md-theme-style', '');
+      if (nonce) {
+        style.setAttribute('nonce', nonce);
+      }
+      style.appendChild(document.createTextNode(styleContent));
+      head.insertBefore(style, firstChild);
+    }
     THEME_COLOR_TYPES.forEach(function(colorType) {
       var styleStrings = parseRules(theme, colorType, rulesByType[colorType]);
       while (styleStrings.length) {
-        var styleContent = styleStrings.shift();
-        if (styleContent) {
-          var style = document.createElement('style');
-          style.setAttribute('md-theme-style', '');
-          if (nonce) {
-            style.setAttribute('nonce', nonce);
-          }
-          style.appendChild(document.createTextNode(styleContent));
-          head.insertBefore(style, firstChild);
-        }
+        appendThemeStyle(styleStrings.shift());
       }
+      THEME_FILL_COLOR_TYPES.forEach(function(fillColorType) {
+        var styleStrings = generateThemeFillRules(theme, colorType, fillColorType, rulesByType[colorType]);
+        while (styleStrings.length) {
+          appendThemeStyle(styleStrings.shift());
+        }
+      });
     });
 
     GENERATED[theme.name] = true;

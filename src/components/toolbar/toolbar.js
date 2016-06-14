@@ -70,6 +70,8 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
     link: function(scope, element, attr) {
 
       element.addClass('_md');     // private md component indicator for styling
+      element.addClass('_md-theme-fill');
+      element.addClass('md-primary'); //default
       $mdTheming(element);
 
       $mdUtil.nextTick(function () {

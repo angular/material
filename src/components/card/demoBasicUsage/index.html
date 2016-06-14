@@ -1,7 +1,7 @@
 <div ng-controller="AppCtrl" ng-cloak >
   <md-content class="md-padding" layout-xs="column" layout="row">
     <div flex-xs flex-gt-xs="50" layout="column">
-      <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch>
+      <md-card md-theme="{{ showDarkTheme ? 'dark-grey' : 'default' }}" md-theme-watch ng-class="{'md-primary': showColorTypes}">
         <md-card-title>
           <md-card-title-text>
             <span class="md-headline">Card with image</span>
@@ -16,7 +16,7 @@
           <md-button>Action 2</md-button>
         </md-card-actions>
       </md-card>
-      <md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch>
+      <md-card md-theme="{{ showDarkTheme ? 'dark-orange' : 'default' }}" md-theme-watch ng-class="{'md-accent': showColorTypes}">
         <md-card-title>
           <md-card-title-text>
             <span class="md-headline">Card with image</span>
@@ -41,7 +41,7 @@
       </md-card>
     </div>
     <div flex-xs flex-gt-xs="50" layout="column">
-      <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch>
+      <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch ng-class="{'md-warn': showColorTypes}">
         <md-card-title>
           <md-card-title-text>
             <span class="md-headline">Card with image</span>
@@ -56,7 +56,7 @@
           <md-button>Action 2</md-button>
         </md-card-actions>
       </md-card>
-      <md-card md-theme="{{ showDarkTheme ? 'dark-blue' : 'default' }}" md-theme-watch>
+      <md-card md-theme="{{ showDarkTheme ? 'dark-blue' : 'default' }}" md-theme-watch ng-class="{'md-primary': showColorTypes, 'md-hue-1': showColorTypes}">
         <md-card-title>
           <md-card-title-text>
             <span class="md-headline">Card with image</span>
@@ -72,6 +72,7 @@
         </md-card-actions>
       </md-card>
       <div layout layout-padding layout-align="center end" style="height:200px">
+        <md-checkbox ng-model="showColorTypes">Use Colored Cards</md-checkbox>
         <md-checkbox ng-model="showDarkTheme">Use 'Dark' Themed Cards</md-checkbox>
       </div>
     </div>

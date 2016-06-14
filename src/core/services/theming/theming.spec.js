@@ -163,7 +163,7 @@ describe('$mdThemingProvider', function() {
       expect(themingProvider._PALETTES.extended['100']).toEqual(testPalette['100']);
       expect(themingProvider._PALETTES.extended['50']).toEqual('newValue');
     });
-  }); 
+  });
 
   describe('css template parsing', function() {
     beforeEach(setup);
@@ -249,6 +249,22 @@ describe('$mdThemingProvider', function() {
           .toEqual('color: rgba(0,0,0,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
           .toEqual('color: ;');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.54);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.54);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-disabled}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.38);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-hint}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.38);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-divider}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.12);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-0.05}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.05);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
       });
       it('for a dark theme', function() {
         testTheme.dark();
@@ -262,6 +278,24 @@ describe('$mdThemingProvider', function() {
           .toEqual('color: rgba(255,255,255,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
           .toEqual('color: 1px 1px 0px rgba(0,0,0,0.4), -1px -1px 0px rgba(0,0,0,0.4);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,1);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-disabled}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.5);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-hint}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.5);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-divider}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.12);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-0.05}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.05);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-900-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
       });
     });
     it('parses contrast colors', function() {
@@ -353,7 +387,7 @@ describe('$mdThemeProvider with custom styles', function() {
     });
     
     // Verify that $MD_THEME_CSS is still set to '/**/' in the test environment.
-    // Check angular-material-mocks.js for $MD_THEME_CSS latest value if this test starts to fail. 
+    // Check angular-material-mocks.js for $MD_THEME_CSS latest value if this test starts to fail.
     inject(function($MD_THEME_CSS) { expect($MD_THEME_CSS).toBe('/**/'); });
     
     // Find the string '/**//*test*/' in the head tag.
@@ -380,7 +414,7 @@ describe('$mdThemeProvider with on-demand generation', function() {
 
     // Use a single simple style rule for which we can check presence / absense.
     $provide.constant('$MD_THEME_CSS',
-        "sparkle.md-THEME_NAME-theme { color: '{{primary-color}}' }");
+        "sparkle.md-THEME_NAME-theme { color: '{{primary-color}}'; }");
 
     $mdThemingProvider.theme('sweden')
         .primaryPalette('light-blue')
@@ -407,13 +441,14 @@ describe('$mdThemeProvider with on-demand generation', function() {
 
     var styles = getThemeStyleElements();
     // One style tag for each default hue (default, hue-1, hue-2, hue-3).
-    expect(styles.length).toBe(4);
+    // One style tag for each md-theme-fill type ('', primary, accent, warn)
+    expect(styles.length).toBe(8);
     expect(document.head.innerHTML).toMatch(/md-sweden-theme/);
     expect(document.head.innerHTML).not.toMatch(/md-belarus-theme/);
 
     $mdTheming.generateTheme('belarus');
     styles = getThemeStyleElements();
-    expect(styles.length).toBe(8);
+    expect(styles.length).toBe(16);
     expect(document.head.innerHTML).toMatch(/md-sweden-theme/);
     expect(document.head.innerHTML).toMatch(/md-belarus-theme/);
   });
@@ -632,5 +667,73 @@ describe('md-themable directive', function() {
   it('should apply a class for a nested default theme', inject(function($rootScope, $compile) {
     var el = $compile('<div md-theme="default" md-themable></div>')($rootScope);
     expect(el.hasClass('md-default-theme')).toBe(true);
+  }));
+});
+
+describe('components inside a component with md-theme-fill', function() {
+  var element, themingProvider, _window;
+  function getThemeStyleElements() {
+    return document.head.querySelectorAll('style[md-theme-style]');
+  }
+
+  function cleanThemeStyleElements() {
+    angular.forEach(getThemeStyleElements(), function(style) {
+      document.head.removeChild(style);
+    });
+  }
+
+  beforeEach(module('material.core', function($provide, $mdThemingProvider) {
+    // Theming requires that there is at least one element present in the document head.
+    cleanThemeStyleElements();
+
+    // Use a single simple style rule for which we can check presence / absense.
+    $provide.constant('$MD_THEME_CSS', "childdiv.md-THEME_NAME-theme { background-color: '{{background-default}}'; }");
+
+    $mdThemingProvider.theme('testFill')
+        .primaryPalette('red')
+        .accentPalette('green');
+
+    themingProvider = $mdThemingProvider;
+  }));
+
+  beforeEach(inject(function($window){
+    _window = $window;
+  }));
+
+  afterEach(inject(function($document){
+    element && $document[0].body.removeChild(element[0]);
+  }));
+
+  function getBackgroundColor(element) {
+    return themingProvider._rgba(themingProvider._colorToRgbaArray(
+      _window.getComputedStyle(element).backgroundColor
+    ));
+  }
+  function getPaletteColor(palette, hue) {
+    return themingProvider._rgba(themingProvider._PALETTES[palette][hue].value);
+  }
+  function getThemePalettes(theme) {
+    return themingProvider._THEMES[theme || 'default'].colors;
+  }
+  it('should apply filled color to children background-color', inject(function($rootScope, $compile, $document, $mdTheming) {
+    $mdTheming.generateTheme('testFill');
+    var primaryPalette = getThemePalettes('testFill').primary;
+    var accentPalette = getThemePalettes('testFill').accent;
+    var backgroundPalette = getThemePalettes('testFill').background;
+    element = $compile('<parentdiv md-theme="testFill"><childdiv>test</childdiv></parentdiv>')($rootScope);
+    var childEl = angular.element(element.children()[0]);
+    $document[0].body.appendChild(element[0]);
+    $mdTheming(element);
+    $mdTheming(childEl);
+
+    element.addClass('_md-theme-fill');
+    $rootScope.$apply();
+    expect(getBackgroundColor(childEl[0])).toEqual(getPaletteColor(backgroundPalette.name, backgroundPalette.hues['default']));
+    element.addClass('md-primary');
+    $rootScope.$apply();
+    expect(getBackgroundColor(childEl[0])).toEqual(getPaletteColor(primaryPalette.name, primaryPalette.hues['default']));
+    element.removeClass('md-primary');
+    element.addClass('md-accent');
+    expect(getBackgroundColor(childEl[0])).toEqual(getPaletteColor(accentPalette.name, accentPalette.hues['default']));
   }));
 });
