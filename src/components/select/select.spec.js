@@ -883,6 +883,36 @@ describe('<md-select>', function() {
         expect($rootScope.testForm.$valid).toBe(true);
       }));
 
+      it('properly validates required attribute with object options', inject(function($rootScope, $compile) {
+        var template =
+          '<form name="testForm">' +
+          '  <md-select ng-model="model" ng-model-options="{ trackBy: \'$value.id\' }" required="required">' +
+          '    <md-option ng-repeat="opt in opts" ng-value="opt"></md-option>' +
+          '  </md-select>' +
+          '</form>';
+
+        $rootScope.opts = [
+          { id: 1, value: 'First'  },
+          { id: 2, value: 'Second' },
+          { id: 3, value: 'Third'  },
+          { id: 4, value: 'Fourth' }
+        ];
+
+        $compile(template)($rootScope);
+
+        // There is no value selected yet, so the validation should currently fail.
+        $rootScope.$digest();
+
+        expect($rootScope.testForm.$valid).toBe(false);
+
+        // Select any valid option, to confirm that the ngModel properly detects the
+        // tracked option.
+        $rootScope.model = $rootScope.opts[0];
+        $rootScope.$digest();
+
+        expect($rootScope.testForm.$valid).toBe(true);
+      }));
+
       it('should keep the form pristine when model is predefined', inject(function($rootScope, $timeout, $compile) {
         $rootScope.model = [1, 2];
         $rootScope.opts = [1, 2, 3, 4];
