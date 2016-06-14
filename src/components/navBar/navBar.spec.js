@@ -89,6 +89,20 @@ describe('mdNavBar', function() {
       expect(getTab('tab2')).not.toHaveClass('md-primary');
       expect(getTab('tab1')).not.toHaveClass('md-active');
       expect(getTab('tab1')).not.toHaveClass('md-primary');
+
+      expect(getInkbarEl().style.display).toBe('none');
+
+      updateSelectedTabRoute('tab1');
+
+      expect(getTab('tab3')).not.toHaveClass('md-active');
+      expect(getTab('tab3')).not.toHaveClass('md-primary');
+      expect(getTab('tab2')).not.toHaveClass('md-active');
+      expect(getTab('tab2')).not.toHaveClass('md-primary');
+      expect(getTab('tab1')).toHaveClass('md-active');
+      expect(getTab('tab1')).toHaveClass('md-primary');
+
+      expect(getInkbarEl().style.display).toBe('');
+
     });
 
     it('requires navigation attribute to be present', function() {

@@ -209,7 +209,7 @@ MdNavBarController.prototype._initTabs = function() {
 MdNavBarController.prototype._updateTabs = function(newValue, oldValue) {
   var self = this;
   var tabs = this._getTabs();
-  var oldIndex;
+  var oldIndex = -1;
   var newIndex = -1;
   var newTab = this._getTabByName(newValue);
   var oldTab = this._getTabByName(oldValue);
@@ -235,8 +235,9 @@ MdNavBarController.prototype._updateTabs = function(newValue, oldValue) {
  */
 MdNavBarController.prototype._updateInkBarStyles = function(tab, newIndex, oldIndex) {
   this._inkbar.toggleClass('_md-left', newIndex < oldIndex)
-      .toggleClass('_md-right', newIndex > oldIndex)
-      .toggleClass('md-button', newIndex === -1);
+      .toggleClass('_md-right', newIndex > oldIndex);
+
+  this._inkbar.css({display: newIndex < 0 ? 'none' : ''});
 
   if(tab){
     var tabEl = tab.getButtonEl();
