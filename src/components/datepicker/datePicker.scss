@@ -6,9 +6,6 @@ $md-datepicker-open-animation-duration: 0.2s !default;
 $md-datepicker-triangle-button-width: 36px !default;
 $md-datepicker-input-mask-height: 40px !default;
 
-// The datepickers triangle icon uses the default button margin.
-// We need to use the margin to align the label inside of an input container properly.
-$icon-button-margin: rem(0.600) !default;
 
 md-datepicker {
   // Don't let linebreaks happen between the open icon-button and the input.
@@ -38,7 +35,7 @@ md-datepicker {
 }
 
 // The input into which the user can type the date.
-.md-datepicker-input, label:not(.md-no-float):not(._md-container-ignore) {
+.md-datepicker-input {
   @include md-flat-input();
   min-width: 120px;
   max-width: $md-calendar-width - $md-datepicker-button-gap;
@@ -47,10 +44,11 @@ md-datepicker {
 // If the datepicker is inside of a md-input-container
 ._md-datepicker-floating-label {
   > label:not(.md-no-float):not(._md-container-ignore) {
-    $offset: $md-datepicker-triangle-button-width * 2 + $md-datepicker-button-gap + $icon-button-margin + $baseline-grid;
-    @include rtl(right, $icon-button-margin, auto);
-    @include rtl(left, auto, $icon-button-margin);
-    width: calc(100% - #{$offset});
+    $width-offset: $md-datepicker-triangle-button-width * 2 + $md-datepicker-button-gap;
+    $offset: $md-datepicker-triangle-button-width / 2;
+    @include rtl(right, $offset, auto);
+    @include rtl(left, auto, $offset);
+    width: calc(100% - #{$width-offset});
   }
 
   > md-datepicker {
