@@ -74,7 +74,7 @@ function MenuProvider($$interimElementProvider) {
      * and backdrop
      */
     function onRemove(scope, element, opts) {
-      opts.cleanupInteraction();
+      opts.cleanupInteraction && opts.cleanupInteraction();
       opts.cleanupResizing();
       opts.hideBackdrop();
 
@@ -437,7 +437,7 @@ function MenuProvider($$interimElementProvider) {
       }
 
       var rtl = ($mdUtil.bidi() == 'rtl');
-      
+
       switch (positionMode.left) {
         case 'target':
           position.left = existingOffsets.left + originNodeRect.left - alignTargetRect.left;
