@@ -99,10 +99,9 @@ md-datepicker {
   // overflowing it's parent, however IE and Edge seem to disregard it.
   // The `left: -100%` pulls the element back in order to ensure that
   // it doesn't cause an overflow.
-  left: -100%;
   position: absolute;
   top: 0;
-  left: 0;
+  left: -100%;
   z-index: $z-index-calendar-pane;
   border-width: 1px;
   border-style: solid;
