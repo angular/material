@@ -115,15 +115,16 @@ function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
 
       attr.$observe('disabled', function(value) {
         if (value === true || value === false) {
-          isDisabled = value;
+          isDisabled = !!value;
         } else {
           isDisabled = angular.isDefined(value);
         }
 
-        element.toggleClass(DISABLED_CLASS, !!isDisabled);
+        element.toggleClass(DISABLED_CLASS, isDisabled);
+        container.toggleClass(lastMode, !isDisabled);
       });
 
-      attr.$observe('mdMode',function(mode){
+      attr.$observe('mdMode', function(mode) {
         if (lastMode) container.removeClass( lastMode );
 
         switch( mode ) {
@@ -151,7 +152,7 @@ function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
 
         //$log.debug( $mdUtil.supplant(info, [mode]) );
 
-        element.attr("md-mode",mode);
+        element.attr("md-mode", mode);
         attr.mdMode = mode;
       }
     }
