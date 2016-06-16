@@ -341,7 +341,7 @@ MdIconProvider.prototype = {
     return this;
   },
 
-  $get: ['$templateRequest', '$q', '$log', '$templateCache', '$mdUtil', '$sce', function($templateRequest, $q, $log, $templateCache, $mdUtil, $sce) {
+  $get: ['$templateRequest', '$q', '$log', '$mdUtil', '$sce', function($templateRequest, $q, $log, $mdUtil, $sce) {
     return MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce);
   }]
 };
@@ -372,7 +372,7 @@ function ConfigurationItem(url, viewBoxSize) {
  *
  * @returns {angular.$q.Promise} A promise that gets resolved to a clone of the initial SVG DOM element; which was
  * created from the SVG markup in the SVG data file. If an error occurs (e.g. the icon cannot be found) the promise
- * will get rejected. 
+ * will get rejected.
  *
  * @usage
  * <hljs lang="js">
@@ -401,6 +401,7 @@ function ConfigurationItem(url, viewBoxSize) {
 /* @ngInject */
 function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   var iconCache = {};
+  var svgCache = {};
   var urlRegex = /[-\w@:%\+.~#?&//=]{2,}\.[a-z]{2,4}\b(\/[-\w@:%\+.~#?&//=]*)?/i;
   var dataUrlRegex = /^data:image\/svg\+xml[\s*;\w\-\=]*?(base64)?,(.*)$/i;
 
@@ -512,7 +513,7 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
     function extractFromSet(set) {
       var iconName = id.slice(id.lastIndexOf(':') + 1);
       var icon = set.querySelector('#' + iconName);
-      return !icon ? announceIdNotFound(id) : new Icon(icon, iconSetConfig);
+      return icon ? new Icon(icon, iconSetConfig) : announceIdNotFound(id);
     }
 
     function announceIdNotFound(id) {
@@ -547,8 +548,10 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
             reject(err);
           },
           extractSvg = function(response) {
-            var svg = angular.element('<div>').append(response).find('svg')[0];
-            resolve(svg);
+            if (!svgCache[url]) {
+              svgCache[url] = angular.element('<div>').append(response)[0].querySelector('svg');
+            }
+            resolve(svgCache[url]);
           };
 
         $templateRequest(url, true).then(extractSvg, announceAndReject);
@@ -572,7 +575,7 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
    */
   function Icon(el, config) {
     if (el && el.tagName != 'svg') {
-      el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">').append(el)[0];
+      el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">').append(el.cloneNode(true))[0];
     }
 
     // Inject the namespace if not available...
