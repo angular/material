@@ -60,7 +60,7 @@ md-card {
   }
 
   > img,
-  > :not(md-card-content) img {
+  > md-card-header img {
     box-sizing: border-box;
     display: flex;
     flex: 0 0 auto;
