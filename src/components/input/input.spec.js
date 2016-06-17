@@ -193,7 +193,7 @@ describe('md-input-container directive', function() {
     expect(el).toHaveClass('md-input-has-value');
 
     pageScope.$apply('value = ""');
-    
+
     expect(el).not.toHaveClass('md-input-has-value');
   });
 
@@ -750,6 +750,18 @@ describe('md-input-container directive', function() {
     it('should not add the handle if md-no-resize is present', function() {
       createAndAppendElement('md-no-resize');
       expect(element.querySelector('.md-resize-handle')).toBeFalsy();
+    });
+
+    it('should reset the padding after measuring the line height', function() {
+      createAndAppendElement();
+      ngTextarea.triggerHandler('input');
+      expect(textarea.style.padding).toBeFalsy();
+    });
+
+    it('should preserve the original inline padding', function() {
+      createAndAppendElement('style="padding: 10px;"');
+      ngTextarea.triggerHandler('input');
+      expect(textarea.style.padding).toBe('10px');
     });
   });
 
