@@ -355,7 +355,7 @@ describe('<md-chips>', function() {
           expect(scope.items).toEqual(['Apple', 'Banana', 'Orange', 'Test']);
         }));
 
-        it('should not trim the input text of the input', inject(function($mdConstant) {
+        it('should properly cancel the backspace event to select the chip before', inject(function($mdConstant) {
           var element = buildChips(BASIC_CHIP_TEMPLATE);
           var ctrl = element.controller('mdChips');
           var input = element.find('input');
@@ -363,7 +363,10 @@ describe('<md-chips>', function() {
           input.val('    ');
           input.triggerHandler('input');
 
-          expect(ctrl.chipBuffer).toBeTruthy();
+          // Since the `md-chips` component is testing the backspace select previous chip functionality by
+          // checking the current caret / cursor position, we have to set the cursor to the end of the current
+          // value.
+          input[0].selectionStart = input[0].selectionEnd = input[0].value.length;
 
           var enterEvent = {
             type: 'keydown',
@@ -378,6 +381,11 @@ describe('<md-chips>', function() {
 
           input.val('');
           input.triggerHandler('input');
+
+          // Since the `md-chips` component is testing the backspace select previous chip functionality by
+          // checking the current caret / cursor position, we have to set the cursor to the end of the current
+          // value.
+          input[0].selectionStart = input[0].selectionEnd = input[0].value.length;
 
           input.triggerHandler(enterEvent);
 
@@ -688,6 +696,56 @@ describe('<md-chips>', function() {
           expect(scope.items.length).toBe(4);
           expect(scope.items[3]).toBe('Kiwi');
           expect(element.find('input').val()).toBe('');
+        }));
+
+        it('should properly cancel the backspace event to select the chip before', inject(function($mdConstant) {
+          setupScopeForAutocomplete();
+          var element = buildChips(AUTOCOMPLETE_CHIPS_TEMPLATE);
+
+          // The embedded `md-autocomplete` needs a timeout flush for it's initialization.
+          $timeout.flush();
+          $timeout.flush();
+          scope.$apply();
+
+          var input = angular.element(element[0].querySelector('md-autocomplete input'));
+
+
+          input.val('    ');
+          input.triggerHandler('input');
+
+          expect(input.controller('ngModel').$modelValue).toBe('');
+          // Since the `md-chips` component is testing the backspace select previous chip functionality by
+          // checking the current caret / cursor position, we have to set the cursor to the end of the current
+          // value.
+          input[0].selectionStart = input[0].selectionEnd = input[0].value.length;
+
+          var backspaceEvent = {
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.BACKSPACE,
+            which: $mdConstant.KEY_CODE.BACKSPACE,
+            preventDefault: jasmine.createSpy('preventDefault')
+          };
+
+          input.triggerHandler(backspaceEvent);
+
+          // We have to trigger a digest, because the event listeners for the chips component will be called
+          // with an async digest evaluation.
+          scope.$digest();
+
+          expect(backspaceEvent.preventDefault).not.toHaveBeenCalled();
+
+          input.val('');
+          input.triggerHandler('input');
+
+          // Since the `md-chips` component is testing the backspace select previous chip functionality by
+          // checking the current caret / cursor position, we have to set the cursor to the end of the current
+          // value.
+          input[0].selectionStart = input[0].selectionEnd = input[0].value.length;
+
+          input.triggerHandler(backspaceEvent);
+          scope.$digest();
+
+          expect(backspaceEvent.preventDefault).toHaveBeenCalledTimes(1);
         }));
 
         it('simultaneously allows selecting an existing chip AND adding a new one', inject(function($mdConstant) {
