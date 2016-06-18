@@ -289,6 +289,37 @@ describe('mdListItem directive', function() {
     expect(secondaryContainer.children()[0].nodeName).toBe('MD-BUTTON');
   });
 
+  it('should copy ng-show to the generated button parent of a clickable secondary item', function() {
+    var listItem = setup(
+      '<md-list-item ng-click="sayHello()">' +
+        '<p>Hello World</p>' +
+        '<md-icon class="md-secondary" ng-show="isShown" ng-click="goWild()"></md-icon>' +
+      '</md-list-item>');
+
+    // First child is our button wrap
+    var firstChild = listItem.children().eq(0);
+    expect(firstChild[0].nodeName).toBe('DIV');
+
+    expect(listItem).toHaveClass('_md-button-wrap');
+
+    // It should contain three elements, the button overlay, inner content
+    // and the secondary container.
+    expect(firstChild.children().length).toBe(3);
+
+    var secondaryContainer = firstChild.children().eq(2);
+    expect(secondaryContainer).toHaveClass('_md-secondary-container');
+
+    // The secondary container should contain the md-icon,
+    // which has been transformed to an icon button.
+    var iconButton = secondaryContainer.children()[0];
+
+    expect(iconButton.nodeName).toBe('MD-BUTTON');
+    expect(iconButton.hasAttribute('ng-show')).toBe(true);
+
+    // The actual `md-icon` element, should not have the ng-show attribute anymore.
+    expect(iconButton.firstElementChild.hasAttribute('ng-show')).toBe(false);
+  });
+
   it('moves multiple md-secondary items outside of the button', function() {
     var listItem = setup(
       '<md-list-item ng-click="sayHello()">' +
