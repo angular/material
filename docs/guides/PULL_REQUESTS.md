@@ -10,7 +10,7 @@ Before you submit your pull request consider the following guidelines:
 * Make your changes in a new git branch:
 
      ```shell
-     git checkout -b my-fix-branch master
+     git checkout -b wip/my-fix-branch master
      ```
 
 * Follow our [Coding Rules](CODING.md#rules).
@@ -40,7 +40,7 @@ Before you submit your pull request consider the following guidelines:
 * Push your branch to GitHub:
 
     ```shell
-    git push origin my-fix-branch
+    git push origin wip/my-fix-branch
     ```
 
 * In GitHub, send a pull request to `angular:master`.
@@ -72,7 +72,7 @@ from the main (upstream) repository:
 * Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:
 
     ```shell
-    git push origin --delete my-fix-branch
+    git push origin --delete wip/my-fix-branch
     ```
 
 * Check out the master branch:
@@ -84,7 +84,7 @@ from the main (upstream) repository:
 * Delete the local branch:
 
     ```shell
-    git branch -D my-fix-branch
+    git branch -D wip/my-fix-branch
     ```
 
 * Update your master with the latest upstream version:
