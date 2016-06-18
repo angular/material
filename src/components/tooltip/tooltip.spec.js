@@ -52,7 +52,7 @@ describe('<md-tooltip> directive', function() {
         '</md-button>'
       );
 
-      expect(element.attr('aria-label')).toBe("Hello");
+      expect(element.text()).toBe("Hello");
   });
 
   it('should label parent', function(){

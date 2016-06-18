@@ -142,7 +142,7 @@ function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
     $mdButtonInkRipple.attach(scope, element);
 
     // Use async expect to support possible bindings in the button label
-    $mdAria.expectWithText(element, 'aria-label');
+    $mdAria.expectWithoutText(element, 'aria-label');
 
     // For anchor elements, we have to set tabindex manually when the
     // element is disabled
