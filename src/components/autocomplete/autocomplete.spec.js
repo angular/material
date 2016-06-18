@@ -626,6 +626,40 @@ describe('<md-autocomplete>', function() {
       expect($mdUtil.enableScrolling).toHaveBeenCalled();
     }));
 
+    it('should initialize the search text with an empty string', inject(function($mdUtil, $timeout, $material) {
+      var scope = createScope();
+
+      // Delete our searchText variable from the generated scope, because we
+      // want to confirm, that the autocomplete uses an empty string by default.
+      delete scope.searchText;
+
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder">' +
+        '  <md-item-template>{{item.display}}</md-item-template>' +
+        '  <md-not-found>Sorry, not found...</md-not-found>' +
+        '</md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+
+      $material.flushOutstandingAnimations();
+
+      // Run our initial flush
+      $timeout.flush();
+      waitForVirtualRepeat(element);
+
+      // Set our search text to a value that we know doesn't exist
+      expect(scope.searchText).toBe('');
+
+      // Make sure we wrap up anything and remove the element
+      $timeout.flush();
+      element.remove();
+    }));
+
     it('ensures the parent scope digests along with the current scope', inject(function($timeout, $material) {
       var scope = createScope(null, {bang: 'boom'});
       var template =
