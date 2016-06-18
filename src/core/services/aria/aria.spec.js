@@ -39,6 +39,24 @@ describe('$mdAria service', function() {
       expect($log.warn).toHaveBeenCalled();
     }));
 
+    it('should not warn if element has text', inject(function($compile, $rootScope, $log, $mdAria) {
+      spyOn($log, 'warn');
+      var button = $compile('<button>Text</button>')($rootScope);
+
+      $mdAria.expectWithoutText(button, 'aria-label');
+
+      expect($log.warn).not.toHaveBeenCalled();
+    }));
+
+    it('should warn if control is missing text', inject(function($compile, $rootScope, $log, $mdAria) {
+      spyOn($log, 'warn');
+      var radioButton = $compile('<md-radio-button>Text</md-radio-button>')($rootScope);
+
+      $mdAria.expectWithText(radioButton, 'aria-label');
+
+      expect($log.warn).not.toHaveBeenCalled();
+    }));
+
     it('should not warn if child element has attribute', inject(function($compile, $rootScope, $log, $mdAria) {
       spyOn($log, 'warn');
       var button = $compile('<button><md-icon aria-label="text"></md-icon></button>')($rootScope);

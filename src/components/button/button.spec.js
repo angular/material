@@ -31,15 +31,15 @@ describe('md-button', function() {
       expect($log.warn).not.toHaveBeenCalled();
     }));
 
-    it('should expect an aria-label if element has text content', inject(function($compile, $rootScope, $log) {
+    it('should not expect an aria-label if element has text content', inject(function($compile, $rootScope, $log) {
       spyOn($log, 'warn');
 
       var button = $compile('<md-button>Hello</md-button>')($rootScope);
-      expect(button.attr('aria-label')).toBe("Hello");
+      expect(button.attr('aria-label')).toBeUndefined();
       expect($log.warn).not.toHaveBeenCalled();
     }));
 
-    it('should set an aria-label if the text content using bindings', inject(function($$rAF, $compile, $rootScope, $log, $timeout) {
+    it('should not set an aria-label if the text content uses bindings', inject(function($$rAF, $compile, $rootScope, $log, $timeout) {
       spyOn($log, 'warn');
 
       var scope = angular.extend($rootScope.$new(),{greetings : "Welcome"});
@@ -48,7 +48,7 @@ describe('md-button', function() {
       $rootScope.$apply();
       $$rAF.flush();    // needed for $mdAria.expectAsync()
 
-      expect(button.attr('aria-label')).toBe("Welcome");
+      expect(button.attr('aria-label')).toBeUndefined();
       expect($log.warn).not.toHaveBeenCalled();
     }));
 
