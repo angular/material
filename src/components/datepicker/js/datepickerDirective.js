@@ -9,7 +9,6 @@
   // TODO(jelbourn): something better for mobile (calendar panel takes up entire screen?)
   // TODO(jelbourn): input behavior (masking? auto-complete?)
   // TODO(jelbourn): UTC mode
-  // TODO(jelbourn): RTL
 
 
   angular.module('material.components.datepicker')
@@ -717,9 +716,7 @@
    */
   DatePickerCtrl.prototype.handleBodyClick = function(event) {
     if (this.isCalendarOpen) {
-      // TODO(jelbourn): way want to also include the md-datepicker itself in this check.
-      var closest = this.$mdUtil.getClosest;
-      var isInCalendar = closest(event.target, 'md-calendar-year') || closest(event.target, 'md-calendar-month');
+      var isInCalendar = this.$mdUtil.getClosest(event.target, 'md-calendar');
 
       if (!isInCalendar) {
         this.closeCalendarPane();
