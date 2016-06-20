@@ -439,6 +439,63 @@ describe('mdSidenav', function() {
       expect(instance).toBeDefined();
       expect(instance.isOpen()).toBeFalsy();
     }));
+
+    describe('onClose', function () {
+      it('should call callback on escape', inject(function($mdSidenav, $rootScope, $material, $mdConstant, $timeout) {
+        var el = setup('md-component-id="left" md-is-open="show"');
+        var callback = jasmine.createSpy("callback spy");
+
+        $mdSidenav('left')
+          .onClose(callback);
+
+        $rootScope.$apply('show = true');
+
+        $material.flushOutstandingAnimations();
+        el.parent().triggerHandler({
+          type: 'keydown',
+          keyCode: $mdConstant.KEY_CODE.ESCAPE
+        });
+        $timeout.flush();
+        expect($rootScope.show).toBe(false);
+        expect(callback).toHaveBeenCalled();
+      }));
+
+      it('should call callback on backdrop click', inject(function($mdSidenav, $rootScope, $material, $timeout) {
+        var el = setup('md-component-id="left" md-is-open="show"');
+        var callback = jasmine.createSpy("callback spy");
+
+        $mdSidenav('left')
+          .onClose(callback);
+
+        $rootScope.$apply('show = true');
+
+        $material.flushOutstandingAnimations();
+        el.parent().find('md-backdrop').triggerHandler('click');
+        $timeout.flush();
+        expect($rootScope.show).toBe(false);
+        expect(callback).toHaveBeenCalled();
+      }));
+
+      it('should call callback on close', inject(function($mdSidenav, $rootScope, $material, $timeout) {
+        var el = setup('md-component-id="left"');
+        var callback = jasmine.createSpy("callback spy");
+
+        $mdSidenav('left')
+          .onClose(callback)
+          .open();
+
+        $timeout.flush();
+
+        expect(el.hasClass('md-closed')).toBe(false);
+
+        $mdSidenav('left')
+          .close();
+
+        $timeout.flush();
+
+        expect(callback).toHaveBeenCalled();
+      }));
+    });
   });
 
 
