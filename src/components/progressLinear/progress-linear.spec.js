@@ -59,7 +59,7 @@ describe('mdProgressLinear', function() {
 
   it('should set not transform if mode is undefined', function() {
     var element = makeElement('value="{{progress}}" md-mode="{{mode}}"');
-    var bar2 = element[0].querySelector('._md-bar2');
+    var bar2 = element[0].querySelector('.md-bar2');
 
     $rootScope.$apply(function() {
       $rootScope.progress = 50;
@@ -71,7 +71,7 @@ describe('mdProgressLinear', function() {
 
   it('should set transform based on value', function() {
     var element = makeElement('value="{{progress}}" md-mode="determinate"');
-    var bar2 = element[0].querySelector('._md-bar2');
+    var bar2 = element[0].querySelector('.md-bar2');
 
     $rootScope.$apply('progress = 50');
     expect(bar2.style[$mdConstant.CSS.TRANSFORM]).toEqual('translateX(-25%) scale(0.5, 1)');
@@ -87,7 +87,7 @@ describe('mdProgressLinear', function() {
 
   it('should set transform based on buffer value', function() {
     var element = makeElement('value="{{progress}}" md-buffer-value="{{progress2}}" md-mode="buffer"');
-    var bar1 = element[0].querySelector('._md-bar1');
+    var bar1 = element[0].querySelector('.md-bar1');
 
     $rootScope.$apply(function() {
       $rootScope.progress = 50;
@@ -99,7 +99,7 @@ describe('mdProgressLinear', function() {
 
   it('should not set transform in query mode', function() {
     var element = makeElement('md-mode="query" value="{{progress}}"');
-    var bar2 = element[0].querySelector('._md-bar2');
+    var bar2 = element[0].querySelector('.md-bar2');
 
     $rootScope.$apply('progress = 80');
     expect(bar2.style[$mdConstant.CSS.TRANSFORM]).toBeFalsy();
@@ -114,8 +114,8 @@ describe('mdProgressLinear', function() {
 
     it('should toggle the mode on the container', function() {
       var element = makeElement('md-mode="query" ng-disabled="isDisabled"');
-      var container = angular.element(element[0].querySelector('._md-container'));
-      var modeClass = '_md-mode-query';
+      var container = angular.element(element[0].querySelector('.md-container'));
+      var modeClass = 'md-mode-query';
 
       expect(container.hasClass(modeClass)).toBe(true);
 

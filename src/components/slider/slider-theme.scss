@@ -1,38 +1,38 @@
 md-slider.md-THEME_NAME-theme {
 
-  ._md-track {
+  .md-track {
     background-color: '{{foreground-3}}';
   }
-  ._md-track-ticks {
+  .md-track-ticks {
     color: '{{background-contrast}}';
   }
-  ._md-focus-ring {
+  .md-focus-ring {
     background-color: '{{accent-A200-0.2}}';
   }
-  ._md-disabled-thumb {
+  .md-disabled-thumb {
     border-color: '{{background-color}}';
     background-color: '{{background-color}}';
   }
 
-  &._md-min {
-    ._md-thumb:after {
+  &.md-min {
+    .md-thumb:after {
       background-color: '{{background-color}}';
       border-color: '{{foreground-3}}';
     }
 
-    ._md-focus-ring {
+    .md-focus-ring {
       background-color: '{{foreground-3-0.38}}';
     }
 
     &[md-discrete] {
-      ._md-thumb {
+      .md-thumb {
         &:after {
           background-color: '{{background-contrast}}';
           border-color: transparent;
         }
       }
 
-      ._md-sign {
+      .md-sign {
         background-color: '{{background-400}}';
         &:after {
           border-top-color: '{{background-400}}';
@@ -40,7 +40,7 @@ md-slider.md-THEME_NAME-theme {
       }
 
       &[md-vertical] {
-        ._md-sign:after {
+        .md-sign:after {
           border-top-color: transparent;
           border-left-color: '{{background-400}}';
         }
@@ -48,14 +48,14 @@ md-slider.md-THEME_NAME-theme {
     }
   }
 
-  ._md-track._md-track-fill {
+  .md-track.md-track-fill {
     background-color: '{{accent-color}}';
   }
-  ._md-thumb:after {
+  .md-thumb:after {
     border-color: '{{accent-color}}';
     background-color: '{{accent-color}}';
   }
-  ._md-sign {
+  .md-sign {
     background-color: '{{accent-color}}';
     &:after {
       border-top-color: '{{accent-color}}';
@@ -63,28 +63,28 @@ md-slider.md-THEME_NAME-theme {
   }
 
   &[md-vertical] {
-    ._md-sign:after {
+    .md-sign:after {
       border-top-color: transparent;
       border-left-color: '{{accent-color}}';
     }
   }
 
-  ._md-thumb-text {
+  .md-thumb-text {
     color: '{{accent-contrast}}';
   }
 
   &.md-warn {
-    ._md-focus-ring {
+    .md-focus-ring {
       background-color: '{{warn-200-0.38}}';
     }
-    ._md-track._md-track-fill {
+    .md-track.md-track-fill {
       background-color: '{{warn-color}}';
     }
-    ._md-thumb:after {
+    .md-thumb:after {
       border-color: '{{warn-color}}';
       background-color: '{{warn-color}}';
     }
-    ._md-sign {
+    .md-sign {
       background-color: '{{warn-color}}';
 
       &:after {
@@ -93,29 +93,29 @@ md-slider.md-THEME_NAME-theme {
     }
 
     &[md-vertical] {
-      ._md-sign:after {
+      .md-sign:after {
         border-top-color: transparent;
         border-left-color: '{{warn-color}}';
       }
     }
 
-    ._md-thumb-text {
+    .md-thumb-text {
       color: '{{warn-contrast}}';
     }
   }
 
   &.md-primary {
-    ._md-focus-ring {
+    .md-focus-ring {
       background-color: '{{primary-200-0.38}}';
     }
-    ._md-track._md-track-fill {
+    .md-track.md-track-fill {
       background-color: '{{primary-color}}';
     }
-    ._md-thumb:after {
+    .md-thumb:after {
       border-color: '{{primary-color}}';
       background-color: '{{primary-color}}';
     }
-    ._md-sign {
+    .md-sign {
       background-color: '{{primary-color}}';
 
       &:after {
@@ -124,23 +124,23 @@ md-slider.md-THEME_NAME-theme {
     }
 
     &[md-vertical] {
-      ._md-sign:after {
+      .md-sign:after {
         border-top-color: transparent;
         border-left-color: '{{primary-color}}';
       }
     }
 
-    ._md-thumb-text {
+    .md-thumb-text {
       color: '{{primary-contrast}}';
     }
   }
 
   &[disabled] {
-    ._md-thumb:after {
+    .md-thumb:after {
       border-color: transparent;
     }
-    &:not(._md-min), &[md-discrete] {
-      ._md-thumb:after {
+    &:not(.md-min), &[md-discrete] {
+      .md-thumb:after {
         background-color: '{{foreground-3}}';
         border-color: transparent;
       }
@@ -148,7 +148,7 @@ md-slider.md-THEME_NAME-theme {
   }
 
   &[disabled][readonly] {
-    ._md-sign {
+    .md-sign {
       background-color: '{{background-400}}';
       &:after {
         border-top-color: '{{background-400}}';
@@ -156,13 +156,13 @@ md-slider.md-THEME_NAME-theme {
     }
 
     &[md-vertical] {
-      ._md-sign:after {
+      .md-sign:after {
         border-top-color: transparent;
         border-left-color: '{{background-400}}';
       }
     }
 
-    ._md-disabled-thumb {
+    .md-disabled-thumb {
       border-color: transparent;
       background-color: transparent;
     }

@@ -100,7 +100,7 @@ describe('material.components.menuBar', function() {
         }
 
         function getOpenSubMenu() {
-          var containers = document.body.querySelectorAll('._md-open-menu-container._md-active');
+          var containers = document.body.querySelectorAll('.md-open-menu-container.md-active');
           var lastContainer = containers.item(containers.length - 1);
 
           return angular.element(lastContainer.querySelector('md-menu-content'));

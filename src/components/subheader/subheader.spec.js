@@ -154,7 +154,7 @@ describe('mdSubheader', function() {
       '</div>'
     );
 
-    var cloneContent = getCloneElement()[0].querySelector('._md-subheader-content');
+    var cloneContent = getCloneElement()[0].querySelector('.md-subheader-content');
 
     expect(cloneContent.children.length).toBe(4);
   });
@@ -197,9 +197,9 @@ describe('mdSubheader', function() {
   }
 
   function getCloneElement() {
-    // We search for the clone element by using the _md-sticky-clone class, which will be automatically added
+    // We search for the clone element by using the md-sticky-clone class, which will be automatically added
     // by the $mdSticky service.
-    return angular.element(contentElement[0].querySelector('._md-sticky-clone .md-subheader'));
+    return angular.element(contentElement[0].querySelector('.md-sticky-clone .md-subheader'));
   }
 
   function getElement() {
@@ -213,7 +213,7 @@ describe('mdSubheader', function() {
       var item = items[index];
       if (!item) return;
 
-      return item.parentNode.classList.contains('_md-sticky-clone') ? checkSubheader(index + 1) : item;
+      return item.parentNode.classList.contains('md-sticky-clone') ? checkSubheader(index + 1) : item;
     }
   }
 

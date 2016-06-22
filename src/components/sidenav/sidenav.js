@@ -249,7 +249,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     },
     controller: '$mdSidenavController',
     compile: function(element) {
-      element.addClass('_md-closed');
+      element.addClass('md-closed');
       element.attr('tabIndex', '-1');
       return postLink;
     }
@@ -277,7 +277,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
 
     // Only create the backdrop if the backdrop isn't disabled.
     if (!angular.isDefined(attr.mdDisableBackdrop)) {
-      backdrop = $mdUtil.createBackdrop(scope, "_md-sidenav-backdrop md-opaque ng-enter");
+      backdrop = $mdUtil.createBackdrop(scope, "md-sidenav-backdrop md-opaque ng-enter");
     }
 
     element.addClass('_md');     // private md component indicator for styling
@@ -310,12 +310,12 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
     function updateIsLocked(isLocked, oldValue) {
       scope.isLockedOpen = isLocked;
       if (isLocked === oldValue) {
-        element.toggleClass('_md-locked-open', !!isLocked);
+        element.toggleClass('md-locked-open', !!isLocked);
       } else {
-        $animate[isLocked ? 'addClass' : 'removeClass'](element, '_md-locked-open');
+        $animate[isLocked ? 'addClass' : 'removeClass'](element, 'md-locked-open');
       }
       if (backdrop) {
-        backdrop.toggleClass('_md-locked-open', !!isLocked);
+        backdrop.toggleClass('md-locked-open', !!isLocked);
       }
     }
 
@@ -343,7 +343,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $animate, 
       return promise = $q.all([
         isOpen && backdrop ? $animate.enter(backdrop, parent) : backdrop ?
                              $animate.leave(backdrop) : $q.when(true),
-        $animate[isOpen ? 'removeClass' : 'addClass'](element, '_md-closed')
+        $animate[isOpen ? 'removeClass' : 'addClass'](element, 'md-closed')
       ]).then(function() {
         // Perform focus when animations are ALL done...
         if (scope.isOpen) {

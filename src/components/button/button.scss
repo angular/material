@@ -180,7 +180,7 @@ button.md-button.md-fab {
   }
 }
 
-._md-toast-open-top {
+.md-toast-open-top {
   .md-button.md-fab-top-left,
   .md-button.md-fab-top-right {
     transition: $swift-ease-out;
@@ -194,7 +194,7 @@ button.md-button.md-fab {
   }
 }
 
-._md-toast-open-bottom {
+.md-toast-open-bottom {
   .md-button.md-fab-bottom-left,
   .md-button.md-fab-bottom-right {
     transition: $swift-ease-out;

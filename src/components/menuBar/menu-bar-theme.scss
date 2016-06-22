@@ -4,16 +4,16 @@ md-menu-bar.md-THEME_NAME-theme {
     border-radius: 2px;
   }
 
-  md-menu._md-open > button, md-menu > button:focus {
+  md-menu.md-open > button, md-menu > button:focus {
     outline: none;
     background: '{{background-200}}';
   }
 
-  &._md-open:not(._md-keyboard-mode) md-menu:hover > button {
+  &.md-open:not(.md-keyboard-mode) md-menu:hover > button {
     background-color: '{{ background-500-0.2}}';
   }
 
-  &:not(._md-keyboard-mode):not(._md-open) {
+  &:not(.md-keyboard-mode):not(.md-open) {
     md-menu button:hover,
     md-menu button:focus {
       background: transparent;
@@ -26,7 +26,7 @@ md-menu-content.md-THEME_NAME-theme {
     color: '{{background-A200-0.54}}';
   }
 
-  .md-menu._md-open > .md-button {
+  .md-menu.md-open > .md-button {
     background-color: '{{ background-500-0.2}}';
   }
 }

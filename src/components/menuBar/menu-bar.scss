@@ -26,12 +26,12 @@ md-menu-bar {
     height: 5 * $baseline-grid;
   }
 
-  md-backdrop._md-menu-backdrop {
+  md-backdrop.md-menu-backdrop {
     z-index: -2;
   }
 }
 
-md-menu-content._md-menu-bar-menu.md-dense {
+md-menu-content.md-menu-bar-menu.md-dense {
   max-height: none;
   padding: 2 * $baseline-grid 0;
   md-menu-item.md-indent {

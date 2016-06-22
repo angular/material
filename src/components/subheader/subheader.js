@@ -48,8 +48,8 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
     transclude: true,
     template: (
     '<div class="md-subheader _md">' +
-    '  <div class="_md-subheader-inner">' +
-    '    <div class="_md-subheader-content"></div>' +
+    '  <div class="md-subheader-inner">' +
+    '    <div class="md-subheader-content"></div>' +
     '  </div>' +
     '</div>'
     ),
@@ -60,7 +60,7 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
       var outerHTML = element[0].outerHTML;
 
       function getContent(el) {
-        return angular.element(el[0].querySelector('._md-subheader-content'));
+        return angular.element(el[0].querySelector('.md-subheader-content'));
       }
 
       // Transclude the user-given contents of the subheader
@@ -77,7 +77,7 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
           // compiled clone below will only be a comment tag (since they replace their elements with
           // a comment) which cannot be properly passed to the $mdSticky; so we wrap it in our own
           // DIV to ensure we have something $mdSticky can use
-          var wrapper = $compile('<div class="_md-subheader-wrapper">' + outerHTML + '</div>')(scope);
+          var wrapper = $compile('<div class="md-subheader-wrapper">' + outerHTML + '</div>')(scope);
 
           // Delay initialization until after any `ng-if`/`ng-repeat`/etc has finished before
           // attempting to create the clone

@@ -35,7 +35,7 @@ md-checkbox {
   }
 
   &.md-focused:not([disabled]) {
-    ._md-container:before {
+    .md-container:before {
       left: -8px;
       top: -8px;
       right: -8px;
@@ -43,19 +43,19 @@ md-checkbox {
     }
 
     &:not(.md-checked) {
-      ._md-container:before {
+      .md-container:before {
         background-color: rgba(0, 0, 0, 0.12);
       }
     }
   }
 
-  &.md-align-top-left > div._md-container {
+  &.md-align-top-left > div.md-container {
     top: $checkbox-top;
   }
 
   @include checkbox-container;
 
-  ._md-label {
+  .md-label {
     box-sizing: border-box;
     position: relative;
     display: inline-block;

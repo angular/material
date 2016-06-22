@@ -7,7 +7,7 @@ md-chips.md-THEME_NAME-theme {
       box-shadow: 0 2px '{{primary-color}}';
     }
 
-    ._md-chip-input-container {
+    .md-chip-input-container {
       input {
         @include input-placeholder-color('\'{{foreground-3}}\'');
         color: '{{foreground-1}}';
