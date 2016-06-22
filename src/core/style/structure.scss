@@ -115,13 +115,13 @@ input {
 }
 
 .md-ripple {
+  $sizeDuration: 0.45s * 2;
   position: absolute;
   transform: translate(-50%, -50%) scale(0);
   transform-origin: 50% 50%;
   opacity: 0;
   border-radius: 50%;
   &.md-ripple-placed {
-    $sizeDuration: 0.45s * 2;
     transition: margin $sizeDuration $swift-ease-out-timing-function,
                 border $sizeDuration $swift-ease-out-timing-function,
                 width $sizeDuration $swift-ease-out-timing-function,
@@ -135,6 +135,15 @@ input {
   &.md-ripple-active, &.md-ripple-full, &.md-ripple-visible {
     opacity: 0.20;
   }
+  &.md-ripple-remove {
+    animation: md-remove-ripple $sizeDuration $swift-ease-out-timing-function;
+  }
+}
+
+// Fix issue causing ripple disappear suddenly in Chrome version 51, opacity .15 is close to the opacity when a normal click mouseup
+@keyframes md-remove-ripple {
+  0% { opacity: .15; }
+  100% { opacity: 0; }
 }
 
 .md-padding {
