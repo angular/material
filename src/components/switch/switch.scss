@@ -33,12 +33,12 @@ md-switch {
   &[disabled] {
     cursor: default;
 
-    ._md-container {
+    .md-container {
       cursor: default;
     }
   }
 
-  ._md-container {
+  .md-container {
     cursor: grab;
     width: $switch-width;
     height: $switch-height;
@@ -50,14 +50,14 @@ md-switch {
 
   // If the user moves his mouse off the switch, stil display grabbing cursor
   &:not([disabled]) {
-    ._md-dragging,
-    &._md-dragging ._md-container {
+    .md-dragging,
+    &.md-dragging .md-container {
       cursor: grabbing;
     }
   }
 
   &.md-focused:not([disabled]) {
-    ._md-thumb:before {
+    .md-thumb:before {
       left: -8px;
       top: -8px;
       right: -8px;
@@ -65,19 +65,19 @@ md-switch {
     }
 
     &:not(.md-checked) {
-      ._md-thumb:before {
+      .md-thumb:before {
         background-color: rgba(0, 0, 0, 0.12);
       }
     }
   }
 
-  ._md-label {
+  .md-label {
     border-color: transparent;
     border-width: 0;
     float: left;
   }
 
-  ._md-bar {
+  .md-bar {
     left: 1px;
     width: $switch-width - 2px;
     top: $switch-height / 2 - $switch-bar-height / 2;
@@ -86,7 +86,7 @@ md-switch {
     position: absolute;
   }
 
-  ._md-thumb-container {
+  .md-thumb-container {
     top: $switch-height / 2 - $switch-thumb-size / 2;
     left: 0;
     width: $switch-width - $switch-thumb-size;
@@ -94,11 +94,11 @@ md-switch {
     transform: translate3d(0,0,0);
     z-index: 1;
   }
-  &.md-checked ._md-thumb-container {
+  &.md-checked .md-thumb-container {
     transform: translate3d(100%,0,0);
   }
 
-  ._md-thumb {
+  .md-thumb {
     position: absolute;
     margin: 0;
     left: 0;
@@ -136,15 +136,15 @@ md-switch {
     }
   }
 
-  &:not(._md-dragging) {
-    ._md-bar,
-    ._md-thumb-container,
-    ._md-thumb {
+  &:not(.md-dragging) {
+    .md-bar,
+    .md-thumb-container,
+    .md-thumb {
       transition: $swift-linear;
       transition-property: transform, background-color;
     }
-    ._md-bar,
-    ._md-thumb {
+    .md-bar,
+    .md-thumb {
       transition-delay: 0.05s;
     }
   }
@@ -152,13 +152,13 @@ md-switch {
 }
 
 @media screen and (-ms-high-contrast: active) {
-  md-switch.md-default-theme ._md-bar {
+  md-switch.md-default-theme .md-bar {
     background-color: #666;
   }
-  md-switch.md-default-theme.md-checked ._md-bar {
+  md-switch.md-default-theme.md-checked .md-bar {
     background-color: #9E9E9E;
   }
-  md-switch.md-default-theme ._md-thumb {
+  md-switch.md-default-theme .md-thumb {
     background-color: #fff;
   }
 }

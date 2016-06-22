@@ -7,7 +7,7 @@ md-checkbox.md-THEME_NAME-theme {
     color: '{{background-600}}';
   }
 
-  &.md-checked.md-focused ._md-container:before {
+  &.md-checked.md-focused .md-container:before {
     background-color: '{{accent-color-0.26}}';
   }
 
@@ -19,15 +19,15 @@ md-checkbox.md-THEME_NAME-theme {
     color: '{{accent-color-0.87}}';
   }
 
-  ._md-icon {
+  .md-icon {
     border-color: '{{foreground-2}}';
   }
 
-  &.md-checked ._md-icon {
+  &.md-checked .md-icon {
     background-color: '{{accent-color-0.87}}';
   }
 
-  &.md-checked ._md-icon:after {
+  &.md-checked .md-icon:after {
     border-color: '{{accent-contrast-0.87}}';
   }
 
@@ -49,42 +49,42 @@ md-checkbox.md-THEME_NAME-theme {
         color: '{{warn-color-0.87}}';
       }
 
-      ._md-icon {
+      .md-icon {
         border-color: '{{foreground-2}}';
       }
 
-      &.md-checked ._md-icon {
+      &.md-checked .md-icon {
         background-color: '{{warn-color-0.87}}';
       }
 
-      &.md-checked.md-focused:not([disabled]) ._md-container:before {
+      &.md-checked.md-focused:not([disabled]) .md-container:before {
         background-color: '{{warn-color-0.26}}';
       }
 
-      &.md-checked ._md-icon:after {
+      &.md-checked .md-icon:after {
         border-color: '{{background-200}}';
       }
     }
   }
 
   &[disabled] {
-    ._md-icon {
+    .md-icon {
       border-color: '{{foreground-3}}';
     }
 
-    &.md-checked ._md-icon {
+    &.md-checked .md-icon {
       background-color: '{{foreground-3}}';
     }
 
-    &.md-checked ._md-icon:after {
+    &.md-checked .md-icon:after {
       border-color: '{{background-200}}';
     }
 
-    ._md-icon:after {
+    .md-icon:after {
       border-color: '{{foreground-3}}';
     }
 
-    ._md-label {
+    .md-label {
       color: '{{foreground-3}}';
     }
   }

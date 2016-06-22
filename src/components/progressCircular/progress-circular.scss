@@ -13,7 +13,7 @@ md-progress-circular {
         visibility: hidden;
     }
 
-    &._md-mode-indeterminate svg {
+    &.md-mode-indeterminate svg {
         animation: indeterminate-rotate $progress-circular-indeterminate-duration linear infinite;
     }
 

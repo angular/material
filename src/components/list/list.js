@@ -243,7 +243,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         if (hasProxiedElement) {
           wrapIn('div');
         } else if (!tEl[0].querySelector('md-button:not(.md-secondary):not(.md-exclude)')) {
-          tEl.addClass('_md-no-proxy');
+          tEl.addClass('md-no-proxy');
         }
       }
 
@@ -272,7 +272,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
       function setupProxiedMenu() {
         var menuEl = angular.element(proxyElement);
 
-        var isEndAligned = menuEl.parent().hasClass('_md-secondary-container') ||
+        var isEndAligned = menuEl.parent().hasClass('md-secondary-container') ||
                            proxyElement.parentNode.firstElementChild !== proxyElement;
 
         var xAxisPosition = 'left';
@@ -300,20 +300,20 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
       function wrapIn(type) {
         if (type == 'div') {
-          itemContainer = angular.element('<div class="_md-no-style _md-list-item-inner">');
+          itemContainer = angular.element('<div class="md-no-style md-list-item-inner">');
           itemContainer.append(tEl.contents());
-          tEl.addClass('_md-proxy-focus');
+          tEl.addClass('md-proxy-focus');
         } else {
           // Element which holds the default list-item content.
           itemContainer = angular.element(
-            '<div class="md-button _md-no-style">'+
-            '   <div class="_md-list-item-inner"></div>'+
+            '<div class="md-button md-no-style">'+
+            '   <div class="md-list-item-inner"></div>'+
             '</div>'
           );
 
           // Button which shows ripple and executes primary action.
           var buttonWrap = angular.element(
-            '<md-button class="_md-no-style"></md-button>'
+            '<md-button class="md-no-style"></md-button>'
           );
 
           buttonWrap[0].setAttribute('aria-label', tEl[0].textContent);
@@ -339,7 +339,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
       }
 
       function wrapSecondaryItems() {
-        var secondaryItemsWrapper = angular.element('<div class="_md-secondary-container">');
+        var secondaryItemsWrapper = angular.element('<div class="md-secondary-container">');
 
         angular.forEach(secondaryItems, function(secondaryItem) {
           wrapSecondaryItem(secondaryItem, secondaryItemsWrapper);
@@ -435,7 +435,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         computeProxies();
         computeClickable();
 
-        if ($element.hasClass('_md-proxy-focus') && proxies.length) {
+        if ($element.hasClass('md-proxy-focus') && proxies.length) {
           angular.forEach(proxies, function(proxy) {
             proxy = angular.element(proxy);
 
@@ -477,7 +477,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
             $element.addClass('md-clickable');
 
             if (!hasClick) {
-              ctrl.attachRipple($scope, angular.element($element[0].querySelector('._md-no-style')));
+              ctrl.attachRipple($scope, angular.element($element[0].querySelector('.md-no-style')));
             }
           }
         }

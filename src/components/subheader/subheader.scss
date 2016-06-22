@@ -22,7 +22,7 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
   }
 }
 
-._md-subheader-wrapper {
+.md-subheader-wrapper {
 
   &:not(.md-sticky-no-effect) {
     .md-subheader {
@@ -39,7 +39,7 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
       margin-top: -2px;
     }
 
-    &:not(.md-sticky-clone)[sticky-prev-state="active"] ._md-subheader-inner:after {
+    &:not(.md-sticky-clone)[sticky-prev-state="active"] .md-subheader-inner:after {
       animation: subheaderStickyHoverOut 0.3s ease-out both;
     }
   }
@@ -54,12 +54,12 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
   margin: $subheader-margin;
   position: relative;
 
-  ._md-subheader-inner {
+  .md-subheader-inner {
     display: block;
     padding: $subheader-padding;
   }
 
-  ._md-subheader-content {
+  .md-subheader-content {
     display: block;
     z-index: 1;
     position: relative;

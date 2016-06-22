@@ -107,7 +107,7 @@ md-input-container {
     }
   }
 
-  label:not(._md-container-ignore) {
+  label:not(.md-container-ignore) {
     position: absolute;
     bottom: 100%;
     @include rtl(left, 0, auto);
@@ -120,8 +120,8 @@ md-input-container {
     }
   }
 
-  label:not(.md-no-float):not(._md-container-ignore),
-  ._md-placeholder {
+  label:not(.md-no-float):not(.md-container-ignore),
+  .md-placeholder {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -141,19 +141,19 @@ md-input-container {
 
     @include rtl(transform-origin, left top, right top);
   }
-  ._md-placeholder {
+  .md-placeholder {
     position: absolute;
     top: 0;
     opacity: 0;
     transition-property: opacity, transform;
     transform: translate3d(0, $input-placeholder-offset + $baseline-grid * 0.75, 0);
   }
-  &.md-input-focused ._md-placeholder {
+  &.md-input-focused .md-placeholder {
     opacity: 1;
     transform: translate3d(0, $input-placeholder-offset, 0);
   }
   // Placeholder should immediately disappear when the user starts typing
-  &.md-input-has-value ._md-placeholder {
+  &.md-input-has-value .md-placeholder {
     transition: none;
     opacity: 0;
   }
@@ -345,7 +345,7 @@ md-input-container {
   &.md-icon-left,
   &.md-icon-right {
     > label {
-      &:not(.md-no-float):not(._md-container-ignore),
+      &:not(.md-no-float):not(.md-container-ignore),
       .md-placeholder {
         width: calc(100% - #{$icon-offset} - #{$input-label-float-width});
       }
@@ -379,7 +379,7 @@ md-input-container {
     padding-right: $icon-offset;
 
     > label {
-      &:not(.md-no-float):not(._md-container-ignore),
+      &:not(.md-no-float):not(.md-container-ignore),
       .md-placeholder {
         width: calc(100% - (#{$icon-offset} * 2));
       }

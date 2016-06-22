@@ -75,7 +75,7 @@ MdChipCtrl.prototype.init = function(controller) {
  * @return {Object}
  */
 MdChipCtrl.prototype.getChipContent = function() {
-  var chipContents = this.$element[0].getElementsByClassName('_md-chip-content');
+  var chipContents = this.$element[0].getElementsByClassName('md-chip-content');
   return angular.element(chipContents[0]);
 };
 

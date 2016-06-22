@@ -213,7 +213,7 @@ function MenuDirective($mdUtil) {
     var mdMenuCtrl = ctrls[0];
     var isInMenuBar = ctrls[1] != undefined;
     // Move everything into a md-menu-container and pass it to the controller
-    var menuContainer = angular.element( '<div class="_md _md-open-menu-container md-whiteframe-z2"></div>');
+    var menuContainer = angular.element( '<div class="_md md-open-menu-container md-whiteframe-z2"></div>');
     var menuContents = element.children()[1];
 
     element.addClass('_md');     // private md component indicator for styling

@@ -1228,7 +1228,7 @@ MdPanelRef.prototype._updatePosition = function(opt_init) {
 MdPanelRef.prototype._focusOnOpen = function() {
   if (this._config['focusOnOpen']) {
     // Wait for the template to finish rendering to guarantee md-autofocus has
-    // finished adding the class _md-autofocus, otherwise the focusable element
+    // finished adding the class md-autofocus, otherwise the focusable element
     // isn't available to focus.
     var self = this;
     this._$rootScope['$$postDigest'](function() {

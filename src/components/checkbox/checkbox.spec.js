@@ -143,7 +143,7 @@ describe('mdCheckbox', function() {
     document.body.appendChild(checkbox[0]);
 
     var container = checkbox.children().eq(0);
-    expect(container[0]).toHaveClass('_md-container');
+    expect(container[0]).toHaveClass('md-container');
 
     // We simulate IE11's focus bug, which always focuses an unfocusable div
     // https://connect.microsoft.com/IE/feedback/details/1028411/

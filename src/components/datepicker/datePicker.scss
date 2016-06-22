@@ -43,7 +43,7 @@ md-datepicker {
 
 // If the datepicker is inside of a md-input-container
 ._md-datepicker-floating-label {
-  > label:not(.md-no-float):not(._md-container-ignore) {
+  > label:not(.md-no-float):not(.md-container-ignore) {
     $width-offset: $md-datepicker-triangle-button-width * 2 + $md-datepicker-button-gap;
     $offset: $md-datepicker-triangle-button-width / 2;
     @include rtl(right, $offset, auto);
@@ -220,7 +220,7 @@ md-datepicker[disabled] {
   }
 
   .md-datepicker-input,
-  label:not(.md-no-float):not(._md-container-ignore) {
+  label:not(.md-no-float):not(.md-container-ignore) {
     margin-bottom: -$md-datepicker-border-bottom-gap;
   }
 

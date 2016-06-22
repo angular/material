@@ -19,12 +19,12 @@ $dialog-padding: $baseline-grid * 3 !default;
 
 md-dialog {
 
-  &._md-transition-in {
+  &.md-transition-in {
     opacity: 1;
     transition: $swift-ease-out;
     transform: translate(0,0) scale(1.0);
   }
-  &._md-transition-out {
+  &.md-transition-out {
     opacity: 0;
     transition: $swift-ease-out;
     transform: translate(0,100%) scale(0.2);
@@ -70,7 +70,7 @@ md-dialog {
       margin: 0;
     }
 
-    ._md-dialog-content-body {
+    .md-dialog-content-body {
       width:100%;
     }
 

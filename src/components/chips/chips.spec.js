@@ -217,7 +217,7 @@ describe('<md-chips>', function() {
 
           expect(containers.length).toBe(0);
 
-          var removeContainer = wrap[0].querySelector('._md-chip-remove-container');
+          var removeContainer = wrap[0].querySelector('.md-chip-remove-container');
           expect(removeContainer).not.toBeTruthy();
         });
 
@@ -270,10 +270,10 @@ describe('<md-chips>', function() {
           // and a user-provided value.
           expect(controller.removable).toBe(undefined);
 
-          var containers = wrap[0].querySelectorAll("._md-chip-input-container");
+          var containers = wrap[0].querySelectorAll(".md-chip-input-container");
           expect(containers.length).not.toBe(0);
 
-          var removeContainer = wrap[0].querySelector('._md-chip-remove-container');
+          var removeContainer = wrap[0].querySelector('.md-chip-remove-container');
           expect(removeContainer).toBeTruthy();
         });
 
@@ -289,7 +289,7 @@ describe('<md-chips>', function() {
           expect(wrap.hasClass("md-removable")).toBe(false);
           expect(controller.removable).toBe(false);
 
-          var containers = wrap[0].querySelectorAll("._md-chip-remove-container");
+          var containers = wrap[0].querySelectorAll(".md-chip-remove-container");
           expect(containers.length).toBe(0);
 
           scope.$apply('removable = true');
@@ -297,7 +297,7 @@ describe('<md-chips>', function() {
           expect(wrap.hasClass("md-removable")).toBe(true);
           expect(controller.removable).toBe(true);
 
-          containers = wrap[0].querySelector("._md-chip-remove-container");
+          containers = wrap[0].querySelector(".md-chip-remove-container");
           expect(containers).toBeTruthy();
         });
 
@@ -367,12 +367,12 @@ describe('<md-chips>', function() {
 
           expect(ctrl.removable).toBeUndefined();
 
-          var removeContainer = wrap[0].querySelector('._md-chip-remove-container');
+          var removeContainer = wrap[0].querySelector('.md-chip-remove-container');
           expect(removeContainer).toBeFalsy();
 
           scope.$apply('isRemovable = true');
 
-          removeContainer = wrap[0].querySelector('._md-chip-remove-container');
+          removeContainer = wrap[0].querySelector('.md-chip-remove-container');
           expect(removeContainer).toBeTruthy();
         });
 

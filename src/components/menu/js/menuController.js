@@ -147,13 +147,13 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
   this.onIsOpenChanged = function(isOpen) {
     if (isOpen) {
       menuContainer.attr('aria-hidden', 'false');
-      $element[0].classList.add('_md-open');
+      $element[0].classList.add('md-open');
       angular.forEach(self.nestedMenus, function(el) {
-        el.classList.remove('_md-open');
+        el.classList.remove('md-open');
       });
     } else {
       menuContainer.attr('aria-hidden', 'true');
-      $element[0].classList.remove('_md-open');
+      $element[0].classList.remove('md-open');
     }
     $scope.$mdMenuIsOpen = self.isOpen;
   };

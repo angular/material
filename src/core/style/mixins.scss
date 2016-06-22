@@ -176,7 +176,7 @@
   $height: $checkbox-height,
   $border-width: $checkbox-border-width,
   $border-radius: $checkbox-border-radius) {
-  ._md-container {
+  .md-container {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -228,7 +228,7 @@
   }
 
   // unchecked
-  ._md-icon {
+  .md-icon {
     box-sizing: border-box;
     transition: 240ms;
     position: absolute;
@@ -241,7 +241,7 @@
     border-radius: $border-radius;
   }
 
-  &#{$checkedSelector} ._md-icon {
+  &#{$checkedSelector} .md-icon {
     border: none;
 
     &:after {
@@ -266,7 +266,7 @@
     cursor: default;
   }
 
-  &.md-indeterminate ._md-icon {
+  &.md-indeterminate .md-icon {
     &:after {
       box-sizing: border-box;
       position: absolute;

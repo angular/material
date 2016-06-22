@@ -7,9 +7,9 @@ md-list {
     padding-top:0;
 }
 md-list-item > p,
-md-list-item > ._md-list-item-inner > p,
-md-list-item ._md-list-item-inner > p,
-md-list-item ._md-list-item-inner > ._md-list-item-inner > p {
+md-list-item > .md-list-item-inner > p,
+md-list-item .md-list-item-inner > p,
+md-list-item .md-list-item-inner > .md-list-item-inner > p {
     -webkit-user-select: none; /* Chrome all / Safari all */
     -moz-user-select: none; /* Firefox all */
     -ms-user-select: none; /* IE 10+ */

@@ -154,7 +154,7 @@ function MdTabs ($$mdSvgRegistry) {
                   'md-scope="::tab.parent"></md-tab-item> ' +
               '<md-ink-bar></md-ink-bar> ' +
             '</md-pagination-wrapper> ' +
-            '<md-tabs-dummy-wrapper class="_md-visually-hidden md-dummy-wrapper"> ' +
+            '<md-tabs-dummy-wrapper class="md-visually-hidden md-dummy-wrapper"> ' +
               '<md-dummy-tab ' +
                   'class="md-tab" ' +
                   'tabindex="-1" ' +

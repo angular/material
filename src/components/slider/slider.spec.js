@@ -19,7 +19,7 @@ describe('md-slider', function() {
 
     slider = $compile('<md-slider ' + (attrs || '') + '>')(pageScope);
     spyOn(
-      slider[0].querySelector('._md-track-container'),
+      slider[0].querySelector('.md-track-container'),
       'getBoundingClientRect'
     ).and.returnValue(angular.extend({
       width: 100,
@@ -40,7 +40,7 @@ describe('md-slider', function() {
   }
 
   function getWrapper(slider) {
-    return angular.element(slider[0].querySelector('._md-slider-wrapper'));
+    return angular.element(slider[0].querySelector('.md-slider-wrapper'));
   }
 
 
@@ -141,21 +141,21 @@ describe('md-slider', function() {
     var wrapper = getWrapper(slider);
 
     pageScope.$apply('value = 30');
-    expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('30');
+    expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
 
     wrapper.triggerHandler({
       type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
-    expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('29');
+    expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('29');
 
     wrapper.triggerHandler({type: '$md.pressdown', pointer: { x: 30 }});
-    expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('30');
+    expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
 
     wrapper.triggerHandler({type: '$md.dragstart', pointer: { x: 31 }});
     wrapper.triggerHandler({type: '$md.drag', pointer: { x: 31 }});
-    expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('31');
+    expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('31');
   });
 
   it('should update the thumb text with the model value when using ng-change', function() {
@@ -169,7 +169,7 @@ describe('md-slider', function() {
     wrapper.triggerHandler({type: '$md.pressdown', pointer: { x: 30 }});
     $timeout.flush();
     expect(pageScope.value).toBe(50);
-    expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('50');
+    expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('50');
   });
 
   it('should call $log.warn if aria-label isn\'t provided', function() {
@@ -215,15 +215,15 @@ describe('md-slider', function() {
       type: '$md.pressdown',
       pointer: {}
     });
-    expect(slider).not.toHaveClass('_md-active');
+    expect(slider).not.toHaveClass('md-active');
 
     // Doesn't remove active class up on pressup when disabled
-    slider.addClass('_md-active');
+    slider.addClass('md-active');
     wrapper.triggerHandler({
       type: '$md.pressup',
       pointer: {}
     });
-    expect(slider).toHaveClass('_md-active');
+    expect(slider).toHaveClass('md-active');
   });
 
   it('should disable via the `disabled` attribute', function() {
@@ -238,52 +238,52 @@ describe('md-slider', function() {
       type: '$md.pressdown',
       pointer: {}
     });
-    expect(slider).not.toHaveClass('_md-active');
+    expect(slider).not.toHaveClass('md-active');
   });
 
   it('should add active class on pressdown and remove on blur', function() {
     var slider = setup();
     var wrapper = getWrapper(slider);
 
-    expect(slider).not.toHaveClass('_md-active');
+    expect(slider).not.toHaveClass('md-active');
 
     wrapper.triggerHandler({
       type: '$md.pressdown',
       pointer: {}
     });
-    expect(slider).toHaveClass('_md-active');
+    expect(slider).toHaveClass('md-active');
 
     wrapper.triggerHandler({
       type: 'blur',
       pointer: {}
     });
-    expect(slider).not.toHaveClass('_md-active');
+    expect(slider).not.toHaveClass('md-active');
   });
 
-  it('should add _md-min class only when at min value', function() {
+  it('should add md-min class only when at min value', function() {
     var slider = setup('ng-model="model" min="0" max="30"');
     var wrapper = getWrapper(slider);
 
     pageScope.$apply('model = 0');
-    expect(slider).toHaveClass('_md-min');
+    expect(slider).toHaveClass('md-min');
 
     wrapper.triggerHandler({type: '$md.dragstart', pointer: {x: 0}});
     wrapper.triggerHandler({type: '$md.drag', pointer: {x: 10}});
     $timeout.flush();
-    expect(slider).not.toHaveClass('_md-min');
+    expect(slider).not.toHaveClass('md-min');
   });
 
-  it('should add _md-max class only when at max value', function() {
+  it('should add md-max class only when at max value', function() {
     var slider = setup('ng-model="model" min="0" max="30"');
     var wrapper = getWrapper(slider);
 
     pageScope.$apply('model = 30');
-    expect(slider).toHaveClass('_md-max');
+    expect(slider).toHaveClass('md-max');
 
     wrapper.triggerHandler({type: '$md.dragstart', pointer: {x: 30}});
     wrapper.triggerHandler({type: '$md.drag', pointer: {x: 10}});
     $timeout.flush();
-    expect(slider).not.toHaveClass('_md-max');
+    expect(slider).not.toHaveClass('md-max');
   });
 
   it('should increment at a predictable step', function() {
@@ -407,47 +407,47 @@ describe('md-slider', function() {
       var wrapper = getWrapper(slider);
 
       pageScope.$apply('value = 30');
-      expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('30');
+      expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
 
       wrapper.triggerHandler({
         type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
       });
       $timeout.flush();
-      expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('29');
+      expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('29');
 
       wrapper.triggerHandler({type: '$md.pressdown', pointer: { y: 70 }});
-      expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('30');
+      expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
 
       wrapper.triggerHandler({type: '$md.dragstart', pointer: { y: 93 }});
       wrapper.triggerHandler({type: '$md.drag', pointer: { y: 93 }});
-      expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('7');
+      expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('7');
     });
 
-    it('should add _md-min class only when at min value', function() {
+    it('should add md-min class only when at min value', function() {
       var slider = setup('md-vertical ng-model="model" min="0" max="30"');
       var wrapper = getWrapper(slider);
 
       pageScope.$apply('model = 0');
-      expect(slider).toHaveClass('_md-min');
+      expect(slider).toHaveClass('md-min');
 
       wrapper.triggerHandler({type: '$md.dragstart', pointer: {y: 0}});
       wrapper.triggerHandler({type: '$md.drag', pointer: {y: 10}});
       $timeout.flush();
-      expect(slider).not.toHaveClass('_md-min');
+      expect(slider).not.toHaveClass('md-min');
     });
 
-    it('should add _md-max class only when at max value', function() {
+    it('should add md-max class only when at max value', function() {
       var slider = setup('md-vertical ng-model="model" min="0" max="30"');
       var wrapper = getWrapper(slider);
 
       pageScope.$apply('model = 30');
-      expect(slider).toHaveClass('_md-max');
+      expect(slider).toHaveClass('md-max');
 
       wrapper.triggerHandler({type: '$md.dragstart', pointer: {y: 30}});
       wrapper.triggerHandler({type: '$md.drag', pointer: {y: 10}});
       $timeout.flush();
-      expect(slider).not.toHaveClass('_md-max');
+      expect(slider).not.toHaveClass('md-max');
     });
 
     it('should increment at a predictable step', function() {
@@ -505,7 +505,7 @@ describe('md-slider', function() {
         type: '$md.pressdown',
         pointer: {}
       });
-      expect(slider).not.toHaveClass('_md-active');
+      expect(slider).not.toHaveClass('md-active');
     });
 
     it('should disable via the `ngDisabled` attribute', function() {
@@ -519,7 +519,7 @@ describe('md-slider', function() {
         type: '$md.pressdown',
         pointer: {}
       });
-      expect(slider).toHaveClass('_md-active');
+      expect(slider).toHaveClass('md-active');
 
       // Removing focus from the slider
       wrapper.triggerHandler({
@@ -533,7 +533,7 @@ describe('md-slider', function() {
         type: '$md.pressdown',
         pointer: {}
       });
-      expect(slider).not.toHaveClass('_md-active');
+      expect(slider).not.toHaveClass('md-active');
     });
 
     it('should disable related inputs', inject(function($compile) {
@@ -640,47 +640,47 @@ describe('md-slider', function() {
       var wrapper = getWrapper(slider);
 
       pageScope.$apply('value = 30');
-      expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('30');
+      expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
 
       wrapper.triggerHandler({
         type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
       });
       $timeout.flush();
-      expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('31');
+      expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('31');
 
       wrapper.triggerHandler({type: '$md.pressdown', pointer: { y: 70 }});
-      expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('70');
+      expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('70');
 
       wrapper.triggerHandler({type: '$md.dragstart', pointer: { y: 93 }});
       wrapper.triggerHandler({type: '$md.drag', pointer: { y: 93 }});
-      expect(slider[0].querySelector('._md-thumb-text').textContent).toBe('93');
+      expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('93');
     });
 
-    it('should add _md-min class only when at min value', function() {
+    it('should add md-min class only when at min value', function() {
       var slider = setup('md-vertical md-invert ng-model="model" min="0" max="30"');
       var wrapper = getWrapper(slider);
 
       pageScope.$apply('model = 0');
-      expect(slider).toHaveClass('_md-min');
+      expect(slider).toHaveClass('md-min');
 
       wrapper.triggerHandler({type: '$md.dragstart', pointer: {y: 0}});
       wrapper.triggerHandler({type: '$md.drag', pointer: {y: 10}});
       $timeout.flush();
-      expect(slider).not.toHaveClass('_md-min');
+      expect(slider).not.toHaveClass('md-min');
     });
 
-    it('should add _md-max class only when at max value', function() {
+    it('should add md-max class only when at max value', function() {
       var slider = setup('md-vertical md-invert ng-model="model" min="0" max="30"');
       var wrapper = getWrapper(slider);
 
       pageScope.$apply('model = 30');
-      expect(slider).toHaveClass('_md-max');
+      expect(slider).toHaveClass('md-max');
 
       wrapper.triggerHandler({type: '$md.dragstart', pointer: {y: 30}});
       wrapper.triggerHandler({type: '$md.drag', pointer: {y: 10}});
       $timeout.flush();
-      expect(slider).not.toHaveClass('_md-max');
+      expect(slider).not.toHaveClass('md-max');
     });
 
     it('should increment at a predictable step', function() {

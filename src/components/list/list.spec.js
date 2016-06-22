@@ -296,7 +296,7 @@ describe('mdListItem directive', function() {
     expect(firstChild.children().length).toBe(3);
 
     var secondaryContainer = firstChild.children().eq(2);
-    expect(secondaryContainer).toHaveClass('_md-secondary-container');
+    expect(secondaryContainer).toHaveClass('md-secondary-container');
 
     // The secondary container should contain the md-icon,
     // which has been transformed to an icon button.
@@ -321,7 +321,7 @@ describe('mdListItem directive', function() {
     expect(firstChild.children().length).toBe(3);
 
     var secondaryContainer = firstChild.children().eq(2);
-    expect(secondaryContainer).toHaveClass('_md-secondary-container');
+    expect(secondaryContainer).toHaveClass('md-secondary-container');
 
     // The secondary container should contain the md-icon,
     // which has been transformed to an icon button.
@@ -353,7 +353,7 @@ describe('mdListItem directive', function() {
     expect(firstChild.children().length).toBe(3);
 
     var secondaryContainer = firstChild.children().eq(2);
-    expect(secondaryContainer).toHaveClass('_md-secondary-container');
+    expect(secondaryContainer).toHaveClass('md-secondary-container');
 
     // The secondary container should hold the two secondary items.
     expect(secondaryContainer.children().length).toBe(2);
@@ -375,7 +375,7 @@ describe('mdListItem directive', function() {
       '  <md-button class="md-exclude" ng-click="sayHello()">Hello</md-button>' +
       '</md-list-item>'
     );
-    expect(listItem.hasClass('_md-no-proxy')).toBeTruthy();
+    expect(listItem.hasClass('md-no-proxy')).toBeTruthy();
   });
 
   it('should copy md-icon.md-secondary attributes to the button', function() {

@@ -85,42 +85,42 @@ md-slider {
     box-sizing: border-box;
   }
 
-  ._md-slider-wrapper {
+  .md-slider-wrapper {
     outline: none;
     width: 100%;
     height: 100%;
   }
 
-  ._md-slider-content {
+  .md-slider-content {
     position: relative;
   }
 
   /**
    * Track
    */
-  ._md-track-container {
+  .md-track-container {
     width: 100%;
     position: absolute;
     top: ($slider-size / 2) - ($slider-track-height) / 2;
     height: $slider-track-height;
   }
-  ._md-track {
+  .md-track {
     position: absolute;
     left: 0;
     right: 0;
     height: 100%;
   }
-  ._md-track-fill {
+  .md-track-fill {
     transition: all .4s cubic-bezier(.25,.8,.25,1);
     transition-property: width, height;
   }
-  ._md-track-ticks {
+  .md-track-ticks {
     position: absolute;
     left: 0;
     right: 0;
     height: 100%;
   }
-  ._md-track-ticks canvas {
+  .md-track-ticks canvas {
     // Restrict the width and the height of the canvas so that ticks are rendered correctly
     // when parent elements are resized. Else, the position of the ticks might
     // be incorrect as we only update the canvas width attribute on window resize.
@@ -131,7 +131,7 @@ md-slider {
   /**
    * Slider thumb
    */
-  ._md-thumb-container {
+  .md-thumb-container {
     position: absolute;
     @include rtl-prop(left, right, 0);
     top: 50%;
@@ -139,7 +139,7 @@ md-slider {
     transition: all .4s cubic-bezier(.25,.8,.25,1);
     transition-property: left, right, bottom;
   }
-  ._md-thumb {
+  .md-thumb {
     z-index: 1;
     
     @include slider-thumb-position($slider-thumb-width, $slider-thumb-height);
@@ -163,7 +163,7 @@ md-slider {
   }
 
   /* The sign that's focused in discrete mode */
-  ._md-sign {
+  .md-sign {
 
     /* Center the children (slider-thumb-text) */
     display: flex;
@@ -197,7 +197,7 @@ md-slider {
       transition: all 0.2s $swift-ease-in-out-timing-function;
     }
 
-    ._md-thumb-text {
+    .md-thumb-text {
       z-index: 1;
       font-size: 12px;
       font-weight: bold;
@@ -207,14 +207,14 @@ md-slider {
   /**
    * The border/background that comes in when focused in non-discrete mode
    */
-  ._md-focus-ring {
+  .md-focus-ring {
     @include slider-thumb-position($slider-focus-thumb-width, $slider-focus-thumb-height);
     transform: scale(.7);
     opacity: 0;
     // using a custom duration to match the spec example video
     transition: all ($slider-thumb-focus-duration / 2) $swift-ease-in-out-timing-function;
   }
-  ._md-disabled-thumb {
+  .md-disabled-thumb {
     @include slider-thumb-position(
       $slider-thumb-width + $slider-thumb-disabled-border * 2,
       $slider-thumb-height + $slider-thumb-disabled-border * 2
@@ -225,8 +225,8 @@ md-slider {
     display: none;
   }
 
-  &._md-min {
-    ._md-sign {
+  &.md-min {
+    .md-sign {
       opacity: 0;
     }
   }
@@ -236,40 +236,40 @@ md-slider {
   }
 
   /* Don't animate left/right while panning */
-  &._md-dragging {
-    ._md-thumb-container,
-    ._md-track-fill {
+  &.md-dragging {
+    .md-thumb-container,
+    .md-track-fill {
       transition: none;
     }
   }
 
   &:not([md-discrete]) {
     /* Hide the sign and ticks in non-discrete mode */
-    ._md-track-ticks,
-    ._md-sign {
+    .md-track-ticks,
+    .md-sign {
       display: none;
     }
 
     &:not([disabled]) {
-      ._md-slider-wrapper {
-        ._md-thumb:hover {
+      .md-slider-wrapper {
+        .md-thumb:hover {
           transform: scale($slider-thumb-hover-scale);
         }
 
         &.md-focused {
-          ._md-focus-ring {
+          .md-focus-ring {
             transform: scale(1);
             opacity: 1;
           }
-          ._md-thumb {
+          .md-thumb {
             animation: sliderFocusThumb $slider-thumb-focus-duration $swift-ease-in-out-timing-function;
           }
         }
       }
 
-      &._md-active {
-        ._md-slider-wrapper {
-          ._md-thumb {
+      &.md-active {
+        .md-slider-wrapper {
+          .md-thumb {
             transform: scale($slider-thumb-focus-scale);
           }
         }
@@ -279,24 +279,24 @@ md-slider {
 
   &[md-discrete] {
     &:not([disabled]) {
-      ._md-slider-wrapper {
+      .md-slider-wrapper {
         &.md-focused {
-          ._md-focus-ring {
+          .md-focus-ring {
             transform: scale(0);
             animation: sliderDiscreteFocusRing .5s $swift-ease-in-out-timing-function;
           }
-          ._md-thumb {
+          .md-thumb {
             animation: sliderDiscreteFocusThumb .5s $swift-ease-in-out-timing-function;
           }
         }
       }
-      ._md-slider-wrapper.md-focused,
-      &._md-active {
-        ._md-thumb {
+      .md-slider-wrapper.md-focused,
+      &.md-active {
+        .md-thumb {
           transform: scale(0);
         }
-        ._md-sign,
-        ._md-sign:after {
+        .md-sign,
+        .md-sign:after {
           opacity: 1;
           transform: translate3d(0,0,0) scale(1.0);
         }
@@ -304,11 +304,11 @@ md-slider {
     }
 
     &[disabled][readonly] {
-      ._md-thumb {
+      .md-thumb {
         transform: scale(0);
       }
-      ._md-sign,
-      ._md-sign:after {
+      .md-sign,
+      .md-sign:after {
         opacity: 1;
         transform: translate3d(0,0,0) scale(1.0);
       }
@@ -316,19 +316,19 @@ md-slider {
   }
 
   &[disabled] {
-    ._md-track-fill {
+    .md-track-fill {
       display: none;
     }
-    ._md-track-ticks {
+    .md-track-ticks {
       opacity: 0;
     }
-    &:not([readonly]) ._md-sign {
+    &:not([readonly]) .md-sign {
       opacity: 0;
     }
-    ._md-thumb {
+    .md-thumb {
       transform: scale($slider-thumb-disabled-scale);
     }
-    ._md-disabled-thumb {
+    .md-disabled-thumb {
       display: block;
     }
   }
@@ -338,7 +338,7 @@ md-slider {
     min-height: $slider-min-size;
     min-width: 0;
     
-    ._md-slider-wrapper {
+    .md-slider-wrapper {
       flex: 1;
       padding-top: 12px;
       padding-bottom: 12px;
@@ -348,34 +348,34 @@ md-slider {
       justify-content: center;
     }
 
-    ._md-track-container {
+    .md-track-container {
       height: 100%;
       width: $slider-track-height;
       top: 0;
       left: calc(50% - (#{$slider-track-height} / 2));
     }
 
-    ._md-thumb-container {
+    .md-thumb-container {
       top: auto;
       margin-bottom: ($slider-size / 2) - ($slider-track-height) / 2;
       left: calc(50% - 1px);
       bottom: 0;
 
-      ._md-thumb:after {
+      .md-thumb:after {
         left: 1px;
       }
 
-      ._md-focus-ring {
+      .md-focus-ring {
         left: -(($slider-focus-thumb-width / 2) - ($slider-track-height / 2));
       }
     }
 
-    ._md-track-fill {
+    .md-track-fill {
       bottom: 0;
     }
 
     &[md-discrete] {
-      ._md-sign {
+      .md-sign {
         $sign-top: -($slider-sign-top / 2) + 1;
 
         left: -$slider-sign-height - 12;
@@ -398,40 +398,40 @@ md-slider {
           transition: all 0.2s ease-in-out;
         }
 
-        ._md-thumb-text {
+        .md-thumb-text {
           z-index: 1;
           font-size: 12px;
           font-weight: bold;
         }
       }
 
-      &._md-active,
+      &.md-active,
       .md-focused,
       &[disabled][readonly]{
-        ._md-sign:after {
+        .md-sign:after {
           top: 0;
         }
       }
     }
 
     &[disabled][readonly] {
-      ._md-thumb {
+      .md-thumb {
         transform: scale(0);
       }
-      ._md-sign,
-      ._md-sign:after {
+      .md-sign,
+      .md-sign:after {
         opacity: 1;
         transform: translate3d(0,0,0) scale(1.0);
       }
     }
   }
   &[md-invert] {
-    &:not([md-vertical]) ._md-track-fill {
+    &:not([md-vertical]) .md-track-fill {
       @include rtl-prop(left, right, auto);
       @include rtl-prop(right, left, 0);
     }
     &[md-vertical] {
-      ._md-track-fill {
+      .md-track-fill {
         bottom: auto;
         top: 0;
       }
@@ -489,7 +489,7 @@ md-slider-container {
 }
 
 @media screen and (-ms-high-contrast: active) {
-  md-slider.md-default-theme ._md-track {
+  md-slider.md-default-theme .md-track {
     border-bottom: 1px solid #fff;
   }
 }

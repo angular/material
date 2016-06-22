@@ -11,21 +11,21 @@ $select-max-visible-options: 5 !default;
 // Fixes the animations with the floating label when select is inside an input container
 md-input-container {
   &:not([md-no-float]) {
-    ._md-select-placeholder span:first-child {
+    .md-select-placeholder span:first-child {
       transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
       @include rtl(transform-origin, left top, right top);
     }
   }
   &.md-input-focused {
     &:not([md-no-float]) {
-      ._md-select-placeholder span:first-child {
+      .md-select-placeholder span:first-child {
         transform: translateY(-22px) translateX(-2px) scale(0.75);
       }
     }
   }
 }
 
-._md-select-menu-container {
+.md-select-menu-container {
   position: fixed;
   left: 0;
   top: 0;
@@ -37,7 +37,7 @@ md-input-container {
   transform: translateY(-1px);
 
   // Don't let the user select a new choice while it's animating
-  &:not(._md-clickable) {
+  &:not(.md-clickable) {
     pointer-events: none;
   }
 
@@ -48,7 +48,7 @@ md-input-container {
 
 
   // enter: md-select scales in, then options fade in.
-  &._md-active {
+  &.md-active {
     display: block;
     opacity: 1;
     md-select-menu {
@@ -64,7 +64,7 @@ md-input-container {
   }
 
   // leave: the container fades out
-  &._md-leave {
+  &.md-leave {
     opacity: 0;
     transition: $swift-ease-in;
     transition-duration: 250ms;
@@ -83,7 +83,7 @@ md-input-container > md-select {
 // asterisk denoting that it is required
 md-input-container:not(.md-input-has-value) {
   md-select[required], md-select.ng-required {
-    ._md-select-value span:first-child:after {
+    .md-select-value span:first-child:after {
       content: ' *';
       font-size: 13px;
       vertical-align: top;
@@ -93,7 +93,7 @@ md-input-container:not(.md-input-has-value) {
 
 md-input-container.md-input-invalid {
   md-select {
-    ._md-select-value {
+    .md-select-value {
       border-bottom-style: solid;
       padding-bottom: 1px;
     }
@@ -106,7 +106,7 @@ md-select {
 
   &[required], &.ng-required {
     &.ng-invalid {
-      ._md-select-value span:first-child:after {
+      .md-select-value span:first-child:after {
         content: ' *';
         font-size: 13px;
         vertical-align: top;
@@ -114,7 +114,7 @@ md-select {
     }
   }
 
-  &[disabled] ._md-select-value {
+  &[disabled] .md-select-value {
     background-position: 0 bottom;
     // This background-size is coordinated with a linear-gradient set in select-theme.scss
     // to create a dotted line under the input.
@@ -134,19 +134,19 @@ md-select {
       cursor: pointer
     }
     &.ng-invalid.ng-touched {
-      ._md-select-value {
+      .md-select-value {
         border-bottom-style: solid;
         padding-bottom: 1px;
       }
     }
     &:focus {
-      ._md-select-value {
+      .md-select-value {
         border-bottom-width: 2px;
         border-bottom-style: solid;
         padding-bottom: 0;
       }
       &.ng-invalid.ng-touched {
-        ._md-select-value {
+        .md-select-value {
           padding-bottom: 0;
         }
       }
@@ -155,13 +155,13 @@ md-select {
 }
 
 // Fix value by 1px to align with standard text inputs (and spec)
-md-input-container.md-input-has-value ._md-select-value {
-  > span:not(._md-select-icon) {
+md-input-container.md-input-has-value .md-select-value {
+  > span:not(.md-select-icon) {
     transform: translate3d(0, 1px, 0);
   }
 }
 
-._md-select-value {
+.md-select-value {
   display: flex;
   align-items: center;
   padding: 2px 2px 1px;
@@ -175,19 +175,19 @@ md-input-container.md-input-has-value ._md-select-value {
   flex-grow: 1;
 
 
-  > span:not(._md-select-icon) {
+  > span:not(.md-select-icon) {
     max-width: 100%;
     flex: 1 1 auto;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 
-    ._md-text {
+    .md-text {
       display: inline;
     }
   }
 
-  ._md-select-icon {
+  .md-select-icon {
     display: block;
     align-items: flex-end;
     text-align: end;
@@ -197,7 +197,7 @@ md-input-container.md-input-has-value ._md-select-value {
     font-size: 1.2rem;
   }
 
-  ._md-select-icon:after {
+  .md-select-icon:after {
     display: block;
     content: '\25BC';
     position: relative;
@@ -207,7 +207,7 @@ md-input-container.md-input-has-value ._md-select-value {
     transform: scaleY(0.6) scaleX(1);
   }
 
-  &._md-select-placeholder {
+  &.md-select-placeholder {
     display: flex;
     order: 1;
     pointer-events: none;
@@ -224,7 +224,7 @@ md-select-menu {
     flex-direction: column-reverse;
   }
 
-  &:not(._md-overflow) {
+  &:not(.md-overflow) {
     md-content {
       padding-top: $baseline-grid;
       padding-bottom: $baseline-grid;
@@ -267,7 +267,7 @@ md-option {
     outline: none;
   }
 
-  ._md-text {
+  .md-text {
     @include not-selectable();
     width: auto;
     white-space: nowrap;
@@ -294,7 +294,7 @@ md-optgroup {
 }
 
 @media screen and (-ms-high-contrast: active) {
-  ._md-select-backdrop {
+  .md-select-backdrop {
     background-color: transparent;
   }
   md-select-menu {
@@ -303,13 +303,13 @@ md-optgroup {
 }
 
 md-select-menu[multiple] {
-  md-option._md-checkbox-enabled {
+  md-option.md-checkbox-enabled {
     @include rtl(padding-left, $select-option-padding * 2.5, $select-option-padding);
     @include rtl(padding-right, $select-option-padding, $select-option-padding * 2.5);
 
     @include checkbox-container('[selected]');
 
-    ._md-container {
+    .md-container {
       @include rtl(margin-left, $select-option-padding * (2 / 3), auto);
       @include rtl(margin-right, auto, $select-option-padding * (2 / 3));
     }

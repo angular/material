@@ -170,7 +170,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
 
       if (!options.disableBackdrop) {
         // Add a backdrop that will close on click
-        backdrop = $mdUtil.createBackdrop(scope, "_md-bottom-sheet-backdrop md-opaque");
+        backdrop = $mdUtil.createBackdrop(scope, "md-bottom-sheet-backdrop md-opaque");
 
         // Prevent mouse focus on backdrop; ONLY programatic focus allowed.
         // This allows clicks on backdrop to propogate to the $rootElement and

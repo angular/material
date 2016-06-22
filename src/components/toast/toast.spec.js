@@ -243,8 +243,8 @@ describe('$mdToast service', function() {
         });
         var toast = $rootElement.find('md-toast');
         $timeout.flush();
-        expect(toast.hasClass('_md-top')).toBe(true);
-        expect(toast.hasClass('_md-left')).toBe(true);
+        expect(toast.hasClass('md-top')).toBe(true);
+        expect(toast.hasClass('md-left')).toBe(true);
       }));
 
       it('should wrap toast content with .md-toast-content', inject(function($rootElement, $timeout) {
@@ -280,7 +280,7 @@ describe('$mdToast service', function() {
           setup({
             template: '<md-toast>'
           });
-          expect($rootElement.hasClass('_md-toast-open-bottom')).toBe(true);
+          expect($rootElement.hasClass('md-toast-open-bottom')).toBe(true);
 
           $material.flushInterimElement();
 
@@ -288,7 +288,7 @@ describe('$mdToast service', function() {
             template: '<md-toast>',
             position: 'top'
           });
-          expect($rootElement.hasClass('_md-toast-open-bottom')).toBe(true);
+          expect($rootElement.hasClass('md-toast-open-bottom')).toBe(true);
         }));
       });
     });
@@ -438,7 +438,7 @@ describe('$mdToast service', function() {
       setup({
         template: '<md-toast>'
       });
-      expect($rootElement.hasClass('_md-toast-open-bottom')).toBe(true);
+      expect($rootElement.hasClass('md-toast-open-bottom')).toBe(true);
 
       $material.flushInterimElement();
 
@@ -446,7 +446,7 @@ describe('$mdToast service', function() {
         template: '<md-toast>',
         position: 'top'
       });
-      expect($rootElement.hasClass('_md-toast-open-top')).toBe(true);
+      expect($rootElement.hasClass('md-toast-open-top')).toBe(true);
     }));
   });
 
