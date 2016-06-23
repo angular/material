@@ -248,8 +248,8 @@
 
       // The default "short" day strings are the first character of each day,
       // e.g., "Monday" => "M".
-      var defaultShortDays = $locale.DATETIME_FORMATS.DAY.map(function(day) {
-        return day[0];
+      var defaultShortDays = $locale.DATETIME_FORMATS.SHORTDAY.map(function(day) {
+        return day.substring(0, 1);
       });
 
       // The default dates are simply the numbers 1 through 31.

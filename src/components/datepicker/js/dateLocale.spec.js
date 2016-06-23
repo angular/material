@@ -6,6 +6,7 @@ describe('$mdDateLocale', function() {
   var $localeFake = {
     DATETIME_FORMATS: {
       DAY: ['Sundog', 'Mondog', 'Tuesdog', 'Wednesdog', 'Thursdog', 'Fridog', 'Saturdog'],
+      SHORTDAY: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       MONTH: ['JanZ', 'FebZ', 'MarZ', 'AprZ', 'MayZ', 'JunZ', 'JulZ', 'AugZ', 'SeptZ',
           'OctZ', 'NovZ', 'DecZ'],
       SHORTMONTH: ['JZ', 'FZ', 'MZ', 'AZ', 'MZ', 'JZ', 'JZ', 'AZ', 'SZ', 'OZ', 'NZ', 'DZ']
