@@ -141,6 +141,16 @@ describe('$mdPanel', function() {
     expect(panelRef._config.locals).toEqual(null);
   });
 
+  it('destroy should destroy the panel scope', function () {
+    openPanel(DEFAULT_CONFIG);
+
+    expect(panelRef._config.scope.$$destroyed).toBe(false);
+
+    panelRef.destroy();
+
+    expect(panelRef._config.scope.$$destroyed).toBe(true);
+  });
+
   describe('promises logic:', function() {
     var config;
 

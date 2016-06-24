@@ -92,8 +92,11 @@ function PanelDialogCtrl(mdPanelRef) {
 
 
 PanelDialogCtrl.prototype.closeDialog = function() {
-  this._mdPanelRef && this._mdPanelRef.close().then(function() {
+  var panelRef = this._mdPanelRef;
+
+  panelRef && panelRef.close().then(function() {
     angular.element(document.querySelector('.demo-dialog-open-button')).focus();
+    panelRef.destroy();
   });
 };
 
