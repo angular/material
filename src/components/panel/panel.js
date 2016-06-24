@@ -245,7 +245,9 @@ angular
  * @ngdoc method
  * @name MdPanelRef#close
  * @description
- * Hides and detaches the panel.
+ * Hides and detaches the panel. Note that this will **not** destroy the panel. If you
+ * don't intend on using the panel again, call the {@link MdPanelRef#destroy destroy} method
+ * afterwards.
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
  * closed.
@@ -963,6 +965,7 @@ MdPanelRef.prototype.detach = function() {
  * Destroys the panel. The Panel cannot be opened again after this.
  */
 MdPanelRef.prototype.destroy = function() {
+  this._config.scope.$destroy();
   this._config.locals = null;
 };
 
