@@ -1171,6 +1171,7 @@ describe('<md-autocomplete>', function() {
   });
 
   describe('md-select-on-match', function() {
+
     it('selects matching item on exact match when `md-select-on-match` is toggled', inject(function($timeout) {
       var scope = createScope();
       var template = '\
@@ -1196,6 +1197,44 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     }));
+
+    it('selects matching item on exact match with caching enabled', inject(function($timeout) {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-select-on-match\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBe(null);
+
+      scope.$apply('searchText = "foo"');
+      $timeout.flush();
+
+      expect(scope.selectedItem).not.toBe(null);
+      expect(scope.selectedItem.display).toBe('foo');
+
+      scope.$apply('searchText = ""');
+      $timeout.flush();
+
+      expect(scope.selectedItem).toBeFalsy();
+
+      scope.$apply('searchText = "foo"');
+      $timeout.flush();
+
+      expect(scope.selectedItem).not.toBe(null);
+      expect(scope.selectedItem.display).toBe('foo');
+
+      element.remove();
+    }));
+
     it('should not select matching item on exact match when `md-select-on-match` is NOT toggled', inject(function($timeout) {
       var scope = createScope();
       var template = '\

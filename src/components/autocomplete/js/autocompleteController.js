@@ -732,7 +732,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         isList = angular.isArray(items),
         isPromise = !!items.then; // Every promise should contain a `then` property
 
-    if (isList) handleResults(items);
+    if (isList) onResultsRetrieved(items);
     else if (isPromise) handleAsyncResults(items);
 
     function handleAsyncResults(items) {
@@ -744,7 +744,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
       $mdUtil.nextTick(function () {
           items
-            .then(handleResults)
+            .then(onResultsRetrieved)
             .finally(function(){
               if (--fetchesInProgress === 0) {
                 setLoading(false);
@@ -753,21 +753,16 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       },true, $scope);
     }
 
-    function handleResults (matches) {
-      cache[ term ] = matches;
-      if ((searchText || '') !== ($scope.searchText || '')) return; //-- just cache the results if old request
+    function onResultsRetrieved(matches) {
+      cache[term] = matches;
 
-      ctrl.matches = matches;
-      ctrl.hidden  = shouldHide();
+      // Just cache the results if the request is now outdated.
+      // The request becomes outdated, when the new searchText has changed during the result fetching.
+      if ((searchText || '') !== ($scope.searchText || '')) {
+        return;
+      }
 
-      // If loading is in progress, then we'll end the progress. This is needed for example,
-      // when the `clear` button was clicked, because there we always show the loading process, to prevent flashing.
-      if (ctrl.loading) setLoading(false);
-
-      if ($scope.selectOnMatch) selectItemOnMatch();
-
-      updateMessages();
-      positionDropdown();
+      handleResults(matches);
     }
   }
 
@@ -833,18 +828,36 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * results first, then forwards the process to `fetchResults` if necessary.
    */
   function handleQuery () {
-    var searchText = $scope.searchText || '',
-        term       = searchText.toLowerCase();
-    //-- if results are cached, pull in cached results
-    if (!$scope.noCache && cache[ term ]) {
-      ctrl.matches = cache[ term ];
-      updateMessages();
-      setLoading(false);
+    var searchText = $scope.searchText || '';
+    var term = searchText.toLowerCase();
+
+    // If caching is enabled and the current searchText is stored in the cache
+    if (!$scope.noCache && cache[term]) {
+      // The results should be handled as same as a normal un-cached request does.
+      handleResults(cache[term]);
     } else {
       fetchResults(searchText);
     }
 
     ctrl.hidden = shouldHide();
+  }
+
+  /**
+   * Handles the retrieved results by showing them in the autocompletes dropdown.
+   * @param results Retrieved results
+   */
+  function handleResults(results) {
+    ctrl.matches = results;
+    ctrl.hidden  = shouldHide();
+
+    // If loading is in progress, then we'll end the progress. This is needed for example,
+    // when the `clear` button was clicked, because there we always show the loading process, to prevent flashing.
+    if (ctrl.loading) setLoading(false);
+
+    if ($scope.selectOnMatch) selectItemOnMatch();
+
+    updateMessages();
+    positionDropdown();
   }
 
   /**
