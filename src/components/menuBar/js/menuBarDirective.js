@@ -123,6 +123,13 @@ function MenuBarDirective($mdUtil, $mdTheming) {
         }
       });
 
+      // Mark the child menu items that they're inside a menu bar. This is necessary,
+      // because mnMenuItem has special behaviour during compilation, depending on
+      // whether it is inside a mdMenuBar. We can usually figure this out via the DOM,
+      // however if a directive that uses documentFragment is applied to the child (e.g. ngRepeat),
+      // the element won't have a parent and won't compile properly.
+      templateEl.find('md-menu-item').addClass('md-in-menu-bar');
+
       return function postLink(scope, el, attr, ctrl) {
         el.addClass('_md');     // private md component indicator for styling
         $mdTheming(scope, el);

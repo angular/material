@@ -26,13 +26,13 @@ describe('material.components.menuBar', function() {
       });
 
       describe('ARIA', function() {
-        
+
         it('sets role="menubar" on the menubar', function() {
           var menuBar = setup();
           var ariaRole = menuBar[0].getAttribute('role');
           expect(ariaRole).toBe('menubar');
         });
-        
+
         it('should set the role on the menu trigger correctly', inject(function($compile, $rootScope) {
           var el = $compile(
             '<md-menu-bar>' +
@@ -235,7 +235,7 @@ describe('material.components.menuBar', function() {
         it('clicks the focused menu', function() {
           var opened = false;
           spyOn(ctrl, 'getFocusedMenu').and.returnValue({
-            querySelector: function() { return true }
+            querySelector: function() { return true; }
           });
           spyOn(angular, 'element').and.returnValue({
             controller: function() { return {
@@ -317,8 +317,19 @@ describe('material.components.menuBar', function() {
 
   describe('md-menu-item directive', function() {
     describe('type="checkbox"', function() {
+      function setup(attrs) {
+        return setupMenuItem(attrs + ' type="checkbox"');
+      }
+
       it('compiles', function() {
         var menuItem = setup('ng-model="test"')[0];
+        expect(menuItem.classList.contains('md-indent')).toBe(true);
+        var children = menuItem.children;
+        expect(children[0].nodeName).toBe('MD-ICON');
+        expect(children[1].nodeName).toBe('MD-BUTTON');
+      });
+      it('compiles with ng-repeat', function() {
+        var menuItem = setup('ng-repeat="i in [1, 2, 3]"')[0];
         expect(menuItem.classList.contains('md-indent')).toBe(true);
         var children = menuItem.children;
         expect(children[0].nodeName).toBe('MD-ICON');
@@ -354,31 +365,22 @@ describe('material.components.menuBar', function() {
         expect(menuItem.children[0].style.display).toBe('');
         expect(button.getAttribute('aria-checked')).toBe('true');
       }));
-
-      function setup(attrs) {
-        attrs = attrs || '';
-
-        var template = '<md-menu-item type="checkbox" ' + attrs + '>Test Item</md-menu-item>';
-
-        var checkboxMenuItem;
-        inject(function($compile, $rootScope) {
-          // We need to have a `md-menu-bar` as a parent of our menu item, because the menu-item
-          // is only wrapping and indenting the content if it's inside of a menu bar.
-          var menuBarMock = angular.element('<md-menu-bar>');
-          var itemEl = angular.element(template);
-
-          menuBarMock.append(itemEl);
-          checkboxMenuItem = $compile(itemEl)($rootScope);
-
-          $rootScope.$digest();
-        });
-        return checkboxMenuItem;
-      }
     });
 
     describe('type="radio"', function() {
+      function setup(attrs) {
+        return setupMenuItem(attrs + ' type="radio"');
+      }
+
       it('compiles', function() {
         var menuItem = setup('ng-model="test"')[0];
+        expect(menuItem.classList.contains('md-indent')).toBe(true);
+        var children = menuItem.children;
+        expect(children[0].nodeName).toBe('MD-ICON');
+        expect(children[1].nodeName).toBe('MD-BUTTON');
+      });
+      it('compiles with ng-repeat', function() {
+        var menuItem = setup('ng-repeat="i in [1, 2, 3]"')[0];
         expect(menuItem.classList.contains('md-indent')).toBe(true);
         var children = menuItem.children;
         expect(children[0].nodeName).toBe('MD-ICON');
@@ -417,27 +419,24 @@ describe('material.components.menuBar', function() {
         expect(menuItem.children[0].style.display).toBeFalsy();
         expect(button.getAttribute('aria-checked')).toBe('true');
       }));
-
-      function setup(attrs) {
-        attrs = attrs || '';
-
-        var template = '<md-menu-item type="radio" ' + attrs + '>Test Item</md-menu-item>';
-
-        var radioMenuItem;
-        inject(function($compile, $rootScope) {
-          // We need to have a `md-menu-bar` as a parent of our menu item, because the menu-item
-          // is only wrapping and indenting the content if it's inside of a menu bar.
-          var menuBarMock = angular.element('<md-menu-bar>');
-          var itemEl = angular.element(template);
-
-          menuBarMock.append(itemEl);
-          radioMenuItem = $compile(itemEl)($rootScope);
-
-          $rootScope.$digest();
-        });
-        return radioMenuItem;
-      }
     });
+
+    function setupMenuItem(attrs) {
+      // We need to have a `md-menu-bar` as a parent of our menu item, because the menu-item
+      // is only wrapping and indenting the content if it's inside of a menu bar.
+      var menuBar;
+      var template =
+        '<md-menu-bar>' +
+          '<md-menu-item ' + (attrs = attrs || '') + '>Test Item</md-menu-item>' +
+        '</md-menu-bar>';
+
+      inject(function($compile, $rootScope) {
+        menuBar = $compile(template)($rootScope);
+        $rootScope.$digest();
+      });
+
+      return menuBar.find('md-menu-item');
+    }
   });
 
   function waitForMenuOpen() {
