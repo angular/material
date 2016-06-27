@@ -242,14 +242,14 @@
   }
 
   &#{$checkedSelector} .md-icon {
-    border: none;
+    border-color: transparent;
 
     &:after {
       box-sizing: border-box;
       transform: rotate(45deg);
       position: absolute;
-      left: $width / 3;
-      top: $width / 9;
+      left: $width / 3 - $border-width;
+      top: $width / 9 - $border-width;
       display: table;
       width: $width / 3;
       height: $width * 2 / 3;
@@ -306,7 +306,7 @@
     color: '{{primary-color-0.87}}';
   }
 
-  ._md-icon {
+  &:not(.md-checked) ._md-icon {
     border-color: '{{foreground-2}}';
   }
 
