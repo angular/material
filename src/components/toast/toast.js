@@ -46,9 +46,9 @@ function MdToastDirective($mdToast) {
   *
   * ## Parent container notes
   *
-  * The toast is positioned using absolute positioning relative to it's first non-static parent
+  * The toast is positioned using absolute positioning relative to its first non-static parent
   * container. Thus, if the requested parent container uses static positioning, we will temporarily
-  * set it's positioning to `relative` while the toast is visible and reset it when the toast is
+  * set its positioning to `relative` while the toast is visible and reset it when the toast is
   * hidden.
   *
   * Because of this, it is usually best to ensure that the parent container has a fixed height and
