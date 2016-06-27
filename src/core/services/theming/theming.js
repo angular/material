@@ -549,7 +549,7 @@ function parseRules(theme, colorType, rules) {
   var generatedRules = [];
   var color = theme.colors[colorType];
 
-  var themeNameRegex = new RegExp('.md-' + theme.name + '-theme', 'g');
+  var themeNameRegex = new RegExp('\\.md-' + theme.name + '-theme', 'g');
   // Matches '{{ primary-color }}', etc
   var hueRegex = new RegExp('(\'|")?{{\\s*(' + colorType + ')-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}(\"|\')?','g');
   var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow|default)-?(\d\.?\d*)?(contrast)?\s*\}\}'?"?/g;
