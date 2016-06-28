@@ -46,10 +46,15 @@ function MdConstantFactory() {
 
   var self = {
     isInputKey : function(e) { return (e.keyCode >= 31 && e.keyCode <= 90); },
-    isNumPadKey : function (e){ return (3 === e.location && e.keyCode >= 97 && e.keyCode <= 105); },
+    isNumPadKey : function(e) { return (3 === e.location && e.keyCode >= 97 && e.keyCode <= 105); },
+    isMetaKey: function(e) { return (e.keyCode >= 91 && e.keyCode <= 93); },
+    isFnLockKey: function(e) { return (e.keyCode >= 112 && e.keyCode <= 145); },
     isNavigationKey : function(e) {
       var kc = self.KEY_CODE, NAVIGATION_KEYS =  [kc.SPACE, kc.ENTER, kc.UP_ARROW, kc.DOWN_ARROW];
       return (NAVIGATION_KEYS.indexOf(e.keyCode) != -1);
+    },
+    hasModifierKey: function(e) {
+      return e.ctrlKey || e.metaKey || e.altKey;
     },
 
     /**
