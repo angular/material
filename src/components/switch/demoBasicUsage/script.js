@@ -11,4 +11,10 @@ angular.module('switchDemo1', ['ngMaterial'])
   $scope.onChange = function(cbState) {
   	$scope.message = cbState;
   };
+})
+.config(function($mdThemingProvider) {
+    $mdThemingProvider.theme('docs-switch-dark')
+      .primaryPalette('blue')
+      .accentPalette('teal')
+      .dark();
 });

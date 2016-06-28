@@ -1,5 +1,10 @@
 md-icon.md-THEME_NAME-theme {
-  color: '{{foreground-2}}';
+  color: '{{background-default-contrast-icon}}';
+  fill: currentColor;
+  &.md-inactive,
+  &[disabled] {
+    color: '{{background-default-contrast-disabled}}';
+  }
 
   &.md-primary {
     color: '{{primary-color}}';

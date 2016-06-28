@@ -66,7 +66,7 @@
 md-tabs.md-THEME_NAME-theme {
   md-tabs-wrapper {
     background-color: transparent;
-    border-color: '{{foreground-4}}';
+    border-color: '{{background-contrast-divider}}';
   }
   .md-paginator md-icon {
     color: '{{primary-color}}';
@@ -78,10 +78,10 @@ md-tabs.md-THEME_NAME-theme {
   }
 
   .md-tab {
-    color: '{{foreground-2}}';
+    color: '{{background-contrast-secondary}}';
     &[disabled] {
       &, md-icon {
-        color: '{{foreground-3}}';
+        color: '{{background-contrast-disabled}}';
       }
     }
     &.md-active, &.md-focused {

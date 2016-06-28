@@ -28,7 +28,6 @@ button.md-button::-moz-focus-inner {
 .md-button {
   border-radius: $button-border-radius;
   box-sizing: border-box;
-  color: currentColor;
 
   user-select: none;
   position: relative; //for child absolute-positioned <canvas>

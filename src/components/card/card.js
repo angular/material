@@ -125,6 +125,7 @@ function mdCardDirective($mdTheming) {
     restrict: 'E',
     link: function ($scope, $element, attr) {
       $element.addClass('_md');     // private md component indicator for styling
+      $element.addClass('_md-theme-fill');
       $mdTheming($element);
     }
   };

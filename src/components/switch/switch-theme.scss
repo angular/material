@@ -1,57 +1,43 @@
+@mixin md-switch-checked ($group, $shade) {
+  .md-ink-ripple {
+      color: '{{' + $group + '-'+ $shade +'}}';
+  }
+  ._md-thumb {
+    background-color: '{{' + $group + '-' + $shade + '}}';
+  }
+  ._md-bar {
+    background-color: '{{' + $group + '-' + $shade + '-0.5}}';
+  }
+  &.md-focused ._md-thumb:before {
+    background-color: '{{' + $group + '-' + $shade + '-0.26}}';
+  }
+}
+
 md-switch.md-THEME_NAME-theme {
   .md-ink-ripple {
-    color: '{{background-500}}';
+    color: '{{background-contrast-1.0}}';
   }
   ._md-thumb {
     background-color: '{{background-50}}';
   }
   ._md-bar {
-    background-color: '{{background-500}}';
+    background-color: '{{background-contrast-0.38}}';
+  }
+  &.md-focused ._md-thumb:before {
+    background-color: '{{background-contrast-0.26}}';
   }
 
   &.md-checked {
-    .md-ink-ripple {
-      color: '{{accent-color}}';
-    }
-    ._md-thumb {
-      background-color: '{{accent-color}}';
-    }
-    ._md-bar {
-      background-color: '{{accent-color-0.5}}';
-    }
-    &.md-focused ._md-thumb:before {
-      background-color: '{{accent-color-0.26}}';
-    }
+    @include md-switch-checked('accent', '500');
 
     &.md-primary {
-      .md-ink-ripple {
-        color: '{{primary-color}}';
-      }
-      ._md-thumb {
-        background-color: '{{primary-color}}';
-      }
-      ._md-bar {
-        background-color: '{{primary-color-0.5}}';
-      }
-      &.md-focused ._md-thumb:before {
-        background-color: '{{primary-color-0.26}}';
-      }
+      @include md-switch-checked('primary', '500');
     }
 
     &.md-warn {
-      .md-ink-ripple {
-        color: '{{warn-color}}';
-      }
-      ._md-thumb {
-        background-color: '{{warn-color}}';
-      }
-      ._md-bar {
-        background-color: '{{warn-color-0.5}}';
-      }
-      &.md-focused ._md-thumb:before {
-        background-color: '{{warn-color-0.26}}';
-      }
+      @include md-switch-checked('warn', '500');
     }
+
   }
 
   &[disabled] {
@@ -59,7 +45,38 @@ md-switch.md-THEME_NAME-theme {
       background-color: '{{background-400}}';
     }
     ._md-bar {
-      background-color: '{{foreground-4}}';
+      background-color: '{{background-contrast-0.12}}';
+    }
+  }
+
+  &.md-theme-dark {
+    ._md-thumb {
+      background-color: '{{background-400}}';
+    }
+    ._md-bar {
+      background-color: '{{background-contrast-0.30}}';
+    }
+
+    &.md-checked {
+      @include md-switch-checked('accent', '200');
+
+      &.md-primary {
+        @include md-switch-checked('primary', '200');
+      }
+
+      &.md-warn {
+        @include md-switch-checked('warn', '200');
+      }
+
+    }
+
+    &[disabled] {
+      ._md-thumb {
+        background-color: '{{background-800}}';
+      }
+      ._md-bar {
+        background-color: '{{background-contrast-0.10}}';
+      }
     }
   }
 }
