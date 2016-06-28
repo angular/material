@@ -187,6 +187,32 @@ describe('$mdDialog', function() {
       expect($document.activeElement).toBe(parent[0].querySelector('md-dialog-content'));
     }));
 
+    it('should warn if the template contains a ng-cloak', inject(function($mdDialog, $rootScope, $document, $log) {
+      var parent = angular.element('<div>');
+
+      // Enable spy on $log.warn
+      spyOn($log, 'warn');
+
+      $mdDialog.show(
+        $mdDialog.alert({
+          template:
+            '<md-dialog ng-cloak>' +
+              '<md-dialog-content>' +
+                '<p>Muppets are the best</p>' +
+              '</md-dialog-content>' +
+            '</md-dialog>',
+          parent: parent
+        })
+      );
+
+      runAnimation(parent.find('md-dialog'));
+
+      console.log($log.warn.logs);
+
+      // The $mdDialog should throw a warning about the `ng-cloak`.
+      expect($log.warn).toHaveBeenCalled();
+    }));
+
     it('should use the prefixed id from `md-dialog` for `md-dialog-content`', inject(function ($mdDialog, $rootScope, $document) {
       jasmine.mockElementFocus(this);
 
