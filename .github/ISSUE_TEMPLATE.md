@@ -1,20 +1,20 @@
-**Actual behavior**:
--  What is the issue? *
--  What is the expected behavior?
+**Actual Behavior**:
+ -  `What is the issue?` *
+ -  `What is the expected behavior?`
 
-**CodePen** or Steps to reproduce the issue: *
--  CodePen Demo which shows your issue :
--  Details:
+**CodePen** (or steps to reproduce the issue): *
+ -  `CodePen Demo which shows your issue:`
+ -  `Details:`
 
 **Angular Versions**: *
--  Angular Version:
--  Angular Material Version:
+ -  `Angular Version:`
+ -  `Angular Material Version:`
 
 **Additional Information**:
--  Browser Type: *
--  Browser Version: *
--  OS: *
--  Stack Traces:
+ -  `Browser Type: *`
+ -  `Browser Version: *`
+ -  `OS: *`
+ -  `Stack Traces:`
 
 ----
 Shortcut to create a [new CodePen Demo](http://codepen.io/team/AngularMaterial/pen/bEGJdd).
