@@ -184,6 +184,11 @@ MdChipsCtrl.prototype.isEditingChip = function() {
 
 
 MdChipsCtrl.prototype.isRemovable = function() {
+  // Return false if we have static chips
+  if (!this.ngModelCtrl) {
+    return false;
+  }
+
   return this.readonly ? this.removable :
          angular.isDefined(this.removable) ? this.removable : true;
 };

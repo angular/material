@@ -62,8 +62,7 @@
     <br/>
     <md-checkbox ng-model="ctrl.readonly">Readonly</md-checkbox>
     <md-checkbox ng-model="ctrl.removable">
-      Removable
-      <span ng-if="ctrl.removable === undefined">(Currently is <code>undefined</code>)</span>
+      Removable (<code>{{ctrl.removable === undefined ? 'undefined' : ctrl.removable}}</code>)
     </md-checkbox>
     <p class="md-caption">
       <b>Note</b>: When md-removable is undefined, readonly automatically sets md-removable to false.

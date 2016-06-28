@@ -1067,6 +1067,14 @@ describe('<md-chips>', function() {
         expect(chipArray[1].innerHTML).toContain('2');
         expect(chipArray[2].innerHTML).toContain('3');
       });
+
+      it('does not allow removal of chips', function() {
+        scope.chipItem = 'Football';
+        var element = buildChips(STATIC_CHIPS_TEMPLATE);
+        var wrap = element.find('md-chips-wrap');
+
+        expect(wrap).not.toHaveClass('md-removable');
+      });
     });
 
     describe('<md-chip-remove>', function() {
