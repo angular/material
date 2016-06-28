@@ -19,6 +19,8 @@ angular
  *     no matches were found.  You can do this by wrapping your template in `md-item-template` and
  *     adding a tag for `md-not-found`.  An example of this is shown below.
  *
+ * To reset the displayed value you must clear both values for `md-search-text` and `md-selected-item`.
+ *
  * ### Validation
  *
  * You can use `ng-messages` to include validation the same way that you would normally validate;
