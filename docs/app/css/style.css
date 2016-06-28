@@ -934,3 +934,36 @@ table.md-api-table  tr  td:first-child {
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+/* Provide some layout/padding enhancements for mobile/small devices */
+@media(max-width: 500px) {
+  /* Reduce the size of the nav logo/header */
+  .docs-logo > img {
+    height: 75px;
+    margin-top: 10px;
+  }
+
+  .docs-logo h1 {
+    font-size: 18px;
+    line-height: 2rem;
+  }
+
+  /* Reduce the padding around standard doc content */
+  .docs-ng-view .doc-content {
+    margin: 8px;
+    padding: 0;
+  }
+
+  /* Reduce the padding around doc demos */
+  .docs-ng-view docs-demo {
+    padding: 0;
+  }
+
+  .docs-ng-view docs-demo:first-child {
+    margin-top: 0;
+  }
+
+  .docs-ng-view docs-demo .doc-demo-content {
+    margin: 0;
+  }
+}
