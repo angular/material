@@ -1284,7 +1284,7 @@ MdPanelRef.prototype._removeEventListeners = function() {
   this._removeListeners && this._removeListeners.forEach(function(removeFn) {
     removeFn();
   });
-  this._removeListeners = null;
+  this._removeListeners = [];
 };
 
 
