@@ -86,6 +86,7 @@ angular
  *     the dropdown.<br/><br/>
  *     When the dropdown doesn't fit into the viewport, the dropdown will shrink
  *     as less as possible.
+ * @param {boolean=} md-replace-text-on-select If true, displayed text will be replaced on item select
  *
  * @usage
  * ### Basic Example
@@ -148,29 +149,30 @@ function MdAutocomplete ($$mdSvgRegistry) {
     controller:   'MdAutocompleteCtrl',
     controllerAs: '$mdAutocompleteCtrl',
     scope:        {
-      inputName:        '@mdInputName',
-      inputMinlength:   '@mdInputMinlength',
-      inputMaxlength:   '@mdInputMaxlength',
-      searchText:       '=?mdSearchText',
-      selectedItem:     '=?mdSelectedItem',
-      itemsExpr:        '@mdItems',
-      itemText:         '&mdItemText',
-      placeholder:      '@placeholder',
-      noCache:          '=?mdNoCache',
-      requireMatch:     '=?mdRequireMatch',
-      selectOnMatch:    '=?mdSelectOnMatch',
-      matchInsensitive: '=?mdMatchCaseInsensitive',
-      itemChange:       '&?mdSelectedItemChange',
-      textChange:       '&?mdSearchTextChange',
-      minLength:        '=?mdMinLength',
-      delay:            '=?mdDelay',
-      autofocus:        '=?mdAutofocus',
-      floatingLabel:    '@?mdFloatingLabel',
-      autoselect:       '=?mdAutoselect',
-      menuClass:        '@?mdMenuClass',
-      inputId:          '@?mdInputId',
-      escapeOptions:    '@?mdEscapeOptions',
-      dropdownItems:    '=?mdDropdownItems'
+      inputName:           '@mdInputName',
+      inputMinlength:      '@mdInputMinlength',
+      inputMaxlength:      '@mdInputMaxlength',
+      searchText:          '=?mdSearchText',
+      selectedItem:        '=?mdSelectedItem',
+      itemsExpr:           '@mdItems',
+      itemText:            '&mdItemText',
+      placeholder:         '@placeholder',
+      noCache:             '=?mdNoCache',
+      requireMatch:        '=?mdRequireMatch',
+      selectOnMatch:       '=?mdSelectOnMatch',
+      matchInsensitive:    '=?mdMatchCaseInsensitive',
+      itemChange:          '&?mdSelectedItemChange',
+      textChange:          '&?mdSearchTextChange',
+      minLength:           '=?mdMinLength',
+      delay:               '=?mdDelay',
+      autofocus:           '=?mdAutofocus',
+      floatingLabel:       '@?mdFloatingLabel',
+      autoselect:          '=?mdAutoselect',
+      menuClass:           '@?mdMenuClass',
+      inputId:             '@?mdInputId',
+      escapeOptions:       '@?mdEscapeOptions',
+      dropdownItems:       '=?mdDropdownItems',
+      replaceTextOnSelect: '=?mdReplaceTextOnSelect'
     },
     compile: function(tElement, tAttrs) {
       var attributes = ['md-select-on-focus', 'md-no-asterisk', 'ng-trim'];
@@ -274,7 +276,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
                   ng-minlength="inputMinlength"\
                   ng-maxlength="inputMaxlength"\
                   ng-disabled="$mdAutocompleteCtrl.isDisabled"\
-                  ng-model="$mdAutocompleteCtrl.scope.searchText"\
+                  ng-model="$mdAutocompleteCtrl.scope.inputText"\
                   ng-model-options="{ allowInvalid: true }"\
                   ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                   ng-blur="$mdAutocompleteCtrl.blur($event)"\
@@ -299,7 +301,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
                 ng-required="$mdAutocompleteCtrl.isRequired"\
                 ng-disabled="$mdAutocompleteCtrl.isDisabled"\
                 ng-readonly="$mdAutocompleteCtrl.isReadonly"\
-                ng-model="$mdAutocompleteCtrl.scope.searchText"\
+                ng-model="$mdAutocompleteCtrl.scope.inputText"\
                 ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                 ng-blur="$mdAutocompleteCtrl.blur($event)"\
                 ng-focus="$mdAutocompleteCtrl.focus($event)"\

@@ -2261,4 +2261,51 @@ describe('<md-autocomplete>', function() {
     element.remove();
   });
 
+  describe('replace text on select', function() {
+    it('does not change searchText on item select', inject(function($timeout, $mdConstant, $material) {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-replace-text-on-select="true"\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var ul = element.find('ul');
+      var input = element.find('input');
+
+      $material.flushInterimElement();
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBe(null);
+
+      // Focus the input
+      ctrl.focus();
+
+      // Update the scope
+      scope.$apply('searchText = "b"');
+      $timeout.flush();
+      waitForVirtualRepeat(element);
+
+      // Check expectations
+      expect(scope.searchText).toBe('b');
+      expect(scope.match(scope.searchText).length).toBe(2);
+
+      expect(ul.find('li').length).toBe(2);
+
+      // Run our key events
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+      $timeout.flush();
+
+      expect(input[0].value).toBe('bar');
+      expect(scope.searchText).toBe('b');
+
+      element.remove();
+    }));
+  });
 });
