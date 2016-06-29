@@ -369,6 +369,8 @@
     // TODO(chenmike): Add ability for users to specify this interval.
     self.ngInputElement.on('input', self.$mdUtil.debounce(self.handleInputEvent,
         DEFAULT_DEBOUNCE_INTERVAL, self));
+
+    self.ngInputElement.on('blur', angular.bind(self, self.handleInputEvent));
   };
 
   /** Attach event listeners for user interaction. */
