@@ -2771,4 +2771,130 @@ describe('<md-autocomplete>', function() {
     }));
   });
 
+  describe('inline options', function() {
+    it('should replace input text on item select', inject(function($timeout, $mdConstant, $material) {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-inline-option="replace"\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var ul = element.find('ul');
+      var input = element.find('input');
+
+      $material.flushInterimElement();
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBe(null);
+
+      // Focus the input
+      ctrl.focus();
+
+      // Update the scope
+      scope.$apply('searchText = "b"');
+      $timeout.flush();
+      waitForVirtualRepeat(element);
+
+      // Check expectations
+      expect(scope.searchText).toBe('b');
+      expect(scope.match(scope.searchText).length).toBe(2);
+
+      expect(ul.find('li').length).toBe(2);
+
+      // Run our key events
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+      $timeout.flush();
+
+      expect(input[0].value).toBe('bar');
+      expect(scope.searchText).toBe('b');
+
+      // Run our key events
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+      $timeout.flush();
+
+      expect(input[0].value).toBe('baz');
+      expect(scope.searchText).toBe('b');
+
+      // Run our key events
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ENTER));
+      $timeout.flush();
+
+      expect(scope.searchText).toBe('baz');
+
+      element.remove();
+    }));
+
+    it('should append text on item select', inject(function($timeout, $mdConstant, $material) {
+      var scope = createScope();
+      var template = '\
+          <md-autocomplete\
+              md-inline-option="append"\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var ul = element.find('ul');
+      var input = element.find('input');
+
+      // Add the element to the document's body to read the text selection data
+      document.body.appendChild(element[0]);
+
+      $material.flushInterimElement();
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBe(null);
+
+      // Focus the input
+      ctrl.focus();
+
+      // Update the scope
+      scope.$apply('searchText = "b"');
+      $timeout.flush();
+      waitForVirtualRepeat(element);
+
+      // Check expectations
+      expect(scope.searchText).toBe('b');
+      expect(scope.match(scope.searchText).length).toBe(2);
+
+      expect(ul.find('li').length).toBe(2);
+
+      // Run our key events
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+      $timeout.flush();
+
+      expect(input[0].value).toBe('bar');
+      expect(input[0].selectionStart).toBe(1);
+      expect(input[0].selectionEnd).toBe(3);
+      expect(scope.searchText).toBe('b');
+
+      // Run our key events
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+      $timeout.flush();
+
+      expect(input[0].value).toBe('baz');
+      expect(input[0].selectionStart).toBe(1);
+      expect(input[0].selectionEnd).toBe(3);
+      expect(scope.searchText).toBe('b');
+
+      // Run our key events
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ENTER));
+      $timeout.flush();
+
+      expect(scope.searchText).toBe('baz');
+
+      element.remove();
+    }));
+  });
 });

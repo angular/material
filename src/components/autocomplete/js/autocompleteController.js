@@ -22,7 +22,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       fetchesInProgress    = 0,
       enableWrapScroll     = null,
       inputModelCtrl       = null,
-      debouncedOnResize    = $mdUtil.debounce(onWindowResize);
+      debouncedOnResize    = $mdUtil.debounce(onWindowResize),
+      suggestedInputText   = '';
 
   // Public Exported Variables with handlers
   defineProperty('hidden', handleHiddenChange, true);
@@ -74,13 +75,12 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * Initialize the controller, setup watchers, gather elements
    */
   function init () {
-
     $mdUtil.initOptionalProperties($scope, $attrs, {
+      inputText: '',
       searchText: '',
       selectedItem: null,
       clearButton: false
     });
-
     $mdTheming($element);
     configureWatchers();
     $mdUtil.nextTick(function () {
@@ -211,7 +211,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     $attrs.$observe('disabled', function (value) { ctrl.isDisabled = $mdUtil.parseAttributeBoolean(value, false); });
     $attrs.$observe('required', function (value) { ctrl.isRequired = $mdUtil.parseAttributeBoolean(value, false); });
     $attrs.$observe('readonly', function (value) { ctrl.isReadonly = $mdUtil.parseAttributeBoolean(value, false); });
-
+    $scope.$watch('inputText', handleInputText);
     $scope.$watch('searchText', wait ? $mdUtil.debounce(handleSearchText, wait) : handleSearchText);
     $scope.$watch('selectedItem', selectedItemChange);
 
@@ -455,7 +455,26 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   }
 
   /**
-   * Handles changes to the searchText property.
+   * Handles changes to the inputText property.
+   * @param inputText
+   * @param previousInputText
+   */
+  function handleInputText (inputText, previousInputText) {
+    // Only continue if display text was changed by user
+    if (suggestedInputText === inputText) return;
+    ctrl.index = getDefaultIndex();
+    suggestedInputText = undefined;
+
+    // Do nothing on init
+    if (inputText === previousInputText) return;
+    if (inputText === $scope.searchText) return;
+    $scope.$evalAsync(function() {
+      $scope.searchText = inputText;
+    });
+  }
+
+  /**
+   * Handles calls from the searchText watcher.
    * @param searchText
    * @param previousSearchText
    */
@@ -465,6 +484,15 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     // do nothing on init
     if (searchText === previousSearchText) return;
 
+    if ($scope.inputText !== searchText) {
+      // Synchronize with input box before processing change
+      $scope.$evalAsync(function () {
+        $scope.inputText = searchText;
+        suggestedInputText = searchText;
+        handleSearchText(searchText, previousSearchText);
+      });
+      return;
+    }
     updateModelValidators();
 
     getDisplayValue($scope.selectedItem).then(function (val) {
@@ -499,6 +527,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
     if (!noBlur) {
       ctrl.hidden = shouldHide();
+      if (hasInlineOption() && $scope.inputText !== $scope.searchText) {
+        // Revert input text back to $scope.scopeText
+        $scope.inputText = $scope.searchText;
+      }
       evalAttr('ngBlur', { $event: $event });
     }
   }
@@ -543,6 +575,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         ctrl.index   = Math.min(ctrl.index + 1, ctrl.matches.length - 1);
         updateScroll();
         reportMessages(false, ReportType.Selected);
+        if (hasInlineOption()) {
+          updateInputText();
+        }
         break;
       case $mdConstant.KEY_CODE.UP_ARROW:
         if (ctrl.loading) return;
@@ -551,6 +586,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         ctrl.index   = ctrl.index < 0 ? ctrl.matches.length - 1 : Math.max(0, ctrl.index - 1);
         updateScroll();
         reportMessages(false, ReportType.Selected);
+        if (hasInlineOption()) {
+          updateInputText();
+        }
         break;
       case $mdConstant.KEY_CODE.TAB:
         // If we hit tab, assume that we've left the list so it will close
@@ -564,6 +602,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         if (hasSelection()) return;
         event.stopPropagation();
         event.preventDefault();
+        if (hasInlineOption('append') && $scope.inputText) {
+          // Force text caret to end
+          elements.input.setSelectionRange($scope.inputText.length, $scope.inputText.length);
+        }
         select(ctrl.index);
         break;
       case $mdConstant.KEY_CODE.ESCAPE:
@@ -572,14 +614,21 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         event.stopPropagation();
 
         clearSelectedItem();
-        if ($scope.searchText && hasEscapeOption('clear')) {
-          clearSearchText();
+        var willBlur = hasEscapeOption('blur');
+        var willClear = hasEscapeOption('clear');
+
+        if (isTextClearable()) {
+          if (hasInlineOption() && $scope.inputText !== $scope.searchText && !willBlur) {
+            $scope.inputText = $scope.searchText;
+          } else if (willClear) {
+            clearSearchText();
+          }
         }
 
         // Manually hide (needed for mdNotFound support)
         ctrl.hidden = true;
 
-        if (hasEscapeOption('blur')) {
+        if (willBlur) {
           // Force the component to blur if they hit escape
           doBlur(true);
         }
@@ -683,7 +732,16 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * @returns {boolean}
    */
   function shouldProcessEscape() {
-    return hasEscapeOption('blur') || !ctrl.hidden || ctrl.loading || hasEscapeOption('clear') && $scope.searchText;
+    return hasEscapeOption('blur') || !ctrl.hidden || ctrl.loading || hasEscapeOption('clear')
+           && isTextClearable();
+  }
+
+  /**
+   * Determines if there is text that can cleared
+   * @returns {boolean}
+   */
+  function isTextClearable() {
+    return $scope.searchText || $scope.inputText || elements.input.value;
   }
 
   /**
@@ -692,6 +750,22 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    */
   function hasEscapeOption(option) {
     return !$scope.escapeOptions || $scope.escapeOptions.toLowerCase().indexOf(option) !== -1;
+  }
+
+  /**
+   * Determines if an inline option is set
+   * @param {string} (optional) specific option to be checked
+   * @returns {boolean}
+   */
+  function hasInlineOption(option) {
+    if (!$scope.inlineOption || $scope.inlineOption === 'none') {
+      return false;
+    }
+    if (!option) {
+      // Check if any inline option is used
+      return $scope.inlineOption === 'append' || $scope.inlineOption === 'replace';
+    }
+    return $scope.inlineOption.toLowerCase().indexOf(option) !== -1;
   }
 
   /**
@@ -769,6 +843,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     //-- force form to update state for validation
     $mdUtil.nextTick(function () {
       getDisplayValue(ctrl.matches[ index ]).then(function (val) {
+        suggestedInputText = val;
         var ngModel = elements.$.input.controller('ngModel');
         ngModel.$setViewValue(val);
         ngModel.$render();
@@ -797,7 +872,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   }
 
   /**
-   * Clears the searchText value
+   * Clears searchText, inputText, and input value
    */
   function clearSearchText () {
     // Set the loading to true so we don't see flashes of content.
@@ -805,6 +880,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     // So the loading process will stop when the results had been retrieved.
     setLoading(true);
 
+    $scope.inputText = '';
     $scope.searchText = '';
 
     // Normally, triggering the change / input event is unnecessary, because the browser detects it properly.
@@ -819,7 +895,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     // $scope.searchText has a space character at the end, so we blank it one more time and then
     // focus.
     elements.input.blur();
-    $scope.searchText = '';
+    $scope.inputText = '';
     elements.input.focus();
   }
 
@@ -922,6 +998,35 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     } else if (bot > scrollTop + hgt) {
       scrollTo(bot - hgt);
     }
+  }
+
+  /**
+   * Update displayed text to currently selected item
+   */
+  function updateInputText () {
+    getCurrentDisplayValue().then(function (val) {
+      if (!val) {
+        return;
+      }
+      if (hasInlineOption('replace')) {
+        suggestedInputText = val;
+        $scope.inputText = val;
+      } else if (hasInlineOption('append')) {
+        if (!$scope.searchText || !angular.isString($scope.searchText)) {
+          return;
+        }
+        if (val.toLowerCase().indexOf($scope.searchText.toLowerCase()) !== 0) {
+          return;
+        }
+        var selectionStart = $scope.searchText.length;
+        var selectionEnd = val.length;
+        suggestedInputText = val;
+        $scope.inputText = val;
+        $mdUtil.nextTick(function() {
+          elements.input.setSelectionRange(selectionStart, selectionEnd);
+        });
+      }
+    });
   }
 
   function isPromiseFetching() {

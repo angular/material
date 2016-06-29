@@ -128,6 +128,8 @@ angular
  *     Defaults to true.
  * @param {string=} ng-pattern Adds the pattern validator to the ngModel of the search text.
  *     [ngPattern Directive](https://docs.angularjs.org/api/ng/directive/ngPattern)
+ * @param {boolean=} md-inline-option Add optional inline option. Default is `none`.<br/>
+ *     Options: `append`, `replace`, `none`
  *
  * @usage
  * ### Basic Example
@@ -253,7 +255,8 @@ function MdAutocomplete ($$mdSvgRegistry) {
       escapeOptions:    '@?mdEscapeOptions',
       dropdownItems:    '=?mdDropdownItems',
       dropdownPosition: '@?mdDropdownPosition',
-      clearButton:      '=?mdClearButton'
+      clearButton:      '=?mdClearButton',
+      inlineOption:     '@?mdInlineOption'
     },
     compile: function(tElement, tAttrs) {
       var attributes = ['md-select-on-focus', 'md-no-asterisk', 'ng-trim', 'ng-pattern'];
@@ -359,7 +362,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
                   ng-minlength="inputMinlength"\
                   ng-maxlength="inputMaxlength"\
                   ng-disabled="$mdAutocompleteCtrl.isDisabled"\
-                  ng-model="$mdAutocompleteCtrl.scope.searchText"\
+                  ng-model="$mdAutocompleteCtrl.scope.inputText"\
                   ng-model-options="{ allowInvalid: true }"\
                   ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                   ng-blur="$mdAutocompleteCtrl.blur($event)"\
@@ -386,7 +389,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
                 ng-readonly="$mdAutocompleteCtrl.isReadonly"\
                 ng-minlength="inputMinlength"\
                 ng-maxlength="inputMaxlength"\
-                ng-model="$mdAutocompleteCtrl.scope.searchText"\
+                ng-model="$mdAutocompleteCtrl.scope.inputText"\
                 ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                 ng-blur="$mdAutocompleteCtrl.blur($event)"\
                 ng-focus="$mdAutocompleteCtrl.focus($event)"\

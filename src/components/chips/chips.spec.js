@@ -1137,7 +1137,8 @@ describe('<md-chips>', function() {
           input.val('    ');
           input.triggerHandler('input');
 
-          expect(input.controller('ngModel').$modelValue).toBe('');
+          // IE sets the value to undefined while other browsers use ''
+          expect(input.controller('ngModel').$modelValue).toBeFalsy();
           // Since the `md-chips` component is testing the backspace select previous chip functionality by
           // checking the current caret / cursor position, we have to set the cursor to the end of the current
           // value.
