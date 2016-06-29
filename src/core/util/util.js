@@ -200,7 +200,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * @param {!Element|!angular.JQLite} parent Element to disable scrolling within.
      *   Defaults to body if none supplied.
      * @param options Object of options to modify functionality
-     *   - doNotCreateScrollMaskElement Boolean of whether or not to create a scroll mask element or
+     *   - disableScrollMask Boolean of whether or not to create a scroll mask element or
      *     use the passed parent element.
      */
     disableScrollAround: function(element, parent, options) {
@@ -223,7 +223,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       function disableElementScroll(element) {
         element = angular.element(element || body);
         var scrollMask;
-        if (options && options.doNotCreateScrollMaskElement) {
+        if (options && options.disableScrollMask) {
           scrollMask = element;
         } else {
           element = element[0];
