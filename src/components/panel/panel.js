@@ -1119,7 +1119,10 @@ MdPanelRef.prototype._createPanel = function() {
 
           if (self._config['disableParentScroll']) {
             self._restoreScroll = self._$mdUtil.disableScrollAround(
-                null, self._panelContainer);
+              null,
+              self._panelContainer,
+              { disableScrollMask: true }
+            );
           }
 
           self._panelEl = angular.element(
@@ -1197,12 +1200,12 @@ MdPanelRef.prototype._updatePosition = function(opt_init) {
 
   if (positionConfig) {
     positionConfig._setPanelPosition(this._panelEl);
-    
+
     // Hide the panel now that position is known.
     if (opt_init) {
       this._panelContainer.addClass(MD_PANEL_HIDDEN);
     }
-    
+
     this._panelEl.css('top', positionConfig.getTop());
     this._panelEl.css('bottom', positionConfig.getBottom());
     this._panelEl.css('left', positionConfig.getLeft());

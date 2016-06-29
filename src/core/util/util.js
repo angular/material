@@ -199,8 +199,11 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * @param element Unused
      * @param {!Element|!angular.JQLite} parent Element to disable scrolling within.
      *   Defaults to body if none supplied.
+     * @param options Object of options to modify functionality
+     *   - disableScrollMask Boolean of whether or not to create a scroll mask element or
+     *     use the passed parent element.
      */
-    disableScrollAround: function(element, parent) {
+    disableScrollAround: function(element, parent, options) {
       $mdUtil.disableScrollAround._count = $mdUtil.disableScrollAround._count || 0;
       ++$mdUtil.disableScrollAround._count;
       if ($mdUtil.disableScrollAround._enableScrolling) return $mdUtil.disableScrollAround._enableScrolling;
@@ -218,12 +221,18 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
       // Creates a virtual scrolling mask to absorb touchmove, keyboard, scrollbar clicking, and wheel events
       function disableElementScroll(element) {
-        element = angular.element(element || body)[0];
-        var scrollMask = angular.element(
-          '<div class="md-scroll-mask">' +
-          '  <div class="md-scroll-mask-bar"></div>' +
-          '</div>');
-        element.appendChild(scrollMask[0]);
+        element = angular.element(element || body);
+        var scrollMask;
+        if (options && options.disableScrollMask) {
+          scrollMask = element;
+        } else {
+          element = element[0];
+          scrollMask = angular.element(
+            '<div class="md-scroll-mask">' +
+            '  <div class="md-scroll-mask-bar"></div>' +
+            '</div>');
+          element.appendChild(scrollMask[0]);
+        }
 
         scrollMask.on('wheel', preventDefault);
         scrollMask.on('touchmove', preventDefault);
@@ -240,8 +249,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         }
       }
 
-      // Converts the body to a position fixed block and translate it to the proper scroll
-      // position
+      // Converts the body to a position fixed block and translate it to the proper scroll position
       function disableBodyScroll() {
         var htmlNode = body.parentNode;
         var restoreHtmlStyle = htmlNode.style.cssText || '';
@@ -707,19 +715,19 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       var stickyProps = ['sticky', '-webkit-sticky'];
       for (var i = 0; i < stickyProps.length; ++i) {
         testEl.css({
-          position: stickyProps[i], 
-          top: 0, 
+          position: stickyProps[i],
+          top: 0,
           'z-index': 2
         });
-        
+
         if (testEl.css('position') == stickyProps[i]) {
           stickyProp = stickyProps[i];
           break;
         }
       }
-      
+
       testEl.remove();
-      
+
       return stickyProp;
     },
 
@@ -740,9 +748,9 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
     /**
      * Returns true if the parent form of the element has been submitted.
-     * 
+     *
      * @param element An Angular or HTML5 element.
-     * 
+     *
      * @returns {boolean}
      */
     isParentFormSubmitted: function(element) {
@@ -783,4 +791,3 @@ angular.element.prototype.blur = angular.element.prototype.blur || function() {
     }
     return this;
   };
-
