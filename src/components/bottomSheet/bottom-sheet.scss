@@ -115,7 +115,7 @@ md-bottom-sheet {
           }
         }
       }
-      
+
       @media (max-width: $layout-breakpoint-sm) {
         @include grid-items-per-row(3, true);
       }
@@ -132,7 +132,10 @@ md-bottom-sheet {
         @include grid-items-per-row(7);
       }
 
-
+      // Override of the IE11 fix from @mixin ie11-min-height-flexbug, line 109 mixins.scss
+      &::before {
+        display: none;
+      }
 
       .md-list-item-content {
         display: flex;
