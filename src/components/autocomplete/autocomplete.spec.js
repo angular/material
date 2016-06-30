@@ -400,48 +400,67 @@ describe('<md-autocomplete>', function() {
                   placeholder="placeholder">\
                 <span md-highlight-text="searchText">{{item.display}}</span>\
               </md-autocomplete>';
-      beforeEach( inject(function($timeout) {
+      beforeEach( inject(function($timeout, $material) {
         scope = createScope();
         element = compile(template, scope);
         ctrl = element.controller('mdAutocomplete');
 
+        $material.flushInterimElement();
+
+        // Update the scope
+        element.scope().searchText = 'fo';
+        waitForVirtualRepeat(element);
+
         // Focus the input
         ctrl.focus();
         $timeout.flush();
-        expect(scope.searchText).toBe('');
 
-        scope.$apply('searchText = "test"');
+        expect(ctrl.hidden).toBe(false);
 
-        expect(scope.searchText).toBe('test');
+        expect(scope.searchText).toBe('fo');
 
+        waitForVirtualRepeat(element);
         $timeout.flush();
+        expect(ctrl.hidden).toBe(false);
       }));
 
       afterEach(function() { element.remove() });
-      it('does not clear the value nor blur when hitting escape', inject(function($mdConstant, $document) {
+      it('does not clear the value nor blur when hitting escape', inject(function($mdConstant, $document, $timeout) {
         scope.$apply('escapeOptions = "none"');
         scope.$apply(function() {
           ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+          $timeout.flush();
+          expect(ctrl.hidden).toBe(true);
+          ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+          $timeout.flush();
         });
 
-        expect(scope.searchText).toBe('test');
+        expect(scope.searchText).toBe('fo');
         expect($document.activeElement).toBe(ctrl[0]);
       }));
 
-      it('does not clear the value but does blur when hitting escape', inject(function($mdConstant, $document) {
+      it('does not clear the value but does blur when hitting escape', inject(function($mdConstant, $document, $timeout) {
         scope.$apply('escapeOptions = "blur"');
         scope.$apply(function() {
           ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+          $timeout.flush();
+          expect(ctrl.hidden).toBe(true);
+          ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+          $timeout.flush();
         });
 
-        expect(scope.searchText).toBe('test');
+        expect(scope.searchText).toBe('fo');
         expect($document.activeElement).toBe(undefined);
       }));
 
-      it('clear the value but does not blur when hitting escape', inject(function($mdConstant, $document) {
+      it('clear the value but does not blur when hitting escape', inject(function($mdConstant, $document, $timeout) {
         scope.$apply('escapeOptions = "clear"');
         scope.$apply(function() {
           ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+          $timeout.flush();
+          expect(ctrl.hidden).toBe(true);
+          ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+          $timeout.flush();
         });
 
         expect(scope.searchText).toBe('');
