@@ -255,6 +255,60 @@ describe('<md-select>', function() {
       expect(el).not.toHaveClass('md-input-has-value');
     }));
 
+    it('should add has-value class on container for option ng-value="undefined"', inject(function($rootScope) {
+      var el = setupSelect('ng-model="$root.value"',
+        '<md-option ng-value="undefined"></md-option><md-option ng-value="1">1</md-option>'
+      );
+      var select = el.find('md-select');
+
+      document.body.appendChild(el[0]);
+
+      openSelect(select);
+      waitForSelectOpen();
+      clickOption(select, 0);
+      expect(el).toHaveClass('md-input-has-value');
+
+      openSelect(select);
+      waitForSelectOpen();
+      clickOption(select, 1);
+      expect(el).toHaveClass('md-input-has-value');
+
+      el.remove();
+    }));
+
+    it('should unset has-value class on container for empty value option', inject(function($rootScope) {
+      var templates = [
+        '<md-option></md-option>',
+        '<md-option value></md-option>',
+        '<md-option value>None</md-option>',
+        '<md-option ng-value></md-option>',
+        '<md-option ng-value>None</md-option>',
+        '<md-option value=""></md-option>',
+        '<md-option ng-value=""></md-option>',
+      ];
+      
+      templates.forEach(function(template) {
+        var el = setupSelect('ng-model="$root.value"',
+          template + '<md-option ng-value="1">1</md-option>'
+        );
+        var select = el.find('md-select');
+
+        document.body.appendChild(el[0]);
+
+        openSelect(select);
+        waitForSelectOpen();
+        clickOption(select, 1);
+        expect(el).toHaveClass('md-input-has-value');
+
+        openSelect(select);
+        waitForSelectOpen();
+        clickOption(select, 0);
+        expect(el).not.toHaveClass('md-input-has-value');
+
+        el.remove();
+      });
+    }));
+
     it('should match label to given input id', function() {
       var el = setupSelect('ng-model="$root.value" id="foo"');
       expect(el.find('label').attr('for')).toBe('foo');
