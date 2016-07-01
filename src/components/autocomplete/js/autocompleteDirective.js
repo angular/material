@@ -65,11 +65,12 @@ angular
  * @param {number=} md-input-minlength The minimum length for the input's value for validation
  * @param {number=} md-input-maxlength The maximum length for the input's value for validation
  * @param {boolean=} md-select-on-match When set, autocomplete will automatically select exact
- *     the item if the search text is an exact match
+ *     the item if the search text is an exact match. <br/><br/>
+ *     Exact match means that there is only one match showing up.
  * @param {boolean=} md-match-case-insensitive When set and using `md-select-on-match`, autocomplete
  *     will select on case-insensitive match
- * @param {string=} md-escape-options Override escape key logic. Default is `blur clear`.
- *     Options: `blur|clear`, `none`
+ * @param {string=} md-escape-options Override escape key logic. Default is `blur clear`.<br/>
+ *     Options: `blur | clear`, `none`
  *
  * @usage
  * ### Basic Example
