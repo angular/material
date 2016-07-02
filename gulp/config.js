@@ -21,8 +21,7 @@ module.exports = {
   ],
   themeBaseFiles: [
     'src/core/style/variables.scss',
-    'src/core/style/mixins.scss',
-    'src/core/style/themes.scss'
+    'src/core/style/mixins.scss'
   ],
   scssBaseFiles: [
     'src/core/style/color-palette.scss',
@@ -48,7 +47,7 @@ module.exports = {
     'src/core/services/**/*.scss'
   ],
   cssIEPaths : ['src/**/ie_fixes.css'],
-  paths: 'src/{components, services}/**',
+  paths: 'src/+(components|core)/**',
   outputDir: 'dist/',
   demoFolder: 'demo-partials'
 };
