@@ -172,7 +172,7 @@ function buildModule(module, opts) {
 function readModuleArg() {
   var module = args.c ? 'material.components.' + args.c : (args.module || args.m);
   if (!module) {
-    gutil.log('\nProvide a compnent argument via `-c`:',
+    gutil.log('\nProvide a component argument via `-c`:',
         '\nExample: -c toast');
     gutil.log('\nOr provide a module argument via `--module` or `-m`.',
         '\nExample: --module=material.components.toast or -m material.components.dialog');
