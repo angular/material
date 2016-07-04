@@ -4,6 +4,14 @@ $radio-text-margin: 10px !default;
 $radio-top-left: 12px !default;
 $radio-margin: 16px !default;
 
+@mixin md-radio-button-disabled {
+  cursor: default;
+
+  .md-container {
+    cursor: default;
+  }
+}
+
 md-radio-button {
   box-sizing: border-box;
   display: block;
@@ -12,13 +20,9 @@ md-radio-button {
   cursor: pointer;
   position: relative;
 
-  // disabled
+  // When the radio-button is disabled.
   &[disabled] {
-    cursor: default;
-
-    .md-container {
-      cursor: default;
-    }
+    @include md-radio-button-disabled();
   }
 
   .md-container {
@@ -110,6 +114,7 @@ md-radio-button {
 }
 
 md-radio-group {
+  /** Layout adjustments for the radio group. */
   &.layout-column,
   &.layout-xs-column, &.layout-gt-xs-column,
   &.layout-sm-column, &.layout-gt-sm-column,
@@ -139,9 +144,11 @@ md-radio-group {
       }
     }
   }
+
   &:focus {
     outline: none;
   }
+
   &.md-focused {
     .md-checked .md-container:before {
       left: -8px;
@@ -149,6 +156,10 @@ md-radio-group {
       right: -8px;
       bottom: -8px;
     }
+  }
+
+  &[disabled] md-radio-button {
+    @include md-radio-button-disabled();
   }
 }
 
