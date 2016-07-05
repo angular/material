@@ -163,7 +163,7 @@ describe('$mdThemingProvider', function() {
       expect(themingProvider._PALETTES.extended['100']).toEqual(testPalette['100']);
       expect(themingProvider._PALETTES.extended['50']).toEqual('newValue');
     });
-  }); 
+  });
 
   describe('css template parsing', function() {
     beforeEach(setup);
@@ -351,11 +351,11 @@ describe('$mdThemeProvider with custom styles', function() {
       $mdThemingProvider.registerStyles('/*test*/');
       $mdThemingProvider.theme('register-custom-styles');
     });
-    
+
     // Verify that $MD_THEME_CSS is still set to '/**/' in the test environment.
-    // Check angular-material-mocks.js for $MD_THEME_CSS latest value if this test starts to fail. 
+    // Check angular-material-mocks.js for $MD_THEME_CSS latest value if this test starts to fail.
     inject(function($MD_THEME_CSS) { expect($MD_THEME_CSS).toBe('/**/'); });
-    
+
     // Find the string '/**//*test*/' in the head tag.
     expect(document.head.innerHTML).toContain('/*test*/');
   });
@@ -416,6 +416,23 @@ describe('$mdThemeProvider with on-demand generation', function() {
     expect(styles.length).toBe(8);
     expect(document.head.innerHTML).toMatch(/md-sweden-theme/);
     expect(document.head.innerHTML).toMatch(/md-belarus-theme/);
+  });
+});
+
+describe('$mdThemeProvider with a theme that ends in a newline', function() {
+  beforeEach(function() {
+    module('material.core', function($provide) {
+      // Note that it should end with a newline
+      $provide.constant('$MD_THEME_CSS', "sparkle.md-THEME_NAME-theme { color: '{{primary-color}}' }\n");
+    });
+
+    inject(function($mdTheming) {});
+  });
+
+  it('should not add an extra closing bracket if the stylesheet ends with a newline', function() {
+    var style = document.head.querySelector('style[md-theme-style]');
+    expect(style.innerText).not.toContain('}}');
+    style.parentNode.removeChild(style);
   });
 });
 
@@ -593,7 +610,7 @@ describe('md-themable directive', function() {
     $rootScope.themey = 'red';
     var el = $compile('<div md-theme="{{themey}}"><span md-themable md-theme-watch></span></div>')($rootScope);
     $rootScope.$apply();
-    
+
     expect(el.children().hasClass('md-red-theme')).toBe(true);
     $rootScope.$apply('themey = "blue"');
     expect(el.children().hasClass('md-blue-theme')).toBe(true);
@@ -604,7 +621,7 @@ describe('md-themable directive', function() {
     $rootScope.themey = 'red';
     var el = $compile('<div md-theme="{{themey}}"><span md-themable></span></div>')($rootScope);
     $rootScope.$apply();
-    
+
     expect(el.children().hasClass('md-red-theme')).toBe(true);
     $rootScope.$apply('themey = "blue"');
     expect(el.children().hasClass('md-blue-theme')).toBe(false);
