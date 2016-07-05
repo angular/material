@@ -207,8 +207,6 @@ describe('$mdDialog', function() {
 
       runAnimation(parent.find('md-dialog'));
 
-      console.log($log.warn.logs);
-
       // The $mdDialog should throw a warning about the `ng-cloak`.
       expect($log.warn).toHaveBeenCalled();
     }));
@@ -278,7 +276,7 @@ describe('$mdDialog', function() {
 
       var dialog = parent.find('md-dialog');
       var content = parent[0].querySelector('md-dialog-content');
-      
+
       expect(content.id).toMatch(/dialogContent_[0-9]+/g);
     }));
 
