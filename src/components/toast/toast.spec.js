@@ -26,7 +26,7 @@ describe('$mdToast service', function() {
 
   describe('simple()', function() {
 
-    hasConfigMethods(['content', 'action', 'capsule', 'highlightAction', 'theme']);
+    hasConfigMethods(['content', 'action', 'capsule', 'highlightAction', 'theme', 'toastClass']);
 
     it('should have `._md` class indicator', inject(function($mdToast, $material) {
       var parent = angular.element('<div>');
@@ -119,6 +119,19 @@ describe('$mdToast service', function() {
       expect(button.text().trim()).toBe('UNDO');
       expect(button).toHaveClass('md-highlight');
       expect(button).toHaveClass('md-warn');
+    }));
+
+    it('adds the specified class to md-toast when using toastClass', inject(function($mdToast, $material) {
+      var parent = angular.element('<div>');
+
+      $mdToast.show(
+        $mdToast.simple()
+          .parent(parent)
+          .toastClass('test')
+      );
+      $material.flushOutstandingAnimations();
+
+      expect(parent.find('md-toast').hasClass('test')).toBe(true);
     }));
 
     describe('when using custom interpolation symbols', function() {
