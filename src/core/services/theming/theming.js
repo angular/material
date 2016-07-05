@@ -622,7 +622,7 @@ function generateAllThemes($injector, $mdTheming) {
   // Break the CSS into individual rules
   var rules = themeCss
                   .split(/\}(?!(\}|'|"|;))/)
-                  .filter(function(rule) { return rule && rule.length; })
+                  .filter(function(rule) { return rule && rule.trim().length; })
                   .map(function(rule) { return rule.trim() + '}'; });
 
 
