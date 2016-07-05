@@ -268,28 +268,28 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
         // touchmove events.
         if (!touchActionProperty && ev.type === 'touchmove') ev.preventDefault();
 
-        if (!this.state.dragPointer) {
-          if (this.state.options.horizontal) {
-            shouldStartDrag = Math.abs(pointer.distanceX) > this.state.options.minDistance;
-            shouldCancel = Math.abs(pointer.distanceY) > this.state.options.minDistance * this.state.options.cancelMultiplier;
-          }
-          
-          if (!this.state.options.horizontal || this.state.options.vertical) {
-            shouldStartDrag = Math.abs(pointer.distanceY) > this.state.options.minDistance;
-            shouldCancel = Math.abs(pointer.distanceX) > this.state.options.minDistance * this.state.options.cancelMultiplier;
-          }
-
-          if (shouldStartDrag) {
-            // Create a new pointer representing this drag, starting at this point where the drag started.
-            this.state.dragPointer = makeStartPointer(ev);
-            updatePointerState(ev, this.state.dragPointer);
-            this.dispatchEvent(ev, '$md.dragstart', this.state.dragPointer);
-
-          } else if (shouldCancel) {
-            this.cancel();
-          }
-        } else {
+        if (this.state.dragPointer) {
           this.dispatchDragMove(ev);
+          return;
+        }
+
+        if (this.state.options.horizontal) {
+          shouldStartDrag = Math.abs(pointer.distanceX) > this.state.options.minDistance;
+          shouldCancel = Math.abs(pointer.distanceY) > this.state.options.minDistance * this.state.options.cancelMultiplier;
+        }
+        
+        if (!this.state.options.horizontal || this.state.options.vertical) {
+          shouldStartDrag = shouldStartDrag || Math.abs(pointer.distanceY) > this.state.options.minDistance;
+          shouldCancel = shouldCancel || Math.abs(pointer.distanceX) > this.state.options.minDistance * this.state.options.cancelMultiplier;
+        }
+
+        if (shouldStartDrag) {
+          // Create a new pointer representing this drag, starting at this point where the drag started.
+          this.state.dragPointer = makeStartPointer(ev);
+          updatePointerState(ev, this.state.dragPointer);
+          this.dispatchEvent(ev, '$md.dragstart', this.state.dragPointer);
+        } else if (shouldCancel) {
+          this.cancel();
         }
       },
       // Only dispatch dragmove events every frame; any more is unnecessary
