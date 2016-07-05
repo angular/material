@@ -279,8 +279,8 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
         }
         
         if (!this.state.options.horizontal || this.state.options.vertical) {
-          shouldStartDrag = shouldStartDrag || Math.abs(pointer.distanceY) > this.state.options.minDistance;
-          shouldCancel = shouldCancel || Math.abs(pointer.distanceX) > this.state.options.minDistance * this.state.options.cancelMultiplier;
+          shouldStartDrag = shouldStartDrag || (Math.abs(pointer.distanceY) > this.state.options.minDistance);
+          shouldCancel = shouldCancel || (Math.abs(pointer.distanceX) > this.state.options.minDistance * this.state.options.cancelMultiplier);
         }
 
         if (shouldStartDrag) {
