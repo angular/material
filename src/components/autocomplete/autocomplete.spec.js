@@ -320,6 +320,75 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    describe('md-input-maxlength', function() {
+
+      it('should correctly set the form to invalid', inject(function($timeout) {
+        var scope = createScope(null, {inputId: 'custom-input-id'});
+        var template =
+          '<form name="testForm">' +
+            '<md-autocomplete ' +
+                'md-input-id="{{inputId}}" ' +
+                'md-input-maxlength="2" ' +
+                'md-input-name="testAutocomplete" ' +
+                'md-selected-item="selectedItem" ' +
+                'md-search-text="searchText" ' +
+                'md-items="item in match(searchText)" ' +
+                'md-item-text="item.display" ' +
+                'tabindex="3"' +
+                'md-floating-label="Favorite state">' +
+              '<span md-highlight-text="searchText">{{item.display}}</span>' +
+            '</md-autocomplete>' +
+          '</form>';
+
+        var element = compile(template, scope);
+        var input = element.find('input');
+
+        expect(scope.searchText).toBe('');
+        expect(scope.testForm.$valid).toBe(true);
+
+        scope.$apply('searchText = "Exceeded"');
+
+        expect(scope.testForm.$valid).toBe(false);
+
+        element.remove();
+      }));
+
+      it('should not clear the view value if the input is invalid', inject(function($timeout) {
+        var scope = createScope(null, {inputId: 'custom-input-id'});
+        var template =
+          '<form name="testForm">' +
+            '<md-autocomplete ' +
+                'md-input-id="{{inputId}}" ' +
+                'md-input-maxlength="2" ' +
+                'md-input-name="testAutocomplete" ' +
+                'md-selected-item="selectedItem" ' +
+                'md-search-text="searchText" ' +
+                'md-items="item in match(searchText)" ' +
+                'md-item-text="item.display" ' +
+                'tabindex="3"' +
+                'md-floating-label="Favorite state">' +
+              '<span md-highlight-text="searchText">{{item.display}}</span>' +
+            '</md-autocomplete>' +
+          '</form>';
+
+        var element = compile(template, scope);
+        var input = element.find('input');
+
+        expect(scope.searchText).toBe('');
+        expect(scope.testForm.$valid).toBe(true);
+
+        input.val('Exceeded');
+        input.triggerHandler('change');
+        scope.$digest();
+
+        expect(scope.testForm.$valid).toBe(false);
+        expect(scope.searchText).toBe('Exceeded');
+
+        element.remove();
+      }));
+
+    });
+
     describe('md-escape-options checks', function() {
       var scope, ctrl, element;
       var template = '\
