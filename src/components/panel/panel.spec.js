@@ -409,6 +409,34 @@ describe('$mdPanel', function() {
       });
     });
 
+    describe('should cause the propagation of events', function() {
+      var config, wrapper;
+
+      it('to be stopped when propagateContainerEvents=false', function() {
+        config = {
+          propagateContainerEvents: false,
+          template: DEFAULT_TEMPLATE
+        };
+
+        openPanel(config);
+
+        wrapper = angular.element(document.querySelector(PANEL_WRAPPER_CLASS));
+        expect(wrapper.css('pointer-events')).not.toEqual('none');
+      });
+
+      it('to NOT be stopped when propagateContainerEvents=true', function() {
+        config = {
+          propagateContainerEvents: true,
+          template: DEFAULT_TEMPLATE
+        };
+
+        openPanel(config);
+
+        wrapper = angular.element(document.querySelector(PANEL_WRAPPER_CLASS));
+        expect(wrapper.css('pointer-events')).toEqual('none');
+      });
+    });
+
     it('should apply a custom css class to the panel', function() {
       var customClass = 'custom-class';
 
@@ -815,7 +843,6 @@ describe('$mdPanel', function() {
         expect(onRemovingCalled).toBe(true);
       });
 
-
       it('should call onDomRemoved if provided when removing the panel from ' +
           'the DOM', function() {
             var onDomRemovedCalled = false;
@@ -866,6 +893,87 @@ describe('$mdPanel', function() {
         expect(PANEL_EL).not.toExist();
         expect(onDomRemovedCalled).toBe(true);
       });
+    });
+
+    describe('CSS class logic:', function() {
+      it('should add a class to the container/wrapper when toElement=false',
+          function() {
+            openPanel(DEFAULT_CONFIG);
+
+            panelRef.addClass('my-class');
+
+            expect(PANEL_WRAPPER_CLASS).toHaveClass('my-class');
+            expect(PANEL_EL).not.toHaveClass('my-class');
+          });
+
+      it('should add a class to the element when toElement=true', function() {
+        openPanel(DEFAULT_CONFIG);
+
+        panelRef.addClass('my-class', true);
+
+        expect(PANEL_WRAPPER_CLASS).not.toHaveClass('my-class');
+        expect(PANEL_EL).toHaveClass('my-class');
+      });
+
+      it('should remove a class from the container/wrapper when fromElement=false',
+          function() {
+            openPanel(DEFAULT_CONFIG);
+
+            panelRef.addClass('my-class');
+
+            expect(PANEL_WRAPPER_CLASS).toHaveClass('my-class');
+            expect(PANEL_EL).not.toHaveClass('my-class');
+
+            panelRef.removeClass('my-class');
+
+            expect(PANEL_WRAPPER_CLASS).not.toHaveClass('my-class');
+            expect(PANEL_EL).not.toHaveClass('my-class');
+          });
+
+      it('should remove a class from the element when fromElement=true',
+          function() {
+            openPanel(DEFAULT_CONFIG);
+
+            panelRef.addClass('my-class', true);
+
+            expect(PANEL_WRAPPER_CLASS).not.toHaveClass('my-class');
+            expect(PANEL_EL).toHaveClass('my-class');
+
+            panelRef.removeClass('my-class', true);
+
+            expect(PANEL_WRAPPER_CLASS).not.toHaveClass('my-class');
+            expect(PANEL_EL).not.toHaveClass('my-class');
+          });
+
+      it('should toggle a class on the container/wrapper when onElement=false',
+          function() {
+            openPanel(DEFAULT_CONFIG);
+
+            panelRef.toggleClass('my-class');
+
+            expect(PANEL_WRAPPER_CLASS).toHaveClass('my-class');
+            expect(PANEL_EL).not.toHaveClass('my-class');
+
+            panelRef.toggleClass('my-class');
+
+            expect(PANEL_WRAPPER_CLASS).not.toHaveClass('my-class');
+            expect(PANEL_EL).not.toHaveClass('my-class');
+          });
+
+      it('should toggle a class on the element when onElement=true',
+          function() {
+            openPanel(DEFAULT_CONFIG);
+
+            panelRef.toggleClass('my-class', true);
+
+            expect(PANEL_WRAPPER_CLASS).not.toHaveClass('my-class');
+            expect(PANEL_EL).toHaveClass('my-class');
+
+            panelRef.toggleClass('my-class', true);
+
+            expect(PANEL_WRAPPER_CLASS).not.toHaveClass('my-class');
+            expect(PANEL_EL).not.toHaveClass('n-class');
+          });
     });
 
     describe('should focus on the origin element on', function() {
@@ -1113,6 +1221,106 @@ describe('$mdPanel', function() {
     beforeEach(function() {
       config = DEFAULT_CONFIG;
       mdPanelPosition = $mdPanel.newPanelPosition();
+    });
+
+    describe('should update the position of an open panel', function() {
+      var xPosition, yPosition, myButton, myButtonRect;
+
+      beforeEach(function() {
+        xPosition = $mdPanel.xPosition;
+        yPosition = $mdPanel.yPosition;
+
+        myButton = '<button>myButton</button>';
+        attachToBody(myButton);
+        myButton = angular.element(document.querySelector('button'));
+        myButtonRect = myButton[0].getBoundingClientRect();
+      });
+
+      it('between two absolute positions', function() {
+        var top = '50px';
+        var left = '30px';
+        var position = $mdPanel.newPanelPosition()
+            .absolute()
+            .top(top)
+            .left(left);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        expect(panelRect.top).toBeApproximately(parseInt(top));
+        expect(panelRect.left).toBeApproximately(parseInt(left));
+
+        var newTop = '500px';
+        var newLeft = '300px';
+        var newPosition = $mdPanel.newPanelPosition()
+            .absolute()
+            .top(newTop)
+            .left(newLeft);
+
+        panelRef.updatePosition(newPosition);
+
+        var newPanelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        expect(newPanelRect.top).toBeApproximately(parseInt(newTop));
+        expect(newPanelRect.left).toBeApproximately(parseInt(newLeft));
+      });
+
+      it('between two relative positions', function() {
+        var position = $mdPanel.newPanelPosition()
+            .relativeTo(myButton[0])
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        expect(panelRect.top).toBeApproximately(myButtonRect.top);
+        expect(panelRect.left).toBeApproximately(myButtonRect.left);
+
+        var newPosition = $mdPanel.newPanelPosition()
+            .relativeTo(myButton)
+            .addPanelPosition(null, yPosition.ABOVE);
+
+        panelRef.updatePosition(newPosition);
+
+        var newPanelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        expect(newPanelRect.bottom).toBeApproximately(myButtonRect.top);
+      });
+
+      it('from an absolute to a relative position', function() {
+        var top = '250px';
+        var left = '400px';
+        var position = $mdPanel.newPanelPosition()
+            .absolute()
+            .top(top)
+            .left(left);
+            
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        expect(panelRect.top).toBeApproximately(parseInt(top));
+        expect(panelRect.left).toBeApproximately(parseInt(left));
+
+        var newPosition = $mdPanel.newPanelPosition()
+            .relativeTo(myButton[0])
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS);
+
+        panelRef.updatePosition(newPosition);
+
+        var newPanelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+        expect(newPanelRect.top).toBeApproximately(myButtonRect.top);
+        expect(newPanelRect.left).toBeApproximately(myButtonRect.left);
+      });
     });
 
     describe('should offset the panel', function() {
