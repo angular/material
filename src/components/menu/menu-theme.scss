@@ -1,24 +1,18 @@
 md-menu-content.md-THEME_NAME-theme {
-  background-color: '{{background-A100}}';
-
+  background-color: '{{background-50}}';
   md-menu-item {
-    color: '{{background-A200-0.87}}';
-
+    color: '{{background-50-contrast}}';
     md-icon {
-      color: '{{background-A200-0.54}}';
+      color: '{{background-50-contrast-icon}}';
     }
-
     .md-button[disabled] {
-      color: '{{background-A200-0.25}}';
-
+      color: '{{background-50-contrast-disabled}}';
       md-icon {
-        color: '{{background-A200-0.25}}';
+        color: '{{background-50-contrast-disabled}}';
       }
     }
-
   }
-
   md-menu-divider {
-    background-color: '{{background-A200-0.11}}';
+    background-color: '{{background-50-contrast-divider}}';
   }
 }
