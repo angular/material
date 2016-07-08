@@ -134,6 +134,8 @@ function detectDisabledThemes($mdThemingProvider) {
  * {{primary-contrast}} - Generates .md-hue-1, .md-hue-2, .md-hue-3 with configured contrast (ie. text) color shades set for each hue
  * {{primary-contrast-0.7}} - Apply 0.7 opacity to each of the above rules
  * {{primary-contrast-divider}} - Apply divider opacity to contrast color
+ * {{background-default-contrast}} - Apply primary text color for contrasting with default background
+ * {{background-50-contrast-icon}} - Apply contrast color for icon on background's shade 50 hue
  *
  * Foreground expansion: Applies rgba to black/white foreground text
  *
@@ -1010,7 +1012,7 @@ function parseRules(theme, colorType, rules) {
   var color = theme.colors[colorType];
   var themeNameRegex = new RegExp('\\.md-' + theme.name + '-theme', 'g');
   // Matches '{{ primary-color }}', etc
-  var hueRegex = new RegExp('(\'|")?{{\\s*([a-zA-Z]+)-?(color|default)?-?(contrast)?-?((?:\\d\\.?\\d*)|(?:[a-zA-Z]+))?\\s*}}("|\')?','g');
+  var hueRegex = new RegExp('(?:\'|")?{{\\s*(' + colorType + ')-?(color|default)?-?(contrast)?-?((?:\\d\\.?\\d*)|(?:[a-zA-Z]+))?\\s*}}("|\')?','g');
   var simpleVariableRegex = /'?"?{{\s*([a-zA-Z]+)-(A?\d+|hue-[0-3]|shadow|default)-?(contrast)?-?((?:\d\.?\d*)|(?:[a-zA-Z]+))?\s*}}'?"?/g;
   var palette = PALETTES[color.name];
   var defaultBgHue = theme.colors['background'].hues['default'];
@@ -1027,7 +1029,7 @@ function parseRules(theme, colorType, rules) {
       } else if (theme.foregroundPalette[hue]) {
         // Use user defined palette number (ie: foreground-2)
         return rgba(colorToRgbaArray(theme.foregroundPalette[hue]));
-      } else if (theme.foregroundPalette['1']){
+      } else if (theme.foregroundPalette['1']) {
         return rgba(colorToRgbaArray(theme.foregroundPalette['1']));
       }
       // Default to background-default-contrast-{opacity}
