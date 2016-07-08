@@ -249,12 +249,30 @@ describe('$mdThemingProvider', function() {
           .toEqual('color: rgba(0,0,0,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
           .toEqual('color: ;');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.54);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.54);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-disabled}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.38);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-hint}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.38);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-divider}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.12);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-0.05}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.05);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
       });
 
       it('for a dark theme', function() {
         testTheme.dark();
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-1}}"; }')[0].content)
-          .toEqual('color: rgba(255,255,255,1.0);');
+          .toEqual('color: rgba(255,255,255,0.87);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.7);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
@@ -263,6 +281,77 @@ describe('$mdThemingProvider', function() {
           .toEqual('color: rgba(255,255,255,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
           .toEqual('color: 1px 1px 0px rgba(0,0,0,0.4), -1px -1px 0px rgba(0,0,0,0.4);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-disabled}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.5);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-hint}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.5);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-divider}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.12);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-0.05}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.05);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-900-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-900-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,1);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
+      });
+      it('override foreground color', function() {
+        testTheme.dark(false);
+        testTheme.foregroundPalette = {
+          '1': 'ff0000',
+          '2': '00ff00',
+          '3': '0000ff',
+          '4': 'ffff00'
+        };
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-1}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
+          .toEqual('color: rgb(0,255,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
+          .toEqual('color: rgb(0,0,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
+          .toEqual('color: ;');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgb(0,255,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgb(0,255,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-disabled}}"; }')[0].content)
+          .toEqual('color: rgb(0,0,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-hint}}"; }')[0].content)
+          .toEqual('color: rgb(0,0,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-divider}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,0);');
+
+        // override colors of same contrast type
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-50-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-100-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-200-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+
+        // should not override the following
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-900-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
       });
     });
 
