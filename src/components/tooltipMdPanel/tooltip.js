@@ -6,13 +6,39 @@ angular
   .module('material.components.tooltipMdPanel', [ 'material.core' ])
   .directive('mdTooltipMdPanel', MdTooltipDirective);
 
+/**
+* @ngdoc directive
+* @name mdTooltip
+* @module material.components.tooltip
+* @description
+* Tooltips are used to describe elements that are interactive and primarily graphical (not textual).
+*
+* Place a `<md-tooltip>` as a child of the element it describes.
+*
+* A tooltip will activate when the user focuses, hovers over, or touches the parent.
+*
+* @usage
+* <hljs lang="html">
+* <md-button class="md-fab md-accent" aria-label="Play">
+*   <md-tooltip>
+*     Play Music
+*   </md-tooltip>
+*   <md-icon icon="img/icons/ic_play_arrow_24px.svg"></md-icon>
+* </md-button>
+* </hljs>
+*
+* @param {expression=} md-visible Boolean bound to whether the tooltip is currently visible.
+* @param {number=} md-delay How many milliseconds to wait to show the tooltip after the user focuses, hovers, or touches the
+* parent. Defaults to 0ms on non-touch devices and 75ms on touch.
+* @param {boolean=} md-autohide If present or provided with a boolean value, the tooltip will hide on mouse leave, regardless of focus
+* @param {string=} md-direction Which direction would you like the tooltip to go?  Supports left, right, top, and bottom.  Defaults to bottom.
+*/
 function MdTooltipDirective($$rAF, $timeout, $window, $document, $q, $interpolate, $rootElement,
   $mdTheming, $mdUtil, $mdPanel) {
 
   var ENTER_EVENTS = 'focus touchstart mouseenter';
   var LEAVE_EVENTS = 'blur touchcancel mouseleave';
   var TOOLTIP_SHOW_DELAY = 0;
-  var TOOLTIP_WINDOW_EDGE_SPACE = 0;
 
   return {
     restrict: 'E',
