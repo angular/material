@@ -309,6 +309,8 @@ angular
  * Adds a class to the panel. DO NOT use this to hide/show the panel.
  *
  * @param {string} newClass Class to be added.
+ * @param {boolean} toElement Whether or not to add the class to the panel
+ *    element instead of the container.
  */
 
 /**
@@ -318,6 +320,8 @@ angular
  * Removes a class from the panel. DO NOT use this to hide/show the panel.
  *
  * @param {string} oldClass Class to be removed.
+ * @param {boolean} fromElement Whether or not to remove the class from the
+ * panel element instead of the container.
  */
 
 /**
@@ -327,6 +331,17 @@ angular
  * Toggles a class on the panel. DO NOT use this to hide/show the panel.
  *
  * @param {string} toggleClass Class to be toggled.
+ * @param {boolean} onElement Whether or not to remove the class from the panel
+ *    element instead of the container.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#updatePosition
+ * @description
+ * Updates the position configuration of a panel. Use this to update the
+ * position of a panel that is open, without having to close and re-open the
+ * panel.
  */
 
 /**
@@ -1078,8 +1093,8 @@ MdPanelRef.prototype.addClass = function(newClass, toElement) {
  * Remove a class from the panel. DO NOT use this to hide/show the panel.
  *
  * @param {string} oldClass Class to be removed.
- * @param {boolean} fromElement Whether or not to remove the class from the panel
- *    element instead of the container.
+ * @param {boolean} fromElement Whether or not to remove the class from the
+ *    panel element instead of the container.
  */
 MdPanelRef.prototype.removeClass = function(oldClass, fromElement) {
   if (!this._panelContainer) {
@@ -1211,7 +1226,7 @@ MdPanelRef.prototype._addStyles = function() {
 
 
 /**
- * Update the position configuration of a panel
+ * Updates the position configuration of a panel
  * @param {MdPanelPosition} position
  */
 MdPanelRef.prototype.updatePosition = function(position) {
