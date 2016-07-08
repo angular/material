@@ -1,5 +1,5 @@
 **Actual Behavior**:
- -  `What is the issue?` *
+ -  `What is the issue? *`
  -  `What is the expected behavior?`
 
 **CodePen** (or steps to reproduce the issue): *
