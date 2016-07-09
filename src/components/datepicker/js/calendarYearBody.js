@@ -112,7 +112,7 @@
 
     var cellText = this.dateLocale.shortMonths[month];
 
-    if (this.dateUtil.isDateWithinRange(firstOfMonth,
+    if (this.dateUtil.isMonthWithinRange(firstOfMonth,
         calendarCtrl.minDate, calendarCtrl.maxDate)) {
       var selectionIndicator = document.createElement('span');
       selectionIndicator.classList.add('md-calendar-date-selection-indicator');

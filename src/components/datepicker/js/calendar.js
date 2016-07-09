@@ -387,4 +387,22 @@
       date.getDate()
     ].join('-');
   };
+
+  /**
+   * Util to trigger an extra digest on a parent scope, in order to to ensure that
+   * any child virtual repeaters have updated. This is necessary, because the virtual
+   * repeater doesn't update the $index the first time around since the content isn't
+   * in place yet. The case, in which this is an issue, is when the repeater has less
+   * than a page of content (e.g. a month or year view has a min or max date).
+   */
+  CalendarCtrl.prototype.updateVirtualRepeat = function() {
+    var scope = this.$scope;
+    var virtualRepeatResizeListener = scope.$on('$md-resize-enable', function() {
+      if (!scope.$$phase) {
+        scope.$apply();
+      }
+
+      virtualRepeatResizeListener();
+    });
+  };
 })();

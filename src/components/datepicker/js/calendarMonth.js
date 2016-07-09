@@ -148,6 +148,7 @@
     }
 
     this.attachScopeListeners();
+    calendarCtrl.updateVirtualRepeat();
 
     // Fire the initial render, since we might have missed it the first time it fired.
     calendarCtrl.ngModelCtrl && calendarCtrl.ngModelCtrl.$render();
