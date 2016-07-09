@@ -43,7 +43,7 @@
    * Controller for the mdCalendar component.
    * @ngInject @constructor
    */
-  function CalendarYearCtrl($element, $scope, $animate, $q, $$mdDateUtil, $timeout) {
+  function CalendarYearCtrl($element, $scope, $animate, $q, $$mdDateUtil) {
 
     /** @final {!angular.JQLite} */
     this.$element = $element;
@@ -59,9 +59,6 @@
 
     /** @final */
     this.dateUtil = $$mdDateUtil;
-
-    /** @final */
-    this.$timeout = $timeout;
 
     /** @final {HTMLElement} */
     this.calendarScroller = $element[0].querySelector('.md-virtual-repeat-scroller');
@@ -103,12 +100,6 @@
      */
     this.items = { length: 400 };
 
-    if (maxDate && minDate) {
-      // Limit the number of years if min and max dates are set.
-      var numYears = this.dateUtil.getYearDistance(minDate, maxDate) + 1;
-      this.items.length = Math.max(numYears, 1);
-    }
-
     this.firstRenderableDate = this.dateUtil.incrementYears(calendarCtrl.today, - (this.items.length / 2));
 
     if (minDate && minDate > this.firstRenderableDate) {
@@ -119,13 +110,14 @@
       this.firstRenderableDate = this.dateUtil.incrementMonths(maxDate, - (this.items.length - 1));
     }
 
-    // Trigger an extra digest to ensure that the virtual repeater has updated. This
-    // is necessary, because the virtual repeater doesn't update the $index the first
-    // time around since the content isn't in place yet. The case, in which this is an
-    // issues, is when the repeater has less than a page of content (e.g. there's a min
-    // and max date).
-    if (minDate || maxDate) this.$timeout();
+    if (maxDate && minDate) {
+      // Limit the number of years if min and max dates are set.
+      var numYears = this.dateUtil.getYearDistance(this.firstRenderableDate, maxDate) + 1;
+      this.items.length = Math.max(numYears, 1);
+    }
+
     this.attachScopeListeners();
+    calendarCtrl.updateVirtualRepeat();
 
     // Fire the initial render, since we might have missed it the first time it fired.
     calendarCtrl.ngModelCtrl && calendarCtrl.ngModelCtrl.$render();
