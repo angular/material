@@ -206,7 +206,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  * <hljs lang="js">
  *   $scope.showPrerenderedDialog = function() {
  *     $mdDialog.show({
- *       contentElement: '#myStaticDialog'
+ *       contentElement: '#myStaticDialog',
  *       parent: angular.element(document.body)
  *     });
  *   };
