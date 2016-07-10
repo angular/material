@@ -17,7 +17,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#d50000',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 300 A100',
-    'contrastStrongLightColors': '400 500 600 700 A200 A400 A700'
+    'contrastStrongLightColors': '400 500 600 700 800 900 A200 A400 A700'
   },
   'pink': {
     '50': '#fce4ec',
@@ -36,7 +36,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#c51162',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '500 600 A200 A400 A700'
+    'contrastStrongLightColors': '300 400 500 600 700 800 900 A200 A400 A700'
   },
   'purple': {
     '50': '#f3e5f5',
@@ -55,7 +55,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#aa00ff',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '300 400 A200 A400 A700'
+    'contrastStrongLightColors': '300 400 500 600 700 800 900 A200 A400 A700'
   },
   'deep-purple': {
     '50': '#ede7f6',
@@ -74,7 +74,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#6200ea',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '300 400 A200'
+    'contrastStrongLightColors': '300 400 500 600 700 800 900 A200 A400 A700'
   },
   'indigo': {
     '50': '#e8eaf6',
@@ -93,7 +93,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#304ffe',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '300 400 A200 A400'
+    'contrastStrongLightColors': '300 400 500 600 700 800 900 A200 A400 A700'
   },
   'blue': {
     '50': '#e3f2fd',
@@ -112,7 +112,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#2962ff',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 300 400 A100',
-    'contrastStrongLightColors': '500 600 700 A200 A400 A700'
+    'contrastStrongLightColors': '500 600 700 800 900 A200 A400 A700'
   },
   'light-blue': {
     '50': '#e1f5fe',
@@ -131,7 +131,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#0091ea',
     'contrastDefaultColor': 'dark',
     'contrastLightColors': '600 700 800 900 A700',
-    'contrastStrongLightColors': '600 700 800 A700'
+    'contrastStrongLightColors': '600 700 800 900 A700'
   },
   'cyan': {
     '50': '#e0f7fa',
@@ -169,7 +169,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#00bfa5',
     'contrastDefaultColor': 'dark',
     'contrastLightColors': '500 600 700 800 900',
-    'contrastStrongLightColors': '500 600 700'
+    'contrastStrongLightColors': '500 600 700 800 900'
   },
   'green': {
     '50': '#e8f5e9',
@@ -187,8 +187,8 @@ angular.module('material.core.theming.palette', [])
     'A400': '#00e676',
     'A700': '#00c853',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '500 600 700 800 900',
-    'contrastStrongLightColors': '500 600 700'
+    'contrastLightColors': '600 700 800 900',
+    'contrastStrongLightColors': '600 700 800 900'
   },
   'light-green': {
     '50': '#f1f8e9',
@@ -317,7 +317,7 @@ angular.module('material.core.theming.palette', [])
     'A700': '#5d4037',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 A100 A200',
-    'contrastStrongLightColors': '300 400'
+    'contrastStrongLightColors': '300 400 500 600 700 800 900 A400 A700'
   },
   'grey': {
     '50': '#fafafa',
@@ -354,6 +354,6 @@ angular.module('material.core.theming.palette', [])
     'A700': '#455a64',
     'contrastDefaultColor': 'light',
     'contrastDarkColors': '50 100 200 300 A100 A200',
-    'contrastStrongLightColors': '400 500 700'
+    'contrastStrongLightColors': '400 500 600 700 800 900 A400 A700'
   }
 });
