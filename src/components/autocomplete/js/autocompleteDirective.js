@@ -45,6 +45,8 @@ angular
  * @param {string=} placeholder Placeholder text that will be forwarded to the input.
  * @param {boolean=} md-no-cache Disables the internal caching that happens in autocomplete
  * @param {boolean=} ng-disabled Determines whether or not to disable the input field
+ * @param {boolean=} md-require-match When set to true, the autocomplete will add a validator,
+ *     which will evaluate to false, when no item is currently selected.
  * @param {number=} md-min-length Specifies the minimum length of text before autocomplete will
  *     make suggestions
  * @param {number=} md-delay Specifies the amount of time (in milliseconds) to wait before looking
@@ -143,6 +145,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
       itemText:         '&mdItemText',
       placeholder:      '@placeholder',
       noCache:          '=?mdNoCache',
+      requireMatch:     '=?mdRequireMatch',
       selectOnMatch:    '=?mdSelectOnMatch',
       matchInsensitive: '=?mdMatchCaseInsensitive',
       itemChange:       '&?mdSelectedItemChange',

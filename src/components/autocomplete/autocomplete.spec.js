@@ -1248,6 +1248,51 @@ describe('<md-autocomplete>', function() {
     }));
   });
 
+  describe('when requiring a match', function() {
+
+    it('should correctly update the validity', inject(function($timeout) {
+      var scope = createScope();
+      var template = '\
+          <form name="form">\
+            <md-autocomplete\
+                md-input-name="autocomplete"\
+                md-selected-item="selectedItem"\
+                md-search-text="searchText"\
+                md-items="item in match(searchText)"\
+                md-item-text="item.display"\
+                placeholder="placeholder"\
+                md-require-match="true">\
+              <span md-highlight-text="searchText">{{item.display}}</span>\
+            </md-autocomplete>\
+          </form>';
+      var element = compile(template, scope);
+      var ctrl = element.find('md-autocomplete').controller('mdAutocomplete');
+
+      element.scope().searchText = 'fo';
+      $timeout.flush();
+
+      ctrl.select(0);
+      $timeout.flush();
+
+      expect(scope.searchText).toBe('foo');
+      expect(scope.selectedItem).not.toBeNull();
+      expect(scope.selectedItem.display).toBe('foo');
+      expect(scope.match(scope.searchText).length).toBe(1);
+
+      expect(scope.form.autocomplete.$error['md-require-match']).toBeFalsy();
+
+      ctrl.clear();
+
+      scope.$apply();
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBe(null);
+      expect(scope.form.autocomplete.$error['md-require-match']).toBeTruthy();
+
+    }));
+
+  });
+
   describe('when required', function() {
     it('properly handles md-min-length="0" and undefined searchText', function() {
       var scope = createScope();
