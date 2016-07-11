@@ -20,7 +20,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       hasFocus             = false,
       lastCount            = 0,
       fetchesInProgress    = 0,
-      enableWrapScroll     = null;
+      enableWrapScroll     = null,
+      inputModelCtrl       = null;
 
   //-- public variables with handlers
   defineProperty('hidden', handleHiddenChange, true);
@@ -72,6 +73,12 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       focusElement();
       $element.on('focus', focusElement);
     });
+  }
+
+  function updateModelValidators() {
+    if (!$scope.requireMatch || !inputModelCtrl) return;
+
+    inputModelCtrl.$setValidity('md-require-match', !!$scope.selectedItem);
   }
 
   /**
@@ -205,9 +212,12 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       wrap:  $element.find('md-autocomplete-wrap')[0],
       root:  document.body
     };
+
     elements.li   = elements.ul.getElementsByTagName('li');
     elements.snap = getSnapTarget();
     elements.$    = getAngularElements(elements);
+
+    inputModelCtrl = elements.$.input.controller('ngModel');
   }
 
   /**
@@ -310,6 +320,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * @param previousSelectedItem
    */
   function selectedItemChange (selectedItem, previousSelectedItem) {
+
+    updateModelValidators();
+
     if (selectedItem) {
       getDisplayValue(selectedItem).then(function (val) {
         $scope.searchText = val;
@@ -372,8 +385,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    */
   function handleSearchText (searchText, previousSearchText) {
     ctrl.index = getDefaultIndex();
+
     // do nothing on init
     if (searchText === previousSearchText) return;
+
+    updateModelValidators();
 
     getDisplayValue($scope.selectedItem).then(function (val) {
       // clear selected item if search text no longer matches it
