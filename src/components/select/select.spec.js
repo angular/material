@@ -266,11 +266,15 @@ describe('<md-select>', function() {
       openSelect(select);
       waitForSelectOpen();
       clickOption(select, 0);
+      closeSelect();
+      waitForSelectClose();
       expect(el).toHaveClass('md-input-has-value');
 
       openSelect(select);
       waitForSelectOpen();
       clickOption(select, 1);
+      closeSelect();
+      waitForSelectClose();
       expect(el).toHaveClass('md-input-has-value');
 
       el.remove();
@@ -284,7 +288,7 @@ describe('<md-select>', function() {
         '<md-option ng-value></md-option>',
         '<md-option ng-value>None</md-option>',
         '<md-option value=""></md-option>',
-        '<md-option ng-value=""></md-option>',
+        '<md-option ng-value=""></md-option>'
       ];
       
       templates.forEach(function(template) {
@@ -298,11 +302,15 @@ describe('<md-select>', function() {
         openSelect(select);
         waitForSelectOpen();
         clickOption(select, 1);
+        closeSelect();
+        waitForSelectClose();
         expect(el).toHaveClass('md-input-has-value');
 
         openSelect(select);
         waitForSelectOpen();
         clickOption(select, 0);
+        closeSelect();
+        waitForSelectClose();
         expect(el).not.toHaveClass('md-input-has-value');
 
         el.remove();
