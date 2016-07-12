@@ -207,7 +207,7 @@ function labelDirective() {
  *   <md-input-container>
  *     <label>Favorite Color</label>
  *     <input name="favoriteColor" ng-model="favoriteColor" required>
- *     <div ng-messages="userForm.lastName.$error">
+ *     <div ng-messages="colorForm.favoriteColor.$error">
  *       <div ng-message="required">This is required!</div>
  *     </div>
  *   </md-input-container>
