@@ -7,6 +7,7 @@
 angular.module('material.core.theming', ['material.core.theming.palette'])
   .directive('mdTheme', ThemingDirective)
   .directive('mdThemable', ThemableDirective)
+  .directive('mdThemesCss', disableThemesDirective )
   .provider('$mdTheming', ThemingProvider)
   .run(generateAllThemes);
 
@@ -534,6 +535,36 @@ function ThemingDirective($mdTheming, $interpolate, $log) {
         ctrl.$setTheme($interpolate(attrs.mdTheme)(scope));
         attrs.$observe('mdTheme', ctrl.$setTheme);
       }
+    }
+  };
+}
+
+/**
+ * Special directive that will disable ALL runtime Theme style generation and DOM injection
+ *
+ * <link rel="stylesheet" href="angular-material.min.css">
+ * <link rel="stylesheet" href="angular-material.themes.css">
+ *
+ * <body md-theme-css>
+ *  ...
+ * </body>
+ *
+ * Note: Using md-themes-css directive requires the developer to load external
+ * theme stylesheets; e.g. custom themes from Material-Tools:
+ *
+ *       `angular-material.themes.css`
+ *
+ * Another option is to use the ThemingProvider to configure and disable the attribute
+ * conversions; this would obviate the use of the `md-themes-css` directive
+ *
+ */
+function disableThemesDirective() {
+  return {
+    restrict : 'A',
+    priority : '900',
+    compile  : function() {
+      disableTheming = false;
+      return angular.noop;
     }
   };
 }
