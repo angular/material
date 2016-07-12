@@ -6,64 +6,123 @@ $md-datepicker-open-animation-duration: 0.2s !default;
 $md-datepicker-triangle-button-width: 36px !default;
 $md-datepicker-input-mask-height: 40px !default;
 
+$input-padding-bottom: 8px !default;
+$md-datepicker-calendar-offset: 30px !default;
+
+$input-margin-top: 10px !default;
+$input-label-default-offset: 24px !default;
+
+// md-spacing values (horizontal spacing with icons)
+// normal     = 36px (Angular Material default)
+// wide       = 48px (Material Design Spec dense)
+// extra-wide = 56px (Material Design Spec default)
+
+$input-horizontal-offset: 36px !default;
+$input-horizontal-offset-wide: 48px !default;
+$input-horizontal-offset-extra-wide: 56px !default;
+
+
+// The datepickers triangle icon uses the default button margin.
+// We need to use the margin to align the label inside of an input container properly.
+$icon-button-margin: rem(0.600) !default;
+
+$button-margin-and-padding: 14px !default;
+
 
 md-datepicker {
   // Don't let linebreaks happen between the open icon-button and the input.
   white-space: nowrap;
   overflow: hidden;
+  position: relative; // for md-datepicker-button's absolute position
+  md-input-container & {
+    position: initial; // let md-datepicker-button position pass up
+    .md-datepicker-button.md-button {
+      @include rtl-prop(left, right, -$button-margin-and-padding);
+      margin-top: $input-label-default-offset + 6px;
+    }
+    .md-datepicker-triangle-button {
+      top: $input-label-default-offset;
+    }
+    .md-datepicker-input {
+      width: auto;
+    }
+  }
 
   // Leave room for the down-triangle button to "overflow" it's parent without modifying scrollLeft.
   // This prevents the element from shifting right when opening via the triangle button.
   @include rtl-prop(padding-right, padding-left, $md-datepicker-triangle-button-width / 2);
   @include rtl-prop(margin-right, margin-left, -$md-datepicker-triangle-button-width / 2);
+  @include rtl-prop(padding-left, padding-right, $button-margin-and-padding);
+  @include rtl-prop(margin-left, margin-right, -$button-margin-and-padding);
 
   vertical-align: middle;
 }
 
-.md-inline-form {
-  md-datepicker {
-    margin-top: 12px;
+.layout-row,
+.layout-xs-row, .layout-gt-xs-row,
+.layout-sm-row, .layout-gt-sm-row,
+.layout-md-row, .layout-gt-md-row,
+.layout-lg-row, .layout-gt-lg-row,
+.layout-xl-row {
+  .md-inline-form & > md-datepicker {
+    margin-top: $input-label-default-offset;
+    margin-bottom: auto;
+  }
+
+  & > md-datepicker:not(:last-child), {
+    @include rtl-prop(margin-right, margin-left, -$md-datepicker-triangle-button-width / 2 + 16px);
   }
 }
 
 // The calendar icon button used to open the calendar pane.
-.md-datepicker-button {
-  display: inline-block;
-  box-sizing: border-box;
+.md-datepicker-button.md-button {
+  top: auto;
+  margin-top: 6px;
+  position: absolute;
+  @include rtl-prop(left, right, 0);
   background: none;
+  z-index: 1;
   vertical-align: middle;
 }
+
 
 // The input into which the user can type the date.
 .md-datepicker-input {
   @include md-flat-input();
   min-width: 120px;
-  max-width: $md-calendar-width - $md-datepicker-button-gap;
+  max-width: $md-calendar-width - $input-horizontal-offset - $md-datepicker-calendar-offset;
+
+  [md-spacing="wide"] &,
+  &[md-spacing="wide"] {
+    max-width: $md-calendar-width - $input-horizontal-offset-wide - $md-datepicker-calendar-offset;
+  }
+
+  [md-spacing="extra-wide"] &,
+  &[md-spacing="extra-wide"] {
+    max-width: $md-calendar-width - $input-horizontal-offset-extra-wide - $md-datepicker-calendar-offset;
+  }
+
 }
 
 // If the datepicker is inside of a md-input-container
 ._md-datepicker-floating-label {
   > label:not(.md-no-float):not(.md-container-ignore) {
-    $width-offset: $md-datepicker-triangle-button-width * 2 + $md-datepicker-button-gap;
-    $offset: $md-datepicker-triangle-button-width / 2;
-    @include rtl(right, $offset, auto);
-    @include rtl(left, auto, $offset);
-    width: calc(100% - #{$width-offset});
+    @include rtl-prop(left, right, $input-horizontal-offset);
   }
-
+  [md-spacing="wide"] &,
+  &[md-spacing="wide"] {
+    > label:not(.md-no-float):not(.md-container-ignore) {
+      @include rtl-prop(left, right, $input-horizontal-offset-wide);
+    }
+  }
+  [md-spacing="extra-wide"] &,
+  &[md-spacing="extra-wide"] {
+    > label:not(.md-no-float):not(.md-container-ignore) {
+      @include rtl-prop(left, right, $input-horizontal-offset-extra-wide);
+    }
+  }
   > md-datepicker {
-    // Prevents the ripple on the triangle from being clipped.
-    overflow: visible;
-
-    .md-datepicker-input-container {
-      border: none;
-    }
-
-    .md-datepicker-button {
-      // Prevents the button from wrapping around.
-      @include rtl(float, left, right);
-      margin-top: -$md-datepicker-border-bottom-gap / 2;
-    }
+    overflow: visible; // Prevents the ripple on the triangle from being clipped.
   }
 }
 
@@ -73,19 +132,38 @@ md-datepicker {
   // Position relative in order to absolutely position the down-triangle button within.
   position: relative;
 
-  padding-bottom: $md-datepicker-border-bottom-gap;
-  border-bottom-width: 1px;
-  border-bottom-style: solid;
+  > input {
+    margin-top: $input-margin-top;
+    padding-top: 0;
+    padding-bottom: $input-padding-bottom - 1;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    margin-bottom: 11px;
+    @include rtl-prop(margin-left, margin-right, $input-horizontal-offset);
+  }
+
+  [md-spacing="wide"] &,
+  &[md-spacing="wide"] {
+    > input {
+      @include rtl-prop(margin-left, margin-right, $input-horizontal-offset-wide);
+    }
+  }
+
+  [md-spacing="extra-wide"] &,
+  &[md-spacing="extra-wide"] {
+    > input {
+      @include rtl-prop(margin-left, margin-right, $input-horizontal-offset-extra-wide);
+    }
+  }
 
   display: inline-block;
   width: auto;
 
-  .md-icon-button + & {
-    @include rtl-prop(margin-left, margin-right, $md-datepicker-button-gap);
-  }
-
   &.md-datepicker-focused {
-    border-bottom-width: 2px;
+    > input {
+      border-bottom-width: 2px;
+      padding-bottom: $input-padding-bottom - 2;
+    }
   }
 }
 
@@ -168,6 +246,7 @@ md-datepicker {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  font-size: 16px;
 
   width: 0;
   height: 0;
@@ -179,11 +258,8 @@ md-datepicker {
 // Button containing the down "disclosure" triangle/arrow.
 .md-datepicker-triangle-button {
   position: absolute;
-  @include rtl-prop(right, left, 0);
-  top: $md-date-arrow-size;
-
-  // TODO(jelbourn): This position isn't great on all platforms.
-  @include rtl(transform, translateY(-25%) translateX(45%), translateY(-25%) translateX(-45%));
+  @include rtl-prop(right, left, -$button-margin-and-padding);
+  top: 0;
 }
 
 // Need crazy specificity to override .md-button.md-icon-button.
@@ -210,31 +286,37 @@ md-datepicker[disabled] {
   overflow: hidden;
 
   .md-datepicker-input-container {
-    // The negative bottom margin prevents the content around the datepicker
-    // from jumping when it gets opened.
-    margin-bottom: -$md-datepicker-border-bottom-gap;
+    @include rtl-prop(margin-left, margin-right, $md-datepicker-calendar-offset);
   }
-
-  .md-icon-button + .md-datepicker-input-container {
-    @include rtl-prop(margin-left, margin-right, -$md-datepicker-button-gap);
-  }
-
-  .md-datepicker-input,
-  label:not(.md-no-float):not(.md-container-ignore) {
-    margin-bottom: -$md-datepicker-border-bottom-gap;
-  }
-
-  // This needs some extra specificity in order to override
-  // the focused/invalid border colors.
   input.md-datepicker-input {
-    @include rtl-prop(margin-left, margin-right, 24px);
-    height: $md-datepicker-input-mask-height;
+    @include rtl-prop(margin-left, margin-right, $input-horizontal-offset - $md-datepicker-calendar-offset);
     border-bottom-color: transparent;
   }
 
-  .md-datepicker-triangle-button,
-  &.md-input-has-value > label,
-  &.md-input-has-placeholder > label {
+  &._md-datepicker-floating-label {
+   .md-datepicker-input-container {
+      margin-top: 24px;
+    }
+  }
+
+  .md-datepicker-input {
+    margin-top: 10px !important; //override
+  }
+
+  [md-spacing="wide"] &,
+  &[md-spacing="wide"] {
+    input.md-datepicker-input {
+      @include rtl-prop(margin-left, margin-right, $input-horizontal-offset-wide - $md-datepicker-calendar-offset);
+    }
+  }
+  [md-spacing="extra-wide"] &,
+  &[md-spacing="extra-wide"] {
+    input.md-datepicker-input {
+      @include rtl-prop(margin-left, margin-right, $input-horizontal-offset-extra-wide - $md-datepicker-calendar-offset);
+    }
+  }
+
+  .md-datepicker-triangle-button {
     display: none;
   }
 }

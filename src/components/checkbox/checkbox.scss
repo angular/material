@@ -1,38 +1,37 @@
-//$checkbox-width: 20px !default;
+//$checkbox-width: 18px !default;
 //$checkbox-height: $checkbox-width !default;
 //$checkbox-border-radius: 2px !default;
 //$checkbox-border-width: 2px !default;
 //
 // ^^ defined in variables.scss
 //
-$checkbox-margin: 16px !default;
-$checkbox-text-margin: 10px !default;
-$checkbox-top: 12px !default;
+$checkbox-margin-end: 16px !default;
+$checkbox-text-margin-top: 8px !default;
+$container-checkbox-margin: 3px !default;
 
-.md-inline-form {
-  md-checkbox {
-    margin: 19px 0 18px;
-  }
-}
+// md-spacing values (horizontal spacing with icons)
+// normal     = 36px (Angular Material default)
+// wide       = 48px (Material Design Spec dense)
+// extra-wide = 56px (Material Design Spec default)
+$checkbox-text-margin: 36px !default;
+$checkbox-text-margin-wide: 48px !default;
+$checkbox-text-margin-extra-wide: 56px !default;
+
+// from input.scss
+$input-label-default-offset: 24px !default;
+
+$md-inline-alignment: $input-label-default-offset;
 
 md-checkbox {
   box-sizing: border-box;
   display: inline-block;
-  margin-bottom: $checkbox-margin;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
   user-select: none;
   position: relative;
   min-width: $checkbox-width;
-  min-height: $checkbox-width;
-  @include rtl(margin-left, 0, $checkbox-margin);
-  @include rtl(margin-right, $checkbox-margin, 0);
-
-  &:last-of-type {
-    margin-left: 0;
-    margin-right: 0;
-  }
+  min-height: $checkbox-width * 2;
 
   &.md-focused:not([disabled]) {
     .md-container:before {
@@ -49,11 +48,16 @@ md-checkbox {
     }
   }
 
-  &.md-align-top-left > div.md-container {
-    top: $checkbox-top;
-  }
-
   @include checkbox-container;
+
+  .md-container {
+    // Use auto for compatibility with md-checkbox padding
+    top: auto;
+    @include rtl(left, initial, auto);
+    @include rtl(right, auto, initial);
+    margin: $container-checkbox-margin;
+    margin-top: $checkbox-height + $container-checkbox-margin;
+  }
 
   .md-label {
     box-sizing: border-box;
@@ -62,9 +66,54 @@ md-checkbox {
     vertical-align: middle;
     white-space: normal;
     user-select: text;
+    margin-top: $checkbox-text-margin-top;
+    margin-bottom: auto;
 
-    @include rtl(margin-left, $checkbox-text-margin + $checkbox-width, 0);
-    @include rtl(margin-right, 0, $checkbox-text-margin + $checkbox-width);
+    @include rtl(margin-left, $checkbox-text-margin, 0);
+    @include rtl(margin-right, 0, $checkbox-text-margin);
 
+    &:empty {
+      // clamp to checkbox-container margins
+      @include rtl(margin-left, $checkbox-height + ($container-checkbox-margin * 2), 0);
+      @include rtl(margin-right, 0, $checkbox-height + ($container-checkbox-margin * 2));
+    }
+
+  }
+
+  [md-spacing="wide"] &,
+  &[md-spacing="wide"] {
+    .md-label {
+      @include rtl(margin-left, $checkbox-text-margin-wide, 0);
+      @include rtl(margin-right, 0, $checkbox-text-margin-wide);
+    }
+  }
+
+  [md-spacing="extra-wide"] &,
+  &[md-spacing="extra-wide"]{
+    .md-label {
+      @include rtl(margin-left, $checkbox-text-margin-extra-wide, 0);
+      @include rtl(margin-right, 0, $checkbox-text-margin-extra-wide);
+    }
+  }
+}
+
+
+.layout-row,
+.layout-xs-row, .layout-gt-xs-row,
+.layout-sm-row, .layout-gt-sm-row,
+.layout-md-row, .layout-gt-md-row,
+.layout-lg-row, .layout-gt-lg-row,
+.layout-xl-row {
+  & > md-checkbox:not(:last-child), {
+    @include rtl(margin-right, $checkbox-margin-end, 0);
+    @include rtl(margin-left, 0, $checkbox-margin-end);
+  }
+
+  &.md-inline-form,
+  .md-inline-form & {
+    > md-checkbox {
+      margin-top: $md-inline-alignment;
+      margin-bottom: auto;
+    }
   }
 }

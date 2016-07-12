@@ -8,14 +8,20 @@
   }
 
   .md-datepicker-input-container {
-    border-bottom-color: '{{foreground-4}}';
+    > input {
+      border-bottom-color: '{{foreground-4}}';
+    }
 
     &.md-datepicker-focused {
-      border-bottom-color: '{{primary-color}}'
+      > input {
+        border-bottom-color: '{{primary-color}}'
+      }
     }
 
     &.md-datepicker-invalid {
-      border-bottom-color: '{{warn-A700}}';
+      > input {
+        border-bottom-color: '{{warn-A700}}';
+      }
     }
   }
 

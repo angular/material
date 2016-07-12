@@ -71,16 +71,26 @@ md-autocomplete {
     &.md-menu-showing {
       z-index: $z-index-backdrop + 1;
     }
+
+    md-input-container.md-input-has-messages {
+      md-progress-linear.md-inline {
+        bottom: 18px;
+      }
+
+      &.md-dense md-progress-linear.md-inline {
+        bottom: 20px;
+      }
+
+    }
+
     md-progress-linear {
       position: absolute;
       bottom: -2px;
       left: 0;
       // When `md-inline` is present, we adjust the offset to go over the `ng-message` space
       &.md-inline {
-        bottom: 40px;
-        right: 2px;
-        left: 2px;
-        width: auto;
+        bottom: 8px;
+        width: 100%;
       }
       .md-mode-indeterminate {
         position: absolute;
