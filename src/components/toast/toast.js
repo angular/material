@@ -283,7 +283,7 @@ function MdToastProvider($$interimElementProvider) {
           template:
             '<md-toast md-theme="{{ toast.theme }}" ng-class="{\'md-capsule\': toast.capsule}">' +
             '  <div class="md-toast-content">' +
-            '    <span flex class="md-toast-text" role="alert" aria-relevant="all" aria-atomic="true">' +
+            '    <span class="md-toast-text" role="alert" aria-relevant="all" aria-atomic="true">' +
             '      {{ toast.content }}' +
             '    </span>' +
             '    <md-button class="md-action" ng-if="toast.action" ng-click="toast.resolve()" ' +

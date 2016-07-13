@@ -26,6 +26,7 @@ md-toast {
 
   .md-toast-content {
     display: flex;
+    direction: row;
     align-items: center;
 
     max-height: 7 * $toast-height;
@@ -49,6 +50,13 @@ md-toast {
     transition: $swift-ease-out;
 
     @include rtl(justify-content, flex-start, flex-end);
+
+    span {
+      // Layout  [flex]
+      flex:1 1 0%;
+      box-sizing:border-box;
+      min-width :0;
+    }
   }
 
   &.md-capsule {

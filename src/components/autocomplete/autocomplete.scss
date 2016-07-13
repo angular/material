@@ -64,13 +64,26 @@ md-autocomplete {
     }
   }
   md-autocomplete-wrap {
-    display: block;
+
+    // Layout [layout='row']
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+
     position: relative;
     overflow: visible;
     height: 40px;
     &.md-menu-showing {
       z-index: $z-index-backdrop + 1;
     }
+
+    md-input-container, input {
+      // Layout [flex]
+      flex:1 1 0%;
+      box-sizing:border-box;
+      min-width :0;
+    }
+
     md-progress-linear {
       position: absolute;
       bottom: -2px;

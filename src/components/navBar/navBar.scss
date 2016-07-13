@@ -13,6 +13,11 @@ $md-nav-bar-height: 48px;
   list-style: none;
   margin: 0;
   padding: 0;
+
+  // Layout [layout='row']
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
 }
 
 .md-nav-item:first-of-type {
