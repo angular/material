@@ -303,7 +303,7 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
     function shouldPaginate () {
         var elements = getElements();
         var navWidth = getNavWidth();
-        var parentWidth = elements.parent.clientWidth;
+        var parentWidth = elements.parent != null && elements.parent.clientWidth != null ? elements.parent.clientWidth : 0;
 
         return navWidth > parentWidth;
     }
