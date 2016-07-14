@@ -279,12 +279,12 @@ MdNavBarController.prototype._getNavWidth = function () {
  * @returns {!boolean}
  */
 MdNavBarController.prototype.canPaginate = function () {
-  var elements          = this._getElements();
-  var navWidth          = this._getNavWidth();
+  var elements             = this._getElements();
+  var navWidth             = this._getNavWidth();
 
-  var parentWidth       = 0;
-  var isParentWidthNull = !elements.parent && !elements.parent.clientWidth;
-  if (!isParentWidthNull) parentWidth = elements.parent.clientWidth;
+  var parentWidth          = 0;
+  var isParentWidthNotNull = !!elements.parent && !!elements.parent.clientWidth;
+  if(isParentWidthNotNull) parentWidth = elements.parent.clientWidth;
 
   return navWidth > parentWidth;
 }
