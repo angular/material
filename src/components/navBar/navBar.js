@@ -191,6 +191,9 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
 
   // Injected variables
 
+  /** @private @const {!angular.JQLite} */
+  this._$element = $element;
+
   /** @private @const {!angular.Timeout} */
   this._$timeout = $timeout;
 
@@ -201,10 +204,10 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
   this._$mdConstant = $mdConstant;
 
   // Data-bound variables.
-  /** @type {string} */
+  /** @type {!string} */
   this.mdSelectedNavItem;
 
-  /** @type {string} */
+  /** @type {!string} */
   this.navBarAriaLabel;
 
 
@@ -221,25 +224,10 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
 
   // Responsivity actions
 
-  /** @type {Object} */
-  this.updatePagination = $mdUtil.debounce(updatePagination, 100);
+  /** @type {!boolean} */
+  this.shouldPaginate = this.canPaginate();
 
-  /** @type {boolean} */
-  this.shouldPaginate = shouldPaginate();
-
-  /** @type {Function} */
-  this.nextPage = nextPage;
-
-  /** @type {Function} */
-  this.previousPage = previousPage;
-
-  /** @type {Function} */
-  this.canPageBack = canPageBack;
-
-  /** @type {Function} */
-  this.canPageForward = canPageForward;
-
-  /** @type {Number} */
+  /** @type {!number} */
   this.left = 0;
 
   // need to wait for transcluded content to be available
@@ -253,121 +241,124 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
       }
     });
 
-
-
-  /**
-   * Gathers references to all of the DOM elements used by this controller.
-   * @returns {Object}
-   */
-  function getElements() {
-    var elements = {};
-    var node = $element[0];
-    elements.parent = node.parentElement;
-    elements.canvas = node.querySelector('.md-nav-bar');
-    elements.tabs = elements.canvas.querySelectorAll('.md-nav-item');
-
-    return elements;
-  }
-
-  /**
-   * Updates whether or not pagination should be displayed
-   * and the pagination styles defined by the element.
-   */
-  function updatePagination() {
-    self.shouldPaginate = shouldPaginate();
-
-    // Setting the style.
-    var rootElement = $element[0];
-    var prevButton = angular.element(rootElement.querySelector('md-prev-button'));
-    var nextButton = angular.element(rootElement.querySelector('md-next-button'));
-    prevButton.css({
-      'background-image': 'linear-gradient(to right, ' + $element.css('background-color') + ', rgba(0,0,0,0.0))'
-    });
-    nextButton.css({
-      'background-image': 'linear-gradient(to left, ' + $element.css('background-color') + ', rgba(0,0,0,0.0))'
-    });
-
-    if (!self.shouldPaginate) {
-      var canvas = angular.element(getElements().canvas);
-      self.left = 0;
-      canvas.css({
-        'left': self.left + 'px'
-      });
-    }
-  }
-
-  /**
-   * Calculate the real width size of the mdNavBar using each tab of it.
-   * @returns {number}
-   */
-  function getNavWidth() {
-    var tabs = getElements().tabs
-    var contWidth = 0;
-    for (var i = 0; i < tabs.length; i++) {
-      var tab = tabs[i];
-      contWidth = contWidth + tab.offsetWidth;
-    }
-    return contWidth;
-  }
-
-  /**
-   * Determines if pagination is necessary to display the tabs within the available space.
-   * @returns {boolean}
-   */
-  function shouldPaginate() {
-    var elements = getElements();
-    var navWidth = getNavWidth();
-    var parentWidth = elements.parent != null && elements.parent.clientWidth != null ? elements.parent.clientWidth : 0;
-
-    return navWidth > parentWidth;
-  }
-
-  /**
-   * Determines whether or not the left pagination arrow should be enabled.
-   * @returns {boolean}
-   */
-  function canPageBack() {
-    var elements = getElements();
-    return elements.canvas.scrollWidth + this.left <= getNavWidth();
-  }
-
-  /**
-   * Determines whether or not the right pagination arrow should be enabled.
-   * @returns {*|boolean}
-   */
-  function canPageForward() {
-    var elements = getElements();
-    return elements.canvas.scrollWidth + this.left >= elements.parent.clientWidth;
-  }
-
-  /**
-   * Slides the tabs over approximately one page forward.
-   */
-  function nextPage() {
-    if (this.canPageForward()) {
-      var canvas = angular.element(getElements().canvas);
-      this.left = this.left - 100;
-      canvas.css({
-        'left': this.left + 'px'
-      });
-    }
-  }
-
-  /**
-   * Slides the tabs over approximately one page backward.
-   */
-  function previousPage() {
-    if (this.canPageBack()) {
-      var canvas = angular.element(getElements().canvas);
-      this.left = this.left + 100;
-      canvas.css({
-        'left': this.left + 'px'
-      });
-    }
-  }
 }
 
 
+/**
+ * Gathers references to all of the DOM elements used by this controller.
+ * @private
+ * @returns {!Object}
+ */
+MdNavBarController.prototype._getElements = function () {
+  var elements = {};
+  var node = this._$element[0];
+  elements.parent = node.parentElement;
+  elements.canvas = node.querySelector('.md-nav-bar');
+  elements.tabs = elements.canvas.querySelectorAll('.md-nav-item');
+
+  return elements;
+}
+
+/**
+ * Calculate the real width size of the mdNavBar using each tab of it.
+ * @private
+ * @returns {!number}
+ */
+MdNavBarController.prototype._getNavWidth = function () {
+  var tabs = this._getElements().tabs;
+  var contWidth = 0;
+  tabs.forEach(function (tab) {
+    contWidth += tab.offsetWidth;
+  });
+
+  return contWidth;
+}
+
+/**
+ * Determines if pagination is necessary to display the tabs within the available space.
+ * @returns {!boolean}
+ */
+MdNavBarController.prototype.canPaginate = function () {
+  var elements = this._getElements();
+  var navWidth = this._getNavWidth();
+
+  var parentWidth = 0;
+  var isParentWidthNull = !elements.parent && !elements.parent.clientWidth;
+  if(!isParentWidthNull) parentWidth = elements.parent.clientWidth;
+
+  return navWidth > parentWidth;
+}
+
+/**
+ * Updates whether or not pagination should be displayed
+ * and the pagination styles defined by the element.
+ */
+MdNavBarController.prototype.updatePagination = function () {
+  this.shouldPaginate = this.canPaginate();
+
+  // Setting the style.
+  var rootElement = this._$element[0];
+  var prevButton = angular.element(rootElement.querySelector('md-prev-button'));
+  var nextButton = angular.element(rootElement.querySelector('md-next-button'));
+  prevButton.css({
+    'background-image': 'linear-gradient(to right, ' + this._$element.css('background-color') + ', rgba(0,0,0,0.0))'
+  });
+  nextButton.css({
+    'background-image': 'linear-gradient(to left, ' + this._$element.css('background-color') + ', rgba(0,0,0,0.0))'
+  });
+
+  if (!this.shouldPaginate) {
+    var canvas = angular.element(this._getElements().canvas);
+    this.left = 0;
+    canvas.css({
+      'left': this.left + 'px'
+    });
+  }
+}
+
+/**
+ * Determines whether or not the left pagination arrow should be enabled.
+ * @returns {!boolean}
+ */
+MdNavBarController.prototype.canPageBack = function () {
+  var elements = this._getElements();
+  return elements.canvas.scrollWidth + this.left <= this._getNavWidth();
+}
+
+/**
+ * Determines whether or not the right pagination arrow should be enabled.
+ * @returns {!boolean}
+ */
+MdNavBarController.prototype.canPageForward = function () {
+  var elements = this._getElements();
+  return elements.canvas.scrollWidth + this.left >= elements.parent.clientWidth;
+}
+
+/**
+ * Slides the tabs over approximately one page forward.
+ */
+MdNavBarController.prototype.nextPage = function () {
+  if (this.canPageForward()) {
+    var canvas = angular.element(this._getElements().canvas);
+    this.left = this.left - 100;
+    canvas.css({
+      'left': this.left + 'px'
+    });
+  }
+}
+
+/**
+ * Slides the tabs over approximately one page backward.
+ */
+MdNavBarController.prototype.previousPage = function () {
+  if (this.canPageBack()) {
+    var canvas = angular.element(this._getElements().canvas);
+    this.left = this.left + 100;
+    canvas.css({
+      'left': this.left + 'px'
+    });
+  }
+}
 
 /**
  * Initializes the tab components once they exist.
@@ -582,26 +573,26 @@ function MdNavItem($$rAF) {
     controllerAs: 'ctrl',
     replace: true,
     transclude: true,
-    template: '<li class="md-nav-item" role="option" aria-selected="{{ctrl.isSelected()}}">' +
-      '<md-button ng-if="ctrl.mdNavSref" class="_md-nav-button md-accent"' +
-      'ng-class="ctrl.getNgClassMap()"' +
-      'tabindex="-1"' +
-      'ui-sref="{{ctrl.mdNavSref}}">' +
-      '<span ng-transclude class="_md-nav-button-text"></span>' +
-      '</md-button>' +
-      '<md-button ng-if="ctrl.mdNavHref" class="_md-nav-button md-accent"' +
-      'ng-class="ctrl.getNgClassMap()"' +
-      'tabindex="-1"' +
-      'ng-href="{{ctrl.mdNavHref}}">' +
-      '<span ng-transclude class="_md-nav-button-text"></span>' +
-      '</md-button>' +
-      '<md-button ng-if="ctrl.mdNavClick" class="_md-nav-button md-accent"' +
-      'ng-class="ctrl.getNgClassMap()"' +
-      'tabindex="-1"' +
-      'ng-click="ctrl.mdNavClick()">' +
-      '<span ng-transclude class="_md-nav-button-text"></span>' +
-      '</md-button>' +
-      '</li>',
+    template: '<li class="md-nav-item" role="option" aria-selected="{{ctrl.isSelected()}}"> ' +
+                '<md-button ng-if="ctrl.mdNavSref" class="_md-nav-button md-accent" ' +
+                'ng-class="ctrl.getNgClassMap()" ' +
+                'tabindex="-1" ' +
+                'ui-sref="{{ctrl.mdNavSref}}"> ' +
+                  '<span ng-transclude class="_md-nav-button-text"></span> ' +
+                '</md-button> ' +
+                '<md-button ng-if="ctrl.mdNavHref" class="_md-nav-button md-accent" ' +
+                'ng-class="ctrl.getNgClassMap()" ' +
+                'tabindex="-1" ' +
+                'ng-href="{{ctrl.mdNavHref}}"> ' +
+                  '<span ng-transclude class="_md-nav-button-text"></span> ' +
+                '</md-button> ' +
+                '<md-button ng-if="ctrl.mdNavClick" class="_md-nav-button md-accent" ' +
+                'ng-class="ctrl.getNgClassMap()" ' +
+                'tabindex="-1" ' +
+                'ng-click="ctrl.mdNavClick()"> ' +
+                  '<span ng-transclude class="_md-nav-button-text"></span> ' +
+                '</md-button>' +
+              '</li>',
     scope: {
       'mdNavClick': '&?',
       'mdNavHref': '@?',
