@@ -222,13 +222,24 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
   var self = this;
 
 
-  // Responsivity actions
+  // Responsivity States
 
   /** @type {!boolean} */
   this.shouldPaginate = this.canPaginate();
 
   /** @type {!number} */
   this.left = 0;
+
+  /**
+    * To avoid multiple parent.clientWidth get calls, cache the value in this scope variable
+    * @type {!number} */
+  this.parentWidth = 0;
+
+  /**
+    * To avoid multiple canvas.scrollWidth get calls, cache the value in this scope variable
+    * @type {!number} */
+  this.navWidth = 0;
+
 
   // need to wait for transcluded content to be available
   var deregisterTabWatch = this._$scope.$watch(function () {
@@ -264,14 +275,12 @@ MdNavBarController.prototype._getElements = function () {
  * @private
  * @returns {!number}
  */
-MdNavBarController.prototype._getNavWidth = function () {
-  var tabs      = this._getElements().tabs;
-  var contWidth = 0;
-  angular.forEach(tabs, function (tab) {
-    contWidth  += tab.offsetWidth;
-  });
-
-  return contWidth;
+MdNavBarController.prototype._updateStates = function () {
+  var elements     = this._getElements();
+  var isNavWidthNotNull = !!elements.canvas && !!elements.canvas.scrollWidth;
+  if(isNavWidthNotNull) this.navWidth = elements.canvas.scrollWidth;
+  var isParentWidthNotNull = !!elements.parent && !!elements.parent.clientWidth;
+  if(isParentWidthNotNull) this.parentWidth = elements.parent.clientWidth;
 }
 
 /**
@@ -279,14 +288,7 @@ MdNavBarController.prototype._getNavWidth = function () {
  * @returns {!boolean}
  */
 MdNavBarController.prototype.canPaginate = function () {
-  var elements             = this._getElements();
-  var navWidth             = this._getNavWidth();
-
-  var parentWidth          = 0;
-  var isParentWidthNotNull = !!elements.parent && !!elements.parent.clientWidth;
-  if(isParentWidthNotNull) parentWidth = elements.parent.clientWidth;
-
-  return navWidth > parentWidth;
+  return this.navWidth > this.parentWidth;
 }
 
 /**
@@ -294,6 +296,7 @@ MdNavBarController.prototype.canPaginate = function () {
  * and the pagination styles defined by the element.
  */
 MdNavBarController.prototype.updatePagination = function () {
+  this._updateStates();
   this.shouldPaginate = this.canPaginate();
 
   // Setting the style.
@@ -321,8 +324,7 @@ MdNavBarController.prototype.updatePagination = function () {
  * @returns {!boolean}
  */
 MdNavBarController.prototype.canPageBack = function () {
-  var elements = this._getElements();
-  return elements.canvas.scrollWidth + this.left <= this._getNavWidth();
+  return this.navWidth + this.left < this.navWidth;
 }
 
 /**
@@ -330,8 +332,7 @@ MdNavBarController.prototype.canPageBack = function () {
  * @returns {!boolean}
  */
 MdNavBarController.prototype.canPageForward = function () {
-  var elements = this._getElements();
-  return elements.canvas.scrollWidth + this.left >= elements.parent.clientWidth;
+  return this.navWidth + this.left >= this.parentWidth;
 }
 
 /**
