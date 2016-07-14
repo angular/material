@@ -2,8 +2,7 @@
 $md-nav-bar-height: 48px;
 
 .md-nav-bar {
-  border-style: solid;
-  border-width: 0 0 1px;
+  transition: left 0.35s $swift-ease-in-out-timing-function;
   height: $md-nav-bar-height;
   position: relative;
 }
@@ -58,4 +57,40 @@ md-nav-ink-bar {
 md-nav-extra-content {
   min-height: 48px;
   padding-right: 12px;
+}
+
+/** Responsive pagination **/
+.md-nav-wrapper {
+    border-color: rgba(0,0,0,0.12);
+    border-style: solid;
+    border-width: 0 0 1px;
+    display: inline-flex;
+}
+
+.md-nav-pagination{
+    md-next-button {
+        md-icon {
+            transform: rotate(180deg);
+        }
+        padding-bottom: 9px;
+        padding-top: 15px;
+        position: absolute;
+        right: 0px;
+        max-width: 40px;
+        z-index: 5;
+        background-image: linear-gradient(to left, #fafafa, rgba(0,0,0,0.0));
+    }
+    md-prev-button {
+        padding-bottom: 9px;
+        padding-top: 15px;
+        position: absolute;
+        left: 0px;
+        max-width: 40px;
+        z-index: 5;
+        background-image: linear-gradient(to right, #fafafa, rgba(0,0,0,0.0));
+    }
+}
+
+.md-nav-pagination{
+    display: flex;
 }

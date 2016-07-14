@@ -34,6 +34,9 @@ angular.module('material.components.navBar', ['material.core'])
  * listbox, according to
  * https://www.w3.org/TR/wai-aria-practices/#Site_Navigator_Tabbed_Style
  *
+ * In small screens that not support the entire width of this element, this directive works like md-tabs,
+ * showing a pagination with arrows and working with gestures (swipe left/right).
+ *
  * @param {string=} mdSelectedNavItem The name of the current tab; this must
  * match the name attribute of `<md-nav-item>`
  * @param {string=} navBarAriaLabel An aria-label for the nav-bar
@@ -92,7 +95,7 @@ angular.module('material.components.navBar', ['material.core'])
  *                                IMPLEMENTATION                             *
  *****************************************************************************/
 
-function MdNavBar($mdAria) {
+function MdNavBar($mdAria, $mdUtil, $$mdSvgRegistry) {
   return {
     restrict: 'E',
     transclude: true,
@@ -104,7 +107,26 @@ function MdNavBar($mdAria) {
       'navBarAriaLabel': '@?',
     },
     template:
-      '<div class="md-nav-bar">' +
+      '<div class=\'md-nav-wrapper\'>'+
+      '<div class=\'md-nav-pagination\'>'+
+                      '<md-prev-button ' +
+              'aria-label="Previous Page" ' +
+              'aria-disabled="{{!ctrl.canPageBack()}}" ' +
+              'ng-disabled="{{!ctrl.canPageBack()}}" ' +
+              'ng-if="ctrl.shouldPaginate" ' +
+              'ng-click="ctrl.previousPage()"> ' +
+            '<md-icon md-svg-src="'+ $$mdSvgRegistry.mdTabsArrow +'"></md-icon> ' +
+          '</md-prev-button> ' +
+            '<md-next-button ' +
+              'aria-label="Next Page" ' +
+              'aria-disabled="{{!ctrl.canPageForward()}}" ' +
+              'ng-disabled="{{!ctrl.canPageForward()}}" ' +
+              'ng-if="ctrl.shouldPaginate" ' +
+              'ng-click="ctrl.nextPage()"> ' +
+            '<md-icon md-svg-src="'+ $$mdSvgRegistry.mdTabsArrow +'"></md-icon> ' +
+          '</md-next-button> ' +
+      '</div>'+
+      '<div class="md-nav-bar" md-swipe-left="ctrl.previousPage()" md-swipe-right="ctrl.nextPage()">' +
         '<nav role="navigation">' +
           '<ul class="_md-nav-bar-list" layout="row" ng-transclude role="listbox"' +
             'tabindex="0"' +
@@ -115,11 +137,34 @@ function MdNavBar($mdAria) {
           '</ul>' +
         '</nav>' +
         '<md-nav-ink-bar></md-nav-ink-bar>' +
+      '</div>'+
       '</div>',
     link: function(scope, element, attrs, ctrl) {
-      if (!ctrl.navBarAriaLabel) {
-        $mdAria.expectAsync(element, 'aria-label', angular.noop);
-      }
+        if (!ctrl.navBarAriaLabel) {
+            $mdAria.expectAsync(element, 'aria-label', angular.noop);
+        }
+
+        var observer = new MutationObserver(function(mutations) {
+            ctrl.updatePagination();
+        });
+
+        var config = {
+        childList: true,
+        subtree: true,
+        // Per https://bugzilla.mozilla.org/show_bug.cgi?id=1138368, browsers will not fire
+        // the childList mutation, once a <span> element's innerText changes.
+        // The characterData of the <span> element will change.
+        characterData: true
+      };
+
+      observer.observe(element[0], config);
+
+      // Disconnect the observer
+      scope.$on('$destroy', function() {
+        if (observer) {
+          observer.disconnect();
+        }
+      });
     },
   };
 }
@@ -134,11 +179,12 @@ function MdNavBar($mdAria) {
  * @param {!angular.Scope} $scope
  * @param {!angular.Timeout} $timeout
  * @param {!Object} $mdConstant
+ * @param {!Object} $mdUtil
  * @constructor
  * @final
  * @ngInject
  */
-function MdNavBarController($element, $scope, $timeout, $mdConstant) {
+function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
   // Injected variables
   /** @private @const {!angular.Timeout} */
   this._$timeout = $timeout;
@@ -175,6 +221,132 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant) {
       deregisterTabWatch();
     }
   });
+
+    // Responsivity actions
+
+    /** @type {Object} */
+    this.updatePagination   = $mdUtil.debounce(updatePagination, 100);
+
+    /** @type {boolean} */
+    this.shouldPaginate     = shouldPaginate();
+
+    /** @type {Function} */
+    this.nextPage           = nextPage;
+
+    /** @type {Function} */
+    this.previousPage       = previousPage;
+
+    /** @type {Function} */
+    this.canPageBack        = canPageBack;
+
+    /** @type {Function} */
+    this.canPageForward     = canPageForward;
+
+    /** @type {Number} */
+    this.left               = 0;
+
+
+    /**
+    * Gathers references to all of the DOM elements used by this controller.
+    * @returns {Object}
+    */
+    function getElements () {
+        var elements = {};
+        var node = $element[0];
+        elements.parent  = node.parentElement;
+        elements.canvas  = node.querySelector('.md-nav-bar');
+        elements.tabs    = elements.canvas.querySelectorAll('.md-nav-item');
+
+        return elements;
+    }
+
+    /**
+    * Updates whether or not pagination should be displayed
+    * and the pagination styles defined by the element.
+    */
+    function updatePagination () {
+        self.shouldPaginate = shouldPaginate();
+
+        // Setting the style.
+        var rootElement = $element[0];
+        var prevButton = angular.element(rootElement.querySelector('md-prev-button'));
+        var nextButton = angular.element(rootElement.querySelector('md-next-button'));
+        console.log($element.css('background-color'));
+        prevButton.css({'background-image': 'linear-gradient(to right, '+$element.css('background-color')+', rgba(0,0,0,0.0))'});
+        nextButton.css({'background-image': 'linear-gradient(to left, '+$element.css('background-color')+', rgba(0,0,0,0.0))'});
+
+        if(!self.shouldPaginate){
+            var canvas = angular.element(getElements().canvas);
+            self.left = 0;
+            canvas.css({'left': self.left + 'px'});
+        }
+    }
+
+    /**
+     * Calculate the real width size of the mdNavBar using each tab of it.
+     * @returns {number}
+     */
+    function getNavWidth () {
+        var tabs = getElements().tabs
+        var contWidth = 0;
+        for(var i = 0; i < tabs.length; i++) {
+            var tab = tabs[i];
+            contWidth = contWidth + tab.offsetWidth;
+        }
+        return contWidth;
+    }
+
+    /**
+    * Determines if pagination is necessary to display the tabs within the available space.
+    * @returns {boolean}
+    */
+    function shouldPaginate () {
+        var elements = getElements();
+        var navWidth = getNavWidth();
+        var parentWidth = elements.parent.clientWidth;
+
+        return navWidth > parentWidth;
+    }
+
+    /**
+    * Determines whether or not the left pagination arrow should be enabled.
+    * @returns {boolean}
+    */
+    function canPageBack () {
+        var elements = getElements();
+        return elements.canvas.scrollWidth + this.left <= getNavWidth();
+    }
+
+    /**
+    * Determines whether or not the right pagination arrow should be enabled.
+    * @returns {*|boolean}
+    */
+    function canPageForward () {
+        var elements = getElements();
+        return elements.canvas.scrollWidth + this.left >= elements.parent.clientWidth;
+    }
+
+    /**
+    * Slides the tabs over approximately one page forward.
+    */
+    function nextPage () {
+        if(this.canPageForward()){
+            var canvas = angular.element(getElements().canvas);
+            this.left = this.left - 100;
+            canvas.css({'left': this.left + 'px'});
+        }
+    }
+
+    /**
+    * Slides the tabs over approximately one page backward.
+    */
+    function previousPage () {
+        if(this.canPageBack()){
+            var canvas = angular.element(getElements().canvas);
+            this.left = this.left + 100;
+            canvas.css({'left': this.left + 'px'});
+        }
+    }
 }
 
 
