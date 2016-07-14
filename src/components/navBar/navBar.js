@@ -126,7 +126,7 @@ function MdNavBar($mdAria, $mdUtil, $$mdSvgRegistry) {
             '<md-icon md-svg-src="'+ $$mdSvgRegistry.mdTabsArrow +'"></md-icon> ' +
           '</md-next-button> ' +
       '</div>'+
-      '<div class="md-nav-bar" md-swipe-left="ctrl.previousPage()" md-swipe-right="ctrl.nextPage()">' +
+      '<div class="md-nav-bar" md-swipe-left="ctrl.nextPage()" md-swipe-right="ctrl.previousPage()">' +
         '<nav role="navigation">' +
           '<ul class="_md-nav-bar-list" layout="row" ng-transclude role="listbox"' +
             'tabindex="0"' +
