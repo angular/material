@@ -267,7 +267,7 @@ MdNavBarController.prototype._getElements = function () {
 MdNavBarController.prototype._getNavWidth = function () {
   var tabs      = this._getElements().tabs;
   var contWidth = 0;
-  tabs.forEach(function (tab) {
+  angular.forEach(tabs, function (tab) {
     contWidth  += tab.offsetWidth;
   });
 
