@@ -265,10 +265,10 @@ MdNavBarController.prototype._getElements = function () {
  * @returns {!number}
  */
 MdNavBarController.prototype._getNavWidth = function () {
-  var tabs = this._getElements().tabs;
+  var tabs      = this._getElements().tabs;
   var contWidth = 0;
   tabs.forEach(function (tab) {
-    contWidth += tab.offsetWidth;
+    contWidth  += tab.offsetWidth;
   });
 
   return contWidth;
@@ -279,12 +279,12 @@ MdNavBarController.prototype._getNavWidth = function () {
  * @returns {!boolean}
  */
 MdNavBarController.prototype.canPaginate = function () {
-  var elements = this._getElements();
-  var navWidth = this._getNavWidth();
+  var elements          = this._getElements();
+  var navWidth          = this._getNavWidth();
 
-  var parentWidth = 0;
+  var parentWidth       = 0;
   var isParentWidthNull = !elements.parent && !elements.parent.clientWidth;
-  if(!isParentWidthNull) parentWidth = elements.parent.clientWidth;
+  if (!isParentWidthNull) parentWidth = elements.parent.clientWidth;
 
   return navWidth > parentWidth;
 }
@@ -298,8 +298,8 @@ MdNavBarController.prototype.updatePagination = function () {
 
   // Setting the style.
   var rootElement = this._$element[0];
-  var prevButton = angular.element(rootElement.querySelector('md-prev-button'));
-  var nextButton = angular.element(rootElement.querySelector('md-next-button'));
+  var prevButton  = angular.element(rootElement.querySelector('md-prev-button'));
+  var nextButton  = angular.element(rootElement.querySelector('md-next-button'));
   prevButton.css({
     'background-image': 'linear-gradient(to right, ' + this._$element.css('background-color') + ', rgba(0,0,0,0.0))'
   });
@@ -309,7 +309,7 @@ MdNavBarController.prototype.updatePagination = function () {
 
   if (!this.shouldPaginate) {
     var canvas = angular.element(this._getElements().canvas);
-    this.left = 0;
+    this.left  = 0;
     canvas.css({
       'left': this.left + 'px'
     });
@@ -340,7 +340,7 @@ MdNavBarController.prototype.canPageForward = function () {
 MdNavBarController.prototype.nextPage = function () {
   if (this.canPageForward()) {
     var canvas = angular.element(this._getElements().canvas);
-    this.left = this.left - 100;
+    this.left  = this.left - 100;
     canvas.css({
       'left': this.left + 'px'
     });
@@ -353,7 +353,7 @@ MdNavBarController.prototype.nextPage = function () {
 MdNavBarController.prototype.previousPage = function () {
   if (this.canPageBack()) {
     var canvas = angular.element(this._getElements().canvas);
-    this.left = this.left + 100;
+    this.left  = this.left + 100;
     canvas.css({
       'left': this.left + 'px'
     });
@@ -388,12 +388,12 @@ MdNavBarController.prototype._initTabs = function () {
  * @private
  */
 MdNavBarController.prototype._updateTabs = function (newValue, oldValue) {
-  var self = this;
-  var tabs = this._getTabs();
-  var oldIndex = -1;
-  var newIndex = -1;
-  var newTab = this._getTabByName(newValue);
-  var oldTab = this._getTabByName(oldValue);
+  var self      = this;
+  var tabs      = this._getTabs();
+  var oldIndex  = -1;
+  var newIndex  = -1;
+  var newTab    = this._getTabByName(newValue);
+  var oldTab    = this._getTabByName(oldValue);
 
   if (oldTab) {
     oldTab.setSelected(false);
