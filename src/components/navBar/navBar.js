@@ -96,77 +96,76 @@ angular.module('material.components.navBar', ['material.core', 'material.compone
  *****************************************************************************/
 
 function MdNavBar($mdAria, $mdUtil, $$mdSvgRegistry) {
-  return {
-    restrict: 'E',
-    transclude: true,
-    controller: MdNavBarController,
-    controllerAs: 'ctrl',
-    bindToController: true,
-    scope: {
-      'mdSelectedNavItem': '=?',
-      'navBarAriaLabel': '@?',
-    },
-    template:
-      '<div class=\'md-nav-wrapper\'>'+
-      '<div class=\'md-nav-pagination\'>'+
-                      '<md-prev-button ' +
-              'aria-label="Previous Page" ' +
-              'aria-disabled="{{!ctrl.canPageBack()}}" ' +
-              'ng-disabled="{{!ctrl.canPageBack()}}" ' +
-              'ng-if="ctrl.shouldPaginate" ' +
-              'ng-click="ctrl.previousPage()"> ' +
-            '<md-icon md-svg-src="'+ $$mdSvgRegistry.mdTabsArrow +'"></md-icon> ' +
-          '</md-prev-button> ' +
+    return {
+        restrict: 'E',
+        transclude: true,
+        controller: MdNavBarController,
+        controllerAs: 'ctrl',
+        bindToController: true,
+        scope: {
+            'mdSelectedNavItem': '=?',
+            'navBarAriaLabel': '@?',
+        },
+        template: '<div class=\'md-nav-wrapper\'>' +
+            '<div class=\'md-nav-pagination\'>' +
+            '<md-prev-button ' +
+            'aria-label="Previous Page" ' +
+            'aria-disabled="{{!ctrl.canPageBack()}}" ' +
+            'ng-disabled="{{!ctrl.canPageBack()}}" ' +
+            'ng-if="ctrl.shouldPaginate" ' +
+            'ng-click="ctrl.previousPage()"> ' +
+            '<md-icon md-svg-src="' + $$mdSvgRegistry.mdTabsArrow + '"></md-icon> ' +
+            '</md-prev-button> ' +
             '<md-next-button ' +
-              'aria-label="Next Page" ' +
-              'aria-disabled="{{!ctrl.canPageForward()}}" ' +
-              'ng-disabled="{{!ctrl.canPageForward()}}" ' +
-              'ng-if="ctrl.shouldPaginate" ' +
-              'ng-click="ctrl.nextPage()"> ' +
-            '<md-icon md-svg-src="'+ $$mdSvgRegistry.mdTabsArrow +'"></md-icon> ' +
-          '</md-next-button> ' +
-      '</div>'+
-      '<div class="md-nav-bar" md-swipe-left="ctrl.nextPage()" md-swipe-right="ctrl.previousPage()">' +
-        '<nav role="navigation">' +
-          '<ul class="_md-nav-bar-list" layout="row" ng-transclude role="listbox"' +
+            'aria-label="Next Page" ' +
+            'aria-disabled="{{!ctrl.canPageForward()}}" ' +
+            'ng-disabled="{{!ctrl.canPageForward()}}" ' +
+            'ng-if="ctrl.shouldPaginate" ' +
+            'ng-click="ctrl.nextPage()"> ' +
+            '<md-icon md-svg-src="' + $$mdSvgRegistry.mdTabsArrow + '"></md-icon> ' +
+            '</md-next-button> ' +
+            '</div>' +
+            '<div class="md-nav-bar" md-swipe-left="ctrl.nextPage()" md-swipe-right="ctrl.previousPage()">' +
+            '<nav role="navigation">' +
+            '<ul class="_md-nav-bar-list" layout="row" ng-transclude role="listbox"' +
             'tabindex="0"' +
             'ng-focus="ctrl.onFocus()"' +
             'ng-blur="ctrl.onBlur()"' +
             'ng-keydown="ctrl.onKeydown($event)"' +
             'aria-label="{{ctrl.navBarAriaLabel}}">' +
-          '</ul>' +
-        '</nav>' +
-        '<md-nav-ink-bar></md-nav-ink-bar>' +
-      '</div>'+
-      '</div>',
-    link: function(scope, element, attrs, ctrl) {
-        if (!ctrl.navBarAriaLabel) {
-            $mdAria.expectAsync(element, 'aria-label', angular.noop);
-        }
+            '</ul>' +
+            '</nav>' +
+            '<md-nav-ink-bar></md-nav-ink-bar>' +
+            '</div>' +
+            '</div>',
+        link: function (scope, element, attrs, ctrl) {
+            if (!ctrl.navBarAriaLabel) {
+                $mdAria.expectAsync(element, 'aria-label', angular.noop);
+            }
 
-        var observer = new MutationObserver(function(mutations) {
-            ctrl.updatePagination();
-        });
+            var observer = new MutationObserver(function (mutations) {
+                ctrl.updatePagination();
+            });
 
-        var config = {
-        childList: true,
-        subtree: true,
-        // Per https://bugzilla.mozilla.org/show_bug.cgi?id=1138368, browsers will not fire
-        // the childList mutation, once a <span> element's innerText changes.
-        // The characterData of the <span> element will change.
-        characterData: true
-      };
+            var config = {
+                childList: true,
+                subtree: true,
+                // Per https://bugzilla.mozilla.org/show_bug.cgi?id=1138368, browsers will not fire
+                // the childList mutation, once a <span> element's innerText changes.
+                // The characterData of the <span> element will change.
+                characterData: true
+            };
 
-      observer.observe(element[0], config);
+            observer.observe(element[0], config);
 
-      // Disconnect the observer
-      scope.$on('$destroy', function() {
-        if (observer) {
-          observer.disconnect();
-        }
-      });
-    },
-  };
+            // Disconnect the observer
+            scope.$on('$destroy', function () {
+                if (observer) {
+                    observer.disconnect();
+                }
+            });
+        },
+    };
 }
 
 /**
@@ -185,99 +184,105 @@ function MdNavBar($mdAria, $mdUtil, $$mdSvgRegistry) {
  * @ngInject
  */
 function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
-  // Injected variables
-  /** @private @const {!angular.Timeout} */
-  this._$timeout = $timeout;
+    // Injected variables
+    /** @private @const {!angular.Timeout} */
+    this._$timeout = $timeout;
 
-  /** @private @const {!angular.Scope} */
-  this._$scope = $scope;
+    /** @private @const {!angular.Scope} */
+    this._$scope = $scope;
 
-  /** @private @const {!Object} */
-  this._$mdConstant = $mdConstant;
+    /** @private @const {!Object} */
+    this._$mdConstant = $mdConstant;
 
-  // Data-bound variables.
-  /** @type {string} */
-  this.mdSelectedNavItem;
+    // Data-bound variables.
+    /** @type {string} */
+    this.mdSelectedNavItem;
 
-  /** @type {string} */
-  this.navBarAriaLabel;
+    /** @type {string} */
+    this.navBarAriaLabel;
 
-  // State variables.
+    // State variables.
 
-  /** @type {?angular.JQLite} */
-  this._navBarEl = $element[0];
+    /** @type {?angular.JQLite} */
+    this._navBarEl = $element[0];
 
-  /** @type {?angular.JQLite} */
-  this._inkbar;
+    /** @type {?angular.JQLite} */
+    this._inkbar;
 
-  var self = this;
-  // need to wait for transcluded content to be available
-  var deregisterTabWatch = this._$scope.$watch(function() {
-    return self._navBarEl.querySelectorAll('._md-nav-button').length;
-  },
-  function(newLength) {
-    if (newLength > 0) {
-      self._initTabs();
-      deregisterTabWatch();
-    }
-  });
+    var self = this;
+    // need to wait for transcluded content to be available
+    var deregisterTabWatch = this._$scope.$watch(function () {
+            return self._navBarEl.querySelectorAll('._md-nav-button').length;
+        },
+        function (newLength) {
+            if (newLength > 0) {
+                self._initTabs();
+                deregisterTabWatch();
+            }
+        });
 
     // Responsivity actions
 
     /** @type {Object} */
-    this.updatePagination   = $mdUtil.debounce(updatePagination, 100);
+    this.updatePagination = $mdUtil.debounce(updatePagination, 100);
 
     /** @type {boolean} */
-    this.shouldPaginate     = shouldPaginate();
+    this.shouldPaginate = shouldPaginate();
 
     /** @type {Function} */
-    this.nextPage           = nextPage;
+    this.nextPage = nextPage;
 
     /** @type {Function} */
-    this.previousPage       = previousPage;
+    this.previousPage = previousPage;
 
     /** @type {Function} */
-    this.canPageBack        = canPageBack;
+    this.canPageBack = canPageBack;
 
     /** @type {Function} */
-    this.canPageForward     = canPageForward;
+    this.canPageForward = canPageForward;
 
     /** @type {Number} */
-    this.left               = 0;
+    this.left = 0;
 
 
     /**
-    * Gathers references to all of the DOM elements used by this controller.
-    * @returns {Object}
-    */
-    function getElements () {
+     * Gathers references to all of the DOM elements used by this controller.
+     * @returns {Object}
+     */
+    function getElements() {
         var elements = {};
         var node = $element[0];
-        elements.parent  = node.parentElement;
-        elements.canvas  = node.querySelector('.md-nav-bar');
-        elements.tabs    = elements.canvas.querySelectorAll('.md-nav-item');
+        elements.parent = node.parentElement;
+        elements.canvas = node.querySelector('.md-nav-bar');
+        elements.tabs = elements.canvas.querySelectorAll('.md-nav-item');
 
         return elements;
     }
 
     /**
-    * Updates whether or not pagination should be displayed
-    * and the pagination styles defined by the element.
-    */
-    function updatePagination () {
+     * Updates whether or not pagination should be displayed
+     * and the pagination styles defined by the element.
+     */
+    function updatePagination() {
         self.shouldPaginate = shouldPaginate();
 
         // Setting the style.
         var rootElement = $element[0];
         var prevButton = angular.element(rootElement.querySelector('md-prev-button'));
         var nextButton = angular.element(rootElement.querySelector('md-next-button'));
-        prevButton.css({'background-image': 'linear-gradient(to right, '+$element.css('background-color')+', rgba(0,0,0,0.0))'});
-        nextButton.css({'background-image': 'linear-gradient(to left, '+$element.css('background-color')+', rgba(0,0,0,0.0))'});
+        prevButton.css({
+            'background-image': 'linear-gradient(to right, ' + $element.css('background-color') + ', rgba(0,0,0,0.0))'
+        });
+        nextButton.css({
+            'background-image': 'linear-gradient(to left, ' + $element.css('background-color') + ', rgba(0,0,0,0.0))'
+        });
 
-        if(!self.shouldPaginate){
+        if (!self.shouldPaginate) {
             var canvas = angular.element(getElements().canvas);
             self.left = 0;
-            canvas.css({'left': self.left + 'px'});
+            canvas.css({
+                'left': self.left + 'px'
+            });
         }
     }
 
@@ -285,10 +290,10 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
      * Calculate the real width size of the mdNavBar using each tab of it.
      * @returns {number}
      */
-    function getNavWidth () {
+    function getNavWidth() {
         var tabs = getElements().tabs
         var contWidth = 0;
-        for(var i = 0; i < tabs.length; i++) {
+        for (var i = 0; i < tabs.length; i++) {
             var tab = tabs[i];
             contWidth = contWidth + tab.offsetWidth;
         }
@@ -296,10 +301,10 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
     }
 
     /**
-    * Determines if pagination is necessary to display the tabs within the available space.
-    * @returns {boolean}
-    */
-    function shouldPaginate () {
+     * Determines if pagination is necessary to display the tabs within the available space.
+     * @returns {boolean}
+     */
+    function shouldPaginate() {
         var elements = getElements();
         var navWidth = getNavWidth();
         var parentWidth = elements.parent != null && elements.parent.clientWidth != null ? elements.parent.clientWidth : 0;
@@ -308,42 +313,46 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
     }
 
     /**
-    * Determines whether or not the left pagination arrow should be enabled.
-    * @returns {boolean}
-    */
-    function canPageBack () {
+     * Determines whether or not the left pagination arrow should be enabled.
+     * @returns {boolean}
+     */
+    function canPageBack() {
         var elements = getElements();
         return elements.canvas.scrollWidth + this.left <= getNavWidth();
     }
 
     /**
-    * Determines whether or not the right pagination arrow should be enabled.
-    * @returns {*|boolean}
-    */
-    function canPageForward () {
+     * Determines whether or not the right pagination arrow should be enabled.
+     * @returns {*|boolean}
+     */
+    function canPageForward() {
         var elements = getElements();
         return elements.canvas.scrollWidth + this.left >= elements.parent.clientWidth;
     }
 
     /**
-    * Slides the tabs over approximately one page forward.
-    */
-    function nextPage () {
-        if(this.canPageForward()){
+     * Slides the tabs over approximately one page forward.
+     */
+    function nextPage() {
+        if (this.canPageForward()) {
             var canvas = angular.element(getElements().canvas);
             this.left = this.left - 100;
-            canvas.css({'left': this.left + 'px'});
+            canvas.css({
+                'left': this.left + 'px'
+            });
         }
     }
 
     /**
-    * Slides the tabs over approximately one page backward.
-    */
-    function previousPage () {
-        if(this.canPageBack()){
+     * Slides the tabs over approximately one page backward.
+     */
+    function previousPage() {
+        if (this.canPageBack()) {
             var canvas = angular.element(getElements().canvas);
             this.left = this.left + 100;
-            canvas.css({'left': this.left + 'px'});
+            canvas.css({
+                'left': this.left + 'px'
+            });
         }
     }
 }
@@ -354,21 +363,21 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
  * Initializes the tab components once they exist.
  * @private
  */
-MdNavBarController.prototype._initTabs = function() {
-  this._inkbar = angular.element(this._navBarEl.getElementsByTagName('md-nav-ink-bar')[0]);
+MdNavBarController.prototype._initTabs = function () {
+    this._inkbar = angular.element(this._navBarEl.getElementsByTagName('md-nav-ink-bar')[0]);
 
-  var self = this;
-  this._$timeout(function() {
-    self._updateTabs(self.mdSelectedNavItem, undefined);
-  });
-
-  this._$scope.$watch('ctrl.mdSelectedNavItem', function(newValue, oldValue) {
-    // Wait a digest before update tabs for products doing
-    // anything dynamic in the template.
-    self._$timeout(function() {
-      self._updateTabs(newValue, oldValue);
+    var self = this;
+    this._$timeout(function () {
+        self._updateTabs(self.mdSelectedNavItem, undefined);
     });
-  });
+
+    this._$scope.$watch('ctrl.mdSelectedNavItem', function (newValue, oldValue) {
+        // Wait a digest before update tabs for products doing
+        // anything dynamic in the template.
+        self._$timeout(function () {
+            self._updateTabs(newValue, oldValue);
+        });
+    });
 };
 
 /**
@@ -377,45 +386,50 @@ MdNavBarController.prototype._initTabs = function() {
  * @param {string|undefined} oldValue Previous tab name.
  * @private
  */
-MdNavBarController.prototype._updateTabs = function(newValue, oldValue) {
-  var self = this;
-  var tabs = this._getTabs();
-  var oldIndex = -1;
-  var newIndex = -1;
-  var newTab = this._getTabByName(newValue);
-  var oldTab = this._getTabByName(oldValue);
+MdNavBarController.prototype._updateTabs = function (newValue, oldValue) {
+    var self = this;
+    var tabs = this._getTabs();
+    var oldIndex = -1;
+    var newIndex = -1;
+    var newTab = this._getTabByName(newValue);
+    var oldTab = this._getTabByName(oldValue);
 
-  if (oldTab) {
-    oldTab.setSelected(false);
-    oldIndex = tabs.indexOf(oldTab);
-  }
+    if (oldTab) {
+        oldTab.setSelected(false);
+        oldIndex = tabs.indexOf(oldTab);
+    }
 
-  if (newTab) {
-    newTab.setSelected(true);
-    newIndex = tabs.indexOf(newTab);
-  }
+    if (newTab) {
+        newTab.setSelected(true);
+        newIndex = tabs.indexOf(newTab);
+    }
 
-  this._$timeout(function() {
-    self._updateInkBarStyles(newTab, newIndex, oldIndex);
-  });
+    this._$timeout(function () {
+        self._updateInkBarStyles(newTab, newIndex, oldIndex);
+    });
 };
 
 /**
  * Repositions the ink bar to the selected tab.
  * @private
  */
-MdNavBarController.prototype._updateInkBarStyles = function(tab, newIndex, oldIndex) {
-  this._inkbar.toggleClass('_md-left', newIndex < oldIndex)
-      .toggleClass('_md-right', newIndex > oldIndex);
+MdNavBarController.prototype._updateInkBarStyles = function (tab, newIndex, oldIndex) {
+    this._inkbar.toggleClass('_md-left', newIndex < oldIndex)
+        .toggleClass('_md-right', newIndex > oldIndex);
 
-  this._inkbar.css({display: newIndex < 0 ? 'none' : ''});
+    this._inkbar.css({
+        display: newIndex < 0 ? 'none' : ''
+    });
 
-  if(tab){
-    var tabEl = tab.getButtonEl();
-    var left = tabEl.offsetLeft;
+    if (tab) {
+        var tabEl = tab.getButtonEl();
+        var left = tabEl.offsetLeft;
 
-    this._inkbar.css({left: left + 'px', width: tabEl.offsetWidth + 'px'});
-  }
+        this._inkbar.css({
+            left: left + 'px',
+            width: tabEl.offsetWidth + 'px'
+        });
+    }
 };
 
 /**
@@ -423,12 +437,12 @@ MdNavBarController.prototype._updateInkBarStyles = function(tab, newIndex, oldIn
  * @return {!Array<!NavItemController>}
  * @private
  */
-MdNavBarController.prototype._getTabs = function() {
-  var linkArray = Array.prototype.slice.call(
-      this._navBarEl.querySelectorAll('.md-nav-item'));
-  return linkArray.map(function(el) {
-    return angular.element(el).controller('mdNavItem')
-  });
+MdNavBarController.prototype._getTabs = function () {
+    var linkArray = Array.prototype.slice.call(
+        this._navBarEl.querySelectorAll('.md-nav-item'));
+    return linkArray.map(function (el) {
+        return angular.element(el).controller('mdNavItem')
+    });
 };
 
 /**
@@ -437,10 +451,10 @@ MdNavBarController.prototype._getTabs = function() {
  * @return {!NavItemController|undefined}
  * @private
  */
-MdNavBarController.prototype._getTabByName = function(name) {
-  return this._findTab(function(tab) {
-    return tab.getName() == name;
-  });
+MdNavBarController.prototype._getTabByName = function (name) {
+    return this._findTab(function (tab) {
+        return tab.getName() == name;
+    });
 };
 
 /**
@@ -448,55 +462,55 @@ MdNavBarController.prototype._getTabByName = function(name) {
  * @return {!NavItemController|undefined}
  * @private
  */
-MdNavBarController.prototype._getSelectedTab = function() {
-  return this._findTab(function(tab) {
-    return tab.isSelected()
-  });
+MdNavBarController.prototype._getSelectedTab = function () {
+    return this._findTab(function (tab) {
+        return tab.isSelected()
+    });
 };
 
 /**
  * Returns the focused tab.
  * @return {!NavItemController|undefined}
  */
-MdNavBarController.prototype.getFocusedTab = function() {
-  return this._findTab(function(tab) {
-    return tab.hasFocus()
-  });
+MdNavBarController.prototype.getFocusedTab = function () {
+    return this._findTab(function (tab) {
+        return tab.hasFocus()
+    });
 };
 
 /**
  * Find a tab that matches the specified function.
  * @private
  */
-MdNavBarController.prototype._findTab = function(fn) {
-  var tabs = this._getTabs();
-  for (var i = 0; i < tabs.length; i++) {
-    if (fn(tabs[i])) {
-      return tabs[i];
+MdNavBarController.prototype._findTab = function (fn) {
+    var tabs = this._getTabs();
+    for (var i = 0; i < tabs.length; i++) {
+        if (fn(tabs[i])) {
+            return tabs[i];
+        }
     }
-  }
 
-  return null;
+    return null;
 };
 
 /**
  * Direct focus to the selected tab when focus enters the nav bar.
  */
-MdNavBarController.prototype.onFocus = function() {
-  var tab = this._getSelectedTab();
-  if (tab) {
-    tab.setFocused(true);
-  }
+MdNavBarController.prototype.onFocus = function () {
+    var tab = this._getSelectedTab();
+    if (tab) {
+        tab.setFocused(true);
+    }
 };
 
 /**
  * Clear tab focus when focus leaves the nav bar.
  */
-MdNavBarController.prototype.onBlur = function() {
-  var tab = this.getFocusedTab();
-  if (tab) {
-    tab.setFocused(false);
-  }
+MdNavBarController.prototype.onBlur = function () {
+    var tab = this.getFocusedTab();
+    if (tab) {
+        tab.setFocused(false);
+    }
 };
 
 /**
@@ -505,107 +519,106 @@ MdNavBarController.prototype.onBlur = function() {
  * @param {!NavItemController} newTab
  * @private
  */
-MdNavBarController.prototype._moveFocus = function(oldTab, newTab) {
-  oldTab.setFocused(false);
-  newTab.setFocused(true);
+MdNavBarController.prototype._moveFocus = function (oldTab, newTab) {
+    oldTab.setFocused(false);
+    newTab.setFocused(true);
 };
 
 /**
  * Responds to keypress events.
  * @param {!Event} e
  */
-MdNavBarController.prototype.onKeydown = function(e) {
-  var keyCodes = this._$mdConstant.KEY_CODE;
-  var tabs = this._getTabs();
-  var focusedTab = this.getFocusedTab();
-  if (!focusedTab) return;
+MdNavBarController.prototype.onKeydown = function (e) {
+    var keyCodes = this._$mdConstant.KEY_CODE;
+    var tabs = this._getTabs();
+    var focusedTab = this.getFocusedTab();
+    if (!focusedTab) return;
 
-  var focusedTabIndex = tabs.indexOf(focusedTab);
+    var focusedTabIndex = tabs.indexOf(focusedTab);
 
-  // use arrow keys to navigate between tabs
-  switch (e.keyCode) {
+    // use arrow keys to navigate between tabs
+    switch (e.keyCode) {
     case keyCodes.UP_ARROW:
     case keyCodes.LEFT_ARROW:
-      if (focusedTabIndex > 0) {
-        this._moveFocus(focusedTab, tabs[focusedTabIndex - 1]);
-      }
-      break;
+        if (focusedTabIndex > 0) {
+            this._moveFocus(focusedTab, tabs[focusedTabIndex - 1]);
+        }
+        break;
     case keyCodes.DOWN_ARROW:
     case keyCodes.RIGHT_ARROW:
-      if (focusedTabIndex < tabs.length - 1) {
-        this._moveFocus(focusedTab, tabs[focusedTabIndex + 1]);
-      }
-      break;
+        if (focusedTabIndex < tabs.length - 1) {
+            this._moveFocus(focusedTab, tabs[focusedTabIndex + 1]);
+        }
+        break;
     case keyCodes.SPACE:
     case keyCodes.ENTER:
-      // timeout to avoid a "digest already in progress" console error
-      this._$timeout(function() {
-        focusedTab.getButtonEl().click();
-      });
-      break;
-  }
+        // timeout to avoid a "digest already in progress" console error
+        this._$timeout(function () {
+            focusedTab.getButtonEl().click();
+        });
+        break;
+    }
 };
 
 /**
  * @ngInject
  */
 function MdNavItem($$rAF) {
-  return {
-    restrict: 'E',
-    require: ['mdNavItem', '^mdNavBar'],
-    controller: MdNavItemController,
-    bindToController: true,
-    controllerAs: 'ctrl',
-    replace: true,
-    transclude: true,
-    template:
-      '<li class="md-nav-item" role="option" aria-selected="{{ctrl.isSelected()}}">' +
-        '<md-button ng-if="ctrl.mdNavSref" class="_md-nav-button md-accent"' +
-          'ng-class="ctrl.getNgClassMap()"' +
-          'tabindex="-1"' +
-          'ui-sref="{{ctrl.mdNavSref}}">' +
-          '<span ng-transclude class="_md-nav-button-text"></span>' +
-        '</md-button>' +
-        '<md-button ng-if="ctrl.mdNavHref" class="_md-nav-button md-accent"' +
-          'ng-class="ctrl.getNgClassMap()"' +
-          'tabindex="-1"' +
-          'ng-href="{{ctrl.mdNavHref}}">' +
-          '<span ng-transclude class="_md-nav-button-text"></span>' +
-        '</md-button>' +
-        '<md-button ng-if="ctrl.mdNavClick" class="_md-nav-button md-accent"' +
-          'ng-class="ctrl.getNgClassMap()"' +
-          'tabindex="-1"' +
-          'ng-click="ctrl.mdNavClick()">' +
-          '<span ng-transclude class="_md-nav-button-text"></span>' +
-        '</md-button>' +
-      '</li>',
-    scope: {
-      'mdNavClick': '&?',
-      'mdNavHref': '@?',
-      'mdNavSref': '@?',
-      'name': '@',
-    },
-    link: function(scope, element, attrs, controllers) {
-      var mdNavItem = controllers[0];
-      var mdNavBar = controllers[1];
+    return {
+        restrict: 'E',
+        require: ['mdNavItem', '^mdNavBar'],
+        controller: MdNavItemController,
+        bindToController: true,
+        controllerAs: 'ctrl',
+        replace: true,
+        transclude: true,
+        template: '<li class="md-nav-item" role="option" aria-selected="{{ctrl.isSelected()}}">' +
+            '<md-button ng-if="ctrl.mdNavSref" class="_md-nav-button md-accent"' +
+            'ng-class="ctrl.getNgClassMap()"' +
+            'tabindex="-1"' +
+            'ui-sref="{{ctrl.mdNavSref}}">' +
+            '<span ng-transclude class="_md-nav-button-text"></span>' +
+            '</md-button>' +
+            '<md-button ng-if="ctrl.mdNavHref" class="_md-nav-button md-accent"' +
+            'ng-class="ctrl.getNgClassMap()"' +
+            'tabindex="-1"' +
+            'ng-href="{{ctrl.mdNavHref}}">' +
+            '<span ng-transclude class="_md-nav-button-text"></span>' +
+            '</md-button>' +
+            '<md-button ng-if="ctrl.mdNavClick" class="_md-nav-button md-accent"' +
+            'ng-class="ctrl.getNgClassMap()"' +
+            'tabindex="-1"' +
+            'ng-click="ctrl.mdNavClick()">' +
+            '<span ng-transclude class="_md-nav-button-text"></span>' +
+            '</md-button>' +
+            '</li>',
+        scope: {
+            'mdNavClick': '&?',
+            'mdNavHref': '@?',
+            'mdNavSref': '@?',
+            'name': '@',
+        },
+        link: function (scope, element, attrs, controllers) {
+            var mdNavItem = controllers[0];
+            var mdNavBar = controllers[1];
 
-      // When accessing the element's contents synchronously, they
-      // may not be defined yet because of transclusion. There is a higher chance
-      // that it will be accessible if we wait one frame.
-      $$rAF(function() {
-        if (!mdNavItem.name) {
-          mdNavItem.name = angular.element(element[0].querySelector('._md-nav-button-text'))
-            .text().trim();
+            // When accessing the element's contents synchronously, they
+            // may not be defined yet because of transclusion. There is a higher chance
+            // that it will be accessible if we wait one frame.
+            $$rAF(function () {
+                if (!mdNavItem.name) {
+                    mdNavItem.name = angular.element(element[0].querySelector('._md-nav-button-text'))
+                        .text().trim();
+                }
+
+                var navButton = angular.element(element[0].querySelector('._md-nav-button'));
+                navButton.on('click', function () {
+                    mdNavBar.mdSelectedNavItem = mdNavItem.name;
+                    scope.$apply();
+                });
+            });
         }
-
-        var navButton = angular.element(element[0].querySelector('._md-nav-button'));
-        navButton.on('click', function() {
-          mdNavBar.mdSelectedNavItem = mdNavItem.name;
-          scope.$apply();
-        });
-      });
-    }
-  };
+    };
 }
 
 /**
@@ -617,91 +630,91 @@ function MdNavItem($$rAF) {
  */
 function MdNavItemController($element) {
 
-  /** @private @const {!angular.JQLite} */
-  this._$element = $element;
+    /** @private @const {!angular.JQLite} */
+    this._$element = $element;
 
-  // Data-bound variables
-  /** @const {?Function} */
-  this.mdNavClick;
-  /** @const {?string} */
-  this.mdNavHref;
-  /** @const {?string} */
-  this.name;
+    // Data-bound variables
+    /** @const {?Function} */
+    this.mdNavClick;
+    /** @const {?string} */
+    this.mdNavHref;
+    /** @const {?string} */
+    this.name;
 
-  // State variables
-  /** @private {boolean} */
-  this._selected = false;
+    // State variables
+    /** @private {boolean} */
+    this._selected = false;
 
-  /** @private {boolean} */
-  this._focused = false;
+    /** @private {boolean} */
+    this._focused = false;
 
-  var hasNavClick = !!($element.attr('md-nav-click'));
-  var hasNavHref = !!($element.attr('md-nav-href'));
-  var hasNavSref = !!($element.attr('md-nav-sref'));
+    var hasNavClick = !!($element.attr('md-nav-click'));
+    var hasNavHref = !!($element.attr('md-nav-href'));
+    var hasNavSref = !!($element.attr('md-nav-sref'));
 
-  // Cannot specify more than one nav attribute
-  if ((hasNavClick ? 1:0) + (hasNavHref ? 1:0) + (hasNavSref ? 1:0) > 1) {
-    throw Error(
-        'Must specify exactly one of md-nav-click, md-nav-href, ' +
-        'md-nav-sref for nav-item directive');
-  }
+    // Cannot specify more than one nav attribute
+    if ((hasNavClick ? 1 : 0) + (hasNavHref ? 1 : 0) + (hasNavSref ? 1 : 0) > 1) {
+        throw Error(
+            'Must specify exactly one of md-nav-click, md-nav-href, ' +
+            'md-nav-sref for nav-item directive');
+    }
 }
 
 /**
  * Returns a map of class names and values for use by ng-class.
  * @return {!Object<string,boolean>}
  */
-MdNavItemController.prototype.getNgClassMap = function() {
-  return {
-    'md-active': this._selected,
-    'md-primary': this._selected,
-    'md-unselected': !this._selected,
-    'md-focused': this._focused,
-  };
+MdNavItemController.prototype.getNgClassMap = function () {
+    return {
+        'md-active': this._selected,
+        'md-primary': this._selected,
+        'md-unselected': !this._selected,
+        'md-focused': this._focused,
+    };
 };
 
 /**
  * Get the name attribute of the tab.
  * @return {string}
  */
-MdNavItemController.prototype.getName = function() {
-  return this.name;
+MdNavItemController.prototype.getName = function () {
+    return this.name;
 };
 
 /**
  * Get the button element associated with the tab.
  * @return {!Element}
  */
-MdNavItemController.prototype.getButtonEl = function() {
-  return this._$element[0].querySelector('._md-nav-button');
+MdNavItemController.prototype.getButtonEl = function () {
+    return this._$element[0].querySelector('._md-nav-button');
 };
 
 /**
  * Set the selected state of the tab.
  * @param {boolean} isSelected
  */
-MdNavItemController.prototype.setSelected = function(isSelected) {
-  this._selected = isSelected;
+MdNavItemController.prototype.setSelected = function (isSelected) {
+    this._selected = isSelected;
 };
 
 /**
  * @return {boolean}
  */
-MdNavItemController.prototype.isSelected = function() {
-  return this._selected;
+MdNavItemController.prototype.isSelected = function () {
+    return this._selected;
 };
 
 /**
  * Set the focused state of the tab.
  * @param {boolean} isFocused
  */
-MdNavItemController.prototype.setFocused = function(isFocused) {
-  this._focused = isFocused;
+MdNavItemController.prototype.setFocused = function (isFocused) {
+    this._focused = isFocused;
 };
 
 /**
  * @return {boolean}
  */
-MdNavItemController.prototype.hasFocus = function() {
-  return this._focused;
+MdNavItemController.prototype.hasFocus = function () {
+    return this._focused;
 };
