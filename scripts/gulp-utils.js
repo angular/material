@@ -196,7 +196,9 @@ exports.buildNgMaterialDefinition = function() {
 };
 
 function moduleNameToClosureName(name) {
-  return 'ng.' + name;
+  // For Closure, all modules start with "ngmaterial". We specifically don't use `ng.`
+  // because it conflicts with other packages under `ng.`.
+  return 'ng' + name;
 }
 exports.addJsWrapper = function(enforce) {
   return through2.obj(function(file, enc, next) {
