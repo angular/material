@@ -271,7 +271,6 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
         var rootElement = $element[0];
         var prevButton = angular.element(rootElement.querySelector('md-prev-button'));
         var nextButton = angular.element(rootElement.querySelector('md-next-button'));
-        console.log($element.css('background-color'));
         prevButton.css({'background-image': 'linear-gradient(to right, '+$element.css('background-color')+', rgba(0,0,0,0.0))'});
         nextButton.css({'background-image': 'linear-gradient(to left, '+$element.css('background-color')+', rgba(0,0,0,0.0))'});
 
