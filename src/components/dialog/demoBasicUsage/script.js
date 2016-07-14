@@ -62,7 +62,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
       parent: angular.element(document.body),
       targetEvent: ev,
       clickOutsideToClose: true,
-      fullscreen: true  // only applies for screen size xs and sm
+      fullscreen: true // Fullscreen only applies for -xs, -sm breakpoints.
     })
     .then(function(answer) {
       $scope.status = 'You said the information was "' + answer + '".';
