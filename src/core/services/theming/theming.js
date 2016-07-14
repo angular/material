@@ -22,8 +22,8 @@ angular.module('material.core.theming', ['material.core.theming.palette'])
  * @ngInject
  */
 function detectDisabledThemes($mdThemingProvider) {
- var isDisabled = document.querySelectorAll('[md-themes-disabled]').length > 0;
- $mdThemingProvider.disableTheming(isDisabled);
+  var isDisabled = !!document.querySelector('[md-themes-disabled]');
+  $mdThemingProvider.disableTheming(isDisabled);
 }
 
 /**

@@ -174,8 +174,8 @@
     * @ngInject
     */
    function detectDisabledLayouts() {
-    var items = document.querySelectorAll('[md-layouts-disabled]');
-    if ( items.length ) config.enabled = false;
+     var isDisabled = !!document.querySelector('[md-layouts-disabled]');
+     config.enabled = !isDisabled;
    }
 
   /**
