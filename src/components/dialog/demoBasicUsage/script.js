@@ -2,7 +2,6 @@ angular.module('dialogDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $mdDialog, $mdMedia) {
   $scope.status = '  ';
-  $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
 
   $scope.showAlert = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -57,30 +56,19 @@ angular.module('dialogDemo1', ['ngMaterial'])
   };
 
   $scope.showAdvanced = function(ev) {
-    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-
     $mdDialog.show({
       controller: DialogController,
       templateUrl: 'dialog1.tmpl.html',
       parent: angular.element(document.body),
       targetEvent: ev,
-      clickOutsideToClose:true,
-      fullscreen: useFullScreen
+      clickOutsideToClose: true,
+      fullscreen: true  // only applies for screen size xs and sm
     })
     .then(function(answer) {
       $scope.status = 'You said the information was "' + answer + '".';
     }, function() {
       $scope.status = 'You cancelled the dialog.';
     });
-
-
-
-    $scope.$watch(function() {
-      return $mdMedia('xs') || $mdMedia('sm');
-    }, function(wantsFullScreen) {
-      $scope.customFullscreen = (wantsFullScreen === true);
-    });
-
   };
 
   $scope.showTabDialog = function(ev) {
