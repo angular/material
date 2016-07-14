@@ -4,7 +4,7 @@
  */
 
 
-angular.module('material.components.navBar', ['material.core'])
+angular.module('material.components.navBar', ['material.core', 'material.components.icon'])
     .controller('MdNavBarController', MdNavBarController)
     .directive('mdNavBar', MdNavBar)
     .controller('MdNavItemController', MdNavItemController)
