@@ -2,7 +2,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope, $mdDialog) {
   $scope.status = '  ';
-  $scope.customFullscreen = true;
+  $scope.customFullscreen = false;
 
   $scope.showAlert = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
