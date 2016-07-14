@@ -1,7 +1,8 @@
 angular.module('dialogDemo1', ['ngMaterial'])
 
-.controller('AppCtrl', function($scope, $mdDialog, $mdMedia) {
+.controller('AppCtrl', function($scope, $mdDialog) {
   $scope.status = '  ';
+  $scope.customFullscreen = true;
 
   $scope.showAlert = function(ev) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -61,8 +62,8 @@ angular.module('dialogDemo1', ['ngMaterial'])
       templateUrl: 'dialog1.tmpl.html',
       parent: angular.element(document.body),
       targetEvent: ev,
-      clickOutsideToClose: true,
-      fullscreen: true // Fullscreen only applies for -xs, -sm breakpoints.
+      clickOutsideToClose:true,
+      fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
     })
     .then(function(answer) {
       $scope.status = 'You said the information was "' + answer + '".';
