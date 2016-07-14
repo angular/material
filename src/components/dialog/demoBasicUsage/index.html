@@ -25,9 +25,6 @@
     </md-button>
   </div>
   <p class="footer">Note: The <b>Confirm</b> dialog does not use <code>$mdDialog.clickOutsideToClose(true)</code>.</p>
-  <div hide-gt-sm layout="row" layout-align="center center" flex>
-      <md-checkbox ng-model="customFullscreen" aria-label="Fullscreen Custom Dialog">Force Custom Dialog Fullscreen</md-checkbox>
-    </div>
 
   <div ng-if="status" id="status">
     <b layout="row" layout-align="center center" class="md-padding">
@@ -38,6 +35,8 @@
   <div class="dialog-demo-prerendered">
     <md-checkbox ng-model="listPrerenderedButton">Show Pre-Rendered Dialog</md-checkbox>
     <p class="md-caption">Sometimes you may not want to compile the dialogs template on each opening.</p>
+    <md-checkbox ng-model="customFullscreen" aria-label="Fullscreen custom dialog">Use full screen mode for custom dialog</md-checkbox>
+    <p class="md-caption">Allows the dialog to consume all available space on small devices</p>
   </div>
 
 
