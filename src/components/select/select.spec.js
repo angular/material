@@ -280,18 +280,16 @@ describe('<md-select>', function() {
       el.remove();
     }));
 
-    it('should unset has-value class on container for empty value option', inject(function($rootScope) {
-      var templates = [
-        '<md-option></md-option>',
-        '<md-option value></md-option>',
-        '<md-option value>None</md-option>',
-        '<md-option ng-value></md-option>',
-        '<md-option ng-value>None</md-option>',
-        '<md-option value=""></md-option>',
-        '<md-option ng-value=""></md-option>'
-      ];
-      
-      templates.forEach(function(template) {
+    [
+      '<md-option></md-option>',
+      '<md-option value></md-option>',
+      '<md-option value>None</md-option>',
+      '<md-option ng-value></md-option>',
+      '<md-option ng-value>None</md-option>',
+      '<md-option value=""></md-option>',
+      '<md-option ng-value=""></md-option>'
+    ].forEach(function(template) {
+      it('should unset has-value class on container for empty value option (' + template + ')', inject(function($rootScope) {
         var el = setupSelect('ng-model="$root.value"',
           template + '<md-option ng-value="1">1</md-option>'
         );
@@ -314,8 +312,8 @@ describe('<md-select>', function() {
         expect(el).not.toHaveClass('md-input-has-value');
 
         el.remove();
-      });
-    }));
+      }));
+    });
 
     it('should match label to given input id', function() {
       var el = setupSelect('ng-model="$root.value" id="foo"');
