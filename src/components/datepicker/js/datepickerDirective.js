@@ -54,6 +54,7 @@
    * </hljs>
    *
    */
+
   function datePickerDirective($$mdSvgRegistry, $mdUtil, $mdAria) {
     return {
       template: function(tElement, tAttrs) {
@@ -121,6 +122,7 @@
         var mdDatePickerCtrl = controllers[1];
         var mdInputContainer = controllers[2];
         var parentForm = controllers[3];
+        var mdNoAsterisk = $mdUtil.parseAttributeBoolean(attr.mdNoAsterisk);
 
         mdDatePickerCtrl.configureNgModel(ngModelCtrl, mdInputContainer);
 
@@ -146,6 +148,10 @@
 
           if (!mdInputContainer.label) {
             $mdAria.expect(element, 'aria-label', attr.mdPlaceholder);
+          } else if(!mdNoAsterisk) {
+            attr.$observe('required', function(value) {
+              mdInputContainer.label.toggleClass('md-required', !!value);
+            });
           }
 
           scope.$watch(mdInputContainer.isErrorGetter || function() {

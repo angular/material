@@ -21,7 +21,7 @@ describe('md-datepicker', function() {
          'ng-disabled="isDisabled">' +
     '</md-datepicker>';
 
-  beforeEach(module('material.components.datepicker', 'ngAnimateMock'));
+  beforeEach(module('material.components.datepicker', 'material.components.input', 'ngAnimateMock'));
 
   beforeEach(inject(function($rootScope, $injector) {
     $compile = $injector.get('$compile');
@@ -112,17 +112,6 @@ describe('md-datepicker', function() {
       pageScope.myDate = undefined;
       pageScope.$apply();
 
-    }).not.toThrow();
-  });
-
-  it('should work inside of md-input-container', function() {
-    var template =
-        '<md-input-container>' +
-          '<md-datepicker ng-model="myDate"></md-datepicker>' +
-        '</md-input-container>';
-
-    expect(function() {
-      $compile(template)(pageScope);
     }).not.toThrow();
   });
 
@@ -622,5 +611,69 @@ describe('md-datepicker', function() {
       expect(element.querySelector(calendarSelector)).toBeNull();
       expect(element.querySelector(triangleSelector)).toBeNull();
     });
+  });
+
+  describe('md-input-container integration', function() {
+    var element;
+
+    it('should register the element with the mdInputContainer controller', function() {
+      compileElement();
+
+      var inputContainer = element.controller('mdInputContainer');
+
+      expect(inputContainer.input[0]).toBe(element[0].querySelector('md-datepicker'));
+      expect(inputContainer.element).toHaveClass('_md-datepicker-floating-label');
+    });
+
+    it('should notify the input container that the element has a placeholder', function() {
+      compileElement('md-placeholder="Enter a date"');
+      expect(element).toHaveClass('md-input-has-placeholder');
+    });
+
+    it('should add the asterisk if the element is required', function() {
+      compileElement('ng-required="isRequired"');
+      var label = element.find('label');
+
+      expect(label).not.toHaveClass('md-required');
+      pageScope.$apply('isRequired = true');
+      expect(label).toHaveClass('md-required');
+    });
+
+    it('should not add the asterisk if the element has md-no-asterisk', function() {
+      compileElement('required md-no-asterisk');
+      expect(element.find('label')).not.toHaveClass('md-required');
+    });
+
+    it('should pass the error state to the input container', inject(function($material) {
+      compileElement('required');
+
+      var ngModelCtrl = element.find('md-datepicker').controller('ngModel');
+      var invalidClass = 'md-input-invalid';
+
+      expect(ngModelCtrl.$valid).toBe(true);
+      expect(element).not.toHaveClass(invalidClass);
+
+      ngModelCtrl.$setViewValue(null);
+      ngModelCtrl.$setTouched(true);
+      $material.flushOutstandingAnimations();
+
+      expect(ngModelCtrl.$valid).toBe(false);
+      expect(element).toHaveClass(invalidClass);
+    }));
+
+    afterEach(function() {
+      element.remove();
+    });
+
+    function compileElement(attrs) {
+      var template =
+        '<md-input-container>' +
+          '<label>Enter a date</label>' +
+          '<md-datepicker ng-model="myDate" ' + attrs + '></md-datepicker>' +
+        '</md-input-container>';
+
+      element = $compile(template)(pageScope);
+      pageScope.$digest();
+    }
   });
 });
