@@ -53,7 +53,7 @@
    * </hljs>
    *
    */
-  function datePickerDirective($$mdSvgRegistry) {
+  function datePickerDirective($$mdSvgRegistry, $mdAria) {
     return {
       template: function(tElement, tAttrs) {
         // Buttons are not in the tab order because users can open the calendar via keyboard
