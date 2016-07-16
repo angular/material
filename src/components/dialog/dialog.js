@@ -489,12 +489,13 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
  *   - `parent` - `{element=}`: The element to append the dialog to. Defaults to appending
  *     to the root element of the application.
- *   - `onShowing` `{function=} Callback function used to announce the show() action is
+ *   - `onShowing` - `function(scope, element)`: Callback function used to announce the show() action is
  *     starting.
- *   - `onComplete` `{function=}`: Callback function used to announce when the show() action is
+ *   - `onComplete` - `function(scope, element)`: Callback function used to announce when the show() action is
  *     finished.
- *   - `onRemoving` `{function=}`: Callback function used to announce the close/hide() action is
- *     starting. This allows developers to run custom animations in parallel the close animations.
+ *   - `onRemoving` - `function(element, removePromise)`: Callback function used to announce the
+ *      close/hide() action is starting. This allows developers to run custom animations
+ *      in parallel the close animations.
  *   - `fullscreen` `{boolean=}`: An option to apply `.md-dialog-fullscreen` class on open.
  * @returns {promise} A promise that can be resolved with `$mdDialog.hide()` or
  * rejected with `$mdDialog.cancel()`.
