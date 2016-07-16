@@ -321,6 +321,17 @@ describe('md-datepicker', function() {
       expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
     });
 
+    it('should toggle the invalid class when an external value causes the error state to change', function() {
+      pageScope.isRequired = true;
+      populateInputElement('');
+      expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
+
+      pageScope.$apply(function() {
+        pageScope.isRequired = false;
+      });
+      expect(controller.inputContainer).not.toHaveClass('md-datepicker-invalid');
+    });
+
     it('should not update the model when value is not enabled', function() {
       pageScope.dateFilter = function(date) {
         return date.getDay() === 1;
