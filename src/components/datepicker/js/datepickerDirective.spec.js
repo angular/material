@@ -126,7 +126,7 @@ describe('md-datepicker', function() {
     }).not.toThrow();
   });
 
-  describe('ngMessages suport', function() {
+  describe('ngMessages support', function() {
     it('should set the `required` $error flag', function() {
       pageScope.isRequired = true;
       populateInputElement('');
@@ -242,6 +242,31 @@ describe('md-datepicker', function() {
         controller.ngModelCtrl.$render();
 
         expect(formCtrl.$error['filtered']).toBeTruthy();
+      });
+
+      it('should add the invalid class when the form is submitted', function() {
+        // This needs to be recompiled, in order to reproduce conditions where a form is
+        // submitted, without the datepicker having being touched (usually it has it's value
+        // set to `myDate` by default).
+        ngElement && ngElement.remove();
+        pageScope.myDate = null;
+        pageScope.isRequired = true;
+
+        createDatepickerInstance('<form>' + DATEPICKER_TEMPLATE + '</form>');
+
+        var formCtrl = ngElement.controller('form');
+        var inputContainer = ngElement.controller('mdDatepicker').inputContainer;
+
+        expect(formCtrl.$invalid).toBe(true);
+        expect(formCtrl.$submitted).toBe(false);
+        expect(inputContainer).not.toHaveClass('md-datepicker-invalid');
+
+        pageScope.$apply(function() {
+          formCtrl.$setSubmitted(true);
+        });
+
+        expect(formCtrl.$submitted).toBe(true);
+        expect(inputContainer).toHaveClass('md-datepicker-invalid');
       });
     });
   });

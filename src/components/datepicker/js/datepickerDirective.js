@@ -53,7 +53,7 @@
    * </hljs>
    *
    */
-  function datePickerDirective($$mdSvgRegistry) {
+  function datePickerDirective($$mdSvgRegistry, $mdUtil, $mdAria) {
     return {
       template: function(tElement, tAttrs) {
         // Buttons are not in the tab order because users can open the calendar via keyboard
@@ -142,7 +142,8 @@
           }
 
           scope.$watch(mdInputContainer.isErrorGetter || function() {
-            return ngModelCtrl.$invalid && ngModelCtrl.$touched;
+            var parentForm = mdDatePickerCtrl.parentForm;
+            return ngModelCtrl.$invalid && (ngModelCtrl.$touched || (parentForm && parentForm.$submitted));
           }, mdInputContainer.setInvalid);
         }
       }
@@ -276,6 +277,9 @@
     /** @final */
     this.mdInputContainer = null;
 
+    /** @final */
+    this.parentForm = angular.element($mdUtil.getClosest($element, 'form')).controller('form');
+
     /**
      * Element from which the calendar pane was opened. Keep track of this so that we can return
      * focus to it when the pane is closed.
@@ -319,6 +323,18 @@
           });
         } else {
           self.closeCalendarPane();
+        }
+      });
+    }
+
+    if (self.parentForm) {
+      // If invalid, highlights the input when the parent form is submitted.
+      var parentSubmittedWatcher = $scope.$watch(function() {
+        return self.parentForm.$submitted;
+      }, function(isSubmitted) {
+        if (isSubmitted) {
+          self.updateErrorState();
+          parentSubmittedWatcher();
         }
       });
     }
