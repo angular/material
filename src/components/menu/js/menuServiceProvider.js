@@ -34,7 +34,7 @@ function MenuProvider($$interimElementProvider) {
       disableParentScroll: true,
       skipCompile: true,
       preserveScope: true,
-      skipHide: true,
+      multiple: true,
       themable: true
     };
 
