@@ -11,7 +11,15 @@
     border-bottom-color: '{{foreground-4}}';
 
     &.md-datepicker-focused {
-      border-bottom-color: '{{primary-color}}'
+      border-bottom-color: '{{primary-color}}';
+
+      .md-accent & {
+        border-bottom-color: '{{accent-color}}';
+      }
+
+      .md-warn & {
+        border-bottom-color: '{{warn-A700}}';
+      }
     }
 
     &.md-datepicker-invalid {
@@ -36,7 +44,19 @@
   // Open state for all of the elements of the picker.
   .md-datepicker-open {
     .md-datepicker-calendar-icon {
-      fill: '{{primary-500}}';
+      color: '{{primary-color}}';
+    }
+
+    &.md-accent, .md-accent & {
+      .md-datepicker-calendar-icon {
+        color: '{{accent-color}}';
+      }
+    }
+
+    &.md-warn, .md-warn & {
+      .md-datepicker-calendar-icon {
+        color: '{{warn-A700}}';
+      }
     }
   }
 
