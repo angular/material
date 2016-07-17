@@ -45,9 +45,7 @@ md-input-container.md-THEME_NAME-theme {
     }
 
     &.md-input-focused {
-      label {
-        color: '{{primary-color}}';
-      }
+      label,
       md-icon {
         color: '{{primary-color}}';
       }
@@ -55,7 +53,8 @@ md-input-container.md-THEME_NAME-theme {
         .md-input {
           border-color: '{{accent-color}}';
         }
-        label {
+        label,
+        md-icon {
           color: '{{accent-color}}';
         }
       }
@@ -63,7 +62,8 @@ md-input-container.md-THEME_NAME-theme {
         .md-input {
           border-color: '{{warn-A700}}';
         }
-        label {
+        label,
+        md-icon {
           color: '{{warn-A700}}';
         }
       }
@@ -73,10 +73,9 @@ md-input-container.md-THEME_NAME-theme {
     .md-input {
       border-color: '{{warn-A700}}';
     }
-    label {
-      color: '{{warn-A700}}';
-    }
-    .md-input-message-animation, .md-char-counter {
+    label,
+    .md-input-message-animation,
+    .md-char-counter {
       color: '{{warn-A700}}';
     }
   }
