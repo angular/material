@@ -285,10 +285,8 @@
   }
 }
 
-/**
- * Mixin to create a primary checkbox.
- * Used by the checkbox and select component.
- */
+// Mixin to create a primary checkbox.
+// Used by the checkbox and select component.
 @mixin checkbox-primary($checkedSelector: '.md-checked') {
   .md-ripple {
     color: '{{primary-600}}';
