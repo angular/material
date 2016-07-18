@@ -85,7 +85,7 @@ describe('md-input-container directive', function() {
       '</div>' +
       '</form>';
 
-    var parentForm = $compile(template)(pageScope);
+    var parentForm = $compile(template)(pageScope).find('div');
     pageScope.$apply();
 
     expect(parentForm.find('md-input-container')).not.toHaveClass('md-input-invalid');

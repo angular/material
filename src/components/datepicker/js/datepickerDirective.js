@@ -100,7 +100,7 @@
           '</div>' +
         '</div>';
       },
-      require: ['ngModel', 'mdDatepicker', '?^mdInputContainer'],
+      require: ['ngModel', 'mdDatepicker', '?^mdInputContainer', '?^form'],
       scope: {
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
@@ -116,6 +116,7 @@
         var ngModelCtrl = controllers[0];
         var mdDatePickerCtrl = controllers[1];
         var mdInputContainer = controllers[2];
+        var parentForm = controllers[3];
 
         mdDatePickerCtrl.configureNgModel(ngModelCtrl, mdInputContainer);
 
@@ -142,9 +143,18 @@
           }
 
           scope.$watch(mdInputContainer.isErrorGetter || function() {
-            var parentForm = mdDatePickerCtrl.parentForm;
             return ngModelCtrl.$invalid && (ngModelCtrl.$touched || (parentForm && parentForm.$submitted));
           }, mdInputContainer.setInvalid);
+        } else if (parentForm) {
+          // If invalid, highlights the input when the parent form is submitted.
+          var parentSubmittedWatcher = scope.$watch(function() {
+            return parentForm.$submitted;
+          }, function(isSubmitted) {
+            if (isSubmitted) {
+              mdDatePickerCtrl.updateErrorState();
+              parentSubmittedWatcher();
+            }
+          });
         }
       }
     };
@@ -277,9 +287,6 @@
     /** @final */
     this.mdInputContainer = null;
 
-    /** @final */
-    this.parentForm = angular.element($mdUtil.getClosest($element, 'form')).controller('form');
-
     /**
      * Element from which the calendar pane was opened. Keep track of this so that we can return
      * focus to it when the pane is closed.
@@ -323,18 +330,6 @@
           });
         } else {
           self.closeCalendarPane();
-        }
-      });
-    }
-
-    if (self.parentForm) {
-      // If invalid, highlights the input when the parent form is submitted.
-      var parentSubmittedWatcher = $scope.$watch(function() {
-        return self.parentForm.$submitted;
-      }, function(isSubmitted) {
-        if (isSubmitted) {
-          self.updateErrorState();
-          parentSubmittedWatcher();
         }
       });
     }
