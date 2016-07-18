@@ -36,7 +36,7 @@ angular.module('material.components.select', [
  *
  * When the select is required and uses a floating label, then the label will automatically contain
  * an asterisk (`*`). This behavior can be disabled by using the `md-no-asterisk` attribute.
- * 
+ *
  * By default, the select will display with an underline to match other form elements. This can be
  * disabled by applying the `md-no-underline` CSS class.
  *
@@ -46,7 +46,7 @@ angular.module('material.components.select', [
  * select and put it back in it's default state. You may supply this attribute on any option you
  * wish, however, it is automatically applied to an option whose `value` or `ng-value` are not
  * defined.
- * 
+ *
  * **Automatically Applied**
  *
  *  - `<md-option>`
@@ -54,7 +54,7 @@ angular.module('material.components.select', [
  *  - `<md-option value="">`
  *  - `<md-option ng-value>`
  *  - `<md-option ng-value="">`
- *  
+ *
  * **NOT Automatically Applied**
  *
  *  - `<md-option ng-value="1">`
@@ -272,7 +272,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
 
       if (containerCtrl) {
         var isErrorGetter = containerCtrl.isErrorGetter || function() {
-          return ngModelCtrl.$invalid && (ngModelCtrl.$touched || $mdUtil.isParentFormSubmitted(element));
+          return ngModelCtrl.$invalid && (ngModelCtrl.$touched || (formCtrl && formCtrl.$submitted));
         };
 
         if (containerCtrl.input) {
