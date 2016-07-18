@@ -182,9 +182,9 @@ input {
 }
 
 // Add a class to help reduce flicker
-// @see issue #7078
+// @see issue #7078 and #8649
 .md-no-flicker {
-  -webkit-transform: translateX(0);
+  -webkit-filter: blur(0px);
 }
 
 @media (min-width: $layout-breakpoint-sm) {
