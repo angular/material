@@ -175,6 +175,17 @@ describe('mdNavBar', function() {
           expect(getTab('tab2').attr('ui-sref-opts'))
               .toBe('{"reload":true,"notify":true}');
         });
+
+    it('does not update tabs if tab controller is undefined', function() {
+      $scope.selectedTabRoute = 'tab1';
+
+      spyOn(Object.getPrototypeOf(ctrl), '_updateInkBarStyles');
+      spyOn(Object.getPrototypeOf(ctrl), '_getTabs').and.returnValue(null);
+      createTabs();
+
+      expect(ctrl._updateInkBarStyles)
+        .not.toHaveBeenCalled();
+    });
   });
 
   describe('inkbar', function() {
