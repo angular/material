@@ -682,28 +682,29 @@
     if (this.isCalendarOpen) {
       var self = this;
 
-      self.calendarPaneOpenedFrom.focus();
-      self.calendarPaneOpenedFrom = null;
-
-      if (self.openOnFocus) {
-        // Ensures that all focus events have fired before detaching
-        // the calendar. Prevents the calendar from reopening immediately
-        // in IE when md-open-on-focus is set. Also it needs to trigger
-        // a digest, in order to prevent issues where the calendar wasn't
-        // showing up on the next open.
-        this.$mdUtil.nextTick(detach);
-      } else {
-        detach();
-      }
-    }
-
-    function detach() {
       self.detachCalendarPane();
-      self.isCalendarOpen = self.isOpen = false;
       self.ngModelCtrl.$setTouched();
 
       self.documentElement.off('click touchstart', self.bodyClickHandler);
       window.removeEventListener('resize', self.windowResizeHandler);
+
+      self.calendarPaneOpenedFrom.focus();
+      self.calendarPaneOpenedFrom = null;
+
+      if (self.openOnFocus) {
+        // Ensures that all focus events have fired before resetting
+        // the calendar. Prevents the calendar from reopening immediately
+        // in IE when md-open-on-focus is set. Also it needs to trigger
+        // a digest, in order to prevent issues where the calendar wasn't
+        // showing up on the next open.
+        self.$mdUtil.nextTick(reset);
+      } else {
+        reset();
+      }
+    }
+
+    function reset(){
+      self.isCalendarOpen = self.isOpen = false;
     }
   };
 

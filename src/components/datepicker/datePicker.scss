@@ -33,6 +33,19 @@ md-datepicker {
   box-sizing: border-box;
   background: none;
   vertical-align: middle;
+  position: relative;
+
+  // Captures any of the click events. This is necessary, because the button has a SVG
+  // icon which doesn't propagate the focus event, causing inconsistent behaviour.
+  &:before {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    content: '';
+    speak: none;
+  }
 }
 
 // The input into which the user can type the date.
