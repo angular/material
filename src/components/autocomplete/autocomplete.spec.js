@@ -58,7 +58,6 @@ describe('<md-autocomplete>', function() {
   }
 
   describe('basic functionality', function() {
-
     it('updates selected item and search text', inject(function($timeout, $mdConstant, $material) {
       var scope = createScope();
       var template = '\
@@ -103,63 +102,6 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     }));
-
-    it('should clear the searchText when selectedItem cleared',
-      inject(function($timeout, $material, $mdConstant) {
-        var scope = createScope();
-
-        var template =
-          '<md-autocomplete ' +
-              'md-selected-item="selectedItem" ' +
-              'md-search-text="searchText" ' +
-              'md-items="item in match(searchText)" ' +
-              'md-item-text="item.display" ' +
-              'placeholder="placeholder"> ' +
-            '<span md-highlight-text="searchText">{{item.display}}</span>' +
-          '</md-autocomplete>';
-
-        var element = compile(template, scope);
-        var ctrl = element.controller('mdAutocomplete');
-        var ul = element.find('ul');
-
-        $material.flushInterimElement();
-
-        expect(scope.searchText).toBe('');
-        expect(scope.selectedItem).toBe(null);
-
-        ctrl.focus();
-
-        scope.$apply('searchText = "fo"');
-        waitForVirtualRepeat(element);
-
-        expect(scope.searchText).toBe('fo');
-        expect(scope.match(scope.searchText).length).toBe(1);
-
-        expect(ul.find('li').length).toBe(1);
-
-        // Run our key events to trigger a select action
-        ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
-        ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ENTER));
-        $timeout.flush();
-
-        expect(scope.searchText).toBe('foo');
-        expect(scope.selectedItem).toBe(scope.match(scope.searchText)[0]);
-
-        // Reset / Clear the current selected item.
-        scope.$apply('selectedItem = null');
-        waitForVirtualRepeat(element);
-
-        // Run our key events to trigger a select action
-        ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
-        ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ENTER));
-        $timeout.flush();
-
-        // The autocomplete automatically clears the searchText when the selectedItem was cleared.
-        expect(scope.searchText).toBe('');
-        expect(scope.selectedItem).toBeFalsy();
-
-        element.remove();
-      }));
 
     it('allows you to set an input id without floating label', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});

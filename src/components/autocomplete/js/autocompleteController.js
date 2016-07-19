@@ -328,8 +328,6 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         $scope.searchText = val;
         handleSelectedItemChange(selectedItem, previousSelectedItem);
       });
-    } else if (previousSelectedItem) {
-      $scope.searchText = '';
     }
 
     if (selectedItem !== previousSelectedItem) announceItemChange();
