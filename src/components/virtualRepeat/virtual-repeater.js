@@ -620,7 +620,7 @@ VirtualRepeatController.prototype.containerUpdated = function() {
         this.repeatListExpression,
         angular.bind(this, function(items) {
           if (items && items.length) {
-            this.$$rAF(angular.bind(this, this.readItemSize_));
+            this.readItemSize_();
           }
         }));
     if (!this.$rootScope.$$phase) this.$scope.$digest();
