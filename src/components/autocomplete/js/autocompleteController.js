@@ -328,6 +328,15 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         $scope.searchText = val;
         handleSelectedItemChange(selectedItem, previousSelectedItem);
       });
+    } else if (previousSelectedItem) {
+      getDisplayValue(previousSelectedItem).then(function(displayValue) {
+        // Clear the searchText, when the selectedItem is set to null.
+        // Do not clear the searchText, when the searchText isn't matching with the previous
+        // selected item.
+        if (displayValue.toLowerCase() === $scope.searchText.toLowerCase()) {
+          $scope.searchText = '';
+        }
+      });
     }
 
     if (selectedItem !== previousSelectedItem) announceItemChange();
