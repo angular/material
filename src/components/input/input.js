@@ -305,7 +305,11 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
       element.attr('aria-hidden', 'true');
       return;
     } else if (containerCtrl.input) {
-      throw new Error("<md-input-container> can only have *one* <input>, <textarea> or <md-select> child element!");
+      if (containerCtrl.input[0].contains(element[0])) {
+        return;
+      } else {
+        throw new Error("<md-input-container> can only have *one* <input>, <textarea> or <md-select> child element!");
+      }
     }
     containerCtrl.input = element;
 
