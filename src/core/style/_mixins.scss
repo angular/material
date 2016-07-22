@@ -348,3 +348,56 @@
     @include rtl($prop, $ltr-dense, $rtl-dense);
   }
 }
+
+// Only use when in row layout
+@mixin when-layout-row($element) {
+  @media (max-width: $layout-breakpoint-xs - 1) {
+    .layout-row:not(.layout-xs-column),
+    .layout-xs-row {
+      & > #{$element} { @content; }
+    }
+  }
+  @media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
+    .layout-row:not(.layout-gt-xs-column),
+    .layout-gt-xs-row,
+    .layout-sm-row {
+      &:not(.layout-sm-column) > #{$element} { @content; }
+    }
+  }
+  @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
+    .layout-row:not(.layout-gt-xs-column):not(.layout-gt-sm-column),
+    .layout-gt-xs-row:not(.layout-gt-sm-column),
+    .layout-gt-sm-row,
+    .layout-md-row {
+      &:not(.layout-md-column) > #{$element} { @content; }
+    }
+  }
+  @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
+    .layout-row:not(.layout-gt-xs-column):not(.layout-gt-sm-column):not(.layout-gt-md-column),
+    .layout-gt-xs-row:not(.layout-gt-sm-column):not(.layout-gt-md-column),
+    .layout-gt-sm-row:not(.layout-gt-md-column),
+    .layout-gt-md-row,
+    .layout-lg-row {
+      &:not(.layout-lg-column) > #{$element} { @content; }
+    }
+  }
+  @media (min-width: $layout-breakpoint-lg) {
+    .layout-row:not(.layout-gt-xs-column):not(.layout-gt-sm-column):not(.layout-gt-md-column),
+    .layout-gt-xs-row:not(.layout-gt-sm-column):not(.layout-gt-md-column),
+    .layout-gt-sm-row:not(.layout-gt-md-column),
+    .layout-gt-md-row,
+    .layout-gt-lg-row,
+    .layout-xl-row {
+      &:not(.layout-gt-lg-column):not(.layout-xl-column) > #{$element} { @content; }
+    }
+  }
+}
+
+// Auto insert object margin
+@mixin auto-horizontal-margin($selector) {
+  @include when-layout-row($selector) {
+    &:not(:first-child) {
+      @include rtl-prop(margin-left, margin-right, $default-horizontal-margin, 0);
+    }
+  }
+}

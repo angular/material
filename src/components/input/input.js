@@ -147,6 +147,8 @@ function mdInputContainerDirective($mdTheming, $parse, $$rAF) {
   function ContainerCtrl($scope, $element, $attrs, $animate) {
     var self = this;
 
+    $element.addClass('md-auto-horizontal-margin');
+
     self.isErrorGetter = $attrs.mdIsError && $parse($attrs.mdIsError);
 
     self.delegateClick = function() {
