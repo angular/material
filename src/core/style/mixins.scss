@@ -326,3 +326,47 @@
     }
   }
 }
+
+// Only use when in row layout
+@mixin when-layout-row($element, $parent: '') {
+  @media (max-width: 599px) {
+    #{$parent}.layout-row:not(.layout-xs-column),
+    #{$parent}.layout-xs-row {
+      & > #{$element} { @content; }
+    }
+  }
+  @media (min-width: 600px) and (max-width: 959px) {
+    #{$parent}.layout-row:not(.layout-gt-xs-column),
+    #{$parent}.layout-gt-xs-row,
+    #{$parent}.layout-sm-row {
+      &:not(.layout-sm-column) > #{$element} { @content; }
+    }
+  }
+  @media (min-width: 960px) and (max-width: 1279px) {
+    #{$parent}.layout-row:not(.layout-gt-xs-column):not(.layout-gt-sm-column),
+    #{$parent}.layout-gt-xs-row:not(.layout-gt-sm-column),
+    #{$parent}.layout-gt-sm-row,
+    #{$parent}.layout-md-row {
+      &:not(.layout-md-column) > #{$element} { @content; }
+    }
+  }
+  @media (min-width: 1280px) and (max-width: 1919px) {
+    #{$parent}.layout-row:not(.layout-gt-xs-column):not(.layout-gt-sm-column):not(.layout-gt-md-column),
+    #{$parent}.layout-gt-xs-row:not(.layout-gt-sm-column):not(.layout-gt-md-column),
+    #{$parent}.layout-gt-sm-row:not(.layout-gt-md-column),
+    #{$parent}.layout-gt-md-row,
+    #{$parent}.layout-lg-row {
+      &:not(.layout-lg-column) > #{$element} { @content; }
+    }
+  }
+  @media (min-width: 1920px) {
+    #{$parent}.layout-row:not(.layout-gt-xs-column):not(.layout-gt-sm-column):not(.layout-gt-md-column),
+    #{$parent}.layout-gt-xs-row:not(.layout-gt-sm-column):not(.layout-gt-md-column),
+    #{$parent}.layout-gt-sm-row:not(.layout-gt-md-column),
+    #{$parent}.layout-gt-md-row,
+    #{$parent}.layout-gt-lg-row,
+    #{$parent}.layout-xl-row {
+      &:not(.layout-gt-lg-column):not(.layout-xl-column) > #{$element} { @content; }
+    }
+  }
+}

@@ -113,36 +113,12 @@ md-radio-button {
   }
 }
 
+
+
 md-radio-group {
   /** Layout adjustments for the radio group. */
-  &.layout-column,
-  &.layout-xs-column, &.layout-gt-xs-column,
-  &.layout-sm-column, &.layout-gt-sm-column,
-  &.layout-md-column, &.layout-gt-md-column,
-  &.layout-lg-column, &.layout-gt-lg-column,
-  &.layout-xl-column {
-    md-radio-button {
-      margin-bottom: $radio-margin;
-    }
-  }
-
-  &.layout-row,
-  &.layout-xs-row, &.layout-gt-xs-row,
-  &.layout-sm-row, &.layout-gt-sm-row,
-  &.layout-md-row, &.layout-gt-md-row,
-  &.layout-lg-row, &.layout-gt-lg-row,
-  &.layout-xl-row {
-    md-radio-button {
-      margin-top: 0;
-      margin-bottom: 0;
-      @include rtl(margin-left, 0, $radio-margin);
-      @include rtl(margin-right, $radio-margin, 0);
-
-      &:last-of-type {
-        margin-left: 0;
-        margin-right: 0;
-      }
-    }
+  md-radio-button {
+    margin-bottom: $radio-margin;
   }
 
   &:focus {
@@ -160,6 +136,18 @@ md-radio-group {
 
   &[disabled] md-radio-button {
     @include md-radio-button-disabled();
+  }
+}
+
+@include when-layout-row(md-radio-button, md-radio-group) {
+  margin-top: 0;
+  margin-bottom: 0;
+  @include rtl(margin-left, 0, $radio-margin);
+  @include rtl(margin-right, $radio-margin, 0);
+
+  &:last-of-type {
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 
