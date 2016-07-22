@@ -27,6 +27,7 @@
    * @param {String=} md-placeholder The date input placeholder value.
    * @param {String=} md-open-on-focus When present, the calendar will be opened when the input is focused.
    * @param {Boolean=} md-is-open Expression that can be used to open the datepicker's calendar on-demand.
+   * @param {String=} md-current-view Default open view of the calendar pane. Can be either "month" or "year".
    * @param {String=} md-hide-icons Determines which datepicker icons should be hidden. Note that this may cause the
    * datepicker to not align properly with other components. **Use at your own risk.** Possible values are:
    * * `"all"` - Hides all icons.
@@ -93,7 +94,9 @@
           '</div>' +
           '<div class="md-datepicker-calendar">' +
             '<md-calendar role="dialog" aria-label="{{::ctrl.dateLocale.msgCalendar}}" ' +
-                'md-min-date="ctrl.minDate" md-max-date="ctrl.maxDate"' +
+                'md-current-view="{{::ctrl.currentView}}"' +
+                'md-min-date="ctrl.minDate"' +
+                'md-max-date="ctrl.maxDate"' +
                 'md-date-filter="ctrl.dateFilter"' +
                 'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen">' +
             '</md-calendar>' +
@@ -105,6 +108,7 @@
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
         placeholder: '@mdPlaceholder',
+        currentView: '@mdCurrentView',
         dateFilter: '=mdDateFilter',
         isOpen: '=?mdIsOpen',
         debounceInterval: '=mdDebounceInterval'
@@ -205,13 +209,8 @@
    *
    * @ngInject @constructor
    */
-  function DatePickerCtrl($scope, $element, $attrs, $compile, $timeout, $window,
-      $mdConstant, $mdTheming, $mdUtil, $mdDateLocale, $$mdDateUtil, $$rAF) {
-    /** @final */
-    this.$compile = $compile;
-
-    /** @final */
-    this.$timeout = $timeout;
+  function DatePickerCtrl($scope, $element, $attrs, $window, $mdConstant,
+    $mdTheming, $mdUtil, $mdDateLocale, $$mdDateUtil, $$rAF) {
 
     /** @final */
     this.$window = $window;

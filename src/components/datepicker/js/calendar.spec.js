@@ -93,9 +93,9 @@ describe('md-calendar', function() {
   }
 
   /** Creates and compiles an md-calendar element. */
-  function createElement(parentScope) {
+  function createElement(parentScope, templateOverride) {
     var directiveScope = parentScope || $rootScope.$new();
-    var template = '<md-calendar md-min-date="minDate" md-max-date="maxDate" ' +
+    var template = templateOverride || '<md-calendar md-min-date="minDate" md-max-date="maxDate" ' +
         'ng-model="myDate"></md-calendar>';
     var attachedElement = angular.element(template);
     document.body.appendChild(attachedElement[0]);
@@ -706,5 +706,13 @@ describe('md-calendar', function() {
         expect(date).toHaveClass('md-calendar-date-disabled');
       }
     }
+  });
+
+  it('should have a configurable default view', function() {
+    ngElement.remove();
+    var calendar = createElement(null, '<md-calendar ng-model="myDate" md-current-view="year"></md-calendar>')[0];
+
+    expect(calendar.querySelector('md-calendar-month')).toBeFalsy();
+    expect(calendar.querySelector('md-calendar-year')).toBeTruthy();
   });
 });
