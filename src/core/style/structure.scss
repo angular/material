@@ -210,3 +210,4 @@ bdo[dir=ltr] {
   unicode-bidi: bidi-override;
 }
 
+@include auto-horizontal-margin('.md-auto-horizontal-margin');

@@ -269,6 +269,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
 
     $mdTheming(element);
     configureAria(element, scope);
+    element.addClass('md-auto-horizontal-margin');
 
     // ngAria overwrites the aria-checked inside a $watch for ngValue.
     // We should defer the initialization until all the watches have fired.

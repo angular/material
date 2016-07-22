@@ -26,13 +26,6 @@ md-checkbox {
   position: relative;
   min-width: $checkbox-width;
   min-height: $checkbox-width;
-  @include rtl(margin-left, 0, $checkbox-margin);
-  @include rtl(margin-right, $checkbox-margin, 0);
-
-  &:last-of-type {
-    margin-left: 0;
-    margin-right: 0;
-  }
 
   &.md-focused:not([disabled]) {
     .md-container:before {
