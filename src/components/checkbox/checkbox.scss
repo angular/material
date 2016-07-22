@@ -5,7 +5,6 @@
 //
 // ^^ defined in _variables.scss
 //
-$checkbox-margin-end: 16px !default;
 $checkbox-text-margin-top: 10px !default;
 $container-checkbox-margin: 3px !default;
 
@@ -41,13 +40,7 @@ md-checkbox {
   position: relative;
   min-width: $checkbox-width;
   @include dense(min-height, $checkbox-min-height, $checkbox-min-height-dense);
-  @include rtl(margin-left, 0, $checkbox-margin-end);
-  @include rtl(margin-right, $checkbox-margin-end, 0);
 
-  &:last-of-type {
-    margin-left: 0;
-    margin-right: 0;
-  }
   &.md-focused:not([disabled]) {
     .md-container:before {
       left: -8px;
