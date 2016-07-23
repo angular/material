@@ -115,7 +115,7 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
   if (event.keyCode === this.$mdConstant.KEY_CODE.BACKSPACE) {
     // Only select and focus the previous chip, if the current caret position of the
     // input element is at the beginning.
-    if (getCursorPosition(event.target) !== 0) {
+    if (this.getCursorPosition(event.target) !== 0) {
       return;
     }
 
@@ -149,16 +149,25 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
 
 /**
  * Returns the cursor position of the specified input element.
- * If no selection is present it returns -1.
  * @param element HTMLInputElement
  * @returns {Number} Cursor Position of the input.
  */
-function getCursorPosition(element) {
-  if (element.selectionStart === element.selectionEnd) {
-    return element.selectionStart;
+MdChipsCtrl.prototype.getCursorPosition = function(element) {
+  /*
+   * Figure out whether the current input for the chips buffer is valid for using
+   * the selectionStart / end property to retrieve the cursor position.
+   * Some browsers do not allow the use of those attributes, on different input types.
+   */
+  try {
+    if (element.selectionStart === element.selectionEnd) {
+      return element.selectionStart;
+    }
+  } catch (e) {
+    if (!element.value) {
+      return 0;
+    }
   }
-  return -1;
-}
+};
 
 
 /**

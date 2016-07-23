@@ -486,57 +486,118 @@ describe('<md-chips>', function() {
           expect(scope.items).toEqual(['Apple', 'Banana', 'Orange', 'Test']);
         }));
 
-        it('should properly cancel the backspace event to select the chip before', inject(function($mdConstant) {
-          var element = buildChips(BASIC_CHIP_TEMPLATE);
-          var ctrl = element.controller('mdChips');
-          var input = element.find('input');
+        describe('with backspace event', function() {
 
-          // Add the element to the document's body, because otherwise we won't be able
-          // to set the selection of the chip input.
-          document.body.appendChild(element[0]);
+          var backspaceEvent, element, input, ctrl, isValidInput;
 
-          input.val('    ');
+          beforeEach(inject(function($mdConstant) {
+            backspaceEvent = {
+              type: 'keydown',
+              keyCode: $mdConstant.KEY_CODE.BACKSPACE,
+              which: $mdConstant.KEY_CODE.BACKSPACE,
+              preventDefault: jasmine.createSpy('preventDefault')
+            };
+          }));
 
-          // We have to trigger the `change` event, because IE11 does not support
-          // the `input` event to update the ngModel. An alternative for `input` is to use the `change` event.
-          input.triggerHandler('change');
+          afterEach(function() {
+            element && element.remove();
+          });
 
-          // Since the `md-chips` component is testing the backspace select previous chip functionality by
-          // checking the current caret / cursor position, we have to set the cursor to the end of the current
-          // value.
-          input[0].selectionStart = input[0].selectionEnd = input[0].value.length;
+          function createChips(template) {
+            element = buildChips(template);
+            input = element.find('input');
+            ctrl = element.controller('mdChips');
 
-          var backspaceEvent = {
-            type: 'keydown',
-            keyCode: $mdConstant.KEY_CODE.BACKSPACE,
-            which: $mdConstant.KEY_CODE.BACKSPACE,
-            preventDefault: jasmine.createSpy('preventDefault')
-          };
+            $timeout.flush();
 
-          input.triggerHandler(backspaceEvent);
+            // Add the element to the document's body, because otherwise we won't be able
+            // to set the selection of the chip input.
+            document.body.appendChild(element[0]);
 
-          expect(backspaceEvent.preventDefault).not.toHaveBeenCalled();
+            /** Detect whether the current input is supporting the `selectionStart` property */
+            var oldInputValue = input.val();
+            input.val('2');
+            isValidInput = angular.isDefined(ctrl.getCursorPosition(input[0]));
+            input.val(oldInputValue);
+          }
 
-          input.val('');
+          /**
+           * Updates the cursor position of the input.
+           * This is necessary to test the cursor position.
+           */
+          function updateInputCursor() {
+            if (isValidInput) {
+              input[0].selectionStart = input[0].selectionEnd = input[0].value.length;
+            }
+          }
 
-          // Since the `md-chips` component is testing the backspace select previous chip functionality by
-          // checking the current caret / cursor position, we have to set the cursor to the end of the current
-          // value.
-          input[0].selectionStart = input[0].selectionEnd = input[0].value.length;
+          it('should properly cancel the backspace event to select the chip before', function() {
+            createChips(BASIC_CHIP_TEMPLATE);
 
-          input.triggerHandler(backspaceEvent);
+            input.val('    ');
+            updateInputCursor();
+            input.triggerHandler('change');
 
-          // We have to trigger the `change` event, because IE11 does not support
-          // the `input` event to update the ngModel. An alternative for `input` is to use the `change` event.
-          input.triggerHandler('change');
+            input.triggerHandler(backspaceEvent);
+            expect(backspaceEvent.preventDefault).not.toHaveBeenCalled();
 
-          expect(backspaceEvent.preventDefault).toHaveBeenCalledTimes(1);
+            input.val('');
+            updateInputCursor();
+            input.triggerHandler('change');
 
-          // Remove the element from the document's body.
-          document.body.removeChild(element[0]);
-        }));
+
+            input.triggerHandler(backspaceEvent);
+            expect(backspaceEvent.preventDefault).toHaveBeenCalledTimes(1);
+          });
+
+          it('should properly cancel the backspace event to select the chip before', function() {
+            createChips(BASIC_CHIP_TEMPLATE);
+
+            input.val('    ');
+            updateInputCursor();
+            input.triggerHandler('change');
+
+
+            input.triggerHandler(backspaceEvent);
+            expect(backspaceEvent.preventDefault).not.toHaveBeenCalled();
+
+            input.val('');
+            updateInputCursor();
+            input.triggerHandler('change');
+
+            input.triggerHandler(backspaceEvent);
+            expect(backspaceEvent.preventDefault).toHaveBeenCalledTimes(1);
+          });
+
+          it('should properly handle the cursor position when using a number input', function() {
+            createChips(
+              '<md-chips ng-model="items">' +
+                '<input type="number" placeholder="Enter a number">' +
+              '</md-chips>'
+            );
+
+            input.val('2');
+            updateInputCursor();
+            input.triggerHandler('change');
+
+            input.triggerHandler(backspaceEvent);
+            $timeout.flush();
+
+            expect(backspaceEvent.preventDefault).not.toHaveBeenCalled();
+
+            input.val('');
+            updateInputCursor();
+            input.triggerHandler('change');
+
+            input.triggerHandler(backspaceEvent);
+            $timeout.flush();
+
+            expect(backspaceEvent.preventDefault).toHaveBeenCalledTimes(1);
+          });
+
+        });
+
       });
-
 
       it('focuses/blurs the component when focusing/blurring the input', inject(function() {
         var element = buildChips(BASIC_CHIP_TEMPLATE);
