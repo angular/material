@@ -707,10 +707,10 @@ function MdDialogProvider($$interimElementProvider) {
       captureParentAndFromToElements(options);
       configureAria(dialogElement, options);
       showBackdrop(scope, element, options);
+      activateListeners(element, options);
 
       return dialogPopIn(element, options)
         .then(function() {
-          activateListeners(element, options);
           lockScreenReader(element, options);
           warnDeprecatedActions();
           focusOnOpen();
