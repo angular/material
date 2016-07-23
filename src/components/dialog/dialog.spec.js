@@ -979,6 +979,31 @@ describe('$mdDialog', function() {
       expect(parent.find('md-dialog').length).toBe(0);
     }));
 
+    it('should close on escape before the animation started',
+      inject(function($mdDialog, $rootScope, $rootElement, $timeout, $animate, $mdConstant) {
+        var parent = angular.element('<div>');
+
+        $mdDialog.show({
+          template: '<md-dialog></md-dialog>',
+          parent: parent,
+          escapeToClose: true
+        });
+
+        $rootScope.$apply();
+
+        expect(parent.find('md-dialog').length).toBe(1);
+
+        parent.triggerHandler({
+          type: 'keydown',
+          keyCode: $mdConstant.KEY_CODE.ESCAPE
+        });
+        $timeout.flush();
+
+        runAnimation();
+
+        expect(parent.find('md-dialog').length).toBe(0);
+      }));
+
     it('should escapeToClose == false', inject(function($mdDialog, $rootScope, $rootElement, $timeout, $animate, $mdConstant) {
       var parent = angular.element('<div>');
       $mdDialog.show({
