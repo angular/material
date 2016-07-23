@@ -249,7 +249,7 @@ angular
  * @name MdPanelRef#close
  * @description
  * Hides and detaches the panel. Note that this will **not** destroy the panel. If you
- * don't intend on using the panel again, call the {@link MdPanelRef#destroy destroy} method
+ * don't intend on using the panel again, call the {@link #destroy destroy} method
  * afterwards.
  *
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
