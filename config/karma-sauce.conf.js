@@ -23,10 +23,18 @@ module.exports = function(config) {
     browserDisconnectTimeout: 180 * 1000,
     browserNoActivityTimeout: 180 * 1000,
 
+    transports: ['polling'],
     reporters: ['dots', 'saucelabs'],
 
     sauceLabs: {
-      testName: 'Angular Material 1.x Unit Tests'
+      testName: 'Angular Material 1.x Unit Tests',
+      recordVideo: false,
+      recordScreenshots: false,
+      options: {
+        'command-timeout': 600,
+        'idle-timeout': 600,
+        'max-duration': 5400
+      }
     },
 
     singleRun: true
