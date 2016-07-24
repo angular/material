@@ -9,15 +9,8 @@ md-divider {
   }
 }
 
-.layout-row,
-.layout-xs-row, .layout-gt-xs-row,
-.layout-sm-row, .layout-gt-sm-row,
-.layout-md-row, .layout-gt-md-row,
-.layout-lg-row, .layout-gt-lg-row,
-.layout-xl-row {
-  & > md-divider {
-    border-top-width: 0;
-    border-right-width: 1px;
-    border-right-style: solid;
-  }
+@include when-layout-row(md-divider) {
+  border-top-width: 0;
+  border-right-width: 1px;
+  border-right-style: solid;
 }
