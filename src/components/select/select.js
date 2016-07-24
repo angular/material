@@ -530,7 +530,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdTheming, $mdAria, $compile, $par
           e.preventDefault();
           openSelect(e);
         } else {
-          if (e.keyCode <= 90 && e.keyCode >= 31) {
+          if ((e.keyCode <= 90 && e.keyCode >= 31) || (e.location === 3 && e.keyCode >= 97 && e.keyCode <= 105)) {
             e.preventDefault();
             var node = selectMenuCtrl.optNodeForKeyboardSearch(e);
             if (!node || node.hasAttribute('disabled')) return;
@@ -689,7 +689,13 @@ function SelectMenuDirective($parse, $mdUtil, $mdTheming) {
         optText = undefined;
         optNodes = undefined;
       }, CLEAR_SEARCH_AFTER);
-      searchStr += String.fromCharCode(e.keyCode);
+
+      // Support 1-9 on numpad
+      var keyCode = e.keyCode;
+      if (3 === e.location && e.keyCode >= 97 && e.keyCode <= 105)
+        keyCode -= 48;
+
+      searchStr += String.fromCharCode(keyCode);
       var search = new RegExp('^' + searchStr, 'i');
       if (!optNodes) {
         optNodes = $element.find('md-option');
@@ -1348,7 +1354,7 @@ function SelectProvider($$interimElementProvider) {
               $mdUtil.nextTick($mdSelect.hide, true);
               break;
             default:
-              if (ev.keyCode >= 31 && ev.keyCode <= 90) {
+              if ((ev.keyCode >= 31 && ev.keyCode <= 90) || (3 === ev.location && ev.keyCode >= 97 && ev.keyCode <= 105)) {
                 var optNode = dropDown.controller('mdSelectMenu').optNodeForKeyboardSearch(ev);
                 opts.focusedNode = optNode || opts.focusedNode;
                 optNode && optNode.focus();
