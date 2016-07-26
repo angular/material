@@ -1218,9 +1218,21 @@ describe('$mdPanel', function() {
     var config;
     var mdPanelPosition;
 
+    function setRTL() {
+      mdPanelPosition._isRTL = true;
+    }
+
+    function disableRTL() {
+      mdPanelPosition._isRTL = false;
+    }
+
     beforeEach(function() {
       config = DEFAULT_CONFIG;
       mdPanelPosition = $mdPanel.newPanelPosition();
+    });
+
+    afterEach(function () {
+      disableRTL();
     });
 
     describe('should update the position of an open panel', function() {
@@ -1536,6 +1548,50 @@ describe('$mdPanel', function() {
         var panelCss = document.querySelector(PANEL_EL).style;
         expect(panelCss.left).toEqual('');
         expect(panelCss.right).toEqual('0px');
+      });
+
+      it('start in ltr', function() {
+        var start = '50px';
+        config['position'] = mdPanelPosition.absolute().start(start);
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.left).toEqual(start);
+      });
+
+      it('start in rtl', function() {
+        setRTL();
+
+        var start = '50px';
+        config['position'] = mdPanelPosition.absolute().start(start);
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.right).toEqual(start);
+      });
+
+      it('end in ltr', function() {
+        var end = '50px';
+        config['position'] = mdPanelPosition.absolute().end(end);
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.right).toEqual(end);
+      });
+
+      it('end in rtl', function() {
+        setRTL();
+
+        var end = '50px';
+        config['position'] = mdPanelPosition.absolute().end(end);
+
+        openPanel(config);
+
+        var panelCss = document.querySelector(PANEL_EL).style;
+        expect(panelCss.left).toEqual(end);
       });
 
       it('center horizontally', function() {
@@ -1889,6 +1945,68 @@ describe('$mdPanel', function() {
           var panelRect = document.querySelector(PANEL_EL)
               .getBoundingClientRect();
           expect(panelRect.left).toBeApproximately(myButtonRect.right);
+        });
+
+        describe('rtl', function () {
+          beforeEach(function () {
+            setRTL();
+          });
+
+          it('offset to the right of an element', function() {
+            var position = mdPanelPosition
+              .relativeTo(myButton)
+              .addPanelPosition(xPosition.OFFSET_START, null);
+
+            config['position'] = position;
+
+            openPanel(config);
+
+            var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+            expect(panelRect.left).toBeApproximately(myButtonRect.right);
+          });
+
+          it('left aligned with an element', function() {
+            var position = mdPanelPosition
+              .relativeTo(myButton)
+              .addPanelPosition(xPosition.ALIGN_END, null);
+
+            config['position'] = position;
+
+            openPanel(config);
+
+            var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+            expect(panelRect.left).toBeApproximately(myButtonRect.left);
+          });
+
+          it('right aligned with an element', function() {
+            var position = mdPanelPosition
+              .relativeTo(myButton)
+              .addPanelPosition(xPosition.ALIGN_START, null);
+
+            config['position'] = position;
+
+            openPanel(config);
+
+            var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+            expect(panelRect.right).toBeApproximately(myButtonRect.right);
+          });
+
+          it('offset to the right of an element', function() {
+            var position = mdPanelPosition
+              .relativeTo(myButton)
+              .addPanelPosition(xPosition.OFFSET_END, null);
+
+            config['position'] = position;
+
+            openPanel(config);
+
+            var panelRect = document.querySelector(PANEL_EL)
+              .getBoundingClientRect();
+            expect(panelRect.right).toBeApproximately(myButtonRect.left);
+          });
         });
       });
 
