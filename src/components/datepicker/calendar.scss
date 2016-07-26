@@ -131,6 +131,14 @@ md-calendar {
   md-calendar-month &:not(.md-calendar-month-label-disabled) {
     cursor: pointer;
   }
+
+  md-icon {
+    transform: rotate(180deg);
+  }
+
+  span {
+    vertical-align: middle;
+  }
 }
 
 // Table containing the day-of-the-week header.
