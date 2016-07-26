@@ -71,7 +71,7 @@ function buildJs () {
 
 function autoprefix () {
   return autoprefixer({browsers: [
-    'last 2 versions', 'last 4 Android versions'
+    'last 2 versions', 'last 4 Android versions', 'Safari >= 8'
   ]});
 }
 
