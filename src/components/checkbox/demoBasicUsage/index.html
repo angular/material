@@ -3,14 +3,14 @@
   <div>
     <fieldset class="standard">
       <legend>Using &lt;ng-model&gt;</legend>
-      <div layout="column" layout-wrap layout-gt-sm="row" >
-        <div flex-xs flex="50">
+      <div layout-wrap layout-gt-sm="row" >
+        <div flex-gt-sm="50">
           <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
             Checkbox 1: {{ data.cb1 }}
           </md-checkbox>
         </div>
-        <div flex-xs flex="50">
-          <div layout-xs="column" flex-xs="100">
+        <div flex-gt-sm="50">
+          <div>
             <md-checkbox
               ng-model="data.cb2"
               aria-label="Checkbox 2"
@@ -28,28 +28,28 @@
           </md-checkbox>
           </div>
         </div>
-        <div flex-xs flex="50">
+        <div flex-gt-sm="50">
           <md-checkbox ng-disabled="true" aria-label="Disabled checkbox" ng-model="data.cb3">
             Checkbox: Disabled
           </md-checkbox>
         </div>
-        <div flex-xs flex="50">
+        <div flex-gt-sm="50">
           <md-checkbox ng-disabled="true" aria-label="Disabled checked checkbox" ng-model="data.cb4" ng-init="data.cb4=true">
             Checkbox: Disabled, Checked
           </md-checkbox>
         </div>
-        <div flex-xs flex="50">
+        <div flex-gt-sm="50">
           <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
             Checkbox (md-primary): No Ink
           </md-checkbox>
         </div>
-        <div flex-xs flex="50">
+        <div flex-gt-sm="50">
           <md-checkbox md-indeterminate
               aria-label="Checkbox Indeterminate" class="md-primary">
             Checkbox: Indeterminate
           </md-checkbox>
         </div>
-        <div flex-xs flex="50">
+        <div flex-gt-sm="50">
           <md-checkbox md-indeterminate aria-label="Checkbox Disabled Indeterminate"
               ng-disabled="true" class="md-primary">
             Checkbox: Disabled, Indeterminate
