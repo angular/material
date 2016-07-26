@@ -47,11 +47,15 @@ before_script:
 - mkdir -p $LOGS_DIR
 - git config --global user.email "ngmaterial@googlegroups.com"
 - git config --global user.name "ngMaterial Bot"
+- "./scripts/sauce/start-tunnel.sh"
 
 script:
 - gulp ddescribe-iit
 - gulp build
 - gulp karma --config=config/karma-sauce.conf.js --browsers=$BROWSER --reporters='dots'
+
+after_script:
+- "./scripts/sauce/stop-tunnel.sh"
 
 after_success:
 - 'if [[ $MODE == "NORMAL" ]]; then ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT; fi'
