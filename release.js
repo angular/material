@@ -153,7 +153,7 @@
         return getVersionString(version);
 
         function parseVersion (version) {
-          var parts = version.split(/\.|\-rc/g);
+          var parts = version.split(/\-rc\.|\./g);
           return {
             string: version,
             major:  parts[ 0 ],
