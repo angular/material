@@ -81,7 +81,7 @@ angular
  * @description
  * Creates a panel with the specified options.
  *
- * @param opt_config {Object=} Specific configuration object that may contain
+ * @param config {Object=} Specific configuration object that may contain
  * the following properties:
  *
  *   - `template` - `{string=}`: HTML template to show in the dialog. This
@@ -152,12 +152,6 @@ angular
  *     the opening of the panel. If you do not use `origin`, you need to control
  *     the focus manually.
  *
- * TODO(ErinCoughlan): Add the following config options.
- *   - `groupName` - `{string=}`: Name of panel groups. This group name is
- *     used for configuring the number of open panels and identifying specific
- *     behaviors for groups. For instance, all tooltips will be identified
- *     using the same groupName.
- *
  * @returns {MdPanelRef} panelRef
  */
 
@@ -172,23 +166,11 @@ angular
  * Instead create the panel, chain promises on the domAdded and openComplete
  * methods, and call open from the returned panelRef.
  *
- * @param {Object=} opt_config Specific configuration object that may contain
+ * @param {Object=} config Specific configuration object that may contain
  * the properties defined in `$mdPanel.create`.
  *
  * @returns {angular.$q.Promise<MdPanelRef>} panelRef A promise that resolves
  * to an instance of the panel.
- */
-
-
-/**
- * @ngdoc method
- * @name $mdPanel#setGroupMaxOpen
- * @description
- * Sets the maximum number of panels in a group that can be opened at a given
- * time.
- *
- * @param groupName {string} The name of the group to configure.
- * @param maxOpen {number} The max number of panels that can be opened.
  */
 
 
@@ -406,7 +388,7 @@ angular
  * @description
  * Sets the value of `top` for the panel. Clears any previously set
  * vertical position.
- * @param {string=} opt_top Value of `top`. Defaults to '0'.
+ * @param {string=} top Value of `top`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 
@@ -416,7 +398,7 @@ angular
  * @description
  * Sets the value of `bottom` for the panel. Clears any previously set
  * vertical position.
- * @param {string=} opt_bottom Value of `bottom`. Defaults to '0'.
+ * @param {string=} bottom Value of `bottom`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 
@@ -426,7 +408,7 @@ angular
  * @description
  * Sets the value of `left` for the panel. Clears any previously set
  * horizontal position.
- * @param {string=} opt_left Value of `left`. Defaults to '0'.
+ * @param {string=} left Value of `left`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 
@@ -436,7 +418,7 @@ angular
  * @description
  * Sets the value of `right` for the panel. Clears any previously set
  * horizontal position.
- * @param {string=} opt_right Value of `right`. Defaults to '0'.
+ * @param {string=} right Value of `right`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
 
@@ -692,11 +674,11 @@ function MdPanelService($rootElement, $rootScope, $injector, $window) {
 
 /**
  * Creates a panel with the specified options.
- * @param {!Object=} opt_config Configuration object for the panel.
+ * @param {!Object=} config Configuration object for the panel.
  * @returns {!MdPanelRef}
  */
-MdPanelService.prototype.create = function(opt_config) {
-  var configSettings = opt_config || {};
+MdPanelService.prototype.create = function(config) {
+  var configSettings = config || {};
 
   this._config = {
     scope: this._$rootScope.$new(true),
@@ -713,11 +695,11 @@ MdPanelService.prototype.create = function(opt_config) {
 
 /**
  * Creates and opens a panel with the specified options.
- * @param {!Object=} opt_config Configuration object for the panel.
+ * @param {!Object=} config Configuration object for the panel.
  * @returns {!angular.$q.Promise<MdPanelRef>} The panel created from create.
  */
-MdPanelService.prototype.open = function(opt_config) {
-  var panelRef = this.create(opt_config);
+MdPanelService.prototype.open = function(config) {
+  var panelRef = this.create(config);
   return panelRef.open().then(function() {
     return panelRef;
   });
@@ -1247,17 +1229,17 @@ MdPanelRef.prototype.updatePosition = function(position) {
 
 /**
  * Calculates and updates the position of the panel.
- * @param {boolean=} opt_init
+ * @param {boolean=} init
  * @private
  */
-MdPanelRef.prototype._updatePosition = function(opt_init) {
+MdPanelRef.prototype._updatePosition = function(init) {
   var positionConfig = this._config['position'];
 
   if (positionConfig) {
     positionConfig._setPanelPosition(this._panelEl);
 
     // Hide the panel now that position is known.
-    if (opt_init) {
+    if (init) {
       this._panelContainer.addClass(MD_PANEL_HIDDEN);
     }
 
@@ -1666,12 +1648,12 @@ MdPanelPosition.prototype.absolute = function() {
 /**
  * Sets the value of `top` for the panel. Clears any previously set vertical
  * position.
- * @param {string=} opt_top Value of `top`. Defaults to '0'.
+ * @param {string=} top Value of `top`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
-MdPanelPosition.prototype.top = function(opt_top) {
+MdPanelPosition.prototype.top = function(top) {
   this._bottom = '';
-  this._top = opt_top || '0';
+  this._top = top || '0';
   return this;
 };
 
@@ -1679,12 +1661,12 @@ MdPanelPosition.prototype.top = function(opt_top) {
 /**
  * Sets the value of `bottom` for the panel. Clears any previously set vertical
  * position.
- * @param {string=} opt_bottom Value of `bottom`. Defaults to '0'.
+ * @param {string=} bottom Value of `bottom`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
-MdPanelPosition.prototype.bottom = function(opt_bottom) {
+MdPanelPosition.prototype.bottom = function(bottom) {
   this._top = '';
-  this._bottom = opt_bottom || '0';
+  this._bottom = bottom || '0';
   return this;
 };
 
@@ -1692,12 +1674,12 @@ MdPanelPosition.prototype.bottom = function(opt_bottom) {
 /**
  * Sets the value of `left` for the panel. Clears any previously set
  * horizontal position.
- * @param {string=} opt_left Value of `left`. Defaults to '0'.
+ * @param {string=} left Value of `left`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
-MdPanelPosition.prototype.left = function(opt_left) {
+MdPanelPosition.prototype.left = function(left) {
   this._right = '';
-  this._left = opt_left || '0';
+  this._left = left || '0';
   return this;
 };
 
@@ -1705,12 +1687,12 @@ MdPanelPosition.prototype.left = function(opt_left) {
 /**
  * Sets the value of `right` for the panel. Clears any previously set
  * horizontal position.
- * @param {string=} opt_right Value of `right`. Defaults to '0'.
+ * @param {string=} right Value of `right`. Defaults to '0'.
  * @returns {MdPanelPosition}
  */
-MdPanelPosition.prototype.right = function(opt_right) {
+MdPanelPosition.prototype.right = function(right) {
   this._left = '';
-  this._right = opt_right || '0';
+  this._right = right || '0';
   return this;
 };
 
