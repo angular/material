@@ -104,7 +104,7 @@ function detectDisabledThemes($mdThemingProvider) {
  * @ngdoc method
  * @name $mdThemingProvider#setNonce
  * @param {string} nonceValue The nonce to be added as an attribute to the theme style tags.
- * Setting a value allows the use CSP policy without using the unsafe-inline directive.
+ * Setting a value allows the use of CSP policy without using the unsafe-inline directive.
  */
 
 /**
