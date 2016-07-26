@@ -28,6 +28,9 @@ module.exports = function(config) {
 
     sauceLabs: {
       testName: 'Angular Material 1.x Unit Tests',
+
+      // Don't start the Sauce Connector. We use the integrated from Travis CI.
+      startConnect: false,
       recordVideo: false,
       recordScreenshots: false,
       options: {

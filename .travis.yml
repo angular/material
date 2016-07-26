@@ -55,3 +55,8 @@ script:
 
 after_success:
 - 'if [[ $MODE == "NORMAL" ]]; then ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT; fi'
+
+addons:
+  sauce_connect:
+    username: "angular-ci"
+    access_key: "78924453-3ea4-4aa8-acbf-8ff434f889b9"
