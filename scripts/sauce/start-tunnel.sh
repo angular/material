@@ -20,7 +20,7 @@ if [ ! -z "$TRAVIS_JOB_NUMBER" ]; then
 fi
 
 # Starting the Sauce Tunnel.
-$SAUCE_BINARY_DIR/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY $CONNECT_ARGS
+$SAUCE_BINARY_DIR/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY $CONNECT_ARGS &
 
 # Wait for the tunnel to be ready.
 while [ ! -e $SAUCE_READY_FILE ]; do sleep 1; done
