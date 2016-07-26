@@ -5,6 +5,8 @@ SAUCE_BINARY_DIR="/tmp/sauce"
 SAUCE_ACCESS_KEY=`echo $SAUCE_ACCESS_KEY | rev`
 SAUCE_READY_FILE="/tmp/sauce-readyfile"
 
+echo "Installing Sauce Connector binaries..."
+
 mkdir -p $SAUCE_BINARY_DIR
 
 # Install the Sauce Connector binary
@@ -19,8 +21,14 @@ if [ ! -z "$TRAVIS_JOB_NUMBER" ]; then
   CONNECT_ARGS="$CONNECT_ARGS --tunnel-identifier $TRAVIS_JOB_NUMBER"
 fi
 
+echo "Starting Sauce Connector Tunnel"
+echo "- Username: $SAUCE_USERNAME"
+echo "- Arguments: $CONNECT_ARGS"
+
 # Starting the Sauce Tunnel.
 $SAUCE_BINARY_DIR/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY $CONNECT_ARGS &
 
 # Wait for the tunnel to be ready.
 while [ ! -e $SAUCE_READY_FILE ]; do sleep 1; done
+
+echo "Sauce Tunnel is now ready"
