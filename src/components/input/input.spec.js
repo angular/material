@@ -906,5 +906,44 @@ describe('md-input-container directive', function() {
         expect(el.hasClass('md-icon-right')).toBeTruthy();
       });
     });
+
+    [
+      'type="hidden"',
+      'aria-hidden="true"',
+      'aria-hidden',
+      'hidden',
+      'hidden="true"',
+      'class="md-visually-hidden"',
+    ].forEach(function(attribute) {
+      it('ignores all hidden inputs when adding icon classes', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <input type="text" name="text">' +
+          '  <md-icon>help</md-icon>' +
+          '  <select ' + attribute + ' >' +
+          '</md-input-container>'
+        );
+
+        expect(el.hasClass('md-icon-left')).toBe(false);
+        expect(el.hasClass('md-icon-right')).toBe(true);
+      });
+    });
+
+    [
+      'aria-hidden="false"',
+      'hidden="false"',
+    ].forEach(function(attribute) {
+      it('does not ignore inputs with falsy hidden attributes when adding icon classes', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <input ' + attribute + ' >' +
+          '  <md-icon>help</md-icon>' +
+          '</md-input-container>'
+        );
+
+        expect(el.hasClass('md-icon-left')).toBe(false);
+        expect(el.hasClass('md-icon-right')).toBe(true);
+      });
+    });
   });
 });

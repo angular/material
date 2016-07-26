@@ -80,11 +80,20 @@ function mdInputContainerDirective($mdTheming, $parse) {
 
   var INPUT_TAGS = ['INPUT', 'TEXTAREA', 'SELECT', 'MD-SELECT'];
 
+  var HIDDEN_INPUT_SELECTORS = ':not([hidden=""])'
+        + ':not([hidden="true"])'
+        + ':not([type="hidden"])'
+        + ':not([aria-hidden=""])'
+        + ':not([aria-hidden="true"])'
+        + ':not(.md-visually-hidden)';
+
   var LEFT_SELECTORS = INPUT_TAGS.reduce(function(selectors, isel) {
+    isel = isel + HIDDEN_INPUT_SELECTORS;
     return selectors.concat(['md-icon ~ ' + isel, '.md-icon ~ ' + isel]);
   }, []).join(",");
 
   var RIGHT_SELECTORS = INPUT_TAGS.reduce(function(selectors, isel) {
+    isel = isel + HIDDEN_INPUT_SELECTORS;
     return selectors.concat([isel + ' ~ md-icon', isel + ' ~ .md-icon']);
   }, []).join(",");
 

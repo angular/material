@@ -507,6 +507,29 @@ describe('<md-select>', function() {
 
         expect(optgroupLabel).toBe(null);
       }));
+
+      it('ignores hidden select input when adding icon classes', inject(function($rootScope, $compile) {
+        $rootScope.val = [1];
+        var select = $compile(
+            '<md-input-container>' +
+            '  <label>Label</label>' +
+            '  <md-select multiple ng-model="val" placeholder="Hello World" name="testName">' +
+            '    <md-select-header class="demo-select-header">' +
+            '      <span>Hello World</span>' +
+            '    </md-select-header>' +
+            '    <md-optgroup label="stuff">' +
+            '      <md-option value="1">One</md-option>' +
+            '      <md-option value="2">Two</md-option>' +
+            '      <md-option value="3">Three</md-option>' +
+            '    </md-optgroup>' +
+            '  </md-select>' +
+            '  <md-icon>help</md-icon>' +
+            '</md-input-container>')($rootScope);
+
+        expect(select.find('select').length).toBe(1);
+        expect(select.hasClass('md-icon-left')).toBe(false);
+        expect(select.hasClass('md-icon-right')).toBe(true);
+      }));
     });
 
     it('does not allow keydown events to propagate from inside the md-select-menu', inject(function($rootScope, $compile) {
