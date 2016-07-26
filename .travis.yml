@@ -9,6 +9,7 @@ env:
   - LOGS_DIR=/tmp/angular-material1-build/logs
   - SAUCE_USERNAME=angular-ci
   - SAUCE_ACCESS_KEY=9b988f434ff8-fbca-8aa4-4ae3-35442987
+  - SAUCE_READY_FILE=/tmp/sauce-readyfile
   - BROWSER_STACK_USERNAME=angularteam1
   - BROWSER_STACK_ACCESS_KEY=BWCd4SynLzdDcv8xtzsB
   - secure: X7CNmOMemAJ9Jqrsmv6MXyeh8n8TIL5CKzE9LYsZUbsyKo0l5CyyysJq0y/AbpQS6awsSv2qP/cZ/kand6r6z0wMFbUcxa4HjMZEfRwv3sGtwj1OKJko/GvjcZQzD54FtHy1NU7wR0mYhAlE5IwH7f8bMa/nUiijgD/TOCTtKH8=
@@ -47,13 +48,9 @@ before_script:
 - mkdir -p $LOGS_DIR
 - git config --global user.email "ngmaterial@googlegroups.com"
 - git config --global user.name "ngMaterial Bot"
-- "./scripts/sauce/start-tunnel.sh"
 
 script:
 - ./scripts/travis-run-script.sh
-
-after_script:
-- "./scripts/sauce/stop-tunnel.sh"
 
 after_success:
 - 'if [[ $MODE == "NORMAL" ]]; then ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT; fi'

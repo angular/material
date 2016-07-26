@@ -1,9 +1,8 @@
 #!/bin/bash
 
-SAUCE_BINARY_FILE="sc-latest-linux.tar.gz"
+SAUCE_BINARY_FILE="sc-4.3.16-linux.tar.gz"
 SAUCE_BINARY_DIR="/tmp/sauce"
 SAUCE_ACCESS_KEY=`echo $SAUCE_ACCESS_KEY | rev`
-SAUCE_READY_FILE="/tmp/sauce-readyfile"
 
 echo "Installing Sauce Connector binaries..."
 
@@ -26,9 +25,4 @@ echo "- Username: $SAUCE_USERNAME"
 echo "- Arguments: $CONNECT_ARGS"
 
 # Starting the Sauce Tunnel.
-$SAUCE_BINARY_DIR/bin/sc -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY $CONNECT_ARGS &
-
-# Wait for the tunnel to be ready.
-while [ ! -e $SAUCE_READY_FILE ]; do sleep 1; done
-
-echo "Sauce Tunnel is now ready"
+$SAUCE_BINARY_DIR/bin/sc -vv -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY $CONNECT_ARGS &
