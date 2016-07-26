@@ -29,9 +29,9 @@ module.exports = function(config) {
     sauceLabs: {
       testName: 'Angular Material 1.x Unit Tests',
       tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER,
-      build: 'Build ' + process.env.TRAVIS_BUILD_NUMBER + '.' + process.env.TRAVIS_BUILD_ID,
+      build: 'Build ' + process.env.TRAVIS_JOB_NUMBER,
 
-      // Don't start the Sauce Connector. We use the integrated from Travis CI.
+      // Don't start the Sauce Connector, because we create our Saucelabs Tunnel manually.
       startConnect: false,
       recordVideo: false,
       recordScreenshots: false,
