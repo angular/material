@@ -71,7 +71,7 @@ function buildJs () {
 
 function autoprefix () {
   return autoprefixer({browsers: [
-    'last 2 versions', 'last 4 Android versions'
+    'last 2 versions', 'last 4 Android versions', 'Safari >= 8'
   ]});
 }
 
@@ -87,11 +87,14 @@ function buildModule(module, opts) {
 
   var stream = utils.filesForModule(module)
       .pipe(filterNonCodeFiles())
+      .pipe(filterLayoutAttrFiles())
       .pipe(gulpif('*.scss', buildModuleStyles(name)))
       .pipe(gulpif('*.js', buildModuleJs(name)));
+
   if (module === 'material.core') {
     stream = splitStream(stream);
   }
+
   return stream
       .pipe(BUILD_MODE.transform())
       .pipe(insert.prepend(config.banner))
@@ -146,22 +149,25 @@ function buildModule(module, opts) {
   }
 
   function buildModuleStyles(name) {
+
     var files = [];
     config.themeBaseFiles.forEach(function(fileGlob) {
       files = files.concat(glob(fileGlob, { cwd: ROOT }));
     });
+
     var baseStyles = files.map(function(fileName) {
       return fs.readFileSync(fileName, 'utf8').toString();
     }).join('\n');
 
     return lazypipe()
         .pipe(insert.prepend, baseStyles)
-        .pipe(gulpif, /theme.scss/,
-        rename(name + '-default-theme.scss'), concat(name + '.scss')
-    )
+        .pipe(gulpif, /theme.scss/, rename(name + '-default-theme.scss'), concat(name + '.scss'))
+        // Theme files are suffixed with the `default-theme.scss` string.
+        // In some cases there are multiple theme SCSS files, which should be concatenated together.
+        .pipe(gulpif, /default-theme.scss/, concat(name + '-default-theme.scss'))
         .pipe(sass)
         .pipe(autoprefix)
-    (); // invoke the returning fn to create our pipe
+    (); // Invoke the returning lazypipe function to create our new pipe.
   }
 
 }
@@ -169,13 +175,23 @@ function buildModule(module, opts) {
 function readModuleArg() {
   var module = args.c ? 'material.components.' + args.c : (args.module || args.m);
   if (!module) {
-    gutil.log('\nProvide a compnent argument via `-c`:',
+    gutil.log('\nProvide a component argument via `-c`:',
         '\nExample: -c toast');
     gutil.log('\nOr provide a module argument via `--module` or `-m`.',
         '\nExample: --module=material.components.toast or -m material.components.dialog');
     process.exit(1);
   }
   return module;
+}
+
+/**
+ * We are not injecting the layout-attributes selectors into the core module css,
+ * otherwise we would have the layout-classes and layout-attributes in there.
+ */
+function filterLayoutAttrFiles() {
+  return filter(function(file) {
+    return !/.*layout-attributes\.scss/g.test(file.path);
+  });
 }
 
 function filterNonCodeFiles() {

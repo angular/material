@@ -31,15 +31,15 @@ describe('md-button', function() {
       expect($log.warn).not.toHaveBeenCalled();
     }));
 
-    it('should expect an aria-label if element has text content', inject(function($compile, $rootScope, $log) {
+    it('should not expect an aria-label if element has text content', inject(function($compile, $rootScope, $log) {
       spyOn($log, 'warn');
 
       var button = $compile('<md-button>Hello</md-button>')($rootScope);
-      expect(button.attr('aria-label')).toBe("Hello");
+      expect(button.attr('aria-label')).toBeUndefined();
       expect($log.warn).not.toHaveBeenCalled();
     }));
 
-    it('should set an aria-label if the text content using bindings', inject(function($$rAF, $compile, $rootScope, $log, $timeout) {
+    it('should not set an aria-label if the text content uses bindings', inject(function($$rAF, $compile, $rootScope, $log, $timeout) {
       spyOn($log, 'warn');
 
       var scope = angular.extend($rootScope.$new(),{greetings : "Welcome"});
@@ -48,7 +48,7 @@ describe('md-button', function() {
       $rootScope.$apply();
       $$rAF.flush();    // needed for $mdAria.expectAsync()
 
-      expect(button.attr('aria-label')).toBe("Welcome");
+      expect(button.attr('aria-label')).toBeUndefined();
       expect($log.warn).not.toHaveBeenCalled();
     }));
 
@@ -73,6 +73,15 @@ describe('md-button', function() {
     expect(button[0]).toHaveClass('md-focused');
     button.triggerHandler('blur');
     expect(button[0]).not.toHaveClass('md-focused');
+  }));
+
+  it('should not set the focus state if focus is disabled', inject(function($compile, $rootScope) {
+    var button = $compile('<md-button class="md-no-focus">')($rootScope.$new());
+    $rootScope.$apply();
+
+    button.triggerHandler('focus');
+
+    expect(button).not.toHaveClass('md-focused');
   }));
 
   describe('with href or ng-href', function() {

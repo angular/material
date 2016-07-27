@@ -12,6 +12,7 @@ md-sidenav {
   max-width: $sidenav-mobile-width;
   bottom: 0;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 
   ul {
     list-style: none;
@@ -50,13 +51,13 @@ md-sidenav {
   &.md-locked-open-remove-active {
     transition: width $swift-ease-in-duration $swift-ease-in-timing-function,
                 min-width $swift-ease-in-duration $swift-ease-in-timing-function;
-    width: 0;
-    min-width: 0;
+    width: 0 !important;
+    min-width: 0 !important;
   }
 
   &.md-closed.md-locked-open-add {
-    width: 0;
-    min-width: 0;
+    width: 0 !important;
+    min-width: 0 !important;
     transform: translate3d(0%, 0, 0);
   }
 
@@ -86,9 +87,9 @@ md-sidenav {
 .md-sidenav-right {
   left: 100%;
   top: 0;
-  transform: translate3d(-100%, 0, 0);
+  transform: translate(-100%, 0);
   &.md-closed {
-    transform: translate3d(0%, 0, 0);
+    transform: translate(0%, 0);
   }
 }
 

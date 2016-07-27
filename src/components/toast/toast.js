@@ -15,7 +15,9 @@ angular.module('material.components.toast', [
 function MdToastDirective($mdToast) {
   return {
     restrict: 'E',
-    link: function postLink(scope, element, attr) {
+    link: function postLink(scope, element) {
+      element.addClass('_md');     // private md component indicator for styling
+      
       // When navigation force destroys an interimElement, then
       // listen and $destroy() that interim instance...
       scope.$on('$destroy', function() {
@@ -34,6 +36,8 @@ function MdToastDirective($mdToast) {
   * `$mdToast` is a service to build a toast notification on any position
   * on the screen with an optional duration, and provides a simple promise API.
   *
+  * The toast will be always positioned at the `bottom`, when the screen size is
+  * between `600px` and `959px` (`sm` breakpoint)
   *
   * ## Restrictions on custom toasts
   * - The toast's template must have an outer `<md-toast>` element.
@@ -42,9 +46,9 @@ function MdToastDirective($mdToast) {
   *
   * ## Parent container notes
   *
-  * The toast is positioned using absolute positioning relative to it's first non-static parent
+  * The toast is positioned using absolute positioning relative to its first non-static parent
   * container. Thus, if the requested parent container uses static positioning, we will temporarily
-  * set it's positioning to `relative` while the toast is visible and reset it when the toast is
+  * set its positioning to `relative` while the toast is visible and reset it when the toast is
   * hidden.
   *
   * Because of this, it is usually best to ensure that the parent container has a fixed height and
@@ -105,22 +109,59 @@ function MdToastDirective($mdToast) {
   * @returns {obj} a `$mdToastPreset` with the following chainable configuration methods.
   *
   * _**Note:** These configuration methods are provided in addition to the methods provided by
-  *   the `build()` and `show()` methods below._
+  * the `build()` and `show()` methods below._
   *
-  * - `.textContent(string)` - Sets the toast content to the specified string.
+  * <table class="md-api-table methods">
+  *    <thead>
+  *      <tr>
+  *        <th>Method</th>
+  *        <th>Description</th>
+  *      </tr>
+  *    </thead>
+  *    <tbody>
+  *      <tr>
+  *        <td>`.textContent(string)`</td>
+  *        <td>Sets the toast content to the specified string</td>
+  *      </tr>
+  *      <tr>
+  *        <td>`.action(string)`</td>
+  *        <td>
+  *          Adds an action button. <br/>
+  *          If clicked, the promise (returned from `show()`)
+  *          will resolve with the value `'ok'`; otherwise, it is resolved with `true` after a `hideDelay`
+  *          timeout
+  *        </td>
+  *      </tr>
+  *      <tr>
+  *        <td>`.highlightAction(boolean)`</td>
+  *        <td>
+  *          Whether or not the action button will have an additional highlight class.<br/>
+  *          By default the `accent` color will be applied to the action button.
+  *        </td>
+  *      </tr>
+  *      <tr>
+  *        <td>`.highlightClass(string)`</td>
+  *        <td>
+  *          If set, the given class will be applied to the highlighted action button.<br/>
+  *          This allows you to specify the highlight color easily. Highlight classes are `md-primary`, `md-warn`
+  *          and `md-accent`
+  *        </td>
+  *      </tr>
+  *      <tr>
+  *        <td>`.capsule(boolean)`</td>
+  *        <td>Whether or not to add the `md-capsule` class to the toast to provide rounded corners</td>
+  *      </tr>
+  *      <tr>
+  *        <td>`.theme(string)`</td>
+  *        <td>Sets the theme on the toast to the requested theme. Default is `$mdThemingProvider`'s default.</td>
+  *      </tr>
+  *      <tr>
+  *        <td>`.toastClass(string)`</td>
+  *        <td>Sets a class on the toast element</td>
+  *      </tr>
+  *    </tbody>
+  * </table>
   *
-  * - `.action(string)` - Adds an action button. If clicked, the promise (returned from `show()`)
-  * will resolve with the value `'ok'`; otherwise, it is resolved with `true` after a `hideDelay`
-  * timeout.
-  *
-  * - `.highlightAction(boolean)` - Whether or not the action button will have an additional
-  * highlight class.
-  *
-  * - `.capsule(boolean)` - Whether or not to add the `md-capsule` class to the toast to provide
-  * rounded corners.
-  *
-  * - `.theme(string)` - Sets the theme on the toast to the requested theme. Default is
-  * `$mdThemingProvider`'s default.
   */
 
 /**
@@ -165,8 +206,11 @@ function MdToastDirective($mdToast) {
   *   - `hideDelay` - `{number=}`: How many milliseconds the toast should stay
   *     active before automatically closing.  Set to 0 or false to have the toast stay open until
   *     closed manually. Default: 3000.
-  *   - `position` - `{string=}`: Where to place the toast. Available: any combination
-  *     of 'bottom', 'left', 'top', 'right'. Default: 'bottom left'.
+  *   - `position` - `{string=}`: Sets the position of the toast. <br/>
+  *     Available: any combination of `'bottom'`, `'left'`, `'top'`, `'right'`, `'end'` and `'start'`.
+  *     The properties `'end'` and `'start'` are dynamic and can be used for RTL support.<br/>
+  *     Default combination: `'bottom left'`.
+  *   - `toastClass` - `{string=}`: A class to set on the toast element.
   *   - `controller` - `{string=}`: The controller to associate with this toast.
   *     The controller will be injected the local `$mdToast.hide( )`, which is a function
   *     used to hide the toast.
@@ -228,30 +272,40 @@ function MdToastProvider($$interimElementProvider) {
   var activeToastContent;
   var $mdToast = $$interimElementProvider('$mdToast')
     .setDefaults({
-      methods: ['position', 'hideDelay', 'capsule', 'parent', 'position' ],
+      methods: ['position', 'hideDelay', 'capsule', 'parent', 'position', 'toastClass'],
       options: toastDefaultOptions
     })
     .addPreset('simple', {
       argOption: 'textContent',
-      methods: ['textContent', 'content', 'action', 'highlightAction', 'theme', 'parent' ],
+      methods: ['textContent', 'content', 'action', 'highlightAction', 'highlightClass', 'theme', 'parent' ],
       options: /* @ngInject */ function($mdToast, $mdTheming) {
-        var opts = {
+        return {
           template:
             '<md-toast md-theme="{{ toast.theme }}" ng-class="{\'md-capsule\': toast.capsule}">' +
             '  <div class="md-toast-content">' +
-            '    <span flex class="md-toast-text" role="alert" aria-relevant="all" aria-atomic="true">' +
+            '    <span class="md-toast-text" role="alert" aria-relevant="all" aria-atomic="true">' +
             '      {{ toast.content }}' +
             '    </span>' +
-            '    <md-button class="md-action" ng-if="toast.action" ng-click="toast.resolve()" ng-class="{\'md-highlight\': toast.highlightAction}">' +
+            '    <md-button class="md-action" ng-if="toast.action" ng-click="toast.resolve()" ' +
+            '        ng-class="highlightClasses">' +
             '      {{ toast.action }}' +
             '    </md-button>' +
             '  </div>' +
             '</md-toast>',
           controller: /* @ngInject */ function mdToastCtrl($scope) {
             var self = this;
+
+            if (self.highlightAction) {
+              $scope.highlightClasses = [
+                'md-highlight',
+                self.highlightClass
+              ]
+            }
+
             $scope.$watch(function() { return activeToastContent; }, function() {
               self.content = activeToastContent;
             });
+
             this.resolve = function() {
               $mdToast.hide( ACTION_RESOLVE );
             };
@@ -260,7 +314,6 @@ function MdToastProvider($$interimElementProvider) {
           controllerAs: 'toast',
           bindToController: true
         };
-        return opts;
       }
     })
     .addMethod('updateTextContent', updateTextContent)
@@ -278,6 +331,7 @@ function MdToastProvider($$interimElementProvider) {
     return {
       onShow: onShow,
       onRemove: onRemove,
+      toastClass: '',
       position: 'bottom left',
       themable: true,
       hideDelay: 3000,
@@ -289,18 +343,29 @@ function MdToastProvider($$interimElementProvider) {
           // Root element of template will be <md-toast>. We need to wrap all of its content inside of
           // of <div class="md-toast-content">. All templates provided here should be static, developer-controlled
           // content (meaning we're not attempting to guard against XSS).
-          var parsedTemplate = angular.element(template);
-          var wrappedContent = '<div class="md-toast-content">' + parsedTemplate.html() + '</div>';
+          var templateRoot = document.createElement('md-template');
+          templateRoot.innerHTML = template;
 
-          parsedTemplate.empty().append(wrappedContent);
+          // Iterate through all root children, to detect possible md-toast directives.
+          for (var i = 0; i < templateRoot.children.length; i++) {
+            if (templateRoot.children[i].nodeName === 'MD-TOAST') {
+              var wrapper = angular.element('<div class="md-toast-content">');
 
-          // Underlying interimElement expects a template string.
-          return parsedTemplate[0].outerHTML;
+              // Wrap the children of the `md-toast` directive in jqLite, to be able to append multiple
+              // nodes with the same execution.
+              wrapper.append(angular.element(templateRoot.children[i].childNodes));
+
+              // Append the new wrapped element to the `md-toast` directive.
+              templateRoot.children[i].appendChild(wrapper[0]);
+            }
+          }
+
+          // We have to return the innerHTMl, because we do not want to have the `md-template` element to be
+          // the root element of our interimElement.
+          return templateRoot.innerHTML;
         }
 
-        return shouldAddWrapper ?
-            '<div class="md-toast-content">' + template + '</div>' :
-            template || '';
+        return template || '';
       }
     };
 
@@ -310,6 +375,8 @@ function MdToastProvider($$interimElementProvider) {
       var isSmScreen = !$mdMedia('gt-sm');
 
       element = $mdUtil.extractElementByName(element, 'md-toast', true);
+      options.element = element;
+
       options.onSwipe = function(ev, gesture) {
         //Add the relevant swipe class to the element so it can animate correctly
         var swipe = ev.type.replace('$md.','');
@@ -331,6 +398,7 @@ function MdToastProvider($$interimElementProvider) {
       };
       options.openClass = toastOpenClass(options.position);
 
+      element.addClass(options.toastClass);
 
       // 'top left' -> 'md-top md-left'
       options.parent.addClass(options.openClass);

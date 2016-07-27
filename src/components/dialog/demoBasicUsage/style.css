@@ -19,3 +19,7 @@ button {
 div#status {
     color: #c60008;
 }
+
+.dialog-demo-prerendered md-checkbox {
+  margin-bottom: 0;
+}

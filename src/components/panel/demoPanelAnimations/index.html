@@ -1,0 +1,39 @@
+<div class="demo-md-panel-animation md-padding" ng-controller="AnimationCtrl as ctrl">
+  <h2>Animations</h2>
+  <div layout="row">
+    <div flex="33">
+      OpenFrom:
+      <md-radio-group ng-model="ctrl.openFrom">
+        <md-radio-button value="button">Button</md-radio-button>
+        <md-radio-button value="corner">Top/Left Corner</md-radio-button>
+        <md-radio-button value="bottom">Bottom Center</md-radio-button>
+      </md-radio-group>
+    </div>
+
+    <div flex="33">
+      CloseTo:
+      <md-radio-group ng-model="ctrl.closeTo">
+        <md-radio-button value="button">Button</md-radio-button>
+        <md-radio-button value="corner">Top/Left Corner</md-radio-button>
+        <md-radio-button value="bottom">Bottom Center</md-radio-button>
+      </md-radio-group>
+    </div>
+
+    <div flex="33">
+      AnimationType:
+      <md-radio-group ng-model="ctrl.animationType">
+        <md-radio-button value="none">None</md-radio-button>
+        <md-radio-button value="slide">Slide</md-radio-button>
+        <md-radio-button value="scale">Scale</md-radio-button>
+        <md-radio-button value="fade">Fade</md-radio-button>
+        <md-radio-button value="custom">Custom</md-radio-button>
+      </md-radio-group>
+    </div>
+  </div>
+
+  <div class="demo-md-panel-content">
+    <md-button class="animation-target md-primary md-raised" ng-click="ctrl.showDialog($event)">
+      Dialog
+    </md-button>
+  </div>
+</div>

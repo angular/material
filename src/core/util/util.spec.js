@@ -209,6 +209,24 @@ describe('util', function() {
       });
     });
 
+    describe('disableScrollAround', function() {
+      it('should prevent scrolling of the passed element', inject(function($mdUtil) {
+        var element = angular.element('<div style="height: 2000px">');
+        document.body.appendChild(element[0]);
+
+        var enableScrolling = $mdUtil.disableScrollAround(element);
+
+        window.scrollTo(0, 1000);
+
+        expect(window.pageYOffset).toBe(0);
+
+        // Restore the scrolling.
+        enableScrolling();
+        window.scrollTo(0, 0);
+        document.body.removeChild(element[0]);
+      }));
+    });
+
     describe('nextTick', function() {
       it('should combine multiple calls into a single digest', inject(function($mdUtil, $rootScope, $timeout) {
         var digestWatchFn = jasmine.createSpy('watchFn');
@@ -229,15 +247,76 @@ describe('util', function() {
         //-- but callback is still called more
         expect(callback.calls.count()).toBe(10);
       }));
+
       it('should return a timeout', inject(function($mdUtil) {
         var timeout = $mdUtil.nextTick(angular.noop);
         expect(timeout.$$timeoutId).toBeOfType('number');
       }));
+
       it('should return the same timeout for multiple calls', inject(function($mdUtil) {
         var a = $mdUtil.nextTick(angular.noop),
           b = $mdUtil.nextTick(angular.noop);
         expect(a).toBe(b);
       }));
+
+      it('should use scope argument and `scope.$$destroyed` to skip the callback', inject(function($mdUtil) {
+        var callback = jasmine.createSpy('callback');
+        var scope = $rootScope.$new(true);
+
+        $mdUtil.nextTick(callback, false, scope);
+        scope.$destroy();
+
+        flush(function(){
+          expect(callback).not.toHaveBeenCalled();
+        });
+      }));
+
+      it('should only skip callbacks of scopes which were destroyed', inject(function($mdUtil) {
+        var callback1 = jasmine.createSpy('callback1');
+        var callback2 = jasmine.createSpy('callback2');
+        var scope1 = $rootScope.$new(true);
+        var scope2 = $rootScope.$new(true);
+
+        $mdUtil.nextTick(callback1, false, scope1);
+        $mdUtil.nextTick(callback2, false, scope2);
+        scope1.$destroy();
+
+        flush(function() {
+          expect(callback1).not.toHaveBeenCalled();
+          expect(callback2).toHaveBeenCalled();
+        });
+      }));
+
+      it('should skip callback for destroyed scopes even if first scope registered is undefined', inject(function($mdUtil) {
+        var callback1 = jasmine.createSpy('callback1');
+        var callback2 = jasmine.createSpy('callback2');
+        var scope = $rootScope.$new(true);
+
+        $mdUtil.nextTick(callback1, false);  // no scope
+        $mdUtil.nextTick(callback2, false, scope);
+        scope.$destroy();
+
+        flush(function() {
+          expect(callback1).toHaveBeenCalled();
+          expect(callback2).not.toHaveBeenCalled();
+        });
+      }));
+
+      it('should use scope argument and `!scope.$$destroyed` to invoke the callback', inject(function($mdUtil) {
+        var callback = jasmine.createSpy('callback');
+        var scope = $rootScope.$new(true);
+
+        $mdUtil.nextTick(callback, false, scope);
+        flush(function(){
+          expect(callback).toHaveBeenCalled();
+        });
+      }));
+
+      function flush(expectation) {
+        $rootScope.$digest();
+        $timeout.flush();
+        expectation && expectation();
+      }
     });
 
     describe('hasComputedStyle', function () {
@@ -284,6 +363,45 @@ describe('util', function() {
           expect($mdUtil.hasComputedStyle(elem, 'height')).toBe(false);
         }));
       });
+    });
+
+    describe('parseAttributeBoolean', function() {
+
+      it('should validate `1` string to be true', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('1')).toBe(true);
+      }));
+
+      it('should validate an empty value to be true', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('')).toBe(true);
+      }));
+
+      it('should validate `false` text to be false', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('false')).toBe(false);
+      }));
+
+      it('should validate `true` text to be true', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('true')).toBe(true);
+      }));
+
+      it('should validate a random text to be true', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('random-string')).toBe(true);
+      }));
+
+      it('should validate `0` text to be false', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('0')).toBe(false);
+      }));
+
+      it('should validate true boolean to be true', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean(true)).toBe(true);
+      }));
+
+      it('should validate false boolean to be false', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean(false)).toBe(false);
+      }));
+
+      it('should validate `false` text to be true when ignoring negative values', inject(function($mdUtil) {
+        expect($mdUtil.parseAttributeBoolean('false', false)).toBe(true);
+      }));
     });
 
     describe('getParentWithPointerEvents', function () {
@@ -375,30 +493,6 @@ describe('util', function() {
         }));
       });
     });
-
-    it('should use scope argument and `scope.$$destroyed` to skip the callback', inject(function($mdUtil) {
-      var callBackUsed, callback = function(){ callBackUsed = true; };
-      var scope = $rootScope.$new(true);
-
-      $mdUtil.nextTick(callback,false,scope);
-      scope.$destroy();
-
-      flush(function(){ expect( callBackUsed ).toBeUndefined(); });
-    }));
-
-    it('should use scope argument and `!scope.$$destroyed` to invoke the callback', inject(function($mdUtil) {
-       var callBackUsed, callback = function(){ callBackUsed = true; };
-       var scope = $rootScope.$new(true);
-
-       $mdUtil.nextTick(callback,false,scope);
-       flush(function(){ expect( callBackUsed ).toBe(true); });
-     }));
-
-    function flush(expectation) {
-      $rootScope.$digest();
-      $timeout.flush();
-      expectation && expectation();
-    }
   });
 
   describe('processTemplate', function() {
@@ -408,6 +502,43 @@ describe('util', function() {
         expect(output).toEqual('<some-tag>{{some-var}}</some-tag>');
       })
     );
+  });
+  
+  describe('isParentFormSubmitted', function() {
+    var formTemplate =
+      '<form>' +
+      '  <input type="text" name="test" ng-model="test" />' +
+      '  <input type="submit" />' +
+      '<form>';
+
+    it('returns false if you pass no element', inject(function($mdUtil) {
+      expect($mdUtil.isParentFormSubmitted()).toBe(false);
+    }));
+    
+    it('returns false if there is no form', inject(function($mdUtil) {
+      var element = angular.element('<input />');
+      
+      expect($mdUtil.isParentFormSubmitted(element)).toBe(false);
+    }));
+    
+    it('returns false if the parent form is NOT submitted', inject(function($compile, $rootScope, $mdUtil) { 
+      var scope = $rootScope.$new();
+      var form = $compile(formTemplate)(scope);
+      
+      expect($mdUtil.isParentFormSubmitted(form.find('input'))).toBe(false);
+    }));
+    
+    it('returns true if the parent form is submitted', inject(function($compile, $rootScope, $mdUtil) {
+      var scope = $rootScope.$new();
+      var form = $compile(formTemplate)(scope);
+
+      var formController = form.controller('form');
+      
+      formController.$setSubmitted();
+
+      expect(formController.$submitted).toBe(true);
+      expect($mdUtil.isParentFormSubmitted(form.find('input'))).toBe(true);
+    }));
   });
 
   describe('with $interpolate.start/endSymbol override', function() {
@@ -426,6 +557,64 @@ describe('util', function() {
 
         expect(output).toEqual('<some-tag>[[some-var]]</some-tag>');
       }));
+    });
+  });
+
+  describe('getClosest', function() {
+    var $mdUtil;
+
+    beforeEach(inject(function(_$mdUtil_) {
+      $mdUtil = _$mdUtil_;
+    }));
+
+    it('should be able to get the closest parent of a particular node type', function() {
+      var grandparent = angular.element('<h1>');
+      var parent = angular.element('<h2>');
+      var element = angular.element('<h3>');
+
+      parent.append(element);
+      grandparent.append(parent);
+
+      var result = $mdUtil.getClosest(element, 'h1');
+
+      expect(result).toBeTruthy();
+      expect(result.nodeName.toLowerCase()).toBe('h1');
+
+      grandparent.remove();
+    });
+
+    it('should be able to start from the parent of the specified node', function() {
+      var grandparent = angular.element('<div>');
+      var parent = angular.element('<span>');
+      var element = angular.element('<div>');
+
+      parent.append(element);
+      grandparent.append(parent);
+
+      var result = $mdUtil.getClosest(element, 'div', true);
+
+      expect(result).toBeTruthy();
+      expect(result).not.toBe(element[0]);
+
+      grandparent.remove();
+    });
+
+    it('should be able to take in a predicate function', function() {
+      var grandparent = angular.element('<div random-attr>');
+      var parent = angular.element('<div>');
+      var element = angular.element('<span>');
+
+      parent.append(element);
+      grandparent.append(parent);
+
+      var result = $mdUtil.getClosest(element, function(el) {
+        return el.hasAttribute('random-attr');
+      });
+
+      expect(result).toBeTruthy();
+      expect(result).toBe(grandparent[0]);
+
+      grandparent.remove();
     });
   });
 });

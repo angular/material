@@ -3,22 +3,29 @@ describe('material.components.menu', function() {
   var $mdMenu, $timeout, menuActionPerformed, $mdUtil;
 
   beforeEach(module('material.components.menu'));
-  beforeEach(inject(function(_$mdUtil_, _$mdMenu_, _$timeout_, $document) {
+  beforeEach(inject(function(_$mdUtil_, _$mdMenu_, _$timeout_) {
     $mdUtil = _$mdUtil_;
     $mdMenu = _$mdMenu_;
     $timeout = _$timeout_;
-    var abandonedMenus = $document[0].querySelectorAll('.md-open-menu-container');
-    angular.element(abandonedMenus).remove();
   }));
-  afterEach(function() {
+
+  afterEach(inject(function($document) {
     menuActionPerformed = false;
     attachedElements.forEach(function(element) {
       element.remove();
     });
     attachedElements = [];
-  });
+
+    var abandonedMenus = $document[0].querySelectorAll('.md-open-menu-container');
+    angular.element(abandonedMenus).remove();
+  }));
 
   describe('md-menu directive', function() {
+
+    it('should have `._md` class indicator', function() {
+      var element = setup();
+      expect(element.hasClass('_md')).toBe(true);
+    });
 
     it('errors on invalid markup', inject(function($compile, $rootScope) {
       function buildBadMenu() {
@@ -107,6 +114,17 @@ describe('material.components.menu', function() {
       expect($document.find('md-backdrop').length).toBe(0);
     }));
 
+    it('should remove the backdrop if the container scope got destroyed', inject(function($document, $rootScope) {
+      var scope = $rootScope.$new();
+      var menu = setup(null, null, scope);
+
+      openMenu(menu);
+      expect($document.find('md-backdrop').length).not.toBe(0);
+
+      scope.$destroy();
+      expect($document.find('md-backdrop').length).toBe(0);
+    }));
+
     it('closes on backdrop click', inject(function($document) {
 
       var menu = setup();
@@ -133,6 +151,48 @@ describe('material.components.menu', function() {
 
       expect(getOpenMenuContainer(menu).length).toBe(0);
     }));
+
+    describe('autofocus', function() {
+
+      it('should focus a button with md-menu-focus-target', inject(function($compile, $rootScope, $document) {
+        var menu = $compile(
+          '<md-menu>' +
+            '<button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+            '<md-menu-content>' +
+              '<md-menu-item>' +
+                '<button id="menuFocus" md-menu-focus-target ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+            '</md-menu-content>' +
+          '</md-menu>'
+        )($rootScope);
+
+        openMenu(menu);
+
+        var menuTarget = $document[0].querySelector('#menuFocus');
+
+        expect(document.activeElement).toBe(menuTarget);
+      }));
+
+      it('should focus a button with md-autofocus', inject(function($compile, $rootScope, $document) {
+        var menu = $compile(
+          '<md-menu>' +
+            '<button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+            '<md-menu-content>' +
+              '<md-menu-item>' +
+                '<button id="menuFocus" md-autofocus ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+            '</md-menu-content>' +
+          '</md-menu>'
+        )($rootScope);
+
+        openMenu(menu);
+
+        var menuTarget = $document[0].querySelector('#menuFocus');
+
+        expect(document.activeElement).toBe(menuTarget);
+      }));
+
+    });
 
     describe('closes with -', function() {
       it('closes on normal option click', function() {

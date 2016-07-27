@@ -1,0 +1,25 @@
+<div ng-controller="SelectHeaderController" class="md-padding" ng-cloak>
+  <div>
+    <h1 class="md-title">Pick a vegetable below</h1>
+    <div layout="row">
+      <md-input-container>
+        <label>Vegetables</label>
+        <md-select ng-model="selectedVegetables"
+                   md-on-close="clearSearchTerm()"
+                   data-md-container-class="selectdemoSelectHeader"
+                   multiple>
+          <md-select-header class="demo-select-header">
+            <input ng-model="searchTerm"
+                   type="search"
+                   placeholder="Search for a vegetable.."
+                   class="demo-header-searchbox md-text">
+          </md-select-header>
+          <md-optgroup label="vegetables">
+            <md-option ng-value="vegetable" ng-repeat="vegetable in vegetables |
+              filter:searchTerm">{{vegetable}}</md-option>
+          </md-optgroup>
+        </md-select>
+      </md-input-container>
+    </div>
+ </div>
+</div>

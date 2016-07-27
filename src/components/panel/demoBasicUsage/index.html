@@ -1,0 +1,23 @@
+<div class="demo-md-panel md-padding" ng-controller="BasicDemoCtrl as ctrl">
+  <p>
+    A panel can be used to create dialogs, menus, and other overlays.
+  </p>
+  <h2>Options</h2>
+  <div layout="row">
+    <div flex="33">
+      <md-checkbox ng-model="ctrl.disableParentScroll">Disable Parent Scroll</md-checkbox
+    </div>
+
+  <div class="demo-md-panel-content">
+    <md-button class="md-primary md-raised demo-dialog-open-button"
+               ng-click="ctrl.showDialog($event)">
+      Dialog
+    </md-button>
+    <md-button class="md-primary md-raised demo-menu-open-button"
+               ng-click="ctrl.showMenu($event)">
+      Select Menu
+    </md-button>
+
+    <p>Your favorite dessert is: {{ ctrl.selected.favoriteDessert }}</p>
+  </div>
+</div>

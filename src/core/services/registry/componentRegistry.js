@@ -26,8 +26,8 @@
       /**
        * Used to print an error when an instance for a handle isn't found.
        */
-      notFoundError: function(handle) {
-        $log.error('No instance found for handle', handle);
+      notFoundError: function(handle, msgContext) {
+        $log.error( (msgContext || "") + 'No instance found for handle', handle);
       },
       /**
        * Return all registered instances as an array.
@@ -83,7 +83,9 @@
         function resolveWhen() {
           var dfd = pendings[handle];
           if ( dfd ) {
-            dfd.resolve( instance );
+            dfd.forEach(function (promise) {
+              promise.resolve(instance);
+            });
             delete pendings[handle];
           }
         }
@@ -102,7 +104,10 @@
           if ( instance )  {
             deferred.resolve( instance );
           } else {
-            pendings[handle] = deferred;
+            if (pendings[handle] === undefined) {
+              pendings[handle] = [];
+            }
+            pendings[handle].push(deferred);
           }
 
           return deferred.promise;

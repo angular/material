@@ -127,9 +127,9 @@ function VirtualRepeatContainerController(
     this.topIndex = 0;
   }
 
-  this.scroller = $element[0].getElementsByClassName('md-virtual-repeat-scroller')[0];
-  this.sizer = this.scroller.getElementsByClassName('md-virtual-repeat-sizer')[0];
-  this.offsetter = this.scroller.getElementsByClassName('md-virtual-repeat-offsetter')[0];
+  this.scroller = $element[0].querySelector('.md-virtual-repeat-scroller');
+  this.sizer = this.scroller.querySelector('.md-virtual-repeat-sizer');
+  this.offsetter = this.scroller.querySelector('.md-virtual-repeat-offsetter');
 
   // After the dom stablizes, measure the initial size of the container and
   // make a best effort at re-measuring as it changes.
@@ -183,7 +183,7 @@ VirtualRepeatContainerController.prototype.getSize = function() {
 /**
  * Resizes the container.
  * @private
- * @param {number} The new size to set.
+ * @param {number} size The new size to set.
  */
 VirtualRepeatContainerController.prototype.setSize_ = function(size) {
   var dimension = this.getDimensionName_();
@@ -201,6 +201,7 @@ VirtualRepeatContainerController.prototype.unsetSize_ = function() {
 
 /** Instructs the container to re-measure its size. */
 VirtualRepeatContainerController.prototype.updateSize = function() {
+  // If the original size is already determined, we can skip the update.
   if (this.originalSize) return;
 
   this.size = this.isHorizontal()
@@ -274,22 +275,35 @@ VirtualRepeatContainerController.prototype.sizeScroller_ = function(size) {
  */
 VirtualRepeatContainerController.prototype.autoShrink_ = function(size) {
   var shrinkSize = Math.max(size, this.autoShrinkMin * this.repeater.getItemSize());
+
   if (this.autoShrink && shrinkSize !== this.size) {
     if (this.oldElementSize === null) {
       this.oldElementSize = this.$element[0].style[this.getDimensionName_()];
     }
 
     var currentSize = this.originalSize || this.size;
+
     if (!currentSize || shrinkSize < currentSize) {
       if (!this.originalSize) {
         this.originalSize = this.size;
       }
 
+      // Now we update the containers size, because shrinking is enabled.
       this.setSize_(shrinkSize);
     } else if (this.originalSize !== null) {
+      // Set the size back to our initial size.
       this.unsetSize_();
+
+      var _originalSize = this.originalSize;
       this.originalSize = null;
-      this.updateSize();
+
+      // We determine the repeaters size again, if the original size was zero.
+      // The originalSize needs to be null, to be able to determine the size.
+      if (!_originalSize) this.updateSize();
+
+      // Apply the original size or the determined size back to the container, because
+      // it has been overwritten before, in the shrink block.
+      this.setSize_(_originalSize || this.size);
     }
 
     this.repeater.containerUpdated();
@@ -345,7 +359,15 @@ VirtualRepeatContainerController.prototype.resetScroll = function() {
 
 
 VirtualRepeatContainerController.prototype.handleScroll_ = function() {
-  var offset = this.isHorizontal() ? this.scroller.scrollLeft : this.scroller.scrollTop;
+  var doc = angular.element(document)[0];
+  var ltr = doc.dir != 'rtl' && doc.body.dir != 'rtl';
+  if(!ltr && !this.maxSize) {
+    this.scroller.scrollLeft = this.scrollSize;
+    this.maxSize = this.scroller.scrollLeft;
+  }
+  var offset = this.isHorizontal() ?
+      (ltr?this.scroller.scrollLeft : this.maxSize - this.scroller.scrollLeft)
+      : this.scroller.scrollTop;
   if (offset === this.scrollOffset || offset > this.scrollSize - this.size) return;
 
   var itemSize = this.repeater.getItemSize();
@@ -354,7 +376,7 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
   var numItems = Math.max(0, Math.floor(offset / itemSize) - NUM_EXTRA);
 
   var transform = (this.isHorizontal() ? 'translateX(' : 'translateY(') +
-                  (numItems * itemSize) + 'px)';
+      (!this.isHorizontal() || ltr ? (numItems * itemSize) : - (numItems * itemSize))  + 'px)';
 
   this.scrollOffset = offset;
   this.offsetter.style.webkitTransform = transform;
@@ -440,7 +462,7 @@ function VirtualRepeatDirective($parse) {
 
 /** @ngInject */
 function VirtualRepeatController($scope, $element, $attrs, $browser, $document, $rootScope,
-    $$rAF) {
+    $$rAF, $mdUtil) {
   this.$scope = $scope;
   this.$element = $element;
   this.$attrs = $attrs;
@@ -450,7 +472,7 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
   this.$$rAF = $$rAF;
 
   /** @type {boolean} Whether we are in on-demand mode. */
-  this.onDemand = $attrs.hasOwnProperty('mdOnDemand');
+  this.onDemand = $mdUtil.parseAttributeBoolean($attrs.mdOnDemand);
   /** @type {!Function} Backup reference to $browser.$$checkUrlChange */
   this.browserCheckUrlChange = $browser.$$checkUrlChange;
   /** @type {number} Most recent starting repeat index (based on scroll offset) */
@@ -493,6 +515,8 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
   this.blocks = {};
   /** @type {Array<!VirtualRepeatController.Block>} A pool of presently unused blocks. */
   this.pooledBlocks = [];
+
+  $scope.$on('$destroy', angular.bind(this, this.cleanupBlocks_));
 }
 
 
@@ -525,6 +549,14 @@ VirtualRepeatController.prototype.link_ =
   this.repeatListExpression = angular.bind(this, this.repeatListExpression_);
 
   this.container.register(this);
+};
+
+
+/** @private Cleans up unused blocks. */
+VirtualRepeatController.prototype.cleanupBlocks_ = function() {
+  angular.forEach(this.pooledBlocks, function cleanupBlock(block) {
+    block.element.remove();
+  });
 };
 
 
@@ -580,11 +612,15 @@ VirtualRepeatController.prototype.repeatListExpression_ = function(scope) {
 VirtualRepeatController.prototype.containerUpdated = function() {
   // If itemSize is unknown, attempt to measure it.
   if (!this.itemSize) {
+    // Make sure to clean up watchers if we can (see #8178)
+    if(this.unwatchItemSize_ && this.unwatchItemSize_ !== angular.noop){
+      this.unwatchItemSize_();
+    }
     this.unwatchItemSize_ = this.$scope.$watchCollection(
         this.repeatListExpression,
         angular.bind(this, function(items) {
           if (items && items.length) {
-            this.$$rAF(angular.bind(this, this.readItemSize_));
+            this.readItemSize_();
           }
         }));
     if (!this.$rootScope.$$phase) this.$scope.$digest();
@@ -647,10 +683,12 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
   var itemsLength = items && items.length || 0;
   var lengthChanged = false;
 
-  // If the number of items shrank, scroll up to the top.
+  // If the number of items shrank
   if (this.items && itemsLength < this.items.length && this.container.getScrollOffset() !== 0) {
     this.items = items;
+    var previousScrollOffset = this.container.getScrollOffset();
     this.container.resetScroll();
+    this.container.scrollTo(previousScrollOffset);
     return;
   }
 

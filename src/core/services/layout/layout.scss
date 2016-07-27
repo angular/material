@@ -1,4 +1,12 @@
 /*
+* Since Layout API uses ng-cloak to hide the dom elements while layouts are adjusted
+*
+*/
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
+}
+
+/*
 *
 *  Responsive attributes
 *

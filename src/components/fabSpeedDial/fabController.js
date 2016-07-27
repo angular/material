@@ -142,7 +142,7 @@
       // If the element is actually visible on the screen
       if ($element[0].scrollHeight > 0) {
         // Fire our animation
-        $animate.addClass($element, 'md-animations-ready').then(function() {
+        $animate.addClass($element, '_md-animations-ready').then(function() {
           // Remove the waiting class
           $element.removeClass('md-animations-waiting');
         });

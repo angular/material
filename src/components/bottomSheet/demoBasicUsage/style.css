@@ -9,7 +9,8 @@
 }
 
 .md-grid-item-content {
-  height:96px;
+  height:90px;
+  padding-top:10px;
 }
 .md-grid-item-content md-icon {
   height: 48px;
@@ -33,11 +34,11 @@ h2 {
 
 
 .md-subheader .md-subheader-inner {
-  padding: 0px;
+  padding: 0;
 }
 
 
-md-toast {
+md-toast .md-toast-content {
   background-color: #B14141;
 }
 

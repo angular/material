@@ -7,20 +7,24 @@ md-progress-linear.md-THEME_NAME-theme {
     background-color: '{{primary-color}}';
   }
 
-  &.md-warn .md-container {
-    background-color: '{{warn-100}}';
+  &.md-warn {
+    .md-container {
+      background-color: '{{warn-100}}';
+    }
+
+    .md-bar {
+      background-color: '{{warn-color}}';
+    }
   }
 
-  &.md-warn .md-bar {
-    background-color: '{{warn-color}}';
-  }
+  &.md-accent {
+    .md-container {
+      background-color: '{{accent-A100}}';
+    }
 
-  &.md-accent .md-container {
-    background-color: '{{accent-100}}';
-  }
-
-  &.md-accent .md-bar {
-    background-color: '{{accent-color}}';
+    .md-bar {
+      background-color: '{{accent-color}}';
+    }
   }
 
   &[md-mode=buffer] {
@@ -34,10 +38,10 @@ md-progress-linear.md-THEME_NAME-theme {
     }
     &.md-accent {
       .md-bar1 {
-        background-color: '{{accent-100}}';
+        background-color: '{{accent-A100}}';
       }
       .md-dashed:before {
-        background: radial-gradient('{{accent-100}}' 0%, '{{accent-100}}' 16%, transparent 42%);
+        background: radial-gradient('{{accent-A100}}' 0%, '{{accent-A100}}' 16%, transparent 42%);
       }
     }
   }

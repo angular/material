@@ -15,12 +15,13 @@ describe('$mdCompiler service', function() {
   describe('setup', function() {
 
     it('element should use templateUrl', inject(function($templateCache) {
-      var tpl = 'hola';
+      var tpl = '<span>hola</span>';
       $templateCache.put('template.html', tpl);
       var data = compile({
         templateUrl: 'template.html'
       });
-      expect(data.element.html()).toBe(tpl);
+
+      expect(data.element.html()).toBe('hola');
     }));
 
     it('element should use template', function() {
@@ -28,7 +29,11 @@ describe('$mdCompiler service', function() {
       var data = compile({
         template: tpl
       });
-      expect(data.element.html()).toBe(tpl);
+
+      // .html() returns the “inner” HTML
+      // but  inner HTML of "hello" is `undefined`
+      // so use .text()
+      expect(data.element.text()).toBe(tpl);
     });
 
     it('should support a custom element', function() {
@@ -43,7 +48,7 @@ describe('$mdCompiler service', function() {
       var data = compile({
         template: tpl
       });
-      expect(data.element.html()).toBe('hello');
+      expect(data.element.text()).toBe('hello');
     });
 
     it('transformTemplate should work with template', function() {
@@ -51,7 +56,7 @@ describe('$mdCompiler service', function() {
         template: 'world',
         transformTemplate: function(tpl) { return 'hello ' + tpl; }
       });
-      expect(data.element.html()).toBe('hello world');
+      expect(data.element.text()).toBe('hello world');
     });
 
     it('transformTemplate receives the options', function() {
@@ -60,7 +65,7 @@ describe('$mdCompiler service', function() {
         someArg: 'foo',
         transformTemplate: function(tpl, options) { return 'hello ' + tpl + ': ' + options.someArg; }
       });
-      expect(data.element.html()).toBe('hello world: foo');
+      expect(data.element.text()).toBe('hello world: foo');
     });
 
     describe('with resolve and locals options', function() {
@@ -104,7 +109,7 @@ describe('$mdCompiler service', function() {
 
       it('should compile with scope', inject(function($rootScope) {
         var data = compile({
-          template: 'hello'
+          template: '<span>hello</span>'
         });
         var scope = $rootScope.$new();
         data.link(scope);
@@ -113,7 +118,7 @@ describe('$mdCompiler service', function() {
 
       it('should compile with controller & locals', inject(function($rootScope) {
         var data = compile({
-          template: 'hello',
+          template: '<span>hello</span>',
           locals: {
             one: 1
           },
@@ -129,7 +134,7 @@ describe('$mdCompiler service', function() {
 
       it('should compile with controllerAs', inject(function($rootScope) {
         var data = compile({
-          template: 'hello',
+          template: '<span>hello</span>',
           controller: function Ctrl() {},
           controllerAs: 'myControllerAs'
         });

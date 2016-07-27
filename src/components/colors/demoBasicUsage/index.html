@@ -1,0 +1,25 @@
+<div layout="column" ng-cloak class="md-padding">
+  <p style="margin-bottom: 10px;">
+    Custom components implementations using Material elements often want to easily apply Theme colors
+    to their custom components.Consider the custom components <code>&lt;user-card&gt;</code> below
+    where the <code>md-colors</code> attribute is used to color the background and text colors
+    using the either the current or specified Theme palette colors.
+  </p>
+  <!-- Example 1 -->
+  <span class="card-title"> <code>&lt;user-card&gt;</code> without md-color features</span>
+  <regular-card name="User name" md-theme="default"></regular-card>
+  <!-- Example 2 -->
+  <span class="card-title"> <code>&lt;user-card&gt;</code> coloring using the 'default' Theme</span>
+  <user-card name="User name"></user-card>
+  <!-- Example 3 -->
+  <span class="card-title"> <code>&lt;user-card&gt;</code> coloring using the 'forest' Theme</span>
+  <user-card name="User name" theme="forest"></user-card>
+  <!-- Footnote -->
+  <p class="footnote">
+    Note: The <code>md-colors</code> directive allows pre-defined theme colors to be easily applied
+    as CSS style properties. <code>md-colors</code> uses the Palettes defined at
+    <a class="md-accent" href="https://www.google.com/design/spec/style/color.html">Material Design Colors</a>
+    and the Themes defined using <code>$mdThemingProvider</code>. This feature is simply an
+    extension of the <code>$mdTheming</code> features.
+  </p>
+</div>

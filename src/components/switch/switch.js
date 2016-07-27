@@ -1,5 +1,4 @@
 /**
- * @private
  * @ngdoc module
  * @name material.components.switch
  */
@@ -11,7 +10,6 @@ angular.module('material.components.switch', [
   .directive('mdSwitch', MdSwitch);
 
 /**
- * @private
  * @ngdoc directive
  * @module material.components.switch
  * @name mdSwitch
@@ -48,7 +46,7 @@ angular.module('material.components.switch', [
  *
  * </hljs>
  */
-function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdGesture) {
+function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdGesture, $timeout) {
   var checkboxDirective = mdCheckboxDirective[0];
 
   return {
@@ -68,7 +66,7 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
   };
 
   function mdSwitchCompile(element, attr) {
-    var checkboxLink = checkboxDirective.compile(element, attr);
+    var checkboxLink = checkboxDirective.compile(element, attr).post;
     // No transition on initial load.
     element.addClass('md-dragging');
 
@@ -113,7 +111,6 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
 
         element.addClass('md-dragging');
         drag = {width: thumbContainer.prop('offsetWidth')};
-        element.removeClass('transition');
       }
 
       function onDrag(ev) {
@@ -141,11 +138,17 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
 
         // We changed if there is no distance (this is a click a click),
         // or if the drag distance is >50% of the total.
-        var isChanged = ngModel.$viewValue ? drag.translate > 0.5 : drag.translate < 0.5;
+        var isChanged = ngModel.$viewValue ? drag.translate < 0.5 : drag.translate > 0.5;
         if (isChanged) {
           applyModelValue(!ngModel.$viewValue);
         }
         drag = null;
+
+        // Wait for incoming mouse click
+        scope.skipToggle = true;
+        $timeout(function() {
+          scope.skipToggle = false;
+        }, 1);
       }
 
       function applyModelValue(newValue) {

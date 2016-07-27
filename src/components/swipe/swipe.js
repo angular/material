@@ -86,7 +86,7 @@ function getDirective(name) {
       function postLink(scope, element, attr) {
         var fn = $parse(attr[directiveName]);
         element.on(eventName, function(ev) {
-          scope.$apply(function() { fn(scope, { $event: ev }); });
+          scope.$applyAsync(function() { fn(scope, { $event: ev }); });
         });
       }
     }

@@ -72,11 +72,6 @@ md-bottom-sheet {
       align-items: center;
       height: $bottom-sheet-list-item-height;
 
-      div.md-icon-container {
-        display: inline-block;
-        height: 3 * $baseline-grid;
-        margin-right: $bottom-sheet-icon-after-margin;
-      }
     }
   }
 
@@ -120,7 +115,7 @@ md-bottom-sheet {
           }
         }
       }
-      
+
       @media (max-width: $layout-breakpoint-sm) {
         @include grid-items-per-row(3, true);
       }
@@ -137,7 +132,10 @@ md-bottom-sheet {
         @include grid-items-per-row(7);
       }
 
-
+      // Override of the IE11 fix from @mixin ie11-min-height-flexbug, line 109 mixins.scss
+      &::before {
+        display: none;
+      }
 
       .md-list-item-content {
         display: flex;
@@ -153,14 +151,6 @@ md-bottom-sheet {
         flex-direction: column;
         align-items: center;
         width: 10 * $baseline-grid;
-      }
-
-      .md-icon-container {
-        display: inline-block;
-        box-sizing: border-box;
-        height: 6 * $baseline-grid;
-        width: 6 * $baseline-grid;
-        margin: 0 0;
       }
 
       .md-grid-text {

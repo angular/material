@@ -11,9 +11,10 @@ angular
  * @param $mdConstant
  * @param $log
  * @param $element
+ * @param $mdUtil
  * @constructor
  */
-function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
+function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $mdUtil) {
   /** @type {$timeout} **/
   this.$timeout = $timeout;
 
@@ -50,6 +51,8 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
   /** @type {boolean} */
   this.hasAutocomplete = false;
 
+  /** @type {string} */
+  this.enableChipEdit = $mdUtil.parseAttributeBoolean(this.mdEnableChipEdit);
 
   /**
    * Hidden hint text for how to delete a chip. Used to give context to screen readers.
@@ -68,16 +71,6 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
    * @type {string}
    */
   this.chipBuffer = '';
-
-  /**
-   * Whether to use the onAppend expression to transform the chip buffer
-   * before appending it to the list.
-   * @type {boolean}
-   *
-   *
-   * @deprecated Will remove in 1.0.
-   */
-  this.useOnAppend = false;
 
   /**
    * Whether to use the transformChip expression to transform the chip buffer
@@ -103,7 +96,6 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout) {
    * after selecting a chip from the list.
    * @type {boolean}
    */
-  this.useOnSelect = false;
 }
 
 /**
@@ -121,10 +113,19 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
   }
 
   if (event.keyCode === this.$mdConstant.KEY_CODE.BACKSPACE) {
-    if (chipBuffer) return;
+    // Only select and focus the previous chip, if the current caret position of the
+    // input element is at the beginning.
+    if (this.getCursorPosition(event.target) !== 0) {
+      return;
+    }
+
     event.preventDefault();
     event.stopPropagation();
-    if (this.items.length) this.selectAndFocusChipSafe(this.items.length - 1);
+
+    if (this.items.length) {
+      this.selectAndFocusChipSafe(this.items.length - 1);
+    }
+
     return;
   }
 
@@ -139,11 +140,66 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
     event.preventDefault();
 
     // Only append the chip and reset the chip buffer if the max chips limit isn't reached.
-    if (this.items.length >= this.maxChips) return;
+    if (this.hasMaxChipsReached()) return;
 
-    this.appendChip(chipBuffer);
+    this.appendChip(chipBuffer.trim());
     this.resetChipBuffer();
   }
+};
+
+/**
+ * Returns the cursor position of the specified input element.
+ * @param element HTMLInputElement
+ * @returns {Number} Cursor Position of the input.
+ */
+MdChipsCtrl.prototype.getCursorPosition = function(element) {
+  /*
+   * Figure out whether the current input for the chips buffer is valid for using
+   * the selectionStart / end property to retrieve the cursor position.
+   * Some browsers do not allow the use of those attributes, on different input types.
+   */
+  try {
+    if (element.selectionStart === element.selectionEnd) {
+      return element.selectionStart;
+    }
+  } catch (e) {
+    if (!element.value) {
+      return 0;
+    }
+  }
+};
+
+
+/**
+ * Updates the content of the chip at given index
+ * @param chipIndex
+ * @param chipContents
+ */
+MdChipsCtrl.prototype.updateChipContents = function(chipIndex, chipContents){
+  if(chipIndex >= 0 && chipIndex < this.items.length) {
+    this.items[chipIndex] = chipContents;
+    this.ngModelCtrl.$setDirty();
+  }
+};
+
+
+/**
+ * Returns true if a chip is currently being edited. False otherwise.
+ * @return {boolean}
+ */
+MdChipsCtrl.prototype.isEditingChip = function() {
+  return !!this.$element[0].getElementsByClassName('_md-chip-editing').length;
+};
+
+
+MdChipsCtrl.prototype.isRemovable = function() {
+  // Return false if we have static chips
+  if (!this.ngModelCtrl) {
+    return false;
+  }
+
+  return this.readonly ? this.removable :
+         angular.isDefined(this.removable) ? this.removable : true;
 };
 
 /**
@@ -153,11 +209,15 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
  */
 MdChipsCtrl.prototype.chipKeydown = function (event) {
   if (this.getChipBuffer()) return;
+  if (this.isEditingChip()) return;
+  
   switch (event.keyCode) {
     case this.$mdConstant.KEY_CODE.BACKSPACE:
     case this.$mdConstant.KEY_CODE.DELETE:
       if (this.selectedChip < 0) return;
       event.preventDefault();
+      // Cancel the delete action only after the event cancel. Otherwise the page will go back.
+      if (!this.isRemovable()) return;
       this.removeAndSelectAdjacentChip(this.selectedChip);
       break;
     case this.$mdConstant.KEY_CODE.LEFT_ARROW:
@@ -185,7 +245,7 @@ MdChipsCtrl.prototype.chipKeydown = function (event) {
  */
 MdChipsCtrl.prototype.getPlaceholder = function() {
   // Allow `secondary-placeholder` to be blank.
-  var useSecondary = (this.items.length &&
+  var useSecondary = (this.items && this.items.length &&
       (this.secondaryPlaceholder == '' || this.secondaryPlaceholder));
   return useSecondary ? this.secondaryPlaceholder : this.placeholder;
 };
@@ -266,25 +326,6 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
 };
 
 /**
- * Sets whether to use the md-on-append expression. This expression is
- * bound to scope and controller in {@code MdChipsDirective} as
- * {@code onAppend}. Due to the nature of directive scope bindings, the
- * controller cannot know on its own/from the scope whether an expression was
- * actually provided.
- *
- * @deprecated
- *
- * TODO: Remove deprecated md-on-append functionality in 1.0
- */
-MdChipsCtrl.prototype.useOnAppendExpression = function() {
-  this.$log.warn("md-on-append is deprecated; please use md-transform-chip or md-on-add instead");
-  if (!this.useTransformChip || !this.transformChip) {
-    this.useTransformChip = true;
-    this.transformChip = this.onAppend;
-  }
-};
-
-/**
  * Sets whether to use the md-transform-chip expression. This expression is
  * bound to scope and controller in {@code MdChipsDirective} as
  * {@code transformChip}. Due to the nature of directive scope bindings, the
@@ -358,7 +399,7 @@ MdChipsCtrl.prototype.resetChipBuffer = function() {
   }
 };
 
-MdChipsCtrl.prototype.hasMaxChips = function() {
+MdChipsCtrl.prototype.hasMaxChipsReached = function() {
   if (angular.isString(this.maxChips)) this.maxChips = parseInt(this.maxChips, 10) || 0;
 
   return this.maxChips > 0 && this.items.length >= this.maxChips;
@@ -368,7 +409,7 @@ MdChipsCtrl.prototype.hasMaxChips = function() {
  * Updates the validity properties for the ngModel.
  */
 MdChipsCtrl.prototype.validateModel = function() {
-  this.ngModelCtrl.$setValidity('md-max-chips', !this.hasMaxChips());
+  this.ngModelCtrl.$setValidity('md-max-chips', !this.hasMaxChipsReached());
 };
 
 /**
@@ -504,10 +545,14 @@ MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
 };
 
 MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
-  if ( ctrl ){
+  if ( ctrl ) {
     this.hasAutocomplete = true;
+
     ctrl.registerSelectedItemWatcher(angular.bind(this, function (item) {
       if (item) {
+        // Only append the chip and reset the chip buffer if the max chips limit isn't reached.
+        if (this.hasMaxChipsReached()) return;
+
         this.appendChip(item);
         this.resetChipBuffer();
       }

@@ -196,7 +196,9 @@ exports.buildNgMaterialDefinition = function() {
 };
 
 function moduleNameToClosureName(name) {
-  return 'ng.' + name;
+  // For Closure, all modules start with "ngmaterial". We specifically don't use `ng.`
+  // because it conflicts with other packages under `ng.`.
+  return 'ng' + name;
 }
 exports.addJsWrapper = function(enforce) {
   return through2.obj(function(file, enc, next) {
@@ -219,7 +221,8 @@ exports.addClosurePrefixes = function() {
     if (module) {
       var closureModuleName = moduleNameToClosureName(module.name);
       var requires = (module.dependencies || []).sort().map(function(dep) {
-        return dep.indexOf(module.name) === 0 ? '' : 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
+        if (dep.indexOf(module.name) === 0 || /material\..+/g.test(dep) == false) return '';
+        return 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
       }).join('\n');
 
       file.contents = new Buffer([

@@ -1,11 +1,12 @@
 md-checkbox.md-THEME_NAME-theme {
-
   .md-ripple {
-    color: '{{accent-600}}';
+    color: '{{accent-A700}}';
   }
+
   &.md-checked .md-ripple {
     color: '{{background-600}}';
   }
+
   &.md-checked.md-focused .md-container:before {
     background-color: '{{accent-color-0.26}}';
   }
@@ -18,9 +19,10 @@ md-checkbox.md-THEME_NAME-theme {
     color: '{{accent-color-0.87}}';
   }
 
-  .md-icon {
+  &:not(.md-checked) .md-icon {
     border-color: '{{foreground-2}}';
   }
+
   &.md-checked .md-icon {
     background-color: '{{accent-color-0.87}}';
   }
@@ -31,35 +33,7 @@ md-checkbox.md-THEME_NAME-theme {
 
   &:not([disabled]) {
     &.md-primary {
-      .md-ripple {
-        color: '{{primary-600}}';
-      }
-      &.md-checked .md-ripple {
-        color: '{{background-600}}';
-      }
-
-      .md-ink-ripple {
-        color: '{{foreground-2}}';
-      }
-
-      &.md-checked .md-ink-ripple {
-        color: '{{primary-color-0.87}}';
-      }
-
-      .md-icon {
-        border-color: '{{foreground-2}}';
-      }
-      &.md-checked .md-icon {
-        background-color: '{{primary-color-0.87}}';
-      }
-
-      &.md-checked.md-focused .md-container:before {
-        background-color: '{{primary-color-0.26}}';
-      }
-
-      &.md-checked .md-icon:after {
-        border-color: '{{primary-contrast-0.87}}';
-      }
+     @include checkbox-primary;
     }
 
     &.md-warn {
@@ -75,15 +49,18 @@ md-checkbox.md-THEME_NAME-theme {
         color: '{{warn-color-0.87}}';
       }
 
-      .md-icon {
+      &:not(.md-checked) .md-icon {
         border-color: '{{foreground-2}}';
       }
+
       &.md-checked .md-icon {
         background-color: '{{warn-color-0.87}}';
       }
+
       &.md-checked.md-focused:not([disabled]) .md-container:before {
         background-color: '{{warn-color-0.26}}';
       }
+
       &.md-checked .md-icon:after {
         border-color: '{{background-200}}';
       }
@@ -91,8 +68,7 @@ md-checkbox.md-THEME_NAME-theme {
   }
 
   &[disabled] {
-
-    .md-icon {
+    &:not(.md-checked) .md-icon {
       border-color: '{{foreground-3}}';
     }
 
@@ -102,6 +78,10 @@ md-checkbox.md-THEME_NAME-theme {
 
     &.md-checked .md-icon:after {
       border-color: '{{background-200}}';
+    }
+
+    .md-icon:after {
+      border-color: '{{foreground-3}}';
     }
 
     .md-label {

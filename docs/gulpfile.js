@@ -70,7 +70,7 @@ function generateDemos() {
 
       utils.readModuleDemos(moduleName, function(demoId) {
         return lazypipe()
-          .pipe(gulpif, /.css$/, transformCss(demoId))
+          .pipe(gulpif, /^(?!.+global\.).*css/, transformCss(demoId))
           .pipe(gulp.dest, 'dist/docs/demo-partials/' + name)
         ();
       })
@@ -112,7 +112,7 @@ gulp.task('docs-demo-scripts', ['demos'], function() {
 });
 
 gulp.task('docs-js-dependencies', ['build'], function() {
-  return gulp.src(['dist/angular-material.js', 'dist/angular-material.min.js'])
+  return gulp.src(['dist/angular-material.js', 'dist/angular-material.min.js', 'docs/app/contributors.json'])
     .pipe(gulp.dest('dist/docs'));
 });
 

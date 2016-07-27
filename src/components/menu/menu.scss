@@ -1,9 +1,9 @@
-$menu-border-radius: 2px;
-$max-visible-items: 6;
-$menu-item-height: 6 * $baseline-grid;
-$dense-menu-item-height: 4 * $baseline-grid;
-$max-menu-height: 2 * $baseline-grid + $max-visible-items * $menu-item-height;
-$max-dense-menu-height: 2 * $baseline-grid + $max-visible-items * $dense-menu-item-height;
+$menu-border-radius: 2px !default;
+$max-visible-items: 6 !default;
+$menu-item-height: 6 * $baseline-grid !default;
+$dense-menu-item-height: 4 * $baseline-grid !default;
+$max-menu-height: 2 * $baseline-grid + $max-visible-items * $menu-item-height !default;
+$max-dense-menu-height: 2 * $baseline-grid + $max-visible-items * $dense-menu-item-height !default;
 
 .md-open-menu-container {
   position: fixed;
@@ -81,27 +81,36 @@ md-menu-item {
     padding-right: 2*$baseline-grid;
   }
 
+  /*
+   * We cannot use flex on <button> elements due to a bug in Firefox, so we also can't use it on
+   * <a> elements. Add some top padding to fix alignment since buttons automatically align their
+   * text vertically.
+   */
   > a.md-button {
-    display: flex;
+    padding-top: 5px;
   }
 
   > .md-button {
+    // Firefox-specific reset styling to fix alignment issues (see #8464)
+    &::-moz-focus-inner {
+      padding: 0;
+      border: 0
+    }
+
+    @include rtl(text-align, left, right);
+
+    display: inline-block;
     border-radius: 0;
     margin: auto 0;
     font-size: (2*$baseline-grid) - 1;
     text-transform: none;
     font-weight: 400;
-    text-align: left;
-    text-align: start;
     height: 100%;
     padding-left: 2*$baseline-grid;
     padding-right: 2*$baseline-grid;
-    display: inline-block;
-    align-items: baseline;
-    align-content: flex-start;
     width:100%;
     md-icon {
-      margin: auto 2*$baseline-grid auto 0;
+      @include rtl(margin, auto 2*$baseline-grid auto 0,  auto 0 auto 2*$baseline-grid);
     }
     p {
       display:inline-block;
@@ -115,10 +124,6 @@ md-menu-item {
       border-radius: inherit;
     }
   }
-}
-
-.md-menu {
-  padding: $baseline-grid 0;
 }
 
 md-toolbar {

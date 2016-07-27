@@ -6,6 +6,7 @@ describe('mdWhiteframe directive', function() {
     var element;
     inject(function($compile, $rootScope) {
       element = $compile('<div md-whiteframe="' + (elevation || '') + '">')($rootScope);
+      $rootScope.$digest();
     });
     return element;
   }
@@ -26,10 +27,18 @@ describe('mdWhiteframe directive', function() {
 
   it('should use the default dp and warn if the attribute value is to low', inject(function($log) {
     spyOn($log, 'warn');
-    var element = buildWhiteframe('-1');
+    var element = buildWhiteframe('-2');
 
     expect($log.warn).toHaveBeenCalled();
     expect(element).toHaveClass('md-whiteframe-4dp');
+  }));
+
+  it('should not apply a whiteframe if the attribute value is -1', inject(function($log) {
+    spyOn($log, 'warn');
+    var element = buildWhiteframe('-1');
+
+    expect($log.warn).not.toHaveBeenCalled();
+    expect(element).not.toHaveClass('md-whiteframe-4dp');
   }));
 
   it('should apply the correct whiteframe if attribute value is valid', function() {
@@ -50,4 +59,22 @@ describe('mdWhiteframe directive', function() {
     expect(element).toHaveClass('md-whiteframe-1dp');
   });
 
+  it('should interpolate the elevation value', inject(function($rootScope) {
+    $rootScope.elevation = 6;
+
+    var element = buildWhiteframe('{{elevation}}');
+
+    expect(element).toHaveClass('md-whiteframe-6dp');
+
+    $rootScope.elevation = -1;
+    $rootScope.$digest();
+
+    expect(element).not.toHaveClass('md-whiteframe-6dp');
+    expect(element).not.toHaveClass('md-whiteframe-4dp');
+
+    $rootScope.elevation = 0;
+    $rootScope.$digest();
+
+    expect(element).toHaveClass('md-whiteframe-4dp');
+  }));
 });

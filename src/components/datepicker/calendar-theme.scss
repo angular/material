@@ -1,17 +1,17 @@
 /** Theme styles for mdCalendar. */
 
 .md-calendar.md-THEME_NAME-theme {
-  color: '{{foreground-1}}';
+  background: '{{background-A100}}';
+  color: '{{background-A200-0.87}}';
 
   tr:last-child td {
     border-bottom-color: '{{background-200}}';
   }
 }
 .md-THEME_NAME-theme {
-
   .md-calendar-day-header {
-    background: '{{background-hue-1}}';
-    color: '{{foreground-1}}';
+    background: '{{background-300}}';
+    color: '{{background-A200-0.87}}';
   }
 
   .md-calendar-date.md-calendar-date-today {
@@ -25,16 +25,11 @@
     }
   }
 
-  // The CSS class `md-focus` is used instead of real browser focus for accessibility reasons
-  // (the root md-calendar holds browser focus).
-  .md-calendar-date.md-focus {
-    .md-calendar-date-selection-indicator {
-      background: '{{background-hue-1}}';
+  .md-calendar-date-selection-indicator {
+    .md-calendar-date.md-focus &,
+    &:hover {
+      background: '{{background-300}}';
     }
-  }
-
-  .md-calendar-date-selection-indicator:hover {
-    background: '{{background-hue-1}}';
   }
 
   // Selected style goes after hover and focus so that it takes priority.
@@ -49,6 +44,10 @@
 
   .md-calendar-date-disabled,
   .md-calendar-month-label-disabled {
-    color: '{{foreground-3}}';
+    // Note that this uses half the opacity of the default text color,
+    // because the calendar is white, even on the dark theme, otherwise
+    // the default disabled color `foreground-3` blends in with the
+    // background.
+    color: '{{background-A200-0.435}}';
   }
 }

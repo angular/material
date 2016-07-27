@@ -1,8 +1,8 @@
 // See height set globally, depended on by buttons
 
-$md-toast-content-padding: 3 * $baseline-grid - $button-left-right-padding;
-$md-toast-button-left-margin: 3 * $baseline-grid - 2 * $button-left-right-padding;
-$md-toast-text-padding: $button-left-right-padding;
+$md-toast-content-padding: 3 * $baseline-grid - $button-left-right-padding !default;
+$md-toast-button-left-margin: 3 * $baseline-grid - 2 * $button-left-right-padding !default;
+$md-toast-text-padding: $button-left-right-padding !default;
 
 
 .md-toast-text {
@@ -26,12 +26,17 @@ md-toast {
 
   .md-toast-content {
     display: flex;
+    direction: row;
     align-items: center;
 
-    height: 0;
     max-height: 7 * $toast-height;
     max-width: 100%;
+
     min-height: 48px;
+    // Since we're vertically centering our text by using flexbox and having a min-height, we need to apply
+    // a fix for an IE11 flexbug, otherwise the text won't be centered vertically.
+    @include ie11-min-height-flexbug(48px);
+
     padding: 0 $md-toast-content-padding;
 
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
@@ -45,6 +50,13 @@ md-toast {
     transition: $swift-ease-out;
 
     @include rtl(justify-content, flex-start, flex-end);
+
+    span {
+      // Layout  [flex]
+      flex:1 1 0%;
+      box-sizing:border-box;
+      min-width :0;
+    }
   }
 
   &.md-capsule {
@@ -171,6 +183,15 @@ md-toast {
     }
     &.md-top {
       top: 0;
+    }
+
+    // Support for RTL alignment
+    &._md-start {
+      @include rtl-prop(left, right, 0);
+    }
+
+    &._md-end {
+      @include rtl-prop(right, left, 0);
     }
 
     /*

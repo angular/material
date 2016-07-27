@@ -1,22 +1,25 @@
 /** Theme styles for mdDatepicker. */
 
-md-datepicker.md-THEME_NAME-theme {
-  background: '{{background-color}}';
-}
-
 .md-THEME_NAME-theme {
 
   .md-datepicker-input {
-    @include input-placeholder-color('{{foreground-3}}');
-    color: '{{background-contrast}}';
-    background: '{{background-color}}';
+    @include input-placeholder-color('\'{{foreground-3}}\'');
+    color: '{{foreground-1}}';
   }
 
   .md-datepicker-input-container {
-    border-bottom-color: '{{background-300}}';
+    border-bottom-color: '{{foreground-4}}';
 
     &.md-datepicker-focused {
-      border-bottom-color: '{{primary-500}}'
+      border-bottom-color: '{{primary-color}}';
+
+      .md-accent & {
+        border-bottom-color: '{{accent-color}}';
+      }
+
+      .md-warn & {
+        border-bottom-color: '{{warn-A700}}';
+      }
     }
 
     &.md-datepicker-invalid {
@@ -25,7 +28,7 @@ md-datepicker.md-THEME_NAME-theme {
   }
 
   .md-datepicker-calendar-pane {
-    border-color: '{{background-300}}';
+    border-color: '{{background-hue-1}}';
   }
 
   .md-datepicker-triangle-button {
@@ -41,12 +44,28 @@ md-datepicker.md-THEME_NAME-theme {
   // Open state for all of the elements of the picker.
   .md-datepicker-open {
     .md-datepicker-calendar-icon {
-      fill: '{{primary-500}}';
+      color: '{{primary-color}}';
+    }
+
+    &.md-accent, .md-accent & {
+      .md-datepicker-calendar-icon {
+        color: '{{accent-color}}';
+      }
+    }
+
+    &.md-warn, .md-warn & {
+      .md-datepicker-calendar-icon {
+        color: '{{warn-A700}}';
+      }
     }
   }
 
-  .md-datepicker-calendar,
+  .md-datepicker-open .md-datepicker-input-container,
   .md-datepicker-input-mask-opaque {
-    background: '{{background-color}}';
+    background: '{{background-hue-1}}';
+  }
+
+  .md-datepicker-calendar {
+    background: '{{background-A100}}';
   }
 }

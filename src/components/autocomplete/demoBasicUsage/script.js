@@ -19,7 +19,7 @@
     self.newState = newState;
 
     function newState(state) {
-      alert("Sorry! You'll need to create a Constituion for " + state + " first!");
+      alert("Sorry! You'll need to create a Constitution for " + state + " first!");
     }
 
     // ******************************

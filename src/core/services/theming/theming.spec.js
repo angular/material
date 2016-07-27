@@ -163,7 +163,7 @@ describe('$mdThemingProvider', function() {
       expect(themingProvider._PALETTES.extended['100']).toEqual(testPalette['100']);
       expect(themingProvider._PALETTES.extended['50']).toEqual('newValue');
     });
-  }); 
+  });
 
   describe('css template parsing', function() {
     beforeEach(setup);
@@ -202,6 +202,40 @@ describe('$mdThemingProvider', function() {
       ).join('')).toContain('.md-test-theme {}');
     });
 
+    describe('background palette', function() {
+
+      function getRgbaBackgroundHue(hue) {
+        return themingProvider._rgba(themingProvider._PALETTES.testPalette[hue].value);
+      }
+
+      it('should parse for a light theme probably', function() {
+        testTheme.dark(false);
+
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('50') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-1}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A100') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-2}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('100') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-3}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('300') + ';');
+      });
+
+      it('should parse for a dark theme probably', function() {
+        testTheme.dark(true);
+
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A400') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-1}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('800') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-2}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('900') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-3}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A200') + ';');
+      });
+
+    });
+
     describe('parses foreground text and shadow', function() {
       it('for a light theme', function() {
         testTheme.dark(false);
@@ -210,7 +244,7 @@ describe('$mdThemingProvider', function() {
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
           .toEqual('color: rgba(0,0,0,0.54);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
-          .toEqual('color: rgba(0,0,0,0.26);');
+          .toEqual('color: rgba(0,0,0,0.38);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
           .toEqual('color: rgba(0,0,0,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
@@ -223,7 +257,7 @@ describe('$mdThemingProvider', function() {
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.7);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
-          .toEqual('color: rgba(255,255,255,0.3);');
+          .toEqual('color: rgba(255,255,255,0.5);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
@@ -311,6 +345,24 @@ describe('$mdThemingProvider', function() {
 
 });
 
+describe('$mdThemeProvider with custom styles', function() {
+  it('appends the custom styles to the end of the $MD_THEME_CSS string', function() {
+    module('material.core', function($mdThemingProvider) {
+      $mdThemingProvider.registerStyles('/*test*/');
+      $mdThemingProvider.theme('register-custom-styles');
+    });
+
+    inject(function($MD_THEME_CSS) {
+      // Verify that $MD_THEME_CSS is still set to '/**/' in the test environment.
+      // Check angular-material-mocks.js for $MD_THEME_CSS latest value if this test starts to fail.
+      expect($MD_THEME_CSS).toBe('/**/');
+    });
+
+    // Find the string '/**//*test*/' in the head tag.
+    expect(document.head.innerHTML).toContain('/*test*/');
+  });
+});
+
 describe('$mdThemeProvider with on-demand generation', function() {
   var $mdTheming;
 
@@ -366,6 +418,100 @@ describe('$mdThemeProvider with on-demand generation', function() {
     expect(styles.length).toBe(8);
     expect(document.head.innerHTML).toMatch(/md-sweden-theme/);
     expect(document.head.innerHTML).toMatch(/md-belarus-theme/);
+  });
+});
+
+describe('$mdThemeProvider with a theme that ends in a newline', function() {
+  beforeEach(function() {
+    module('material.core', function($provide) {
+      // Note that it should end with a newline
+      $provide.constant('$MD_THEME_CSS', "sparkle.md-THEME_NAME-theme { color: '{{primary-color}}' }\n");
+    });
+
+    inject(function($mdTheming) {});
+  });
+
+  it('should not add an extra closing bracket if the stylesheet ends with a newline', function() {
+    var style = document.head.querySelector('style[md-theme-style]');
+    expect(style.innerText).not.toContain('}}');
+    style.parentNode.removeChild(style);
+  });
+});
+
+describe('$mdThemeProvider with disabled themes', function() {
+
+  function getThemeStyleElements() {
+    return document.head.querySelectorAll('style[md-theme-style]');
+  }
+
+  function cleanThemeStyleElements() {
+    angular.forEach(getThemeStyleElements(), function(style) {
+      document.head.removeChild(style);
+    });
+  }
+  beforeEach(function() {
+
+    module('material.core', function($provide, $mdThemingProvider) {
+      // Use a single simple style rule for which we can check presence / absense.
+      $provide.constant('$MD_THEME_CSS', "sparkle.md-THEME_NAME-theme { color: '{{primary-color}}' }");
+
+      $mdThemingProvider
+        .theme('belarus')
+        .primaryPalette('red')
+        .accentPalette('green');
+
+    });
+  });
+
+  afterEach(function() {
+    cleanThemeStyleElements();
+  });
+
+  describe('can disable themes programmatically', function() {
+    beforeEach(function() {
+      cleanThemeStyleElements();
+
+      module('material.core', function($mdThemingProvider) {
+        $mdThemingProvider.disableTheming();
+      });
+    });
+
+    it('should not add any theme styles', function() {
+      var styles = getThemeStyleElements();
+      expect(styles.length).toBe(0);
+    });
+  });
+
+  describe('can disable themes declaratively', function() {
+    beforeEach(function() {
+      // Set the body attribute BEFORE the theming module is loaded
+      var el = document.getElementsByTagName('body')[0];
+          el.setAttribute('md-themes-disabled', '');
+    });
+
+    afterEach(function() {
+      var el = document.getElementsByTagName('body')[0];
+          el.removeAttribute('md-themes-disabled');
+    });
+
+    it('should not set any classnames', function() {
+      inject(function($rootScope, $compile, $mdTheming) {
+        el = $compile('<h1>Test</h1>')($rootScope);
+        $mdTheming(el);
+        expect(el.hasClass('md-default-theme')).toBe(false);
+      });
+    });
+
+    it('should not inject any styles', function() {
+      inject(function($rootScope, $compile, $mdTheming) {
+        el = $compile('<h1>Test</h1>')($rootScope);
+        $mdTheming(el);
+
+        var styles = getThemeStyleElements();
+        expect(styles.length).toBe(0);
+      });
+    });
+
   });
 });
 
@@ -543,7 +689,7 @@ describe('md-themable directive', function() {
     $rootScope.themey = 'red';
     var el = $compile('<div md-theme="{{themey}}"><span md-themable md-theme-watch></span></div>')($rootScope);
     $rootScope.$apply();
-    
+
     expect(el.children().hasClass('md-red-theme')).toBe(true);
     $rootScope.$apply('themey = "blue"');
     expect(el.children().hasClass('md-blue-theme')).toBe(true);
@@ -554,7 +700,7 @@ describe('md-themable directive', function() {
     $rootScope.themey = 'red';
     var el = $compile('<div md-theme="{{themey}}"><span md-themable></span></div>')($rootScope);
     $rootScope.$apply();
-    
+
     expect(el.children().hasClass('md-red-theme')).toBe(true);
     $rootScope.$apply('themey = "blue"');
     expect(el.children().hasClass('md-blue-theme')).toBe(false);

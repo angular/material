@@ -1,7 +1,5 @@
 html, body {
   height: 100%;
-  color: rgba(0,0,0,0.87);
-  background: white;
   position: relative;
 }
 
@@ -17,6 +15,7 @@ body {
   padding: 10px;
 }
 
+a.md-no-style,
 button.md-no-style {
   font-weight: normal;
   background-color: inherit;
@@ -61,6 +60,9 @@ input {
     &::-webkit-search-cancel-button {
       -webkit-appearance: none;
     }
+  }
+  &:-webkit-autofill {
+    text-shadow: none;
   }
 }
 
@@ -113,13 +115,13 @@ input {
 }
 
 .md-ripple {
+  $sizeDuration: 0.45s * 2;
   position: absolute;
   transform: translate(-50%, -50%) scale(0);
   transform-origin: 50% 50%;
   opacity: 0;
   border-radius: 50%;
   &.md-ripple-placed {
-    $sizeDuration: 0.45s * 2;
     transition: margin $sizeDuration $swift-ease-out-timing-function,
                 border $sizeDuration $swift-ease-out-timing-function,
                 width $sizeDuration $swift-ease-out-timing-function,
@@ -133,6 +135,15 @@ input {
   &.md-ripple-active, &.md-ripple-full, &.md-ripple-visible {
     opacity: 0.20;
   }
+  &.md-ripple-remove {
+    animation: md-remove-ripple $sizeDuration $swift-ease-out-timing-function;
+  }
+}
+
+// Fix issue causing ripple disappear suddenly in Chrome version 51, opacity .15 is close to the opacity when a normal click mouseup
+@keyframes md-remove-ripple {
+  0% { opacity: .15; }
+  100% { opacity: 0; }
 }
 
 .md-padding {
@@ -150,6 +161,8 @@ input {
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: $z-index-scroll-mask;
+
   > .md-scroll-mask-bar {
     display: block;
     position: absolute;
@@ -157,9 +170,21 @@ input {
     right: 0;
     top: 0;
     bottom: 0;
-    z-index: $z-index-scroll-mask;
+    z-index: $z-index-scroll-mask-bar;
     box-shadow: inset 0px 0px 1px rgba(0, 0, 0, 0.3)
   }
+}
+
+// For iOS allow disabling of momentum scrolling
+// @see issue #2640
+.md-no-momentum {
+  -webkit-overflow-scrolling: auto;
+}
+
+// Add a class to help reduce flicker
+// @see issue #7078 and #8649
+.md-no-flicker {
+  -webkit-filter: blur(0px);
 }
 
 @media (min-width: $layout-breakpoint-sm) {
@@ -167,3 +192,21 @@ input {
     padding: 16px;
   }
 }
+
+// Bi-directional support
+
+html, body {
+  &[dir=rtl], &[dir=ltr] {
+     unicode-bidi: embed
+  }
+}
+
+bdo[dir=rtl] {
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}
+bdo[dir=ltr] {
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
