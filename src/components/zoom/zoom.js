@@ -48,9 +48,10 @@
 function ZoomDirective($mdGesture) {
   return {
     scope: {},
+    transclude: true,
     template:
       '<div class="md-zoom-wrapper">' +
-        '<div class="md-zoom-thumb-container"></div>' +
+        '<div class="md-zoom-thumb-container"><div ng-transclude></div></div>' +
         '<div class="md-zoom-zoomed-container"></div>' +
       '</div>',
     compile: compile
@@ -81,7 +82,6 @@ function ZoomDirective($mdGesture) {
       $formatters: [],
       $viewChangeListeners: []
     };
-    console.log(element);
 
     var thumbContainer = angular.element(element[0].querySelector('.md-zoom-thumb-container'));
     var zoomedContainer = angular.element(element[0].querySelector('.md-zoom-zoomed-container'));
@@ -89,9 +89,11 @@ function ZoomDirective($mdGesture) {
 
     thumbContainer.append('<img draggable="false" src="' + attr.thumb + '">');
     zoomedContainer.html('<img src="' + attr.zoom + '">');
-    
-    if (attr.label) {
-      element.append('<label class="md-zoom-message">' + attr.label + '</label>');
+
+    if (thumbContainer.find('label')) {
+        console.log("tiene label");
+        thumbContainer.find('label').addClass('md-zoom-message');
+      //element.append('<label class="md-zoom-message">' + attr.label + '</label>');
     }
 
     var thumbImage = thumbContainer.find('img');
@@ -101,7 +103,7 @@ function ZoomDirective($mdGesture) {
 
     $mdGesture.register(element, 'drag');
     //$mdGesture.register(element, 'swipe');
-    
+
     element
       .on('$md.drag', onDrag)
       .on('$md.dragstart', onDragStart)
@@ -132,7 +134,6 @@ function ZoomDirective($mdGesture) {
     }
     function onDrag(ev) {
       if (!ev.pointer.target.x) {
-        console.log("el target no tiene posision");
         return false;
       }
       var rect = ev.target.getBoundingClientRect();
@@ -143,8 +144,6 @@ function ZoomDirective($mdGesture) {
       if (y < 0) y = 0;
       if (x > ev.pointer.target.clientWidth) x = ev.pointer.target.clientWidth;
       if (y > ev.pointer.target.clientHeight) y = ev.pointer.target.clientHeight;
-      
-      console.log(x * zoomSize);
 
       var posX = (x * zoomSize ) - thumbImage[0].offsetWidth;
       var posY = (y * zoomSize ) - thumbImage[0].offsetHeight;
