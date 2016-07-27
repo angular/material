@@ -1,3 +1,3 @@
-describe('md-slider', function() {
+describe('md-zoom', function() {
 
 });

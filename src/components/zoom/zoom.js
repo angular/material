@@ -9,41 +9,22 @@
 
 /**
  * @ngdoc directive
- * @name mdSlider
- * @module material.components.slider
+ * @name mdZoom
+ * @module material.components.zoom
  * @restrict E
  * @description
- * The `<md-slider>` component allows the user to choose from a range of
- * values.
- *
- * As per the [material design spec](http://www.google.com/design/spec/style/color.html#color-ui-color-application)
- * the slider is in the accent color by default. The primary color palette may be used with
- * the `md-primary` class.
- *
- * It has two modes: 'normal' mode, where the user slides between a wide range
- * of values, and 'discrete' mode, where the user slides between only a few
- * select values.
- *
- * To enable discrete mode, add the `md-discrete` attribute to a slider,
- * and use the `step` attribute to change the distance between
- * values the user is allowed to pick.
+ * The `<md-zoom>` component allows the user to see an image with real zoom when drag over the thumb image
  *
  * @usage
- * <h4>Normal Mode</h4>
  * <hljs lang="html">
- * <md-slider ng-model="myValue" min="5" max="500">
- * </md-slider>
- * </hljs>
- * <h4>Discrete Mode</h4>
- * <hljs lang="html">
- * <md-slider md-discrete ng-model="myDiscreteValue" step="10" min="10" max="130">
- * </md-slider>
+ * <md-zoom thumb="thumb-image" zoom="zoom-image" size=zoom-scale>
+ * <label>message to notify the user to start drag</label>
+ * </md-zoom>
  * </hljs>
  *
- * @param {boolean=} md-discrete Whether to enable discrete mode.
- * @param {number=} step The distance between values the user is allowed to pick. Default 1.
- * @param {number=} min The minimum value the user is allowed to pick. Default 0.
- * @param {number=} max The maximum value the user is allowed to pick. Default 100.
+ * @param {string=} thumb Thumb image.
+ * @param {string=} zoom Zoomed image
+ * @param {number=} size scale to zoom the background image.
  */
 function ZoomDirective($mdGesture) {
   return {
@@ -72,8 +53,6 @@ function ZoomDirective($mdGesture) {
 
   function postLink(scope, element, attr, ngModelCtrl) {
     ngModelCtrl = ngModelCtrl || {
-      // Mock ngModelController if it doesn't exist to give us
-      // the minimum functionality needed
       $setViewValue: function(val) {
         this.$viewValue = val;
         this.$viewChangeListeners.forEach(function(cb) { cb(); });
@@ -91,9 +70,7 @@ function ZoomDirective($mdGesture) {
     zoomedContainer.html('<img src="' + attr.zoom + '">');
 
     if (thumbContainer.find('label')) {
-        console.log("tiene label");
         thumbContainer.find('label').addClass('md-zoom-message');
-      //element.append('<label class="md-zoom-message">' + attr.label + '</label>');
     }
 
     var thumbImage = thumbContainer.find('img');
@@ -102,8 +79,6 @@ function ZoomDirective($mdGesture) {
     var zoomSize = attr.size || 2;
 
     $mdGesture.register(element, 'drag');
-    //$mdGesture.register(element, 'swipe');
-
     element
       .on('$md.drag', onDrag)
       .on('$md.dragstart', onDragStart)
