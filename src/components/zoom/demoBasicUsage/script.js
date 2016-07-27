@@ -1,5 +1,5 @@
 
-angular.module('sliderDemo1', ['ngMaterial'])
+angular.module('zoomDemo', ['ngMaterial'])
 
 .controller('AppCtrl', function($scope) {
 
