@@ -1,7 +1,7 @@
 describe('md-input-container animations', function() {
   var $rootScope, $compile, $animate, $animateCss,
     el, pageScope, invalidAnimation, messagesAnimation, messageAnimation,
-    cssTransitionsDisabled = false;
+    cssTransitionsDisabled = false, lastAnimateCall;
 
   // Load our modules
   beforeEach(module('ngAnimate', 'ngMessages', 'material.components.input'));
@@ -44,7 +44,7 @@ describe('md-input-container animations', function() {
 
     expectError(getError(), 'pattern');
     expect(container).not.toHaveClass('md-input-invalid');
-    expect(lastAnimateCall()).toEqual({element: getError(), options: {}});
+    expect(lastAnimateCall).toEqual({element: getError(), options: {}});
 
     /*
      * 2. Blur the input, which adds the md-input-invalid class
@@ -58,9 +58,9 @@ describe('md-input-container animations', function() {
 
     expectError(getError(), 'pattern');
     expect(container).toHaveClass('md-input-invalid');
-    expect(lastAnimateCall().element).toEqual(getError());
-    expect(lastAnimateCall().options.event).toEqual('enter');
-    expect(lastAnimateCall().options.to).toEqual({"opacity": 1, "margin-top": "0"});
+    expect(lastAnimateCall.element).toEqual(getError());
+    expect(lastAnimateCall.options.event).toEqual('enter');
+    expect(lastAnimateCall.options.to).toEqual({"opacity": 1, "margin-top": "0"});
 
     /*
      * 3. Clear the field
@@ -74,9 +74,9 @@ describe('md-input-container animations', function() {
     messageAnimation.leave(patternError).start().done(angular.noop);
     $animate.flush();
 
-    expect(lastAnimateCall().element).toEqual(patternError);
-    expect(lastAnimateCall().options.event).toEqual('leave');
-    expect(parseInt(lastAnimateCall().options.to["margin-top"])).toBeLessThan(0);
+    expect(lastAnimateCall.element).toEqual(patternError);
+    expect(lastAnimateCall.options.event).toEqual('leave');
+    expect(parseInt(lastAnimateCall.options.to["margin-top"])).toBeLessThan(0);
 
     setFoo('');
     expectError(getError(), 'required');
@@ -85,9 +85,9 @@ describe('md-input-container animations', function() {
     $animate.flush();
 
     expect(container).toHaveClass('md-input-invalid');
-    expect(lastAnimateCall().element).toEqual(getError());
-    expect(lastAnimateCall().options.event).toEqual('enter');
-    expect(lastAnimateCall().options.to).toEqual({"opacity": 1, "margin-top": "0"});
+    expect(lastAnimateCall.element).toEqual(getError());
+    expect(lastAnimateCall.options.event).toEqual('enter');
+    expect(lastAnimateCall.options.to).toEqual({"opacity": 1, "margin-top": "0"});
   });
 
   /*
@@ -101,13 +101,6 @@ describe('md-input-container animations', function() {
     pageScope.$apply();
 
     return el;
-  }
-
-  function lastAnimateCall() {
-    return {
-      element: $animateCss.calls.mostRecent().args[0],
-      options: $animateCss.calls.mostRecent().args[1]
-    }
   }
 
   function setFoo(value) {
@@ -132,6 +125,16 @@ describe('md-input-container animations', function() {
     module(function($provide) {
       $provide.decorator('$animateCss', function($delegate) {
         return jasmine.createSpy('$animateCss').and.callFake(function(element, options) {
+
+          // Store the last call to $animateCss
+          //
+          // NOTE: We handle this manually because the actual code modifies the options
+          // and can make the tests fail if it executes before the expect() fires
+          lastAnimateCall = {
+            element: element,
+            options: angular.copy(options)
+          };
+
           // Make sure any transitions happen immediately; NOTE: this is REQUIRED for the above
           // tests to pass without using window.setTimeout to wait for the animations
           if (cssTransitionsDisabled) {
