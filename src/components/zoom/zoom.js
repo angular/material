@@ -64,7 +64,7 @@ function ZoomDirective($mdGesture) {
 
     var thumbContainer = angular.element(element[0].querySelector('.md-zoom-thumb-container'));
     var zoomedContainer = angular.element(element[0].querySelector('.md-zoom-zoomed-container'));
-    var zoomeMessage = angular.element(element[0].querySelector('.md-zoom-message'));
+    var zoomedMessage = angular.element(element[0].querySelector('.md-zoom-message'));
 
     thumbContainer.append('<img draggable="false" src="' + attr.thumb + '">');
     zoomedContainer.html('<img src="' + attr.zoom + '">');
@@ -86,8 +86,8 @@ function ZoomDirective($mdGesture) {
 
 
     function onDragStop(ev) {
-      zoomedContainer.css('display', 'none  ');
-      zoomeMessage.css('display', 'block');
+      zoomedContainer.css('display', 'none');
+      zoomedMessage.css('display', 'block');
       thumbContainer
         .css('cursor', 'default');
     }
@@ -98,7 +98,7 @@ function ZoomDirective($mdGesture) {
           .css('width',thumbImage[0].offsetWidth + 'px')
           .css('display', 'block');
 
-        zoomeMessage
+        zoomedMessage
           .css('display', 'none');
 
         zoomedImage
