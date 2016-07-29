@@ -428,6 +428,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  * - $mdDialogPreset#targetEvent(DOMClickEvent=) - A click's event object. When passed in as an option,
  *     the location of the click will be used as the starting point for the opening animation
  *     of the the dialog.
+ * - $mdDialogPreset#useTextarea(boolean) - Uses a textarea instead of an input for multiple lines of entry
  *
  */
 
@@ -547,7 +548,7 @@ function MdDialogProvider($$interimElementProvider) {
     })
     .addPreset('prompt', {
       methods: ['title', 'htmlContent', 'textContent', 'initialValue', 'content', 'placeholder', 'ariaLabel',
-          'ok', 'cancel', 'theme', 'css'],
+          'ok', 'cancel', 'theme', 'css', 'useTextarea'],
       options: advancedDialogOptions
     });
 
@@ -565,7 +566,9 @@ function MdDialogProvider($$interimElementProvider) {
         '    </div>',
         '    <md-input-container md-no-float ng-if="::dialog.$type == \'prompt\'" class="md-prompt-input-container">',
         '      <input ng-keypress="dialog.keypress($event)" md-autofocus ng-model="dialog.result" ' +
-        '             placeholder="{{::dialog.placeholder}}">',
+        '             placeholder="{{::dialog.placeholder}}" ng-if="::!dialog.useTextarea"></input>',
+        '      <textarea ng-keypress="dialog.keypress($event)" md-autofocus ng-model="dialog.result" ' +
+        '             placeholder="{{::dialog.placeholder}}" ng-if="::dialog.useTextarea"></textarea>',
         '    </md-input-container>',
         '  </md-dialog-content>',
         '  <md-dialog-actions>',
@@ -593,7 +596,7 @@ function MdDialogProvider($$interimElementProvider) {
           $mdDialog.cancel();
         };
         this.keypress = function($event) {
-          if ($event.keyCode === $mdConstant.KEY_CODE.ENTER) {
+          if ($event.keyCode === $mdConstant.KEY_CODE.ENTER && !this.useTextarea) {
             $mdDialog.hide(this.result)
           }
         }
@@ -615,6 +618,7 @@ function MdDialogProvider($$interimElementProvider) {
       onShowing: beforeShow,
       onRemove: onRemove,
       clickOutsideToClose: false,
+      useTextarea: false,
       escapeToClose: true,
       targetEvent: null,
       contentElement: null,
