@@ -111,8 +111,13 @@ function ZoomDirective($mdGesture) {
             var x, y, clientWidth,clientHeight;
             if (ev.type === 'mousemove') {
                 var rect = ev.target.getBoundingClientRect();
-                x = ev.x - rect.left;
-                y = ev.y - rect.top;
+                if (angular.isDefined(ev.layerX)) {
+                     x = ev.layerX;
+                     y = ev.layerY;
+                } else {
+                    x = ev.x;
+                    y = ev.y;
+                }
                 clientWidth = ev.target.clientWidth;
                 clientHeight = ev.target.clientHeight;
             } else {
@@ -129,7 +134,6 @@ function ZoomDirective($mdGesture) {
                 clientWidth = ev.pointer.target.clientWidth;
                 clientHeight = ev.pointer.target.clientHeight;
             }
-
             if (x < 0) x = 0;
             if (y < 0) y = 0;
             if (x > clientWidth) x = clientWidth;
