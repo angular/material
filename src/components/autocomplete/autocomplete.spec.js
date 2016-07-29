@@ -1562,6 +1562,116 @@ describe('<md-autocomplete>', function() {
     });
   });
 
+  describe('dropdown position', function() {
+
+    it('should adjust the width when the window resizes', inject(function($timeout, $window) {
+      var scope = createScope();
+
+      var template =
+        '<div style="width: 400px">' +
+          '<md-autocomplete ' +
+              'md-search-text="searchText" ' +
+              'md-items="item in match(searchText)" ' +
+              'md-item-text="item.display" ' +
+              'md-min-length="0" ' +
+              'placeholder="placeholder">' +
+            '<span md-highlight-text="searchText">{{item.display}}</span>' +
+          '</md-autocomplete>' +
+        '</div>';
+
+      var parent = compile(template, scope);
+      var element = parent.find('md-autocomplete');
+      var ctrl = element.controller('mdAutocomplete');
+
+      // Add container to the DOM to be able to test the rect calculations.
+      document.body.appendChild(parent[0]);
+
+      $timeout.flush();
+
+      expect(ctrl.positionDropdown).toBeTruthy();
+
+      // Focus the Autocomplete to open the dropdown.
+      ctrl.focus();
+
+      scope.$apply('searchText = "fo"');
+      waitForVirtualRepeat(element);
+
+      // The scroll repeat container has been moved to the body element to avoid
+      // z-index / overflow issues.
+      var scrollContainer = document.body.querySelector('.md-virtual-repeat-container');
+      expect(scrollContainer).toBeTruthy();
+
+      // Expect the current width of the scrollContainer to be the same as of the parent element
+      // at initialization.
+      expect(scrollContainer.style.minWidth).toBe('400px');
+
+      // Change the parents width, to be shrink the scrollContainers width.
+      parent.css('width', '200px');
+
+      // Update the scrollContainers rectangle, by triggering a reposition of the dropdown.
+      angular.element($window).triggerHandler('resize');
+
+      // The scroll container should have a width of 200px, since we changed the parents width.
+      expect(scrollContainer.style.minWidth).toBe('200px');
+
+      document.body.removeChild(parent[0]);
+    }));
+
+    it('should adjust the width when manually repositioning', inject(function($timeout) {
+      var scope = createScope();
+
+      var template =
+        '<div style="width: 400px">' +
+          '<md-autocomplete ' +
+              'md-search-text="searchText" ' +
+              'md-items="item in match(searchText)" ' +
+              'md-item-text="item.display" ' +
+              'md-min-length="0" ' +
+              'placeholder="placeholder">' +
+            '<span md-highlight-text="searchText">{{item.display}}</span>' +
+          '</md-autocomplete>' +
+        '</div>';
+
+      var parent = compile(template, scope);
+      var element = parent.find('md-autocomplete');
+      var ctrl = element.controller('mdAutocomplete');
+
+      // Add container to the DOM to be able to test the rect calculations.
+      document.body.appendChild(parent[0]);
+
+      $timeout.flush();
+
+      expect(ctrl.positionDropdown).toBeTruthy();
+
+      // Focus the Autocomplete to open the dropdown.
+      ctrl.focus();
+
+      scope.$apply('searchText = "fo"');
+      waitForVirtualRepeat(element);
+
+      // The scroll repeat container has been moved to the body element to avoid
+      // z-index / overflow issues.
+      var scrollContainer = document.body.querySelector('.md-virtual-repeat-container');
+      expect(scrollContainer).toBeTruthy();
+
+      // Expect the current width of the scrollContainer to be the same as of the parent element
+      // at initialization.
+      expect(scrollContainer.style.minWidth).toBe('400px');
+
+      // Change the parents width, to be shrink the scrollContainers width.
+      parent.css('width', '200px');
+
+      // Update the scrollContainers rectangle, by triggering a reposition of the dropdown.
+      ctrl.positionDropdown();
+
+      // The scroll container should have a width of 200px, since we changed the parents width.
+      expect(scrollContainer.style.minWidth).toBe('200px');
+
+      document.body.removeChild(parent[0]);
+    }));
+
+  });
+
   describe('md-highlight-text', function() {
     it('updates when content is modified', inject(function() {
       var template = '<div md-highlight-text="query">{{message}}</div>';
