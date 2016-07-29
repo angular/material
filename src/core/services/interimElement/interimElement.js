@@ -339,7 +339,16 @@ function InterimElementProvider() {
        *
        */
       function hide(reason, options) {
+
         if (!showingInterims.length) {
+          // When there are still interim's opening, then wait for the first interim element to
+          // finish its opening.
+          if (showPromises.length) {
+            return showPromises.shift().finally(function() {
+              return service.hide(reason, options)
+            });
+          }
+
           return $q.when(reason);
         }
 
