@@ -1,9 +1,19 @@
 describe('$mdBottomSheet service', function () {
-  beforeEach(module('material.components.bottomSheet'));
+  var $mdBottomSheet, $rootElement, $rootScope, $material, $mdConstant;
 
-  describe('#build()', function () {
-    it('should have `._md` class indicator',
-      inject(function ($mdBottomSheet, $rootElement, $material) {
+  beforeEach(function() {
+    module('material.components.bottomSheet');
+    inject(function(_$mdBottomSheet_, _$rootElement_, _$rootScope_, _$material_, _$mdConstant_) {
+      $mdBottomSheet = _$mdBottomSheet_;
+      $rootElement = _$rootElement_;
+      $rootScope = _$rootScope_;
+      $material = _$material_;
+      $mdConstant = _$mdConstant_;
+    });
+  });
+
+  describe('#build()', function() {
+    it('should have `._md` class indicator', function() {
         var parent = angular.element('<div>');
         $mdBottomSheet.show({
           template: '<md-bottom-sheet>',
@@ -13,57 +23,55 @@ describe('$mdBottomSheet service', function () {
 
         var sheet = parent.find('md-bottom-sheet');
         expect(sheet.hasClass('_md')).toBe(true);
-    }));
+    });
 
-    it('should close when `clickOutsideToClose == true`',
-      inject(function ($mdBottomSheet, $rootElement, $material) {
-        var parent = angular.element('<div>');
-        $mdBottomSheet.show({
-          template: '<md-bottom-sheet>',
-          parent: parent,
-          clickOutsideToClose: true
-        });
+    it('should close when `clickOutsideToClose == true`', function() {
+      var parent = angular.element('<div>');
+      $mdBottomSheet.show({
+        template: '<md-bottom-sheet>',
+        parent: parent,
+        clickOutsideToClose: true
+      });
 
-        $material.flushOutstandingAnimations();
+      $material.flushOutstandingAnimations();
 
-        expect(parent.find('md-bottom-sheet').length).toBe(1);
+      expect(parent.find('md-bottom-sheet').length).toBe(1);
 
-        var backdrop = parent.find('md-backdrop');
+      var backdrop = parent.find('md-backdrop');
 
-        backdrop.triggerHandler({
-          type: 'click',
-          target: backdrop[0]
-        });
+      backdrop.triggerHandler({
+        type: 'click',
+        target: backdrop[0]
+      });
 
-        $material.flushInterimElement();
-        expect(parent.find('md-bottom-sheet').length).toBe(0);
-      }));
+      $material.flushInterimElement();
+      expect(parent.find('md-bottom-sheet').length).toBe(0);
+    });
 
-    it('should not close when `clickOutsideToClose == false`',
-      inject(function ($mdBottomSheet, $rootElement, $material) {
-        var parent = angular.element('<div>');
-        $mdBottomSheet.show({
-          template: '<md-bottom-sheet>',
-          parent: parent,
-          clickOutsideToClose: false
-        });
+    it('should not close when `clickOutsideToClose == false`', function() {
+      var parent = angular.element('<div>');
+      $mdBottomSheet.show({
+        template: '<md-bottom-sheet>',
+        parent: parent,
+        clickOutsideToClose: false
+      });
 
-        $material.flushOutstandingAnimations();
+      $material.flushOutstandingAnimations();
 
-        expect(parent.find('md-bottom-sheet').length).toBe(1);
+      expect(parent.find('md-bottom-sheet').length).toBe(1);
 
-        var backdrop = parent.find('md-backdrop');
+      var backdrop = parent.find('md-backdrop');
 
-        backdrop.triggerHandler({
-          type: 'click',
-          target: backdrop[0]
-        });
+      backdrop.triggerHandler({
+        type: 'click',
+        target: backdrop[0]
+      });
 
-        $material.flushInterimElement();
-        expect(parent.find('md-bottom-sheet').length).toBe(1);
-      }));
+      $material.flushInterimElement();
+      expect(parent.find('md-bottom-sheet').length).toBe(1);
+    });
 
-    it('should warn if the template contains a `ng-cloak`', inject(function($mdBottomSheet, $material, $log) {
+    it('should warn if the template contains a `ng-cloak`', inject(function($log) {
       var parent = angular.element('<div>');
 
       // Enable spy on $log.warn
@@ -82,99 +90,94 @@ describe('$mdBottomSheet service', function () {
       expect($log.warn).toHaveBeenCalled();
     }));
 
-    it('should not append any backdrop when `disableBackdrop === true`',
-      inject(function($mdBottomSheet, $rootElement, $material) {
-        var parent = angular.element('<div>');
-        $mdBottomSheet.show({
-          template: '<md-bottom-sheet>',
-          parent: parent,
-          disableBackdrop: true
-        });
+    it('should not append any backdrop when `disableBackdrop === true`', function() {
+      var parent = angular.element('<div>');
+      $mdBottomSheet.show({
+        template: '<md-bottom-sheet>',
+        parent: parent,
+        disableBackdrop: true
+      });
 
-        $material.flushOutstandingAnimations();
+      $material.flushOutstandingAnimations();
 
-        expect(parent.find('md-bottom-sheet').length).toBe(1);
+      expect(parent.find('md-bottom-sheet').length).toBe(1);
 
-        var backdrop = parent.find('md-backdrop');
-        expect(backdrop.length).toBe(0);
-      }));
+      var backdrop = parent.find('md-backdrop');
+      expect(backdrop.length).toBe(0);
+    });
 
-    it('should append a backdrop by default to the bottomsheet',
-      inject(function($mdBottomSheet, $rootElement, $material) {
-        var parent = angular.element('<div>');
-        $mdBottomSheet.show({
-          template: '<md-bottom-sheet>',
-          parent: parent
-        });
+    it('should append a backdrop by default to the bottomsheet', function() {
+      var parent = angular.element('<div>');
+      $mdBottomSheet.show({
+        template: '<md-bottom-sheet>',
+        parent: parent
+      });
 
-        $material.flushOutstandingAnimations();
+      $material.flushOutstandingAnimations();
 
-        expect(parent.find('md-bottom-sheet').length).toBe(1);
+      expect(parent.find('md-bottom-sheet').length).toBe(1);
 
-        var backdrop = parent.find('md-backdrop');
-        expect(backdrop.length).toBe(1);
-      }));
+      var backdrop = parent.find('md-backdrop');
+      expect(backdrop.length).toBe(1);
+    });
 
-    it('should close when `escapeToClose == true`',
-      inject(function ($mdBottomSheet, $rootElement, $material, $mdConstant) {
-        var parent = angular.element('<div>');
-        $mdBottomSheet.show({
-          template: '<md-bottom-sheet>',
-          parent: parent,
-          escapeToClose: true
-        });
+    it('should close when `escapeToClose == true`', function() {
+      var parent = angular.element('<div>');
+      $mdBottomSheet.show({
+        template: '<md-bottom-sheet>',
+        parent: parent,
+        escapeToClose: true
+      });
 
-        $material.flushOutstandingAnimations();
+      $material.flushOutstandingAnimations();
 
-        expect(parent.find('md-bottom-sheet').length).toBe(1);
+      expect(parent.find('md-bottom-sheet').length).toBe(1);
 
-        $rootElement.triggerHandler({
-          type: 'keyup',
-          keyCode: $mdConstant.KEY_CODE.ESCAPE
-        });
+      $rootElement.triggerHandler({
+        type: 'keyup',
+        keyCode: $mdConstant.KEY_CODE.ESCAPE
+      });
 
-        $material.flushInterimElement();
-        expect(parent.find('md-bottom-sheet').length).toBe(0);
-      }));
+      $material.flushInterimElement();
+      expect(parent.find('md-bottom-sheet').length).toBe(0);
+    });
 
-    it('should not close when `escapeToClose == false`',
-      inject(function ($mdBottomSheet, $rootScope, $rootElement, $timeout, $animate, $mdConstant) {
-        var parent = angular.element('<div>');
-        $mdBottomSheet.show({
-          template: '<md-bottom-sheet>',
-          parent: parent,
-          escapeToClose: false
-        });
-        $rootScope.$apply();
+    it('should not close when `escapeToClose == false`', function() {
+      var parent = angular.element('<div>');
+      $mdBottomSheet.show({
+        template: '<md-bottom-sheet>',
+        parent: parent,
+        escapeToClose: false
+      });
+      $rootScope.$apply();
 
-        expect(parent.find('md-bottom-sheet').length).toBe(1);
+      expect(parent.find('md-bottom-sheet').length).toBe(1);
 
-        $rootElement.triggerHandler({type: 'keyup', keyCode: $mdConstant.KEY_CODE.ESCAPE});
+      $rootElement.triggerHandler({type: 'keyup', keyCode: $mdConstant.KEY_CODE.ESCAPE});
 
-        expect(parent.find('md-bottom-sheet').length).toBe(1);
-      }));
+      expect(parent.find('md-bottom-sheet').length).toBe(1);
+    });
 
-    it('should close when navigation fires `scope.$destroy()`',
-      inject(function ($mdBottomSheet, $rootScope, $rootElement, $timeout, $material) {
-        var parent = angular.element('<div>');
-        $mdBottomSheet.show({
-          template: '<md-bottom-sheet>',
-          parent: parent,
-          escapeToClose: false
-        });
+    it('should close when navigation fires `scope.$destroy()`', function() {
+      var parent = angular.element('<div>');
+      $mdBottomSheet.show({
+        template: '<md-bottom-sheet>',
+        parent: parent,
+        escapeToClose: false
+      });
 
-        $rootScope.$apply();
-        $material.flushOutstandingAnimations();
+      $rootScope.$apply();
+      $material.flushOutstandingAnimations();
 
-        expect(parent.find('md-bottom-sheet').length).toBe(1);
+      expect(parent.find('md-bottom-sheet').length).toBe(1);
 
-        $rootScope.$destroy();
-        $material.flushInterimElement();
-        expect(parent.find('md-bottom-sheet').length).toBe(0);
-      }));
+      $rootScope.$destroy();
+      $material.flushInterimElement();
+      expect(parent.find('md-bottom-sheet').length).toBe(0);
+    });
 
     it('should focus child with md-autofocus',
-      inject(function ($rootScope, $animate, $document, $mdBottomSheet) {
+      inject(function ($document) {
         jasmine.mockElementFocus(this);
         var parent = angular.element('<div>');
         var markup = '' +
@@ -204,20 +207,70 @@ describe('$mdBottomSheet service', function () {
 
     // This test is mainly for touch devices as the -webkit-overflow-scrolling causes z-index issues
     // if the scroll mask is appended to the body element
-    it('appends the scroll mask to the same parent',
-      inject(function ($mdBottomSheet, $rootScope) {
-        var parent = angular.element('<div>');
+    it('appends the scroll mask to the same parent', function() {
+      var parent = angular.element('<div>');
 
+      $mdBottomSheet.show({
+        template: '<md-bottom-sheet>',
+        parent: parent
+      });
+
+      $rootScope.$apply();
+
+      var scrollMask = parent[0].querySelector('.md-scroll-mask');
+
+      expect(scrollMask).not.toBeNull();
+    });
+
+    describe('isLockedOpen option', function() {
+      it('should not close, even though `escapeToClose` is true', function() {
+        var parent = angular.element('<div>');
         $mdBottomSheet.show({
           template: '<md-bottom-sheet>',
-          parent: parent
+          parent: parent,
+          escapeToClose: true,
+          isLockedOpen: true
         });
 
-        $rootScope.$apply();
+        $material.flushOutstandingAnimations();
 
-        var scrollMask = parent[0].querySelector('.md-scroll-mask');
+        expect(parent.find('md-bottom-sheet').length).toBe(1);
 
-        expect(scrollMask).not.toBeNull();
-      }));
+        $rootElement.triggerHandler({
+          type: 'keyup',
+          keyCode: $mdConstant.KEY_CODE.ESCAPE
+        });
+
+        $material.flushInterimElement();
+        expect(parent.find('md-bottom-sheet').length).toBe(1);
+      });
+
+      it('should not close, even though `clickOutsideToClose` is true', function() {
+        var parent = angular.element('<div>');
+        $mdBottomSheet.show({
+          template: '<md-bottom-sheet>',
+          parent: parent,
+          clickOutsideToClose: true,
+          isLockedOpen: true
+        });
+
+        $material.flushOutstandingAnimations();
+
+        expect(parent.find('md-bottom-sheet').length).toBe(1);
+
+        var backdrop = parent.find('md-backdrop');
+
+        backdrop.triggerHandler({
+          type: 'click',
+          target: backdrop[0]
+        });
+
+        $material.flushInterimElement();
+        expect(parent.find('md-bottom-sheet').length).toBe(1);
+      });
+
+    });
+
   });
+
 });
