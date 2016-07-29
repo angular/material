@@ -547,7 +547,7 @@ function MdDialogProvider($$interimElementProvider) {
     })
     .addPreset('prompt', {
       methods: ['title', 'htmlContent', 'textContent', 'initialValue', 'content', 'placeholder', 'ariaLabel',
-          'ok', 'cancel', 'theme', 'css'],
+          'ok', 'cancel', 'theme', 'css', 'pressEnterToClose'],
       options: advancedDialogOptions
     });
 
@@ -564,8 +564,8 @@ function MdDialogProvider($$interimElementProvider) {
         '      <p>{{::dialog.mdTextContent}}</p>',
         '    </div>',
         '    <md-input-container md-no-float ng-if="::dialog.$type == \'prompt\'" class="md-prompt-input-container">',
-        '      <input ng-keypress="dialog.keypress($event)" md-autofocus ng-model="dialog.result" ' +
-        '             placeholder="{{::dialog.placeholder}}">',
+        '      <textarea ng-keypress="dialog.keypress($event)" md-autofocus ng-model="dialog.result" ' +
+        '             placeholder="{{::dialog.placeholder}}"></textarea>',
         '    </md-input-container>',
         '  </md-dialog-content>',
         '  <md-dialog-actions>',
@@ -593,7 +593,7 @@ function MdDialogProvider($$interimElementProvider) {
           $mdDialog.cancel();
         };
         this.keypress = function($event) {
-          if ($event.keyCode === $mdConstant.KEY_CODE.ENTER) {
+          if ($event.keyCode === $mdConstant.KEY_CODE.ENTER && this.pressEnterToClose) {
             $mdDialog.hide(this.result)
           }
         }
@@ -615,6 +615,7 @@ function MdDialogProvider($$interimElementProvider) {
       onShowing: beforeShow,
       onRemove: onRemove,
       clickOutsideToClose: false,
+      pressEnterToClose: true,
       escapeToClose: true,
       targetEvent: null,
       contentElement: null,
