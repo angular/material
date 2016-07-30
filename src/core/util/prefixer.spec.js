@@ -76,6 +76,34 @@ describe('prefixer', function() {
 
     });
 
+    describe('and removing an attribute', function() {
+
+      it('should remove a prefixed attribute', function() {
+        var element = angular.element('<div data-ng-click="null">')[0];
+
+        prefixer.removeAttribute(element, 'ng-click');
+
+        expect(element.hasAttribute('data-ng-click')).toBeFalsy();
+      });
+
+      it('should remove an un-prefixed attribute', function() {
+        var element = angular.element('<div ng-click="null">')[0];
+
+        prefixer.removeAttribute(element, 'ng-click');
+
+        expect(element.hasAttribute('ng-click')).toBeFalsy();
+      });
+
+      it('should remove prefixed and un-prefixed attributes', function() {
+        var element = angular.element('<div ng-click="null" data-ng-click="null">')[0];
+
+        prefixer.removeAttribute(element, 'ng-click');
+
+        expect(prefixer.hasAttribute(element, 'ng-click')).toBeFalsy();
+      });
+
+    });
+
   });
   
 });

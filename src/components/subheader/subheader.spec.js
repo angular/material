@@ -166,9 +166,7 @@ describe('mdSubheader', function() {
       '</div>'
     );
 
-    // TODO(devversion): Remove this expectation and update to correctly detect 6 subheaders
-    // TODO(devversion) See related issue: https://github.com/angular/material/issues/8647
-    expect(contentElement[0].querySelectorAll('.md-subheader').length).toEqual(12);
+    expect(contentElement[0].querySelectorAll('.md-subheader').length).toEqual(6);
 
     // Check if there were no exceptions caused.
     expect($exceptionHandler.errors).toEqual([]);
