@@ -334,6 +334,53 @@ describe('mdListItem directive', function() {
     expect(iconButton.firstElementChild.hasAttribute('ng-show')).toBe(false);
   });
 
+  it('should not create a parent button for proxied secondary elements with ng-click', function() {
+    var listItem = setup(
+      '<md-list-item ng-click="sayHello()">' +
+        '<p>Hello World</p>' +
+        '<md-checkbox class="md-secondary" ng-click="goWild()"></md-checkbox>' +
+      '</md-list-item>');
+
+    // First child is our button wrap
+    var firstChild = listItem.children().eq(0);
+    expect(firstChild[0].nodeName).toBe('DIV');
+
+    expect(listItem).toHaveClass('_md-button-wrap');
+
+    // It should contain three elements, the button overlay, inner content
+    // and the secondary container.
+    expect(firstChild.children().length).toBe(3);
+
+    var secondaryContainer = firstChild.children().eq(2);
+    expect(secondaryContainer).toHaveClass('md-secondary-container');
+
+    // The secondary container should contain the md-checkbox, without any button as parent.
+    var checkboxItem = secondaryContainer.children()[0];
+
+    expect(checkboxItem.nodeName).toBe('MD-CHECKBOX');
+    expect(checkboxItem.hasAttribute('ng-click')).toBe(true);
+  });
+
+  it('should not use as a proxied element when using ng-click on the element', function() {
+    var listItem = setup(
+      '<md-list-item ng-click="sayHello()">' +
+        '<p>Hello World</p>' +
+        '<md-checkbox class="md-secondary" ng-click="null" ng-model="isChecked"></md-checkbox>' +
+      '</md-list-item>');
+
+    var checkboxEl = listItem.find('md-checkbox');
+
+    expect($rootScope.isChecked).toBeFalsy();
+
+    var clickListener = listItem[0].querySelector('div');
+
+    clickListener.click();
+    expect($rootScope.isChecked).toBeFalsy();
+
+    checkboxEl[0].click();
+    expect($rootScope.isChecked).toBeTruthy();
+  });
+
   it('moves multiple md-secondary items outside of the button', function() {
     var listItem = setup(
       '<md-list-item ng-click="sayHello()">' +

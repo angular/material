@@ -349,9 +349,11 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
       }
 
       function wrapSecondaryItem(secondaryItem, container) {
-        // If the current secondary item is not a button, but contains a ng-click attribute,
-        // the secondary item will be automatically wrapped inside of a button.
-        if (secondaryItem && !isButton(secondaryItem) && secondaryItem.hasAttribute('ng-click')) {
+        // If the current secondary item is not a button or proxied element,
+        // but contains a ng-click attribute, the secondary item will be automatically
+        // wrapped inside of a button.
+        if (secondaryItem && !isButton(secondaryItem) && !isProxiedElement(secondaryItem)
+            && secondaryItem.hasAttribute('ng-click')) {
 
           $mdAria.expect(secondaryItem, 'aria-label');
           var buttonWrapper = angular.element('<md-button class="md-secondary md-icon-button">');
@@ -367,7 +369,8 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           secondaryItem = buttonWrapper[0];
         }
 
-        if (secondaryItem && (!hasClickEvent(secondaryItem) || (!tAttrs.ngClick && isProxiedElement(secondaryItem)))) {
+        if (secondaryItem && !tAttrs.ngClick && !hasClickEvent(secondaryItem)
+            && isProxiedElement(secondaryItem)) {
           // In this case we remove the secondary class, so we can identify it later, when we searching for the
           // proxy items.
           angular.element(secondaryItem).removeClass('md-secondary');
