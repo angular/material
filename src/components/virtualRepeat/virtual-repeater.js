@@ -18,8 +18,21 @@ angular.module('material.components.virtualRepeat', [
  * @description
  * `md-virtual-repeat-container` provides the scroll container for md-virtual-repeat.
  *
- * Virtual repeat is a limited substitute for ng-repeat that renders only
- * enough dom nodes to fill the container and recycling them as the user scrolls.
+ * VirtualRepeat is a limited substitute for ng-repeat that renders only
+ * enough DOM nodes to fill the container and recycling them as the user scrolls.
+ *
+ * Once an element is not visible anymore, the VirtualRepeat recycles it and will reuse it for
+ * another visible item by replacing the previous dataset with the new one.
+ *
+ * **Common Issues**
+ * > When having one-time bindings inside of the view template, the VirtualRepeat will not properly
+ * > update the bindings for new items, since the view will be recycled.
+ *
+ * **Notes:**
+ * > The VirtualRepeat is a similar implementation to the Android
+ * [RecyclerView](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html)
+ *
+ *
  *
  * @usage
  * <hljs lang="html">
