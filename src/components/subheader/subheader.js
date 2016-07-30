@@ -56,7 +56,11 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
     link: function postLink(scope, element, attr, controllers, transclude) {
       $mdTheming(element);
       element.addClass('_md');
-      
+
+      // Remove the ngRepeat attribute from the root element, because we don't want to compile
+      // the ngRepeat for the sticky clone again.
+      $mdUtil.prefixer().removeAttribute(element, 'ng-repeat');
+
       var outerHTML = element[0].outerHTML;
 
       function getContent(el) {
