@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 angular.module('panelAnimationsDemo', ['ngMaterial'])
     .controller('AnimationCtrl', AnimationCtrl)
     .controller('DialogCtrl', DialogCtrl);
@@ -94,3 +97,5 @@ function DialogCtrl(mdPanelRef) {
 DialogCtrl.prototype.closeDialog = function() {
   this._mdPanelRef && this._mdPanelRef.close();
 };
+
+})();
