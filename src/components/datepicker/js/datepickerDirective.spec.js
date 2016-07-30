@@ -586,10 +586,43 @@ describe('md-datepicker', function() {
     });
   });
 
-  it('should be able open the calendar when the input is focused', function() {
-    createDatepickerInstance('<md-datepicker ng-model="myDate" md-open-on-focus></md-datepicker>');
-    controller.ngInputElement.triggerHandler('focus');
-    expect(document.querySelector('md-calendar')).toBeTruthy();
+  describe('mdOpenOnFocus attribute', function() {
+    beforeEach(function() {
+      createDatepickerInstance('<md-datepicker ng-model="myDate" md-open-on-focus></md-datepicker>');
+    });
+
+    it('should be able open the calendar when the input is focused', function() {
+      controller.ngInputElement.triggerHandler('focus');
+      expect(controller.isCalendarOpen).toBe(true);
+    });
+
+    it('should not reopen a closed calendar when the window is refocused', inject(function($timeout) {
+      // Focus the input initially to open the calendar.
+      // Note that the element needs to be appended to the DOM so it can be set as the activeElement.
+      document.body.appendChild(element);
+      controller.inputElement.focus();
+      controller.ngInputElement.triggerHandler('focus');
+
+      expect(document.activeElement).toBe(controller.inputElement);
+      expect(controller.isCalendarOpen).toBe(true);
+
+      // Close the calendar, but make sure that the input is still focused.
+      controller.closeCalendarPane();
+      $timeout.flush();
+      expect(document.activeElement).toBe(controller.inputElement);
+      expect(controller.isCalendarOpen).toBe(false);
+
+      // Simulate the user tabbing away.
+      angular.element(window).triggerHandler('blur');
+      expect(controller.inputFocusedOnWindowBlur).toBe(true);
+
+      // Try opening the calendar again.
+      controller.ngInputElement.triggerHandler('focus');
+      expect(controller.isCalendarOpen).toBe(false);
+
+      // Clean up.
+      document.body.removeChild(element);
+    }));
   });
 
   describe('hiding the icons', function() {
