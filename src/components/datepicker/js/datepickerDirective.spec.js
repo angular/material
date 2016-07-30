@@ -17,6 +17,8 @@ describe('md-datepicker', function() {
          'md-date-filter="dateFilter"' +
          'ng-model="myDate" ' +
          'ng-change="dateChangedHandler()" ' +
+         'ng-focus="focusHandler()" ' +
+         'ng-blur="blurHandler()" ' +
          'ng-required="isRequired" ' +
          'ng-disabled="isDisabled">' +
     '</md-datepicker>';
@@ -708,5 +710,57 @@ describe('md-datepicker', function() {
       element = $compile(template)(pageScope);
       pageScope.$digest();
     }
+  });
+
+  describe('ngFocus support', function() {
+    beforeEach(function() {
+      pageScope.focusHandler = jasmine.createSpy('ng-focus handler');
+    });
+
+    it('should trigger the ngFocus handler when the input is focused', function() {
+      controller.ngInputElement.triggerHandler('focus');
+      expect(pageScope.focusHandler).toHaveBeenCalled();
+    });
+
+    it('should trigger the ngFocus handler when the calendar is opened', function() {
+      controller.openCalendarPane({});
+      expect(pageScope.focusHandler).toHaveBeenCalled();
+    });
+
+    it('should only trigger once when mdOpenOnFocus is set', function() {
+      createDatepickerInstance('<md-datepicker ng-model="myDate" ng-focus="focusHandler()" ' +
+        'md-open-on-focus></md-datepicker>');
+
+      controller.ngInputElement.triggerHandler('focus');
+      expect(pageScope.focusHandler).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('ngBlur support', function() {
+    beforeEach(function() {
+      pageScope.blurHandler = jasmine.createSpy('ng-blur handler');
+    });
+
+    it('should trigger the ngBlur handler when the input is blurred', function() {
+      controller.ngInputElement.triggerHandler('blur');
+      expect(pageScope.blurHandler).toHaveBeenCalled();
+    });
+
+    it('should trigger the ngBlur handler when the calendar is closed', function() {
+      controller.openCalendarPane({
+        target: controller.ngInputElement
+      });
+      controller.closeCalendarPane();
+      expect(pageScope.blurHandler).toHaveBeenCalled();
+    });
+
+    it('should only trigger once when mdOpenOnFocus is set', function() {
+      createDatepickerInstance('<md-datepicker ng-model="myDate" ng-blur="blurHandler()" ' +
+        'md-open-on-focus></md-datepicker>');
+
+      controller.ngInputElement.triggerHandler('focus');
+      controller.closeCalendarPane();
+      expect(pageScope.blurHandler).toHaveBeenCalledTimes(1);
+    });
   });
 });
