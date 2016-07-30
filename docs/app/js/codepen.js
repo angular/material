@@ -1,5 +1,5 @@
 (function() {
-  DocsApp
+  angular.module('docsApp')
     .factory('codepenDataAdapter', CodepenDataAdapter)
     .factory('codepen', ['$demoAngularScripts', '$document', 'codepenDataAdapter', Codepen]);
 

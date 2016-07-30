@@ -1,5 +1,4 @@
-DocsApp
-
+angular.module('docsApp')
 .directive('hljs', ['$timeout', '$q', '$interpolate', function($timeout, $q, $interpolate) {
   return {
     restrict: 'E',

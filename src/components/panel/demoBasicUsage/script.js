@@ -1,3 +1,6 @@
+(function() {
+'use strict';
+
 angular.module('panelDemo', ['ngMaterial'])
     .controller('BasicDemoCtrl', BasicDemoCtrl)
     .controller('PanelDialogCtrl', PanelDialogCtrl);
@@ -167,3 +170,5 @@ PanelMenuCtrl.prototype.onKeydown = function($event, dessert) {
     return -1;
   }
 };
+
+})();

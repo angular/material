@@ -1,2 +1,1 @@
-DocsApp
-.constant('{$ doc.name $}', {$ doc.items | json $});
+angular.module('docsApp').constant('{$ doc.name $}', {$ doc.items | json $});
