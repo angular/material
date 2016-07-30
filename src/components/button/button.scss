@@ -26,29 +26,36 @@ button.md-button::-moz-focus-inner {
 }
 
 .md-button {
-  border-radius: $button-border-radius;
-  box-sizing: border-box;
-  color: currentColor;
-
-  user-select: none;
-  position: relative; //for child absolute-positioned <canvas>
-
-  outline: none;
-  border: 0;
   display: inline-block;
-  align-items: center;
-  padding: $button-padding;
-  margin: $button-margin;
-  line-height: $button-line-height;
-  min-height: $button-line-height;
-  background: transparent;
-  white-space: nowrap;
-  // override for FAB, icon buttons, etc.
-  min-width: $button-min-width;
+  position: relative; // Required for absolute canvas child elements.
+  cursor: pointer;
 
+  /** Alignment adjustments */
+  min-height: $button-line-height;
+  min-width: $button-min-width;
+  line-height: $button-line-height;
+
+  vertical-align: middle;
+  align-items: center;
   text-align: center;
 
-  // Always uppercase buttons
+  border-radius: $button-border-radius;
+  box-sizing: border-box;
+
+  /* Reset default button appearance */
+  user-select: none;
+  outline: none;
+  border: 0;
+
+  /** Custom styling for button */
+  padding: $button-padding;
+  margin: $button-margin;
+
+  background: transparent;
+  color: currentColor;
+  white-space: nowrap;
+
+  /* Uppercase text content */
   text-transform: uppercase;
   font-weight: 500;
   font-size: $body-font-size-base;
@@ -57,8 +64,8 @@ button.md-button::-moz-focus-inner {
   font-family: inherit;
   text-decoration: none;
 
-  cursor: pointer;
-  overflow: hidden;   // for ink containment
+  // Ink Ripple should not create any overflow.
+  overflow: hidden;
 
   transition: box-shadow $swift-ease-out-duration $swift-ease-out-timing-function,
               background-color $swift-ease-out-duration $swift-ease-out-timing-function;
