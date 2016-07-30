@@ -234,6 +234,35 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  * When using a `template` as content element, it will be not compiled upon open.
  * This allows you to compile the element yourself and use it each time the dialog opens.
  *
+ * ### Custom Presets
+ * Developers are also able to create their own preset, which can be easily used without repeating
+ * their options each time.
+ *
+ * <hljs lang="js">
+ *   $mdDialogProvider.addPreset('testPreset', {
+ *     options: function() {
+ *       return {
+ *         template:
+ *           '<md-dialog>' +
+ *             'This is a custom preset' +
+ *           '</md-dialog>',
+ *         controllerAs: 'dialog',
+ *         bindToController: true,
+ *         clickOutsideToClose: true,
+ *         escapeToClose: true
+ *       };
+ *     }
+ *   });
+ * </hljs>
+ *
+ * After you created your preset at config phase, you can easily access it.
+ *
+ * <hljs lang="js">
+ *   $mdDialog.show(
+ *     $mdDialog.testPreset()
+ *   );
+ * </hljs>
+ *
  * ### JavaScript: promise API syntax, custom dialog template
  * <hljs lang="js">
  * (function(angular, undefined){
