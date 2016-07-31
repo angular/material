@@ -8,14 +8,14 @@
       <div layout="column" flex-xs="100" flex-sm="100" flex="33" layout-align="center center">
         <p>Target Mode Positioning (default)</p>
         <md-menu>
-          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
             <md-icon md-menu-origin md-svg-icon="call:business"></md-icon>
           </md-button>
           <md-menu-content width="6">
             <md-menu-item ng-repeat="item in [1, 2, 3]">
               <md-button ng-click="ctrl.announceClick($index)">
                 <md-icon md-menu-align-target md-svg-icon="call:no-sim"></md-icon>
-                Option {{item}} 
+                Option {{item}}
               </md-button>
             </md-menu-item>
           </md-menu-content>
@@ -24,7 +24,7 @@
       <div layout="column" flex-xs="100" flex-sm="100" flex="33" layout-align="center center">
         <p>Target mode with <code>md-offset</code></p>
         <md-menu md-offset="0 -5">
-          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="ctrl.openMenu($mdOpenMenu, $event)">
+          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="ctrl.openMenu($mdMenu, $event)">
             <md-icon md-menu-origin md-svg-icon="call:ring-volume"></md-icon>
           </md-button>
           <md-menu-content width="4">
@@ -37,7 +37,7 @@
       <div layout="column" flex-xs="100" flex-sm="100" flex="33" layout-align="center center">
         <p><code>md-position-mode="target-right target"</code></p>
         <md-menu md-position-mode="target-right target" >
-          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+          <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdMenu.open($event)">
             <md-icon md-menu-origin md-svg-icon="call:portable-wifi-off"></md-icon>
           </md-button>
           <md-menu-content width="4" >
