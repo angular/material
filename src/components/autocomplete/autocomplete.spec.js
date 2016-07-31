@@ -1,37 +1,52 @@
 describe('<md-autocomplete>', function() {
 
+  var element, scope;
+
   beforeEach(module('material.components.autocomplete'));
 
-  function compile(str, scope) {
-    var container;
+  afterEach(function() {
+    scope && scope.$destroy();
+  });
+
+  function compile(template, scope) {
+
     inject(function($compile) {
-      container = $compile(str)(scope);
+      element = $compile(template)(scope);
       scope.$apply();
     });
-    return container;
+
+    return element;
   }
 
-  function createScope(items, obj, matchLowercase) {
-    var scope;
+  function createScope(items, scopeData, matchLowercase) {
+
     items = items || ['foo', 'bar', 'baz'].map(function(item) {
-        return {display: item};
-      });
+      return { display: item };
+    });
+
     inject(function($rootScope, $timeout) {
       scope = $rootScope.$new();
+
       scope.match = function(term) {
         return items.filter(function(item) {
           return item.display.indexOf(matchLowercase ? term.toLowerCase() : term) === 0;
         });
       };
+
       scope.asyncMatch = function(term) {
         return $timeout(function() {
           return scope.match(term)
         }, 1000);
       };
+
       scope.searchText = '';
       scope.selectedItem = null;
-      for (var key in obj) scope[key] = obj[key];
+
+      angular.forEach(scopeData, function(value, key) {
+        scope[key] = value;
+      });
     });
+
     return scope;
   }
 
@@ -43,7 +58,7 @@ describe('<md-autocomplete>', function() {
     };
   }
 
-  function waitForVirtualRepeat(element) {
+  function waitForVirtualRepeat() {
     // Because the autocomplete does not make the suggestions menu visible
     // off the bat, the virtual repeat needs a couple more iterations to
     // figure out how tall it is and then how tall the repeated items are.
