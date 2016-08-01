@@ -5,7 +5,7 @@ var HANDLERS = {};
  * It contains normalized x and y coordinates from DOM events,
  * as well as other information abstracted from the DOM.
  */
- 
+
 var pointer, lastPointer, forceSkipClickHijack = false;
 
 /**
@@ -79,6 +79,8 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
   var self = {
     handler: addHandler,
     register: register,
+    isIos: isIos,
+    isAndroid: isAndroid,
     // On mobile w/out jQuery, we normally intercept clicks. Should we skip that?
     isHijackingClicks: (isIos || isAndroid) && !hasJQuery && !forceSkipClickHijack
   };
@@ -170,7 +172,7 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
    * Register handlers. These listen to touch/start/move events, interpret them,
    * and dispatch gesture events depending on options & conditions. These are all
    * instances of GestureHandler.
-   * @see GestureHandler 
+   * @see GestureHandler
    */
   return self
     /*
@@ -528,7 +530,7 @@ function attachToDocument( $mdGesture, $$MdGestureHandler ) {
      * click event will be sent ~400ms after a touchend event happens.
      * The only way to know if this click is real is to prevent any normal
      * click events, and add a flag to events sent by material so we know not to prevent those.
-     * 
+     *
      * Two exceptions to click events that should be prevented are:
      *  - click events sent by the keyboard (eg form submit)
      *  - events that originate from an Ionic app

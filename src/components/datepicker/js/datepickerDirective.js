@@ -218,7 +218,7 @@
    * @ngInject @constructor
    */
   function DatePickerCtrl($scope, $element, $attrs, $window, $mdConstant,
-    $mdTheming, $mdUtil, $mdDateLocale, $$mdDateUtil, $$rAF) {
+    $mdTheming, $mdUtil, $mdDateLocale, $$mdDateUtil, $$rAF, $mdGesture) {
 
     /** @final */
     this.$window = $window;
@@ -312,8 +312,15 @@
     /** Pre-bound click handler is saved so that the event listener can be removed. */
     this.bodyClickHandler = angular.bind(this, this.handleBodyClick);
 
-    /** Pre-bound resize handler so that the event listener can be removed. */
-    this.windowResizeHandler = $mdUtil.debounce(angular.bind(this, this.closeCalendarPane), 100);
+    /**
+     * Name of the event that will trigger a close. Necessary to sniff the browser, because
+     * the resize event doesn't make sense on mobile and can have a negative impact since it
+     * triggers whenever the browser zooms in on a focused input.
+     */
+    this.windowEventName = ($mdGesture.isIos || $mdGesture.isAndroid) ? 'orientationchange' : 'resize';
+
+    /** Pre-bound close handler so that the event listener can be removed. */
+    this.windowEventHandler = $mdUtil.debounce(angular.bind(this, this.closeCalendarPane), 100);
 
     /** Pre-bound handler for the window blur event. Allows for it to be removed later. */
     this.windowBlurHandler = angular.bind(this, this.handleWindowBlur);
@@ -690,7 +697,7 @@
         self.documentElement.on('click touchstart', self.bodyClickHandler);
       }, false);
 
-      window.addEventListener('resize', this.windowResizeHandler);
+      window.addEventListener(this.windowEventName, this.windowEventHandler);
     }
   };
 
@@ -704,7 +711,7 @@
       self.evalAttr('ngBlur');
 
       self.documentElement.off('click touchstart', self.bodyClickHandler);
-      window.removeEventListener('resize', self.windowResizeHandler);
+      window.removeEventListener(self.windowEventName, self.windowEventHandler);
 
       self.calendarPaneOpenedFrom.focus();
       self.calendarPaneOpenedFrom = null;
