@@ -97,12 +97,13 @@ function MdTableOrderByDirective() {
   }
 }
 
-function MdTableOrderByController($element, $scope, $attrs, $compile, $mdUtil) {
+function MdTableOrderByController($element, $scope, $attrs, $compile, $mdUtil, $$mdSvgRegistry) {
   this.$element = $element;
   this.$scope = $scope;
   this.$attrs = $attrs;
   this.$compile = $compile;
   this.$mdUtil = $mdUtil;
+  this.$$mdArrowUpIcon = $$mdSvgRegistry.mdArrowUp;
 
   this.isActiveRegex = new RegExp('^-?' + this.$attrs.mdOrderBy + '$');
 
@@ -159,7 +160,8 @@ MdTableOrderByController.prototype.getDirection = function() {
 
 MdTableOrderByController.prototype.compileIcon = function() {
   return this.$compile(
-    '<md-icon class="md-sort-icon" ng-class="$mdOrderBy.getDirection()" md-svg-icon="md-arrow-up">'
+    '<md-icon class="md-sort-icon" ng-class="$mdOrderBy.getDirection()" ' +
+    '         md-svg-src="' + this.$$mdArrowUpIcon + '">'
   )(this.$scope);
 };
 
