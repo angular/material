@@ -79,7 +79,9 @@ function MdTableController($attrs, $element, $scope, $mdUtil) {
 }
 
 MdTableController.prototype.getRows = function(element) {
-  return Array.prototype.filter.call(element.rows || this.$element[0].rows, function(row) {
+  var tableElement = element || this.$element[0];
+
+  return Array.prototype.filter.call(tableElement, function(row) {
     // This makes sure, that the row is currently visible in the DOM.
     return !!row.offsetParent;
   });

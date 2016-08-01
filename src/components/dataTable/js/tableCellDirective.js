@@ -26,35 +26,39 @@ function MdTableCellDirective() {
 function MdTableCellController($element, $scope) {
   this.$element = $element;
   this.$scope = $scope;
+
+  this.validAlignments = ['left', 'center', 'right', 'justify'];
 }
 
 MdTableCellController.prototype.initCtrl = function(tableCtrl) {
   this.table = tableCtrl;
 
-  var VALID_ALIGNMENTS = ['left', 'center', 'right', 'justify'];
   this.$scope.$watch(this.getAlignment.bind(this), function(newAlignment, oldAlignment) {
-    if (VALID_ALIGNMENTS.indexOf(newAlignment) !== -1) {
+
+    if (this.validAlignments.indexOf(newAlignment) !== -1) {
       this.$element.addClass('md-align-' + newAlignment);
     }
-    if (VALID_ALIGNMENTS.indexOf(oldAlignment) !== -1 && oldAlignment !== newAlignment) {
+
+    if (this.validAlignments.indexOf(oldAlignment) !== -1 && newAlignment !== oldAlignment) {
       this.$element.removeClass('md-align-' + oldAlignment);
     }
+
   }.bind(this));
 };
 
 MdTableCellController.prototype.getAlignment = function() {
 
-  return findAndReturn(this.table.getHead().rows, function(row) {
-    return angular.element(row.cells[this.$element[0].cellIndex]).data('align');
-  }.bind(this));
+  // Transform NodeList into an Array.
+  var headRows = [].slice.call(this.table.getHead().rows);
+  var cellIndex = this.$element[0].cellIndex;
 
-  function findAndReturn(collection, queryFn) {
-    var result = null;
-    Array.prototype.forEach.call(collection, function(row) {
-      if (!result) result = queryFn(row)
-    });
-    return result;
-  }
+  return headRows
+    .map(function(row) {
+      return angular.element(row.cells[cellIndex]).data('align');
+    })
+    .filter(function(cell) {
+      return !!cell;
+    })[0];
 };
 
 function MdTableAlignDirective() {
@@ -100,6 +104,8 @@ function MdTableOrderByController($element, $scope, $attrs, $compile, $mdUtil) {
   this.$compile = $compile;
   this.$mdUtil = $mdUtil;
 
+  this.isActiveRegex = new RegExp('^-?' + this.$attrs.mdOrderBy + '$');
+
   this.$attrs.$observe('mdOrderBy', function (orderBy) {
     if (orderBy) {
       this.enableSorting();
@@ -117,31 +123,28 @@ MdTableOrderByController.prototype.initCtrl = function(tableCtrl, orderCtrl, cel
   this.unregisterWatch = null;
   this.clickListenerFn = this.updateSortOrder.bind(this);
 
-  // This function updates the icon position, on index change of the cell.
+  // Watch for position changes to realign the sort icon.
   this.$scope.$watch(function() {
     return this.cellCtrl.$element[0].cellIndex;
   }.bind(this), function() {
-    if (this.$attrs.mdOrderBy) {
-      var icon = this.$element[0].querySelector('.md-sort-icon');
+    var icon = this.$element[0].querySelector('.md-sort-icon');
 
-      if (icon) {
-        if (this.$element.hasClass('md-align-right')) {
-          this.$element.prepend(icon);
-        } else {
-          this.$element.append(icon);
-        }
+    if (icon) {
+      if (this.$element.data('align') === 'right') {
+        this.$element.prepend(icon);
+      } else {
+        this.$element.append(icon);
       }
-
     }
+
   }.bind(this));
 };
 
 MdTableOrderByController.prototype.isActive = function() {
-  // We need to create a regex, to check the headCtrl's order property.
+  // The isActiveRegex checks the headCtrl's order property.
   // When the order direction is inverted, we prefix the order property
   // with a minus.
-  var regex = new RegExp('^-?' + this.$attrs.mdOrderBy + '$');
-  return regex.test(this.orderCtrl.value);
+  return this.isActiveRegex.test(this.orderCtrl.value);
 };
 
 MdTableOrderByController.prototype.getDirection = function() {
@@ -164,9 +167,11 @@ MdTableOrderByController.prototype.updateSortOrder = function() {
   this.$scope.$applyAsync(function() {
     var orderFilter = this.$attrs.mdOrderBy;
     if (this.isActive()) {
-      this.orderCtrl.setSortOrder(this.orderCtrl.value.charAt(0) === '-' ? orderFilter : '-' + orderFilter);
+      var isDescendant = this.orderCtrl.value.charAt(0) === '-';
+      this.orderCtrl.setSortOrder(isDescendant ? orderFilter : '-' + orderFilter);
     } else {
-      this.orderCtrl.setSortOrder(this.$mdUtil.parseAttributeBoolean(this.$attrs.mdDesc) ? '-' + orderFilter : orderFilter);
+      var isStaticDescendant = this.$mdUtil.parseAttributeBoolean(this.$attrs.mdDesc);
+      this.orderCtrl.setSortOrder(isStaticDescendant ? '-' + orderFilter : orderFilter);
     }
   }.bind(this));
 };
