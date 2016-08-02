@@ -156,6 +156,23 @@ describe('mdNavBar', function() {
 
       expect($scope.selectedTabRoute).toBe('tab2');
     });
+
+    it('does not find tab if no controllers exist on tabs', function() {
+        createTabs();
+
+        // Simulate _getTabs returning undefined tab controllers
+        ctrl._getTabs = function() {
+            return ['tab1', 'tab2', 'tab3'].map(function(tab) {
+                return undefined;
+            });
+        }
+
+        var focusedTab = findTab(function(tab) {
+          return tab.hasFocus();
+        });
+
+        expect(focusedTab).toBeNull();
+    });
   });
 
   describe('inkbar', function() {
@@ -281,6 +298,10 @@ describe('mdNavBar', function() {
       expect(tab2Ctrl.getButtonEl().click).toHaveBeenCalled();
     });
   });
+
+  function findTab(fn) {
+      return ctrl._findTab(fn);
+  }
 
   function getTab(tabName) {
     return angular.element(getTabCtrl(tabName).getButtonEl());
