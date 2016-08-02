@@ -234,7 +234,7 @@ MdTableSelectController.prototype.createTrackByFn = function(identifier, trackEx
 
 MdTableSelectController.prototype._compileCheckbox = function() {
   return this.$compile(
-    '<md-checkbox aria-label="Select Row" ng-click="$mdSelect.toggleSelection()" ' +
+    '<md-checkbox aria-label="Select Row" ng-click="$mdSelect.onCheckboxToggle($event)" ' +
                  'ng-checked="$mdSelect.isSelected()" ng-disabled="$mdSelect.isDisabled">'
   )(this.$scope);
 };
@@ -317,4 +317,10 @@ MdTableSelectController.prototype.deselectRow = function() {
 
 MdTableSelectController.prototype.toggleSelection = function() {
   this.isSelected() ? this.deselectRow() : this.selectRow();
+};
+
+MdTableSelectController.prototype.onCheckboxToggle = function(event) {
+  // The checkbox click should not propagate and emit a click event for the auto selection.
+  event.stopPropagation();
+  this.toggleSelection();
 };
