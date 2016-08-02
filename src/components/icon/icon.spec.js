@@ -397,8 +397,9 @@ describe('MdIcon service', function() {
     $mdIconProvider
       .icon('android'           , 'android.svg')
       .icon('c2'                , 'c2.svg')
-      .iconSet('social'         , 'social.svg' )
-      .iconSet('emptyIconSet'   , 'emptyGroup.svg' )
+      .icon('notInTemplateCache', 'http://example.com/not-in-template-cache.svg')
+      .iconSet('social'         , 'social.svg')
+      .iconSet('emptyIconSet'   , 'emptyGroup.svg')
       .defaultIconSet('core.svg');
 
     $mdIconProvider.icon('missingIcon', 'notfoundicon.svg');
@@ -476,6 +477,22 @@ describe('MdIcon service', function() {
         });
 
         $scope.$digest();
+      });
+
+      it('should treat urls given to the provider as trusted', function() {
+        $httpBackend.whenGET('http://example.com/not-in-template-cache.svg').respond('');
+
+        // For this first icon, we simply expect that this does *not* throw an error,
+        // since registering it with the provider should mark the URL as explicity trusted.
+        $mdIcon('notInTemplateCache');
+        $scope.$apply();
+
+        // For this second icon, we expect it to throw an untrusted error because it was not
+        // registered to the provider.
+        expect(function() {
+          $mdIcon('http://example.com/not-configured-in-provider.svg');
+          $scope.$apply();
+        }).toThrowError(/\[\$sce:insecurl\]/);
       });
     });
 

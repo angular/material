@@ -276,13 +276,19 @@
  *
  */
 
-var config = {
-  defaultViewBoxSize: 24,
-  defaultFontSet: 'material-icons',
-  fontSets: []
-};
+
+/**
+ * The configuration for $mdIconProvider. This contains both options for the icon service
+ * and acts as a map of iconName -> ConfigurationItem (configuration for a single icon).
+ */
+var config;
 
 function MdIconProvider() {
+  config = {
+    defaultViewBoxSize: 24,
+    defaultFontSet: 'material-icons',
+    fontSets: []
+  };
 }
 
 MdIconProvider.prototype = {
@@ -404,6 +410,16 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   var svgCache = {};
   var urlRegex = /[-\w@:%\+.~#?&//=]{2,}\.[a-z]{2,4}\b(\/[-\w@:%\+.~#?&//=]*)?/i;
   var dataUrlRegex = /^data:image\/svg\+xml[\s*;\w\-\=]*?(base64)?,(.*)$/i;
+  var configUrls = new Set();
+
+  // Implicity trust all the icon URLs given to MdIconProvider because they are set during
+  // Angular's "config" phase, during which the application is not yet in a state where
+  // user-provided values are generally available.
+  angular.forEach(config, function(configItem) {
+    if (angular.isString(configItem.url)) {
+      configUrls.add(configItem.url);
+    }
+  });
 
   Icon.prototype = {clone: cloneSVG, prepare: prepareAndStyle};
   getIcon.fontSet = findRegisteredFontSet;
@@ -553,6 +569,10 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
             }
             resolve(svgCache[url]);
           };
+
+        if (configUrls.has(url)) {
+          url = $sce.trustAsResourceUrl(url);
+        }
 
         $templateRequest(url, true).then(extractSvg, announceAndReject);
       });
