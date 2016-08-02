@@ -225,7 +225,7 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
         // If using svg-src and the value is static (i.e., is exactly equal to the compile-time
         // `md-svg-src` value), then it is implicitly trusted.
         if (!isInlineSvg(attrVal) && attrVal === originalSvgSrc) {
-          attrVal = $sce.trustAsUrl(attrVal);
+          attrVal = $sce.trustAsResourceUrl(attrVal);
         }
 
         element.empty();
