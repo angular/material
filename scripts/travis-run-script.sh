@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Terminate the execution if anything fails in the pipeline.
+set -e
+
 # Run our check to make sure all tests will actually run
 gulp ddescribe-iit
 gulp build
