@@ -47,7 +47,7 @@ md-tooltip {
     }
     &.md-show, &.md-show-add-active {
       transform: scale(1);
-      opacity: 1;
+      opacity: 0.9;
       transform-origin: center top;
     }
     &.md-show-remove {
