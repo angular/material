@@ -75,7 +75,7 @@ MdTableHeadController.prototype.getSelectableRows = function() {
     }.bind(this), [])
     // Transform into the controllers of the select directive.
     .map(function(row) {
-      return angular.element(row).controller('mdSelect');
+      return angular.element(row).controller('mdSelectable');
     })
     // Filter for the enabled rows.
     .filter(function(row) {

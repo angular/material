@@ -36,8 +36,8 @@ table.md-table td {
   }
 }
 
-table.md-table.md-select th,
-table.md-table.md-select td {
+table.md-table.md-selectable th,
+table.md-table.md-selectable td {
   &:first-child {
     width: 20px;
     padding: 0 0 0 24px;

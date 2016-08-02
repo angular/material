@@ -24,7 +24,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr md-row ng-repeat="dessert in ctrl.desserts | orderBy: ctrl.order" md-select="dessert"
+        <tr md-row ng-repeat="dessert in ctrl.desserts | orderBy: ctrl.order" md-selectable="dessert"
             md-on-select="ctrl.onSelect(dessert)" md-on-deselect="ctrl.onDeselect(dessert)"
             md-auto-select="{{ctrl.options.auto}}" >
           <td md-cell>{{::dessert.name}}</td>

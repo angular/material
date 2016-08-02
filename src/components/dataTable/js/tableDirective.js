@@ -101,7 +101,7 @@ MdTableController.prototype.isSelectable = function() {
 };
 
 MdTableController.prototype.toggleSelectable = function(state) {
-  this.$element.toggleClass('md-select', state);
+  this.$element.toggleClass('md-selectable', state);
 
   if (state) {
     var self = this;

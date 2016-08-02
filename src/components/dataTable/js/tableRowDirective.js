@@ -1,7 +1,7 @@
 angular
   .module('material.components.table')
   .directive('mdRow', MdTableRowDirective)
-  .directive('mdSelect', MdTableSelectDirective);
+  .directive('mdSelectable', MdTableSelectableDirective);
 
 /**
  * @ngdoc directive
@@ -18,7 +18,7 @@ angular
  * <hljs lang="html">
  * <table md-table md-row-select md-selected="$ctrl.selected">
  *   <tbody>
- *     <tr md-row md-select="item" ng-repeat="item in $ctrl.items">
+ *     <tr md-row md-selectable="item" ng-repeat="item in $ctrl.items">
  *       <td>{{::item.name}}</td>
  *     </tr>
  *   </tbody>
@@ -34,7 +34,7 @@ angular
  * <hljs lang="html">
  * <table md-table md-row-select md-selected="$ctrl.selected">
  *   <tbody>
- *     <tr md-row md-select="item" md-track-by="item.id" ng-repeat="item in $ctrl.items">
+ *     <tr md-row md-selectable="item" md-track-by="item.id" ng-repeat="item in $ctrl.items">
  *       <td>{{::item.name}}</td>
  *     </tr>
  *   </tbody>
@@ -50,7 +50,7 @@ angular
  * <!-- this example creates an alias for account.user named user -->
  * <table md-table md-row-select md-selected="$ctrl.selected">
  *   <tbody>
- *     <tr md-row md-select="account.user as user" md-track-by="user.email" ng-repeat="account in $ctrl.accounts">
+ *     <tr md-row md-selectable="account.user as user" md-track-by="user.email" ng-repeat="account in $ctrl.accounts">
  *       <td>{{::user.name}}</td>
  *     </tr>
  *   </tbody>
@@ -61,14 +61,14 @@ angular
  *  <!-- this example assigns the result of a function call to an alias named copy -->
  * <table md-table md-row-select md-selected="$ctrl.selected">
  *   <tbody>
- *     <tr md-row md-select="$ctrl.copy(item) as copy" md-track-by="copy.id" ng-repeat="item in $ctrl.items">
+ *     <tr md-row md-selectable="$ctrl.copy(item) as copy" md-track-by="copy.id" ng-repeat="item in $ctrl.items">
  *       <td>{{::copy.name}}</td>
  *     </tr>
  *   </tbody>
  * </table>
  * </hljs>
  *
- * @param {expression=} md-select An expression of the form `expression (as alias)?`. The value of the expression will be the item selected.
+ * @param {expression=} md-selectable An expression of the form `expression (as alias)?`. The value of the expression will be the item selected.
  * @param {expression=} md-track-by Optionally use an expression to track items. Otherwise equality will be determend by `===`.
  * @param {expression=} md-on-select An expression to be executed when an item is selected (will be called for each item).
  * @param {expression=} md-on-deselect An expression to be executed when an item is deselected (will be called for each item).
@@ -79,7 +79,7 @@ function MdTableRowDirective() {
 
   return {
     restrict: 'A',
-    require: ['mdRow', '?mdSelect', '?^^mdHead', '^^mdTable'],
+    require: ['mdRow', '?mdSelectable', '?^^mdHead', '^^mdTable'],
     controller: MdTableRowController,
     link: postLink
   };
@@ -151,10 +151,10 @@ MdTableRowController.prototype.getCells = function(index) {
 };
 
 
-function MdTableSelectDirective() {
+function MdTableSelectableDirective() {
 
   return {
-    require: ['mdSelect', 'mdRow', '^^mdTable'],
+    require: ['mdSelectable', 'mdRow', '^^mdTable'],
     restrict: 'A',
     scope: {
       onSelect: '&?mdOnSelect',
@@ -163,7 +163,7 @@ function MdTableSelectDirective() {
     link: postLink,
     bindToController: true,
     controller: MdTableSelectController,
-    controllerAs: '$mdSelect'
+    controllerAs: '$mdSelectable'
   };
 
   function postLink(scope, element, attrs, ctrls) {
@@ -183,9 +183,9 @@ function MdTableSelectController($element, $scope, $attrs, $parse, $mdUtil, $com
   this.$compile = $compile;
   this.$mdUtil = $mdUtil;
 
-  var expressionSplit = this.$attrs.mdSelect.match(/^\s*(\S+)(?:\s+as\s+(\S+))?\s*$/);
+  var expressionSplit = this.$attrs.mdSelectable.match(/^\s*(\S+)(?:\s+as\s+(\S+))?\s*$/);
   if (!expressionSplit) {
-    throw 'mdSelect: Invalid expression. Expected an expression in the form of "item (as alias)?".';
+    throw 'mdSelectable: Invalid expression. Expected an expression in the form of "item (as alias)?".';
   }
 
   this.$$toggleAutoSelectFn = function() {
@@ -234,8 +234,8 @@ MdTableSelectController.prototype.createTrackByFn = function(identifier, trackEx
 
 MdTableSelectController.prototype._compileCheckbox = function() {
   return this.$compile(
-    '<md-checkbox aria-label="Select Row" ng-click="$mdSelect.onCheckboxToggle($event)" ' +
-                 'ng-checked="$mdSelect.isSelected()" ng-disabled="$mdSelect.isDisabled">'
+    '<md-checkbox aria-label="Select Row" ng-click="$mdSelectable.onCheckboxToggle($event)" ' +
+                 'ng-checked="$mdSelectable.isSelected()" ng-disabled="$mdSelectable.isDisabled">'
   )(this.$scope);
 };
 
