@@ -82,7 +82,8 @@ MdTableController.prototype.getRows = function(element) {
   var tableElement = element || this.$element[0];
 
   return Array.prototype.filter.call(tableElement.rows, function(row) {
-    // This makes sure, that the row is currently visible in the DOM.
+    // This makes sure that the row is currently visible in the DOM.
+    // We may need to filter rows leaving with ng-repeat when we incorporate pagination.
     return !!row.offsetParent;
   });
 };
