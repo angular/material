@@ -578,7 +578,8 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
       });
     }
 
-    return dataUrlRegex.test(url)
+    var testUrl = angular.isString(url) ? url : $sce.getTrustedResourceUrl(url);
+    return dataUrlRegex.test(testUrl)
       ? loadByDataUrl(url)
       : loadByHttpUrl(url);
   }
