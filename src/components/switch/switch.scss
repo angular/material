@@ -29,7 +29,7 @@ md-switch {
     @include rtl(margin-left, inherit, 0);
     @include rtl(margin-right, 0, inherit);
   }
-  
+
   &[disabled] {
     cursor: default;
 
@@ -44,7 +44,7 @@ md-switch {
     height: $switch-height;
     position: relative;
     user-select: none;
-    @include rtl-prop(margin-right, margin-left, 8px);
+    @include rtl-prop(margin-right, margin-left, 8px, auto);
     float: left;
   }
 

@@ -187,11 +187,11 @@ md-toast {
 
     // Support for RTL alignment
     &._md-start {
-      @include rtl-prop(left, right, 0);
+      @include rtl-prop(left, right, 0, auto);
     }
 
     &._md-end {
-      @include rtl-prop(right, left, 0);
+      @include rtl-prop(right, left, 0, auto);
     }
 
     /*

@@ -15,8 +15,8 @@ md-datepicker {
 
   // Leave room for the down-triangle button to "overflow" it's parent without modifying scrollLeft.
   // This prevents the element from shifting right when opening via the triangle button.
-  @include rtl-prop(padding-right, padding-left, $md-datepicker-triangle-button-width / 2);
-  @include rtl-prop(margin-right, margin-left, -$md-datepicker-triangle-button-width / 2);
+  @include rtl-prop(padding-right, padding-left, $md-datepicker-triangle-button-width / 2, 0);
+  @include rtl-prop(margin-right, margin-left, -$md-datepicker-triangle-button-width / 2, auto);
 
   vertical-align: middle;
 }
@@ -83,7 +83,7 @@ md-datepicker {
 
     .md-input-message-animation {
       $margin: $md-datepicker-triangle-button-width + $md-datepicker-button-padding * 2 + $md-datepicker-button-gap;
-      @include rtl-prop(margin-left, margin-right, $margin);
+      @include rtl-prop(margin-left, margin-right, $margin, auto);
     }
   }
 }
@@ -102,7 +102,7 @@ md-datepicker {
   width: auto;
 
   .md-icon-button + & {
-    @include rtl-prop(margin-left, margin-right, $md-datepicker-button-gap);
+    @include rtl-prop(margin-left, margin-right, $md-datepicker-button-gap, auto);
   }
 
   &.md-datepicker-focused {
@@ -200,7 +200,7 @@ md-datepicker {
 // Button containing the down "disclosure" triangle/arrow.
 .md-datepicker-triangle-button {
   position: absolute;
-  @include rtl-prop(right, left, 0);
+  @include rtl-prop(right, left, 0, auto);
   top: $md-date-arrow-size;
 
   // TODO(jelbourn): This position isn't great on all platforms.
@@ -238,7 +238,7 @@ md-datepicker[disabled] {
   }
 
   .md-icon-button + .md-datepicker-input-container {
-    @include rtl-prop(margin-left, margin-right, -$md-datepicker-button-gap);
+    @include rtl-prop(margin-left, margin-right, -$md-datepicker-button-gap, auto);
   }
 
   .md-datepicker-input,
@@ -249,7 +249,7 @@ md-datepicker[disabled] {
   // This needs some extra specificity in order to override
   // the focused/invalid border colors.
   input.md-datepicker-input {
-    @include rtl-prop(margin-left, margin-right, 24px);
+    @include rtl-prop(margin-left, margin-right, 24px, auto);
     height: $md-datepicker-input-mask-height;
     border-bottom-color: transparent;
   }

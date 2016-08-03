@@ -41,7 +41,7 @@ md-menu-content.md-menu-bar-menu.md-dense {
       padding: 0;
       width: 24px;
       top: 0.75 * $baseline-grid;
-      @include rtl-prop(left, right, 3 * $baseline-grid);
+      @include rtl-prop(left, right, 3 * $baseline-grid, auto);
     }
     > .md-button, .md-menu > .md-button {
       @include rtl(padding, 0 4 * $baseline-grid 0 8 * $baseline-grid, 0 8 * $baseline-grid 0 4 * $baseline-grid);
@@ -78,7 +78,7 @@ md-menu-content.md-menu-bar-menu.md-dense {
       text-transform: none;
       font-weight: normal;
       border-radius: 0px;
-      @include rtl-prop(padding-left, padding-right, 2 * $baseline-grid);
+      @include rtl-prop(padding-left, padding-right, 2 * $baseline-grid, 0);
       &:after {
         display: block;
         content: '\25BC';
@@ -86,7 +86,7 @@ md-menu-content.md-menu-bar-menu.md-dense {
         top: 0px;
         speak: none;
         @include rtl(transform, rotate(270deg) scaleY(0.45) scaleX(0.9), rotate(90deg) scaleY(0.45) scaleX(0.9));
-        @include rtl-prop(right, left, 3.5 * $baseline-grid);
+        @include rtl-prop(right, left, 3.5 * $baseline-grid, auto);
       }
     }
   }
