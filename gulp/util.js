@@ -70,8 +70,13 @@ function buildJs () {
 }
 
 function autoprefix () {
+
   return autoprefixer({browsers: [
-    'last 2 versions', 'last 4 Android versions', 'Safari >= 8'
+    'last 2 versions',
+    'not ie <= 10',
+    'not ie_mob <= 10',
+    'last 4 Android versions',
+    'Safari >= 8'
   ]});
 }
 
