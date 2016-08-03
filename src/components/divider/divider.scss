@@ -5,7 +5,7 @@ md-divider {
   margin: 0;
 
   &[md-inset] {
-    @include rtl-prop(margin-left, margin-right, $baseline-grid * 10);
+    @include rtl-prop(margin-left, margin-right, $baseline-grid * 10, auto);
   }
 }
 

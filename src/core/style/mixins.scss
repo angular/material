@@ -125,15 +125,10 @@
   }
 }
 
-@mixin rtl-prop($ltr-prop, $rtl-prop, $value) {
+@mixin rtl-prop($ltr-prop, $rtl-prop, $value, $reset-value) {
   #{$ltr-prop}: $value;
   [dir=rtl] & {
-    // fallback for auto
-    #{$ltr-prop}: 0;
-    // fallback for IE
-    #{$ltr-prop}: auto;
-    #{$ltr-prop}: initial;
-
+    #{$ltr-prop}: $reset-value;
     #{$rtl-prop}: $value;
   }
 }

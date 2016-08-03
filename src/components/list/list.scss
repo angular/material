@@ -64,10 +64,10 @@ md-list {
         }
 
         > md-icon:first-child:not(.md-avatar-icon) {
-          @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-dense-primary-icon-width);
+          @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-dense-primary-icon-width, auto);
         }
         .md-avatar, .md-avatar-icon {
-          @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-dense-primary-avatar-width);
+          @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-dense-primary-avatar-width, auto);
         }
         .md-avatar {
           flex: none;
@@ -81,7 +81,7 @@ md-list {
         &, & > .md-no-style {
           .md-list-item-text {
             &.md-offset {
-              @include rtl-prop(margin-left, margin-right, $list-item-primary-width);
+              @include rtl-prop(margin-left, margin-right, $list-item-primary-width, auto);
             }
 
             h3,
@@ -111,7 +111,7 @@ md-list {
 
       &.md-3-line {
         &, & > .md-no-style {
-          
+
           min-height: $list-item-dense-three-line-height;
           @include ie11-min-height-flexbug($list-item-dense-three-line-height);
 
@@ -208,10 +208,10 @@ md-list-item {
   md-divider {
     position: absolute;
     bottom: 0;
-    @include rtl-prop(left, right, 0);
+    @include rtl-prop(left, right, 0, auto);
     width: 100%;
     &[md-inset] {
-      @include rtl-prop(left, right, $list-item-inset-divider-offset);
+      @include rtl-prop(left, right, $list-item-inset-divider-offset, auto);
       width: calc(100% - #{$list-item-inset-divider-offset});
       margin: 0 !important;
     }
@@ -251,13 +251,13 @@ md-list-item {
     }
 
     & > md-icon:first-child:not(.md-avatar-icon) {
-      @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-primary-icon-width);
+      @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-primary-icon-width, auto);
     }
 
     & .md-avatar, .md-avatar-icon {
       margin-top: $baseline-grid;
       margin-bottom: $baseline-grid;
-      @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-primary-avatar-width);
+      @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-primary-avatar-width, auto);
       border-radius: 50%;
       box-sizing: content-box;
     }
@@ -303,7 +303,7 @@ md-list-item {
       .md-button, .md-icon-button {
         &:last-of-type {
           // Reset 6px margin for the button.
-          @include rtl-prop(margin-right, margin-left, 0px);
+          @include rtl-prop(margin-right, margin-left, 0, auto);
         }
       }
 
@@ -313,7 +313,7 @@ md-list-item {
 
         &:last-child {
           width: 3 * $baseline-grid;
-          @include rtl-prop(margin-right, margin-left, 0);
+          @include rtl-prop(margin-right, margin-left, 0, auto);
         }
       }
 
@@ -321,7 +321,7 @@ md-list-item {
         margin-top: 0;
         margin-bottom: 0;
 
-        @include rtl-prop(margin-right, margin-left, -6px);
+        @include rtl-prop(margin-right, margin-left, -6px, auto);
       }
     }
 
@@ -349,7 +349,7 @@ md-list-item {
         overflow: hidden;
 
         &.md-offset {
-          @include rtl-prop(margin-left, margin-right, $list-item-primary-width);
+          @include rtl-prop(margin-left, margin-right, $list-item-primary-width, auto);
         }
 
         h3 {
