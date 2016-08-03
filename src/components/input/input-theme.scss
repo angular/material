@@ -14,10 +14,8 @@ md-input-container.md-THEME_NAME-theme {
     color: '{{foreground-3}}';
   }
 
-  &.md-input-invalid {
-    label.md-required:after {
-      color: '{{warn-A700}}'
-    }
+  label.md-required:after {
+    color: '{{warn-A700}}'
   }
 
   &:not(.md-input-focused):not(.md-input-invalid) label.md-required:after {
