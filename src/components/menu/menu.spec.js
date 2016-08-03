@@ -152,6 +152,52 @@ describe('material.components.menu', function() {
       expect(getOpenMenuContainer(menu).length).toBe(0);
     }));
 
+    describe('default focus', function() {
+      it('should focus on first item automatically', inject(function($compile, $rootScope, $document) {
+        var menu = $compile(
+          '<md-menu>' +
+            '<button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+            '<md-menu-content>' +
+              '<md-menu-item>' +
+                '<button id="menuItem0" ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+              '<md-menu-item>' +
+                '<button ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+            '</md-menu-content>' +
+          '</md-menu>'
+        )($rootScope);
+
+        openMenu(menu);
+
+        var menuTarget = $document[0].querySelector('#menuItem0');
+
+        expect(document.activeElement).toBe(menuTarget);
+      }));
+
+      it('should focus on first non-disabled item', inject(function($compile, $rootScope, $document) {
+        var menu = $compile(
+          '<md-menu>' +
+            '<button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+            '<md-menu-content>' +
+              '<md-menu-item>' +
+                '<button disabled ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+              '<md-menu-item>' +
+                '<button id="menuItem1" ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+            '</md-menu-content>' +
+          '</md-menu>'
+        )($rootScope);
+
+        openMenu(menu);
+
+        var menuTarget = $document[0].querySelector('#menuItem1');
+
+        expect(document.activeElement).toBe(menuTarget);
+      }));
+    });
+
     describe('autofocus', function() {
 
       it('should focus a button with md-menu-focus-target', inject(function($compile, $rootScope, $document) {
@@ -159,6 +205,9 @@ describe('material.components.menu', function() {
           '<md-menu>' +
             '<button ng-click="$mdOpenMenu($event)">Hello World</button>' +
             '<md-menu-content>' +
+              '<md-menu-item>' +
+                '<button ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
               '<md-menu-item>' +
                 '<button id="menuFocus" md-menu-focus-target ng-click="doSomething($event)"></button>' +
               '</md-menu-item>' +
@@ -178,6 +227,9 @@ describe('material.components.menu', function() {
           '<md-menu>' +
             '<button ng-click="$mdOpenMenu($event)">Hello World</button>' +
             '<md-menu-content>' +
+              '<md-menu-item>' +
+                '<button ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
               '<md-menu-item>' +
                 '<button id="menuFocus" md-autofocus ng-click="doSomething($event)"></button>' +
               '</md-menu-item>' +
