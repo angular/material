@@ -134,21 +134,21 @@ describe('$mdPanel', function() {
   it('destroy should clear the config locals on the panelRef', function () {
     openPanel(DEFAULT_CONFIG);
 
-    expect(panelRef._config.locals).not.toEqual(null);
+    expect(panelRef.config.locals).not.toEqual(null);
 
     panelRef.destroy();
 
-    expect(panelRef._config.locals).toEqual(null);
+    expect(panelRef.config.locals).toEqual(null);
   });
 
   it('destroy should destroy the panel scope', function () {
     openPanel(DEFAULT_CONFIG);
 
-    expect(panelRef._config.scope.$$destroyed).toBe(false);
+    expect(panelRef.config.scope.$$destroyed).toBe(false);
 
     panelRef.destroy();
 
-    expect(panelRef._config.scope.$$destroyed).toBe(true);
+    expect(panelRef.config.scope.$$destroyed).toBe(true);
   });
 
   describe('promises logic:', function() {
@@ -218,7 +218,7 @@ describe('$mdPanel', function() {
     it('should resolve on animate failure when opening', function() {
       var openResolved = false;
 
-      panelRef._config.animation.animateOpen = function() {
+      panelRef.config.animation.animateOpen = function() {
         return panelRef._$q.reject();
       };
 
@@ -272,7 +272,7 @@ describe('$mdPanel', function() {
       expect(panelRef._panelContainer).not.toHaveClass(HIDDEN_CLASS);
       expect(panelRef.isAttached).toEqual(true);
 
-      panelRef._config.animation.animateClose = function() {
+      panelRef.config.animation.animateClose = function() {
         return panelRef._$q.reject();
       };
 
