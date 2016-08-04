@@ -16,9 +16,9 @@ var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var plumber = require('gulp-plumber');
 var ngAnnotate = require('gulp-ng-annotate');
-var minifyCss = require('gulp-minify-css');
 var insert = require('gulp-insert');
 var gulpif = require('gulp-if');
+var nano = require('gulp-cssnano');
 var constants = require('./const');
 var VERSION = constants.VERSION;
 var BUILD_MODE = constants.BUILD_MODE;
@@ -32,6 +32,7 @@ exports.buildModule = buildModule;
 exports.filterNonCodeFiles = filterNonCodeFiles;
 exports.readModuleArg = readModuleArg;
 exports.themeBuildStream = themeBuildStream;
+exports.minifyCss = minifyCss;
 exports.args = args;
 
 /**
@@ -78,6 +79,15 @@ function autoprefix () {
     'last 4 Android versions',
     'Safari >= 8'
   ]});
+}
+
+function minifyCss() {
+  return nano({
+    autoprefixer: false,
+    reduceTransforms: false,
+    svgo: false,
+    safe: true
+  });
 }
 
 function buildModule(module, opts) {
