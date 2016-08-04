@@ -10,10 +10,10 @@ var series = require('stream-series');
 var util = require('../util');
 var sassUtils = require('../../scripts/gulp-utils');
 var sass = require('gulp-sass');
-var minifyCss = require('gulp-minify-css');
 var insert = require('gulp-insert');
 var addsrc = require('gulp-add-src');
 var gulpif = require('gulp-if');
+var minifyCss = util.minifyCss;
 var args = util.args;
 var IS_DEV = require('../const').IS_DEV;
 
