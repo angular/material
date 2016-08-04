@@ -343,6 +343,65 @@ describe('$mdThemingProvider', function() {
     });
   });
 
+  describe('browser color', function () {
+    beforeEach(function () {
+      setup();
+      angular.element(document.getElementsByTagName('meta')).remove();
+    });
+
+    it('should use default primary color at the meta tag', function () {
+      var name = 'theme-color';
+      var content = themingProvider._PALETTES.testPalette['800'].hex;
+
+      expect(document.getElementsByName(name).length).toBe(0);
+
+      themingProvider.enableBrowserColor();
+
+      expect(document.getElementsByName(name).length).toBe(1);
+      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+    });
+
+    it('should use default primary color with hue `200`', function () {
+      var name = 'theme-color';
+
+      var hue = '200';
+
+      var content = themingProvider._PALETTES.testPalette[hue].hex;
+
+      expect(document.getElementsByName(name).length).toBe(0);
+
+      themingProvider.enableBrowserColor({ hue: hue });
+
+      expect(document.getElementsByName(name).length).toBe(1);
+      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+    });
+
+    it('should use red palette', function () {
+      var name = 'theme-color';
+
+      var content = themingProvider._PALETTES.red['800'].hex;
+
+      expect(document.getElementsByName(name).length).toBe(0);
+
+      themingProvider.enableBrowserColor({ palette: 'red' });
+
+      expect(document.getElementsByName(name).length).toBe(1);
+      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+    });
+
+    it('should use test theme', function () {
+      var name = 'theme-color';
+
+      var content = themingProvider._PALETTES.testPalette['800'].hex;
+
+      expect(document.getElementsByName(name).length).toBe(0);
+
+      themingProvider.enableBrowserColor({ theme: 'test' });
+
+      expect(document.getElementsByName(name).length).toBe(1);
+      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+    });
+  })
 });
 
 describe('$mdThemeProvider with custom styles', function() {
@@ -639,6 +698,23 @@ describe('$mdTheming service', function() {
   it('exposes a getter for the default theme', inject(function($mdTheming) {
     expect($mdTheming.defaultTheme()).toBe('default');
   }));
+
+  it('supports changing browser color on the fly', function() {
+    var name = 'theme-color';
+    var primaryPalette = $mdThemingProvider._THEMES.default.colors.primary.name;
+    var primaryColor = $mdThemingProvider._PALETTES[primaryPalette]['800'].hex;
+    var redColor = $mdThemingProvider._PALETTES.red['800'].hex;
+
+    $mdThemingProvider.enableBrowserColor();
+
+    expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(primaryColor);
+
+    inject(function($mdTheming) {
+      $mdTheming.setBrowserColor({ palette: 'red' });
+
+      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(redColor);
+    });
+  });
 });
 
 describe('md-theme directive', function() {
