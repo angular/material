@@ -285,13 +285,15 @@ md-list-item {
       display: flex;
       align-items: center;
 
-      // The secondary container is now static and needs to be aligned at the end of its parent.
-      // - Using an absolute position will cause much issues with the overflow.
-      // - Using a flex-filler, which pushes the container to the end of the parent is working
-      //   but breaks the users list-item layout.
+      // Per W3C: https://www.w3.org/TR/css-flexbox/#flex-common
+      // By default, flex items won’t shrink below their minimum content size.
+      // Safari doesn't follow that specification due to a bug and expects the developer to
+      // explicitly disable flex shrinking.
+      flex-shrink: 0;
+
       // Using margin auto to move them to the end of the list item is more elegant, because it has
-      // a lower priority than the flex filler and isn't introducing overflow issues again.
-      // The margin on the top is also important to align multiple secondary items vertical correctly.
+      // a lower priority than a flex filler and isn't introducing any overflow issues.
+      // The margin on the top is important to align multiple secondary items vertically.
       margin: auto;
 
       @include rtl(margin-right, 0, auto);
