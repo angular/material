@@ -35,7 +35,7 @@ describe('<md-autocomplete>', function() {
 
       scope.asyncMatch = function(term) {
         return $timeout(function() {
-          return scope.match(term)
+          return scope.match(term);
         }, 1000);
       };
 
@@ -702,7 +702,7 @@ describe('<md-autocomplete>', function() {
         return {display: item};
       });
       var scope = createScope(myItems);
-      
+
       var template = '\
           <md-autocomplete\
               md-selected-item="selectedItem"\
@@ -740,7 +740,7 @@ describe('<md-autocomplete>', function() {
 
       expect(scope.searchText).toBe('foo ');
       expect(scope.selectedItem).toBe(scope.match(scope.searchText)[0]);
-      
+
       ctrl.clear();
       $timeout.flush();
 
@@ -1124,6 +1124,32 @@ describe('<md-autocomplete>', function() {
       $timeout.flush();
       element.remove();
     }));
+
+    it('should log a warning if the display text does not evaluate to a string',
+      inject(function($log) {
+        spyOn($log, 'warn');
+
+        var scope = createScope();
+
+        var template =
+          '<md-autocomplete ' +
+              'md-selected-item="selectedItem" ' +
+              'md-search-text="searchText"' +
+              'md-items="item in match(searchText)"> ' +
+          '</md-autocomplete>';
+
+        var element = compile(template, scope);
+
+        scope.$apply(function() {
+          scope.selectedItem = { display: 'foo' };
+        });
+
+        expect($log.warn).toHaveBeenCalled();
+        expect($log.warn.calls.mostRecent().args[0]).toMatch(/md-item-text/);
+
+        element.remove();
+      })
+    );
 
   });
 
