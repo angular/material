@@ -122,3 +122,33 @@ describe('showHide', function() {
     });
   });
 });
+
+describe('showHide directive on a transcluded element', function() {
+  var $compile, scope;
+
+  beforeEach(function() {
+    module('material.components.showHide', function($compileProvider) {
+      // Declare a directive that will convert the element to a comment node.
+      $compileProvider.directive('convertToCommentNode', function(){
+        return { transclude: 'element' };
+      });
+    });
+
+    inject(function(_$compile_, $rootScope) {
+      $compile = _$compile_;
+      scope = $rootScope.$new();
+    });
+  });
+
+  it('does not try to get the computed style of a comment node', function() {
+    expect(function() {
+      $compile('<div ng-show convert-to-comment-node></div>')(scope);
+      scope.$broadcast('$md-resize-enable');
+      scope.$apply();
+    }).not.toThrowError(/getComputedStyle/);
+  });
+
+  afterEach(function() {
+    scope.$destroy();
+  });
+});
