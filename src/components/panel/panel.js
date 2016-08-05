@@ -330,13 +330,6 @@ angular
  * @param {!MdPanelPosition} position
  */
 
-/**
- * @ngdoc method
- * @name MdPanelRef#focusOnOpen
- * @description
- * Focuses the panel content if the focusOnOpen config value is true.
- */
-
 
 /*****************************************************************************
  *                               MdPanelPosition                            *
