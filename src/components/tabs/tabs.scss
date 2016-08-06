@@ -165,7 +165,7 @@ md-pagination-wrapper {
   transform: translate3d(0, 0, 0);
   &.md-center-tabs {
     position: relative;
-    width: initial;
+    width: auto;
     margin: 0 auto;
   }
 }
