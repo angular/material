@@ -185,10 +185,6 @@ pre {
 pre > code.highlight {
   padding: 16px;
   font-weight: 400;
-  -webkit-user-select: initial;
-  -moz-user-select: initial;
-  -ms-user-select: initial;
-  user-select: initial;
 }
 
 pre, code {
