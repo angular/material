@@ -205,12 +205,6 @@ describe('MdIcon directive', function() {
       module(function($provide) {
         var $mdIconMock = function(id) {
 
-          wasLastSvgSrcTrusted = false;
-          if (!angular.isString(id)) {
-            id = $sce.getTrustedUrl(id);
-            wasLastSvgSrcTrusted = true;
-          }
-
           return {
             then: function(fn) {
               switch(id) {
@@ -221,8 +215,6 @@ describe('MdIcon directive', function() {
                 case 'android.svg'      : fn('<svg><g id="android"></g></svg>');
                   break;
                 case 'cake.svg'         : fn('<svg><g id="cake"></g></svg>');
-                  break;
-                case 'galactica.svg'         : fn('<svg><g id="galactica"></g></svg>');
                   break;
                 case 'image:android'    : fn('');
                   break;
@@ -272,17 +264,10 @@ describe('MdIcon directive', function() {
         $sce = _$sce_;
       }));
 
-      it('should mark as trusted static URLs', function() {
-        el = make('<md-icon md-svg-src="galactica.svg"></md-icon>');
-        expect(wasLastSvgSrcTrusted).toBe(true);
-        expect(el[0].innerHTML).toContain('galactica')
-      });
-
       it('should update mdSvgSrc when attribute value changes', function() {
         $scope.url = 'android.svg';
         el = make('<md-icon md-svg-src="{{ url }}"></md-icon>');
         expect(el.attr('md-svg-src')).toEqual('android.svg');
-        expect(wasLastSvgSrcTrusted).toBe(false);
         $scope.url = 'cake.svg';
         $scope.$digest();
         expect(el.attr('md-svg-src')).toEqual('cake.svg');
@@ -397,9 +382,8 @@ describe('MdIcon service', function() {
     $mdIconProvider
       .icon('android'           , 'android.svg')
       .icon('c2'                , 'c2.svg')
-      .icon('notInTemplateCache', 'http://example.com/not-in-template-cache.svg')
-      .iconSet('social'         , 'social.svg')
-      .iconSet('emptyIconSet'   , 'emptyGroup.svg')
+      .iconSet('social'         , 'social.svg' )
+      .iconSet('emptyIconSet'   , 'emptyGroup.svg' )
       .defaultIconSet('core.svg');
 
     $mdIconProvider.icon('missingIcon', 'notfoundicon.svg');
@@ -477,22 +461,6 @@ describe('MdIcon service', function() {
         });
 
         $scope.$digest();
-      });
-
-      it('should treat urls given to the provider as trusted', function() {
-        $httpBackend.whenGET('http://example.com/not-in-template-cache.svg').respond('');
-
-        // For this first icon, we simply expect that this does *not* throw an error,
-        // since registering it with the provider should mark the URL as explicity trusted.
-        $mdIcon('notInTemplateCache');
-        $scope.$apply();
-
-        // For this second icon, we expect it to throw an untrusted error because it was not
-        // registered to the provider.
-        expect(function() {
-          $mdIcon('http://example.com/not-configured-in-provider.svg');
-          $scope.$apply();
-        }).toThrowError(/\[\$sce:insecurl\]/);
       });
     });
 
