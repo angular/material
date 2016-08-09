@@ -91,7 +91,10 @@
     });
 
     /**
-     * Mocks angular.element#focus ONLY for the duration of a particular test.
+     * Mocks the focus method from the HTMLElement prototype for the duration
+     * of the running test.
+     *
+     * The mock will be automatically removed after the test finished.
      *
      * @example
      *
@@ -105,17 +108,20 @@
      * }));
      *
      */
-    jasmine.mockElementFocus = function(test) {
-      var focus = angular.element.prototype.focus;
+    jasmine.mockElementFocus = function() {
+      var _focusFn = HTMLElement.prototype.focus;
+
       inject(function($document) {
-        angular.element.prototype.focus = function() {
-          $document.activeElement = this[0];
+        HTMLElement.prototype.focus = function() {
+          $document.activeElement = this;
         };
       });
+
       // Un-mock focus after the test is done
       afterEach(function() {
-        angular.element.prototype.focus = focus;
+        HTMLElement.prototype.focus = _focusFn;
       });
+
     };
 
     /**
