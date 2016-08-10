@@ -110,8 +110,8 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
 
       if (attr.ngChecked) {
         scope.$watch(
-            scope.$eval.bind(scope, attr.ngChecked),
-            ngModelCtrl.$setViewValue.bind(ngModelCtrl)
+          scope.$eval.bind(scope, attr.ngChecked),
+          ngModelCtrl.$setViewValue.bind(ngModelCtrl)
         );
       }
 
@@ -186,7 +186,8 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
       }
 
       function render() {
-        element.toggleClass('md-checked', ngModelCtrl.$viewValue && !isIndeterminate);
+        // Cast the $viewValue to a boolean since it could be undefined
+        element.toggleClass('md-checked', !!ngModelCtrl.$viewValue && !isIndeterminate);
       }
 
       function setIndeterminateState(newValue) {
@@ -196,6 +197,6 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
         }
         element.toggleClass('md-indeterminate', isIndeterminate);
       }
-    };
+    }
   }
 }
