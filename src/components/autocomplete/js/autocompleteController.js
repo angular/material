@@ -453,16 +453,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   function focus($event) {
     hasFocus = true;
 
-    // When the searchText is not a string, force it to be an empty string.
-    if (!angular.isString($scope.searchText)) {
-      $scope.searchText = '';
+    if (isSearchable() && isMinLengthMet()) {
+      handleQuery();
     }
 
     ctrl.hidden = shouldHide();
-
-    if (!ctrl.hidden) {
-      handleQuery();
-    }
 
     evalAttr('ngFocus', { $event: $event });
   }
@@ -600,10 +595,19 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * @returns {boolean}
    */
   function shouldHide () {
-    if (ctrl.loading && !hasMatches()) return true; // Hide while loading initial matches
-    else if (hasSelection()) return true;           // Hide if there is already a selection
-    else if (!hasFocus) return true;                // Hide if the input does not have focus
-    else return !shouldShow();                      // Defer to standard show logic
+    if (!isSearchable()) return true;    // Hide when not able to query
+    else return !shouldShow();            // Hide when the dropdown is not able to show.
+  }
+
+  /**
+   * Determines whether the autocomplete is able to query within the current state.
+   * @returns {boolean}
+   */
+  function isSearchable() {
+    if (ctrl.loading && !hasMatches()) return false; // No query when query is in progress.
+    else if (hasSelection()) return false;           // No query if there is already a selection
+    else if (!hasFocus) return false;                // No query if the input does not have focus
+    return true;
   }
 
   /**
