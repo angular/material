@@ -452,6 +452,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     hasFocus = true;
     //-- if searchText is null, let's force it to be a string
     if (!angular.isString($scope.searchText)) $scope.searchText = '';
+    if (getMinLength() === 0 && $scope.searchText === '') {
+      handleQuery();
+    }
     ctrl.hidden = shouldHide();
     if (!ctrl.hidden) handleQuery();
   }
