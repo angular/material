@@ -239,6 +239,7 @@ function MdToastDirective($mdToast) {
   *     Available: any combination of `'bottom'`, `'left'`, `'top'`, `'right'`, `'end'` and `'start'`.
   *     The properties `'end'` and `'start'` are dynamic and can be used for RTL support.<br/>
   *     Default combination: `'bottom left'`.
+  *     <b>Note:</b> Position `top` always defaults to `top left` to ensure FABs transition properly.
   *   - `toastClass` - `{string=}`: A class to set on the toast element.
   *   - `controller` - `{string=}`: The controller to associate with this toast.
   *     The controller will be injected the local `$mdToast.hide( )`, which is a function
@@ -401,7 +402,17 @@ function MdToastProvider($$interimElementProvider) {
     function onShow(scope, element, options) {
       activeToastContent = options.textContent || options.content; // support deprecated #content method
 
+      // By default, if no left/right direction is supplied in the position; default it to 'top left'
+      // so that the FAB buttons can appropriately know which side it's on.
+      if (options.position == 'top') {
+        options.position = 'top left';
+      }
+
       var isSmScreen = !$mdMedia('gt-sm');
+
+      if (isSmScreen) {
+        options.position = 'bottom';
+      }
 
       element = $mdUtil.extractElementByName(element, 'md-toast', true);
       options.element = element;
@@ -409,27 +420,16 @@ function MdToastProvider($$interimElementProvider) {
       options.onSwipe = function(ev, gesture) {
         //Add the relevant swipe class to the element so it can animate correctly
         var swipe = ev.type.replace('$md.','');
-        var direction = swipe.replace('swipe', '');
-
-        // If the swipe direction is down/up but the toast came from top/bottom don't fade away
-        // Unless the screen is small, then the toast always on bottom
-        if ((direction === 'down' && options.position.indexOf('top') != -1 && !isSmScreen) ||
-            (direction === 'up' && (options.position.indexOf('bottom') != -1 || isSmScreen))) {
-          return;
-        }
-
-        if ((direction === 'left' || direction === 'right') && isSmScreen) {
-          return;
-        }
 
         element.addClass('md-' + swipe);
         $mdUtil.nextTick($mdToast.cancel);
       };
-      options.openClass = toastOpenClass(options.position);
 
       element.addClass(options.toastClass);
 
-      // 'top left' -> 'md-top md-left'
+      options.openClass = toastOpenClass(options.position);
+
+      // 'top left' -> 'md-toast-open-top-left'
       options.parent.addClass(options.openClass);
 
       // static is the default position
@@ -463,13 +463,7 @@ function MdToastProvider($$interimElementProvider) {
     }
 
     function toastOpenClass(position) {
-      // For mobile, always open full-width on bottom
-      if (!$mdMedia('gt-xs')) {
-        return 'md-toast-open-bottom';
-      }
-
-      return 'md-toast-open-' +
-        (position.indexOf('top') > -1 ? 'top' : 'bottom');
+      return 'md-toast-open-' + position.replace(' ', '-');
     }
   }
 

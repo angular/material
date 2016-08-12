@@ -1,37 +1,58 @@
-<div ng-controller="AppCtrl" layout-fill layout="column" class="inset" ng-cloak paddi>
+<div ng-controller="AppCtrl as $ctrl" layout-fill layout="column" class="inset" ng-cloak>
+  <p>
+    Toast can be dismissed with a swipe, a timer, or a button.
+  </p>
+
+  <div layout="row" layout-align="space-around">
+    <div style="width:50px"></div>
+
+    <md-button ng-click="$ctrl.showSimpleToast()">
+      Show Simple
+    </md-button>
+
+    <md-button class="md-raised" ng-click="$ctrl.showActionToast()">
+      Show With Action
+    </md-button>
+
+    <div style="width:50px"></div>
+  </div>
+
+  <div id="toastBounds">
     <p>
-    Toast can be dismissed with a swipe, a timer, or a button.<br/>
+      <label>Toast Position ('{{$ctrl.getToastPosition()}}')</label>
     </p>
 
-
-    <div layout="row" layout-align="space-around">
-      <div style="width:50px"></div>
-      <md-button ng-click="showSimpleToast()">
-        Show Simple
-      </md-button>
-      <md-button class="md-raised" ng-click="showActionToast()">
-        Show With Action
-      </md-button>
-      <div style="width:50px"></div>
+    <div class="md-inline-form">
+      <md-radio-group ng-model="$ctrl.topBottom">
+        <md-radio-button ng-repeat="option in $ctrl.topBottomOptions" value="{{option}}">
+          {{option}}
+        </md-radio-button>
+      </md-radio-group>
     </div>
 
-    <div layout="row" id="toastBounds">
-
-      <div>
-        <p><b>Toast Position: "{{getToastPosition()}}"</b></p>
-        <md-checkbox ng-repeat="(name, isSelected) in toastPosition"
-          ng-model="toastPosition[name]">
-          {{name}}
-        </md-checkbox>
-      </div>
+    <div class="md-inline-form">
+      <md-radio-group ng-model="$ctrl.position">
+        <md-radio-button ng-repeat="option in $ctrl.positionOptions" value="{{option}}">
+          {{option}}
+        </md-radio-button>
+      </md-radio-group>
     </div>
-    <div layout="row">
-      <md-button class="md-primary md-fab md-fab-bottom-right">
-        FAB
-      </md-button>
-      <md-button class="md-accent md-fab md-fab-top-right">
-        FAB
-      </md-button>
 
-    </div>
+    <p>
+      <md-input-container>
+        <label>Hide Delay (ms)</label>
+        <input ng-model="$ctrl.delay" name="delay" />
+      </md-input-container>
+    </p>
+  </div>
+
+  <div layout="row">
+    <md-button class="md-primary md-fab md-fab-bottom-end">
+      FAB
+    </md-button>
+
+    <md-button class="md-accent md-fab md-fab-top-end">
+      FAB
+    </md-button>
+  </div>
 </div>

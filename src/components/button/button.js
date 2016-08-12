@@ -113,6 +113,23 @@ function MdAnchorDirective($mdTheming) {
  *    <md-icon md-svg-icon="path/to/your.svg"></md-icon>
  *  </md-button>
  * </hljs>
+ *
+ * You may also easily position the FABs by applying one one of the following classes to the
+ * `<md-button>` element:
+ *  - `md-fab-top-left`
+ *  - `md-fab-top-right`
+ *  - `md-fab-bottom-left`
+ *  - `md-fab-bottom-right`
+ *
+ *  Additionally, we now offer the following bi-direction classes which automatically change
+ *  position based on the current `dir` setting (i.e. `ltr` or `rtl`).
+ *  - `md-fab-top-start`
+ *  - `md-fab-top-end`
+ *  - `md-fab-bottom-start`
+ *  - `md-fab-bottom-end`
+ *
+ * These CSS classes use `position: absolute`, so you need to ensure that the container element
+ * also uses `position: absolute` or `position: relative` in order for them to work.
  */
 function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $timeout) {
 

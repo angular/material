@@ -187,33 +187,81 @@ button.md-button.md-fab {
   }
 }
 
-.md-toast-open-top {
-  .md-button.md-fab-top-left,
-  .md-button.md-fab-top-right {
-    transition: $swift-ease-out;
-    transform: translate3d(0, $button-fab-toast-offset, 0);
-    &:not([disabled]) {
-      &.md-focused,
-      &:hover {
-        transform: translate3d(0, $button-fab-toast-offset - 1, 0);
-      }
+/*
+ * When a toast is open that is on the same side as our FAB, move the FAB out of the way.
+ *
+ * Note: On mobile; the toast will always open with the `md-toast-open-bottom` class, regardless of
+ * requested positioning.
+ */
+.md-toast-open-top-left .md-button.md-fab-top-left,
+.md-toast-open-top-start .md-button.md-fab-top-start,
+.md-toast-open-top-left .md-button.md-fab-top-start,
+.md-toast-open-top-start .md-button.md-fab-top-left,
+[dir=rtl] .md-toast-open-top-end .md-button.md-fab-top-left,
+[dir=rtl] .md-toast-open-top-left .md-button.md-fab-top-end,
+
+.md-toast-open-top-right .md-button.md-fab-top-right,
+.md-toast-open-top-end .md-button.md-fab-top-end,
+.md-toast-open-top-right .md-button.md-fab-top-end,
+.md-toast-open-top-end .md-button.md-fab-top-right,
+[dir=rtl] .md-toast-open-top-start .md-button.md-fab-top-right,
+[dir=rtl] .md-toast-open-top-right .md-button.md-fab-top-start
+{
+  transition: $swift-ease-out;
+  transform: translate3d(0, $button-fab-toast-offset, 0);
+  &:not([disabled]) {
+    &.md-focused,
+    &:hover {
+      transform: translate3d(0, $button-fab-toast-offset - 1, 0);
     }
   }
 }
 
-.md-toast-open-bottom {
-  .md-button.md-fab-bottom-left,
-  .md-button.md-fab-bottom-right {
-    transition: $swift-ease-out;
-    transform: translate3d(0, -$button-fab-toast-offset, 0);
-    &:not([disabled]) {
-      &.md-focused,
-      &:hover {
-        transform: translate3d(0, -$button-fab-toast-offset - 1, 0);
-      }
+// Note: We do not currently allow `md-toast-open-top`, but we do allow `md-toast-open-bottom` for
+// mobile devices.
+.md-toast-open-bottom .md-button.md-fab-bottom-start,
+.md-toast-open-bottom .md-button.md-fab-bottom-end,
+.md-toast-open-bottom .md-button.md-fab-bottom-left,
+.md-toast-open-bottom .md-button.md-fab-bottom-right,
+
+.md-toast-open-bottom-left .md-button.md-fab-bottom-left,
+.md-toast-open-bottom-start .md-button.md-fab-bottom-start,
+.md-toast-open-bottom-left .md-button.md-fab-bottom-start,
+.md-toast-open-bottom-start .md-button.md-fab-bottom-left,
+[dir=rtl] .md-toast-open-bottom-end .md-button.md-fab-bottom-left,
+[dir=rtl] .md-toast-open-bottom-left .md-button.md-fab-bottom-end,
+
+.md-toast-open-bottom-right .md-button.md-fab-bottom-right,
+.md-toast-open-bottom-end .md-button.md-fab-bottom-end,
+.md-toast-open-bottom-right .md-button.md-fab-bottom-end,
+.md-toast-open-bottom-end .md-button.md-fab-bottom-right,
+[dir=rtl] .md-toast-open-bottom-start .md-button.md-fab-bottom-right,
+[dir=rtl] .md-toast-open-bottom-right .md-button.md-fab-bottom-start
+{
+  transition: $swift-ease-out;
+  transform: translate3d(0, -$button-fab-toast-offset, 0);
+  &:not([disabled]) {
+    &.md-focused,
+    &:hover {
+      transform: translate3d(0, -$button-fab-toast-offset - 1, 0);
     }
   }
 }
+
+// Add some RTL overrides for ones we know are ok and don't need to be transformed
+[dir=rtl] .md-toast-open-top-left .md-button.md-fab-top-start,
+[dir=rtl] .md-toast-open-top-start .md-button.md-fab-top-left,
+[dir=rtl] .md-toast-open-top-right .md-button.md-fab-top-end,
+[dir=rtl] .md-toast-open-top-end .md-button.md-fab-top-right,
+
+[dir=rtl] .md-toast-open-bottom-left .md-button.md-fab-bottom-start,
+[dir=rtl] .md-toast-open-bottom-start .md-button.md-fab-bottom-left,
+[dir=rtl] .md-toast-open-bottom-right .md-button.md-fab-bottom-end,
+[dir=rtl] .md-toast-open-bottom-end .md-button.md-fab-bottom-right
+{
+  transform: none;
+}
+
 
 .md-button-group {
   display: flex;
