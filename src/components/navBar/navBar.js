@@ -108,18 +108,16 @@ function MdNavBar($mdAria, $mdUtil, $$mdSvgRegistry) {
     },
     template: '<div class=\'md-nav-wrapper\'> ' +
                 '<div class=\'md-nav-pagination\'> ' +
-                  '<md-prev-button ' +
+	             '<md-prev-button ' +
                   'aria-label="Previous Page" ' +
-                  'aria-disabled="{{!ctrl.canPageBack()}}" ' +
-                  'ng-disabled="{{!ctrl.canPageBack()}}" ' +
+                  'aria-disabled="{{!ctrl.mayPageBack}}" ' +
                   'ng-if="ctrl.shouldPaginate" ' +
                   'ng-click="ctrl.previousPage()"> ' +
                     '<md-icon md-svg-src="' + $$mdSvgRegistry.mdTabsArrow + '"></md-icon> ' +
                   '</md-prev-button> ' +
-                  '<md-next-button ' +
+	             '<md-next-button ' +
                   'aria-label="Next Page" ' +
-                  'aria-disabled="{{!ctrl.canPageForward()}}" ' +
-                  'ng-disabled="{{!ctrl.canPageForward()}}" ' +
+                  'aria-disabled="{{!ctrl.mayPageForward}}" ' +
                   'ng-if="ctrl.shouldPaginate" ' +
                   'ng-click="ctrl.nextPage()"> ' +
                     '<md-icon md-svg-src="' + $$mdSvgRegistry.mdTabsArrow + '"></md-icon> ' +
@@ -226,6 +224,12 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
 
   /** @type {!boolean} */
   this.shouldPaginate = this.canPaginate();
+  
+  /** @type {!boolean} */
+  this.mayPageBack = this.canPageBack();
+  
+  /** @type {!boolean} */
+  this.mayPageForward = this.canPageForward();
 
   /** @type {!number} */
   this.left = 0;
@@ -236,7 +240,7 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant, $mdUtil) {
   this.parentWidth = 0;
 
   /**
-    * To avoid multiple canvas.scrollWidth get calls, cache the value in this scope variable
+    * To avoid multiple nav.offsetWidth get calls, cache the value in this scope variable
     * @type {!number} */
   this.navWidth = 0;
 
@@ -264,8 +268,8 @@ MdNavBarController.prototype._getElements = function () {
   var elements = {};
   var node = this._$element[0];
   elements.parent = node.parentElement;
-  elements.canvas = node.querySelector('.md-nav-bar');
-  elements.tabs = elements.canvas.querySelectorAll('.md-nav-item');
+  elements.nav = node.querySelector('.md-nav-bar');
+  elements.tabs = node.querySelectorAll('.md-nav-item');
 
   return elements;
 }
@@ -277,10 +281,10 @@ MdNavBarController.prototype._getElements = function () {
  */
 MdNavBarController.prototype._updateStates = function () {
   var elements     = this._getElements();
-  var isNavWidthNotNull = !!elements.canvas && !!elements.canvas.scrollWidth;
-  if(isNavWidthNotNull) this.navWidth = elements.canvas.scrollWidth;
+  var isNavWidthNotNull = !!elements.nav && !!elements.nav.offsetWidth;
+  if (isNavWidthNotNull) this.navWidth = elements.nav.offsetWidth;
   var isParentWidthNotNull = !!elements.parent && !!elements.parent.clientWidth;
-  if(isParentWidthNotNull) this.parentWidth = elements.parent.clientWidth;
+  if (isParentWidthNotNull) this.parentWidth = elements.parent.clientWidth;
 }
 
 /**
@@ -298,6 +302,8 @@ MdNavBarController.prototype.canPaginate = function () {
 MdNavBarController.prototype.updatePagination = function () {
   this._updateStates();
   this.shouldPaginate = this.canPaginate();
+  this.mayPageBack = this.canPageBack();
+  this.mayPageForward = this.canPageForward();
 
   // Setting the style.
   var rootElement = this._$element[0];
@@ -309,12 +315,14 @@ MdNavBarController.prototype.updatePagination = function () {
   nextButton.css({
     'background-image': 'linear-gradient(to left, ' + this._$element.css('background-color') + ', rgba(0,0,0,0.0))'
   });
-
+  
+  
+  // Returning to normal
   if (!this.shouldPaginate) {
-    var canvas = angular.element(this._getElements().canvas);
+    var nav = angular.element(this._getElements().nav);
     this.left  = 0;
-    canvas.css({
-      'left': this.left + 'px'
+    nav.css({
+      'margin-left': this.left + 'px'
     });
   }
 }
@@ -340,10 +348,10 @@ MdNavBarController.prototype.canPageForward = function () {
  */
 MdNavBarController.prototype.nextPage = function () {
   if (this.canPageForward()) {
-    var canvas = angular.element(this._getElements().canvas);
+    var nav = angular.element(this._getElements().nav);
     this.left  = this.left - 100;
-    canvas.css({
-      'left': this.left + 'px'
+    nav.css({
+      'margin-left': this.left + 'px'
     });
   }
 }
@@ -353,10 +361,10 @@ MdNavBarController.prototype.nextPage = function () {
  */
 MdNavBarController.prototype.previousPage = function () {
   if (this.canPageBack()) {
-    var canvas = angular.element(this._getElements().canvas);
+    var nav = angular.element(this._getElements().nav);
     this.left  = this.left + 100;
-    canvas.css({
-      'left': this.left + 'px'
+    nav.css({
+      'margin-left': this.left + 'px'
     });
   }
 }

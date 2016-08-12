@@ -2,9 +2,10 @@
 
 $md-nav-bar-height: 48px;
 .md-nav-bar {
-  transition: left 0.35s $swift-ease-in-out-timing-function;
+  transition: 0.35s $swift-ease-in-out-timing-function;
   height: $md-nav-bar-height;
   position: relative;
+  left: -100%;
 }
 
 ._md-nav-bar-list {
@@ -61,7 +62,11 @@ md-nav-extra-content {
   border-color: rgba(0, 0, 0, 0.12);
   border-style: solid;
   border-width: 0 0 1px;
-  display: inline-flex;
+  display: inline-flex; //flex
+  overflow-x: hidden;
+  overflow-y: hidden;
+
+  width: 100%;
 }
 
 .md-nav-pagination {
@@ -71,8 +76,9 @@ md-nav-extra-content {
     }
     padding-bottom: 9px;
     padding-top: 15px;
-    position: absolute;
-    right: 0px;
+    position: relative;
+    left: 100%;
+    margin-left: -50px;
     max-width: 40px;
     z-index: 5;
     background-image: linear-gradient(to left, #fafafa, rgba(0, 0, 0, 0.0));
@@ -80,14 +86,14 @@ md-nav-extra-content {
   md-prev-button {
     padding-bottom: 9px;
     padding-top: 15px;
-    position: absolute;
+    position: relative;
     left: 0px;
-    max-width: 40px;
     z-index: 5;
     background-image: linear-gradient(to right, #fafafa, rgba(0, 0, 0, 0.0));
   }
 }
 
 .md-nav-pagination {
+  min-width: 100%;
   display: flex;
 }

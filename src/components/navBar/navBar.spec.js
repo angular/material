@@ -156,6 +156,70 @@ describe('mdNavBar', function() {
 
       expect($scope.selectedTabRoute).toBe('tab2');
     });
+    
+    it('should show pagination', function(){
+      createTabs();
+      el.parent().css({'width': '200px', 'overflow-x': 'hidden'});
+      $scope.$apply();
+//      var tab = el[0].querySelector('.md-nav-item[name="tab2"] md-button');
+//      tab.dispatchEvent(new Event('mousedown'));
+//      tab.dispatchEvent(new Event('mouseup'));
+//      $scope.$apply();
+      console.log(el[0]);
+      var canvas = el[0].querySelector('.md-nav-bar');
+      
+      ctrl._updateStates();
+      $scope.$apply();
+      console.log(canvas.offsetWidth);
+      console.log(ctrl.navWidth);
+      console.log(ctrl.parentWidth);
+      console.log(ctrl.shouldPaginate);
+      
+      var prevButton = angular.element(el[0].querySelector('md-prev-button'));
+      var nextButton = angular.element(el[0].querySelector('md-next-button'));
+      
+      expect(prevButton.attr('aria-disabled')).toBe('true');
+      expect(nextButton.attr('aria-disabled')).tobe('false');
+    });
+    
+    it('should paginate next', function(){
+      createTabs();
+      el.parent().css({'width': '320px', 'overflow-x': 'hidden'});
+      
+      var tab = el[0].querySelector('.md-nav-item[name="tab1"] md-button');
+      tab.dispatchEvent(new Event('mousedown'));
+      tab.dispatchEvent(new Event('mouseup'));
+      $scope.$apply();
+      
+      var prevButton = angular.element(el[0].querySelector('md-prev-button'));
+      var nextButton = angular.element(el[0].querySelector('md-next-button'));
+      
+      expect(nextButton.attr('aria-disabled')).toBe('false');
+      nextButton[0].dispatchEvent(new Event('click'));
+      $scope.$apply();
+      expect(nextButton.attr('aria-disabled')).toBe('true');
+    });
+    
+    it('should paginate previous', function(){
+      createTabs();
+      el.parent().css({'width': '320px', 'overflow-x': 'hidden'});
+      
+      var tab = el[0].querySelector('.md-nav-item[name="tab1"] md-button');
+      tab.dispatchEvent(new Event('mousedown'));
+      tab.dispatchEvent(new Event('mouseup'));
+      $scope.$apply();
+      
+      var prevButton = angular.element(el[0].querySelector('md-prev-button'));
+      var nextButton = angular.element(el[0].querySelector('md-next-button'));
+      
+      expect(prevButton.attr('aria-disabled')).toBe('true');
+      nextButton[0].dispatchEvent(new Event('click'));
+      $scope.$apply();
+      expect(prevButton.attr('aria-disabled')).toBe('false');
+      prevButton[0].dispatchEvent(new Event('click'));
+      $scope.$apply();
+      expect(prevButton.attr('aria-disabled')).toBe('true');
+    });
   });
 
   describe('inkbar', function() {
