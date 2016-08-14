@@ -1,4 +1,5 @@
-$autocomplete-option-height: 48px !default;
+// The default item height is also specified in the JavaScript.
+$md-autocomplete-item-height: 48px !default;
 
 @keyframes md-autocomplete-list-out {
   0% {
@@ -201,25 +202,24 @@ md-autocomplete {
 .md-virtual-repeat-container.md-autocomplete-suggestions-container {
   position: absolute;
   box-shadow: 0 2px 5px rgba(black, 0.25);
-  height: 41px * 5.5;
-  max-height: 41px * 5.5;
   z-index: $z-index-tooltip;
 }
 
 .md-virtual-repeat-container.md-not-found {
-  height: 48px;
+  height: $md-autocomplete-item-height;
 }
 
 .md-autocomplete-suggestions {
   margin: 0;
   list-style: none;
   padding: 0;
+
   li {
     font-size: 14px;
     overflow: hidden;
     padding: 0 15px;
-    line-height: $autocomplete-option-height;
-    height: $autocomplete-option-height;
+    line-height: $md-autocomplete-item-height;
+    height: $md-autocomplete-item-height;
     transition: background 0.15s linear;
     margin: 0;
     white-space: nowrap;
