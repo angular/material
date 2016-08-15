@@ -63,9 +63,6 @@
     /** @final {HTMLElement} */
     this.calendarScroller = $element[0].querySelector('.md-virtual-repeat-scroller');
 
-    /** @type {Date} */
-    this.firstRenderableDate = null;
-
     /** @type {boolean} */
     this.isInitialized = false;
 
@@ -89,33 +86,18 @@
    * setting up the object that will be iterated by the virtual repeater.
    */
   CalendarYearCtrl.prototype.initialize = function(calendarCtrl) {
-    var minDate = calendarCtrl.minDate;
-    var maxDate = calendarCtrl.maxDate;
-    this.calendarCtrl = calendarCtrl;
-
     /**
      * Dummy array-like object for virtual-repeat to iterate over. The length is the total
-     * number of months that can be viewed. This is shorter than ideal because of (potential)
-     * Firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=1181658.
+     * number of years that can be viewed. We add 1 extra in order to include the current year.
      */
-    this.items = { length: 400 };
+    this.items = {
+      length: this.dateUtil.getYearDistance(
+        calendarCtrl.firstRenderableDate,
+        calendarCtrl.lastRenderableDate
+      ) + 1
+    };
 
-    this.firstRenderableDate = this.dateUtil.incrementYears(calendarCtrl.today, - (this.items.length / 2));
-
-    if (minDate && minDate > this.firstRenderableDate) {
-      this.firstRenderableDate = minDate;
-    } else if (maxDate) {
-      // Calculate the year difference between the start date and max date.
-      // Subtract 1 because it's an inclusive difference.
-      this.firstRenderableDate = this.dateUtil.incrementMonths(maxDate, - (this.items.length - 1));
-    }
-
-    if (maxDate && minDate) {
-      // Limit the number of years if min and max dates are set.
-      var numYears = this.dateUtil.getYearDistance(this.firstRenderableDate, maxDate) + 1;
-      this.items.length = Math.max(numYears, 1);
-    }
-
+    this.calendarCtrl = calendarCtrl;
     this.attachScopeListeners();
     calendarCtrl.updateVirtualRepeat();
 
@@ -129,8 +111,11 @@
    */
   CalendarYearCtrl.prototype.getFocusedYearIndex = function() {
     var calendarCtrl = this.calendarCtrl;
-    return this.dateUtil.getYearDistance(this.firstRenderableDate,
-      calendarCtrl.displayDate || calendarCtrl.selectedDate || calendarCtrl.today);
+
+    return this.dateUtil.getYearDistance(
+      calendarCtrl.firstRenderableDate,
+      calendarCtrl.displayDate || calendarCtrl.selectedDate || calendarCtrl.today
+    );
   };
 
   /**
@@ -164,7 +149,7 @@
    */
   CalendarYearCtrl.prototype.animateDateChange = function(date) {
     if (this.dateUtil.isValidDate(date)) {
-      var monthDistance = this.dateUtil.getYearDistance(this.firstRenderableDate, date);
+      var monthDistance = this.dateUtil.getYearDistance(this.calendarCtrl.firstRenderableDate, date);
       this.calendarScroller.scrollTop = monthDistance * TBODY_HEIGHT;
     }
 
@@ -198,7 +183,7 @@
       }
 
       if (date) {
-        var min = calendarCtrl.minDate ? dateUtil.incrementMonths(dateUtil.getFirstDateOfMonth(calendarCtrl.minDate), 1) : null;
+        var min = calendarCtrl.minDate ? dateUtil.getFirstDateOfMonth(calendarCtrl.minDate) : null;
         var max = calendarCtrl.maxDate ? dateUtil.getFirstDateOfMonth(calendarCtrl.maxDate) : null;
         date = dateUtil.getFirstDateOfMonth(this.dateUtil.clampDate(date, min, max));
 
