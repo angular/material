@@ -72,6 +72,7 @@
     "minimist": "^1.1.0",
     "mkdirp": "^0.5.0",
     "phantomjs-prebuilt": "^2.1.7",
+    "postcss": "^5.1.2",
     "prompt-sync": "^1.0.0",
     "q": "^1.0.1",
     "stream-series": "^0.1.1",
