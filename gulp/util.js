@@ -19,6 +19,8 @@ var ngAnnotate = require('gulp-ng-annotate');
 var insert = require('gulp-insert');
 var gulpif = require('gulp-if');
 var nano = require('gulp-cssnano');
+var postcss = require('postcss');
+var _ = require('lodash');
 var constants = require('./const');
 var VERSION = constants.VERSION;
 var BUILD_MODE = constants.BUILD_MODE;
@@ -33,6 +35,7 @@ exports.filterNonCodeFiles = filterNonCodeFiles;
 exports.readModuleArg = readModuleArg;
 exports.themeBuildStream = themeBuildStream;
 exports.minifyCss = minifyCss;
+exports.dedupeCss = dedupeCss;
 exports.args = args;
 
 /**
@@ -181,6 +184,7 @@ function buildModule(module, opts) {
         // In some cases there are multiple theme SCSS files, which should be concatenated together.
         .pipe(gulpif, /default-theme.scss/, concat(name + '-default-theme.scss'))
         .pipe(sass)
+        .pipe(dedupeCss)
         .pipe(autoprefix)
     (); // Invoke the returning lazypipe function to create our new pipe.
   }
@@ -221,5 +225,51 @@ function themeBuildStream() {
       .pipe(concat('default-theme.scss'))
       .pipe(utils.hoistScssVariables())
       .pipe(sass())
+      .pipe(dedupeCss())
       .pipe(utils.cssToNgConstant('material.core', '$MD_THEME_CSS'));
+}
+
+// Removes duplicated CSS properties.
+function dedupeCss() {
+  var prefixRegex = /-(webkit|moz|ms|o)-.+/;
+
+  return insert.transform(function(contents) {
+    // Parse the CSS into an AST.
+    var parsed = postcss.parse(contents);
+
+    // Walk through all the rules, skipping comments, media queries etc.
+    parsed.walk(function(rule) {
+      // Skip over any comments, media queries and rules that have less than 2 properties.
+      if (rule.type !== 'rule' || !rule.nodes || rule.nodes.length < 2) return;
+
+      // Walk all of the properties within a rule.
+      rule.walk(function(prop) {
+        // Check if there's a similar property that comes after the current one.
+        var hasDuplicate = validateProp(prop) && _.find(rule.nodes, function(otherProp) {
+          return prop !== otherProp && prop.prop === otherProp.prop && validateProp(otherProp);
+        });
+
+        // Remove the declaration if it's duplicated.
+        if (hasDuplicate) {
+          prop.remove();
+
+          gutil.log(gutil.colors.yellow(
+            'Removed duplicate property: "' +
+              prop.prop + ': ' + prop.value + '" from "' + rule.selector + '"...'
+          ));
+        }
+      });
+    });
+
+    // Turn the AST back into CSS.
+    return parsed.toResult().css;
+  });
+
+  // Checks if a property is a style declaration and that it
+  // doesn't contain any vendor prefixes.
+  function validateProp(prop) {
+    return prop && prop.type === 'decl' && ![prop.prop, prop.value].some(function(value) {
+      return value.indexOf('-') > -1 && prefixRegex.test(value);
+    });
+  }
 }

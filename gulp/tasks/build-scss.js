@@ -25,7 +25,7 @@ exports.task = function() {
       filename  = args['filename'] || 'angular-material',
       baseFiles = config.scssBaseFiles,
       layoutDest= dest + 'layouts/',
-      scssPipe  = undefined;
+      scssPipe  = null;
 
   gutil.log("Building css files...");
 
@@ -39,13 +39,14 @@ exports.task = function() {
       .pipe(concat('angular-material.scss'))
       .pipe(gulp.dest(dest))            // raw uncompiled SCSS
       .pipe(sass())
+      .pipe(util.dedupeCss())
       .pipe(util.autoprefix())
       .pipe(insert.prepend(config.banner))
       .pipe(gulp.dest(dest))                        // unminified
       .pipe(gulpif(!IS_DEV, minifyCss()))
+      .pipe(gulpif(!IS_DEV, util.dedupeCss()))
       .pipe(rename({extname: '.min.css'}))
       .pipe(gulp.dest(dest))                        // minified
-
   );
 
   streams.push(
@@ -68,10 +69,12 @@ exports.task = function() {
         .pipe(insert.prepend(config.banner))
         .pipe(gulp.dest(layoutDest))      // raw uncompiled SCSS
         .pipe(sass())
+        .pipe(util.dedupeCss())
         .pipe(util.autoprefix())
         .pipe(rename({ extname : '.css'}))
         .pipe(gulp.dest(layoutDest))
         .pipe(gulpif(!IS_DEV, minifyCss()))
+        .pipe(gulpif(!IS_DEV, util.dedupeCss()))
         .pipe(rename({extname: '.min.css'}))
         .pipe(gulp.dest(layoutDest))
   );
@@ -88,11 +91,13 @@ exports.task = function() {
           .pipe(sassUtils.hoistScssVariables())
           .pipe(gulp.dest(layoutDest))     // raw uncompiled SCSS
           .pipe(sass())
+          .pipe(util.dedupeCss())
           .pipe(util.autoprefix())
           .pipe(rename({ extname : '.css'}))
           .pipe(insert.prepend(config.banner))
           .pipe(gulp.dest(layoutDest))
           .pipe(gulpif(!IS_DEV, minifyCss()))
+          .pipe(gulpif(!IS_DEV, util.dedupeCss()))
           .pipe(rename({extname: '.min.css'}))
           .pipe(gulp.dest(layoutDest))
   );
