@@ -299,24 +299,24 @@
     color: '{{primary-color-0.87}}';
   }
 
-  &:not(.md-checked) ._md-icon {
+  &:not(.md-checked) .md-icon {
     border-color: '{{foreground-2}}';
   }
 
-  &#{$checkedSelector} ._md-icon {
+  &#{$checkedSelector} .md-icon {
     background-color: '{{primary-color-0.87}}';
   }
 
-  &#{$checkedSelector}.md-focused ._md-container:before {
+  &#{$checkedSelector}.md-focused .md-container:before {
     background-color: '{{primary-color-0.26}}';
   }
 
-  &#{$checkedSelector} ._md-icon:after {
+  &#{$checkedSelector} .md-icon:after {
     border-color: '{{primary-contrast-0.87}}';
   }
 
   & .md-indeterminate[disabled] {
-    ._md-container {
+    .md-container {
       color: '{{foreground-3}}';
     }
   }
