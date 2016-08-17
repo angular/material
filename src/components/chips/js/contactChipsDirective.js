@@ -66,7 +66,6 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
               md-item-text="$mdContactChipsCtrl.itemName(item)"\
               md-no-cache="true"\
               md-min-length="$mdContactChipsCtrl.minLength"\
-              md-has-not-found="true"\
               md-autoselect\
               placeholder="{{$mdContactChipsCtrl.contacts.length == 0 ?\
                   $mdContactChipsCtrl.placeholder : $mdContactChipsCtrl.secondaryPlaceholder}}">\
