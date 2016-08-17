@@ -19,7 +19,7 @@ md-progress-linear.md-THEME_NAME-theme {
 
   &.md-accent {
     .md-container {
-      background-color: '{{accent-A100}}';
+      background-color: '{{accent-100}}';
     }
 
     .md-bar {
@@ -38,10 +38,10 @@ md-progress-linear.md-THEME_NAME-theme {
     }
     &.md-accent {
       .md-bar1 {
-        background-color: '{{accent-A100}}';
+        background-color: '{{accent-100}}';
       }
       .md-dashed:before {
-        background: radial-gradient('{{accent-A100}}' 0%, '{{accent-A100}}' 16%, transparent 42%);
+        background: radial-gradient('{{accent-100}}' 0%, '{{accent-100}}' 16%, transparent 42%);
       }
     }
   }
