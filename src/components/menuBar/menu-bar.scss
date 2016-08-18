@@ -66,7 +66,6 @@ md-menu-content.md-menu-bar-menu.md-dense {
 
   md-menu-item > .md-button, .md-menu > .md-button {
     @include rtl(text-align, left, right);
-    text-align: start;
   }
 
   .md-menu {

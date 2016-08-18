@@ -427,8 +427,8 @@ md-slider {
   }
   &[md-invert] {
     &:not([md-vertical]) .md-track-fill {
-      @include rtl-prop(left, right, auto, auto);
-      @include rtl-prop(right, left, 0, auto);
+      @include rtl(left, auto, 0);
+      @include rtl(right, 0, auto);
     }
     &[md-vertical] {
       .md-track-fill {
