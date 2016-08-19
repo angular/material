@@ -1,7 +1,9 @@
 <a name"1.1.0"></a>
 ## 1.1.0 (2016-08-14)
 
-BREAKING CHANGE
+BREAKING CHANGES
+
+##### mdSelect:
 
 The `<md-select>`'s, `<md-option>` component now acts more like
 the default `<option>` attribute of a standard HTML `<select>` by
@@ -26,6 +28,29 @@ of the following:
 ```
 
 Fixes #9718.
+
+##### mdProgressCircular
+
+Removed logic to add/remove `ng-hide` attribute. Acceptable modes are `determinate` or `indeterminate`; defaults to `indeterminate` mode.
+
+```html
+<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+```
+
+Fixes #7454
+
+Adds support for ngDisabled to the progressCircular and progressLinear components. Hides the element and stops all rendering if the element is disabled.
+Developers should use `ng-disabled` to toggle visibility of the progress bars: the CSS `visibility:hidden` is used instead of `display:none` so the view layout is not affected.
+
+> Developers can no longer set the `md-mode` to an empty string as this then defaults to `indeterminate`;
+
+
+```html
+<md-progress-circular ng-disabled="!$ctrl.isVisible" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
+```
+
+[Closes #7862](https://github.com/angular/material/pull/7862)
+
 
 #### Features
 
