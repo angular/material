@@ -29,7 +29,7 @@ of the following:
 
 Fixes #9718.
 
-##### mdProgressCircular
+##### mdProgressCircular, mdProgressLinear
 
 Removed logic to add/remove `ng-hide` attribute. Acceptable modes are `determinate` or `indeterminate`; defaults to `indeterminate` mode.
 
@@ -44,9 +44,22 @@ Developers should use `ng-disabled` to toggle visibility of the progress bars: t
 
 > Developers can no longer set the `md-mode` to an empty string as this then defaults to `indeterminate`;
 
+Old
+```html
+<md-progress-circular md-mode="{{!$ctrl.isVisible}}" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
+
+<md-progress-linear md-mode="{{ctrl.isSendingRequest ? 'indeterminate' : ''}}"
+                    class="md-accent"
+                    flex></md-progress-linear>
+```
 
 ```html
 <md-progress-circular ng-disabled="!$ctrl.isVisible" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
+
+<md-progress-linear ng-disabled="!ctrl.isSendingRequest"
+                    md-mode="indeterminate"
+                    class="md-accent"
+                    flex></md-progress-linear>
 ```
 
 [Closes #7862](https://github.com/angular/material/pull/7862)
