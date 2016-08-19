@@ -202,6 +202,112 @@ describe('<md-chips>', function() {
         expect(scope.selectChip).toHaveBeenCalled();
         expect(scope.selectChip.calls.mostRecent().args[0]).toBe('Grape');
       });
+
+      describe('when adding chips on blur', function() {
+
+        it('should append a new chip for the remaining text', function() {
+          var element = buildChips(
+            '<md-chips ng-model="items" md-add-on-blur="true">' +
+            '</md-chips>'
+          );
+
+          var input = element.find('input');
+
+          expect(scope.items.length).toBe(3);
+
+          input.val('Remaining');
+          input.triggerHandler('change');
+
+          // Trigger a blur event, to check if the text was converted properly.
+          input.triggerHandler('blur');
+
+          expect(scope.items.length).toBe(4);
+        });
+
+        it('should not append a new chip if the limit has reached', function() {
+          var element = buildChips(
+            '<md-chips ng-model="items" md-add-on-blur="true" md-max-chips="3">' +
+            '</md-chips>'
+          );
+
+          var input = element.find('input');
+
+          expect(scope.items.length).toBe(3);
+
+          input.val('Remaining');
+          input.triggerHandler('change');
+
+          // Trigger a blur event, to check if the text was converted properly.
+          input.triggerHandler('blur');
+
+          expect(scope.items.length).toBe(3);
+        });
+
+        it('should not append a new chip when the chips model is invalid', function() {
+          var element = buildChips(
+            '<md-chips ng-model="items" md-add-on-blur="true">'
+          );
+
+          var input = element.find('input');
+          var ngModelCtrl = element.controller('ngModel');
+
+          expect(scope.items.length).toBe(3);
+
+          input.val('Remaining');
+
+          input.triggerHandler('change');
+          input.triggerHandler('blur');
+          $timeout.flush();
+
+          expect(scope.items.length).toBe(4);
+
+          input.val('Second');
+
+          ngModelCtrl.$setValidity('is-valid', false);
+
+          input.triggerHandler('change');
+          input.triggerHandler('blur');
+
+          expect(scope.items.length).toBe(4);
+        });
+
+        it('should not append a new chip when the custom input model is invalid', function() {
+          var element = buildChips(
+            '<md-chips ng-model="items" md-add-on-blur="true">' +
+              '<input ng-model="subModel" ng-maxlength="2">' +
+            '</md-chips>'
+          );
+
+          $timeout.flush();
+
+          var input = element.find('input');
+
+          expect(scope.items.length).toBe(3);
+
+          input.val('EN');
+
+          input.triggerHandler('change');
+          input.triggerHandler('blur');
+
+          // Flush the timeout after each blur, because custom inputs have listeners running
+          // in an Angular digest.
+          $timeout.flush();
+
+          expect(scope.items.length).toBe(4);
+
+          input.val('Another');
+
+          input.triggerHandler('change');
+          input.triggerHandler('blur');
+
+          // Flush the timeout after each blur, because custom inputs have listeners running
+          // in an Angular digest.
+          $timeout.flush();
+
+          expect(scope.items.length).toBe(4);
+        });
+
+      });
       
       describe('when removable', function() {
 
