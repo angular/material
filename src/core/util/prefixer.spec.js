@@ -74,6 +74,15 @@ describe('prefixer', function() {
         expect(prefixer.hasAttribute(element, 'ng-click')).toBe(true);
       });
 
+      it('should not throw an error if element is undefined', function() {
+        // Create an empty jqLite element to test if it does throw an error.
+        var emptyElement = angular.element();
+
+        expect(function() {
+          prefixer.hasAttribute(emptyElement, 'ng-click')
+        }).not.toThrow();
+      });
+
     });
 
     describe('and removing an attribute', function() {
@@ -100,6 +109,15 @@ describe('prefixer', function() {
         prefixer.removeAttribute(element, 'ng-click');
 
         expect(prefixer.hasAttribute(element, 'ng-click')).toBeFalsy();
+      });
+
+      it('should not throw an error if element is undefined', function() {
+        // Create an empty jqLite element to test if it does throw an error.
+        var emptyElement = angular.element();
+
+        expect(function() {
+          prefixer.removeAttribute(emptyElement, 'ng-click');
+        }).not.toThrow();
       });
 
     });
