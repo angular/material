@@ -40,7 +40,7 @@ angular
  * </hljs>
  *
  * ### Notes
- * - The `md-subheader` directive uses the [$mdSticky](/api/service/$mdSticky) service to make the
+ * - The `md-subheader` directive uses the [$mdSticky](api/service/$mdSticky) service to make the
  * subheader sticky.
  *
  * > Whenever the current browser doesn't support stickiness natively, the subheader

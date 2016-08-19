@@ -35,14 +35,12 @@ angular.module('docsApp')
         });
 
         function render(contents, parent) {
-
           var codeElement = parent.find('code');
-          var lines = contents.split('\n');
 
-          // Remove empty lines
-          lines = lines.filter(function(line) {
-            return line.trim().length;
-          });
+          // Strip excessive newlines and the leading/trailing newline (otherwise the whitespace
+          // calculations below are not correct).
+          var strippedContents = contents.replace(/\n{2,}/g, '\n\n').replace(/^\n/, '').replace(/\n$/, '');
+          var lines = strippedContents.split('\n');
 
           // Make it so each line starts at 0 whitespace
           var firstLineWhitespace = lines[0].match(/^\s*/)[0];
@@ -63,5 +61,4 @@ angular.module('docsApp')
       };
     }
   };
-}])
-;
+}]);
