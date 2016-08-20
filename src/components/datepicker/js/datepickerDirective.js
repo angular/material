@@ -64,6 +64,7 @@
         // interaction on the text input, and multiple tab stops for one component (picker)
         // may be confusing.
         var hiddenIcons = tAttrs.mdHideIcons;
+        var ariaLabelValue = tAttrs.ariaLabel || tAttrs.mdPlaceholder;
 
         var calendarButton = (hiddenIcons === 'all' || hiddenIcons === 'calendar') ? '' :
           '<md-button class="md-datepicker-button md-icon-button" type="button" ' +
@@ -81,13 +82,15 @@
             '<div class="md-datepicker-expand-triangle"></div>' +
           '</md-button>';
 
-        return '' +
-        calendarButton +
-        '<div class="md-datepicker-input-container" ' +
-            'ng-class="{\'md-datepicker-focused\': ctrl.isFocused}">' +
-          '<input class="md-datepicker-input" aria-haspopup="true" ' +
-              'ng-focus="ctrl.setFocused(true)" ng-blur="ctrl.setFocused(false)">' +
-          triangleButton +
+        return calendarButton +
+        '<div class="md-datepicker-input-container" ng-class="{\'md-datepicker-focused\': ctrl.isFocused}">' +
+          '<input ' +
+            (ariaLabelValue ? 'aria-label="' + ariaLabelValue + '" ' : '') +
+            'class="md-datepicker-input" ' +
+            'aria-haspopup="true" ' +
+            'ng-focus="ctrl.setFocused(true)" ' +
+            'ng-blur="ctrl.setFocused(false)"> ' +
+            triangleButton +
         '</div>' +
 
         // This pane will be detached from here and re-attached to the document body.
