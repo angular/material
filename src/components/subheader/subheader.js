@@ -110,5 +110,5 @@ function MdSubheaderDirective($mdSticky, $compile, $mdTheming, $mdUtil) {
         });
       }
     }
-  }
+  };
 }

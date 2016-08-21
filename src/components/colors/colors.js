@@ -6,7 +6,7 @@
    *  or one that should be observed and dynamically interpolated.
    */
   var STATIC_COLOR_EXPRESSION = /^{((\s|,)*?["'a-zA-Z-]+?\s*?:\s*?('|")[a-zA-Z0-9-.]*('|"))+\s*}$/;
-  var colorPalettes = undefined;
+  var colorPalettes = null;
 
   /**
    * @ngdoc module
@@ -150,7 +150,7 @@
 
         rgbColors[key] = parseColor(color);
         if (hasBackground && !hasColorProperty) {
-          rgbColors['color'] = parseColor(color, true);
+          rgbColors.color = parseColor(color, true);
         }
       });
 
@@ -331,7 +331,7 @@
             if (!angular.equals(colors, lastColors)) {
               var keys = Object.keys(lastColors);
 
-              if (lastColors.background && !keys['color']) {
+              if (lastColors.background && !keys.color) {
                 keys.push('color');
               }
 
