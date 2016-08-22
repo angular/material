@@ -631,7 +631,7 @@ describe('$mdDialog', function() {
 
   describe('#prompt()', function() {
     hasConfigurationMethods('prompt', ['title', 'htmlContent', 'textContent',
-      'content', 'placeholder', 'ariaLabel', 'ok', 'cancel', 'theme', 'css'
+      'content', 'placeholder', 'ariaLabel', 'ok', 'cancel', 'theme', 'css', 'useTextarea'
     ]);
 
     it('shows a basic prompt dialog', inject(function($animate, $rootScope, $mdDialog) {
@@ -777,6 +777,40 @@ describe('$mdDialog', function() {
       runAnimation();
 
       expect(response).toBe('responsetext');
+    }));
+
+    it('should not submit when using a textarea', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
+      jasmine.mockElementFocus(this);
+      var parent = angular.element('<div>');
+      var response;
+
+      $mdDialog.show(
+        $mdDialog
+          .prompt()
+          .parent(parent)
+          .textContent('Hello world')
+          .placeholder('placeholder text')
+          .useTextarea(true)
+      ).then(function(answer) {
+          response = answer;
+        });
+      runAnimation();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      var mdDialog = container.find('md-dialog');
+      var mdContent = mdDialog.find('md-dialog-content');
+      var inputElement = mdContent.find('textarea');
+
+      inputElement.scope().$apply("dialog.result = 'responsetext'");
+
+      inputElement.eq(0).triggerHandler({
+        type: 'keypress',
+        keyCode: $mdConstant.KEY_CODE.ENTER
+      });
+      runAnimation();
+      runAnimation();
+
+      expect(response).not.toBeDefined();
     }));
   });
 
