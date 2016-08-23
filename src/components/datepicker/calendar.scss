@@ -132,7 +132,7 @@ md-calendar {
   }
 
   md-icon {
-    transform: rotate(180deg);
+    @include rtl(transform, rotate(180deg), none);
   }
 
   span {
