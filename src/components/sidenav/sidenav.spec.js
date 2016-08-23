@@ -164,6 +164,47 @@ describe('mdSidenav', function() {
       });
     });
 
+    describe('parent scroll prevention', function() {
+      it('should prevent scrolling on the parent element', inject(function($rootScope) {
+        var parent = setup('md-is-open="isOpen"').parent()[0];
+
+        expect(parent.style.overflow).toBeFalsy();
+        $rootScope.$apply('isOpen = true');
+        expect(parent.style.overflow).toBe('hidden');
+      }));
+
+      it('should prevent scrolling on a custom element', inject(function($compile, $rootScope) {
+        var preventScrollTarget = angular.element('<div id="prevent-scroll-target"></div>');
+        var parent = angular.element(
+          '<div>' +
+            '<md-sidenav md-disable-scroll-target="#prevent-scroll-target" md-is-open="isOpen"></md-sidenav>' +
+          '</div>'
+        );
+
+        preventScrollTarget.append(parent);
+        angular.element(document.body).append(preventScrollTarget);
+        $compile(preventScrollTarget)($rootScope);
+
+        expect(preventScrollTarget[0].style.overflow).toBeFalsy();
+        expect(parent[0].style.overflow).toBeFalsy();
+
+        $rootScope.$apply('isOpen = true');
+        expect(preventScrollTarget[0].style.overflow).toBe('hidden');
+        expect(parent[0].style.overflow).toBeFalsy();
+        preventScrollTarget.remove();
+      }));
+
+      it('should log a warning and fall back to the parent if the custom scroll target does not exist',
+        inject(function($rootScope, $log) {
+          spyOn($log, 'warn');
+          var parent = setup('md-is-open="isOpen" md-disable-scroll-target="does-not-exist"').parent()[0];
+
+          $rootScope.$apply('isOpen = true');
+          expect($log.warn).toHaveBeenCalled();
+          expect(parent.style.overflow).toBe('hidden');
+        }));
+    });
+
   });
 
   describe('controller', function() {
