@@ -402,6 +402,44 @@ describe('$mdThemingProvider', function() {
       expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
     });
   })
+
+  describe('configuration', function () {
+    beforeEach(function () {
+      module('material.core', function($mdThemingProvider) {
+            themingProvider = $mdThemingProvider;
+      });
+      startAngular();
+    });
+
+    it('should have access to read-only configuration', function () {
+      var config = themingProvider.configuration();
+
+      expect(config.disableTheming).toBe(false);
+      expect(config.generateOnDemand).toBe(false);
+      expect(config.registeredStyles.length).toBe(0);
+      expect(config.nonce).toBe(null);
+      expect(config.alwaysWatchTheme).toBe(false);
+
+      // Change local copies
+      config.disableTheming = true;
+      config.generateOnDemand = true;
+      config.registeredStyles.push("Something");
+      config.nonce = 'myNonce';
+      config.alwaysWatchTheme = true;
+
+      var config2 = themingProvider.configuration();
+
+      // Confirm master versions are not altered
+      expect(config2.disableTheming).toBe(false);
+      expect(config2.generateOnDemand).toBe(false);
+      expect(config2.registeredStyles.length).toBe(0);
+      expect(config2.nonce).toBe(null);
+      expect(config2.alwaysWatchTheme).toBe(false);
+
+    });
+
+
+  })
 });
 
 describe('$mdThemeProvider with custom styles', function() {
