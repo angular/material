@@ -27,5 +27,5 @@ angular
     self.selectedId = 2;
     self.selectedUser = function() {
       return $filter('filter')(self.contacts, { id: self.selectedId })[0].lastName;
-    }
+    };
   });

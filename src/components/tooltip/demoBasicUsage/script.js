@@ -14,5 +14,5 @@ angular.module('tooltipDemo1', ['ngMaterial'])
     if (val && val.length ) {
       $scope.demo.showTooltip = true;
     }
-  })
+  });
 });

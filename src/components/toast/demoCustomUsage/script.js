@@ -41,7 +41,7 @@
           )
           .then(function() {
             isDlgOpen = false;
-          })
+          });
       };
     });
 

@@ -48,7 +48,7 @@ angular
           .then(function () {
             $log.debug("toggle " + navID + " is done");
           });
-      }
+      };
     }
   })
   .controller('LeftCtrl', function ($scope, $timeout, $mdSidenav, $log) {

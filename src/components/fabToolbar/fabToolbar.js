@@ -192,6 +192,6 @@
         runAnimation(element, className, done);
         done();
       }
-    }
+    };
   }
 })();

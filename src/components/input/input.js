@@ -928,7 +928,7 @@ function ngMessagesAnimation($$AnimateRunner, $animateCss, $mdUtil) {
         done();
       }
     }
-  }
+  };
 }
 
 function ngMessageAnimation($$AnimateRunner, $animateCss, $mdUtil) {
@@ -942,7 +942,7 @@ function ngMessageAnimation($$AnimateRunner, $animateCss, $mdUtil) {
     leave: function(element, done) {
       return hideMessage(element);
     }
-  }
+  };
 }
 
 function showInputMessages(element, done) {
@@ -1001,7 +1001,7 @@ function hideMessage(element) {
   //var styles = { opacity: element.css('opacity') };
 
   // If we are already hidden, just return an empty animation
-  if (styles.opacity == 0) {
+  if (parseInt(styles.opacity) === 0) {
     return $animateCss(element, {});
   }
 

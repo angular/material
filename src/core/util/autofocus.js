@@ -93,9 +93,8 @@ angular.module('material.core')
 function MdAutofocusDirective() {
   return {
     restrict: 'A',
-
     link: postLink
-  }
+  };
 }
 
 function postLink(scope, element, attrs) {
