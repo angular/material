@@ -68,6 +68,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
       .primaryPalette('docs-blue')
       .accentPalette('docs-red');
 
+  $mdThemingProvider
+      .enableBrowserColor();
+
   angular.forEach(PAGES, function(pages, area) {
     angular.forEach(pages, function(page) {
       $routeProvider
