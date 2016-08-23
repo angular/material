@@ -35,7 +35,7 @@ The development team has defined three (3) Github levels of **commit authorizati
   * Should ensure their issues are tested with latest HEAD versions of Angular Material
   * Should ensure their issues are tested with latest releases of Angular (1.3.x, 1.4.x, 1.5.x)
 * Core: 
-  * Includes: [Ryan Schmukler](https://github.com/rschmukler), [Robert Messerlee](https://github.com/robertmesserle), [Topher Fangio](https://github.com/topherfangio)
+  * Includes: [Topher Fangio](https://github.com/topherfangio)
   * Should not merge PRs (unless explicitly requested)
   * Should use Angular Material branches for major, non-trivial changes. 
   * For minor changes, developers in this group may elect to commit direct to master.
