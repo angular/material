@@ -98,6 +98,11 @@ describe('md-datepicker', function() {
     expect(controller.inputElement.placeholder).toBe('Fancy new placeholder');
   });
 
+  it('should forward the aria-label to the generated input', function() {
+    createDatepickerInstance('<md-datepicker ng-model="myDate" aria-label="Enter a date"></md-datepicker>');
+    expect(controller.ngInputElement.attr('aria-label')).toBe('Enter a date');
+  });
+
   it('should throw an error when the model is not a date', function() {
     expect(function() {
       pageScope.myDate = '2015-01-01';
