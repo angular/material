@@ -36,8 +36,8 @@ angular.module('material.components.virtualRepeat', [
  *
  * <!-- This comment forces a break between blockquotes //-->
  *
- * > Please also review the [VirtualRepeat](api/directive/mdVirtualRepeat) documentation for more
- * information.
+ * > Please also review the <a ng-href="api/directive/mdVirtualRepeat">VirtualRepeat</a>
+ * documentation for more information.
  *
  *
  * @usage
@@ -429,8 +429,8 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  * Track by, as alias, and (key, value) syntax are not supported.
  *
  * > <b>Note:</b> Please also review the
- *   [VirtualRepeatContainer](api/directive/mdVirtualRepeatContainer) documentation for more
- *   information.
+ *   <a ng-href="api/directive/mdVirtualRepeatContainer">VirtualRepeatContainer</a> documentation
+ *   for more information.
  *
  * @usage
  * <hljs lang="html">

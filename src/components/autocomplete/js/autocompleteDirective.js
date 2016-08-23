@@ -35,10 +35,10 @@ angular
  * There is an example below of how this should look.
  *
  * ### Notes
- * The `md-autocomplete` uses the the [VirtualRepeat](api/directive/mdVirtualRepeatContainer)
+ * The `md-autocomplete` uses the the <a ng-href="api/directive/mdVirtualRepeatContainer">VirtualRepeat</a>
  * directive for displaying the results inside of the dropdown.<br/>
  * > When encountering issues regarding the item template please take a look at the
- *   [VirtualRepeatContainer](api/directive/mdVirtualRepeatContainer) documentation.
+ *   <a ng-href="api/directive/mdVirtualRepeatContainer">VirtualRepeatContainer</a> documentation.
  *
  *
  * @param {expression} md-items An expression in the format of `item in items` to iterate over
