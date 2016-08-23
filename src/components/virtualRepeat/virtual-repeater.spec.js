@@ -59,11 +59,11 @@ describe('<md-virtual-repeat>', function() {
     return component;
   }
 
-  function createItems(num) {
+  function createItems(num, label) {
     var items = [];
 
     for (var i = 0; i < num; i++) {
-      items.push('s' + (i * 2) + 's');
+      items.push(label || 's' + (i * 2) + 's');
     }
 
     return items;
@@ -661,6 +661,22 @@ describe('<md-virtual-repeat>', function() {
     scroller.triggerHandler('scroll');
 
     expect(getTransform(offsetter)).toBe('translateY(880px)');
+  });
+
+  it('should re-render the list when switching to a smaller array', function() {
+    scope.items = createItems(50, 'list one');
+
+    createRepeater();
+    scroller[0].scrollTop = 5;
+    scroller.triggerHandler('scroll');
+
+    expect(offsetter.children().eq(0).text()).toContain('list one');
+
+    scope.$apply(function() {
+      scope.items = createItems(25, 'list two');
+    });
+
+    expect(offsetter.children().eq(0).text()).toContain('list two');
   });
 
   describe('md-on-demand', function() {
