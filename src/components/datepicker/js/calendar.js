@@ -181,7 +181,15 @@
       $element.attr('tabindex', '-1');
     }
 
-    $element.on('keydown', angular.bind(this, this.handleKeyEvent));
+    var boundKeyHandler = angular.bind(this, this.handleKeyEvent);
+
+    // Bind the keydown handler to the body, in order to handle cases where the focused
+    // element gets removed from the DOM and stops propagating click events.
+    angular.element(document.body).on('keydown', boundKeyHandler);
+
+    $scope.$on('$destroy', function() {
+      angular.element(document.body).off('keydown', boundKeyHandler);
+    });
   }
 
   /**
