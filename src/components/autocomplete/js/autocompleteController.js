@@ -426,10 +426,12 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   /**
    * Handles input blur event, determines if the dropdown should hide.
    */
-  function blur () {
+  function blur($event) {
     hasFocus = false;
+
     if (!noBlur) {
       ctrl.hidden = shouldHide();
+      evalAttr('ngBlur', { $event: $event });
     }
   }
 
@@ -450,10 +452,19 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    */
   function focus($event) {
     hasFocus = true;
-    //-- if searchText is null, let's force it to be a string
-    if (!angular.isString($scope.searchText)) $scope.searchText = '';
+
+    // When the searchText is not a string, force it to be an empty string.
+    if (!angular.isString($scope.searchText)) {
+      $scope.searchText = '';
+    }
+
     ctrl.hidden = shouldHide();
-    if (!ctrl.hidden) handleQuery();
+
+    if (!ctrl.hidden) {
+      handleQuery();
+    }
+
+    evalAttr('ngFocus', { $event: $event });
   }
 
   /**
@@ -895,6 +906,17 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
       if (isMatching) select(0);
     });
+  }
+
+  /**
+   * Evaluates an attribute expression against the parent scope.
+   * @param {String} attr Name of the attribute to be evaluated.
+   * @param {Object?} locals Properties to be injected into the evaluation context.
+   */
+ function evalAttr(attr, locals) {
+    if ($attrs[attr]) {
+      $scope.$parent.$eval($attrs[attr], locals || {});
+    }
   }
 
 }

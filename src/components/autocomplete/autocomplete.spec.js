@@ -386,6 +386,66 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should emit the ngBlur event from the input', inject(function() {
+      var scope = createScope(null, {
+        onBlur: jasmine.createSpy('onBlur event')
+      });
+
+      var template =
+        '<md-autocomplete ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'ng-blur="onBlur($event)" ' +
+            'placeholder="placeholder">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      input.triggerHandler('blur');
+
+      expect(scope.onBlur).toHaveBeenCalledTimes(1);
+
+      // Confirm that the ngFocus event was called with the $event local.
+      var focusEvent = scope.onBlur.calls.mostRecent().args[0];
+      expect(focusEvent.target).toBe(input[0]);
+
+      element.remove();
+    }));
+
+    it('should emit the ngFocus event from the input', inject(function() {
+      var scope = createScope(null, {
+        onFocus: jasmine.createSpy('onFocus event')
+      });
+
+      var template =
+        '<md-autocomplete ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'ng-focus="onFocus($event)" ' +
+            'placeholder="placeholder">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      input.triggerHandler('focus');
+
+      expect(scope.onFocus).toHaveBeenCalledTimes(1);
+
+      // Confirm that the ngFocus event was called with the $event object.
+      var focusEvent = scope.onFocus.calls.mostRecent().args[0];
+      expect(focusEvent.target).toBe(input[0]);
+
+      element.remove();
+    }));
+
     it('should not show a loading progress when the items object is invalid', inject(function() {
       var scope = createScope(null, {
         match: function() {
