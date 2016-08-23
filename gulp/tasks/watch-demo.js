@@ -16,5 +16,5 @@ exports.task = function() {
       '--', gutil.colors.green('"dist/demos/' + name + '/"'), 'in your browser to develop.'
   );
 
-  return gulp.watch('src/**/*', ['build-demo']);
+  return gulp.watch('src/**/!(*.spec)', ['build-demo']);
 };
