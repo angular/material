@@ -5,7 +5,9 @@
 Angular Material provides typography CSS classes you can use to create visual
 consistency across your application.
 
-[Reference the Material Design specification for Typography.](http://www.google.com/design/spec/style/typography.html)
+<p style="text-align: center;">
+  [Material Design Typography Specification](https://material.google.com/style/typography.html)
+</p>
 
 <section class="demo-container">
   <md-toolbar class="demo-toolbar">
@@ -15,26 +17,29 @@ consistency across your application.
   </md-toolbar>
   <div class="md-whiteframe-z1 docs-list">
     <p>
-      Angular Material is always using the [Roboto](https://www.google.com/fonts#UsePlace:use/Collection:Roboto)
-      font for its components.
+      Angular Material uses the [Roboto](https://fonts.google.com/?selection.family=Roboto)
+      font for all of its components.
     </p>
 
     <p>
-      The `Roboto` font will be <b>not</b> automatically loaded by Angular Material itself. The developer is responsible for loading all fonts used in their application. Shown below is a sample <i>link</i> markup used to load the `Roboto` font from a CDN.
+      The `Roboto` font will be <b>not</b> automatically loaded by Angular Material itself. The
+      developer is responsible for loading all fonts used in their application. Shown below is a
+      sample <i>link</i> markup used to load the `Roboto` font from a CDN.
     </p>
 
     <hljs lang="html">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
     </hljs>
 
+    <h4 class="md-title">Notes</h4>
     <p>
-      <h4 class="md-title">Notes</h4>
-      When `Roboto` isn't loaded, then the typography will fallback to the following fonts:
-      <p>
-        - `Helvetica Neue`<br/>
-        - `sans-serif`
-      </p>
+      When `Roboto` isn't loaded, then the typography will fallback to the following fonts: 
     </p>
+
+    <ul>
+      <li>- `Helvetica Neue`</li>
+      <li>- `sans-serif`</li>
+    </ul>
   </div>
 </section>
 

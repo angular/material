@@ -100,7 +100,7 @@
  *
  * </hljs>
  *
- * NOTE: the loaded SVG data is subsequently cached internally for future requests.
+ * > <b>Note:</b> The loaded SVG data is subsequently cached internally for future requests.
  *
  */
 
@@ -394,8 +394,8 @@ function ConfigurationItem(url, viewBoxSize) {
   * };
  * </hljs>
  *
- * NOTE: The `<md-icon />  ` directive internally uses the `$mdIcon` service to query, loaded, and instantiate
- * SVG DOM elements.
+ * > <b>Note:</b> The `<md-icon>` directive internally uses the `$mdIcon` service to query, loaded,
+ *   and instantiate SVG DOM elements.
  */
 
 /* @ngInject */

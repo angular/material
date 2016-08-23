@@ -514,7 +514,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
 
                 // If we are open and the user has not scrolled the content div; scroll the active
                 // list item into view.
-                if (open && $li && $ul[0].scrollTop === 0) {
+                if (open && $li && $li.offsetParent && $ul[0].scrollTop === 0) {
                   $timeout(function() {
                     var activeHeight = $li.scrollHeight;
                     var activeOffset = $li.offsetTop;

@@ -208,7 +208,8 @@ angular
  * @description
  * A reference to a created panel. This reference contains a unique id for the
  * panel, along with the following properties:
- *   - `id` - `{string}: The unique id for the panel. This id is used to track
+ *
+ *   - `id` - `{string}`: The unique id for the panel. This id is used to track
  *     when a panel was interacted with.
  *   - `config` - `{Object=}`: The entire config object that was used in
  *     create.
@@ -359,20 +360,32 @@ angular
  * @name MdPanelPosition
  * @module material.components.panel
  * @description
- * Object for configuring the position of the panel. Examples:
  *
- * Centering the panel:
- * `new MdPanelPosition().absolute().center();`
+ * Object for configuring the position of the panel.
  *
- * Overlapping the panel with an element:
- * `new MdPanelPosition()
+ * @usage
+ *
+ * #### Centering the panel
+ *
+ * <hljs lang="js">
+ * new MdPanelPosition().absolute().center();
+ * </hljs>
+ *
+ * #### Overlapping the panel with an element
+ *
+ * <hljs lang="js">
+ * new MdPanelPosition()
  *     .relativeTo(someElement)
- *     .addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.ALIGN_TOPS);`
+ *     .addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.ALIGN_TOPS);
+ * </hljs>
  *
- * Aligning the panel with the bottom of an element:
- * `new MdPanelPosition()
+ * #### Aligning the panel with the bottom of an element
+ *
+ * <hljs lang="js">
+ * new MdPanelPosition()
  *     .relativeTo(someElement)
  *     .addPanelPosition($mdPanel.xPosition.CENTER, $mdPanel.yPosition.BELOW);
+ * </hljs>
  */
 
 /**

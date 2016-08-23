@@ -24,14 +24,20 @@ angular.module('material.components.virtualRepeat', [
  * Once an element is not visible anymore, the VirtualRepeat recycles it and will reuse it for
  * another visible item by replacing the previous dataset with the new one.
  *
- * **Common Issues**
+ * ### Common Issues
+ *
  * > When having one-time bindings inside of the view template, the VirtualRepeat will not properly
  * > update the bindings for new items, since the view will be recycled.
  *
- * **Notes:**
+ * ### Notes
+ *
  * > The VirtualRepeat is a similar implementation to the Android
  * [RecyclerView](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html)
  *
+ * <!-- This comment forces a break between blockquotes //-->
+ *
+ * > Please also review the [VirtualRepeat](api/directive/mdVirtualRepeat) documentation for more
+ * information.
  *
  *
  * @usage
@@ -421,6 +427,10 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  * enough dom nodes to fill the container and recycling them as the user scrolls.
  * Arrays, but not objects are supported for iteration.
  * Track by, as alias, and (key, value) syntax are not supported.
+ *
+ * > <b>Note:</b> Please also review the
+ *   [VirtualRepeatContainer](api/directive/mdVirtualRepeatContainer) documentation for more
+ *   information.
  *
  * @usage
  * <hljs lang="html">
