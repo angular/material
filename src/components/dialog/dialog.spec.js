@@ -1294,6 +1294,7 @@ describe('$mdDialog', function() {
             '<md-dialog>Dialog</md-dialog>' +
           '</div>'
         )($rootScope);
+
         var parentEl = angular.element('<div>');
 
         // Add the contentElement to the DOM.
@@ -1324,6 +1325,7 @@ describe('$mdDialog', function() {
             '<md-dialog>Dialog</md-dialog>' +
           '</div>'
         )($rootScope);
+
         var parentEl = angular.element('<div>');
 
         // Add the contentElement to the DOM.
@@ -1354,6 +1356,7 @@ describe('$mdDialog', function() {
           '<md-dialog>Dialog</md-dialog>' +
           '</div>'
         )($rootScope);
+
         var parentEl = angular.element('<div>');
 
         $mdDialog.show({
@@ -1369,6 +1372,85 @@ describe('$mdDialog', function() {
 
         $mdDialog.hide();
         runAnimation();
+      });
+
+      it('should properly toggle the fullscreen class', function() {
+        var contentElement = $compile(
+          '<div class="md-dialog-container" id="myId">' +
+            '<md-dialog>Dialog</md-dialog>' +
+          '</div>'
+        )($rootScope);
+
+        var parentEl = angular.element('<div>');
+        var dialogEl = contentElement.find('md-dialog');
+
+        // Show the dialog with fullscreen enabled.
+        $mdDialog.show({
+          contentElement: contentElement,
+          parent: parentEl,
+          escapeToClose: true,
+          fullscreen: true
+        });
+
+        $rootScope.$apply();
+        runAnimation();
+
+        expect(contentElement[0].parentNode).toBe(parentEl[0]);
+        expect(dialogEl).toHaveClass('md-dialog-fullscreen');
+
+        // Hide the dialog to allow the second dialog to show up.
+        $mdDialog.hide();
+        runAnimation();
+
+        // Show the dialog with fullscreen disabled
+        $mdDialog.show({
+          contentElement: contentElement,
+          parent: parentEl,
+          escapeToClose: true,
+          fullscreen: false
+        });
+
+        $rootScope.$apply();
+        runAnimation();
+
+        expect(contentElement[0].parentNode).toBe(parentEl[0]);
+        expect(dialogEl).not.toHaveClass('md-dialog-fullscreen');
+
+        // Hide the dialog to avoid issues with other tests.
+        $mdDialog.hide();
+        runAnimation();
+      });
+
+      it('should remove the transition classes', function() {
+        var contentElement = $compile(
+          '<div class="md-dialog-container" id="myId">' +
+            '<md-dialog>Dialog</md-dialog>' +
+          '</div>'
+        )($rootScope);
+
+        var parentEl = angular.element('<div>');
+        var dialogEl = contentElement.find('md-dialog');
+
+        // Show the dialog with fullscreen enabled.
+        $mdDialog.show({
+          contentElement: contentElement,
+          parent: parentEl,
+          escapeToClose: true,
+          fullscreen: true
+        });
+
+        $rootScope.$apply();
+        runAnimation();
+
+        expect(contentElement[0].parentNode).toBe(parentEl[0]);
+        expect(dialogEl).toHaveClass('md-transition-in');
+
+        // Hide the dialog to allow the second dialog to show up.
+        $mdDialog.hide();
+        runAnimation();
+
+        expect(dialogEl).not.toHaveClass('md-transition-in');
+        expect(dialogEl).not.toHaveClass('md-transition-out');
       });
 
     });
