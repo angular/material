@@ -8,13 +8,15 @@ angular
  * the models of various input components.
  *
  * @param $scope
+ * @param $attrs
  * @param $mdConstant
  * @param $log
  * @param $element
+ * @param $timeout
  * @param $mdUtil
  * @constructor
  */
-function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $mdUtil) {
+function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $mdUtil) {
   /** @type {$timeout} **/
   this.$timeout = $timeout;
 
@@ -52,7 +54,10 @@ function MdChipsCtrl ($scope, $mdConstant, $log, $element, $timeout, $mdUtil) {
   this.hasAutocomplete = false;
 
   /** @type {string} */
-  this.enableChipEdit = $mdUtil.parseAttributeBoolean(this.mdEnableChipEdit);
+  this.enableChipEdit = $mdUtil.parseAttributeBoolean($attrs.mdEnableChipEdit);
+
+  /** @type {string} */
+  this.addOnBlur = $mdUtil.parseAttributeBoolean($attrs.mdAddOnBlur);
 
   /**
    * Hidden hint text for how to delete a chip. Used to give context to screen readers.
@@ -512,6 +517,23 @@ MdChipsCtrl.prototype.onInputFocus = function () {
 
 MdChipsCtrl.prototype.onInputBlur = function () {
   this.inputHasFocus = false;
+
+  var chipBuffer = this.getChipBuffer().trim();
+
+  // Update the custom chip validators.
+  this.validateModel();
+
+  var isModelValid = this.ngModelCtrl.$valid;
+
+  if (this.userInputNgModelCtrl) {
+    isModelValid &= this.userInputNgModelCtrl.$valid;
+  }
+
+  // Only append the chip and reset the chip buffer if the chips and input ngModel is valid.
+  if (this.addOnBlur && chipBuffer && isModelValid) {
+    this.appendChip(chipBuffer);
+    this.resetChipBuffer();
+  }
 };
 
 /**
