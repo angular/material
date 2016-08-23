@@ -1134,6 +1134,24 @@ describe('$mdDialog', function() {
       expect($document.activeElement).toBe(parent[0].querySelector('#focus-target'));
     }));
 
+    it('should focus the dialog element if no actions are set', inject(function($mdDialog, $rootScope, $document) {
+      jasmine.mockElementFocus(this);
+
+      var parent = angular.element('<div>');
+
+      $mdDialog.show({
+        parent: parent,
+        template:
+        '<md-dialog></md-dialog>'
+      });
+
+      $rootScope.$apply();
+      runAnimation();
+
+      expect($document.activeElement).toBe(parent[0].querySelector('md-dialog'));
+
+    }));
+
     it('should focusOnOpen == false', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
       jasmine.mockElementFocus(this);
 
