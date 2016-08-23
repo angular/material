@@ -338,7 +338,7 @@ describe('md-datepicker', function() {
       expect(controller.ngModelCtrl.$modelValue).toEqual(initialDate);
     });
 
-    it('shoud become touched from bluring closing the pane', function() {
+    it('should become touched from blurring closing the pane', function() {
       populateInputElement('17/1/2015');
 
       controller.openCalendarPane({
@@ -349,7 +349,7 @@ describe('md-datepicker', function() {
       expect(controller.ngModelCtrl.$touched).toBe(true);
     });
 
-    it('should become touch from bluring the input', function() {
+    it('should become touch from blurring the input', function() {
       populateInputElement('17/1/2015');
 
       var input = angular.element(controller.inputElement);
@@ -766,6 +766,23 @@ describe('md-datepicker', function() {
       controller.ngInputElement.triggerHandler('focus');
       controller.closeCalendarPane();
       expect(pageScope.blurHandler).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('tabindex behavior', function() {
+    beforeEach(function() {
+      ngElement && ngElement.remove();
+    });
+
+    it('should remove the datepicker from the tab order, if no tabindex is specified', function() {
+      createDatepickerInstance('<md-datepicker ng-model="myDate"></md-datepicker>');
+      expect(ngElement.attr('tabindex')).toBe('-1');
+    });
+
+    it('should forward the tabindex to the input', function() {
+      createDatepickerInstance('<md-datepicker ng-model="myDate" tabindex="1"></md-datepicker>');
+      expect(ngElement.attr('tabindex')).toBeFalsy();
+      expect(controller.ngInputElement.attr('tabindex')).toBe('1');
     });
   });
 });
