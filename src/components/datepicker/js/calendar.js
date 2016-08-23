@@ -89,7 +89,7 @@
    * @ngInject @constructor
    */
   function CalendarCtrl($element, $scope, $$mdDateUtil, $mdUtil,
-    $mdConstant, $mdTheming, $$rAF, $attrs) {
+    $mdConstant, $mdTheming, $$rAF, $attrs, $mdDateLocale) {
 
     $mdTheming($element);
 
@@ -156,6 +156,20 @@
     this.selectedDate = null;
 
     /**
+     * The first date that can be rendered by the calendar. The default is taken
+     * from the mdDateLocale provider and is limited by the mdMinDate.
+     * @type {Date}
+     */
+    this.firstRenderableDate = null;
+
+    /**
+     * The last date that can be rendered by the calendar. The default comes
+     * from the mdDateLocale provider and is limited by the maxDate.
+     * @type {Date}
+     */
+    this.lastRenderableDate = null;
+
+    /**
      * Used to toggle initialize the root element in the next digest.
      * @type {Boolean}
      */
@@ -190,6 +204,18 @@
     $scope.$on('$destroy', function() {
       angular.element(document.body).off('keydown', boundKeyHandler);
     });
+
+    if (this.minDate && this.minDate > $mdDateLocale.firstRenderableDate) {
+      this.firstRenderableDate = this.minDate;
+    } else {
+      this.firstRenderableDate = $mdDateLocale.firstRenderableDate;
+    }
+
+    if (this.maxDate && this.maxDate < $mdDateLocale.lastRenderableDate) {
+      this.lastRenderableDate = this.maxDate;
+    } else {
+      this.lastRenderableDate = $mdDateLocale.lastRenderableDate;
+    }
   }
 
   /**

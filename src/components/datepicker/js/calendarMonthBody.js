@@ -78,7 +78,7 @@
 
   /** Generate and append the content for this month to the directive element. */
   CalendarMonthBodyCtrl.prototype.generateContent = function() {
-    var date = this.dateUtil.incrementMonths(this.monthCtrl.firstRenderableDate, this.offset);
+    var date = this.dateUtil.incrementMonths(this.calendarCtrl.firstRenderableDate, this.offset);
 
     this.$element
       .empty()

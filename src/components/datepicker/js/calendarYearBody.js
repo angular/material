@@ -68,7 +68,7 @@
 
   /** Generate and append the content for this year to the directive element. */
   CalendarYearBodyCtrl.prototype.generateContent = function() {
-    var date = this.dateUtil.incrementYears(this.yearCtrl.firstRenderableDate, this.offset);
+    var date = this.dateUtil.incrementYears(this.calendarCtrl.firstRenderableDate, this.offset);
 
     this.$element
       .empty()

@@ -76,9 +76,6 @@
     /** @final {HTMLElement} */
     this.calendarScroller = $element[0].querySelector('.md-virtual-repeat-scroller');
 
-    /** @type {Date} */
-    this.firstRenderableDate = null;
-
     /** @type {boolean} */
     this.isInitialized = false;
 
@@ -116,37 +113,23 @@
    * setting up the object that will be iterated by the virtual repeater.
    */
   CalendarMonthCtrl.prototype.initialize = function(calendarCtrl) {
-    var minDate = calendarCtrl.minDate;
-    var maxDate = calendarCtrl.maxDate;
-    this.calendarCtrl = calendarCtrl;
-
     /**
      * Dummy array-like object for virtual-repeat to iterate over. The length is the total
-     * number of months that can be viewed. This is shorter than ideal because of (potential)
-     * Firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=1181658.
+     * number of months that can be viewed. We add 2 months: one to include the current month
+     * and one for the last dummy month.
+     *
+     * This is shorter than ideal because of a (potential) Firefox bug
+     * https://bugzilla.mozilla.org/show_bug.cgi?id=1181658.
      */
-    this.items = { length: 2000 };
 
-    if (maxDate && minDate) {
-      // Limit the number of months if min and max dates are set.
-      var numMonths = this.dateUtil.getMonthDistance(minDate, maxDate) + 1;
-      numMonths = Math.max(numMonths, 1);
-      // Add an additional month as the final dummy month for rendering purposes.
-      numMonths += 1;
-      this.items.length = numMonths;
-    }
+    this.items = {
+      length: this.dateUtil.getMonthDistance(
+        calendarCtrl.firstRenderableDate,
+        calendarCtrl.lastRenderableDate
+      ) + 2
+    };
 
-    this.firstRenderableDate = this.dateUtil.incrementMonths(calendarCtrl.today, -this.items.length / 2);
-
-    if (minDate && minDate > this.firstRenderableDate) {
-      this.firstRenderableDate = minDate;
-    } else if (maxDate) {
-      // Calculate the difference between the start date and max date.
-      // Subtract 1 because it's an inclusive difference and 1 for the final dummy month.
-      var monthDifference = this.items.length - 2;
-      this.firstRenderableDate = this.dateUtil.incrementMonths(maxDate, -(this.items.length - 2));
-    }
-
+    this.calendarCtrl = calendarCtrl;
     this.attachScopeListeners();
     calendarCtrl.updateVirtualRepeat();
 
@@ -160,8 +143,11 @@
    */
   CalendarMonthCtrl.prototype.getSelectedMonthIndex = function() {
     var calendarCtrl = this.calendarCtrl;
-    return this.dateUtil.getMonthDistance(this.firstRenderableDate,
-        calendarCtrl.displayDate || calendarCtrl.selectedDate || calendarCtrl.today);
+
+    return this.dateUtil.getMonthDistance(
+      calendarCtrl.firstRenderableDate,
+      calendarCtrl.displayDate || calendarCtrl.selectedDate || calendarCtrl.today
+    );
   };
 
   /**
@@ -238,7 +224,7 @@
    */
   CalendarMonthCtrl.prototype.animateDateChange = function(date) {
     if (this.dateUtil.isValidDate(date)) {
-      var monthDistance = this.dateUtil.getMonthDistance(this.firstRenderableDate, date);
+      var monthDistance = this.dateUtil.getMonthDistance(this.calendarCtrl.firstRenderableDate, date);
       this.calendarScroller.scrollTop = monthDistance * TBODY_HEIGHT;
     }
 
