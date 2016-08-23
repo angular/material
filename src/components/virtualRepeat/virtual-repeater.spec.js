@@ -663,6 +663,64 @@ describe('<md-virtual-repeat>', function() {
     expect(getTransform(offsetter)).toBe('translateY(880px)');
   });
 
+  it('should broadcast $mdVirtualRepeatItemDetached when an element is removed from the DOM', function() {
+    createRepeater();
+    scope.items = createItems(NUM_ITEMS);
+    scope.$apply();
+    $$rAF.flush();
+    scroller[0].scrollTop = 100;
+    scroller.triggerHandler('scroll');
+
+    var scopes = Array.prototype.map.call(getRepeated(), function(elem) {
+      var s = angular.element(elem).scope();
+      spyOn(s, '$broadcast').and.callThrough();
+      return s;
+    });
+
+    // Scroll up by one.
+    // Expect only the last (index 15) scope to have $broadcast the event.
+    scroller[0].scrollTop = 90;
+    scroller.triggerHandler('scroll');
+    expect(scopes[15].$broadcast).toHaveBeenCalledWith('$mdVirtualRepeatItemDetached');
+    expect(scopes[14].$broadcast).not.toHaveBeenCalled();
+
+    // Scroll down by two.
+    // Expect only the first scope to have $broadcast the event.
+    scroller[0].scrollTop = 110;
+    scroller.triggerHandler('scroll');
+    expect(scopes[0].$broadcast).toHaveBeenCalledWith('$mdVirtualRepeatItemDetached');
+    expect(scopes[1].$broadcast).not.toHaveBeenCalled();
+  });
+  
+  it('should broadcast $mdVirtualRepeatItemReattached when an element is reattached to the DOM', function() {
+    createRepeater();
+    scope.items = createItems(NUM_ITEMS);
+    scope.$apply();
+    $$rAF.flush();
+    scroller[0].scrollTop = 100;
+    scroller.triggerHandler('scroll');
+
+    var scopes = Array.prototype.map.call(getRepeated(), function(elem) {
+      var s = angular.element(elem).scope();
+      spyOn(s, '$broadcast').and.callThrough();
+      return s;
+    });
+
+    // Scroll up by one.
+    // This should remove the last element from the DOM.
+    scroller[0].scrollTop = 90;
+    scroller.triggerHandler('scroll');
+    expect(scopes[15].$broadcast).toHaveBeenCalledWith('$mdVirtualRepeatItemDetached');
+
+    // Scroll down by two.
+    // Expect only the last element to have $broadcast the event.
+    scroller[0].scrollTop = 110;
+    scroller.triggerHandler('scroll');
+    expect(scopes[14].$broadcast).not.toHaveBeenCalled();
+    expect(scopes[15].$broadcast).toHaveBeenCalledWith('$mdVirtualRepeatItemReattached');
+  });
+
+
   describe('md-on-demand', function() {
 
     it('should validate an empty md-on-demand attribute value correctly', inject(function() {

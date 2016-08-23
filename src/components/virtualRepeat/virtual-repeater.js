@@ -780,6 +780,13 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
         this.blocks[maxIndex] && this.blocks[maxIndex].element[0].nextSibling);
   }
 
+  function broadcastMdVirtualRepeatItemReattached(block) {
+    if (!block.new){
+      block.scope.$broadcast('$mdVirtualRepeatItemReattached');
+    }
+  }
+  angular.forEach(newStartBlocks.concat(newEndBlocks), broadcastMdVirtualRepeatItemReattached);
+
   // Restore $$checkUrlChange.
   this.$browser.$$checkUrlChange = this.browserCheckUrlChange;
 
@@ -863,9 +870,11 @@ VirtualRepeatController.prototype.updateScope_ = function(scope, index) {
  * @private
  */
 VirtualRepeatController.prototype.poolBlock_ = function(index) {
-  this.pooledBlocks.push(this.blocks[index]);
-  this.parentNode.removeChild(this.blocks[index].element[0]);
+  var block = this.blocks[index];
+  this.pooledBlocks.push(block);
+  this.parentNode.removeChild(block.element[0]);
   delete this.blocks[index];
+  block.scope.$broadcast('$mdVirtualRepeatItemDetached');
 };
 
 
