@@ -130,7 +130,7 @@ function buildModule(module, opts) {
 
   function buildMin() {
     return lazypipe()
-        .pipe(gulpif, /.css$/, cleanCSS(),
+        .pipe(gulpif, /.css$/, minifyCss(),
         uglify({ preserveComments: 'some' })
             .on('error', function(e) {
               console.log('\x07',e.message);
