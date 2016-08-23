@@ -66,6 +66,9 @@ angular.module('material.components.select', [
  * **Note:** A value of `undefined` ***is considered a valid value*** (and does not auto-apply this
  * attribute) since you may wish this to be your "Not Available" or "None" option.
  *
+ * **Note:** Using the `value` attribute (as opposed to `ng-value`) always evaluates to a string, so
+ * `value="null"` will require the test `ng-if="myValue != 'null'"` rather than `ng-if="!myValue"`.
+ *
  * @param {expression} ng-model The model!
  * @param {boolean=} multiple Whether it's multiple.
  * @param {expression=} md-on-close Expression to be evaluated when the select is closed.
