@@ -328,10 +328,15 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
     extendPalette: extendPalette,
     theme: registerTheme,
 
+    /**
+     * return a read-only clone of the current theme configuration
+     */
     configuration : function() {
-      // return a read-only clone of the current configuration
-      var locals = { defaultTheme : defaultTheme, alwaysWatchTheme : alwaysWatchTheme };
-      return angular.extend( { }, config, locals );
+      return angular.extend( { }, themeConfig, {
+        defaultTheme : defaultTheme,
+        alwaysWatchTheme : alwaysWatchTheme,
+        registeredStyles : [].concat(themeConfig.registeredStyles)
+      });
     },
 
     /**
