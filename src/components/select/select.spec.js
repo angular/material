@@ -1023,6 +1023,26 @@ describe('<md-select>', function() {
         expect(label).not.toHaveClass('md-required');
       }));
 
+      it('correctly adds the .md-no-asterisk class if the attribute is empty', function() {
+        var el = setupSelect('ng-required="isRequired" md-no-asterisk ng-model="someModel"');
+        var select = el.find('md-select');
+
+        expect(select).toHaveClass('md-no-asterisk');
+      });
+
+      it('correctly adds the .md-no-asterisk class if the attribute is true', function() {
+        var el = setupSelect('ng-required="isRequired" md-no-asterisk ng-model="someModel"');
+        var select = el.find('md-select');
+
+        expect(select).toHaveClass('md-no-asterisk');
+      });
+
+      it('correctly removes the .md-no-asterisk class if the attribute is false', function() {
+        var el = setupSelect('ng-required="isRequired" md-no-asterisk="false" ng-model="someModel"');
+        var select = el.find('md-select');
+
+        expect(select).not.toHaveClass('md-no-asterisk');
+      });
     });
 
     describe('view->model', function() {

@@ -82,7 +82,7 @@ md-input-container > md-select {
 // NOTE: When the input has a value and uses a floating label, the floating label will show the
 // asterisk denoting that it is required
 md-input-container:not(.md-input-has-value) {
-  md-select[required], md-select.ng-required {
+  md-select[required]:not(.md-no-asterisk), md-select.ng-required:not(.md-no-asterisk) {
     .md-select-value span:first-child:after {
       content: ' *';
       font-size: 13px;
@@ -105,7 +105,7 @@ md-select {
   margin: 2.5*$baseline-grid 0 3*$baseline-grid + 2 0;
 
   &[required], &.ng-required {
-    &.ng-invalid {
+    &.ng-invalid:not(.md-no-asterisk) {
       .md-select-value span:first-child:after {
         content: ' *';
         font-size: 13px;
