@@ -122,6 +122,10 @@ describe('md-datepicker', function() {
     }).not.toThrow();
   });
 
+  it('should set the element type as "date"', function() {
+    expect(ngElement.attr('type')).toBe('date');
+  });
+
   describe('ngMessages support', function() {
     it('should set the `required` $error flag', function() {
       pageScope.isRequired = true;
