@@ -122,9 +122,12 @@ function buildModule(module, opts) {
 
   function splitStream (stream) {
     var js = series(stream, themeBuildStream())
-        .pipe(filter('*.js'))
+        .pipe(filter('**/*.js'))
         .pipe(concat('core.js'));
-    var css = stream.pipe(filter('*.css'));
+
+    var css = stream
+      .pipe(filter(['**/*.css', '!**/ie_fixes.css']))
+
     return series(js, css);
   }
 
