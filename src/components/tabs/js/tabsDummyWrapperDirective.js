@@ -40,7 +40,7 @@ function MdTabsDummyWrapper ($mdUtil, $window) {
         observer.observe(element[0], config);
         disconnect = observer.disconnect.bind(observer);
       } else {
-        var debounced = $mdUtil.debounce(mutationCallback, 10);
+        var debounced = $mdUtil.debounce(mutationCallback, 15, null, false);
         
         element.on('DOMSubtreeModified', debounced);
         disconnect = element.off.bind(element, 'DOMSubtreeModified', debounced);
