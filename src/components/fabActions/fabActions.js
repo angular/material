@@ -29,11 +29,23 @@
       restrict: 'E',
 
       require: ['^?mdFabSpeedDial', '^?mdFabToolbar'],
-
+  
       compile: function(element, attributes) {
         var children = element.children();
 
         var hasNgRepeat = $mdUtil.prefixer().hasAttribute(children, 'ng-repeat');
+        var hasReverse = attributes.mdReverse || attributes.mdReverse == "";
+
+        // We don't want to be able to use reverse with NgRepeat
+        // You should be reversing it in your controller if you are using NgRepeat
+        if (hasReverse && !hasNgRepeat) {
+          var childrenArr = [].slice.call(children);
+          element.empty();
+          childrenArr.reverse().forEach(function(child){
+            element.append(child);
+          });
+          children = element.children();
+        }
 
         // Support both ng-repeat and static content
         if (hasNgRepeat) {
