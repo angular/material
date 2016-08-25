@@ -29,6 +29,22 @@ describe('<md-fab-actions> directive', function() {
     expect(element.find("md-fab-actions").children()).toHaveClass('md-fab-action-item');
   }));
 
+  it('supports actions created by md-reverse', function(){
+    build(
+      '<md-fab-speed-dial>' +
+      '  <md-fab-actions md-reverse>' +
+      '    <md-button>1</md-button>' +
+      '    <md-button>2</md-button>' +
+      '    <md-button>3</md-button>' +
+      '  </md-fab-actions>' +
+      '</md-fab-speed-dial>'
+    )
+    
+    expect(element.find("md-fab-actions").children().length).toBe(3);
+    expect(element.find("md-fab-actions").children()).toHaveClass('md-fab-action-item');
+    expect(element.find("md-fab-actions").children()[0].textContent.toBe('3');
+  })
+
   angular.forEach(['ng-repeat', 'data-ng-repeat', 'x-ng-repeat'], function(attr) {
     it('supports actions created by ' + attr, inject(function() {
       build(
