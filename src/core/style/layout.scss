@@ -436,9 +436,3 @@
     @include flex-properties-for-name($name);
     @include layout-for-name($name);
 }
-
-/* IE10-IE11 column-flex bug fix (set proper default value) */
-.layout-column > .flex {
-	-ms-flex-basis: auto;
-	flex-basis: auto;
-}

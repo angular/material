@@ -131,7 +131,14 @@
   <table class="md-api-table">
     <tr>
       <td>flex</td>
-      <td>Will grow and shrink as needed. Starts with a size of 0%. Same as <code>flex="0"</code>.</td>
+      <td>
+        Will grow and shrink as needed. Starts with a size of 0%. Same as <code>flex="0"</code>.
+        <br />
+        <br />
+        <b>Note:</b> There is a known bug with this attribute in IE11 when the parent container has
+        no explicit height set. See our
+        <a ng-href="layout/tips#layout-column-0px-ie11">Troubleshooting</a> page for more info.
+      </td>
     </tr>
     <tr>
       <td>flex="none"</td>
