@@ -223,6 +223,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
             name: 'Under the Hood',
             url: 'Theming/05_under_the_hood',
             type: 'link'
+          },
+          {
+            name: 'Browser Color',
+            url: 'Theming/06_browser_color',
+            type: 'link'
           }
         ]
       }
