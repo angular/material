@@ -382,7 +382,7 @@ describe('md-datepicker', function() {
       $timeout.flush();
 
       expect(controller.calendarPane.offsetHeight).toBeGreaterThan(0);
-      expect(controller.inputMask.style.left).toBe(controller.inputContainer.clientWidth + 'px');
+      expect(controller.inputMask[0].style.left).toBeTruthy();
 
       // Click off of the calendar.
       document.body.click();
@@ -499,7 +499,8 @@ describe('md-datepicker', function() {
       var triggerRect = controller.inputContainer.getBoundingClientRect();
 
       // We expect the offset to be close to the exact height, because on IE there are some deviations.
-      expect(paneRect.top).toBeCloseTo(triggerRect.top, 0.5);
+      expect(controller.topMargin).toBeGreaterThan(0);
+      expect(paneRect.top).toBeCloseTo(triggerRect.top - controller.topMargin, 0.5);
 
       // Restore body to pre-test state.
       body.removeChild(superLongElement);
