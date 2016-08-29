@@ -354,7 +354,6 @@ describe('<md-tabs>', function () {
       expect(tabs.find('md-tabs-canvas').attr('role')).toBe('tablist');
 
       expect(tabItem.attr('id')).toBeTruthy();
-      expect(tabItem.attr('role')).toBe('tab');
       expect(tabItem.attr('aria-controls')).toBe(tabContent.attr('id'));
 
       expect(tabContent.attr('id')).toBeTruthy();
@@ -363,6 +362,24 @@ describe('<md-tabs>', function () {
 
       //Unique ids check
       expect(tabContent.attr('id')).not.toEqual(tabItem.attr('id'));
+    });
+
+    it('should not assign role to dummy tabs', function () {
+      var tabs       = setup('<md-tabs>' +
+                             '<md-tab label="label!">content!</md-tab>' +
+                             '</md-tabs>');
+      var tabItem    = tabs.find('md-dummy-tab');
+
+      expect(tabItem.attr('role')).toBeFalsy();
+    });
+
+    it('should assign role to visible tabs', function () {
+      var tabs       = setup('<md-tabs>' +
+                             '<md-tab label="label!">content!</md-tab>' +
+                             '</md-tabs>');
+      var tabItem    = tabs.find('md-tab-item');
+
+      expect(tabItem.attr('role')).toBe('tab');
     });
   });
 
