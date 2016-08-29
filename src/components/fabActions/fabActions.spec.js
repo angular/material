@@ -59,7 +59,7 @@ describe('<md-fab-actions> directive', function() {
 
     $rootScope.$apply('shouldReverse = false');
     expect(element.find("md-fab-actions").children()[0].textContent).toBe('1');
-    $rootScope.$apply('shouldReverse = false');
+    $rootScope.$apply('shouldReverse = true');
     expect(element.find("md-fab-actions").children()[0].textContent).toBe('3');
   }));
 
