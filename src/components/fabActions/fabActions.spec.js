@@ -32,7 +32,7 @@ describe('<md-fab-actions> directive', function() {
   it('supports actions created by md-reverse', inject(function(){
     build(
       '<md-fab-speed-dial>' +
-      '  <md-fab-actions md-reverse>' +
+      '  <md-fab-actions md-reverse="true">' +
       '    <md-button>1</md-button>' +
       '    <md-button>2</md-button>' +
       '    <md-button>3</md-button>' +
@@ -42,6 +42,24 @@ describe('<md-fab-actions> directive', function() {
     
     expect(element.find("md-fab-actions").children().length).toBe(3);
     expect(element.find("md-fab-actions").children()).toHaveClass('md-fab-action-item');
+    expect(element.find("md-fab-actions").children()[0].textContent).toBe('3');
+  }));
+  
+  
+  it('supports updating md-reverse by passing a boolean to it.', inject(function(){
+    var element = $compile(
+      '<md-fab-speed-dial>' +
+      '  <md-fab-actions md-reverse="shouldReverse">' +
+      '    <md-button>1</md-button>' +
+      '    <md-button>2</md-button>' +
+      '    <md-button>3</md-button>' +
+      '  </md-fab-actions>' +
+      '</md-fab-speed-dial>'
+    )($rootScope);
+
+    $rootScope.$apply('shouldReverse = false');
+    expect(element.find("md-fab-actions").children()[0].textContent).toBe('1');
+    $rootScope.$apply('shouldReverse = false');
     expect(element.find("md-fab-actions").children()[0].textContent).toBe('3');
   }));
 
