@@ -60,7 +60,8 @@ md-card {
   }
 
   > img,
-  > md-card-header img {
+  > md-card-header img,
+  md-card-title-media img {
     box-sizing: border-box;
     display: flex;
     flex: 0 0 auto;
