@@ -210,7 +210,7 @@
 
   /**
    * Tail-hook ngCloak to delay the uncloaking while Layout transformers
-   * finish processing. Eliminates flicker with Material.Layoouts
+   * finish processing. Eliminates flicker with Material.Layouts
    */
   function buildCloakInterceptor(className) {
     return [ '$timeout', function($timeout){
