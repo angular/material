@@ -29,23 +29,15 @@
       restrict: 'E',
 
       require: ['^?mdFabSpeedDial', '^?mdFabToolbar'],
+
+      scope: {
+        reverse: "=mdReverse"
+      },
   
-      compile: function(element, attributes) {
+      compile: function (element, attributes) {
         var children = element.children();
 
         var hasNgRepeat = $mdUtil.prefixer().hasAttribute(children, 'ng-repeat');
-        var hasReverse = attributes.mdReverse || attributes.mdReverse == "";
-
-        // We don't want to be able to use reverse with NgRepeat
-        // You should be reversing it in your controller if you are using NgRepeat
-        if (hasReverse && !hasNgRepeat) {
-          var childrenArr = [].slice.call(children);
-          element.empty();
-          childrenArr.reverse().forEach(function(child){
-            element.append(child);
-          });
-          children = element.children();
-        }
 
         // Support both ng-repeat and static content
         if (hasNgRepeat) {
@@ -53,6 +45,21 @@
         } else {
           // Wrap every child in a new div and add a class that we can scale/fling independently
           children.wrap('<div class="md-fab-action-item">');
+        }
+        
+        return function (scope, element, attributes) {
+          var children = element.children();
+          
+          scope.$watch('reverse', function(value, oldValue) {
+            if (value !== oldValue || value === true) {
+              var childrenArr = [].slice.call(children);
+              element.empty();
+              childrenArr.reverse().forEach(function(child){
+                element.append(child);
+              });
+              children = element.children();
+            }
+          });
         }
       }
     }
