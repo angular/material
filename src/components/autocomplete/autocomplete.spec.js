@@ -1214,9 +1214,11 @@ describe('<md-autocomplete>', function() {
   });
 
   describe('xss prevention', function() {
+
     it('should not allow html to slip through', inject(function($timeout, $material) {
       var html = 'foo <img src="img" onerror="alert(1)" />';
-      var scope = createScope([{display: html}]);
+      var scope = createScope([{ display: html }]);
+
       var template = '\
           <md-autocomplete\
               md-selected-item="selectedItem"\
@@ -1227,6 +1229,7 @@ describe('<md-autocomplete>', function() {
               placeholder="placeholder">\
             <span md-highlight-text="searchText">{{item.display}}</span>\
           </md-autocomplete>';
+
       var element = compile(template, scope);
       var ctrl = element.controller('mdAutocomplete');
       var ul = element.find('ul');
@@ -1250,6 +1253,7 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     }));
+
   });
 
   describe('Async matching', function() {
@@ -1774,6 +1778,7 @@ describe('<md-autocomplete>', function() {
   });
 
   describe('md-highlight-text', function() {
+
     it('updates when content is modified', inject(function() {
       var template = '<div md-highlight-text="query">{{message}}</div>';
       var scope = createScope(null, {message: 'some text', query: 'some'});
@@ -1794,7 +1799,7 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
-    it('should properly apply highlight flags', inject(function() {
+    it('should properly apply highlight flags', function() {
       var template = '<div md-highlight-text="query" md-highlight-flags="{{flags}}">{{message}}</div>';
       var scope = createScope(null, {message: 'Some text', query: 'some', flags: '^i'});
       var element = compile(template, scope);
@@ -1826,7 +1831,93 @@ describe('<md-autocomplete>', function() {
       expect(element.html()).toBe('Some text, some flag<span class="highlight">s</span>');
 
       element.remove();
-    }));
+    });
+
+    it('should correctly parse special text identifiers', function() {
+      var template = '<div md-highlight-text="query">{{message}}</div>';
+
+      var scope = createScope(null, {
+        message: 'Angular&Material',
+        query: 'Angular&'
+      });
+
+      var element = compile(template, scope);
+
+      expect(element.html()).toBe('<span class="highlight">Angular&amp;</span>Material');
+
+      scope.query = 'Angular&Material';
+      scope.$apply();
+
+      expect(element.html()).toBe('<span class="highlight">Angular&amp;Material</span>');
+
+      element.remove();
+    });
+
+    it('should properly parse html entity identifiers', function() {
+      var template = '<div md-highlight-text="query">{{message}}</div>';
+
+      var scope = createScope(null, {
+        message: 'Angular&amp;Material',
+        query: ''
+      });
+
+      var element = compile(template, scope);
+
+      expect(element.html()).toBe('Angular&amp;amp;Material');
+
+      scope.query = 'Angular&amp;Material';
+      scope.$apply();
+
+      expect(element.html()).toBe('<span class="highlight">Angular&amp;amp;Material</span>');
+
+
+      scope.query = 'Angular&';
+      scope.$apply();
+
+      expect(element.html()).toBe('<span class="highlight">Angular&amp;</span>amp;Material');
+
+      element.remove();
+    });
+
+    it('should prevent XSS attacks from the highlight text', function() {
+
+      spyOn(window, 'alert');
+
+      var template = '<div md-highlight-text="query">{{message}}</div>';
+
+      var scope = createScope(null, {
+        message: 'Angular Material',
+        query: '<img src="img" onerror="alert(1)">'
+      });
+
+      var element = compile(template, scope);
+
+      expect(element.html()).toBe('Angular Material');
+      expect(window.alert).not.toHaveBeenCalled();
+
+      element.remove();
+    });
+
+  });
+
+  it('should prevent XSS attacks from the content text', function() {
+
+    spyOn(window, 'alert');
+
+    var template = '<div md-highlight-text="query">{{message}}</div>';
+
+    var scope = createScope(null, {
+      message: '<img src="img" onerror="alert(1)">',
+      query: ''
+    });
+
+    var element = compile(template, scope);
+
+    // Expect the image to be escaped due to XSS protection.
+    expect(element.html()).toBe('&lt;img src="img" onerror="alert(1)"&gt;');
+    expect(window.alert).not.toHaveBeenCalled();
+
+    element.remove();
   });
 
 });
