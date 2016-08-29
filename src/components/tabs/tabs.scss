@@ -120,7 +120,6 @@ md-tabs-wrapper {
   &.md-stretch-tabs {
     md-pagination-wrapper {
       width: 100%;
-      display: flex;
       flex-direction: row;
       md-tab-item {
         flex-grow: 1;
@@ -157,7 +156,7 @@ md-tabs-canvas {
 md-pagination-wrapper {
   @include pie-clearfix;
   height: $tabs-header-height;
-  display: block;
+  display: flex;
   transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
   position: absolute;
   width: 999999px;
@@ -181,7 +180,7 @@ md-tabs-content-wrapper {
 }
 
 md-tab-content {
-  display: block;
+  display: flex;
   position: absolute;
   top: 0;
   left: 0;
@@ -218,8 +217,11 @@ md-tab-content {
       visibility: hidden;
     }
   }
-  > div.ng-leave {
-    animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
+  > div {
+    flex: 1 0 100%;
+    &.ng-leave {
+      animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
+    }
   }
 }
 
