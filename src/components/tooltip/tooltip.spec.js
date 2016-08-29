@@ -401,6 +401,35 @@ describe('<md-tooltip> directive', function() {
     });
   });
 
+  describe('custom triggers', function() {
+    it('should allow a custom enter trigger', function() {
+        buildTooltip(
+          '<md-button>' +
+             '<md-tooltip md-enter-trigger="a-custom-enter-event" ' +
+              ' md-visible="testModel.isVisible">Tooltip</md-tooltip>' +
+          '</md-button>'
+        );
+
+        triggerEvent('a-custom-enter-event');
+        expect($rootScope.testModel.isVisible).toBe(true);
+    });
+
+    it('should allow a custom leave trigger', function() {
+        buildTooltip(
+          '<md-button>' +
+             '<md-tooltip md-leave-trigger="a-custom-leave-event" ' +
+              ' md-visible="testModel.isVisible">Tooltip</md-tooltip>' +
+          '</md-button>'
+        );
+
+        triggerEvent('focus');
+        expect($rootScope.testModel.isVisible).toBe(true);
+
+        triggerEvent('a-custom-leave-event');
+        expect($rootScope.testModel.isVisible).toBe(false);
+    });
+  });
+
   // ******************************************************
   // Internal Utility methods
   // ******************************************************

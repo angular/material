@@ -32,6 +32,8 @@ angular
  * parent. Defaults to 0ms on non-touch devices and 75ms on touch.
  * @param {boolean=} md-autohide If present or provided with a boolean value, the tooltip will hide on mouse leave, regardless of focus
  * @param {string=} md-direction Which direction would you like the tooltip to go?  Supports left, right, top, and bottom.  Defaults to bottom.
+ * @param {string=} md-enter-trigger Space-separated list of events that will cause a tooltip to appear. Defaults to `"focus touchstart mouseenter"`.
+ * @param {string=} md-leave-trigger Space-separated list of events that will cause a tooltip to become hidden. Defaults to `"blur touchcancel mouseleave"`.
  */
 function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming, $rootElement,
                             $animate, $q, $interpolate) {
@@ -51,7 +53,9 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       delay: '=?mdDelay',
       visible: '=?mdVisible',
       autohide: '=?mdAutohide',
-      direction: '@?mdDirection'    // only expect raw or interpolated string value; not expression
+      direction: '@?mdDirection',    // only expect raw or interpolated string value; not expression
+      enterTrigger: '@?mdEnterTrigger',
+      leaveTrigger: '@?mdLeaveTrigger'
     },
     compile: function(tElement, tAttr) {
       if (!tAttr.mdDirection) {
@@ -66,11 +70,13 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
     $mdTheming(element);
 
-    var parent        = $mdUtil.getParentWithPointerEvents(element),
-        content       = angular.element(element[0].getElementsByClassName('md-content')[0]),
-        tooltipParent = angular.element(document.body),
-        showTimeout   = null,
-        debouncedOnResize = $$rAF.throttle(function () { updatePosition(); });
+    var parent        = $mdUtil.getParentWithPointerEvents(element);
+    var content       = angular.element(element[0].getElementsByClassName('md-content')[0]);
+    var tooltipParent = angular.element(document.body);
+    var showTimeout   = null;
+    var debouncedOnResize = $$rAF.throttle(function () { updatePosition(); });
+    var enterTrigger = scope.enterTrigger || ENTER_EVENTS;
+    var leaveTrigger = scope.leaveTrigger || LEAVE_EVENTS;
 
     if ($animate.pin) $animate.pin(element, parent);
 
@@ -219,8 +225,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
           .off('resize', debouncedOnResize);
 
         parent
-          .off(ENTER_EVENTS, enterHandler)
-          .off(LEAVE_EVENTS, leaveHandler)
+          .off(enterTrigger, enterHandler)
+          .off(leaveTrigger, leaveHandler)
           .off('mousedown', mousedownHandler);
 
         // Trigger the handler in case any the tooltip was still visible.
@@ -234,7 +240,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
         if (e.type === 'focus' && elementFocusedOnWindowBlur) {
           elementFocusedOnWindowBlur = false;
         } else if (!scope.visible) {
-          parent.on(LEAVE_EVENTS, leaveHandler);
+          parent.on(leaveTrigger, leaveHandler);
           setVisible(true);
 
           // If the user is on a touch device, we should bind the tap away after
@@ -260,7 +266,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
             showTimeout = null;
           }
 
-          parent.off(LEAVE_EVENTS, leaveHandler);
+          parent.off(leaveTrigger, leaveHandler);
           parent.triggerHandler('blur');
           setVisible(false);
         }
@@ -272,7 +278,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
 
       // to avoid `synthetic clicks` we listen to mousedown instead of `click`
       parent.on('mousedown', mousedownHandler);
-      parent.on(ENTER_EVENTS, enterHandler);
+      parent.on(enterTrigger, enterHandler);
     }
 
     function setVisible (value) {
