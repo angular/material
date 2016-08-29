@@ -46,7 +46,7 @@ describe('<md-fab-actions> directive', function() {
   }));
   
   
-  it('supports updating md-reverse by passing a boolean to it.', inject(function(){
+  it('supports updating md-reverse by passing a boolean to it.', inject(function($compile, $rootScope){
     var element = $compile(
       '<md-fab-speed-dial>' +
       '  <md-fab-actions md-reverse="shouldReverse">' +
