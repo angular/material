@@ -114,7 +114,7 @@ function mdCompilerService($q, $templateRequest, $injector, $compile, $controlle
 
           //Instantiate controller if it exists, because we have scope
           if (controller) {
-            var invokeCtrl = $controller(controller, locals, true);
+            var invokeCtrl = $controller(controller, locals, true, controllerAs);
             if (bindToController) {
               angular.extend(invokeCtrl.instance, locals);
             }
@@ -122,10 +122,6 @@ function mdCompilerService($q, $templateRequest, $injector, $compile, $controlle
             //See angular-route source for this logic
             element.data('$ngControllerController', ctrl);
             element.children().data('$ngControllerController', ctrl);
-
-            if (controllerAs) {
-              scope[controllerAs] = ctrl;
-            }
 
             // Publish reference to this controller
             compiledData.controller = ctrl;
