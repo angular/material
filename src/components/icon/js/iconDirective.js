@@ -13,7 +13,7 @@ angular
  * The `md-icon` directive makes it easier to use vector-based icons in your app (as opposed to
  * raster-based icons types like PNG). The directive supports both icon fonts and SVG icons.
  *
- * Icons should be consider view-only elements that should not be used directly as buttons; instead nest a `<md-icon>`
+ * Icons should be considered view-only elements that should not be used directly as buttons; instead nest a `<md-icon>`
  * inside a `md-button` to add hover and click features.
  *
  * ### Icon fonts
