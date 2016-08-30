@@ -223,8 +223,40 @@ describe('util', function() {
         // Restore the scrolling.
         enableScrolling();
         window.scrollTo(0, 0);
-        document.body.removeChild(element[0]);
+
+        element.remove();
       }));
+    });
+
+    describe('getViewportTop', function() {
+
+      it('should properly determine the top offset', inject(function($mdUtil) {
+        var viewportHeight = Math.round(window.innerHeight);
+        var element = angular.element('<div style="height: ' + (viewportHeight * 2) + 'px">');
+
+        document.body.appendChild(element[0]);
+
+        // Scroll down the viewport height.
+        window.scrollTo(0, viewportHeight);
+
+        expect(getViewportTop()).toBe(viewportHeight);
+
+        // Restore the scrolling.
+        window.scrollTo(0, 0);
+
+        expect(getViewportTop()).toBe(0);
+
+        element.remove();
+
+        /*
+         * Round the viewport top offset because the test browser might be resized and
+         * could cause deviations for the test.
+         */
+        function getViewportTop() {
+          return Math.round($mdUtil.getViewportTop());
+        }
+      }));
+
     });
 
     describe('nextTick', function() {
