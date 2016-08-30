@@ -69,7 +69,7 @@ function MdTableController($attrs, $element, $scope, $mdUtil) {
       self.selected = [].concat(self.selected || []);
     } else if (angular.isArray(self.selected)) {
       // Transforms the array of multiple selections into a single selection, by using the first item.
-      self.selected = self.selected.shift();
+      self.selected = self.selected[0];
     }
   });
 
@@ -79,9 +79,9 @@ function MdTableController($attrs, $element, $scope, $mdUtil) {
 }
 
 MdTableController.prototype.getRows = function(element) {
-  var tableElement = element || this.$element[0];
+  var tableBody = element || this.$element[0];
 
-  return Array.prototype.filter.call(tableElement.rows, function(row) {
+  return Array.prototype.filter.call(tableBody.rows, function(row) {
     // This makes sure that the row is currently visible in the DOM.
     // We may need to filter rows leaving with ng-repeat when we incorporate pagination.
     return !!row.offsetParent;

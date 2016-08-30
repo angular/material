@@ -2,8 +2,13 @@ table.md-table {
 
   th, td {
     md-checkbox {
-      width: 20px;
       margin: 0;
+      display: block;
+
+      // hide label
+      .md-label {
+        display: none;
+      }
     }
   }
 

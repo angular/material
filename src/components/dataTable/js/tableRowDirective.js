@@ -117,7 +117,7 @@ MdTableRowController.prototype.onEnableSelection = function() {
 
   this.$element.prepend(cellElement);
 
-  if( this.head) {
+  if (this.head) {
     // We have to call the heads onEnableSelection function, to update the toggle-all checkbox
     // in the head row.
     this.head.onEnableSelection();
@@ -141,7 +141,7 @@ MdTableRowController.prototype.onDisableSelection = function() {
 
   // We only remove the cell from the row, when the cell is marked as a temporary checkbox cell
   if (cell && cell.hasClass('md-checkbox-cell')) {
-    cell[0].parentNode.removeChild(cell[0]);
+    cell.remove();
   }
 };
 

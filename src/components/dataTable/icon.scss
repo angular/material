@@ -1,11 +1,13 @@
+$md-table-icon-size: 16px;
+
 table.md-table thead th {
   md-icon {
-    width: 16px;
-    height: 16px;
-    min-width: 16px;
-    min-height: 16px;
-    font-size: 16px !important;
-    line-height: 16px !important;
+    width: $md-table-icon-size;
+    height: $md-table-icon-size;
+    min-width: $md-table-icon-size;
+    min-height: $md-table-icon-size;
+    font-size: $md-table-icon-size !important;
+    line-height: $md-table-icon-size !important;
 
     &:not(:first-child) {
       margin-left: 8px;

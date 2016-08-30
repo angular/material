@@ -141,10 +141,12 @@ MdTableOrderByController.prototype.initCtrl = function(tableCtrl, orderCtrl, cel
   }.bind(this));
 };
 
+/**
+ * The isActiveRegex checks the headCtrl's order property.
+ * When the order direction is inverted, we prefix the order property
+ * with a minus.
+ */
 MdTableOrderByController.prototype.isActive = function() {
-  // The isActiveRegex checks the headCtrl's order property.
-  // When the order direction is inverted, we prefix the order property
-  // with a minus.
   return this.isActiveRegex.test(this.orderCtrl.value);
 };
 
@@ -153,9 +155,9 @@ MdTableOrderByController.prototype.getDirection = function() {
     // When the current order value is prefixed with a minus, then its order
     // is descendant.
     return this.orderCtrl.value.charAt(0) === '-' ? 'md-desc' : 'md-asc';
-  } else {
-    return this.$mdUtil.parseAttributeBoolean(this.$attrs.mdDesc) ? 'md-desc' : 'md-asc';
   }
+
+  return this.$mdUtil.parseAttributeBoolean(this.$attrs.mdDesc) ? 'md-desc' : 'md-asc';
 };
 
 MdTableOrderByController.prototype.compileIcon = function() {

@@ -1,5 +1,6 @@
-$table-head-font-size: 12px;
-$table-body-font-size: 13px;
+$md-table-head-font-size: 12px;
+$md-table-body-font-size: 13px;
+$md-table-cell-alignments: left, right, center, justify;
 
 table.md-table th,
 table.md-table td {
@@ -11,6 +12,7 @@ table.md-table td {
     padding: 0 24px;
   }
 
+  // apply the same padding to all cells except the first and last cell
   &:nth-child(n+2):nth-last-child(n+2) {
     padding: 0 56px 0 0;
   }
@@ -19,30 +21,21 @@ table.md-table td {
     padding: 0 24px 0 0;
   }
 
-  &.md-align-left {
-    text-align: left;
-  }
-
-  &.md-align-right {
-    text-align: right;
-  }
-
-  &.md-align-center {
-    text-align: center;
-  }
-
-  &.md-align-justify {
-    text-align: justify;
+  // generate cell alignment classes
+  @each $alignment in $md-table-cell-alignments {
+    &.md-align-#{$alignment} {
+      text-align: $alignment;
+    }
   }
 }
 
 table.md-table.md-selectable th,
 table.md-table.md-selectable td {
   &:first-child {
-    width: 20px;
     padding: 0 0 0 24px;
   }
 
+  // second cell (first cell after checkbox)
   &:nth-child(2) {
     padding: 0 24px;
   }
@@ -50,8 +43,8 @@ table.md-table.md-selectable td {
 
 table.md-table thead {
   th {
-    font-size: $table-head-font-size;
-    line-height: $table-head-font-size;
+    font-size: $md-table-head-font-size;
+    line-height: $md-table-head-font-size;
 
     &.md-sort {
       cursor: pointer;
@@ -60,6 +53,6 @@ table.md-table thead {
 }
 
 table.md-table tbody td {
-  font-size: $table-body-font-size;
-  line-height: $table-body-font-size;
+  font-size: $md-table-body-font-size;
+  line-height: $md-table-body-font-size;
 }
