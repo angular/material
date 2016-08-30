@@ -223,7 +223,7 @@ MdChipsCtrl.prototype.chipKeydown = function (event) {
       event.preventDefault();
       // Cancel the delete action only after the event cancel. Otherwise the page will go back.
       if (!this.isRemovable()) return;
-      this.removeAndSelectAdjacentChip(this.selectedChip);
+      this.removeAndSelectAdjacentChip(this.selectedChip, event);
       break;
     case this.$mdConstant.KEY_CODE.LEFT_ARROW:
       event.preventDefault();
@@ -259,9 +259,9 @@ MdChipsCtrl.prototype.getPlaceholder = function() {
  * Removes chip at {@code index} and selects the adjacent chip.
  * @param index
  */
-MdChipsCtrl.prototype.removeAndSelectAdjacentChip = function(index) {
+MdChipsCtrl.prototype.removeAndSelectAdjacentChip = function(index, event) {
   var selIndex = this.getAdjacentChipIndex(index);
-  this.removeChip(index);
+  this.removeChip(index, event);
   this.$timeout(angular.bind(this, function () {
       this.selectAndFocusChipSafe(selIndex);
   }));
@@ -421,7 +421,7 @@ MdChipsCtrl.prototype.validateModel = function() {
  * Removes the chip at the given index.
  * @param index
  */
-MdChipsCtrl.prototype.removeChip = function(index) {
+MdChipsCtrl.prototype.removeChip = function(index, event) {
   var removed = this.items.splice(index, 1);
 
   // Update model validation
@@ -429,12 +429,12 @@ MdChipsCtrl.prototype.removeChip = function(index) {
   this.validateModel();
 
   if (removed && removed.length && this.useOnRemove && this.onRemove) {
-    this.onRemove({ '$chip': removed[0], '$index': index });
+    this.onRemove({ '$chip': removed[0], '$index': index, '$event': event });
   }
 };
 
-MdChipsCtrl.prototype.removeChipAndFocusInput = function (index) {
-  this.removeChip(index);
+MdChipsCtrl.prototype.removeChipAndFocusInput = function (index, $event) {
+  this.removeChip(index, $event);
   this.onFocus();
 };
 /**
