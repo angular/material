@@ -1,5 +1,5 @@
 describe('md-input-container animations', function() {
-  var $rootScope, $compile, $animate, $animateCss,
+  var $rootScope, $compile, $animateCss, $material,
     el, pageScope, invalidAnimation, messagesAnimation, messageAnimation,
     cssTransitionsDisabled = false, lastAnimateCall;
 
@@ -28,7 +28,8 @@ describe('md-input-container animations', function() {
     );
 
     var container = el.find('md-input-container'),
-      input = el.find('input');
+      input = el.find('input'),
+      doneSpy = jasmine.createSpy('done');
 
     // Mimic the real validations/animations that fire
 
@@ -39,10 +40,11 @@ describe('md-input-container animations', function() {
      */
 
     setFoo('asdf');
-    messageAnimation.enter(getError()).start().done(angular.noop);
-    $animate.flush();
+    messageAnimation.enter(getError(), doneSpy);
+    flush();
 
     expectError(getError(), 'pattern');
+    expect(doneSpy).toHaveBeenCalled();
     expect(container).not.toHaveClass('md-input-invalid');
     expect(lastAnimateCall).toEqual({element: getError(), options: {}});
 
@@ -52,11 +54,13 @@ describe('md-input-container animations', function() {
      * Expect to animate in the pattern message
      */
 
+    doneSpy.calls.reset();
     input.triggerHandler('blur');
-    invalidAnimation.addClass(container, 'md-input-invalid', angular.noop);
-    $animate.flush();
+    invalidAnimation.addClass(container, 'md-input-invalid', doneSpy);
+    flush();
 
     expectError(getError(), 'pattern');
+    expect(doneSpy).toHaveBeenCalled();
     expect(container).toHaveClass('md-input-invalid');
     expect(lastAnimateCall.element).toEqual(getError());
     expect(lastAnimateCall.options.event).toEqual('enter');
@@ -71,9 +75,11 @@ describe('md-input-container animations', function() {
     // Grab the pattern error before we change foo and it disappears
     var patternError = getError();
 
-    messageAnimation.leave(patternError).start().done(angular.noop);
-    $animate.flush();
+    doneSpy.calls.reset();
+    messageAnimation.leave(patternError, doneSpy);
+    flush();
 
+    expect(doneSpy).toHaveBeenCalled();
     expect(lastAnimateCall.element).toEqual(patternError);
     expect(lastAnimateCall.options.event).toEqual('leave');
     expect(parseInt(lastAnimateCall.options.to["margin-top"])).toBeLessThan(0);
@@ -81,9 +87,11 @@ describe('md-input-container animations', function() {
     setFoo('');
     expectError(getError(), 'required');
 
-    messageAnimation.enter(getError()).start().done(angular.noop);
-    $animate.flush();
+    doneSpy.calls.reset();
+    messageAnimation.enter(getError(), doneSpy);
+    flush();
 
+    expect(doneSpy).toHaveBeenCalled();
     expect(container).toHaveClass('md-input-invalid');
     expect(lastAnimateCall.element).toEqual(getError());
     expect(lastAnimateCall.options.event).toEqual('enter');
@@ -114,6 +122,12 @@ describe('md-input-container animations', function() {
 
   function expectError(element, message) {
     expect(element.text().trim()).toBe(message);
+  }
+
+  function flush() {
+    // Note: we use flushInterimElement() because it actually calls everything 3 times which seems
+    // to be enough to actually flush the animations
+    $material.flushInterimElement();
   }
 
   /*
@@ -152,8 +166,8 @@ describe('md-input-container animations', function() {
     inject(function($injector) {
       $rootScope = $injector.get('$rootScope');
       $compile = $injector.get('$compile');
-      $animate = $injector.get('$animate');
       $animateCss = $injector.get('$animateCss');
+      $material = $injector.get('$material');
 
       // Grab our input animations
       invalidAnimation = $injector.get('mdInputInvalidAnimation');
