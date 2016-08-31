@@ -737,6 +737,17 @@ describe('$mdTheming service', function() {
     expect($mdTheming.defaultTheme()).toBe('default');
   }));
 
+  it('supports registering theme on the fly', inject(function ($mdTheming) {
+    expect($mdTheming.THEMES.hasOwnProperty('test')).toBeFalsy();
+
+    $mdTheming.defineTheme('test', {
+      primary: 'red',
+      warn: 'yellow'
+    });
+
+    expect($mdTheming.THEMES.hasOwnProperty('test')).toBeTruthy();
+  }));
+
   it('supports changing browser color on the fly', function() {
     var name = 'theme-color';
     var primaryPalette = $mdThemingProvider._THEMES.default.colors.primary.name;
@@ -758,7 +769,7 @@ describe('$mdTheming service', function() {
 describe('md-theme directive', function() {
   beforeEach(module('material.core'));
 
-  it('should observe and set mdTheme controller', inject(function($compile, $rootScope) {
+  it('should watch and set mdTheme controller', inject(function($compile, $rootScope) {
     $rootScope.themey = 'red';
     var el = $compile('<div md-theme="{{themey}}">')($rootScope);
     $rootScope.$apply();
@@ -768,23 +779,48 @@ describe('md-theme directive', function() {
     expect(ctrl.$mdTheme).toBe('blue');
   }));
 
-  it('warns when an unregistered theme is used', function() {
-    inject(function($log, $compile, $rootScope) {
-      spyOn($log, 'warn');
-      $compile('<div md-theme="unregistered"></div>')($rootScope);
-      $rootScope.$apply();
-      expect($log.warn).toHaveBeenCalled();
-    });
-  });
+  it('warns when an unregistered theme is used', inject(function ($log, $compile, $rootScope) {
+    spyOn($log, 'warn');
+    $compile('<div md-theme="unregistered"></div>')($rootScope);
+    $rootScope.$apply();
+    expect($log.warn).toHaveBeenCalled();
+  }));
 
-  it('does not warn when a registered theme is used', function() {
-    inject(function($log, $compile, $rootScope) {
-      spyOn($log, 'warn');
-      $compile('<div md-theme="default"></div>')($rootScope);
+  it('does not warn when a registered theme is used', inject(function($log, $compile, $rootScope) {
+    spyOn($log, 'warn');
+    $compile('<div md-theme="default"></div>')($rootScope);
+    $rootScope.$apply();
+    expect($log.warn.calls.count()).toBe(0);
+  }));
+
+  it('should accept string as a theme', inject(function($compile, $rootScope, $mdTheming) {
+    var el = $compile('<div md-theme="red"></div>')($rootScope);
+    $rootScope.$apply();
+    $mdTheming(el);
+    expect(el.hasClass('md-default-theme')).toBeFalsy();
+    expect(el.hasClass('md-red-theme')).toBeTruthy();
+  }));
+
+  it('should accept $q promise as a theme', inject(function($compile, $rootScope, $q, $mdTheming) {
+    $rootScope.promise = $mdTheming.defineTheme('red', { primary: 'red' });
+    var el = $compile('<div md-theme="promise"></div>')($rootScope);
+    $mdTheming(el);
+    $rootScope.$apply();
+    expect(el.hasClass('md-default-theme')).toBeFalsy();
+    expect(el.hasClass('md-red-theme')).toBeTruthy();
+  }));
+
+  it('should accept a function that returns a promise as a theme',
+    inject(function ($compile, $rootScope, $q, $mdTheming) {
+      $rootScope.func = function () {
+        return $mdTheming.defineTheme('red', {primary: 'red'});
+      };
+      var el = $compile('<div md-theme="func"></div>')($rootScope);
+      $mdTheming(el);
       $rootScope.$apply();
-      expect($log.warn.calls.count()).toBe(0);
-    });
-  });
+      expect(el.hasClass('md-default-theme')).toBeFalsy();
+      expect(el.hasClass('md-red-theme')).toBeTruthy();
+    }));
 });
 
 describe('md-themable directive', function() {
