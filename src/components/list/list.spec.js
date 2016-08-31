@@ -64,6 +64,27 @@ describe('mdListItem directive', function() {
     expect($rootScope.modelVal).toBe(false);
   });
 
+  it('should not wrap when proxies are disabled', function() {
+    var listItem = setup(
+      '<md-list-item class="md-no-proxy">' +
+        '<md-switch ng-model="modelVal"></md-switch>' +
+      '</md-list-item>'
+    );
+
+    var switchEl = listItem[0].querySelector('md-switch');
+
+    // If proxies are disabled, the list will not wrap anything.
+    expect(switchEl.parentNode).toBe(listItem[0]);
+
+    listItem.triggerHandler('click');
+    expect($rootScope.modelVal).toBeFalsy();
+
+    switchEl.click();
+    expect($rootScope.modelVal).toBeTruthy();
+
+    expect(listItem).not.toHaveClass('md-clickable')
+  });
+
   it('should not trigger the proxy element, when clicking on a slider', function() {
     var listItem = setup(
       '<md-list-item>' +
@@ -362,17 +383,16 @@ describe('mdListItem directive', function() {
     expect(secondaryContainer.children()[1].nodeName).toBe('MD-BUTTON');
   });
 
-  it('should detect non-compiled md-buttons', function() {
+  it('should not detect a normal button as a proxy element', function() {
     var listItem = setup('<md-list-item><md-button ng-click="sayHello()">Hello</md-button></md-list-item>');
-    expect(listItem.hasClass('md-no-proxy')).toBeFalsy();
+    expect(listItem.hasClass('md-no-proxy')).toBeTruthy();
   });
 
-  it('should not detect secondary or excluded md-buttons', function() {
+  it('should not detect a secondary button as a proxy element', function() {
     var listItem = setup(
       '<md-list-item>' +
       '  <div>Content Here</div>' +
       '  <md-button class="md-secondary" ng-click="sayHello()">Hello</md-button>' +
-      '  <md-button class="md-exclude" ng-click="sayHello()">Hello</md-button>' +
       '</md-list-item>'
     );
     expect(listItem.hasClass('md-no-proxy')).toBeTruthy();
