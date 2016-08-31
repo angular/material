@@ -25,6 +25,32 @@ describe('material.components.menuBar', function() {
         expect(nestedMenu.getAttribute('md-position-mode')).toBe('left bottom');
       });
 
+      it('should close when clicking on the wrapping toolbar', inject(function($compile, $rootScope, $timeout) {
+        var ctrl = null;
+        var toolbar = $compile(
+          '<md-toolbar>' +
+            '<md-menu-bar>' +
+              '<md-menu ng-repeat="i in [1, 2, 3]">' +
+                '<button ng-click></button>' +
+                '<md-menu-content></md-menu-content>' +
+              '</md-menu>' +
+            '</md-menu-bar>' +
+          '</md-toolbar>'
+        )($rootScope);
+
+        $rootScope.$digest();
+        ctrl = toolbar.find('md-menu-bar').controller('mdMenuBar');
+
+        toolbar.find('md-menu').eq(0).controller('mdMenu').open();
+        $timeout.flush();
+
+        expect(toolbar).toHaveClass('md-has-open-menu');
+        toolbar.triggerHandler('click');
+
+        expect(toolbar).not.toHaveClass('md-has-open-menu');
+        expect(ctrl.getOpenMenuIndex()).toBe(-1);
+      }));
+
       describe('ARIA', function() {
 
         it('sets role="menubar" on the menubar', function() {
