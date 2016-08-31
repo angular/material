@@ -1,0 +1,17 @@
+table.md-table {
+
+  tr {
+    &.md-auto-select:not([disabled]):hover {
+      transition: background 0.2s;
+    }
+  }
+
+  thead tr {
+    height: 56px;
+  }
+
+  tbody tr {
+    height: 48px;
+  }
+
+}

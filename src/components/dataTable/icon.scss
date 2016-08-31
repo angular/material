@@ -1,0 +1,39 @@
+$md-table-icon-size: 16px;
+
+table.md-table thead th {
+  md-icon {
+    width: $md-table-icon-size;
+    height: $md-table-icon-size;
+    min-width: $md-table-icon-size;
+    min-height: $md-table-icon-size;
+    font-size: $md-table-icon-size !important;
+    line-height: $md-table-icon-size !important;
+
+    &:not(:first-child) {
+      margin-left: 8px;
+    }
+
+    &:not(:last-child) {
+      margin-right: 8px;
+    }
+
+    &.md-sort-icon {
+      margin-bottom: 1px;
+      opacity: 0;
+      transition: transform 0.25s, opacity 0.25s;
+
+      &.md-asc {
+        transform: rotate(0deg);
+      }
+
+      &.md-desc {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  &:hover md-icon.md-sort-icon,
+  &.md-active md-icon.md-sort-icon {
+    opacity: 1;
+  }
+}

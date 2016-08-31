@@ -1,0 +1,44 @@
+<div class="container" layout="column" ng-controller="AppCtrl as ctrl">
+
+  <div layout="row" layout-wrap class="options">
+    <md-checkbox ng-model="ctrl.options.rowSelection">Enable Row Selection</md-checkbox>
+    <md-checkbox ng-model="ctrl.options.multiple">Multiple Row Selection</md-checkbox>
+    <md-checkbox ng-model="ctrl.options.auto">Select on Row Click</md-checkbox>
+  </div>
+
+  <md-divider></md-divider>
+
+  <md-content>
+
+    <table md-table md-row-select="{{ctrl.options.rowSelection}}" md-selected="ctrl.selected" multiple="{{ctrl.options.multiple}}">
+      <thead md-head md-order="ctrl.order" md-on-reorder="$log.info(ctrl.order)">
+        <tr md-row>
+          <th md-cell md-order-by="name">Dessert (100g serving)</th>
+          <th md-cell md-align="right" md-order-by="calories">Calories</th>
+          <th md-cell md-align="right" md-order-by="fat">Fat (g)</th>
+          <th md-cell md-align="right" md-order-by="carbs">Carbs (g)</th>
+          <th md-cell md-align="right" md-order-by="protein">Protein (g)</th>
+          <th md-cell md-align="right" md-order-by="sodium">Sodium (mg)</th>
+          <th md-cell md-align="right" md-order-by="calcium">Calcium (%)</th>
+          <th md-cell md-align="right" md-order-by="iron">Iron (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr md-row ng-repeat="dessert in ctrl.desserts | orderBy: ctrl.order" md-selectable="dessert"
+            md-on-select="ctrl.onSelect(dessert)" md-on-deselect="ctrl.onDeselect(dessert)"
+            md-auto-select="{{ctrl.options.auto}}" >
+          <td md-cell>{{::dessert.name}}</td>
+          <td md-cell>{{::dessert.calories}}</td>
+          <td md-cell>{{::dessert.fat | number: 1}}</td>
+          <td md-cell>{{::dessert.carbs}}</td>
+          <td md-cell>{{::dessert.protein | number: 1}}</td>
+          <td md-cell>{{::dessert.sodium}}</td>
+          <td md-cell>{{::dessert.calcium}}%</td>
+          <td md-cell>{{::dessert.iron}}%</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </md-content>
+
+</div>

@@ -1,0 +1,45 @@
+table.md-table.md-THEME_NAME-theme {
+
+  thead {
+    th {
+      color: '{{ foreground-2 }}';
+
+      &.md-active {
+        color: '{{ foreground-1 }}';
+
+        md-icon.md-sort-icon {
+          color: '{{ foreground-1 }}';
+        }
+      }
+
+      md-icon.md-sort-icon {
+        color: '{{ foreground-3 }}'
+      }
+    }
+
+    &:not(:last-of-type) th {
+      // Some users may use multiple head rows inside of the table.
+      // In this case, we show a border between those rows.
+      border-bottom: 1px '{{ foreground-4 }}' solid;
+    }
+  }
+
+  tbody {
+    td {
+      color: '{{ foreground-1 }}';
+      border-top: 1px '{{ foreground-4 }}' solid;
+    }
+  }
+
+  tr {
+    &.md-selected {
+      background: '{{ background-hue-2 }}';
+    }
+
+    &.md-auto-select:not([disabled]):hover {
+      //TODO(devversion): revisit the theming service to provide hue-200 of the background palette.
+      background: #eee;
+    }
+  }
+
+}

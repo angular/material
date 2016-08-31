@@ -1,0 +1,58 @@
+$md-table-head-font-size: 12px;
+$md-table-body-font-size: 13px;
+$md-table-cell-alignments: left, right, center, justify;
+
+table.md-table th,
+table.md-table td {
+  text-align: left;
+  white-space: nowrap;
+  vertical-align: middle;
+
+  &:first-child {
+    padding: 0 24px;
+  }
+
+  // apply the same padding to all cells except the first and last cell
+  &:nth-child(n+2):nth-last-child(n+2) {
+    padding: 0 56px 0 0;
+  }
+
+  &:last-child {
+    padding: 0 24px 0 0;
+  }
+
+  // generate cell alignment classes
+  @each $alignment in $md-table-cell-alignments {
+    &.md-align-#{$alignment} {
+      text-align: $alignment;
+    }
+  }
+}
+
+table.md-table.md-selectable th,
+table.md-table.md-selectable td {
+  &:first-child {
+    padding: 0 0 0 24px;
+  }
+
+  // second cell (first cell after checkbox)
+  &:nth-child(2) {
+    padding: 0 24px;
+  }
+}
+
+table.md-table thead {
+  th {
+    font-size: $md-table-head-font-size;
+    line-height: $md-table-head-font-size;
+
+    &.md-sort {
+      cursor: pointer;
+    }
+  }
+}
+
+table.md-table tbody td {
+  font-size: $md-table-body-font-size;
+  line-height: $md-table-body-font-size;
+}

@@ -1,0 +1,15 @@
+table.md-table {
+
+  th, td {
+    md-checkbox {
+      margin: 0;
+      display: block;
+
+      // hide label
+      .md-label {
+        display: none;
+      }
+    }
+  }
+
+}
