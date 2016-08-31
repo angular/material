@@ -53,6 +53,7 @@ md-datepicker {
   @include md-flat-input();
   min-width: 120px;
   max-width: $md-calendar-width - $md-datepicker-button-gap;
+  padding: 0 0 $md-datepicker-border-bottom-gap;
 }
 
 // If the datepicker is inside of a md-input-container
@@ -94,7 +95,6 @@ md-datepicker {
   // Position relative in order to absolutely position the down-triangle button within.
   position: relative;
 
-  padding-bottom: $md-datepicker-border-bottom-gap;
   border-bottom-width: 1px;
   border-bottom-style: solid;
 
@@ -139,27 +139,14 @@ md-datepicker {
 
 // Portion of the floating panel that sits, invisibly, on top of the input.
 .md-datepicker-input-mask {
-  // It needs to be 1px shorter because of the datepicker-input-container's bottom border,
-  // which can cause a slight hole in the mask when it's inside a md-input-container.
-  height: $md-datepicker-input-mask-height - 1px;
+  height: $md-datepicker-input-mask-height;
   width: $md-calendar-width;
   position: relative;
+  overflow: hidden;
 
   background: transparent;
   pointer-events: none;
   cursor: text;
-}
-
-.md-datepicker-input-mask-opaque {
-  position: absolute;
-  right: 0;
-  left: 120px;
-  height: 100%;
-
-  // The margin pulls it an extra pixel to the left, which gives it a slight overlap
-  // with the input container. This ensures that there are no gaps between the two
-  // elements.
-  margin-left: -1px;
 }
 
 // The calendar portion of the floating pane (vs. the input mask).
@@ -231,26 +218,8 @@ md-datepicker[disabled] {
 .md-datepicker-open {
   overflow: hidden;
 
-  .md-datepicker-input-container {
-    // The negative bottom margin prevents the content around the datepicker
-    // from jumping when it gets opened.
-    margin-bottom: -$md-datepicker-border-bottom-gap;
-  }
-
-  .md-icon-button + .md-datepicker-input-container {
-    @include rtl-prop(margin-left, margin-right, -$md-datepicker-button-gap, auto);
-  }
-
-  .md-datepicker-input,
-  label:not(.md-no-float):not(.md-container-ignore) {
-    margin-bottom: -$md-datepicker-border-bottom-gap;
-  }
-
-  // This needs some extra specificity in order to override
-  // the focused/invalid border colors.
-  input.md-datepicker-input {
-    @include rtl-prop(margin-left, margin-right, 24px, auto);
-    height: $md-datepicker-input-mask-height;
+  .md-datepicker-input-container,
+  input.md-input {
     border-bottom-color: transparent;
   }
 
