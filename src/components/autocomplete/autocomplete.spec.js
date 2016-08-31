@@ -930,6 +930,42 @@ describe('<md-autocomplete>', function() {
       expect($mdUtil.enableScrolling).toHaveBeenCalled();
     }));
 
+    it('removes the md-scroll-mask when md-autocomplete removed on change', inject(function($mdUtil, $timeout, $material) {
+      spyOn($mdUtil, 'enableScrolling');
+
+      var scope = createScope();
+      var template =
+        '<div>' +
+        '  <md-autocomplete' +
+        '     ng-if="!removeAutocomplete"' +
+        '     md-selected-item="selectedItem"' +
+        '     md-search-text="searchText"' +
+        '     md-items="item in match(searchText)"' +
+        '     md-item-text="item.display"' +
+        '     placeholder="placeholder">' +
+        '    <md-item-template>{{item.display}}</md-item-template>' +
+        '    <md-not-found>Sorry, not found...</md-not-found>' +
+        '  </md-autocomplete>' +
+        '</div>';
+      var element = compile(template, scope);
+      var ctrl = element.children().controller('mdAutocomplete');
+
+      $material.flushOutstandingAnimations();
+
+      // Focus our input
+      ctrl.focus();
+
+      // Set our search text to a value to make md-scroll-mask added to DOM
+      scope.searchText = 'searchText';
+
+      $timeout.flush();
+
+      // Set removeAutocomplete to false to remove the md-autocomplete
+      scope.$apply('removeAutocomplete = true');
+
+      expect($mdUtil.enableScrolling).toHaveBeenCalled();
+    }));
+
     it('should initialize the search text with an empty string', inject(function($mdUtil, $timeout, $material) {
       var scope = createScope();
 
