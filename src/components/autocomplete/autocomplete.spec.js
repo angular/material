@@ -278,6 +278,36 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should forward focus to the input element with md-autofocus', inject(function($timeout) {
+
+      var scope = createScope();
+
+      var template =
+        '<md-autocomplete ' +
+        '    md-selected-item="selectedItem" ' +
+        '    md-search-text="searchText" ' +
+        '    md-items="item in match(searchText)" ' +
+        '    md-item-text="item.display" ' +
+        '    placeholder="placeholder"' +
+        '    md-autofocus>' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      document.body.appendChild(element[0]);
+
+      // Initial timeout for gathering elements
+      $timeout.flush();
+
+      element.triggerHandler('focus');
+
+      expect(document.activeElement).toBe(input[0]);
+
+      element.remove();
+    }));
+
     it('allows using an empty readonly attribute', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
       var template = '\
