@@ -1390,6 +1390,8 @@ describe('$mdDialog', function() {
 
         $mdDialog.hide();
         runAnimation();
+
+        expect(contentElement[0].offsetParent).toBeFalsy();
       });
 
       it('should properly toggle the fullscreen class', function() {
@@ -1470,6 +1472,48 @@ describe('$mdDialog', function() {
         expect(dialogEl).not.toHaveClass('md-transition-in');
         expect(dialogEl).not.toHaveClass('md-transition-out');
       });
+
+      it('should restore the contentElement at its previous position', function() {
+        var contentElement = $compile(
+          '<div class="md-dialog-container">' +
+          '<md-dialog>Dialog</md-dialog>' +
+          '</div>'
+        )($rootScope);
+
+        var dialogParent = angular.element('<div>');
+        var contentParent = angular.element(
+          '<div>' +
+          '<span>Child Element</span>' +
+          '</div>'
+        );
+
+        // Append the content parent to the document, otherwise contentElement is not able
+        // to detect it properly.
+        document.body.appendChild(contentParent[0]);
+
+        contentParent.prepend(contentElement);
+
+        $mdDialog.show({
+          contentElement: contentElement,
+          parent: dialogParent,
+          escapeToClose: true
+        });
+
+        $rootScope.$apply();
+        runAnimation();
+
+        expect(contentElement[0].parentNode).toBe(dialogParent[0]);
+
+        $mdDialog.hide();
+        runAnimation();
+
+        expect(contentElement[0].parentNode).toBe(contentParent[0]);
+
+        var childNodes = [].slice.call(contentParent[0].children);
+        expect(childNodes.indexOf(contentElement[0])).toBe(0);
+
+        document.body.removeChild(contentParent[0]);
+      })
 
     });
 
