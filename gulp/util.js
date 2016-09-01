@@ -229,7 +229,6 @@ function themeBuildStream() {
       .pipe(utils.hoistScssVariables())
       .pipe(sass())
       .pipe(dedupeCss())
-      .pipe(minifyCss())
       .pipe(utils.cssToNgConstant('material.core', '$MD_THEME_CSS'));
 }
 
