@@ -388,7 +388,7 @@ describe('$$interimElement service', function() {
         }
       });
 
-      it('should cancel a previous interim after it completes hiding', inject(function($q, $timeout) {
+      it('should cancel a previous interim after a second shows up', inject(function($q, $timeout) {
         var hidePromise = $q.defer();
         var isShown = false;
 

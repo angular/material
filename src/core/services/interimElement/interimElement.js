@@ -430,7 +430,7 @@ function InterimElementProvider() {
 
           // Note: This function might be called when the element already has been removed,
           // in which case we won't find any matches.
-          if (filtered.length > 0) {
+          if (filtered.length) {
             interim = filtered[0];
             showingInterims.splice(showingInterims.indexOf(interim), 1);
           }
