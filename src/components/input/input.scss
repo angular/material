@@ -48,16 +48,6 @@ md-input-container {
     min-width: 1px;
   }
 
-  .md-resize-handle {
-    position: absolute;
-    bottom: $input-error-height - $input-border-width-default * 2;
-    left: 0;
-    height: $input-resize-handle-height;
-    background: transparent;
-    width: 100%;
-    cursor: ns-resize;
-  }
-
   > md-icon {
     position: absolute;
     top: $icon-top-offset;
@@ -383,6 +373,21 @@ md-input-container {
       }
     }
   }
+}
+
+.md-resize-wrapper {
+  @include pie-clearfix();
+  position: relative;
+}
+
+.md-resize-handle {
+  position: absolute;
+  bottom: $input-resize-handle-height / -2;
+  left: 0;
+  height: $input-resize-handle-height;
+  background: transparent;
+  width: 100%;
+  cursor: ns-resize;
 }
 
 @media screen and (-ms-high-contrast: active) {
