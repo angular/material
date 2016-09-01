@@ -545,7 +545,7 @@ function attachToDocument( $mdGesture, $$MdGestureHandler ) {
 
   function mouseInputHijacker(ev) {
     var isKeyClick = !ev.clientX && !ev.clientY;
-    if (!isKeyClick && !ev.$material && !ev.isIonicTap
+    if (!isKeyClick && !ev.$material && !ev.isIonicTap && !ev.target.isContentEditable
       && !isInputEventFromLabelClick(ev)) {
       ev.preventDefault();
       ev.stopPropagation();
@@ -554,7 +554,7 @@ function attachToDocument( $mdGesture, $$MdGestureHandler ) {
 
   function clickHijacker(ev) {
     var isKeyClick = ev.clientX === 0 && ev.clientY === 0;
-    if (!isKeyClick && !ev.$material && !ev.isIonicTap
+    if (!isKeyClick && !ev.$material && !ev.isIonicTap && !ev.target.isContentEditable
       && !isInputEventFromLabelClick(ev)) {
       ev.preventDefault();
       ev.stopPropagation();
