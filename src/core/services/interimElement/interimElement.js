@@ -269,8 +269,8 @@ function InterimElementProvider() {
 
       return service = {
         show: show,
-        hide: hide,
-        cancel: cancel,
+        hide: waitForInterim(hide),
+        cancel: waitForInterim(cancel),
         destroy : destroy,
         $injector_: $injector
       };
@@ -339,19 +339,6 @@ function InterimElementProvider() {
        *
        */
       function hide(reason, options) {
-
-        if (!showingInterims.length) {
-          // When there are still interim's opening, then wait for the first interim element to
-          // finish its opening.
-          if (showPromises.length) {
-            return showPromises.shift().finally(function() {
-              return service.hide(reason, options)
-            });
-          }
-
-          return $q.when(reason);
-        }
-
         options = options || {};
 
         if (options.closeAll) {
@@ -411,6 +398,31 @@ function InterimElementProvider() {
         // is not handling the rejection. We create a pseudo catch handler, which will prevent the
         // promise from being logged to the $exceptionHandler.
         return interim.deferred.promise.catch(angular.noop);
+      }
+
+      /**
+       * Creates a function to wait for at least one interim element to be available.
+       * @param callbackFn Function to be used as callback
+       * @returns {Function}
+       */
+      function waitForInterim(callbackFn) {
+        return function() {
+          var fnArguments = arguments;
+
+          if (!showingInterims.length) {
+            // When there are still interim's opening, then wait for the first interim element to
+            // finish its open animation.
+            if (showPromises.length) {
+              return showPromises[0].finally(function () {
+                return callbackFn.apply(service, fnArguments);
+              });
+            }
+
+            return $q.when("No interim elements currently showing up.");
+          }
+
+          return callbackFn.apply(service, fnArguments);
+        };
       }
 
       /*
