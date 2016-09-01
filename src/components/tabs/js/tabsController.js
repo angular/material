@@ -335,9 +335,14 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     }
     
     if (viewportWidth > tab.offsetWidth) {
-        ctrl.offsetLeft = fixOffset(tab.offsetLeft);
+      //Canvas width *greater* than tab width: usual positioning
+      ctrl.offsetLeft = fixOffset(tab.offsetLeft);
     } else {
-        ctrl.offsetLeft = fixOffset(tab.offsetLeft + (tab.offsetWidth - viewportWidth + 1));
+      /**
+       * Canvas width *smaller* than tab width: positioning at the *end* of current tab to let 
+       * pagination "for loop" to proceed correctly on next tab when nextPage() is called again
+       */
+      ctrl.offsetLeft = fixOffset(tab.offsetLeft + (tab.offsetWidth - viewportWidth + 1));
     }
   }
 
@@ -353,9 +358,14 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     }
     
     if (elements.canvas.clientWidth > tab.offsetWidth) {
-        ctrl.offsetLeft = fixOffset(tab.offsetLeft + tab.offsetWidth - elements.canvas.clientWidth);
+      //Canvas width *greater* than tab width: usual positioning
+      ctrl.offsetLeft = fixOffset(tab.offsetLeft + tab.offsetWidth - elements.canvas.clientWidth);
     } else {
-        ctrl.offsetLeft = fixOffset(tab.offsetLeft);  
+      /**
+       * Canvas width *smaller* than tab width: positioning at the *beginning* of current tab to let 
+       * pagination "for loop" to break correctly on previous tab when previousPage() is called again
+       */
+      ctrl.offsetLeft = fixOffset(tab.offsetLeft);  
     }
   }
 
