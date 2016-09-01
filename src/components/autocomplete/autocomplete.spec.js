@@ -41,6 +41,7 @@ describe('<md-autocomplete>', function() {
 
       scope.searchText = '';
       scope.selectedItem = null;
+      scope.items = items;
 
       angular.forEach(scopeData, function(value, key) {
         scope[key] = value;
@@ -1837,6 +1838,100 @@ describe('<md-autocomplete>', function() {
 
       // The scroll container should have a width of 200px, since we changed the parents width.
       expect(scrollContainer.style.minWidth).toBe('200px');
+
+      document.body.removeChild(parent[0]);
+    }));
+
+    it('should show on focus when min-length is met', inject(function($timeout) {
+      var scope = createScope();
+
+      // Overwrite the match function to always show some results.
+      scope.match = function() {
+        return scope.items;
+      };
+
+      var template =
+        '<div style="width: 400px">' +
+          '<md-autocomplete ' +
+              'md-search-text="searchText" ' +
+              'md-items="item in match(searchText)" ' +
+              'md-item-text="item.display" ' +
+              'md-min-length="0" ' +
+              'placeholder="placeholder">' +
+            '<span md-highlight-text="searchText">{{item.display}}</span>' +
+          '</md-autocomplete>' +
+        '</div>';
+
+      var parent = compile(template, scope);
+      var element = parent.find('md-autocomplete');
+      var ctrl = element.controller('mdAutocomplete');
+
+      // Add container to the DOM to be able to test the rect calculations.
+      document.body.appendChild(parent[0]);
+
+      ctrl.focus();
+      waitForVirtualRepeat(element);
+
+      // The scroll repeat container has been moved to the body element to avoid
+      // z-index / overflow issues.
+      var scrollContainer = document.body.querySelector('.md-virtual-repeat-container');
+      expect(scrollContainer).toBeTruthy();
+
+      // Expect the current width of the scrollContainer to be the same as of the parent element
+      // at initialization.
+      expect(scrollContainer.offsetParent).toBeTruthy();
+
+      document.body.removeChild(parent[0]);
+    }));
+
+    it('should not show on focus when min-length is not met', inject(function($timeout) {
+      var scope = createScope();
+
+      // Overwrite the match function to always show some results.
+      scope.match = function() {
+        return scope.items;
+      };
+
+      var template =
+        '<div style="width: 400px">' +
+          '<md-autocomplete ' +
+              'md-search-text="searchText" ' +
+              'md-items="item in match(searchText)" ' +
+              'md-item-text="item.display" ' +
+              'md-min-length="1" ' +
+              'placeholder="placeholder">' +
+            '<span md-highlight-text="searchText">{{item.display}}</span>' +
+          '</md-autocomplete>' +
+        '</div>';
+
+      var parent = compile(template, scope);
+      var element = parent.find('md-autocomplete');
+      var ctrl = element.controller('mdAutocomplete');
+
+      // Add container to the DOM to be able to test the rect calculations.
+      document.body.appendChild(parent[0]);
+
+      ctrl.focus();
+      waitForVirtualRepeat(element);
+
+      // The scroll repeat container has been moved to the body element to avoid
+      // z-index / overflow issues.
+      var scrollContainer = document.body.querySelector('.md-virtual-repeat-container');
+      expect(scrollContainer).toBeTruthy();
+
+      // Expect the dropdown to not show up, because the min-length is not met.
+      expect(scrollContainer.offsetParent).toBeFalsy();
+
+      ctrl.blur();
+
+      // Add one char to the searchText to match the minlength.
+      scope.$apply('searchText = "X"');
+
+      ctrl.focus();
+      waitForVirtualRepeat(element);
+
+      // Expect the dropdown to not show up, because the min-length is not met.
+      expect(scrollContainer.offsetParent).toBeTruthy();
 
       document.body.removeChild(parent[0]);
     }));
