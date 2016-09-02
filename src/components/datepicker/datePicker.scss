@@ -67,10 +67,16 @@ md-datepicker {
     }
 
     .md-datepicker-button {
-      // Prevents the button from wrapping around.
+      // Prevents the button from wrapping around, as well as it pushing
+      // down the error messages more than they should be.
       @include rtl(float, left, right);
-      margin-top: -$md-datepicker-border-bottom-gap / 2;
+      margin-top: $button-left-right-padding * -2;
+      top: $button-left-right-padding * 2 - $md-datepicker-border-bottom-gap / 2;
     }
+  }
+
+  .md-input {
+    float: none;
   }
 
   &._md-datepicker-has-calendar-icon {
@@ -195,7 +201,7 @@ md-datepicker {
 }
 
 // Need crazy specificity to override .md-button.md-icon-button.
-// Only apply this high specifiy to the property we need to override.
+// Only apply this high specificity to the property we need to override.
 .md-datepicker-triangle-button.md-button.md-icon-button {
   height: $md-datepicker-triangle-button-width;
   width: $md-datepicker-triangle-button-width;
