@@ -95,6 +95,9 @@ md-tabs.md-THEME_NAME-theme {
     .md-ripple-container {
       color: '{{accent-A100}}';
     }
+	&, md-icon {
+		color: '{{primary-contrast}}';
+	}	
   }
 
   &.md-accent {

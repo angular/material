@@ -1,0 +1,105 @@
+<div ng-controller="AppCtrl" ng-cloak>
+  <md-content class="md-padding">
+    <md-tabs class="md-primary" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}">
+      <md-tab id="tab1">
+        <md-tab-label><!--Item One-->
+		<md-icon class="icon-home"></md-icon>		
+		</md-tab-label>
+        <md-tab-body>
+          View for Item #1 <br/>
+          data.selectedIndex = 0;
+        </md-tab-body>
+      </md-tab>
+      <md-tab id="tab2" ng-disabled="data.secondLocked">
+        <md-tab-label>
+		<md-icon class="icon-user-plus"></md-icon> 
+		<!--Item Two-->
+		</md-tab-label>
+        <md-tab-body>
+          View for Item #2 <br/>
+          data.selectedIndex = 1;
+        </md-tab-body>
+      </md-tab>
+      <md-tab id="tab3">
+        <md-tab-label>
+		Item Three
+		</md-tab-label>
+        <md-tab-body>
+          View for Item #3 <br/>
+          data.selectedIndex = 2;
+        </md-tab-body>
+      </md-tab>
+      <md-tab id="tab4">
+        <md-tab-label>
+		<md-icon class="icon-settings"></md-icon>
+		</md-tab-label>
+        <md-tab-body>
+          View for Item #4 <br/>
+          data.selectedIndex = 3;
+        </md-tab-body>
+      </md-tab>	  
+    </md-tabs>
+  </md-content>
+
+  <div class="md-padding" layout="row" layout-sm="column" layout-align="left center"
+       style="padding-top: 0;">
+    <md-checkbox ng-model="data.secondLocked" aria-label="Disable item two?" style="margin: 5px;">
+      Disable item two?
+    </md-checkbox>
+    <md-checkbox ng-model="data.bottom" aria-label="Align tabs to bottom?" style="margin: 5px;">
+      Align tabs to bottom?
+    </md-checkbox>
+  </div>
+    <!-- For this demo, include the font-faces needed by mdIcon above -->
+  <style>
+    @font-face {
+      font-family:"icomoon";
+      src:url("https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.eot");
+      font-weight:normal;
+      font-style:normal;
+    }
+
+    @font-face {
+      font-family: 'icomoon';
+      src:url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.eot?-cmq1um');
+      src:url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.eot?#iefix-cmq1um') format('embedded-opentype'),
+      url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.woff?-cmq1um') format('woff'),
+      url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.ttf?-cmq1um') format('truetype'),
+      url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.svg?-cmq1um#icomoon') format('svg');
+      font-weight: normal;
+      font-style: normal;
+    }
+	    /* Bootstrap Overrides */
+    [class^="icon-"]:before,
+    [class*=" icon-"]:before {
+      font-family:"icomoon";
+
+    }
+
+
+    .icon-home:before {
+        content: "\e900";
+    }
+
+    .icon-clock:before {
+        content: "\e94e";
+    }
+
+    .icon-user-plus:before {
+        content: "\e973";
+    }
+
+    .icon-google-plus2:before {
+        content: "\ea89";
+    }
+
+    .icon-youtube4:before {
+        content: "\ea9a";
+    }
+
+    .icon-settings:before {
+        content: "\e600";
+    }
+  </style>
+</div>
+
