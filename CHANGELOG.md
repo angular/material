@@ -1,5 +1,5 @@
 <a name="1.1.1"></a>
-## [1.1.1](https://github.com/angular/material/compare/v1.1.0...v1.1.1) (2016-09-01)
+## [Angular Material 1.1.1](https://github.com/angular/material/compare/v1.1.0...v1.1.1) (2016-09-01)
 
 We continue to maintain our momentum with Angular Material. Today we published a patch release for Angular Material; a patch that contains more than 60 improvements and fixes.
 
