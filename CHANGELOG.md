@@ -53,6 +53,7 @@ Old
                     flex></md-progress-linear>
 ```
 
+New
 ```html
 <md-progress-circular ng-disabled="!$ctrl.isVisible" class="md-accent md-hue-1" md-diameter="60"></md-progress-circular>
 
