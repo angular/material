@@ -164,6 +164,22 @@ describe('mdSidenav', function() {
       });
     });
 
+    it('should trigger a resize event when opening',
+      inject(function($rootScope, $material, $window) {
+        var el = setup('md-is-open="show"');
+        var obj = { callback: function() {} };
+
+        spyOn(obj, 'callback');
+        angular.element($window).on('resize', obj.callback);
+
+        $rootScope.$apply('show = true');
+        $material.flushOutstandingAnimations();
+
+        expect(obj.callback).toHaveBeenCalled();
+        angular.element($window).off('resize', obj.callback);
+      })
+    );
+
     describe('parent scroll prevention', function() {
       it('should prevent scrolling on the parent element', inject(function($rootScope) {
         var parent = setup('md-is-open="isOpen"').parent()[0];
