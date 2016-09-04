@@ -89,10 +89,7 @@ function mdCompilerService($q, $templateRequest, $injector, $compile, $controlle
     angular.extend(resolve, locals);
 
     if (templateUrl) {
-      resolve.$template = $templateRequest(templateUrl)
-        .then(function(response) {
-          return response;
-        });
+      resolve.$template = $templateRequest(templateUrl);
     } else {
       resolve.$template = $q.when(template);
     }
