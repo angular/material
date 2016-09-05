@@ -823,8 +823,19 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
         // the current option, which will be added, then we can be sure, that the validation
         // of the option has occurred before the option was added properly.
         // This means, that we have to manually trigger a new validation of the current option.
-        if (angular.isDefined(self.ngModel.$modelValue) && self.hashGetter(self.ngModel.$modelValue) === hashKey) {
-          self.ngModel.$validate();
+        if (angular.isDefined(self.ngModel.$modelValue)) {
+          var modelValue = self.ngModel.$modelValue;
+
+          // In some cases the $modelValue mismatches the type of the current hashKey.
+          // That can happen if the $modelValue was set to a number, which actually represents a
+          // possible value.
+          if (typeof modelValue !== typeof hashKey && typeof modelValue === 'number') {
+            modelValue = '' + modelValue;
+          }
+
+          if (self.hashGetter(modelValue) === hashKey) {
+            self.ngModel.$validate();
+          }
         }
 
         self.refreshViewValue();

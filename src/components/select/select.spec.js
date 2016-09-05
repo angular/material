@@ -958,6 +958,53 @@ describe('<md-select>', function() {
         expect($rootScope.testForm.$valid).toBe(true);
       }));
 
+      it('should cast number model values to strings to match hash keys', inject(function($rootScope, $compile) {
+        var template =
+          '<form name="testForm">' +
+          '  <md-select ng-model="model" required="required">' +
+          '    <md-option value="1">Option 1</md-option>' +
+          '    <md-option value="2">Option 2</md-option>' +
+          '  </md-select>' +
+          '</form>';
+
+        $compile(template)($rootScope);
+
+        $rootScope.model = 2;
+        $rootScope.$digest();
+        expect($rootScope.testForm.$valid).toBe(true);
+
+        $rootScope.model = 0;
+        $rootScope.$digest();
+        expect($rootScope.testForm.$valid).toBe(false);
+      }));
+
+      it('should not cast number model values when using ng-value', inject(function($rootScope, $compile) {
+        var template =
+          '<form name="testForm">' +
+          '  <md-select ng-model="model" required="required">' +
+          '    <md-option ng-value="1">Option 1</md-option>' +
+          '    <md-option ng-value="2">Option 2</md-option>' +
+          '    <md-option ng-value="\'2\'">Option 3</md-option>' +
+          '  </md-select>' +
+          '</form>';
+
+        $compile(template)($rootScope);
+
+        // Number Two as an string is also its own option.
+        $rootScope.model = '2';
+        $rootScope.$digest();
+        expect($rootScope.testForm.$valid).toBe(true);
+
+        // Number two as a normal number is its own option.
+        $rootScope.model = 2;
+        $rootScope.$digest();
+        expect($rootScope.testForm.$valid).toBe(true);
+
+        $rootScope.model = 0;
+        $rootScope.$digest();
+        expect($rootScope.testForm.$valid).toBe(false);
+      }));
+
       it('properly validates required attribute with object options', inject(function($rootScope, $compile) {
         var template =
           '<form name="testForm">' +
