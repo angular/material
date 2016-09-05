@@ -1139,6 +1139,43 @@ describe('<md-chips>', function() {
           expect(scope.items[4]).toBe('Acai Berry');
           expect(element.find('input').val()).toBe('');
         }));
+
+        it('should remove a chip on click and return focus to the input', function() {
+
+          var template =
+            '<md-chips ng-model="items" md-max-chips="1">' +
+              '<md-autocomplete ' +
+                  'md-selected-item="selectedItem" ' +
+                  'md-search-text="searchText" ' +
+                  'md-items="item in querySearch(searchText)" ' +
+                  'md-item-text="item">' +
+                '<span md-highlight-text="searchText">{{itemtype}}</span>' +
+              '</md-autocomplete>' +
+            '</md-chips>';
+
+          setupScopeForAutocomplete();
+
+          var element = buildChips(template);
+
+          document.body.appendChild(element[0]);
+
+          // Flush the autocomplete's init timeout.
+          $timeout.flush();
+
+          var input = element.find('input');
+          var removeButton = element[0].querySelector('.md-chip-remove');
+
+          expect(scope.items.length).toBe(3);
+
+          angular.element(removeButton).triggerHandler('click');
+
+          $timeout.flush();
+
+          expect(scope.items.length).toBe(2);
+          expect(document.activeElement).toBe(input[0]);
+
+          element.remove();
+        });
       });
 
       describe('user input templates', function() {
