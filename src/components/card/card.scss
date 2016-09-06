@@ -1,5 +1,7 @@
 $card-padding: 16px !default;
 $card-box-shadow: $whiteframe-shadow-1dp !default;
+$card-title-font-size: rem(1.4) !default;
+$card-subhead-font-size: rem(1.4) !default;
 
 md-card {
   box-sizing: border-box;
@@ -43,7 +45,7 @@ md-card {
         max-height: 40px;
 
         .md-title {
-          font-size: 14px;
+          font-size: $card-title-font-size;
         }
       }
     }
@@ -54,7 +56,7 @@ md-card {
       flex-direction: column;
 
       .md-subhead {
-        font-size: 14px;
+        font-size: $card-subhead-font-size;
       }
     }
   }
@@ -86,7 +88,7 @@ md-card {
 
       .md-subhead {
         padding-top: 0;
-        font-size: 14px;
+        font-size: $card-subhead-font-size;
       }
 
       &:only-child {

@@ -1,4 +1,5 @@
 /** Styles for mdCalendar. */
+$md-calendar-font-size: rem(1.3) !default;
 $md-calendar-cell-size: 44px !default;
 $md-calendar-header-height: 40px !default;
 $md-calendar-cell-emphasis-size: 40px !default;
@@ -6,7 +7,7 @@ $md-calendar-side-padding: 16px !default;
 $md-calendar-weeks-to-show: 7 !default;
 
 $md-calendar-month-label-padding: 8px !default;
-$md-calendar-month-label-font-size: 14px !default;
+$md-calendar-month-label-font-size: rem(1.4) !default;
 
 $md-calendar-scroll-cue-shadow-radius: 6px !default;
 
@@ -50,7 +51,7 @@ $md-calendar-height:
 }
 
 md-calendar {
-  font-size: 13px;
+  font-size: $md-calendar-font-size;
   user-select: none;
 }
 

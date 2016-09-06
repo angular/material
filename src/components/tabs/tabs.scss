@@ -2,6 +2,9 @@ $tabs-paginator-width: $baseline-grid * 4 !default;
 $tabs-tab-width: $baseline-grid * 12 !default;
 $tabs-header-height: 48px !default;
 
+$tabs-arrow-button-font-size: rem(1.6) !default;
+$tabs-label-font-size: rem(1.4) !default;
+
 @keyframes md-tab-content-hide {
   0% { opacity: 1; }
   50% { opacity: 1; }
@@ -86,7 +89,7 @@ md-tabs-wrapper {
     line-height: 1em;
     z-index: 2;
     cursor: pointer;
-    font-size: 16px;
+    font-size: $tabs-arrow-button-font-size;
     background: transparent no-repeat center center;
     transition: $swift-ease-in-out;
     &:focus {
@@ -248,7 +251,7 @@ md-tab {
 }
 
 .md-tab {
-  font-size: 14px;
+  font-size: $tabs-label-font-size;
   text-align: center;
   line-height: $tabs-header-height - 24;
   padding: 12px 24px;

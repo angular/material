@@ -1,4 +1,5 @@
 $menu-border-radius: 2px !default;
+$menu-item-button-font-size: rem(1.5) !default;
 $max-visible-items: 6 !default;
 $menu-item-height: 6 * $baseline-grid !default;
 $dense-menu-item-height: 4 * $baseline-grid !default;
@@ -102,7 +103,7 @@ md-menu-item {
     display: inline-block;
     border-radius: 0;
     margin: auto 0;
-    font-size: (2*$baseline-grid) - 1;
+    font-size: $menu-item-button-font-size;
     text-transform: none;
     font-weight: 400;
     height: 100%;

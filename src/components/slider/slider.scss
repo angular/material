@@ -12,6 +12,7 @@ $slider-thumb-focus-scale: 1 !default;
 $slider-thumb-disabled-scale: 0.5 !default;
 $slider-thumb-disabled-border: 4px !default;
 $slider-thumb-focus-duration: .7s !default;
+$slider-thumb-label-font-size: rem(1.2) !default;
 
 $slider-focus-thumb-width:  34px !default;
 $slider-focus-thumb-height: $slider-focus-thumb-width !default;
@@ -199,7 +200,7 @@ md-slider {
 
     .md-thumb-text {
       z-index: 1;
-      font-size: 12px;
+      font-size: $slider-thumb-label-font-size;
       font-weight: bold;
     }
   }
@@ -400,7 +401,7 @@ md-slider {
 
         .md-thumb-text {
           z-index: 1;
-          font-size: 12px;
+          font-size: $slider-thumb-label-font-size;
           font-weight: bold;
         }
       }
