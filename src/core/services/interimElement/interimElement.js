@@ -295,7 +295,7 @@ function InterimElementProvider() {
         // When an interim element is currently showing, we have to cancel it.
         // Just hiding it, will resolve the InterimElement's promise, the promise should be
         // rejected instead.
-        var hideAction = options.multiple ? $q.when(true) : $q.all(showPromises);
+        var hideAction = options.multiple ? $q.resolve() : $q.all(showPromises);
 
         if (!options.multiple) {
           // Wait for all opening interim's to finish their transition.
@@ -346,10 +346,10 @@ function InterimElementProvider() {
           return $q.all(showingInterims.slice().reverse().map(closeElement));
         } else if (options.closeTo !== undefined) {
           return $q.all(showingInterims.slice(options.closeTo).map(closeElement));
-        } else {
-          var interim = showingInterims.pop();
-          return closeElement(interim);
         }
+
+        // Hide the latest showing interim element.
+        return closeElement(showingInterims.pop());
 
         function closeElement(interim) {
 
