@@ -484,6 +484,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  *     custom dialog directive.
  *   - `targetEvent` - `{DOMClickEvent=}`: A click's event object. When passed in as an option,
  *     the location of the click will be used as the starting point for the opening animation
+ *   - `zIndex` - `{number=}`: The z-index to place the dialog at. Defaults to 80.
  *     of the the dialog.
  *   - `openFrom` - `{string|Element|object}`: The query selector, DOM element or the Rect object
  *     that is used to determine the bounds (top, left, height, width) from which the Dialog will
@@ -561,8 +562,11 @@ function MdDialogProvider($$interimElementProvider) {
 
   return $$interimElementProvider('$mdDialog')
     .setDefaults({
-      methods: ['disableParentScroll', 'hasBackdrop', 'clickOutsideToClose', 'escapeToClose',
-          'targetEvent', 'closeTo', 'openFrom', 'parent', 'fullscreen', 'contentElement'],
+      methods: [
+        'disableParentScroll', 'hasBackdrop', 'clickOutsideToClose', 'escapeToClose',
+        'targetEvent', 'closeTo', 'openFrom', 'parent', 'fullscreen', 'contentElement',
+        'zIndex'
+      ],
       options: dialogDefaultOptions
     })
     .addPreset('alert', {
@@ -654,18 +658,25 @@ function MdDialogProvider($$interimElementProvider) {
       disableParentScroll: true,
       autoWrap: true,
       fullscreen: false,
+      zIndex: 80,
       transformTemplate: function(template, options) {
+
+        template = prepareTemplate(template);
+
         // Make the dialog container focusable, because otherwise the focus will be always redirected to
         // an element outside of the container, and the focus trap won't work probably..
         // Also the tabindex is needed for the `escapeToClose` functionality, because
         // the keyDown event can't be triggered when the focus is outside of the container.
-        return '<div class="md-dialog-container" tabindex="-1">' + validatedTemplate(template) + '</div>';
+        return '' +
+          '<div class="md-dialog-container" tabindex="-1" style="z-index: ' + options.zIndex +'">' +
+            template +
+          '</div>';
 
         /**
-         * The specified template should contain a <md-dialog> wrapper element....
+         * The specified template should contain a <md-dialog> wrapper element.
          */
-        function validatedTemplate(template) {
-          if (options.autoWrap && !/<\/md-dialog>/g.test(template)) {
+        function prepareTemplate(template) {
+          if (options.autoWrap && template.indexOf('</md-dialog>') === -1) {
             return '<md-dialog>' + (template || '') + '</md-dialog>';
           } else {
             return template || '';
@@ -811,6 +822,10 @@ function MdDialogProvider($$interimElementProvider) {
       }
     }
 
+    /**
+     * Detects the theme from the specified targetEvent option and applies
+     * it to the dialog options.
+     */
     function detectTheming(options) {
       // Only detect the theming, if the developer didn't specify the theme specifically.
       if (options.theme) return;
@@ -1036,11 +1051,15 @@ function MdDialogProvider($$interimElementProvider) {
       if (options.disableParentScroll) {
         // !! DO this before creating the backdrop; since disableScrollAround()
         //    configures the scroll offset; which is used by mdBackDrop postLink()
-        options.restoreScroll = $mdUtil.disableScrollAround(element, options.parent);
+        options.restoreScroll = $mdUtil.disableScrollAround(null, element, {
+          disableScrollMask: true
+        });
       }
 
       if (options.hasBackdrop) {
-        options.backdrop = $mdUtil.createBackdrop(scope, "md-dialog-backdrop md-opaque");
+        options.backdrop = $mdUtil.createBackdrop(scope, "md-opaque");
+        options.backdrop.css('z-index', options.zIndex - 1);
+
         $animate.enter(options.backdrop, options.parent);
       }
 

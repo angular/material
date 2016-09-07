@@ -1296,6 +1296,48 @@ describe('$mdDialog', function() {
       expect(parent[0].querySelectorAll('md-dialog.two').length).toBe(0);
     }));
 
+    describe('z-index', function() {
+
+      it('should have a default z-index', inject(function($mdDialog) {
+        var parent = angular.element('<div>');
+
+        $mdDialog.show({
+          template: '<md-dialog>Test</md-dialog>',
+          parent: parent
+        });
+
+        runAnimation();
+
+        var container = parent[0].querySelector('.md-dialog-container');
+        var backdrop = parent[0].querySelector('md-backdrop');
+
+        // Use toMatch here, because IE11 sometimes returns a number instead.
+        expect(container.style.zIndex).toMatch('80');
+        expect(backdrop.style.zIndex).toMatch('79');
+      }));
+
+      it('should have allow custom z-index', inject(function($mdDialog) {
+        var parent = angular.element('<div>');
+        var zIndex = 100;
+
+        $mdDialog.show({
+          template: '<md-dialog>Test</md-dialog>',
+          parent: parent,
+          zIndex: zIndex
+        });
+
+        runAnimation();
+
+        var container = parent[0].querySelector('.md-dialog-container');
+        var backdrop = parent[0].querySelector('md-backdrop');
+
+        // Use toMatch here, because IE11 sometimes returns a number instead.
+        expect(container.style.zIndex).toMatch(zIndex.toString());
+        expect(backdrop.style.zIndex).toMatch((zIndex - 1).toString());
+      }));
+
+    });
+
     describe('contentElement', function() {
       var $mdDialog, $rootScope, $compile, $timeout;
 
