@@ -374,6 +374,31 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should support ng-trim for the search input', inject(function() {
+      var scope = createScope(null, {inputId: 'custom-input-id'});
+      var template =
+        '<md-autocomplete ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'ng-trim="false" ' +
+            'placeholder="placeholder">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      expect(input.attr('ng-trim')).toBe("false");
+
+      scope.$apply('searchText = "      Text    "');
+
+      expect(scope.searchText).not.toBe('Text');
+
+      element.remove();
+    }));
+
     it('forwards the tabindex to the input', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
       var template =
