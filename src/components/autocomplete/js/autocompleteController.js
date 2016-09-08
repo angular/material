@@ -84,7 +84,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   function updateModelValidators() {
     if (!$scope.requireMatch || !inputModelCtrl) return;
 
-    inputModelCtrl.$setValidity('md-require-match', !!$scope.selectedItem);
+    inputModelCtrl.$setValidity('md-require-match', !!$scope.selectedItem || !$scope.searchText);
   }
 
   /**

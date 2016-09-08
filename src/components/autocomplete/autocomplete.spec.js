@@ -1609,7 +1609,10 @@ describe('<md-autocomplete>', function() {
       var element = compile(template, scope);
       var ctrl = element.find('md-autocomplete').controller('mdAutocomplete');
 
-      element.scope().searchText = 'fo';
+      // Flush the element gathering.
+      $timeout.flush();
+
+      scope.$apply('searchText = "fo"');
       $timeout.flush();
 
       ctrl.select(0);
@@ -1622,14 +1625,48 @@ describe('<md-autocomplete>', function() {
 
       expect(scope.form.autocomplete.$error['md-require-match']).toBeFalsy();
 
-      ctrl.clear();
+      scope.$apply('searchText = "food"');
+      $timeout.flush();
 
-      scope.$apply();
-
-      expect(scope.searchText).toBe('');
-      expect(scope.selectedItem).toBe(null);
+      expect(scope.searchText).toBe('food');
+      expect(scope.selectedItem).toBeNull();
       expect(scope.form.autocomplete.$error['md-require-match']).toBeTruthy();
 
+    }));
+
+    it('should not set to invalid if searchText is empty', inject(function($timeout) {
+      var scope = createScope();
+      var template = '\
+          <form name="form">\
+            <md-autocomplete\
+                md-input-name="autocomplete"\
+                md-selected-item="selectedItem"\
+                md-search-text="searchText"\
+                md-items="item in match(searchText)"\
+                md-item-text="item.display"\
+                placeholder="placeholder"\
+                md-require-match="true">\
+              <span md-highlight-text="searchText">{{item.display}}</span>\
+            </md-autocomplete>\
+          </form>';
+
+      compile(template, scope);
+
+      // Flush the element gathering.
+      $timeout.flush();
+
+      scope.$apply('searchText = "food"');
+      $timeout.flush();
+
+      expect(scope.searchText).toBe('food');
+      expect(scope.selectedItem).toBeNull();
+      expect(scope.form.autocomplete.$error['md-require-match']).toBeTruthy();
+
+      scope.$apply('searchText = ""');
+
+      expect(scope.searchText).toBe('');
+      expect(scope.selectedItem).toBeNull();
+      expect(scope.form.autocomplete.$error['md-require-match']).toBeFalsy();
     }));
 
   });
