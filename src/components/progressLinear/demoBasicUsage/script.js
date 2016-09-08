@@ -36,7 +36,7 @@ angular.module('progressLinearDemo1', ['ngMaterial'])
         if ( (j < 2) && !self.showList[j] && self.activated ) {
           self.showList[j] = true;
         }
-        if ( counter++ % 4 == 0 ) j++;
+        if ( counter++ % 4 === 0 ) j++;
 
         // Show the indicator in the "Used within Containers" after 200ms delay
         if ( j == 2 ) self.contained = "indeterminate";

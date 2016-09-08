@@ -663,7 +663,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   function adjustOffset (index) {
     var elements = getElements();
 
-    if (index == null) index = ctrl.focusIndex;
+    if (!angular.isNumber(index)) index = ctrl.focusIndex;
     if (!elements.tabs[ index ]) return;
     if (ctrl.shouldCenterTabs) return;
     var tab         = elements.tabs[ index ],

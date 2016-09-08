@@ -612,14 +612,14 @@ function InterimElementProvider() {
             autoHideTimer = $timeout(service.hide, options.hideDelay) ;
             cancelAutoHide = function() {
               $timeout.cancel(autoHideTimer);
-            }
+            };
           }
 
           // Cache for subsequent use
           options.cancelAutoHide = function() {
             cancelAutoHide();
             options.cancelAutoHide = undefined;
-          }
+          };
         }
 
         /**
@@ -663,7 +663,7 @@ function InterimElementProvider() {
               // Trigger callback *before* the remove operation starts
               announceRemoving(element, action);
 
-              if ( options.$destroy == true ) {
+              if ( options.$destroy ) {
 
                 // For $destroy, onRemove should be synchronous
                 resolve(element);

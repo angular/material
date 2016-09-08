@@ -290,7 +290,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
     return function () {
       removeChrome();
       removeWindows();
-    }
+    };
   };
 
   /**

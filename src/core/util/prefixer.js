@@ -43,7 +43,7 @@ function MdPrefixer(initialAttributes, buildSelector) {
 
     return _buildList(attributes)
       .map(function(item) {
-        return '[' + item + ']'
+        return '[' + item + ']';
       })
       .join(',');
   }

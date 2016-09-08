@@ -106,7 +106,7 @@ function MdTabs ($$mdSvgRegistry) {
       selectedIndex: '=?mdSelected'
     },
     template:         function (element, attr) {
-      attr[ "$mdTabsTemplate" ] = element.html();
+      attr.$mdTabsTemplate = element.html();
       return '' +
         '<md-tabs-wrapper> ' +
           '<md-tab-data></md-tab-data> ' +

@@ -205,7 +205,7 @@
         runAnimation(element);
         delayDone(done);
       }
-    }
+    };
   }
 
   function MdFabSpeedDialScaleAnimation($timeout) {
@@ -248,6 +248,6 @@
         runAnimation(element);
         delayDone(done);
       }
-    }
+    };
   }
 })();

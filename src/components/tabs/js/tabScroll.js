@@ -12,5 +12,5 @@ function MdTabScroll ($parse) {
         });
       };
     }
-  }
+  };
 }
