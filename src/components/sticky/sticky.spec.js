@@ -1,235 +1,249 @@
 describe('$mdSticky service', function() {
 
-  beforeEach(module('material.components.sticky'));
+  var $mdSticky, $timeout, $rootScope, $compile = null;
+  var parent, element = null;
 
-  it('should compile our cloned element in the same scope', function(done) {
-    inject(function($compile, $rootScope, $mdSticky, $timeout) {
-      var scope = $rootScope.$new();
-      var contentEl = $compile(angular.element(
-        '<md-content>' +
-        '<sticky-directive>Sticky Element</sticky-directive>' +
-        '</md-content>'
-      ))(scope);
+  beforeEach(module('material.components.sticky', function($provide) {
+    $provide.decorator('$mdUtil', function($delegate) {
 
-      document.body.appendChild(contentEl[0]);
+      // We always return nothing on the checkStickySupport method to test the polyfill.
+      $delegate.checkStickySupport = angular.noop;
 
-      var stickyEl = contentEl.children().eq(0);
-      $mdSticky(scope, stickyEl);
-
-      // Flush the `$$sticky.add()` timeout.
-      $timeout.flush();
-
-      // When the current browser, which executes that spec, supports the sticky position, then we will always succeed
-      // the test, because otherwise our test will fail.
-      if (stickyEl.css('position')) {
-        expect(true).toBe(true);
-      } else {
-        expect(contentEl.children().length).toBe(2);
-
-        var stickyClone = contentEl[0].getElementsByClassName('md-sticky-clone')[0];
-        expect(stickyClone).toBeTruthy();
-
-        expect(angular.element(stickyClone).scope()).toBe(scope);
-      }
-
-      contentEl.remove();
-
-      done();
-    });
-  });
-
-  it('should not compile our self specified clone in the given scope', function(done) {
-    inject(function($compile, $rootScope, $mdSticky, $timeout) {
-      var scope = $rootScope.$new();
-      var cloneScope = $rootScope.$new();
-
-      var contentEl = $compile(angular.element(
-        '<md-content>' +
-          '<sticky-directive>Sticky Element</sticky-directive>' +
-        '</md-content>'
-      ))(scope);
-
-      var cloneEl = $compile(angular.element(
-        '<sticky-directive>Self-cloned Element</sticky-directive>'
-      ))(cloneScope);
-
-      document.body.appendChild(contentEl[0]);
-
-      var stickyEl = contentEl.children().eq(0);
-      $mdSticky(scope, stickyEl, cloneEl);
-
-      // Flush the `$$sticky.add()` timeout.
-      $timeout.flush();
-
-      // When the current browser, which executes that spec, supports the sticky position, then we will always succeed
-      // the test, because otherwise our test will fail.
-      if (stickyEl.css('position')) {
-        expect(true).toBe(true);
-      } else {
-        expect(contentEl.children().length).toBe(2);
-
-        var stickyClone = contentEl[0].getElementsByClassName('md-sticky-clone')[0];
-        expect(stickyClone).toBeTruthy();
-
-        expect(angular.element(stickyClone).scope()).toBe(cloneScope);
-      }
-
-      contentEl.remove();
-
-      done();
-    });
-  });
-
-});
-
-/*
- * TODO: adjust to work properly with refactors of original code
- */
-/*
-describe('$mdStickySpec', function() {
-  var $document, $compile, $rootScope, $mdSticky;
-
-  beforeEach(module('material.components.sticky'));
-
-  beforeEach(inject(function(_$document_, _$compile_, _$rootScope_, _$mdSticky_) {
-    $document = _$document_;
-    $rootScope = _$rootScope_;
-    $compile = _$compile_;
-    $mdSticky = _$mdSticky_;
+      return $delegate;
+    })
   }));
 
-  var $container, $firstSticky, $secondSticky, $sticky;
-  function setup(opts) {
-    opts = opts || {};
+  beforeEach(inject(function($injector) {
+    $mdSticky = $injector.get('$mdSticky');
+    $timeout = $injector.get('$timeout');
+    $rootScope = $injector.get('$rootScope');
+    $compile = $injector.get('$compile');
+  }));
 
-    var TEST_HTML = '<md-content><h2>First sticky</h2><h2>Second sticky</h2></md-content>';
-    var scope = $rootScope.$new();
-    $container = $compile(TEST_HTML)(scope);
-    $firstSticky = $container.children().eq(0);
-    $secondSticky = $container.children().eq(1);
+  afterEach(function() {
+    parent && parent.remove();
+  });
 
-    // Wire up our special $container instance;
-    $firstSticky.controller('mdContent').$element = $container;
+  describe('with service', function() {
 
-    $document.find('body').html('');
-    $document.find('body').append($container);
+    it('should create a offset element with the height of the sticky element', function() {
+      createBasicElement('<div style="height: 20px">Sticky</div>');
 
+      $mdSticky(element);
 
-    if(!opts.skipFirst) {
-      $mdSticky($rootScope.$new(), $firstSticky);
-    }
-    if(!opts.skipSecond) {
-      $mdSticky($rootScope.$new(), $secondSticky);
-    }
+      // When the sticky element turns into a fixed position, a offset element will be added.
+      var offsetElement = parent.children().eq(0);
 
+      expect(element.css('position')).toBe('fixed');
+      expect(offsetElement.css('height')).toBe('20px');
+    });
 
-    // Overwrite the scrollTop property to return the opts.containerScroll
-    if(opts.containerScroll) {
-      var originalProp = $container.prop;
-      $container.prop = function(prop) {
-        if(prop == 'scrollTop') {
-          return opts.containerScroll;
-        } else {
-          originalProp.call($container, prop);
-        }
-      };
-    }
+    it('should limit the max width for the fixed sticky element', function() {
+      createBasicElement('<div>Sticky</div>');
 
-    // Overwrite children() to provide mock rect positions
-    if(opts.firstActual) {
-      $firstSticky[0].getBoundingClientRect = function() { return opts.firstActual; };
-    }
-    if(opts.secondActual) {
-      $secondSticky[0].getBoundingClientRect = function() { return opts.secondActual; };
-    }
-    if(opts.firstTarget) {
-      var $firstOuter = $firstSticky.parent();
-      $firstOuter[0].getBoundingClientRect = function() { return opts.firstTarget; };
-    }
-    if(opts.secondTarget) {
-      var $secondOuter = $secondSticky.parent();
-      $secondOuter[0].getBoundingClientRect = function() { return opts.secondTarget; };
-    }
+      $mdSticky(element);
 
+      var scrollRect = parent[0].getBoundingClientRect();
 
+      expect(element.css('position')).toBe('fixed');
+      expect(element.css('max-width')).toBe(scrollRect.width + 'px');
+    });
 
-    $sticky = $container.data('$sticky');
+    it('should properly set position for hidden sticky elements', function() {
+      var elements = createSectionElements('<div>Sticky</div>', '<div style="height: 200px">', 2);
 
-    if(opts.lastScroll) { $sticky.lastScroll = opts.lastScroll; }
+      // Make elements inside of the sections sticky
+      elements.forEach($mdSticky);
 
-    scope.$digest();
+      expect(elements[0].css('position')).toBe('fixed');
+      expect(elements[1].css('position')).toBe('');
+    });
+
+    it('should update the position when scrolling', function() {
+      var elements = createSectionElements('<div>Sticky</div>', '<div style="height: 200px">', 2);
+
+      // Emulate scrolling for the parent and only one section fits into the viewport.
+      parent.css({
+        height: '200px',
+        overflowY: 'scroll'
+      });
+
+      // Make elements inside of the sections sticky
+      elements.forEach($mdSticky);
+
+      expect(elements[0].css('position')).toBe('fixed');
+      expect(elements[1].css('position')).toBe('');
+
+      parent[0].scrollTop = 200;
+      parent.triggerHandler('scroll');
+
+      expect(elements[0].css('position')).toBe('');
+      expect(elements[1].css('position')).toBe('fixed');
+
+      parent[0].scrollTop = 0;
+      parent.triggerHandler('scroll');
+
+      expect(elements[0].css('position')).toBe('fixed');
+      expect(elements[1].css('position')).toBe('');
+    });
+
+    it('should leave the sticky element at the bottom when scrolling down', function() {
+      var elements = createSectionElements(
+        '<div style="height: 20px">Sticky</div>',
+        '<div style="height: 200px">',
+        2
+      );
+
+      console.log(parent[0].outerHTML);
+
+      // Emulate scrolling for the parent and only one section fits into the viewport.
+      parent.css({
+        height: '200px',
+        overflowY: 'scroll'
+      });
+
+      // Make elements inside of the sections sticky
+      elements.forEach($mdSticky);
+
+      expect(elements[0].css('position')).toBe('fixed');
+      expect(elements[1].css('position')).toBe('');
+
+      // Second hidden sticky element should align at the start.
+      expect(getTopOffset(elements[1])).toBe(0);
+
+      parent[0].scrollTop = 200;
+      parent.triggerHandler('scroll');
+
+      expect(elements[0].css('position')).toBe('');
+      expect(elements[1].css('position')).toBe('fixed');
+
+      // First hidden sticky element should align at the end.
+      expect(getTopOffset(elements[0])).toBe(180);
+
+      parent[0].scrollTop = 0;
+      parent.triggerHandler('scroll');
+
+      expect(elements[0].css('position')).toBe('fixed');
+      expect(elements[1].css('position')).toBe('');
+
+      // Second hidden sticky element should align at the start.
+      console.log(elements[1].css('transform'));
+      expect(getTopOffset(elements[1])).toBe(0);
+    });
+
+    it('should update the elements to a static position when being partly visible', function() {
+      var elements = createSectionElements(
+        '<div style="height: 20px">Sticky</div>',
+        '<div style="height: 200px">',
+        2
+      );
+
+      // Emulate scrolling for the parent and only one section fits into the viewport.
+      parent.css({
+        height: '200px',
+        overflowY: 'scroll'
+      });
+
+      // Make elements inside of the sections sticky
+      elements.forEach($mdSticky);
+
+      parent[0].scrollTop = 190;
+      parent.triggerHandler('scroll');
+
+      expect(elements[0].css('position')).toBe('');
+      expect(elements[1].css('position')).toBe('');
+
+      // The first should align at the end and the second at the beginning.
+      expect(getTopOffset(elements[0])).toBe(180);
+      expect(getTopOffset(elements[1])).toBe(0);
+
+      parent[0].scrollTop = 200;
+      parent.triggerHandler('scroll');
+
+      expect(elements[0].css('position')).toBe('');
+      expect(elements[1].css('position')).toBe('fixed');
+
+      // The first should align at the end and the second at the beginning.
+      expect(getTopOffset(elements[0])).toBe(180);
+      expect(getTopOffset(elements[1])).toBe(0);
+    });
+
+    it('should update the sticky element position when being partly visible at init', function() {
+      var elements = createSectionElements(
+        '<div style="height: 20px">Sticky</div>',
+        '<div style="height: 200px">',
+        2
+      );
+
+      // Emulate scrolling for the parent and only one section fits into the viewport.
+      parent.css({
+        height: '200px',
+        overflowY: 'scroll'
+      });
+
+      // Set the scroll position to partly show the first sticky element.
+      parent[0].scrollTop = 190;
+      parent.triggerHandler('scroll');
+
+      // Make elements inside of the sections sticky
+      elements.forEach($mdSticky);
+
+      console.log(parent[0]);
+
+      expect(elements[0].css('position')).toBe('');
+      expect(elements[1].css('position')).toBe('');
+
+      // The first should align at the end and the second at the beginning.
+      expect(getTopOffset(elements[0])).toBe(180);
+      expect(getTopOffset(elements[1])).toBe(0);
+
+      parent[0].scrollTop = 200;
+      parent.triggerHandler('scroll');
+
+      expect(elements[0].css('position')).toBe('');
+      expect(elements[1].css('position')).toBe('fixed');
+
+      // The first should align at the end and the second at the beginning.
+      expect(getTopOffset(elements[0])).toBe(180);
+      expect(getTopOffset(elements[1])).toBe(0);
+    });
+
+  });
+
+  function createBasicElement(template) {
+    parent = angular.element('<div>');
+    element = $compile(template)($rootScope);
+
+    parent.append(element);
+    document.body.appendChild(parent[0]);
+
+    return element;
   }
 
-  it('throws an error if uses outside of md-content', inject(function($mdSticky, $compile, $rootScope) {
-    var html = '<h2>Hello world!</h2>';
-    function useWithoutMdContent() {
-      $mdSticky($rootScope.$new(), angular.element(html));
+  function createSectionElements(stickyTemplate, sectionTemplate, amount) {
+    parent = angular.element('<div>');
+
+    var stickyElements = [];
+
+    for (var i = 0; i < amount; i++) {
+      var section = $compile(sectionTemplate)($rootScope);
+      var element = $compile(stickyTemplate)($rootScope);
+
+      stickyElements.push(element);
+      section.append(element);
+      parent.append(section);
     }
-    expect(useWithoutMdContent).toThrow('$mdSticky used outside of md-content');
-  }));
 
-  it('adds class md-sticky-active when an element would scroll off screen', function() {
-    var firstActual = { top: -10, bottom: 9, height: 19 };
-    setup({containerScroll: 10, firstActual: firstActual, skipSecond: true});
-    $sticky.check();
-    expect($firstSticky.hasClass('md-sticky-active')).toBe(true);
-  });
+    document.body.appendChild(parent[0]);
 
-  it('removes class md-sticky-active when an element is no longer sticky', function() {
-    var firstTarget = { top: 1, bottom: 10, height: 9 };
-    setup({
-      containerScroll: 10,
-      lastScroll: 11
-    });
-    $firstSticky.addClass('md-sticky-active');
-    $sticky.check();
-    expect($firstSticky.hasClass('md-sticky-active')).toBe(false);
-  });
+    return stickyElements;
+  }
 
-  it('pushes the active element when the next sticky element touches it', function() {
-    var firstTarget = { top: -10, bottom: 9, height: 19 };
-    var firstActual = { top: 0, bottom: 19, height: 19 };
-    var secondActual = { top: 18, bottom: 37, height: 19 };
-    setup({
-      containerScroll: 19,
-      firstActual: firstActual,
-      firstTarget: firstTarget,
-      secondActual: secondActual
-    });
-    $firstSticky.attr('md-sticky-active', true);
-    $sticky.check();
-    expect($firstSticky.data('translatedHeight')).toBe(-1);
-  });
+  function getTopOffset(element) {
+    var parentRect = element[0].parentNode.getBoundingClientRect();
+    var elementTop = element[0].getBoundingClientRect().top;
 
-  it('increments the active element when it is pushed off screen', function() {
-    var firstActual = { top: -9, bottom: 0, height: 10 };
-    setup({
-      containerScroll: 10,
-      firstActual: firstActual
-    });
-    $firstSticky.addClass('md-sticky-active');
-    $sticky.check();
-    expect($firstSticky.hasClass('md-sticky-active')).toBe(false);
-    expect($sticky.targetIndex).toBe(1);
-  });
+    return elementTop - parentRect.top;
+  }
 
-  it('pulls the previous element when the sticky element losens', function() {
-    var firstActual = { top: -10, bottom: -1, height: 9 };
-    var firstTarget = { top: -50, bottom: -41, height: 9 };
-    var secondActual = { top: 0, bottom: 9, height: 9 };
-    setup({
-      containerScroll: 30,
-      lastScroll: 31,
-      firstActual: firstActual,
-      firstTarget: firstTarget,
-      secondTarget: secondActual,
-      secondActual: secondActual
-    });
-    $sticky.targetIndex = 0;
-    $firstSticky.data('translatedHeight', -10);
-    $firstSticky.addClass('md-sticky-active');
-    $sticky.check();
-    expect($firstSticky.data('translatedHeight')).toBe(-9);
-  });
 });
-*/

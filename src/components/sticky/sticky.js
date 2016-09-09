@@ -2,15 +2,13 @@
  * @ngdoc module
  * @name material.components.sticky
  * @description
- * Sticky effects for md
+ * Position sticky polyfill for browsers.
  *
  */
 angular
-  .module('material.components.sticky', [
-    'material.core',
-    'material.components.content'
-  ])
-  .factory('$mdSticky', MdSticky);
+  .module('material.components.sticky', ['material.core'])
+  .factory('$mdSticky', MdStickyService)
+  .directive('mdSticky', MdStickyDirective);
 
 /**
  * @ngdoc service
@@ -18,335 +16,456 @@ angular
  * @module material.components.sticky
  *
  * @description
- * The `$mdSticky`service provides a mixin to make elements sticky.
+ * The `$mdSticky`service provides a `polyfill` to make elements sticky.
  *
  * Whenever the current browser supports stickiness natively, the `$mdSticky` service will just
  * use the native browser stickiness.
  *
- * By default the `$mdSticky` service compiles the cloned element, when not specified through the `elementClone`
- * parameter, in the same scope as the actual element lives.
+ * The `$mdSticky` polyfill tries to follow the
+ * [specification draft](https://drafts.csswg.org/css-position/#sticky-pos) as close as possible.
  *
+ * There is also a <a ng-href="api/directive/mdSticky">shorthand directive</a> for the `$mdSticky` service.
  *
- * <h3>Notes</h3>
- * When using an element which is containing a compiled directive, which changed its DOM structure during compilation,
- * you should compile the clone yourself using the plain template.<br/><br/>
- * See the right usage below:
- * <hljs lang="js">
- *   angular.module('myModule')
- *     .directive('stickySelect', function($mdSticky, $compile) {
- *       var SELECT_TEMPLATE =
- *         '<md-select ng-model="selected">' +
- *           '<md-option>Option 1</md-option>' +
- *         '</md-select>';
+ * **Performance**
  *
- *       return {
- *         restrict: 'E',
- *         replace: true,
- *         template: SELECT_TEMPLATE,
- *         link: function(scope,element) {
- *           $mdSticky(scope, element, $compile(SELECT_TEMPLATE)(scope));
- *         }
- *       };
- *     });
- * </hljs>
+ * To improve the performance the `$mdSticky` service will only recalculate the styles at
+ * initialization and while changing its stickiness state.
+ *
+ * Another profit for the performance is the grouping of scroll events.<br/>
+ * `$mdSticky` detects previous registered scroll events and does not create a second one.
+ *
+ * **Common Problems with Polyfill**
+ * 1. The `md-sticky` attribute may not work properly when the element is hidden on load.
+ *   <br/>
+ *   This can be caused by having `ngCloak` applied or using the attribute inside of a `ngRepeat`.
+ *
+ * 2. A sticky element can leave its container when being placed inside of another scroll container.
+ *   <br/>
+ *   The solution would be to move the sticky element into only _one_ scroll container, and not having
+ *   it inside of multiple scroll containers.
  *
  * @usage
+ *
+ * Register an element as sticky.
+ *
  * <hljs lang="js">
- *   angular.module('myModule')
- *     .directive('stickyText', function($mdSticky, $compile) {
- *       return {
- *         restrict: 'E',
- *         template: '<span>Sticky Text</span>',
- *         link: function(scope,element) {
- *           $mdSticky(scope, element);
- *         }
- *       };
- *     });
+ *   appModule.controller('AppCtrl', function($mdSticky) {
+ *     // ...
+ *     $mdSticky(myElement);
+ *   });
  * </hljs>
  *
- * @returns A `$mdSticky` function that takes three arguments:
- *   - `scope`
- *   - `element`: The element that will be 'sticky'
- *   - `elementClone`: A clone of the element, that will be shown
- *     when the user starts scrolling past the original element.
- *     If not provided, it will use the result of `element.clone()` and compiles it in the given scope.
+ * Access the `MdStickyElement` API for registered sticky elements.
+ *
+ * <hljs lang="js">
+ *   appModule.controller('AppCtrl', function($mdSticky) {
+ *     // ...
+ *     var stickyEl = $mdSticky(myElement);
+ *
+ *     // Manually update the position with new calculated rectangles.
+ *     stickyEl.updatePositions();
+ *
+ *     // Create a scope function to check whether the element is visible
+ *     $scope.isVisible = stickyEl.isElementVisible;
+ *
+ *     // There could have been changes to the sticky element.
+ *     // Let's run the normal check and update automatically if necessary.
+ *     stickyEl.determineState();
+ *   });
+ * </hljs>
+ *
+ * @returns {MdStickyElement} TEST
+ *
+ *
  */
-function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
+function MdStickyService($mdUtil, $mdConstant, $window) {
 
-  var browserStickySupport = $mdUtil.checkStickySupport();
+  /** @type {number} */
+  var uidCounter = 0;
+
+  /** @type {Object.<string, MdStickyElement>} */
+  var stickyElementsMap = {};
+
+  /** @type {string} */
+  var stickyBrowserSupport = $mdUtil.checkStickySupport();
+
+  // Register a global scroll listener with capturing enabled.
+  $window.addEventListener('scroll', updateStickyElements, true);
 
   /**
-   * Registers an element as sticky, used internally by directives to register themselves
+   * Makes the specified element sticky by using the native behavior or applying a native-like
+   * polyfill.
+   * @param element {JQLite} Element to be sticky
+   * @returns {MdStickyElement} Sticky element
    */
-  return function registerStickyElement(scope, element, stickyClone) {
-    var contentCtrl = element.controller('mdContent');
-    if (!contentCtrl) return;
+  return function registerElement(element) {
 
-    if (browserStickySupport) {
-      element.css({
-        position: browserStickySupport,
-        top: 0,
-        'z-index': 2
-      });
+    if (stickyBrowserSupport) {
+      element.css('position', stickyBrowserSupport);
     } else {
-      var $$sticky = contentCtrl.$element.data('$$sticky');
-      if (!$$sticky) {
-        $$sticky = setupSticky(contentCtrl);
-        contentCtrl.$element.data('$$sticky', $$sticky);
-      }
+      // Temporary pass the vendor prefixed to the sticky element constructor.
+      var stickyEl = new MdStickyElement(element, $mdConstant.CSS.TRANSFORM);
+      var uniqueId = uidCounter++;
 
-      // Compile our cloned element, when cloned in this service, into the given scope.
-      var cloneElement = stickyClone || $compile(element.clone())(scope);
+      // Initialize the sticky element without any listeners.
+      stickyEl.initialize(true);
 
-      var deregister = $$sticky.add(element, cloneElement);
-      scope.$on('$destroy', deregister);
+      // Apply the unique sticky ids to the element and all associated scroll parents.
+      var scrollElements = stickyEl.scrollContainers.map(function(scrollContainer) {
+        return angular.element(scrollContainer.element);
+      });
+
+      applyStickyIds(scrollElements, uniqueId);
+
+      // Add the sticky element with the unique id to the listener map.
+      stickyElementsMap[uniqueId] = stickyEl;
+
+      return stickyEl;
     }
   };
 
-  function setupSticky(contentCtrl) {
-    var contentEl = contentCtrl.$element;
+  /**
+   * Apply unique sticky ids to the specified elements.
+   */
+  function applyStickyIds(elements, uniqueId) {
+    elements.forEach(function(el) {
+      var stickyIds = el.data('$mdStickyId') || [];
 
-    // Refresh elements is very expensive, so we use the debounced
-    // version when possible.
-    var debouncedRefreshElements = $$rAF.throttle(refreshElements);
-
-    // setupAugmentedScrollEvents gives us `$scrollstart` and `$scroll`,
-    // more reliable than `scroll` on android.
-    setupAugmentedScrollEvents(contentEl);
-    contentEl.on('$scrollstart', debouncedRefreshElements);
-    contentEl.on('$scroll', onScroll);
-
-    var self;
-    return self = {
-      prev: null,
-      current: null, //the currently stickied item
-      next: null,
-      items: [],
-      add: add,
-      refreshElements: refreshElements
-    };
-
-    /***************
-     * Public
-     ***************/
-    // Add an element and its sticky clone to this content's sticky collection
-    function add(element, stickyClone) {
-      stickyClone.addClass('md-sticky-clone');
-
-      var item = {
-        element: element,
-        clone: stickyClone
-      };
-      self.items.push(item);
-
-      $mdUtil.nextTick(function() {
-        contentEl.prepend(item.clone);
-      });
-
-      debouncedRefreshElements();
-
-      return function remove() {
-        self.items.forEach(function(item, index) {
-          if (item.element[0] === element[0]) {
-            self.items.splice(index, 1);
-            item.clone.remove();
-          }
-        });
-        debouncedRefreshElements();
-      };
-    }
-
-    function refreshElements() {
-      // Sort our collection of elements by their current position in the DOM.
-      // We need to do this because our elements' order of being added may not
-      // be the same as their order of display.
-      self.items.forEach(refreshPosition);
-      self.items = self.items.sort(function(a, b) {
-        return a.top < b.top ? -1 : 1;
-      });
-
-      // Find which item in the list should be active, 
-      // based upon the content's current scroll position
-      var item;
-      var currentScrollTop = contentEl.prop('scrollTop');
-      for (var i = self.items.length - 1; i >= 0; i--) {
-        if (currentScrollTop > self.items[i].top) {
-          item = self.items[i];
-          break;
-        }
+      if (stickyIds.indexOf(uniqueId) === -1) {
+        el.data('$mdStickyId', stickyIds.concat(uniqueId));
       }
-      setCurrentItem(item);
-    }
-
-    /***************
-     * Private
-     ***************/
-
-    // Find the `top` of an item relative to the content element,
-    // and also the height.
-    function refreshPosition(item) {
-      // Find the top of an item by adding to the offsetHeight until we reach the 
-      // content element.
-      var current = item.element[0];
-      item.top = 0;
-      item.left = 0;
-      item.right = 0;
-      while (current && current !== contentEl[0]) {
-        item.top += current.offsetTop;
-        item.left += current.offsetLeft;
-        if ( current.offsetParent ){
-          item.right += current.offsetParent.offsetWidth - current.offsetWidth - current.offsetLeft; //Compute offsetRight
-        }
-        current = current.offsetParent;
-      }
-      item.height = item.element.prop('offsetHeight');
-
-      var defaultVal = $mdUtil.floatingScrollbars() ? '0' : undefined;
-      $mdUtil.bidi(item.clone, 'margin-left', item.left, defaultVal);
-      $mdUtil.bidi(item.clone, 'margin-right', defaultVal, item.right);
-    }
-
-    // As we scroll, push in and select the correct sticky element.
-    function onScroll() {
-      var scrollTop = contentEl.prop('scrollTop');
-      var isScrollingDown = scrollTop > (onScroll.prevScrollTop || 0);
-
-      // Store the previous scroll so we know which direction we are scrolling
-      onScroll.prevScrollTop = scrollTop;
-
-      //
-      // AT TOP (not scrolling)
-      //
-      if (scrollTop === 0) {
-        // If we're at the top, just clear the current item and return
-        setCurrentItem(null);
-        return;
-      }
-
-      //
-      // SCROLLING DOWN (going towards the next item)
-      //
-      if (isScrollingDown) {
-
-        // If we've scrolled down past the next item's position, sticky it and return
-        if (self.next && self.next.top <= scrollTop) {
-          setCurrentItem(self.next);
-          return;
-        }
-
-        // If the next item is close to the current one, push the current one up out of the way
-        if (self.current && self.next && self.next.top - scrollTop <= self.next.height) {
-          translate(self.current, scrollTop + (self.next.top - self.next.height - scrollTop));
-          return;
-        }
-      }
-
-      //
-      // SCROLLING UP (not at the top & not scrolling down; must be scrolling up)
-      //
-      if (!isScrollingDown) {
-
-        // If we've scrolled up past the previous item's position, sticky it and return
-        if (self.current && self.prev && scrollTop < self.current.top) {
-          setCurrentItem(self.prev);
-          return;
-        }
-
-        // If the next item is close to the current one, pull the current one down into view
-        if (self.next && self.current && (scrollTop >= (self.next.top - self.current.height))) {
-          translate(self.current, scrollTop + (self.next.top - scrollTop - self.current.height));
-          return;
-        }
-      }
-
-      //
-      // Otherwise, just move the current item to the proper place (scrolling up or down)
-      //
-      if (self.current) {
-        translate(self.current, scrollTop);
-      }
-    }
-
-    function setCurrentItem(item) {
-      if (self.current === item) return;
-      // Deactivate currently active item
-      if (self.current) {
-        translate(self.current, null);
-        setStickyState(self.current, null);
-      }
-
-      // Activate new item if given
-      if (item) {
-        setStickyState(item, 'active');
-      }
-
-      self.current = item;
-      var index = self.items.indexOf(item);
-      // If index === -1, index + 1 = 0. It works out.
-      self.next = self.items[index + 1];
-      self.prev = self.items[index - 1];
-      setStickyState(self.next, 'next');
-      setStickyState(self.prev, 'prev');
-    }
-
-    function setStickyState(item, state) {
-      if (!item || item.state === state) return;
-      if (item.state) {
-        item.clone.attr('sticky-prev-state', item.state);
-        item.element.attr('sticky-prev-state', item.state);
-      }
-      item.clone.attr('sticky-state', state);
-      item.element.attr('sticky-state', state);
-      item.state = state;
-    }
-
-    function translate(item, amount) {
-      if (!item) return;
-      if (amount === null || amount === undefined) {
-        if (item.translateY) {
-          item.translateY = null;
-          item.clone.css($mdConstant.CSS.TRANSFORM, '');
-        }
-      } else {
-        item.translateY = amount;
-
-        $mdUtil.bidi( item.clone, $mdConstant.CSS.TRANSFORM,
-          'translate3d(' + item.left + 'px,' + amount + 'px,0)',
-          'translateY(' + amount + 'px)'
-        );
-      }
-    }
+    });
   }
 
+  /**
+   * Event listener to be called when anything in the document scrolls.
+   * @param event {Event}
+   */
+  function updateStickyElements(event) {
+    var target = angular.element(event.target);
+    var stickyIds = target.data('$mdStickyId') || [];
 
-  // Android 4.4 don't accurately give scroll events.
-  // To fix this problem, we setup a fake scroll event. We say:
-  // > If a scroll or touchmove event has happened in the last DELAY milliseconds, 
-  //   then send a `$scroll` event every animationFrame.
-  // Additionally, we add $scrollstart and $scrollend events.
-  function setupAugmentedScrollEvents(element) {
-    var SCROLL_END_DELAY = 200;
-    var isScrolling;
-    var lastScrollTime;
-    element.on('scroll touchmove', function() {
-      if (!isScrolling) {
-        isScrolling = true;
-        $$rAF.throttle(loopScrollEvent);
-        element.triggerHandler('$scrollstart');
-      }
-      element.triggerHandler('$scroll');
-      lastScrollTime = +$mdUtil.now();
+    stickyIds.forEach(function(uniqueId) {
+      stickyElementsMap[uniqueId].determineState();
     });
 
-    function loopScrollEvent() {
-      if (+$mdUtil.now() - lastScrollTime > SCROLL_END_DELAY) {
-        isScrolling = false;
-        element.triggerHandler('$scrollend');
-      } else {
-        element.triggerHandler('$scroll');
-        $$rAF.throttle(loopScrollEvent);
-      }
-    }
   }
 
 }
+
+/**
+ * @ngdoc directive
+ * @restrict A
+ * @name mdSticky
+ * @module material.components.sticky
+ * @description
+ *
+ * Shorthand for the <a ng-href="api/service/$mdSticky">`$mdSticky`</a> service to register an
+ * element as sticky.
+ *
+ * **Common Problems with the Polyfill**
+ *  - Read more about <a ng-href="api/service/$mdSticky">common problems with the polyfill</a>
+ *
+ * @usage
+ *
+ * Single sticky element for scroll container.
+ *
+ * <hljs lang="html">
+ *   <div md-sticky>Sticky Element</div>
+ *   <content></content>
+ * </hljs>
+ *
+ * Sticky elements will always stick at the end of its parent boundary.<br/>
+ * This allows developers to have multiple sections with different sticky elements.
+ *
+ * > This will look the same as the <a ng-href="demo/subheader">Subheader demo</a>
+ *
+ * <hljs lang="html">
+ *   <section>
+ *     <div md-sticky>Section 1</div>
+ *     <content></content>
+ *   </section>
+ *
+ *   <section>
+ *     <div md-sticky>Section 2</div>
+ *     <content></content>
+ *   </section>
+ * </hljs>
+ *
+ */
+function MdStickyDirective($mdSticky, $log) {
+  return {
+    restrict: 'A',
+    link: function(scope, element) {
+
+      if (!element[0].offsetParent) {
+        $log.warn(
+          'MdSticky: Applying the `md-sticky` attribute on a hidden element may not work.\n' +
+          'A common problem is the use of the `ng-cloak` attribute. There is also the $mdSticky service ' +
+          'for manual registration.'
+        );
+      }
+
+      $mdSticky(element);
+    }
+  }
+}
+
+/**
+ * Applies a native-like polyfill for the sticky position to the specified element.
+ * The polyfill follows the specification draft from W3C for the sticky positioning.
+ * > https://drafts.csswg.org/css-position/#sticky-pos
+ *
+ * @constructor
+ * @name $mdSticky
+ * @param element {JQLite} Element to be sticky
+ * @param transformProp {?string} Transform property w/o prefix.
+ */
+function MdStickyElement(element, transformProp) {
+  this.element = element;
+  this.domElement = element[0];
+  this.userRect = this.getUserPositionRect(this.domElement);
+
+  this.scrollContainers = this.findScrollContainers();
+  this.viewportContainer = this.scrollContainers[0];
+
+  // TODO(devversion): remove this in the future
+  this.transformProp = transformProp || 'transform';
+
+  if (this.userRect.bottom > 0) {
+    throw 'Sticky: It is currently not possible to stick element to the bottom.';
+  }
+
+  this.isSticky = false;
+  this.offsetEl = null;
+
+  // Initially update the rectangles.
+  this.updateRectangles();
+}
+
+/**
+ * Initializes the sticky element by triggering an initial position determination.
+ */
+MdStickyElement.prototype.initialize = function() {
+  this.determineState();
+  this.updateElementPosition();
+};
+
+/**
+ * @ngdoc method
+ * @name $mdSticky#updateRectangles
+ * @description Recalculates all offsets and rectangles for all related elements.
+ */
+MdStickyElement.prototype.updateRectangles = function() {
+  /* Basic Client Rectangles for related elements. */
+  this.elementRect = this.domElement.getBoundingClientRect();
+  this.parentRect = this.domElement.parentNode.getBoundingClientRect();
+  this.viewportRect = this.viewportContainer.getClientRect();
+
+  /* Offsets of the sticky element in relative to the viewport or scroll container. */
+  this.initialScrollPos = this.viewportContainer.getScrollPosition();
+
+  this.viewportTop = this.viewportRect.top + this.userRect.top;
+  this.viewportBottom = this.viewportRect.bottom;
+
+  // Offsets of the parent rectangle in relative to the viewport
+  this.scrollTop = this.initialScrollPos + (this.parentRect.top - this.viewportRect.top);
+  this.scrollBottom = this.scrollTop + this.parentRect.height;
+};
+
+/**
+ * @ngdoc method
+ * @name $mdSticky#determineState
+ * @description
+ * Determines the current state of the sticky element and triggers a position update if any
+ * change was detected.
+ */
+MdStickyElement.prototype.determineState = function() {
+  var isVisible = this.isElementVisible();
+
+  if (isVisible && !this.isSticky) {
+    this.isSticky = true;
+    this.updatePositions();
+  } else if (!isVisible && this.isSticky) {
+    this.isSticky = false;
+    this.updatePositions();
+  }
+};
+
+/**
+ * @ngdoc method
+ * @name $mdSticky#updatePositions
+ * @description
+ * Updates the positions of the sticky element to the current state by using the updated
+ * rectangles.
+ */
+MdStickyElement.prototype.updatePositions = function() {
+  this.updateRectangles();
+
+  if (this.isSticky) {
+    this.createHeightOffset();
+
+    this.element.css('position', 'fixed');
+    this.element.css('top', this.viewportTop + 'px');
+    this.element.css('max-width', this.parentRect.width + 'px');
+    this.element.css(this.transformProp, 'translate3d(0, 0, 0)');
+  } else {
+    this.offsetEl.remove();
+
+    /* Store the current position in a relative transform expression. */
+    var positionTransform = this.buildPositionTransform();
+
+    this.element.css('position', '');
+    this.element.css('top', '');
+    this.element.css('max-width', '');
+    this.element.css(this.transformProp, positionTransform);
+  }
+};
+
+/**
+ * Determines from recalculated rectangles whether the fixed sticky element
+ * is leaving the current scroll viewport.
+ * @returns {boolean} Whether it left the scroll viewport or not.
+ */
+MdStickyElement.prototype.isLeavingViewport = function() {
+  if (!this.isSticky) {
+    return false;
+  }
+
+  // TODO: implement that logic.
+
+  this.updateRectangles();
+
+  return this.elementRect.top < this.viewportTop ||
+         this.elementRect.bottom > this.viewportBottom;
+};
+
+/**
+ * @ngdoc method
+ * @name $mdSticky#isElementVisible
+ * @description
+ *
+ * Determines from the scroll position and the scroll offsets whether
+ * the sticky element is fully visible in the scroll container or not.
+ *
+ * @returns {boolean} Whether the sticky element is visible or not.
+ */
+MdStickyElement.prototype.isElementVisible = function() {
+  var scrollY = this.viewportContainer.getScrollPosition();
+  var scrollBottom = this.scrollBottom - this.elementRect.height;
+
+  return scrollY >= this.scrollTop && scrollY <= scrollBottom;
+};
+
+/**
+ * Creates an empty element to fill the missing height in the parent.
+ * Necessary when the sticky element changes to a fixed position.
+ */
+MdStickyElement.prototype.createHeightOffset = function() {
+  this.offsetEl = angular.element('<div>');
+
+  this.offsetEl.css('height', this.elementRect.height + 'px');
+
+  this.domElement.parentNode.insertBefore(this.offsetEl[0], this.domElement);
+};
+
+/**
+ * Resolves the user specified values for the sticky boundary.
+ * Sticky elements can be bound to the top or bottom.
+ * @returns {{top: number, bottom: number}}
+ */
+MdStickyElement.prototype.getUserPositionRect = function(element) {
+  var computedStyle = getComputedStyle(element);
+
+  return {
+    top: _getPositionValue(computedStyle.top),
+    bottom: _getPositionValue(computedStyle.bottom)
+  };
+
+  function _getPositionValue(property) {
+    return property !== 'auto' ? parseInt(property) : null;
+  }
+};
+
+/**
+ * Create a transform for sticky element to move at the correct position in the parent.
+ * Determines the new static position from the current fixed position.
+ * @returns {string} Transform expression for the static position.
+ */
+MdStickyElement.prototype.buildPositionTransform = function() {
+  var offsetY = 0;
+
+  if (this.parentRect.top < this.viewportTop) {
+    offsetY = this.parentRect.height - this.elementRect.height;
+  }
+
+  return 'translate3d(0, ' + offsetY + 'px, 0)';
+};
+
+/**
+ * If the current parent element is above the scroll container, the sticky elements need
+ * to be moved down to the bottom. This is not necessary for parent elements below
+ * the scroll container, because those are by default at the top.
+ */
+MdStickyElement.prototype.updateElementPosition = function() {
+  if (this.isSticky) {
+    return;
+  }
+
+  this.element.css(this.transformProp, this.buildPositionTransform());
+};
+
+/**
+ * Walks the DOM tree up and searches for the nearest scroll parent.
+ * If none could be found the browsers window will be used.
+ * @returns {ScrollContainer[]} Sorted list of scroll containers.
+ */
+MdStickyElement.prototype.findScrollContainers = function() {
+  var scrollRegex = /(scroll|auto)/;
+  var parentEl = this.domElement;
+
+  var scrollContainers = [];
+
+  while ((parentEl = parentEl.parentNode) !== null && parentEl.nodeType === 1) {
+
+    var style = getComputedStyle(parentEl);
+    var overflowExpression = style.overflow + style.overflowX + style.overflowY;
+
+    if (scrollRegex.test(overflowExpression)) {
+      scrollContainers.push(new ScrollContainer(parentEl));
+    }
+  }
+
+  scrollContainers.push(new ScrollContainer(window));
+
+  return scrollContainers;
+};
+
+/**
+ * Creates a wrapper for a given DOM node, which can be either the Window node or a normal
+ * HTML element.
+ * @constructor
+ */
+function ScrollContainer(element) {
+  this.element = element;
+}
+
+/**
+ * Determines the vertical scroll position of the scroll container.
+ * @returns {number}
+ */
+ScrollContainer.prototype.getScrollPosition = function() {
+  return this.element.scrollTop || this.element.scrollY || this.element.pageYOffset || 0;
+};
+
+/**
+ * Returns a client rectangle for the scroll container.
+ * @returns {ClientRect|Object} Rectangle-like object.
+ */
+ScrollContainer.prototype.getClientRect = function() {
+  if (this.element.nodeType !== Node.ELEMENT_NODE) {
+    return { top: 0, right: 0, bottom: 0, left: 0 }
+  } else {
+    return this.element.getBoundingClientRect();
+  }
+};
