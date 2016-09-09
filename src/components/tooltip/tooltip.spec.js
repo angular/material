@@ -1,14 +1,15 @@
 describe('<md-tooltip> directive', function() {
-  var $compile, $rootScope, $material, $timeout;
+  var $compile, $rootScope, $material, $timeout, $$mdTooltipRegistry;
   var element;
 
   beforeEach(module('material.components.tooltip'));
   beforeEach(module('material.components.button'));
-  beforeEach(inject(function(_$compile_, _$rootScope_, _$material_, _$timeout_){
+  beforeEach(inject(function(_$compile_, _$rootScope_, _$material_, _$timeout_, _$$mdTooltipRegistry_){
     $compile   = _$compile_;
     $rootScope = _$rootScope_;
     $material  = _$material_;
     $timeout   = _$timeout_;
+    $$mdTooltipRegistry = _$$mdTooltipRegistry_;
   }));
   afterEach(function() {
     // Make sure to remove/cleanup after each test
@@ -18,20 +19,14 @@ describe('<md-tooltip> directive', function() {
   });
 
   it('should support dynamic directions', function() {
-    var error;
-
-    try {
+    expect(function() {
       buildTooltip(
         '<md-button>' +
-        'Hello' +
-        '<md-tooltip md-direction="{{direction}}">Tooltip</md-tooltip>' +
+          'Hello' +
+          '<md-tooltip md-direction="{{direction}}">Tooltip</md-tooltip>' +
         '</md-button>'
       );
-    } catch(e) {
-      error = e;
-    }
-
-    expect(error).toBe(undefined);
+    }).not.toThrow();
   });
 
   it('should set the position to "bottom", if it is undefined', function() {
@@ -138,6 +133,18 @@ describe('<md-tooltip> directive', function() {
     $timeout.flush(1);
     expect($rootScope.testModel.isVisible).toBe(true);
 
+  });
+
+  it('should register itself with the $$mdTooltipRegistry', function() {
+    spyOn($$mdTooltipRegistry, 'register');
+
+    buildTooltip(
+      '<md-button>' +
+        '<md-tooltip>Tooltip</md-tooltip>' +
+      '</md-button>'
+    );
+
+    expect($$mdTooltipRegistry.register).toHaveBeenCalled();
   });
 
   describe('show and hide', function() {
@@ -370,6 +377,18 @@ describe('<md-tooltip> directive', function() {
       expect(findTooltip().length).toBe(0);
     });
 
+    it('should remove itself from the $$mdTooltipRegistry when it is destroyed', function() {
+      buildTooltip(
+        '<md-button>' +
+          '<md-tooltip md-visible="true">Tooltip</md-tooltip>' +
+        '</md-button>'
+      );
+
+      spyOn($$mdTooltipRegistry, 'deregister');
+      findTooltip().scope().$destroy();
+      expect($$mdTooltipRegistry.deregister).toHaveBeenCalled();
+    });
+
     it('should not re-appear if it was outside the DOM when the parent was removed', function() {
       buildTooltip(
         '<md-button>' +
@@ -435,4 +454,44 @@ describe('<md-tooltip> directive', function() {
     !skipFlush && $timeout.flush();
   }
 
+});
+
+describe('$$mdTooltipRegistry service', function() {
+  var tooltipRegistry, ngWindow;
+
+  beforeEach(function() {
+    module('material.components.tooltip');
+
+    inject(function($$mdTooltipRegistry, $window) {
+      tooltipRegistry = $$mdTooltipRegistry;
+      ngWindow = angular.element($window);
+    });
+  });
+
+  it('should allow for registering event handlers on the window', function() {
+    var obj = { callback: function() {} };
+
+    spyOn(obj, 'callback');
+    tooltipRegistry.register('resize', obj.callback);
+    ngWindow.triggerHandler('resize');
+
+    // check that the callback was triggered
+    expect(obj.callback).toHaveBeenCalled();
+
+    // check that the event object was passed
+    expect(obj.callback.calls.mostRecent().args[0]).toBeTruthy();
+  });
+
+  it('should allow deregistering of the callbacks', function() {
+    var obj = { callback: function() {} };
+
+    spyOn(obj, 'callback');
+    tooltipRegistry.register('resize', obj.callback);
+    ngWindow.triggerHandler('resize');
+    expect(obj.callback).toHaveBeenCalledTimes(1);
+
+    tooltipRegistry.deregister('resize', obj.callback);
+    ngWindow.triggerHandler('resize');
+    expect(obj.callback).toHaveBeenCalledTimes(1);
+  });
 });
