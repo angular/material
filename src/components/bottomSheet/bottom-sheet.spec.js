@@ -15,7 +15,7 @@ describe('$mdBottomSheet service', function () {
         expect(sheet.hasClass('_md')).toBe(true);
     }));
 
-    it('should not close when `clickOutsideToClose == true`',
+    it('should close when `clickOutsideToClose == true`',
       inject(function ($mdBottomSheet, $rootElement, $material) {
         var parent = angular.element('<div>');
         $mdBottomSheet.show({
