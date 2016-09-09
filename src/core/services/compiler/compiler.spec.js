@@ -132,6 +132,22 @@ describe('$mdCompiler service', function() {
         expect(data.element.controller().injectedOne).toBe(1);
       }));
 
+      it('should instantiate the controller with $element as local', inject(function($rootScope) {
+        var ctrlElement = null;
+
+        var data = compile({
+          template: '<span>hello</span>',
+          controller: function Ctrl($scope, $element) {
+            ctrlElement = $element;
+          }
+        });
+
+        var scope = $rootScope.$new();
+        data.link(scope);
+
+        expect(ctrlElement).toBe(data.element);
+      }));
+
       it('should compile with controllerAs', inject(function($rootScope) {
         var data = compile({
           template: '<span>hello</span>',
