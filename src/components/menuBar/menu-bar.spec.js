@@ -25,7 +25,7 @@ describe('material.components.menuBar', function() {
         expect(nestedMenu.getAttribute('md-position-mode')).toBe('left bottom');
       });
 
-      it('should close when clicking on the wrapping toolbar', inject(function($compile, $rootScope, $timeout) {
+      it('should close when clicking on the wrapping toolbar', inject(function($compile, $rootScope, $timeout, $material) {
         var ctrl = null;
         var toolbar = $compile(
           '<md-toolbar>' +
@@ -39,6 +39,8 @@ describe('material.components.menuBar', function() {
         )($rootScope);
 
         $rootScope.$digest();
+        attachedMenuElements.push(toolbar); // ensure it gets cleaned up
+
         ctrl = toolbar.find('md-menu-bar').controller('mdMenuBar');
 
         toolbar.find('md-menu').eq(0).controller('mdMenu').open();
@@ -46,6 +48,7 @@ describe('material.components.menuBar', function() {
 
         expect(toolbar).toHaveClass('md-has-open-menu');
         toolbar.triggerHandler('click');
+        $material.flushInterimElement(); // flush out the scroll mask
 
         expect(toolbar).not.toHaveClass('md-has-open-menu');
         expect(ctrl.getOpenMenuIndex()).toBe(-1);
