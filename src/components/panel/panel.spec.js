@@ -675,14 +675,10 @@ describe('$mdPanel', function() {
       spyOn($mdUtil, 'disableScrollAround').and.callThrough();
 
       openPanel(config);
-
       expect(PANEL_EL).toExist();
-      expect(SCROLL_MASK_CLASS).toExist();
-
+      expect(SCROLL_MASK_CLASS).not.toExist();
       closePanel();
 
-      var scrollMaskEl = $rootEl[0].querySelector(SCROLL_MASK_CLASS);
-      expect(scrollMaskEl).not.toExist();
       expect($mdUtil.disableScrollAround).toHaveBeenCalled();
     });
 
