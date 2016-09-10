@@ -185,7 +185,7 @@ function MdNavBarController($element, $scope, $timeout, $mdConstant) {
  * @private
  */
 MdNavBarController.prototype._initTabs = function() {
-  this._inkbar = angular.element(this._navBarEl.getElementsByTagName('md-nav-ink-bar')[0]);
+  this._inkbar = angular.element(this._navBarEl.querySelector('md-nav-ink-bar'));
 
   var self = this;
   this._$timeout(function() {
