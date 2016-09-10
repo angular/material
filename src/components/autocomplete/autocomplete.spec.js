@@ -914,7 +914,7 @@ describe('<md-autocomplete>', function() {
     }));
 
     it('removes the md-scroll-mask on cleanup', inject(function($mdUtil, $timeout, $material) {
-      spyOn($mdUtil, 'enableScrolling');
+      spyOn($mdUtil, 'enableScrolling').and.callThrough();
 
       var scope = createScope();
       var template =
@@ -957,7 +957,7 @@ describe('<md-autocomplete>', function() {
     }));
 
     it('removes the md-scroll-mask when md-autocomplete removed on change', inject(function($mdUtil, $timeout, $material) {
-      spyOn($mdUtil, 'enableScrolling');
+      spyOn($mdUtil, 'enableScrolling').and.callThrough();
 
       var scope = createScope();
       var template =
