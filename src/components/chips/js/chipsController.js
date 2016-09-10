@@ -29,6 +29,9 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
   /** @type {angular.$scope} */
   this.parent = $scope.$parent;
 
+  /** @type {$mdUtil} */
+  this.$mdUtil = $mdUtil;
+
   /** @type {$log} */
   this.$log = $log;
 
