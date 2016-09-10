@@ -21,11 +21,12 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
      *
      */
     translate3d : function( target, from, to, options ) {
-      return $animateCss(target,{
-        from:from,
-        to:to,
-        addClass:options.transitionInClass,
-        removeClass:options.transitionOutClass
+      return $animateCss(target, {
+        from: from,
+        to: to,
+        addClass: options.transitionInClass,
+        removeClass: options.transitionOutClass,
+        duration: options.duration
       })
       .start()
       .then(function(){
@@ -40,7 +41,8 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
         return $animateCss(target, {
            to: newFrom || from,
            addClass: options.transitionOutClass,
-           removeClass: options.transitionInClass
+           removeClass: options.transitionInClass,
+           duration: options.duration
         }).start();
 
       }

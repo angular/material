@@ -10,7 +10,12 @@ function AnimationCtrl($mdPanel) {
   this._mdPanel = $mdPanel;
   this.openFrom = 'button';
   this.closeTo = 'button';
-  this.animationType = 'none';
+  this.animationType = 'scale';
+  this.duration = 300;
+  this.separateDurations = {
+    open: this.duration,
+    close: this.duration
+  };
 }
 
 
@@ -21,6 +26,8 @@ AnimationCtrl.prototype.showDialog = function() {
       .top();
 
   var animation = this._mdPanel.newPanelAnimation();
+
+  animation.duration(this.duration || this.separateDurations);
 
   switch(this.openFrom) {
     case 'button':
