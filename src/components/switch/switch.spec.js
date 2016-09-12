@@ -79,4 +79,20 @@ describe('<md-switch>', function() {
     expect(checkbox[0]).not.toHaveClass('md-checked');
 
   });
+
+  it('should correctly invert the switch through attribute', function() {
+    var element = $compile('<md-switch md-invert="{{ isInverted }}">')(parentScope);
+
+    parentScope.$apply('isInverted = true');
+
+    expect(element).toHaveClass('md-inverted');
+    expect(element.children()[0]).toHaveClass('md-label');
+    expect(element.children()[1]).toHaveClass('md-container');
+
+    parentScope.$apply('isInverted = false');
+
+    expect(element).not.toHaveClass('md-inverted');
+    expect(element.children()[0]).toHaveClass('md-container');
+    expect(element.children()[1]).toHaveClass('md-label');
+  });
 });
