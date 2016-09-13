@@ -82,6 +82,7 @@ angular.module('material.components.navBar', ['material.core'])
  * clicked. Renders as a `ui-sref`.
  * @param {string=} name The name of this link. Used by the nav bar to know
  * which link is currently selected.
+ * @param {boolean=} ngDisabled If present and expression evaluates to truthy, disabled item selection.
  *
  * @usage
  * See `<md-nav-bar>` for usage.
@@ -392,18 +393,21 @@ function MdNavItem($$rAF) {
       '<li class="md-nav-item" role="option" aria-selected="{{ctrl.isSelected()}}">' +
         '<md-button ng-if="ctrl.mdNavSref" class="_md-nav-button md-accent"' +
           'ng-class="ctrl.getNgClassMap()"' +
+          'ng-disabled="ctrl.disabled"' +
           'tabindex="-1"' +
           'ui-sref="{{ctrl.mdNavSref}}">' +
           '<span ng-transclude class="_md-nav-button-text"></span>' +
         '</md-button>' +
         '<md-button ng-if="ctrl.mdNavHref" class="_md-nav-button md-accent"' +
           'ng-class="ctrl.getNgClassMap()"' +
+          'ng-disabled="ctrl.disabled"' +
           'tabindex="-1"' +
           'ng-href="{{ctrl.mdNavHref}}">' +
           '<span ng-transclude class="_md-nav-button-text"></span>' +
         '</md-button>' +
         '<md-button ng-if="ctrl.mdNavClick" class="_md-nav-button md-accent"' +
           'ng-class="ctrl.getNgClassMap()"' +
+          'ng-disabled="ctrl.disabled"' +
           'tabindex="-1"' +
           'ng-click="ctrl.mdNavClick()">' +
           '<span ng-transclude class="_md-nav-button-text"></span>' +
@@ -414,6 +418,7 @@ function MdNavItem($$rAF) {
       'mdNavHref': '@?',
       'mdNavSref': '@?',
       'name': '@',
+      'disabled': '=?ngDisabled',
     },
     link: function(scope, element, attrs, controllers) {
       var mdNavItem = controllers[0];
