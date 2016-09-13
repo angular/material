@@ -114,7 +114,7 @@ describe('md-calendar', function() {
   function dispatchKeyEvent(keyCode, opt_modifiers) {
     var mod = opt_modifiers || {};
 
-    angular.element(document.body).triggerHandler({
+    calendarController.$element.triggerHandler({
       type: 'keydown',
       keyCode: keyCode,
       which: keyCode,
@@ -717,19 +717,19 @@ describe('md-calendar', function() {
       });
     });
 
-    it('should fire an event when escape is pressed', function() {
-      var escapeHandler = jasmine.createSpy('escapeHandler');
-      pageScope.$on('md-calendar-close', escapeHandler);
+    it('should fire an event when tabbing away', function() {
+      var tabHandler = jasmine.createSpy('tabHandler');
+      pageScope.$on('md-calendar-close', tabHandler);
 
       pageScope.myDate = new Date(2014, FEB, 11);
       applyDateChange();
       var selectedDate = element.querySelector('.md-calendar-selected-date');
       selectedDate.focus();
 
-      dispatchKeyEvent(keyCodes.ESCAPE);
+      dispatchKeyEvent(keyCodes.TAB);
       pageScope.$apply();
 
-      expect(escapeHandler).toHaveBeenCalled();
+      expect(tabHandler).toHaveBeenCalled();
     });
   });
 
