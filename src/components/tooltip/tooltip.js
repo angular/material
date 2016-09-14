@@ -160,9 +160,10 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
       // doesn't need to be set up if the element doesn't have any data
       // bindings.
       if (element.text().indexOf($interpolate.startSymbol()) > -1) {
-        scope.$watch(function() {
-          return element.text().trim();
-        }, addAriaLabel);
+        var originalText = element.text().trim();
+        parent.scope().$watch($interpolate(originalText), function() {
+          addAriaLabel(originalText);
+        });
       }
     }
 
