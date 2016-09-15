@@ -747,6 +747,5 @@ describe('$mdGesture', function() {
 
       expect(spyMouseUp).toHaveBeenCalled();
     }));
-
   });
 });
