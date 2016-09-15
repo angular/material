@@ -1,6 +1,6 @@
-md-tooltip.md-THEME_NAME-theme {
+.md-tooltip.md-THEME_NAME-theme {
   color: '{{background-700-contrast}}';
-  .md-content {
+  &.md-panel {
     background-color: '{{background-700}}';
   }
 }
