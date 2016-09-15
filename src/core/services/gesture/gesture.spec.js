@@ -691,8 +691,10 @@ describe('$mdGesture', function() {
   describe('contenteditable', function() {
 
     it('should not hijack click on contenteditable element', inject(function($document, $mdGesture) {
+      $document.triggerHandler('$$mdGestureReset');
+
       var spy = jasmine.createSpy('click');
-      var el = angular.element('<div contenteditable>');
+      var el = angular.element('<div contenteditable="true">');
 
       el.on('click', spy);
 
@@ -705,9 +707,11 @@ describe('$mdGesture', function() {
     }));
 
     it('should not hijack mousedown/mouseup on contenteditable element', inject(function($document, $mdGesture) {
+      $document.triggerHandler('$$mdGestureReset');
+
       var spy1 = jasmine.createSpy('mousedown');
       var spy2 = jasmine.createSpy('mouseup');
-      var el = angular.element('<div contenteditable>');
+      var el = angular.element('<div contenteditable="true">');
 
       el.on('mousedown', spy1);
       el.on('mouseup', spy2);
