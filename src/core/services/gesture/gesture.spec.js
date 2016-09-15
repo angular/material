@@ -690,13 +690,16 @@ describe('$mdGesture', function() {
 
   describe('contenteditable', function() {
 
-    // Click tests should only be enabled when `$$hijackClicks == true` (for mobile)
-
     it('should not hijack click on contenteditable element', inject(function($document, $mdGesture) {
       var spy = jasmine.createSpy('click');
       var el = angular.element('<div contenteditable>');
 
       el.on('click', spy);
+
+      $document.triggerHandler({
+        type: 'click',
+        target: el[0]
+      });
 
       expect(spy).toHaveBeenCalled();
     }));
@@ -707,9 +710,20 @@ describe('$mdGesture', function() {
       var el = angular.element('<div contenteditable>');
 
       el.on('mousedown', spy1);
+      el.on('mouseup', spy2);
+
+      $document.triggerHandler({
+        type: 'mousedown',
+        target: el[0]
+      });
+
       expect(spy1).toHaveBeenCalled();
 
-      el.on('mouseup', spy2);
+      $document.triggerHandler({
+        type: 'mouseup',
+        target: el[0]
+      });
+
       expect(spy2).toHaveBeenCalled();
     }));
 
