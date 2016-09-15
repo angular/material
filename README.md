@@ -18,8 +18,16 @@ Quick Links:
 
 
 Please note that using Angular Material requires the use of **Angular 1.3.x** or higher. Angular
-Material is targeted for all browsers with versions n-1; where n is the current browser version.
+Material is targeted for all browsers with browser versions shown below with green boxes:
 
+![ngm1_browser_support](https://cloud.githubusercontent.com/assets/210413/18553899/f3fbfbca-7b27-11e6-81c9-2937950c808e.png)
+
+## <a name="news"></a> GitHub Universe
+
+Based on the number of unique contributors and repository forks, GitHub Octoverse recently announced that Angular Material is one of the top 10 most-loved active projects on GitHub:
+
+![angularongithubuniverse](https://cloud.githubusercontent.com/assets/210413/18553990/53cf2e32-7b28-11e6-8e08-29548fd3d786.jpg)
+ 
 ## <a name="demos"></a> Online Documentation (and Demos)
 
 <div style="border: 1px solid #ccc">
