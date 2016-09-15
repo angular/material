@@ -1372,6 +1372,34 @@ describe('$mdPanel', function() {
             .toBeApproximately(parseInt(left) + parseInt(offset));
       });
 
+      it('horizontally with a function', function() {
+        var left = '50px';
+        var offset = '-15px';
+        var obj = {
+          getOffsetX: function() {
+            return offset;
+          }
+        };
+
+        spyOn(obj, 'getOffsetX').and.callThrough();
+
+        var position = mdPanelPosition
+            .absolute()
+            .left(left)
+            .withOffsetX(obj.getOffsetX);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(obj.getOffsetX).toHaveBeenCalledWith(position);
+        expect(panelRect.left)
+            .toBeApproximately(parseInt(left) + parseInt(offset));
+      });
+
       it('horizontally with centering', function() {
         var offset = '15px';
 
@@ -1410,6 +1438,34 @@ describe('$mdPanel', function() {
         var panelRect = document.querySelector(PANEL_EL)
             .getBoundingClientRect();
 
+        expect(panelRect.top)
+            .toBeApproximately(parseInt(top) + parseInt(offset));
+      });
+
+      it('vertically with a function', function() {
+        var top = '50px';
+        var offset = '-15px';
+        var obj = {
+          getOffsetY: function() {
+            return offset;
+          }
+        };
+
+        spyOn(obj, 'getOffsetY').and.callThrough();
+
+        var position = mdPanelPosition
+            .absolute()
+            .top(top)
+            .withOffsetY(obj.getOffsetY);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(obj.getOffsetY).toHaveBeenCalledWith(position);
         expect(panelRect.top)
             .toBeApproximately(parseInt(top) + parseInt(offset));
       });
