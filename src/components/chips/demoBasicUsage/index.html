@@ -5,7 +5,7 @@
 
     <form name="fruitForm">
       <md-chips ng-model="ctrl.roFruitNames" name="fruitName" readonly="ctrl.readonly"
-                md-removable="ctrl.removable" md-max-chips="5">
+                md-removable="ctrl.removable" md-max-chips="5" placeholder="Enter a fruit...">
         <md-chip-template>
           <strong>{{$chip}}</strong>
           <em>(fruit)</em>

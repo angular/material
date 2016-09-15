@@ -1,3 +1,10 @@
+/**
+ * The default chip append delay.
+ *
+ * @type {number}
+ */
+var DEFAULT_CHIP_APPEND_DELAY = 300;
+
 angular
     .module('material.components.chips')
     .controller('MdChipsCtrl', MdChipsCtrl);
@@ -38,6 +45,9 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
   /** @type {$element} */
   this.$element = $element;
 
+  /** @type {$attrs} */
+  this.$attrs = $attrs;
+
   /** @type {angular.NgModelController} */
   this.ngModelCtrl = null;
 
@@ -61,6 +71,20 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
 
   /** @type {string} */
   this.addOnBlur = $mdUtil.parseAttributeBoolean($attrs.mdAddOnBlur);
+
+  /**
+   * The text to be used as the aria-label for the input.
+   * @type {string}
+   */
+  this.inputAriaLabel = 'Chips input.';
+
+  /**
+   * Hidden hint text to describe the chips container. Used to give context to screen readers when
+   * the chips are readonly and the input cannot be selected.
+   *
+   * @type {string}
+   */
+  this.containerHint = 'Chips container. Use arrow keys to select chips.';
 
   /**
    * Hidden hint text for how to delete a chip. Used to give context to screen readers.
@@ -100,11 +124,106 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
   this.useOnRemove = false;
 
   /**
-   * Whether to use the onSelect expression to notify the component's user
-   * after selecting a chip from the list.
-   * @type {boolean}
+   * The ID of the chips wrapper which is used to build unique IDs for the chips and the aria-owns
+   * attribute.
+   *
+   * Defaults to '_md-chips-wrapper-' plus a unique number.
+   *
+   * @type {string}
    */
+  this.wrapperId = '';
+
+  /**
+   * Array of unique numbers which will be auto-generated any time the items change, and is used to
+   * create unique IDs for the aria-owns attribute.
+   *
+   * @type {Array}
+   */
+  this.contentIds = [];
+
+  /**
+   * The index of the chip that should have it's tabindex property set to 0 so it is selectable
+   * via the keyboard.
+   *
+   * @type {int}
+   */
+  this.ariaTabIndex = null;
+
+  /**
+   * After appending a chip, the chip will be focused for this number of milliseconds before the
+   * input is refocused.
+   *
+   * **Note:** This is **required** for compatibility with certain screen readers in order for
+   * them to properly allow keyboard access.
+   *
+   * @type {number}
+   */
+  this.chipAppendDelay = DEFAULT_CHIP_APPEND_DELAY;
+
+  this.init();
 }
+
+/**
+ * Initializes variables and sets up watchers
+ */
+MdChipsCtrl.prototype.init = function() {
+  var ctrl = this;
+
+  // Set the wrapper ID
+  ctrl.wrapperId = '_md-chips-wrapper-' + ctrl.$mdUtil.nextUid();
+
+  // Setup a watcher which manages the role and aria-owns attributes
+  ctrl.$scope.$watchCollection('$mdChipsCtrl.items', function() {
+    // Make sure our input and wrapper have the correct ARIA attributes
+    ctrl.setupInputAria();
+    ctrl.setupWrapperAria();
+  });
+
+  ctrl.$attrs.$observe('mdChipAppendDelay', function(newValue) {
+    ctrl.chipAppendDelay = parseInt(newValue) || DEFAULT_CHIP_APPEND_DELAY;
+  });
+};
+
+/**
+ * If we have an input, ensure it has the appropriate ARIA attributes.
+ */
+MdChipsCtrl.prototype.setupInputAria = function() {
+  var input = this.$element.find('input');
+
+  // If we have no input, just return
+  if (!input) {
+    return;
+  }
+
+  input.attr('role', 'textbox');
+  input.attr('aria-multiline', true);
+};
+
+/**
+ * Ensure our wrapper has the appropriate ARIA attributes.
+ */
+MdChipsCtrl.prototype.setupWrapperAria = function() {
+  var ctrl = this,
+      wrapper = this.$element.find('md-chips-wrap');
+
+  if (this.items && this.items.length) {
+    // Dynamically add the listbox role on every change because it must be removed when there are
+    // no items.
+    wrapper.attr('role', 'listbox');
+
+    // Generate some random (but unique) IDs for each chip
+    this.contentIds = this.items.map(function() {
+      return ctrl.wrapperId + '-chip-' + ctrl.$mdUtil.nextUid();
+    });
+
+    // Use the contentIDs above to generate the aria-owns attribute
+    wrapper.attr('aria-owns', this.contentIds.join(' '));
+  } else {
+    // If we have no items, then the role and aria-owns attributes MUST be removed
+    wrapper.removeAttr('role');
+    wrapper.removeAttr('aria-owns');
+  }
+};
 
 /**
  * Handles the keydown event on the input element: by default <enter> appends
@@ -152,6 +271,8 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
 
     this.appendChip(chipBuffer.trim());
     this.resetChipBuffer();
+
+    return false;
   }
 };
 
@@ -230,7 +351,11 @@ MdChipsCtrl.prototype.chipKeydown = function (event) {
       break;
     case this.$mdConstant.KEY_CODE.LEFT_ARROW:
       event.preventDefault();
-      if (this.selectedChip < 0) this.selectedChip = this.items.length;
+      // By default, allow selection of -1 which will focus the input; if we're readonly, don't go
+      // below 0
+      if (this.selectedChip < 0 || (this.readonly && this.selectedChip == 0)) {
+        this.selectedChip = this.items.length;
+      }
       if (this.items.length) this.selectAndFocusChipSafe(this.selectedChip - 1);
       break;
     case this.$mdConstant.KEY_CODE.RIGHT_ARROW:
@@ -263,11 +388,22 @@ MdChipsCtrl.prototype.getPlaceholder = function() {
  * @param index
  */
 MdChipsCtrl.prototype.removeAndSelectAdjacentChip = function(index) {
-  var selIndex = this.getAdjacentChipIndex(index);
-  this.removeChip(index);
-  this.$timeout(angular.bind(this, function () {
-      this.selectAndFocusChipSafe(selIndex);
-  }));
+  var self = this;
+  var selIndex = self.getAdjacentChipIndex(index);
+  var wrap = this.$element[0].querySelector('md-chips-wrap');
+  var chip = this.$element[0].querySelector('md-chip[index="' + index + '"]');
+
+  self.removeChip(index);
+
+  // The dobule-timeout is currently necessary to ensure that the DOM has finalized and the select()
+  // will find the proper chip since the selection is index-based.
+  //
+  // TODO: Investigate calling from within chip $scope.$on('$destroy') to reduce/remove timeouts
+  self.$timeout(function() {
+    self.$timeout(function() {
+      self.selectAndFocusChipSafe(selIndex);
+    });
+  });
 };
 
 /**
@@ -275,6 +411,7 @@ MdChipsCtrl.prototype.removeAndSelectAdjacentChip = function(index) {
  */
 MdChipsCtrl.prototype.resetSelectedChip = function() {
   this.selectedChip = -1;
+  this.ariaTabIndex = null;
 };
 
 /**
@@ -299,6 +436,7 @@ MdChipsCtrl.prototype.getAdjacentChipIndex = function(index) {
  * @param newChip
  */
 MdChipsCtrl.prototype.appendChip = function(newChip) {
+  this.shouldFocusLastChip = true;
   if (this.useTransformChip && this.transformChip) {
     var transformedChip = this.transformChip({'$chip': newChip});
 
@@ -321,7 +459,8 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
   if (newChip == null || this.items.indexOf(newChip) + 1) return;
 
   // Append the new chip onto our list
-  var index = this.items.push(newChip);
+  var length = this.items.push(newChip);
+  var index = length - 1;
 
   // Update model validation
   this.ngModelCtrl.$setDirty();
@@ -458,16 +597,44 @@ MdChipsCtrl.prototype.removeChipAndFocusInput = function (index) {
  * @param index
  */
 MdChipsCtrl.prototype.selectAndFocusChipSafe = function(index) {
-  if (!this.items.length) {
-    this.selectChip(-1);
-    this.onFocus();
-    return;
+  // If we have no chips, or are asked to select a chip before the first, just focus the input
+  if (!this.items.length || index === -1) {
+    return this.focusInput();
   }
-  if (index === this.items.length) return this.onFocus();
+
+  // If we are asked to select a chip greater than the number of chips...
+  if (index >= this.items.length) {
+    if (this.readonly) {
+      // If we are readonly, jump back to the start (because we have no input)
+      index = 0;
+    } else {
+      // If we are not readonly, we should attempt to focus the input
+      return this.onFocus();
+    }
+  }
+
   index = Math.max(index, 0);
   index = Math.min(index, this.items.length - 1);
+
   this.selectChip(index);
   this.focusChip(index);
+};
+
+MdChipsCtrl.prototype.focusLastChipThenInput = function() {
+  var ctrl = this;
+
+  ctrl.shouldFocusLastChip = false;
+
+  ctrl.focusChip(this.items.length - 1);
+
+  ctrl.$timeout(function() {
+    ctrl.focusInput();
+  }, ctrl.chipAppendDelay);
+};
+
+MdChipsCtrl.prototype.focusInput = function() {
+  this.selectChip(-1);
+  this.onFocus();
 };
 
 /**
@@ -480,7 +647,7 @@ MdChipsCtrl.prototype.selectChip = function(index) {
 
     // Fire the onSelect if provided
     if (this.useOnSelect && this.onSelect) {
-      this.onSelect({'$chip': this.items[this.selectedChip] });
+      this.onSelect({'$chip': this.items[index] });
     }
   } else {
     this.$log.warn('Selected Chip index out of bounds; ignoring.');
@@ -502,7 +669,11 @@ MdChipsCtrl.prototype.selectAndFocusChip = function(index) {
  * Call `focus()` on the chip at `index`
  */
 MdChipsCtrl.prototype.focusChip = function(index) {
-  this.$element[0].querySelector('md-chip[index="' + index + '"] .md-chip-content').focus();
+  var chipContent = this.$element[0].querySelector('md-chip[index="' + index + '"] .md-chip-content');
+
+  this.ariaTabIndex = index;
+
+  chipContent.focus();
 };
 
 /**
@@ -528,6 +699,11 @@ MdChipsCtrl.prototype.onFocus = function () {
 
 MdChipsCtrl.prototype.onInputFocus = function () {
   this.inputHasFocus = true;
+
+  // Make sure we have the appropriate ARIA attributes
+  this.setupInputAria();
+
+  // Make sure we don't have any chips selected
   this.resetSelectedChip();
 };
 
@@ -612,4 +788,8 @@ MdChipsCtrl.prototype.shouldAddOnBlur = function() {
 
 MdChipsCtrl.prototype.hasFocus = function () {
   return this.inputHasFocus || this.selectedChip >= 0;
+};
+
+MdChipsCtrl.prototype.contentIdFor = function(index) {
+  return this.contentIds[index];
 };
