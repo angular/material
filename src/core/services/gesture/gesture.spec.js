@@ -704,10 +704,6 @@ describe('$mdGesture', function() {
         el.on('click', spyClick);
         el.on('mousedown', spyMouseDown);
         el.on('mouseup', spyMouseUp);
-
-        $mdGesture.register(el, 'click');
-        $mdGesture.register(el, 'mousedown');
-        $mdGesture.register(el, 'mouseup');
       });
     });
 
