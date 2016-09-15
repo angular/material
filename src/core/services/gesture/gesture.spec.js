@@ -690,45 +690,54 @@ describe('$mdGesture', function() {
 
   describe('contenteditable', function() {
 
+    var spyClick, spyMouseDown, spyMouseUp;
+    var el;
+
+    beforeEach(function() {
+      inject(function($mdGesture) {
+        spyClick = jasmine.createSpy('click');
+        spyMouseDown = jasmine.createSpy('mousedown');
+        spyMouseUp = jasmine.createSpy('mouseup');
+
+        el = angular.element('<div contenteditable="true">');
+
+        el.on('click', spyClick);
+        el.on('mousedown', spyMouseDown);
+        el.on('mouseup', spyMouseUp);
+
+        $mdGesture.register(el, 'click');
+        $mdGesture.register(el, 'mousedown');
+        $mdGesture.register(el, 'mouseup');
+      });
+    });
+
     it('should not hijack click on contenteditable element', inject(function($document, $mdGesture) {
       $document.triggerHandler('$$mdGestureReset');
-
-      var spy = jasmine.createSpy('click');
-      var el = angular.element('<div contenteditable="true">');
-
-      el.on('click', spy);
 
       $document.triggerHandler({
         type: 'click',
         target: el[0]
       });
 
-      expect(spy).toHaveBeenCalled();
+      expect(spyClick).toHaveBeenCalled();
     }));
 
     it('should not hijack mousedown/mouseup on contenteditable element', inject(function($document, $mdGesture) {
       $document.triggerHandler('$$mdGestureReset');
-
-      var spy1 = jasmine.createSpy('mousedown');
-      var spy2 = jasmine.createSpy('mouseup');
-      var el = angular.element('<div contenteditable="true">');
-
-      el.on('mousedown', spy1);
-      el.on('mouseup', spy2);
 
       $document.triggerHandler({
         type: 'mousedown',
         target: el[0]
       });
 
-      expect(spy1).toHaveBeenCalled();
+      expect(spyMouseDown).toHaveBeenCalled();
 
       $document.triggerHandler({
         type: 'mouseup',
         target: el[0]
       });
 
-      expect(spy2).toHaveBeenCalled();
+      expect(spyMouseUp).toHaveBeenCalled();
     }));
 
   });
