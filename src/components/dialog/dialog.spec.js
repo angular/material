@@ -1337,6 +1337,39 @@ describe('$mdDialog', function() {
         document.body.removeChild(contentElement[0]);
       });
 
+      it('should support contentElement as a preset method', function() {
+        var contentElement = $compile(
+          '<div class="md-dialog-container">' +
+            '<md-dialog>Dialog</md-dialog>' +
+          '</div>'
+        )($rootScope);
+
+        var parentEl = angular.element('<div>');
+
+        // Add the contentElement to the DOM.
+        document.body.appendChild(contentElement[0]);
+
+        $mdDialog.show(
+          $mdDialog
+            .build()
+            .contentElement(contentElement)
+            .parent(parentEl)
+            .escapeToClose(true)
+        );
+
+        $rootScope.$apply();
+        runAnimation();
+
+        expect(contentElement[0].parentNode).toBe(parentEl[0]);
+
+        $mdDialog.hide();
+        runAnimation();
+
+        expect(contentElement[0].parentNode).toBe(document.body);
+
+        document.body.removeChild(contentElement[0]);
+      });
+
       it('should correctly query for a contentElement', function() {
         var contentElement = $compile(
           '<div class="md-dialog-container" id="myId">' +
