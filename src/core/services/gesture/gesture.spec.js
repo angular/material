@@ -717,7 +717,7 @@ describe('$mdGesture', function() {
 
       expect(spyClick).not.toHaveBeenCalled();
 
-      el.trigger('click');
+      el.triggerHandler('click');
 
       expect(spyClick).toHaveBeenCalled();
     }));
@@ -732,7 +732,7 @@ describe('$mdGesture', function() {
 
       expect(spyMouseDown).not.toHaveBeenCalled();
 
-      el.trigger('mousedown');
+      el.triggerHandler('mousedown');
 
       expect(spyMouseDown).toHaveBeenCalled();
 
@@ -743,7 +743,7 @@ describe('$mdGesture', function() {
 
       expect(spyMouseUp).not.toHaveBeenCalled();
 
-      el.trigger('mouseup');
+      el.triggerHandler('mouseup');
 
       expect(spyMouseUp).toHaveBeenCalled();
     }));
