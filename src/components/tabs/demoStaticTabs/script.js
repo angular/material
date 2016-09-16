@@ -2,7 +2,12 @@
   'use strict';
 
   angular
-      .module('tabsDemoStaticTabs', ['ngMaterial'] )
+      .module('tabsDemoIconTabs', ['ngMaterial'] )
+      .config(function($mdIconProvider) {
+        $mdIconProvider
+          .iconSet('communication', 'img/icons/sets/communication-icons.svg')
+          .icon('favorite', 'img/icons/favorite.svg');
+      })
       .controller('AppCtrl', AppCtrl);
 
   function AppCtrl ( $scope ) {

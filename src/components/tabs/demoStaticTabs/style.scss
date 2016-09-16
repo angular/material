@@ -1,13 +1,24 @@
-md-tab-content {
-  padding: 25px;
-  &:nth-child(1) {
-    background-color: #42A5F5;
-  }
-  &:nth-child(2) {
-    background-color: #689F38;
-  }
-  &:nth-child(3) {
-    background-color: #26C6DA;
+md-content {
+  md-tabs {
+    border: 1px solid #e1e1e1;
+    md-tab-content {
+      padding: 25px;
+      &:nth-child(1) {
+        background-color: #cfd8dc;
+      }
+      &:nth-child(2) {
+        background-color: #ffb74d;
+      }
+      &:nth-child(3) {
+        background-color: #ffd54f;
+      }
+      &:nth-child(4) {
+        background-color: #aed581;
+      }
+      &:nth-child(5) {
+        background-color: #00897b;
+      }
+    }
   }
 }
 .after-tabs-area {
