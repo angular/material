@@ -353,7 +353,7 @@ describe('md-datepicker', function() {
       expect(controller.ngModelCtrl.$touched).toBe(true);
     });
 
-    it('should become touch from blurring the input', function() {
+    it('should become touched from blurring the input', function() {
       populateInputElement('17/1/2015');
 
       var input = angular.element(controller.inputElement);
@@ -370,6 +370,18 @@ describe('md-datepicker', function() {
 
       populateInputElement('7');
       expect(pageScope.myDate).toEqual(date);
+    });
+
+    it('should work with ngModelOptions.updateOn', function() {
+      var expectedDate = new Date(2015, JAN, 17);
+
+      createDatepickerInstance('<md-datepicker ng-model="myDate" ' +
+        'ng-model-options="{ updateOn: \'blur\' }"></md-datepicker>');
+
+      populateInputElement('01/17/2015');
+      angular.element(element.querySelector('input')).triggerHandler('blur');
+
+      expect(pageScope.myDate).toEqual(expectedDate);
     });
   });
 
