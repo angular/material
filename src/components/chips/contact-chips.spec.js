@@ -83,7 +83,7 @@ describe('<md-contact-chips>', function() {
         expect(chip.find('img').length).toBe(0);
     });
 
-    it('check if minLength on autocomplete controller equals md-min-length attribute on md-contact-chips element', inject(function() {
+    it('should forward md-min-length attribute to the autocomplete', inject(function() {
         var element = buildChips(CONTACT_CHIPS_TEMPLATE);
 
         var autocompleteElement = element.find('md-autocomplete');
