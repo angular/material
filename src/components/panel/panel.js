@@ -1337,6 +1337,12 @@ MdPanelRef.prototype._updatePosition = function(init) {
   var positionConfig = this.config['position'];
 
   if (positionConfig) {
+    // Use the vendor prefixed version of transform.
+    // Note that the offset should be assigned before the position, in
+    // order to avoid tiny jumps in the panel's position, on slower browsers.
+    var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
+    this.panelEl.css(prefixedTransform, positionConfig.getTransform());
+
     positionConfig._setPanelPosition(this.panelEl);
 
     // Hide the panel now that position is known.
@@ -1360,10 +1366,6 @@ MdPanelRef.prototype._updatePosition = function(init) {
       MdPanelPosition.absPosition.RIGHT,
       positionConfig.getRight()
     );
-
-    // Use the vendor prefixed version of transform.
-    var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
-    this.panelEl.css(prefixedTransform, positionConfig.getTransform());
   }
 };
 
@@ -2003,7 +2005,7 @@ MdPanelPosition.prototype._validateXPosition = function(xPosition) {
 /**
  * Sets the value of the offset in the x-direction. This will add to any
  * previously set offsets.
- * @param {string} offsetX
+ * @param {string|function(MdPanelPosition): string} offsetX
  * @returns {!MdPanelPosition}
  */
 MdPanelPosition.prototype.withOffsetX = function(offsetX) {
@@ -2015,7 +2017,7 @@ MdPanelPosition.prototype.withOffsetX = function(offsetX) {
 /**
  * Sets the value of the offset in the y-direction. This will add to any
  * previously set offsets.
- * @param {string} offsetY
+ * @param {string|function(MdPanelPosition): string} offsetY
  * @returns {!MdPanelPosition}
  */
 MdPanelPosition.prototype.withOffsetY = function(offsetY) {
@@ -2117,8 +2119,11 @@ MdPanelPosition.prototype.getActualPosition = function() {
 MdPanelPosition.prototype._reduceTranslateValues =
     function(translateFn, values) {
       return values.map(function(translation) {
-        return translateFn + '(' + translation + ')';
-      }).join(' ');
+        // TODO(crisbeto): this should add the units after #9609 is merged.
+        var translationValue = angular.isFunction(translation) ?
+            translation(this) : translation;
+        return translateFn + '(' + translationValue + ')';
+      }, this).join(' ');
     };
 
 
