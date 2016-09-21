@@ -166,6 +166,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
       delay:            '=?mdDelay',
       autofocus:        '=?mdAutofocus',
       floatingLabel:    '@?mdFloatingLabel',
+      icon:             '@?mdIcon',
       autoselect:       '=?mdAutoselect',
       menuClass:        '@?mdMenuClass',
       inputId:          '@?mdInputId',
@@ -261,9 +262,13 @@ function MdAutocomplete ($$mdSvgRegistry) {
 
       function getInputElement () {
         if (attr.mdFloatingLabel) {
+            var iconHtml='';
+		    if(attr.mdIcon)
+		        iconHtml='<md-icon md-svg-src="'+attr.mdIcon+'"></md-icon>';
           return '\
             <md-input-container ng-if="floatingLabel">\
               <label>{{floatingLabel}}</label>\
+              '+iconHtml + '\
               <input type="search"\
                   ' + (tabindex != null ? 'tabindex="' + tabindex + '"' : '') + '\
                   id="{{ inputId || \'fl-input-\' + $mdAutocompleteCtrl.id }}"\
