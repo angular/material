@@ -210,6 +210,7 @@ describe('util', function() {
     });
 
     describe('disableScrollAround', function() {
+
       it('should prevent scrolling of the passed element', inject(function($mdUtil) {
         var element = angular.element('<div style="height: 2000px">');
         document.body.appendChild(element[0]);
@@ -226,6 +227,24 @@ describe('util', function() {
 
         element.remove();
       }));
+
+      it('should not remove the element when being use as scorll mask', inject(function($mdUtil) {
+        var element = angular.element('<div>');
+
+        document.body.appendChild(element[0]);
+
+        var enableScrolling = $mdUtil.disableScrollAround(element, null, {
+          disableScrollMask: true
+        });
+
+        // Restore the scrolling.
+        enableScrolling();
+
+        expect(element[0].parentNode).toBeTruthy();
+
+        element.remove();
+      }));
+
     });
 
     describe('getViewportTop', function() {
