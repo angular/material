@@ -54,7 +54,7 @@ function InterimElementProvider() {
      */
     provider.addPreset('build', {
       methods: ['controller', 'controllerAs', 'resolve',
-        'template', 'templateUrl', 'themable', 'transformTemplate', 'parent']
+        'template', 'templateUrl', 'themable', 'transformTemplate', 'parent', 'contentElement']
     });
 
     return provider;
@@ -435,6 +435,9 @@ function InterimElementProvider() {
             compileElement(options)
               .then(function( compiledData ) {
                 element = linkElement( compiledData, options );
+
+                // Expose the cleanup function from the compiler.
+                options.cleanupElement = compiledData.cleanup;
 
                 showAction = showElement(element, options, compiledData.controller)
                   .then(resolve, rejectAll);

@@ -562,7 +562,7 @@ function MdDialogProvider($$interimElementProvider) {
   return $$interimElementProvider('$mdDialog')
     .setDefaults({
       methods: ['disableParentScroll', 'hasBackdrop', 'clickOutsideToClose', 'escapeToClose',
-          'targetEvent', 'closeTo', 'openFrom', 'parent', 'fullscreen', 'contentElement'],
+          'targetEvent', 'closeTo', 'openFrom', 'parent', 'fullscreen'],
       options: dialogDefaultOptions
     })
     .addPreset('alert', {
@@ -647,7 +647,6 @@ function MdDialogProvider($$interimElementProvider) {
       clickOutsideToClose: false,
       escapeToClose: true,
       targetEvent: null,
-      contentElement: null,
       closeTo: null,
       openFrom: null,
       focusOnOpen: true,
@@ -679,10 +678,6 @@ function MdDialogProvider($$interimElementProvider) {
       // Those option changes need to be done, before the compilation has started, because otherwise
       // the option changes will be not available in the $mdCompilers locales.
       detectTheming(options);
-
-      if (options.contentElement) {
-        options.restoreContentElement = installContentElement(options);
-      }
     }
 
     function beforeShow(scope, element, options, controller) {
@@ -799,13 +794,14 @@ function MdDialogProvider($$interimElementProvider) {
        */
       function detachAndClean() {
         angular.element($document[0].body).removeClass('md-dialog-is-showing');
-        // Only remove the element, if it's not provided through the contentElement option.
-        if (!options.contentElement) {
-          element.remove();
-        } else {
+
+        // Reverse the container stretch if using a content element.
+        if (options.contentElement) {
           options.reverseContainerStretch();
-          options.restoreContentElement();
         }
+
+        // Exposed cleanup function from the $mdCompiler.
+        options.cleanupElement();
 
         if (!options.$destroy) options.origin.focus();
       }
@@ -825,56 +821,6 @@ function MdDialogProvider($$interimElementProvider) {
         options.theme = (targetEl.controller('mdTheme') || {}).$mdTheme || options.theme;
       }
 
-    }
-
-    /**
-     * Installs a content element to the current $$interimElement provider options.
-     * @returns {Function} Function to restore the content element at its old DOM location.
-     */
-    function installContentElement(options) {
-      var contentEl = options.contentElement;
-      var restoreFn = null;
-
-      if (angular.isString(contentEl)) {
-        contentEl = document.querySelector(contentEl);
-        restoreFn = createRestoreFn(contentEl);
-      } else {
-        contentEl = contentEl[0] || contentEl;
-
-        // When the element is visible in the DOM, then we restore it at close of the dialog.
-        // Otherwise it will be removed from the DOM after close.
-        if (document.contains(contentEl)) {
-          restoreFn = createRestoreFn(contentEl);
-        } else {
-          restoreFn = function() {
-            contentEl.parentNode.removeChild(contentEl);
-          }
-        }
-      }
-
-      // Overwrite the options to use the content element.
-      options.element = angular.element(contentEl);
-      options.skipCompile = true;
-
-      return restoreFn;
-
-      function createRestoreFn(element) {
-        var parent = element.parentNode;
-        var nextSibling = element.nextElementSibling;
-
-        return function() {
-          if (!nextSibling) {
-            // When the element didn't had any sibling, then it can be simply appended to the
-            // parent, because it plays no role, which index it had before.
-            parent.appendChild(element);
-          } else {
-            // When the element had a sibling, which marks the previous position of the element
-            // in the DOM, we insert it correctly before the sibling, to have the same index as
-            // before.
-            parent.insertBefore(element, nextSibling);
-          }
-        }
-      }
     }
 
     /**
