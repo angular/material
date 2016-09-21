@@ -353,6 +353,47 @@ angular
  * @param {!MdPanelPosition} position
  */
 
+/**
+ * @ngdoc method
+ * @name MdPanelRef#registerInterceptor
+ * @description
+ *
+ * Registers an interceptor with the panel. The callback should return a promise,
+ * which will allow the action to continue when it gets resolved, or will
+ * prevent an action if it is rejected. The interceptors are called sequentially
+ * and it reverse order. `type` must be one of the following
+ * values available on `$mdPanel.interceptorTypes`:
+ * * `CLOSE` - Gets called before the panel begins closing.
+ *
+ * @param {string} type Type of interceptor.
+ * @param {!angular.$q.Promise<any>} callback Callback to be registered.
+ * @returns {!MdPanelRef}
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#removeInterceptor
+ * @description
+ *
+ * Removes a registered interceptor.
+ *
+ * @param {string} type Type of interceptor to be removed.
+ * @param {function(): !angular.$q.Promise<any>} callback Interceptor to be removed.
+ * @returns {!MdPanelRef}
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#removeAllInterceptors
+ * @description
+ *
+ * Removes all interceptors. If a type is supplied, only the
+ * interceptors of that type will be cleared.
+ *
+ * @param {string=} type Type of interceptors to be removed.
+ * @returns {!MdPanelRef}
+ */
+
 
 /*****************************************************************************
  *                               MdPanelPosition                            *
@@ -743,6 +784,12 @@ function MdPanelService($rootElement, $rootScope, $injector, $window) {
    * @type {enum}
    */
   this.yPosition = MdPanelPosition.yPosition;
+
+  /**
+   * Possible values for the interceptors that can be registered on a panel.
+   * @type {enum}
+   */
+  this.interceptorTypes = MdPanelRef.interceptorTypes;
 }
 
 
@@ -912,7 +959,18 @@ function MdPanelRef(config, $injector) {
 
   /** @private {Function?} */
   this._restoreScroll = null;
+
+  /**
+   * Keeps track of all the panel interceptors.
+   * @private {!Object}
+   */
+  this._interceptors = Object.create(null);
 }
+
+
+MdPanelRef.interceptorTypes = {
+  CLOSE: 'onClose'
+};
 
 
 /**
@@ -944,13 +1002,15 @@ MdPanelRef.prototype.close = function() {
   var self = this;
 
   return this._$q(function(resolve, reject) {
-    var done = self._done(resolve, self);
-    var detach = self._simpleBind(self.detach, self);
+    self._callInterceptors(MdPanelRef.interceptorTypes.CLOSE).then(function() {
+      var done = self._done(resolve, self);
+      var detach = self._simpleBind(self.detach, self);
 
-    self.hide()
-        .then(detach)
-        .then(done)
-        .catch(reject);
+      self.hide()
+          .then(detach)
+          .then(done)
+          .catch(reject);
+    }, reject);
   });
 };
 
@@ -1042,6 +1102,7 @@ MdPanelRef.prototype.detach = function() {
 MdPanelRef.prototype.destroy = function() {
   this.config.scope.$destroy();
   this.config.locals = null;
+  this._interceptors = null;
 };
 
 
@@ -1639,6 +1700,106 @@ MdPanelRef.prototype._animateClose = function() {
     animationConfig.animateClose(self.panelEl)
         .then(done, warnAndClose);
   });
+};
+
+/**
+ * Registers a interceptor with the panel. The callback should return a promise,
+ * which will allow the action to continue when it gets resolved, or will
+ * prevent an action if it is rejected.
+ * @param {string} type Type of interceptor.
+ * @param {!angular.$q.Promise<!any>} callback Callback to be registered.
+ * @returns {!MdPanelRef}
+ */
+MdPanelRef.prototype.registerInterceptor = function(type, callback) {
+  var error = null;
+
+  if (!angular.isString(type)) {
+    error = 'Interceptor type must be a string, instead got ' + typeof type;
+  } else if (!angular.isFunction(callback)) {
+    error = 'Interceptor callback must be a function, instead got ' + typeof callback;
+  }
+
+  if (error) {
+    throw new Error('MdPanel: ' + error);
+  }
+
+  var interceptors = this._interceptors[type] = this._interceptors[type] || [];
+
+  if (interceptors.indexOf(callback) === -1) {
+    interceptors.push(callback);
+  }
+
+  return this;
+};
+
+/**
+ * Removes a registered interceptor.
+ * @param {string} type Type of interceptor to be removed.
+ * @param {Function} callback Interceptor to be removed.
+ * @returns {!MdPanelRef}
+ */
+MdPanelRef.prototype.removeInterceptor = function(type, callback) {
+  var index = this._interceptors[type] ?
+    this._interceptors[type].indexOf(callback) : -1;
+
+  if (index > -1) {
+    this._interceptors[type].splice(index, 1);
+  }
+
+  return this;
+};
+
+
+/**
+ * Removes all interceptors.
+ * @param {string=} type Type of interceptors to be removed.
+ *     If ommited, all interceptors types will be removed.
+ * @returns {!MdPanelRef}
+ */
+MdPanelRef.prototype.removeAllInterceptors = function(type) {
+  if (type) {
+    this._interceptors[type] = [];
+  } else {
+    this._interceptors = Object.create(null);
+  }
+
+  return this;
+};
+
+
+/**
+ * Invokes all the interceptors of a certain type sequantially in
+ *     reverse order. Works in a similar way to `$q.all`, except it
+ *     respects the order of the functions.
+ * @param {string} type Type of interceptors to be invoked.
+ * @returns {!angular.$q.Promise<!MdPanelRef>}
+ * @private
+ */
+MdPanelRef.prototype._callInterceptors = function(type) {
+  var self = this;
+  var $q = self._$q;
+  var interceptors = self._interceptors && self._interceptors[type] || [];
+
+  return interceptors.reduceRight(function(promise, interceptor) {
+    var isPromiseLike = interceptor && angular.isFunction(interceptor.then);
+    var response = isPromiseLike ? interceptor : null;
+
+    /**
+    * For interceptors to reject/cancel subsequent portions of the chain, simply
+    * return a `$q.reject(<value>)`
+    */
+    return promise.then(function() {
+      if (!response) {
+        try {
+          response = interceptor(self);
+        } catch(e) {
+          response = $q.reject(e);
+        }
+      }
+
+     return response;
+    });
+  }, $q.resolve(self));
 };
 
 

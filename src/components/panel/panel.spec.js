@@ -2203,6 +2203,213 @@ describe('$mdPanel', function() {
     });
   });
 
+  describe('interceptor logic: ', function() {
+    var interceptorTypes;
+
+    beforeEach(function() {
+      interceptorTypes = $mdPanel.interceptorTypes;
+      openPanel();
+    });
+
+    it('should throw when registering an interceptor without a type', function() {
+      expect(function() {
+        panelRef.registerInterceptor();
+      }).toThrowError('MdPanel: Interceptor type must be a string, instead got undefined');
+    });
+
+    it('should throw when registering an interceptor without a callback', function() {
+      expect(function() {
+        panelRef.registerInterceptor(interceptorTypes.CLOSE);
+      }).toThrowError('MdPanel: Interceptor callback must be a function, instead got undefined');
+    });
+
+    it('should execute the registered interceptors', function() {
+      var obj = { callback: function() {} };
+
+      spyOn(obj, 'callback');
+
+      panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
+      callInteceptors('CLOSE');
+
+      expect(obj.callback).toHaveBeenCalledWith(panelRef);
+    });
+
+    it('should execute the interceptors in reverse order', function() {
+      var results = [];
+      var obj = { callback: function() {} };
+
+      spyOn(obj, 'callback');
+
+      panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(1));
+      panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(2));
+      panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(3));
+
+      callInteceptors('CLOSE').then(obj.callback);
+      $rootScope.$apply();
+
+      expect(results).toEqual([3, 2, 1]);
+      expect(obj.callback).toHaveBeenCalled();
+
+      function makePromise(value) {
+        return function() {
+          return $q.resolve().then(function() {
+            results.push(value);
+          });
+        };
+      }
+    });
+
+    it('should reject and break the chain if one of the promises is rejected', function() {
+      var results = [];
+      var obj = { callback: function() {} };
+
+      spyOn(obj, 'callback');
+
+      panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(1, true));
+      panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(2));
+      panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(3));
+
+      callInteceptors('CLOSE').catch(obj.callback);
+      $rootScope.$apply();
+
+      expect(results).toEqual([3, 2]);
+      expect(obj.callback).toHaveBeenCalled();
+
+      function makePromise(value, shouldFail) {
+        return function() {
+          return shouldFail ? $q.reject() : $q.resolve().then(function() {
+            results.push(value);
+          });
+        };
+      }
+    });
+
+    it('should reject if one of the interceptors throws', function() {
+      var obj = { callback: function() {} };
+
+      spyOn(obj, 'callback');
+
+      panelRef.registerInterceptor(interceptorTypes.CLOSE, function() {
+        throw new Error('Something went wrong.');
+      });
+
+      panelRef.registerInterceptor(interceptorTypes.CLOSE, function() {
+        return $q.resolve();
+      });
+
+      callInteceptors('CLOSE').catch(obj.callback);
+      $rootScope.$apply();
+
+      expect(obj.callback).toHaveBeenCalled();
+    });
+
+    it('should resolve if the interceptor queue is empty', function() {
+      var obj = { callback: function() {} };
+
+      spyOn(obj, 'callback');
+
+      callInteceptors('CLOSE').then(obj.callback);
+      $rootScope.$apply();
+
+      expect(obj.callback).toHaveBeenCalled();
+    });
+
+    it('should remove individual interceptors', function() {
+      var obj = { callback: function() {} };
+
+      spyOn(obj, 'callback');
+
+      panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
+      callInteceptors('CLOSE');
+
+      expect(obj.callback).toHaveBeenCalledTimes(1);
+
+      panelRef.removeInterceptor(interceptorTypes.CLOSE, obj.callback);
+      panelRef._callInterceptors('CLOSE');
+
+      expect(obj.callback).toHaveBeenCalledTimes(1);
+    });
+
+    it('should remove all interceptors', function() {
+      var obj = {
+        callback: function() {},
+        otherCallback: function() {}
+      };
+
+      spyOn(obj, 'callback');
+      spyOn(obj, 'otherCallback');
+
+      panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
+      panelRef.registerInterceptor('onOpen', obj.otherCallback);
+
+      callInteceptors('CLOSE');
+      callInteceptors('onOpen');
+
+      expect(obj.callback).toHaveBeenCalledTimes(1);
+      expect(obj.otherCallback).toHaveBeenCalledTimes(1);
+
+      panelRef.removeAllInterceptors();
+      callInteceptors('CLOSE');
+      callInteceptors('onOpen');
+
+      expect(obj.callback).toHaveBeenCalledTimes(1);
+      expect(obj.otherCallback).toHaveBeenCalledTimes(1);
+    });
+
+    it('should remove all interceptors of a certain type', function() {
+      var obj = {
+        callback: function() {},
+        otherCallback: function() {}
+      };
+
+      spyOn(obj, 'callback');
+      spyOn(obj, 'otherCallback');
+
+      panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
+      panelRef.registerInterceptor('onOpen', obj.otherCallback);
+
+      callInteceptors('CLOSE');
+      callInteceptors('onOpen');
+
+      expect(obj.callback).toHaveBeenCalledTimes(1);
+      expect(obj.otherCallback).toHaveBeenCalledTimes(1);
+
+      panelRef.removeAllInterceptors(interceptorTypes.CLOSE);
+      callInteceptors('CLOSE');
+      callInteceptors('onOpen');
+
+      expect(obj.callback).toHaveBeenCalledTimes(1);
+      expect(obj.otherCallback).toHaveBeenCalledTimes(2);
+    });
+
+    describe('CLOSE interceptor', function() {
+      it('should prevent the panel from closing when the handler is rejected',
+        function() {
+          panelRef.registerInterceptor(interceptorTypes.CLOSE, function() {
+            return $q.reject();
+          });
+
+          expect(panelRef.isAttached).toBe(true);
+
+          closePanel();
+
+          expect(panelRef.isAttached).toBe(true);
+        });
+
+      it('should allow the panel to close when the handler resolves', function() {
+        panelRef.registerInterceptor(interceptorTypes.CLOSE, function() {
+          return $q.when();
+        });
+
+        expect(panelRef.isAttached).toBe(true);
+
+        closePanel();
+
+        expect(panelRef.isAttached).toBe(false);
+      });
+    });
+  });
+
   /**
    * Attached an element to document.body. Keeps track of attached elements
    * so that they can be removed in an afterEach.
@@ -2294,5 +2501,16 @@ describe('$mdPanel', function() {
   function flushPanel() {
     $rootScope.$apply();
     $material.flushOutstandingAnimations();
+  }
+
+  function callInteceptors(type) {
+    if (panelRef) {
+      var promise = panelRef._callInterceptors(
+        $mdPanel.interceptorTypes[type] || type
+      );
+
+      flushPanel();
+      return promise;
+    }
   }
 });
