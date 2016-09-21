@@ -162,7 +162,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
     var focusTarget = menuContainer[0]
       .querySelector(prefixer.buildSelector(['md-menu-focus-target', 'md-autofocus']));
 
-    if (!focusTarget) focusTarget = menuContainer[0].querySelector('.md-button');
+    if (!focusTarget) focusTarget = menuContainer[0].querySelector('.md-button:not([disabled])');
     focusTarget.focus();
   };
 
