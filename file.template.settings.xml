@@ -1,0 +1,9 @@
+<application>
+  <component name="ExportableFileTemplateSettings">
+    <internal_templates>
+      <template name="HTML File.html" reformat="true" live-template-enabled="true" enabled="true" />
+      <template name="HTML4 File.html" reformat="true" live-template-enabled="true" enabled="true" />
+      <template name="XHTML File.xhtml" reformat="true" live-template-enabled="true" enabled="true" />
+    </internal_templates>
+  </component>
+</application>

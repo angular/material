@@ -1,0 +1,6 @@
+<application>
+  <component name="BaseRefactoringSettings">
+    <option name="RENAME_SEARCH_IN_COMMENTS_FOR_FILE" value="false" />
+    <option name="RENAME_SEARCH_FOR_REFERENCES_FOR_FILE" value="false" />
+  </component>
+</application>

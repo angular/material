@@ -1,0 +1,9 @@
+<application>
+  <component name="FileTypeManager" version="17">
+    <extensionMap>
+      <mapping pattern="readme" type="PLAIN_TEXT" />
+      <mapping pattern="CHANGELOG" type="PLAIN_TEXT" />
+      <mapping ext="ngdoc" type="PLAIN_TEXT" />
+    </extensionMap>
+  </component>
+</application>
