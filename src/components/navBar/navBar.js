@@ -380,7 +380,7 @@ MdNavBarController.prototype.onKeydown = function(e) {
 /**
  * @ngInject
  */
-function MdNavItem($$rAF) {
+function MdNavItem($$rAF, $parse) {
   return {
     restrict: 'E',
     require: ['mdNavItem', '^mdNavBar'],
@@ -418,7 +418,7 @@ function MdNavItem($$rAF) {
       'mdNavHref': '@?',
       'mdNavSref': '@?',
       'name': '@',
-      'disabled': '=?ngDisabled',
+      'nativeDisabled': '@?disabled'
     },
     link: function(scope, element, attrs, controllers) {
       var mdNavItem = controllers[0];
@@ -439,6 +439,21 @@ function MdNavItem($$rAF) {
           scope.$apply();
         });
       });
+
+      var stopDisabledWatch = angular.noop;
+
+      if (angular.isDefined(attrs.disabled)) {
+        mdNavItem.disabled = true;
+      }
+      else if (attrs.ngDisabled) {
+        stopDisabledWatch = scope.$parent.$watch(attrs.ngDisabled, function() {
+          mdNavItem.disabled = $parse(attrs.ngDisabled)(scope.$parent);
+        });
+      }
+
+      scope.$on('$destroy', function() {
+        stopDisabledWatch();
+      })
     }
   };
 }
