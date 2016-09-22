@@ -365,6 +365,35 @@ describe('$$interimElement service', function() {
         }
       });
 
+      it('should hide multiple elements', function() {
+        var showCount = 0;
+
+        showInterim();
+        expect(showCount).toBe(1);
+
+        showInterim();
+        expect(showCount).toBe(2);
+
+        Service.hide();
+        expect(showCount).toBe(1);
+
+        Service.hide();
+        expect(showCount).toBe(0);
+
+        function showInterim() {
+          Service.show({
+            template: '<div>Interim Element</div>',
+            onShow: function() {
+              showCount++;
+            },
+            onRemove: function() {
+              showCount--;
+            },
+            multiple: true
+          });
+        }
+
+      });
 
       it('should not show multiple interim elements by default', function() {
         var showCount = 0;
