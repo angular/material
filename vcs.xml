@@ -128,6 +128,6 @@
         </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="/Volumes/JDO/Projecten/Websites" />
+    <option name="cloneParentDir" value="$USER_HOME$/Code" />
   </component>
 </application>
