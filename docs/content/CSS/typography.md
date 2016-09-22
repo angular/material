@@ -58,11 +58,11 @@ consistency across your application.
     </div>
     <md-divider></md-divider>
     <ul>
-      <li layout="column" layout-gt-md="row" layout-align="start center">
+      <li layout="row" layout-sm="column" layout-xs="column" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
           <code>.md-display-4</code>
         </span>
-        <h5 aria-describedby="headings-output" class="md-display-4 docs-output">Light 112px</h5>
+        <h5 flex aria-describedby="headings-output" class="md-display-4 docs-output">Light 112px</h5>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
