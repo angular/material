@@ -7,7 +7,7 @@ angular
  */
 function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipple, $mdUtil,
                            $animateCss, $attrs, $compile, $mdTheming, $mdInteraction,
-                           MdTabsPaginationService) {
+                           MdTabsPaginationService, $timeout) {
   // define private properties
   var ctrl      = this,
       locked    = false,
@@ -15,7 +15,6 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
       queue     = [],
       destroyed = false,
       loaded    = false;
-
 
   // Define public methods
   ctrl.$onInit            = $onInit;
@@ -62,6 +61,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     // Define boolean attributes
     defineBooleanAttribute('noInkBar', handleInkBar);
     defineBooleanAttribute('dynamicHeight', handleDynamicHeight);
+    defineBooleanAttribute('stretchHeight');
     defineBooleanAttribute('noPagination');
     defineBooleanAttribute('swipeContent');
     defineBooleanAttribute('noDisconnect');
@@ -261,7 +261,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     ctrl.selectedIndex     = getNearestSafeIndex(newValue);
     ctrl.lastSelectedIndex = oldValue;
     ctrl.updateInkBarStyles();
-    updateHeightFromContent();
+    if(!ctrl.stretchHeight) updateHeightFromContent();
     adjustOffset(newValue);
     $scope.$broadcast('$mdTabsChanged');
     ctrl.tabs[ oldValue ] && ctrl.tabs[ oldValue ].scope.deselect();
@@ -387,6 +387,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     $mdUtil.nextTick(function () {
       ctrl.updateInkBarStyles();
       updatePagination();
+      if (ctrl.stretchHeight) updateHeightFromParent();
     });
   }
 
@@ -764,6 +765,46 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   function refreshIndex () {
     ctrl.selectedIndex = getNearestSafeIndex(ctrl.selectedIndex);
     ctrl.focusIndex    = getNearestSafeIndex(ctrl.focusIndex);
+  } 
+
+  /**
+   * Rapid fires function to compensate for rendering lag for post-render functions.
+   * Note: Only use on inexpensive functions to avoid performance issues.
+   */
+  function cascadeTimeouts (func) {
+    var timeouts = [],
+        offsets = [50, 100, 300, 1000];
+
+    for (var i = 0; i < offsets.length; i++) {
+      timeouts.push($timeout(func, offsets[i]));
+    }
+
+    ctrl.scope.$on('$destroy', function () {
+      for (var i = 0; i < timeouts.length; i++) {
+        $timeout.cancel(timeouts[i]);
+      }
+    });   
+  }
+
+  /**
+   * Updates element's height to fill available space of parent element.
+   */
+  function updateHeightFromParent () {
+    var parent = $element[0].parentNode,
+        parentHeight = parent.clientHeight,
+        siblingsHeight = 0;
+
+    angular.forEach(parent.children, function (child) {
+      if (child !== $element[0]) {
+        var childStyle = $window.getComputedStyle(child);
+
+        siblingsHeight += child.offsetHeight;
+        siblingsHeight += parseInt(childStyle.marginTop);
+        siblingsHeight += parseInt(childStyle.marginBottom);
+      }
+    });
+  
+    $element.css('height', parentHeight - siblingsHeight + 'px');
   }
 
   /**
@@ -771,8 +812,9 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * @returns {*}
    */
   function updateHeightFromContent () {
-    if (!ctrl.dynamicHeight) return $element.css('height', '');
+    if (!ctrl.dynamicHeight && !ctrl.stretchHeight) return $element.css('height', '');
     if (!ctrl.tabs.length) return queue.push(updateHeightFromContent);
+    if (ctrl.stretchHeight) return cascadeTimeouts(updateHeightFromParent);
 
     var elements = getElements();
 
