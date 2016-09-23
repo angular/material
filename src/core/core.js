@@ -34,7 +34,8 @@ function DetectNgTouch($log, $injector) {
  */
 function MdCoreConfigure($provide, $mdThemingProvider) {
 
-  $provide.decorator('$$rAF', ["$delegate", rAFDecorator]);
+  $provide.decorator('$$rAF', ['$delegate', rAFDecorator]);
+  $provide.decorator('$q', ['$delegate', qDecorator]);
 
   $mdThemingProvider.theme('default')
     .primaryPalette('indigo')
@@ -74,5 +75,23 @@ function rAFDecorator($delegate) {
       }
     };
   };
+  return $delegate;
+}
+
+/**
+ * @ngInject
+ */
+function qDecorator($delegate) {
+  /**
+   * Adds a shim for $q.resolve for Angular version that don't have it,
+   * so we don't have to think about it.
+   *
+   * via https://github.com/angular/angular.js/pull/11987
+   */
+
+  // TODO(crisbeto): this won't be necessary once we drop Angular 1.3
+  if (!$delegate.resolve) {
+    $delegate.resolve = $delegate.when;
+  }
   return $delegate;
 }

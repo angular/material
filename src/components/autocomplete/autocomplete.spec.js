@@ -982,7 +982,7 @@ describe('<md-autocomplete>', function() {
       ctrl.focus();
 
       // Set our search text to a value to make md-scroll-mask added to DOM
-      scope.searchText = 'searchText';
+      scope.$apply('searchText = "searchText"');
 
       $timeout.flush();
 

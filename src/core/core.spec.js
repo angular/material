@@ -20,6 +20,9 @@ describe('material.core', function() {
 
   });
 
-
+  it('should shim $q.resolve', inject(function($q) {
+    expect(angular.isFunction($q.resolve)).toBe(true);
+    expect($q.resolve).toBe($q.when);
+  }));
 });
 
