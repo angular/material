@@ -29,6 +29,10 @@ body.docs-body {
   height: auto;
 }
 
+.docs-anchor {
+  color: inherit;
+}
+
 #license-footer {
   align-self: flex-end;
   padding: 16px 32px;

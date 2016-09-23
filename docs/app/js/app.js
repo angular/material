@@ -127,6 +127,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
   });
 
   $routeProvider.otherwise('/');
+
+  // Change hash prefix of the Angular router, because we use the hash symbol for anchor links.
+  // The hash will be not used by the docs, because we use the HTML5 mode for our links.
+  $locationProvider.hashPrefix('!');
+
 }])
 
 .config(['AngularyticsProvider', function(AngularyticsProvider) {
