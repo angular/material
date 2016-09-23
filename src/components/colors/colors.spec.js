@@ -2,6 +2,7 @@ describe('md-colors', function () {
   var $compile, $rootScope;
   var $mdColorPalette, $mdTheming;
   var supplant, scope;
+  var compiledElements = [];
 
   beforeEach(module('material.components.colors', function ($mdThemingProvider) {
     $mdThemingProvider.theme('myTheme')
@@ -18,6 +19,14 @@ describe('md-colors', function () {
     scope = $rootScope.$new();
   }));
 
+  afterEach(function() {
+    compiledElements.forEach(function(element) {
+      element.remove();
+    });
+
+    compiledElements = [];
+  });
+
   // documentMode is an only-IE property, which confirms that the specs are currently running inside
   // of an Internet Explorer.
   var isIE = !!window.document.documentMode;
@@ -32,18 +41,25 @@ describe('md-colors', function () {
     }
   }
 
+  // Compiles a template and keeps track of the elements so they can be cleaned up properly.
+  function compile(template) {
+    var element = $compile(template)(scope);
+    compiledElements.push(element);
+    return element;
+  }
+
   describe('directive', function () {
 
     function createElement(scope, options) {
       var style =  supplant("{theme}-{palette}-{hue}-{opacity}", {
-              attrs   : options.attrs,
-              palette : options.palette,
-              theme   : options.theme || 'default',
-              hue     : options.hue || (options.palette === 'accent' ? 'A200' : '500'),
-              opacity : options.opacity || 1
-            });
+        attrs   : options.attrs,
+        palette : options.palette,
+        theme   : options.theme || 'default',
+        hue     : options.hue || (options.palette === 'accent' ? 'A200' : '500'),
+        opacity : options.opacity || 1
+      });
       var markup = supplant('<div md-colors="{background: \'{0}\'}" {1} ></div>', [style, options.attrs]);
-      var element = $compile( markup )(scope);
+      var element = compile(markup);
 
       scope.$apply(function() {
         angular.element(document.body).append( element );
@@ -141,7 +157,7 @@ describe('md-colors', function () {
       });
 
     });
-    
+
     describe('themes', function () {
       /**
        * <div md-colors="{background: 'primary'}">
@@ -294,7 +310,7 @@ describe('md-colors', function () {
 
 
           var markup = '<div md-theme="myTheme"><div md-colors="{background: \'primary\'}" ></div></div>';
-          var element = $compile( markup )(scope);
+          var element = compile(markup);
 
           expect(element.children()[0].style.background).toContain( expectedRGB );
         });
@@ -313,7 +329,7 @@ describe('md-colors', function () {
 
           scope.theme = 'myTheme';
           var markup = '<div md-theme="{{theme}}"><div md-colors="{background: \'primary\'}" ></div></div>';
-          var element = $compile( markup )(scope);
+          var element = compile(markup);
 
           expect(element.children()[0].style.background).toContain( expectedRGB );
 
@@ -355,9 +371,9 @@ describe('md-colors', function () {
       /**
        * <div md-colors="{ background: color() }" >
        */
-      it('should accept function', inject(function ($compile) {
+      it('should accept function', function() {
         var color = $mdColorPalette['light-blue']['200'].value;
-        var element = $compile('<div md-colors="{background: color()}"></div>')(scope);
+        var element = compile('<div md-colors="{background: color()}"></div>');
         var expectedRGBa = buildColor(color[0], color[1], color[2], 0.8);
 
         scope.color = function () {
@@ -366,13 +382,13 @@ describe('md-colors', function () {
         scope.$apply();
 
         expect(element[0].style.background).toContain( expectedRGBa );
-      }));
+      });
 
       /**
        * <div md-colors="{ background: test ? 'red' : 'lightBlue' }" >
        */
-      it('should accept ternary value', inject(function ($compile, $timeout) {
-        var element = $compile('<div md-colors="{background: \'{{test ? \'red\' : \'lightBlue\'}}\'}"></div>')(scope);
+      it('should accept ternary value', inject(function($timeout) {
+        var element = compile('<div md-colors="{background: \'{{test ? \'red\' : \'lightBlue\'}}\'}"></div>');
         var color = $mdColorPalette['light-blue']['500'].value;
         var red = $mdColorPalette['red']['500'].value;
         var expectedRGB = buildColor(color[0], color[1], color[2]);
@@ -458,7 +474,7 @@ describe('md-colors', function () {
          * <div md-colors="{background: '{{color}}' }" >
          */
         it('should delete old colors when getting an empty object', function() {
-          var element = $compile( '<div md-colors="{{color}}"></div>' )(scope);
+          var element = compile('<div md-colors="{{color}}"></div>');
 
           scope.color = '{background: \'red\'}';
           scope.$apply();
@@ -490,7 +506,7 @@ describe('md-colors', function () {
        * <div md-colors="" >
        */
       it('should accept empty value and not color the element', function() {
-        var element = $compile( '<div md-colors=""></div>' )(scope);
+        var element = compile('<div md-colors=""></div>');
 
         expect(element[0].style.background).toBe( '' );
       });
@@ -499,7 +515,7 @@ describe('md-colors', function () {
        * <div md-colors="{}" >
        */
       it('should accept empty object and not color the element', function() {
-        var element = $compile( '<div md-colors="{}"></div>' )(scope);
+        var element = compile('<div md-colors="{}"></div>');
 
         expect(element[0].style.background).toBe( '' );
       });
