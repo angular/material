@@ -114,6 +114,16 @@ describe('$mdPanel', function() {
     expect(PANEL_EL).not.toExist();
   });
 
+  it('should remove a panel from the DOM when the scope is destroyed', function() {
+    openPanel();
+
+    expect(PANEL_EL).toExist();
+
+    panelRef.config.scope.$destroy();
+
+    expect(PANEL_EL).not.toExist();
+  });
+
   it('should hide and show a panel in the DOM', function() {
     openPanel(DEFAULT_CONFIG);
 

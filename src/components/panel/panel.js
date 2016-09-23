@@ -817,6 +817,7 @@ MdPanelService.prototype.create = function(config) {
 
   var panelRef = new MdPanelRef(this._config, this._$injector);
   this._trackedPanels[config.id] = panelRef;
+  this._config.scope.$on('$destroy', angular.bind(panelRef, panelRef.detach));
 
   return panelRef;
 };
