@@ -81,15 +81,6 @@ function virtualRepeatContainerTemplate($element) {
 }
 
 /**
- * Maximum size, in pixels, that can be explicitly set to an element. The actual value varies
- * between browsers, but IE11 has the very lowest size at a mere 1,533,917px. Ideally we could
- * *compute* this value, but Firefox always reports an element to have a size of zero if it
- * goes over the max, meaning that we'd have to binary search for the value.
- * @const {number}
- */
-var MAX_ELEMENT_SIZE = 1533917;
-
-/**
  * Number of additional elements to render above and below the visible area inside
  * of the virtual repeat container. A higher number results in less flicker when scrolling
  * very quickly in Safari, but comes with a higher rendering and dirty-checking cost.
@@ -98,8 +89,8 @@ var MAX_ELEMENT_SIZE = 1533917;
 var NUM_EXTRA = 3;
 
 /** @ngInject */
-function VirtualRepeatContainerController(
-    $$rAF, $mdUtil, $parse, $rootScope, $window, $scope, $element, $attrs) {
+function VirtualRepeatContainerController($$rAF, $mdUtil, $mdConstant, $parse, $rootScope, $window, $scope,
+                                          $element, $attrs) {
   this.$rootScope = $rootScope;
   this.$scope = $scope;
   this.$element = $element;
@@ -125,6 +116,8 @@ function VirtualRepeatContainerController(
   this.offsetSize = parseInt(this.$attrs.mdOffsetSize, 10) || 0;
   /** @type {?string} height or width element style on the container prior to auto-shrinking. */
   this.oldElementSize = null;
+  /** @type {!number} Maximum amount of pixels allowed for a single DOM element */
+  this.maxElementPixels = $mdConstant.ELEMENT_MAX_PIXELS;
 
   if (this.$attrs.mdTopIndex) {
     /** @type {function(angular.Scope): number} Binds to topIndex on Angular scope */
@@ -262,18 +255,18 @@ VirtualRepeatContainerController.prototype.sizeScroller_ = function(size) {
   // If the size falls within the browser's maximum explicit size for a single element, we can
   // set the size and be done. Otherwise, we have to create children that add up the the desired
   // size.
-  if (size < MAX_ELEMENT_SIZE) {
+  if (size < this.maxElementPixels) {
     this.sizer.style[dimension] = size + 'px';
   } else {
     this.sizer.style[dimension] = 'auto';
     this.sizer.style[crossDimension] = 'auto';
 
     // Divide the total size we have to render into N max-size pieces.
-    var numChildren = Math.floor(size / MAX_ELEMENT_SIZE);
+    var numChildren = Math.floor(size / this.maxElementPixels);
 
     // Element template to clone for each max-size piece.
     var sizerChild = document.createElement('div');
-    sizerChild.style[dimension] = MAX_ELEMENT_SIZE + 'px';
+    sizerChild.style[dimension] = this.maxElementPixels + 'px';
     sizerChild.style[crossDimension] = '1px';
 
     for (var i = 0; i < numChildren; i++) {
@@ -281,7 +274,7 @@ VirtualRepeatContainerController.prototype.sizeScroller_ = function(size) {
     }
 
     // Re-use the element template for the remainder.
-    sizerChild.style[dimension] = (size - (numChildren * MAX_ELEMENT_SIZE)) + 'px';
+    sizerChild.style[dimension] = (size - (numChildren * this.maxElementPixels)) + 'px';
     this.sizer.appendChild(sizerChild);
   }
 };

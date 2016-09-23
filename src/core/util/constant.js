@@ -41,6 +41,17 @@ function MdConstantFactory($sniffer, $window, $document) {
       return (NAVIGATION_KEYS.indexOf(e.keyCode) != -1);    
     },
 
+    /**
+     * Maximum size, in pixels, that can be explicitly set to an element. The actual value varies
+     * between browsers, but IE11 has the very lowest size at a mere 1,533,917px. Ideally we could
+     * compute this value, but Firefox always reports an element to have a size of zero if it
+     * goes over the max, meaning that we'd have to binary search for the value.
+     */
+    ELEMENT_MAX_PIXELS: 1533917,
+
+    /**
+     * Common Keyboard actions and their associated keycode.
+     */
     KEY_CODE: {
       COMMA: 188,
       SEMICOLON : 186,
@@ -59,6 +70,11 @@ function MdConstantFactory($sniffer, $window, $document) {
       BACKSPACE: 8,
       DELETE: 46
     },
+
+    /**
+     * Vendor prefixed CSS properties to be used to support the given functionality in older browsers
+     * as well.
+     */
     CSS: {
       /* Constants */
       TRANSITIONEND: 'transitionend' + (isWebkit ? ' webkitTransitionEnd' : ''),
@@ -74,6 +90,7 @@ function MdConstantFactory($sniffer, $window, $document) {
       ANIMATION_TIMING: vendorProperty('animationTimingFunction'),
       ANIMATION_DIRECTION: vendorProperty('animationDirection')
     },
+
     /**
      * As defined in core/style/variables.scss
      *
@@ -97,6 +114,7 @@ function MdConstantFactory($sniffer, $window, $document) {
       'portrait'  : '(orientation: portrait)'                    ,
       'print' : 'print'
     },
+
     MEDIA_PRIORITY: [
       'xl',
       'gt-lg',
