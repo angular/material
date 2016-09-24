@@ -23,6 +23,9 @@ describe('<md-chips>', function() {
 
   afterEach(function() {
     attachedElements.forEach(function(element) {
+      var scope = element.scope();
+
+      scope && scope.$destroy();
       element.remove();
     });
     attachedElements = [];
@@ -308,7 +311,7 @@ describe('<md-chips>', function() {
         });
 
       });
-      
+
       describe('when removable', function() {
 
         it('should not append the input div when not removable and readonly is enabled', function() {
@@ -1173,8 +1176,6 @@ describe('<md-chips>', function() {
 
           expect(scope.items.length).toBe(2);
           expect(document.activeElement).toBe(input[0]);
-
-          element.remove();
         });
       });
 

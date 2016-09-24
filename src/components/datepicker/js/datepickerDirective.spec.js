@@ -43,6 +43,13 @@ describe('md-datepicker', function() {
     createDatepickerInstance(DATEPICKER_TEMPLATE);
     controller.closeCalendarPane();
   }));
+
+  afterEach(function() {
+    controller.isAttached && controller.closeCalendarPane();
+    pageScope.$destroy();
+    ngElement.remove();
+  });
+
   /**
    * Compile and link the given template and store values for element, scope, and controller.
    * @param {string} template
