@@ -2239,7 +2239,8 @@ describe('$mdPanel', function() {
       spyOn(obj, 'callback');
 
       panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
-      callInteceptors('CLOSE');
+      panelRef._callInterceptors(interceptorTypes.CLOSE);
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalledWith(panelRef);
     });
@@ -2254,8 +2255,8 @@ describe('$mdPanel', function() {
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(2));
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(3));
 
-      callInteceptors('CLOSE').then(obj.callback);
-      $rootScope.$apply();
+      panelRef._callInterceptors(interceptorTypes.CLOSE).then(obj.callback);
+      flushPanel();
 
       expect(results).toEqual([3, 2, 1]);
       expect(obj.callback).toHaveBeenCalled();
@@ -2279,8 +2280,8 @@ describe('$mdPanel', function() {
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(2));
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(3));
 
-      callInteceptors('CLOSE').catch(obj.callback);
-      $rootScope.$apply();
+      panelRef._callInterceptors(interceptorTypes.CLOSE).catch(obj.callback);
+      flushPanel();
 
       expect(results).toEqual([3, 2]);
       expect(obj.callback).toHaveBeenCalled();
@@ -2307,8 +2308,8 @@ describe('$mdPanel', function() {
         return $q.resolve();
       });
 
-      callInteceptors('CLOSE').catch(obj.callback);
-      $rootScope.$apply();
+      panelRef._callInterceptors(interceptorTypes.CLOSE).catch(obj.callback);
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalled();
     });
@@ -2318,8 +2319,8 @@ describe('$mdPanel', function() {
 
       spyOn(obj, 'callback');
 
-      callInteceptors('CLOSE').then(obj.callback);
-      $rootScope.$apply();
+      panelRef._callInterceptors(interceptorTypes.CLOSE).then(obj.callback);
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalled();
     });
@@ -2330,12 +2331,14 @@ describe('$mdPanel', function() {
       spyOn(obj, 'callback');
 
       panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
-      callInteceptors('CLOSE');
+      panelRef._callInterceptors(interceptorTypes.CLOSE);
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
 
       panelRef.removeInterceptor(interceptorTypes.CLOSE, obj.callback);
-      panelRef._callInterceptors('CLOSE');
+      panelRef._callInterceptors(interceptorTypes.CLOSE);
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
     });
@@ -2352,15 +2355,17 @@ describe('$mdPanel', function() {
       panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
       panelRef.registerInterceptor('onOpen', obj.otherCallback);
 
-      callInteceptors('CLOSE');
-      callInteceptors('onOpen');
+      panelRef._callInterceptors(interceptorTypes.CLOSE);
+      panelRef._callInterceptors('onOpen');
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
       expect(obj.otherCallback).toHaveBeenCalledTimes(1);
 
       panelRef.removeAllInterceptors();
-      callInteceptors('CLOSE');
-      callInteceptors('onOpen');
+      panelRef._callInterceptors(interceptorTypes.CLOSE);
+      panelRef._callInterceptors('onOpen');
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
       expect(obj.otherCallback).toHaveBeenCalledTimes(1);
@@ -2378,15 +2383,17 @@ describe('$mdPanel', function() {
       panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
       panelRef.registerInterceptor('onOpen', obj.otherCallback);
 
-      callInteceptors('CLOSE');
-      callInteceptors('onOpen');
+      panelRef._callInterceptors(interceptorTypes.CLOSE);
+      panelRef._callInterceptors('onOpen');
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
       expect(obj.otherCallback).toHaveBeenCalledTimes(1);
 
       panelRef.removeAllInterceptors(interceptorTypes.CLOSE);
-      callInteceptors('CLOSE');
-      callInteceptors('onOpen');
+      panelRef._callInterceptors(interceptorTypes.CLOSE);
+      panelRef._callInterceptors('onOpen');
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
       expect(obj.otherCallback).toHaveBeenCalledTimes(2);
@@ -2401,7 +2408,8 @@ describe('$mdPanel', function() {
 
           expect(panelRef.isAttached).toBe(true);
 
-          closePanel();
+          panelRef.close().catch(angular.noop);
+          flushPanel();
 
           expect(panelRef.isAttached).toBe(true);
         });
@@ -2511,16 +2519,5 @@ describe('$mdPanel', function() {
   function flushPanel() {
     $rootScope.$apply();
     $material.flushOutstandingAnimations();
-  }
-
-  function callInteceptors(type) {
-    if (panelRef) {
-      var promise = panelRef._callInterceptors(
-        $mdPanel.interceptorTypes[type] || type
-      );
-
-      flushPanel();
-      return promise;
-    }
   }
 });
