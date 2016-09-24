@@ -734,9 +734,11 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
 
       // Allow users to provide `ng-model="foo" ng-model-options="{trackBy: 'foo.id'}"` so
       // that we can properly compare objects set on the model to the available options
-      if (ngModel.$options && ngModel.$options.trackBy) {
+      var trackByOption = $mdUtil.getModelOption(ngModel, 'trackBy');
+
+      if (trackByOption) {
         var trackByLocals = {};
-        var trackByParsed = $parse(ngModel.$options.trackBy);
+        var trackByParsed = $parse(trackByOption);
         self.hashGetter = function(value, valueScope) {
           trackByLocals.$value = value;
           return trackByParsed(valueScope || $scope, trackByLocals);
@@ -852,7 +854,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
           values.push(self.selected[hashKey]);
         }
       }
-      var usingTrackBy = self.ngModel.$options && self.ngModel.$options.trackBy;
+      var usingTrackBy = $mdUtil.getModelOption(self.ngModel, 'trackBy');
 
       var newVal = self.isMultiple ? values : values[0];
       var prevVal = self.ngModel.$modelValue;

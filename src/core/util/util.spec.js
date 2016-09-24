@@ -64,6 +64,46 @@ describe('util', function() {
 
     });
 
+    describe('getModelOption', function() {
+
+      it('should support the old ngModelCtrl options', inject(function($mdUtil) {
+        var ngModelCtrl = {
+          $options: {
+            trackBy: 'Test'
+          }
+        };
+
+        expect($mdUtil.getModelOption(ngModelCtrl, 'trackBy')).toBe('Test');
+      }));
+
+      it('should support the newer ngModelCtrl options', inject(function($mdUtil) {
+        var ngModelCtrl = {
+          $options: {
+            getOption: function() {
+              return 'Test';
+            }
+          }
+        };
+
+        expect($mdUtil.getModelOption(ngModelCtrl, 'trackBy')).toBe('Test');
+      }));
+
+      it('should return nothing if $options is not set', inject(function($mdUtil) {
+        expect($mdUtil.getModelOption({}, 'trackBy')).toBeFalsy();
+      }));
+
+      it('should not throw if an option is not available', inject(function($mdUtil) {
+        var ngModelCtrl = {
+          $options: {}
+        };
+
+        expect(function() {
+          $mdUtil.getModelOption(ngModelCtrl, 'Unknown')
+        }).not.toThrow();
+      }));
+
+    });
+
     describe('findFocusTarget', function() {
 
       it('should not find valid focus target', inject(function($rootScope, $compile, $mdUtil) {
