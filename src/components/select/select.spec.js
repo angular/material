@@ -19,6 +19,9 @@ describe('<md-select>', function() {
 
   afterEach(inject(function($document) {
     attachedElements.forEach(function(element) {
+      var scope = element.scope();
+
+      scope && scope.$destroy();
       element.remove();
     });
     attachedElements = [];
@@ -510,7 +513,10 @@ describe('<md-select>', function() {
     });
 
     it('does not allow keydown events to propagate from inside the md-select-menu', inject(function($rootScope, $compile) {
-      $rootScope.val = [1];
+      var scope = $rootScope.$new();
+
+      scope.val = [1];
+
       var select = $compile(
           '<md-input-container>' +
           '  <label>Label</label>' +
@@ -519,15 +525,15 @@ describe('<md-select>', function() {
           '    <md-option value="2">Two</md-option>' +
           '    <md-option value="3">Three</md-option>' +
           '  </md-select>' +
-          '</md-input-container>')($rootScope);
+          '</md-input-container>')(scope);
 
       var mdOption = select.find('md-option');
       var selectMenu = select.find('md-select-menu');
       var keydownEvent = {
-	type: 'keydown',
-	target: mdOption[0],
-	preventDefault: jasmine.createSpy(),
-	stopPropagation: jasmine.createSpy()
+        type: 'keydown',
+        target: mdOption[0],
+        preventDefault: jasmine.createSpy(),
+        stopPropagation: jasmine.createSpy()
       };
 
       openSelect(select);
@@ -535,6 +541,9 @@ describe('<md-select>', function() {
 
       expect(keydownEvent.preventDefault).toHaveBeenCalled();
       expect(keydownEvent.stopPropagation).toHaveBeenCalled();
+
+      scope.$destroy();
+      select.remove();
     }));
 
     it('supports raw html', inject(function($rootScope, $compile, $sce) {

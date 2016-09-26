@@ -39,6 +39,9 @@ describe('<md-contact-chips>', function() {
   var attachedElements = [];
   afterEach(function() {
     attachedElements.forEach(function(element) {
+      var scope = element.scope();
+
+      scope && scope.$destroy();
       element.remove();
     });
     attachedElements = [];
