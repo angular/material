@@ -636,24 +636,27 @@ angular
  *                               MdPanelAnimation                            *
  *****************************************************************************/
 
-
 /**
  * @ngdoc type
  * @name MdPanelAnimation
+ * @module material.components.panel
  * @description
  * Animation configuration object. To use, create an MdPanelAnimation with the
  * desired properties, then pass the object as part of $mdPanel creation.
  *
- * Example:
+ * @usage
  *
+ * <hljs lang="js">
  * var panelAnimation = new MdPanelAnimation()
  *     .openFrom(myButtonEl)
+ *     .duration(1337)
  *     .closeTo('.my-button')
  *     .withAnimation($mdPanel.animation.SCALE);
  *
  * $mdPanel.create({
  *   animation: panelAnimation
  * });
+ * </hljs>
  */
 
 /**
@@ -699,6 +702,18 @@ angular
  * "transition: opacity 1ms" is added to the to custom class.
  *
  * @param {string|{open: string, close: string}} cssClass
+ * @returns {!MdPanelAnimation}
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelAnimation#duration
+ * @description
+ * Specifies the duration of the animation in milliseconds. The `duration`
+ * method accepts either a number or an object with separate open and close
+ * durations.
+ *
+ * @param {number|{open: number, close: number}} duration
  * @returns {!MdPanelAnimation}
  */
 
@@ -1466,6 +1481,11 @@ MdPanelRef.prototype._createBackdrop = function() {
             open: '_md-opaque-enter',
             close: '_md-opaque-leave'
           });
+
+      if (this.config.animation) {
+        backdropAnimation.duration(this.config.animation._rawDuration);
+      }
+
       var backdropConfig = {
         animation: backdropAnimation,
         attachTo: this.config.attachTo,
@@ -1473,6 +1493,7 @@ MdPanelRef.prototype._createBackdrop = function() {
         panelClass: '_md-panel-backdrop',
         zIndex: this.config.zIndex - 1
       };
+
       this._backdropRef = this._$mdPanel.create(backdropConfig);
     }
     if (!this._backdropRef.isAttached) {
@@ -1610,7 +1631,7 @@ MdPanelRef.prototype._configureScrollListener = function() {
  * @private
  */
 MdPanelRef.prototype._configureTrapFocus = function() {
-  // Focus doesn't remain instead of the panel without this.
+  // Focus doesn't remain inside of the panel without this.
   this.panelEl.attr('tabIndex', '-1');
   if (this.config['trapFocus']) {
     var element = this.panelEl;
@@ -2449,6 +2470,15 @@ function MdPanelAnimation($injector) {
 
   /** @private {string|{open: string, close: string}} */
   this._animationClass = '';
+
+  /** @private {number} */
+  this._openDuration;
+
+  /** @private {number} */
+  this._closeDuration;
+
+  /** @private {number|{open: number, close: number}} */
+  this._rawDuration;
 }
 
 
@@ -2496,6 +2526,30 @@ MdPanelAnimation.prototype.closeTo = function(closeTo) {
   return this;
 };
 
+/**
+ * Specifies the duration of the animation in milliseconds.
+ * @param {number|{open: number, close: number}} duration
+ * @returns {!MdPanelAnimation}
+ */
+MdPanelAnimation.prototype.duration = function(duration) {
+  if (duration) {
+    if (angular.isNumber(duration)) {
+      this._openDuration = this._closeDuration = toSeconds(duration);
+    } else if (angular.isObject(duration)) {
+      this._openDuration = toSeconds(duration.open);
+      this._closeDuration = toSeconds(duration.close);
+    }
+  }
+
+  // Save the original value so it can be passed to the backdrop.
+  this._rawDuration = duration;
+
+  return this;
+
+  function toSeconds(value) {
+    if (angular.isNumber(value)) return value / 1000;
+  }
+};
 
 /**
  * Returns the element and bounds for the animation target.
@@ -2598,6 +2652,8 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl) {
       }
   }
 
+  animationOptions.duration = this._openDuration;
+
   return animator
       .translate3d(panelEl, openFrom, openTo, animationOptions);
 };
@@ -2660,6 +2716,8 @@ MdPanelAnimation.prototype.animateClose = function(panelEl) {
         };
       }
   }
+
+  reverseAnimationOptions.duration = this._closeDuration;
 
   return animator
       .translate3d(panelEl, closeFrom, closeTo, reverseAnimationOptions);

@@ -2211,6 +2211,38 @@ describe('$mdPanel', function() {
         expect(animation._closeTo.bounds).toEqual(inputRect);
       });
     });
+
+    describe('should determine the animation duration when', function() {
+      it('provided a value in milliseconds', function() {
+        var animation = mdPanelAnimation.duration(1300);
+
+        expect(animation._openDuration).toBe(1.3);
+      });
+
+      it('provided a number', function() {
+        var animation = mdPanelAnimation.duration(2000);
+
+        expect(animation._openDuration).toEqual(animation._closeDuration);
+        expect(animation._openDuration).toBe(2);
+      });
+
+      it('provided an object', function() {
+        var animation = mdPanelAnimation.duration({
+          open: 1200,
+          close: 600
+        });
+
+        expect(animation._openDuration).toBe(1.2);
+        expect(animation._closeDuration).toBe(0.6);
+      });
+
+      it('provided an invalid value', function() {
+        var animation = mdPanelAnimation.duration('very fast');
+
+        expect(animation._openDuration).toBeFalsy();
+        expect(animation._closeDuration).toBeFalsy();
+      });
+    });
   });
 
   describe('interceptor logic: ', function() {
