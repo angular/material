@@ -1059,6 +1059,169 @@ describe('$mdPanel', function() {
     });
   });
 
+  describe('grouping logic:', function() {
+    it('should create a group using the newPanelGroup method', function() {
+      $mdPanel.newPanelGroup('test');
+
+      expect($mdPanel._groups['test']).toExist();
+    });
+
+    it('should create a group using the config option groupName when the ' +
+        'group hasn\'t been created yet', function() {
+          var config = {
+            groupName: 'test'
+          };
+          var panel = $mdPanel.create(config);
+
+          expect($mdPanel._groups['test']).toExist();
+        });
+
+    it('should only create a group once', function() {
+      var config = {
+        groupName: 'test'
+      };
+      var panel = $mdPanel.create(config);
+
+      expect(getNumberOfGroups()).toEqual(1);
+
+      $mdPanel.newPanelGroup('test');
+
+      expect(getNumberOfGroups()).toEqual(1);
+    });
+
+    it('should not create a group using the config option when the group is ' +
+        'already defined', function() {
+          $mdPanel.newPanelGroup('test');
+
+          expect(getNumberOfGroups()).toEqual(1);
+
+          var config = {
+            groupName: 'test'
+          };
+          var panel = $mdPanel.create(config);
+
+          expect(getNumberOfGroups()).toEqual(1);
+        });
+
+    it('should add a panel to a group using the addToGroup method', function() {
+      $mdPanel.newPanelGroup('test');
+      var panel = $mdPanel.create(DEFAULT_CONFIG);
+
+      panel.addToGroup('test');
+      expect(getGroupPanels('test')).toContain(panel);
+    });
+
+    it('should add a panel to a group using the config option groupName',
+        function() {
+          $mdPanel.newPanelGroup('test');
+
+          var config = {
+            groupName: 'test'
+          };
+
+          var panel = $mdPanel.create(config);
+          expect(getGroupPanels('test')).toContain(panel);
+        });
+
+    it('should remove a panel from a group using the removeFromGroup method',
+        function() {
+          $mdPanel.newPanelGroup('test');
+
+          var config = {
+            groupName: 'test'
+          };
+
+          var panel = $mdPanel.create(config);
+
+          panel.removeFromGroup('test');
+          expect(getGroupPanels('test')).not.toContain(panel);
+        });
+
+    it('should remove a panel from a group on panel destroy', function() {
+      $mdPanel.newPanelGroup('test');
+
+      var config = {
+        groupName: 'test'
+      };
+
+      var panel = $mdPanel.create(config);
+
+      panel.destroy();
+      expect(getGroupPanels('test')).not.toContain(panel);
+    });
+
+    it('should set the maximum number of panels allowed open within a group ' +
+        'using the newPanelGroup option', function() {
+          $mdPanel.newPanelGroup('test', {
+            maxOpen: 1
+          });
+
+          expect(getGroupMaxOpen('test')).toEqual(1);
+        });
+
+    it('should set the maximum number of panels allowed open within a group ' +
+        'using the setGroupMaxOpen method', function() {
+          $mdPanel.newPanelGroup('test');
+          $mdPanel.setGroupMaxOpen('test', 1);
+
+          expect(getGroupMaxOpen('test')).toEqual(1);
+        });
+
+    it('should throw if trying to set maxOpen on a group that doesn\'t exist',
+        function() {
+          var expression = function() {
+            $mdPanel.setGroupMaxOpen('test', 1);
+          };
+
+          expect(expression).toThrow();
+        });
+
+    it('should update open panels when a panel is closed', function() {
+      $mdPanel.newPanelGroup('test');
+
+      var config = {
+        groupName: 'test'
+      };
+
+      openPanel(config);
+      flushPanel();
+      expect(getGroupOpenPanels('test')).toContain(panelRef);
+
+      closePanel();
+      flushPanel();
+      expect(getGroupOpenPanels('test')).not.toContain(panelRef);
+    });
+
+    it('should close the first open panel when more than the maximum number ' +
+        'of panels is opened', function() {
+          $mdPanel.newPanelGroup('test', {
+            maxOpen: 2
+          });
+
+          var config = {
+            groupName: 'test'
+          };
+
+          var panel1 = $mdPanel.create(config);
+          var panel2 = $mdPanel.create(config);
+          var panel3 = $mdPanel.create(config);
+
+          panel1.open();
+          flushPanel();
+          expect(panel1.isAttached).toEqual(true);
+
+          panel2.open();
+          panel3.open();
+          flushPanel();
+          expect(panel1.isAttached).toEqual(false);
+          expect(panel2.isAttached).toEqual(true);
+          expect(panel3.isAttached).toEqual(true);
+
+          panel2.close();
+          panel3.close();
+        });
+  });
+
   describe('component logic: ', function() {
     it('should allow templateUrl to specify content', function() {
       var htmlContent = 'Puppies and Unicorns';
@@ -2271,8 +2434,7 @@ describe('$mdPanel', function() {
       spyOn(obj, 'callback');
 
       panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
-      panelRef._callInterceptors(interceptorTypes.CLOSE);
-      flushPanel();
+      callInterceptors('CLOSE');
 
       expect(obj.callback).toHaveBeenCalledWith(panelRef);
     });
@@ -2286,9 +2448,8 @@ describe('$mdPanel', function() {
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(1));
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(2));
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(3));
-
-      panelRef._callInterceptors(interceptorTypes.CLOSE).then(obj.callback);
-      flushPanel();
+      callInterceptors('CLOSE').then(obj.callback);
+      $rootScope.$apply();
 
       expect(results).toEqual([3, 2, 1]);
       expect(obj.callback).toHaveBeenCalled();
@@ -2312,8 +2473,8 @@ describe('$mdPanel', function() {
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(2));
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(3));
 
-      panelRef._callInterceptors(interceptorTypes.CLOSE).catch(obj.callback);
-      flushPanel();
+      callInterceptors('CLOSE').catch(obj.callback);
+      $rootScope.$apply();
 
       expect(results).toEqual([3, 2]);
       expect(obj.callback).toHaveBeenCalled();
@@ -2340,8 +2501,8 @@ describe('$mdPanel', function() {
         return $q.resolve();
       });
 
-      panelRef._callInterceptors(interceptorTypes.CLOSE).catch(obj.callback);
-      flushPanel();
+      callInterceptors('CLOSE').catch(obj.callback);
+      $rootScope.$apply();
 
       expect(obj.callback).toHaveBeenCalled();
     });
@@ -2351,8 +2512,8 @@ describe('$mdPanel', function() {
 
       spyOn(obj, 'callback');
 
-      panelRef._callInterceptors(interceptorTypes.CLOSE).then(obj.callback);
-      flushPanel();
+      callInterceptors('CLOSE').then(obj.callback);
+      $rootScope.$apply();
 
       expect(obj.callback).toHaveBeenCalled();
     });
@@ -2363,8 +2524,8 @@ describe('$mdPanel', function() {
       spyOn(obj, 'callback');
 
       panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
-      panelRef._callInterceptors(interceptorTypes.CLOSE);
-      flushPanel();
+
+      callInterceptors('CLOSE');
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
 
@@ -2387,17 +2548,16 @@ describe('$mdPanel', function() {
       panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
       panelRef.registerInterceptor('onOpen', obj.otherCallback);
 
-      panelRef._callInterceptors(interceptorTypes.CLOSE);
-      panelRef._callInterceptors('onOpen');
-      flushPanel();
+      callInterceptors('CLOSE');
+      callInterceptors('onOpen');
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
       expect(obj.otherCallback).toHaveBeenCalledTimes(1);
 
       panelRef.removeAllInterceptors();
-      panelRef._callInterceptors(interceptorTypes.CLOSE);
-      panelRef._callInterceptors('onOpen');
-      flushPanel();
+
+      callInterceptors('CLOSE');
+      callInterceptors('onOpen');
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
       expect(obj.otherCallback).toHaveBeenCalledTimes(1);
@@ -2415,17 +2575,16 @@ describe('$mdPanel', function() {
       panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
       panelRef.registerInterceptor('onOpen', obj.otherCallback);
 
-      panelRef._callInterceptors(interceptorTypes.CLOSE);
-      panelRef._callInterceptors('onOpen');
-      flushPanel();
+      callInterceptors('CLOSE');
+      callInterceptors('onOpen');
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
       expect(obj.otherCallback).toHaveBeenCalledTimes(1);
 
       panelRef.removeAllInterceptors(interceptorTypes.CLOSE);
-      panelRef._callInterceptors(interceptorTypes.CLOSE);
-      panelRef._callInterceptors('onOpen');
-      flushPanel();
+
+      callInterceptors('CLOSE');
+      callInterceptors('onOpen');
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
       expect(obj.otherCallback).toHaveBeenCalledTimes(2);
@@ -2551,5 +2710,32 @@ describe('$mdPanel', function() {
   function flushPanel() {
     $rootScope.$apply();
     $material.flushOutstandingAnimations();
+  }
+
+  function callInterceptors(type) {
+    if (panelRef) {
+      var promise = panelRef._callInterceptors(
+        $mdPanel.interceptorTypes[type] || type
+      );
+
+      flushPanel();
+      return promise;
+    }
+  }
+
+  function getNumberOfGroups() {
+    return Object.keys($mdPanel._groups).length;
+  }
+
+  function getGroupPanels(groupName) {
+    return $mdPanel._groups[groupName].panels;
+  }
+
+  function getGroupOpenPanels(groupName) {
+    return $mdPanel._groups[groupName].openPanels;
+  }
+
+  function getGroupMaxOpen(groupName) {
+    return $mdPanel._groups[groupName].maxOpen;
   }
 });

@@ -1,0 +1,46 @@
+<div ng-controller="PanelGroupsCtrl as ctrl" ng-cloak>
+
+  <md-toolbar class="md-accent">
+    <div class="md-toolbar-tools">
+      <md-button
+        class="md-icon-button"
+        aria-label="Settings"
+        ng-click="ctrl.showToolbarMenu($event, ctrl.settings)">
+        <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+      </md-button>
+      <h2>Toolbar with grouped panels (Maximum open: 2)</h2>
+      <span flex></span>
+      <md-button
+        class="md-icon-button"
+        aria-label="Favorite"
+        ng-click="ctrl.showToolbarMenu($event, ctrl.favorite)">
+        <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
+      </md-button>
+      <md-button
+        class="md-icon-button"
+        aria-label="More"
+        ng-click="ctrl.showToolbarMenu($event, ctrl.more)">
+        <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
+      </md-button>
+    </div>
+  </md-toolbar>
+
+  <md-content layout-padding>
+    <p>
+      Panels can be added to a group. Groups are used to configure specific
+      behaviors on multiple panels. To add a panel to a group, use the
+      <code>$mdPanel.newPanelGroup</code> method, or simply add a group name
+      to the configuration object passed into the <code>$mdPanel.create</code>
+      method.
+    </p>
+    <p>
+      Grouping allows for methods to be applied to several panels at once, i.e.
+      closing all panels within the toolbar group, or destroying all panels
+      within a dialog group. With the <code>maxOpen</code> property, you can
+      also limit the number of panels allowed open within a specific group. This
+      can be useful in limiting the number of menu panels allowed open at a
+      time, etc.
+    </p>
+  </md-content>
+
+</div>

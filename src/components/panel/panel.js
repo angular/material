@@ -155,10 +155,13 @@ angular
  *     on when the panel closes. This is commonly the element which triggered
  *     the opening of the panel. If you do not use `origin`, you need to control
  *     the focus manually.
+ *   - `groupName` - `{string=}`: Name of a panel group. This group name is used
+ *     for configuring the number of open panels and identifying specific
+ *     behaviors for groups. For instance, all tooltips could be identified
+ *     using the same groupName.
  *
  * @returns {!MdPanelRef} panelRef
  */
-
 
 /**
  * @ngdoc method
@@ -176,7 +179,6 @@ angular
  *     to an instance of the panel.
  */
 
-
 /**
  * @ngdoc method
  * @name $mdPanel#newPanelPosition
@@ -187,7 +189,6 @@ angular
  * @returns {!MdPanelPosition} panelPosition
  */
 
-
 /**
  * @ngdoc method
  * @name $mdPanel#newPanelAnimation
@@ -196,6 +197,37 @@ angular
  * the animation config object.
  *
  * @returns {!MdPanelAnimation} panelAnimation
+ */
+
+/**
+ * @ngdoc method
+ * @name $mdPanel#newPanelGroup
+ * @description
+ * Creates a panel group and adds it to a tracked list of panel groups.
+ *
+ * @param {string} groupName Name of the group to create.
+ * @param {!Object=} config Specific configuration object that may contain the
+ *     following properties:
+ *
+ *   - `maxOpen` - `{number=}`: The maximum number of panels that are allowed to
+ *     be open within a defined panel group.
+ *
+ * @returns {!Object<string,
+ *     {panels: !Array<!MdPanelRef>,
+ *     openPanels: !Array<!MdPanelRef>,
+ *     maxOpen: number}>} panelGroup
+ */
+
+/**
+ * @ngdoc method
+ * @name $mdPanel#setGroupMaxOpen
+ * @description
+ * Sets the maximum number of panels in a group that can be opened at a given
+ * time.
+ *
+ * @param {string} groupName The name of the group to configure.
+ * @param {number} maxOpen The maximum number of panels that can be
+ *     opened. Infinity can be passed in to remove the maxOpen limit.
  */
 
 
@@ -355,9 +387,28 @@ angular
 
 /**
  * @ngdoc method
+ * @name MdPanelRef#addToGroup
+ * @description
+ * Adds a panel to a group if the panel does not exist within the group already.
+ * A panel can only exist within a single group.
+ *
+ * @param {string} groupName The name of the group to add the panel to.
+ */
+
+/**
+ * @ngdoc method
+ * @name MdPanelRef#removeFromGroup
+ * @description
+ * Removes a panel from a group if the panel exists within that group. The group
+ * must be created ahead of time.
+ *
+ * @param {string} groupName The name of the group.
+ */
+
+/**
+ * @ngdoc method
  * @name MdPanelRef#registerInterceptor
  * @description
- *
  * Registers an interceptor with the panel. The callback should return a promise,
  * which will allow the action to continue when it gets resolved, or will
  * prevent an action if it is rejected. The interceptors are called sequentially
@@ -374,7 +425,6 @@ angular
  * @ngdoc method
  * @name MdPanelRef#removeInterceptor
  * @description
- *
  * Removes a registered interceptor.
  *
  * @param {string} type Type of interceptor to be removed.
@@ -386,7 +436,6 @@ angular
  * @ngdoc method
  * @name MdPanelRef#removeAllInterceptors
  * @description
- *
  * Removes all interceptors. If a type is supplied, only the
  * interceptors of that type will be cleared.
  *
@@ -777,8 +826,19 @@ function MdPanelService($rootElement, $rootScope, $injector, $window) {
   /** @private @const */
   this._$window = $window;
 
+  /** @private @const */
+  this._$mdUtil = this._$injector.get('$mdUtil');
+
   /** @private {!Object<string, !MdPanelRef>} */
   this._trackedPanels = {};
+
+  /**
+   * @private {!Object<string,
+   *     {panels: !Array<!MdPanelRef>,
+   *     openPanels: !Array<!MdPanelRef>,
+   *     maxOpen: number}>}
+   */
+  this._groups = Object.create(null);
 
   /**
    * Default animations that can be used within the panel.
@@ -822,9 +882,9 @@ MdPanelService.prototype.create = function(config) {
     return this._trackedPanels[config.id];
   }
 
-  // If no ID is set within the passed-in config, then create an arbitrary ID.
   this._config = {
-    id: config.id || 'panel_' + this._$injector.get('$mdUtil').nextUid(),
+    // If no ID is set within the passed-in config, then create an arbitrary ID.
+    id: config.id || 'panel_' + this._$mdUtil.nextUid(),
     scope: this._$rootScope.$new(true),
     attachTo: this._$rootElement
   };
@@ -833,6 +893,10 @@ MdPanelService.prototype.create = function(config) {
   var panelRef = new MdPanelRef(this._config, this._$injector);
   this._trackedPanels[config.id] = panelRef;
   this._config.scope.$on('$destroy', angular.bind(panelRef, panelRef.detach));
+
+  if (this._config.groupName) {
+    panelRef.addToGroup(this._config.groupName);
+  }
 
   return panelRef;
 };
@@ -868,6 +932,78 @@ MdPanelService.prototype.newPanelPosition = function() {
  */
 MdPanelService.prototype.newPanelAnimation = function() {
   return new MdPanelAnimation(this._$injector);
+};
+
+
+/**
+ * Creates a panel group and adds it to a tracked list of panel groups.
+ * @param groupName {string} Name of the group to create.
+ * @param config {!Object=} Specific configuration object that may contain the
+ *     following properties:
+ *
+ *   - `maxOpen` - `{number=}`: The maximum number of panels that are allowed
+ *     open within a defined panel group.
+ *
+ * @returns {!Object<string,
+ *     {panels: !Array<!MdPanelRef>,
+ *     openPanels: !Array<!MdPanelRef>,
+ *     maxOpen: number}>} panelGroup
+ */
+MdPanelService.prototype.newPanelGroup = function(groupName, config) {
+  if (!this._groups[groupName]) {
+    config = config || {};
+    var group = {
+      panels: [],
+      openPanels: [],
+      maxOpen: config.maxOpen > 0 ? config.maxOpen : Infinity
+    };
+    this._groups[groupName] = group;
+  }
+  return this._groups[groupName];
+};
+
+
+/**
+ * Sets the maximum number of panels in a group that can be opened at a given
+ * time.
+ * @param {string} groupName The name of the group to configure.
+ * @param {number} maxOpen The maximum number of panels that can be
+ *     opened. Infinity can be passed in to remove the maxOpen limit.
+ */
+MdPanelService.prototype.setGroupMaxOpen = function(groupName, maxOpen) {
+  if (this._groups[groupName]) {
+    this._groups[groupName].maxOpen = maxOpen;
+  } else {
+    throw new Error('mdPanel: Group does not exist yet. Call newPanelGroup().');
+  }
+};
+
+
+/**
+ * Determines if the current number of open panels within a group exceeds the
+ * limit of allowed open panels.
+ * @param {string} groupName The name of the group to check.
+ * @returns {boolean} true if open count does exceed maxOpen and false if not.
+ * @private
+ */
+MdPanelService.prototype._openCountExceedsMaxOpen = function(groupName) {
+  if (groupName && this._groups[groupName]) {
+    var group = this._groups[groupName];
+    return group.maxOpen > 0 && group.openPanels.length > group.maxOpen;
+  }
+  return false;
+};
+
+
+/**
+ * Closes the first open panel within a specific group.
+ * @param {string} groupName The name of the group.
+ * @private
+ */
+MdPanelService.prototype._closeFirstOpenedPanel = function(groupName) {
+  if (groupName) {
+    this._groups[groupName].openPanels[0].close();
+  }
 };
 
 
@@ -1000,9 +1136,15 @@ MdPanelRef.prototype.open = function() {
   return this._$q(function(resolve, reject) {
     var done = self._done(resolve, self);
     var show = self._simpleBind(self.show, self);
+    var checkGroupMaxOpen = function() {
+      if (self._$mdPanel._openCountExceedsMaxOpen(self.config.groupName)) {
+        self._$mdPanel._closeFirstOpenedPanel(self.config.groupName);
+      }
+    };
 
     self.attach()
         .then(show)
+        .then(checkGroupMaxOpen)
         .then(done)
         .catch(reject);
   });
@@ -1046,9 +1188,9 @@ MdPanelRef.prototype.attach = function() {
     var done = self._done(resolve, self);
     var onDomAdded = self.config['onDomAdded'] || angular.noop;
     var addListeners = function(response) {
-        self.isAttached = true;
-        self._addEventListeners();
-        return response;
+      self.isAttached = true;
+      self._addEventListeners();
+      return response;
     };
 
     self._$q.all([
@@ -1116,6 +1258,9 @@ MdPanelRef.prototype.detach = function() {
  * Destroys the panel. The Panel cannot be opened again after this.
  */
 MdPanelRef.prototype.destroy = function() {
+  if (this.config.groupName) {
+    this.removeFromGroup(this.config.groupName);
+  }
   this.config.scope.$destroy();
   this.config.locals = null;
   this._interceptors = null;
@@ -1130,7 +1275,7 @@ MdPanelRef.prototype.destroy = function() {
 MdPanelRef.prototype.show = function() {
   if (!this.panelContainer) {
     return this._$q(function(resolve, reject) {
-      reject('Panel does not exist yet. Call open() or attach().');
+      reject('mdPanel: Panel does not exist yet. Call open() or attach().');
     });
   }
 
@@ -1147,11 +1292,18 @@ MdPanelRef.prototype.show = function() {
   return this._$q(function(resolve, reject) {
     var done = self._done(resolve, self);
     var onOpenComplete = self.config['onOpenComplete'] || angular.noop;
+    var addToGroupOpen = function() {
+      if (self.config.groupName) {
+        var group = self._$mdPanel._groups[self.config.groupName];
+        group.openPanels.push(self);
+      }
+    };
 
     self._$q.all([
       self._backdropRef ? self._backdropRef.show() : self,
       animatePromise().then(function() { self._focusOnOpen(); }, reject)
     ]).then(onOpenComplete)
+      .then(addToGroupOpen)
       .then(done)
       .catch(reject);
   });
@@ -1166,7 +1318,7 @@ MdPanelRef.prototype.show = function() {
 MdPanelRef.prototype.hide = function() {
   if (!this.panelContainer) {
     return this._$q(function(resolve, reject) {
-      reject('Panel does not exist yet. Call open() or attach().');
+      reject('mdPanel: Panel does not exist yet. Call open() or attach().');
     });
   }
 
@@ -1179,7 +1331,18 @@ MdPanelRef.prototype.hide = function() {
   return this._$q(function(resolve, reject) {
     var done = self._done(resolve, self);
     var onRemoving = self.config['onRemoving'] || angular.noop;
-
+    var hidePanel = function() {
+      self.panelContainer.addClass(MD_PANEL_HIDDEN);
+    };
+    var removeFromGroupOpen = function() {
+      if (self.config.groupName) {
+        var group = self._$mdPanel._groups[self.config.groupName];
+        var index = group.openPanels.indexOf(self);
+        if (index > -1) {
+          group.openPanels.splice(index, 1);
+        }
+      }
+    };
     var focusOnOrigin = function() {
       var origin = self.config['origin'];
       if (origin) {
@@ -1187,15 +1350,12 @@ MdPanelRef.prototype.hide = function() {
       }
     };
 
-    var hidePanel = function() {
-      self.panelContainer.addClass(MD_PANEL_HIDDEN);
-    };
-
     self._$q.all([
       self._backdropRef ? self._backdropRef.hide() : self,
       self._animateClose()
           .then(onRemoving)
           .then(hidePanel)
+          .then(removeFromGroupOpen)
           .then(focusOnOrigin)
           .catch(reject)
     ]).then(done, reject);
@@ -1216,13 +1376,14 @@ MdPanelRef.prototype.hide = function() {
  */
 MdPanelRef.prototype.addClass = function(newClass, toElement) {
   this._$log.warn(
-      'The addClass method is in the process of being deprecated. ' +
+      'mdPanel: The addClass method is in the process of being deprecated. ' +
       'Full deprecation is scheduled for the Angular Material 1.2 release. ' +
       'To achieve the same results, use the panelContainer or panelEl ' +
       'JQLite elements that are referenced in MdPanelRef.');
 
   if (!this.panelContainer) {
-    throw new Error('Panel does not exist yet. Call open() or attach().');
+    throw new Error(
+        'mdPanel: Panel does not exist yet. Call open() or attach().');
   }
 
   if (!toElement && !this.panelContainer.hasClass(newClass)) {
@@ -1246,13 +1407,14 @@ MdPanelRef.prototype.addClass = function(newClass, toElement) {
  */
 MdPanelRef.prototype.removeClass = function(oldClass, fromElement) {
   this._$log.warn(
-      'The removeClass method is in the process of being deprecated. ' +
+      'mdPanel: The removeClass method is in the process of being deprecated. ' +
       'Full deprecation is scheduled for the Angular Material 1.2 release. ' +
       'To achieve the same results, use the panelContainer or panelEl ' +
       'JQLite elements that are referenced in MdPanelRef.');
 
   if (!this.panelContainer) {
-    throw new Error('Panel does not exist yet. Call open() or attach().');
+    throw new Error(
+        'mdPanel: Panel does not exist yet. Call open() or attach().');
   }
 
   if (!fromElement && this.panelContainer.hasClass(oldClass)) {
@@ -1276,13 +1438,14 @@ MdPanelRef.prototype.removeClass = function(oldClass, fromElement) {
  */
 MdPanelRef.prototype.toggleClass = function(toggleClass, onElement) {
   this._$log.warn(
-      'The toggleClass method is in the process of being deprecated. ' +
+      'mdPanel: The toggleClass method is in the process of being deprecated. ' +
       'Full deprecation is scheduled for the Angular Material 1.2 release. ' +
       'To achieve the same results, use the panelContainer or panelEl ' +
       'JQLite elements that are referenced in MdPanelRef.');
 
   if (!this.panelContainer) {
-    throw new Error('Panel does not exist yet. Call open() or attach().');
+    throw new Error(
+        'mdPanel: Panel does not exist yet. Call open() or attach().');
   }
 
   if (!onElement) {
@@ -1397,7 +1560,8 @@ MdPanelRef.prototype._addStyles = function() {
  */
 MdPanelRef.prototype.updatePosition = function(position) {
   if (!this.panelContainer) {
-    throw new Error('Panel does not exist yet. Call open() or attach().');
+    throw new Error(
+        'mdPanel: Panel does not exist yet. Call open() or attach().');
   }
 
   this.config['position'] = position;
@@ -1683,7 +1847,8 @@ MdPanelRef.prototype._animateOpen = function() {
     var done = self._done(resolve, self);
     var warnAndOpen = function() {
       self._$log.warn(
-          'MdPanel Animations failed. Showing panel without animating.');
+          'mdPanel: MdPanel Animations failed. ' +
+          'Showing panel without animating.');
       done();
     };
 
@@ -1715,7 +1880,8 @@ MdPanelRef.prototype._animateClose = function() {
     };
     var warnAndClose = function() {
       self._$log.warn(
-          'MdPanel Animations failed. Hiding panel without animating.');
+          'mdPanel: MdPanel Animations failed. ' +
+          'Hiding panel without animating.');
       done();
     };
 
@@ -1851,6 +2017,44 @@ MdPanelRef.prototype._done = function(callback, self) {
 };
 
 
+/**
+ * Adds a panel to a group if the panel does not exist within the group already.
+ * A panel can only exist within a single group.
+ * @param {string} groupName The name of the group.
+ */
+MdPanelRef.prototype.addToGroup = function(groupName) {
+  if (!this._$mdPanel._groups[groupName]) {
+    this._$mdPanel.newPanelGroup(groupName);
+  }
+
+  var group = this._$mdPanel._groups[groupName];
+  var index = group.panels.indexOf(this);
+
+  if (index < 0) {
+    group.panels.push(this);
+  }
+};
+
+
+/**
+ * Removes a panel from a group if the panel exists within that group. The group
+ * must be created ahead of time.
+ * @param {string} groupName The name of the group.
+ */
+MdPanelRef.prototype.removeFromGroup = function(groupName) {
+  if (!this._$mdPanel._groups[groupName]) {
+    throw new Error('mdPanel: The group ' + groupName + ' does not exist.');
+  }
+
+  var group = this._$mdPanel._groups[groupName];
+  var index = group.panels.indexOf(this);
+
+  if (index > -1) {
+    group.panels.splice(index, 1);
+  }
+};
+
+
 /*****************************************************************************
  *                               MdPanelPosition                             *
  *****************************************************************************/
@@ -1982,7 +2186,7 @@ MdPanelPosition.prototype._setPosition = function(position, value) {
     var positions = Object.keys(MdPanelPosition.absPosition).join()
         .toLowerCase();
 
-    throw new Error('Position must be one of ' + positions + '.');
+    throw new Error('mdPanel: Position must be one of ' + positions + '.');
   }
 
   this['_' +  position] = angular.isString(value) ? value : '0';
@@ -2119,8 +2323,8 @@ MdPanelPosition.prototype.relativeTo = function(element) {
  */
 MdPanelPosition.prototype.addPanelPosition = function(xPosition, yPosition) {
   if (!this._relativeToEl) {
-    throw new Error('addPanelPosition can only be used with relative ' +
-        'positioning. Set relativeTo first.');
+    throw new Error('mdPanel: addPanelPosition can only be used with ' +
+        'relative positioning. Set relativeTo first.');
   }
 
   this._validateXPosition(xPosition);
@@ -2155,8 +2359,8 @@ MdPanelPosition.prototype._validateYPosition = function(yPosition) {
     }
   }
 
-  throw new Error('Panel y position only accepts the following values:\n' +
-    positionValues.join(' | '));
+  throw new Error('mdPanel: Panel y position only accepts the following ' +
+      'values:\n' + positionValues.join(' | '));
 };
 
 
@@ -2180,8 +2384,8 @@ MdPanelPosition.prototype._validateXPosition = function(xPosition) {
     }
   }
 
-  throw new Error('Panel x Position only accepts the following values:\n' +
-      positionValues.join(' | '));
+  throw new Error('mdPanel: Panel x Position only accepts the following ' +
+      'values:\n' + positionValues.join(' | '));
 };
 
 
