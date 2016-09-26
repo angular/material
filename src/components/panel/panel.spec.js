@@ -2025,6 +2025,40 @@ describe('$mdPanel', function() {
         });
       });
 
+      it('takes the x offset into account', function() {
+        var position = mdPanelPosition
+            .relativeTo(myButton)
+            .withOffsetX(window.innerWidth + 'px')
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS)
+            .addPanelPosition(xPosition.ALIGN_END, yPosition.ALIGN_TOPS);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        expect(position.getActualPosition()).toEqual({
+          x: xPosition.ALIGN_END,
+          y: yPosition.ALIGN_TOPS
+        });
+      });
+
+      it('takes the y offset into account', function() {
+        var position = mdPanelPosition
+            .relativeTo(myButton)
+            .withOffsetY(window.innerHeight + 'px')
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_BOTTOMS)
+            .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        expect(position.getActualPosition()).toEqual({
+          x: xPosition.ALIGN_START,
+          y: yPosition.ALIGN_TOPS
+        });
+      });
+
       it('should choose last position if none are on-screen', function() {
         var position = mdPanelPosition
             .relativeTo(myButton)
