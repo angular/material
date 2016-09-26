@@ -1399,13 +1399,15 @@ MdPanelRef.prototype._updatePosition = function(init) {
   var positionConfig = this.config['position'];
 
   if (positionConfig) {
+    positionConfig._setPanelPosition(this.panelEl);
+
     // Use the vendor prefixed version of transform.
-    // Note that the offset should be assigned before the position, in
-    // order to avoid tiny jumps in the panel's position, on slower browsers.
+    // Note that the offset should be assigned before the CSS positions, in
+    // order to avoid tiny jumps in the panel's position, on slower browsers,
+    // however it should be after _setPanelPosition so _actualPosition is
+    // available in the callback.
     var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
     this.panelEl.css(prefixedTransform, positionConfig.getTransform());
-
-    positionConfig._setPanelPosition(this.panelEl);
 
     // Hide the panel now that position is known.
     if (init) {
