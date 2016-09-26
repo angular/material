@@ -203,6 +203,9 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  * ### Pre-Rendered Dialogs
  * By using the `contentElement` option, it is possible to use an already existing element in the DOM.
  *
+ * > Pre-rendered dialogs will be not linked to any scope and will not instantiate any new controller.<br/>
+ * > You can manually link the elements to a scope or instantiate a controller from the template (`ng-controller`)
+ *
  * <hljs lang="js">
  *   $scope.showPrerenderedDialog = function() {
  *     $mdDialog.show({
