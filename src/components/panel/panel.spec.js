@@ -2077,6 +2077,60 @@ describe('$mdPanel', function() {
         });
       });
 
+      it('should have assigned the actual position by the time the offset' +
+        'methods have been called', function() {
+          var positionSnapshot = null;
+          var obj = {
+            getOffsetX: function(mdPanelPosition) {
+              positionSnapshot = angular.copy(mdPanelPosition.getActualPosition());
+            }
+          };
+          var position = mdPanelPosition
+              .relativeTo(myButton[0])
+              .addPanelPosition(xPosition.ALIGN_START, yPosition.ALIGN_TOPS)
+              .withOffsetX(obj.getOffsetX);
+
+          config['position'] = position;
+
+          openPanel(config);
+
+          expect(positionSnapshot).toEqual({
+            x: xPosition.ALIGN_START,
+            y: yPosition.ALIGN_TOPS
+          });
+      });
+
+      it('should have assigned the actual position when using ' +
+        'multiple positions', function() {
+          var positionSnapshot = [];
+          var obj = {
+            getOffsetX: function(mdPanelPosition) {
+              positionSnapshot = angular.copy(mdPanelPosition.getActualPosition());
+              return 0;
+            }
+          };
+          var position = mdPanelPosition
+              .relativeTo(myButton[0])
+              .addPanelPosition(xPosition.ALIGN_END, yPosition.BELOW)
+              .addPanelPosition(xPosition.ALIGN_START, yPosition.ABOVE)
+              .withOffsetX(obj.getOffsetX);
+
+          myButton.css({
+            position: 'absolute',
+            right: '0px',
+            bottom: '0px'
+          });
+
+          config['position'] = position;
+
+          openPanel(config);
+
+          expect(positionSnapshot).toEqual({
+            x: xPosition.ALIGN_START,
+            y: yPosition.ABOVE
+          });
+      });
+
       describe('vertically', function() {
         it('above an element', function() {
           var position = mdPanelPosition
