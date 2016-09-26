@@ -422,7 +422,7 @@
     // Forwards any events from the input to the root element. This is necessary to get `updateOn`
     // working for events that don't bubble (e.g. 'blur') since Angular binds the handlers to
     // the `<md-datepicker>`.
-    var updateOn = ngModelCtrl.$options && ngModelCtrl.$options.updateOn;
+    var updateOn = self.$mdUtil.getModelOption(ngModelCtrl, 'updateOn');
 
     if (updateOn) {
       this.ngInputElement.on(
