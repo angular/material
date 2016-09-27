@@ -94,6 +94,12 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
   this.useOnAdd = false;
 
   /**
+   * Whether to use the onEdit expression to notify of chip edits.
+   * @type {boolean}
+   */
+  this.useOnEdit = false;
+
+  /**
    * Whether to use the onRemove expression to notify of chip removals.
    * @type {boolean}
    */
@@ -187,6 +193,11 @@ MdChipsCtrl.prototype.updateChipContents = function(chipIndex, chipContents){
   if(chipIndex >= 0 && chipIndex < this.items.length) {
     this.items[chipIndex] = chipContents;
     this.ngModelCtrl.$setDirty();
+
+    // If they provide the md-on-edit attribute, notify them of the chip update
+    if (this.useOnEdit && this.onEdit) {
+      this.onEdit({ '$chip': this.items[chipIndex], '$index': chipIndex });
+    }
   }
 };
 
@@ -354,6 +365,18 @@ MdChipsCtrl.prototype.useTransformChipExpression = function() {
 MdChipsCtrl.prototype.useOnAddExpression = function() {
   this.useOnAdd = true;
 };
+
+/**
+ * Sets whether to use the md-on-edit expression. This expression is
+ * bound to scope and controller in {@code MdChipsDirective} as
+ * {@code onEdit}. Due to the nature of directive scope bindings, the
+ * controller cannot know on its own/from the scope whether an expression was
+ * actually provided.
+ */
+MdChipsCtrl.prototype.useOnEditExpression = function() {
+  this.useOnEdit = true;
+};
+
 
 /**
  * Sets whether to use the md-on-remove expression. This expression is

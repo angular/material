@@ -8,6 +8,8 @@ describe('<md-chips>', function() {
     '<md-chips ng-model="items" md-transform-chip="transformChip($chip)"></md-chips>';
   var CHIP_ADD_TEMPLATE =
     '<md-chips ng-model="items" md-on-add="addChip($chip, $index)"></md-chips>';
+  var CHIP_EDIT_TEMPLATE =
+    '<md-chips ng-model="items" md-on-edit="editChip($chip, $index)"></md-chips>';
   var CHIP_REMOVE_TEMPLATE =
     '<md-chips ng-model="items" md-on-remove="removeChip($chip, $index)"></md-chips>';
   var CHIP_SELECT_TEMPLATE =
@@ -103,6 +105,22 @@ describe('<md-chips>', function() {
         expect(scope.items.length).toBe(3);
       });
 
+      it ('should edit a chip', function() {
+        var element = buildChips(CHIP_EDIT_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        element.scope().$apply(function() {
+          // Edit "Banana"
+          ctrl.updateChipContents(1, 'Mango');
+        });
+
+        var chips = getChipElements(element);
+        expect(chips.length).toBe(3);
+        expect(chips[0].innerHTML).toContain('Apple');
+        expect(chips[1].innerHTML).toContain('Mango');
+        expect(chips[2].innerHTML).toContain('Orange');        
+      });
+
       it('should remove a chip', function() {
         var element = buildChips(BASIC_CHIP_TEMPLATE);
         var ctrl = element.controller('mdChips');
@@ -171,6 +189,21 @@ describe('<md-chips>', function() {
         expect(scope.addChip).toHaveBeenCalled();
         expect(scope.addChip.calls.mostRecent().args[0]).toBe('Grape'); // Chip
         expect(scope.addChip.calls.mostRecent().args[1]).toBe(4);       // Index
+      });
+
+      it('should call the edit method when editing a chip', function() {
+        var element = buildChips(CHIP_EDIT_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        scope.editChip = jasmine.createSpy('editChip');
+
+        element.scope().$apply(function() {
+          ctrl.updateChipContents(1, 'Mango');
+        });
+
+        expect(scope.editChip).toHaveBeenCalled();
+        expect(scope.editChip.calls.mostRecent().args[0]).toBe('Mango'); // Chip
+        expect(scope.editChip.calls.mostRecent().args[1]).toBe(1);       // Index
       });
 
 

@@ -107,6 +107,8 @@
    *    - `null` to prevent the chip from being appended
    * @param {expression=} md-on-add An expression which will be called when a chip has been
    *    added.
+   * @param {expression=} md-on-edit An expression which will be called when a chip has been
+   *    edited.
    * @param {expression=} md-on-remove An expression which will be called when a chip has been
    *    removed.
    * @param {expression=} md-on-select An expression which will be called when a chip is selected.
@@ -231,6 +233,7 @@
         transformChip: '&mdTransformChip',
         onAppend: '&mdOnAppend',
         onAdd: '&mdOnAdd',
+        onEdit: '&mdOnEdit',
         onRemove: '&mdOnRemove',
         onSelect: '&mdOnSelect',
         deleteHint: '@',
@@ -342,6 +345,10 @@
           // If an `md-on-add` attribute was set, tell the controller to use the expression
           // when adding chips.
           if (attrs.mdOnAdd) mdChipsCtrl.useOnAddExpression();
+
+          // If an `md-on-edit` attribute was set, tell the controller to use the expression
+          // when editing chips.
+          if (attrs.mdOnEdit) mdChipsCtrl.useOnEditExpression();
 
           // If an `md-on-remove` attribute was set, tell the controller to use the expression
           // when removing chips.
