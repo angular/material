@@ -417,8 +417,7 @@ function MdNavItem($$rAF, $mdUtil) {
       'mdNavClick': '&?',
       'mdNavHref': '@?',
       'mdNavSref': '@?',
-      'name': '@',
-      'disabled': '@?'
+      'name': '@'
     },
     link: function(scope, element, attrs, controllers) {
       var mdNavItem = controllers[0];
