@@ -1244,6 +1244,18 @@ describe('<md-select>', function() {
         expect($rootScope.someModel).toBe(2);
       }));
 
+      it('ignores key combinations involving command/windows keys', inject(function($document, $rootScope) {
+        var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
+        var keydownEvent = {
+          type: 'keydown',
+          keyCode: 82, // 'r' key
+          metaKey: true,
+          preventDefault: jasmine.createSpy()
+        };
+        el.triggerHandler(keydownEvent);
+        expect(keydownEvent.preventDefault.calls.count()).toEqual(0);
+      }));
+
       it('disallows selection of disabled options', inject(function($rootScope) {
         var optsTemplate =
           '<md-option value="1">1</md-option>' +
