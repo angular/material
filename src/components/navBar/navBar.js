@@ -82,7 +82,7 @@ angular.module('material.components.navBar', ['material.core'])
  * clicked. Renders as a `ui-sref`.
  * @param {string=} name The name of this link. Used by the nav bar to know
  * which link is currently selected.
- * @param {boolean=} ngDisabled If present and expression evaluates to truthy, disabled item selection.
+ * @param {boolean=} disabled Whether the item is selectable.
  *
  * @usage
  * See `<md-nav-bar>` for usage.
