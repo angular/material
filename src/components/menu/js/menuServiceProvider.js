@@ -208,14 +208,14 @@ function MenuProvider($$interimElementProvider) {
         // - focus next item on down arrow,
         // - focus prev item on up
         opts.menuContentEl.on('keydown', onMenuKeyDown);
-        opts.menuContentEl[0].addEventListener('click', captureClickListener, true);
+        opts.menuContentEl[0] && opts.menuContentEl[0].addEventListener('click', captureClickListener, true);
 
         // kick off initial focus in the menu on the first enabled element
-        var focusTarget = opts.menuContentEl[0]
-          .querySelector(prefixer.buildSelector(['md-menu-focus-target', 'md-autofocus']));
+        var focusTarget = opts.menuContentEl[0] ? opts.menuContentEl[0]
+          .querySelector(prefixer.buildSelector(['md-menu-focus-target', 'md-autofocus'])): undefined;
 
         if ( !focusTarget ) {
-          var childrenLen = opts.menuContentEl[0].children.length;
+          var childrenLen = opts.menuContentEl[0] ? opts.menuContentEl[0].children.length: 0;
           for(var childIndex = 0; childIndex < childrenLen; childIndex++) {
             var child = opts.menuContentEl[0].children[childIndex];
             focusTarget = child.querySelector('.md-button:not([disabled])');
@@ -235,7 +235,7 @@ function MenuProvider($$interimElementProvider) {
           element.removeClass('md-clickable');
           if (opts.backdrop) opts.backdrop.off('click', onBackdropClick);
           opts.menuContentEl.off('keydown', onMenuKeyDown);
-          opts.menuContentEl[0].removeEventListener('click', captureClickListener, true);
+          opts.menuContentEl[0] && opts.menuContentEl[0].removeEventListener('click', captureClickListener, true);
         };
 
         // ************************************
