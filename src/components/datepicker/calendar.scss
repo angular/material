@@ -127,7 +127,7 @@ md-calendar {
   font-weight: 500; // Roboto Medium
   @include rtl(padding, 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding, rtl-value( 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding));
 
-  md-calendar-month &:not(.md-calendar-month-label-disabled) {
+  &.md-calendar-label-clickable {
     cursor: pointer;
   }
 
