@@ -6,7 +6,7 @@
     .directive('h2', MdAnchorDirective)
     .directive('h1', MdAnchorDirective);
 
-  function MdAnchorDirective($mdUtil) {
+  function MdAnchorDirective($mdUtil, $compile) {
 
     /** @const @type {RegExp} */
     var unsafeCharRegex = /[&\s+$,:;=?@"#{}|^~[`%!'\].\/()*\\]/g;
@@ -14,12 +14,24 @@
     return {
       restrict: 'E',
       scope: {},
-      template: '<a class="docs-anchor" ng-href="#{{ name }}" name="{{ name }}" ng-transclude></a>',
-      transclude: true,
+      require: '^?mdContent',
       link: postLink
     };
 
-    function postLink(scope, element) {
+    function postLink(scope, element, attr, ctrl) {
+
+      // Only create anchors when being inside of a md-content.
+      if (!ctrl) {
+        return;
+      }
+
+      var anchorEl = $compile('<a class="docs-anchor" ng-href="#{{ name }}" name="{{ name }}"></a>')(scope);
+
+      // Wrap contents inside of the anchor element.
+      anchorEl.append(element.contents());
+
+      // Append the anchor element to the directive element.
+      element.append(anchorEl);
 
       // Delay the URL creation, because the inner text might be not interpolated yet.
       $mdUtil.nextTick(createContentURL);
@@ -40,6 +52,6 @@
   }
 
   // Manually specify $inject because Strict DI is enabled.
-  MdAnchorDirective.$inject = ['$mdUtil'];
+  MdAnchorDirective.$inject = ['$mdUtil', '$compile'];
 
 })();
