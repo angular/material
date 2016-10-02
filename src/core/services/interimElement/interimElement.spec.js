@@ -250,6 +250,53 @@ describe('$$interimElement service', function() {
       });
     });
 
+    it('should support multiple interims as a preset method', function() {
+
+      var showCount = 0;
+
+      createInterimProvider('interimTest');
+
+      inject(function(interimTest) {
+
+        showInterim(interimTest);
+        expect(showCount).toBe(1);
+
+        showInterim(interimTest);
+        expect(showCount).toBe(2);
+
+        interimTest.hide();
+        flush();
+
+        expect(showCount).toBe(1);
+
+        interimTest.hide();
+        flush();
+
+        expect(showCount).toBe(0);
+
+      });
+
+      function showInterim(service) {
+
+        var preset = service
+          .build()
+          .template('<div>Interim Element</div>')
+          .multiple(true);
+
+        preset._options.onShow = function() {
+          showCount++;
+        };
+
+        preset._options.onRemove = function() {
+          showCount--;
+        };
+
+        service.show(preset);
+        flush();
+      }
+
+    });
+
   });
 
   describe('a service', function() {

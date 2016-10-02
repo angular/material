@@ -53,7 +53,7 @@ function InterimElementProvider() {
      * all interim elements will come with the 'build' preset
      */
     provider.addPreset('build', {
-      methods: ['controller', 'controllerAs', 'resolve',
+      methods: ['controller', 'controllerAs', 'resolve', 'multiple',
         'template', 'templateUrl', 'themable', 'transformTemplate', 'parent', 'contentElement']
     });
 
