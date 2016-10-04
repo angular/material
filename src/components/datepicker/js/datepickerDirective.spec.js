@@ -129,12 +129,31 @@ describe('md-datepicker', function() {
   });
 
   it('should pass the timezone to the formatting function', function() {
-    spyOn(dateLocale, 'formatDate');
+    spyOn(controller.locale, 'formatDate');
 
     createDatepickerInstance('<md-datepicker ng-model="myDate" ' +
       'ng-model-options="{ timezone: \'utc\' }"></md-datepicker>');
 
-    expect(dateLocale.formatDate).toHaveBeenCalledWith(pageScope.myDate, 'utc');
+    expect(controller.locale.formatDate).toHaveBeenCalledWith(pageScope.myDate, 'utc');
+  });
+
+  it('should allow for the locale to be overwritten on a specific element', function() {
+    pageScope.myDate = new Date(2015, SEP, 1);
+
+    pageScope.customLocale = {
+      formatDate: function() {
+        return 'September First';
+      }
+    };
+
+    spyOn(pageScope.customLocale, 'formatDate').and.callThrough();
+
+    createDatepickerInstance(
+      '<md-datepicker ng-model="myDate" md-date-locale="customLocale"></md-datepicker>'
+    );
+
+    expect(pageScope.customLocale.formatDate).toHaveBeenCalled();
+    expect(ngElement.find('input').val()).toBe('September First');
   });
 
   describe('ngMessages support', function() {
