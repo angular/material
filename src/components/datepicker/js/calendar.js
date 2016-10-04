@@ -201,10 +201,11 @@
 
     var handleKeyElement = this.$element;
 
-    // If use the md-calendar directly in body without datepicker,
+    // If use the md-calendar directly in the body without datepicker,
     // handleKeyEvent will disable other inputs on the page.
-    // On apply the handleKeyEvent on body when the md-calendar inside datepicker,
-    // Otherwise apply on the calendar element only.
+    // So only apply the handleKeyEvent on the body when the md-calendar inside datepicker,
+    // otherwise apply on the calendar element only.
+
     if (this.$element.parent().hasClass('md-datepicker-calendar')) {
       handleKeyElement = angular.element(document.body);
     }
