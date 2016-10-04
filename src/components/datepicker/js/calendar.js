@@ -13,7 +13,8 @@
    *
    * @description
    * `<md-calendar>` is a component that renders a calendar that can be used to select a date.
-   * It is a part of the `<md-datepicker` pane, however it can also be used on it's own.
+   * It is a part of the `<
+   * ` pane, however it can also be used on it's own.
    *
    * @usage
    *
@@ -197,12 +198,23 @@
 
     var boundKeyHandler = angular.bind(this, this.handleKeyEvent);
 
+
+    var handleKeyElement = this.$element;
+
+    // If use the md-calendar directly in body without datepicker,
+    // handleKeyEvent will disable other inputs on the page.
+    // On apply the handleKeyEvent on body when the md-calendar inside datepicker,
+    // Otherwise apply on the calendar element only.
+    if (this.$element.parent().hasClass('md-datepicker-calendar')) {
+      handleKeyElement = angular.element(document.body);
+    }
+
     // Bind the keydown handler to the body, in order to handle cases where the focused
     // element gets removed from the DOM and stops propagating click events.
-    angular.element(document.body).on('keydown', boundKeyHandler);
+    handleKeyElement.on('keydown', boundKeyHandler);
 
     $scope.$on('$destroy', function() {
-      angular.element(document.body).off('keydown', boundKeyHandler);
+      handleKeyElement.off('keydown', boundKeyHandler);
     });
 
     if (this.minDate && this.minDate > $mdDateLocale.firstRenderableDate) {
