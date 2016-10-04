@@ -1,5 +1,6 @@
 // The default item height is also specified in the JavaScript.
-$md-autocomplete-item-height: 48px !default;
+$md-autocomplete-item-height: 48px !default
+$md-autocomplete-input-container-margin: 18px 0;
 
 @keyframes md-autocomplete-list-out {
   0% {
@@ -39,19 +40,25 @@ md-autocomplete {
   position: relative;
   overflow: visible;
   min-width: 190px;
+
   &[disabled] {
     input {
       cursor: default;
     }
   }
+
   &[md-floating-label] {
     border-radius: 0;
     background: transparent;
     height: auto;
 
+    margin: $md-autocomplete-input-container-margin;
+
     md-input-container {
-      padding-bottom: 0px;
+      margin: 0;
+      padding-bottom: 0;
     }
+
     md-autocomplete-wrap {
       height: auto;
     }
