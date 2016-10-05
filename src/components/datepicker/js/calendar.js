@@ -205,10 +205,10 @@
     // otherwise apply on the calendar element only.
 
     var handleKeyElement;
-    if (this.$element.parent().hasClass('md-datepicker-calendar')) {
+    if ($element.parent().hasClass('md-datepicker-calendar')) {
       handleKeyElement = angular.element(document.body);
     } else {
-      handleKeyElement = this.$element;
+      handleKeyElement = $element;
     }
 
     // Bind the keydown handler to the body, in order to handle cases where the focused
