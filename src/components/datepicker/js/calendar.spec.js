@@ -113,14 +113,8 @@ describe('md-calendar', function() {
   function dispatchKeyEvent(keyCode, opt_modifiers) {
     var mod = opt_modifiers || {};
 
-    var dispatchElement;
-      if (angular.element(element).parent().hasClass('md-datepicker-calendar')) {
-        dispatchElement = document.body;
-      } else {
-        dispatchElement = element;
-    }
 
-    angular.element(dispatchElement).triggerHandler({
+    angular.element(element).triggerHandler({
       type: 'keydown',
       keyCode: keyCode,
       which: keyCode,
