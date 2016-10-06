@@ -2246,6 +2246,54 @@ describe('<md-autocomplete>', function() {
       document.body.removeChild(parent[0]);
     }));
 
+    it('should allow dropdown position to be specified', inject(function($timeout, $window) {
+      var scope = createScope();
+
+      scope.match = fakeItemMatch;
+      scope.position = 'top';
+
+      var template = '<div>' +
+          '<md-autocomplete ' +
+          'md-search-text="searchText" ' +
+          'md-items="item in match(searchText)" ' +
+          'md-item-text="item" ' +
+          'md-min-length="0" ' +
+          'md-dropdown-position="{{position}}" ' +
+          'placeholder="placeholder">' +
+        '<span md-highlight-text="searchText">{{item}}</span>' +
+      '</md-autocomplete>' +
+      '</div>';
+
+      var parent = compile(template, scope);
+      var element = parent.find('md-autocomplete');
+      var ctrl = element.controller('mdAutocomplete');
+
+      // Add container to the DOM to be able to test the rect calculations.
+      document.body.appendChild(parent[0]);
+
+      $timeout.flush();
+
+      // Focus the autocomplete and trigger a query to be able to open the dropdown.
+      ctrl.focus();
+      scope.$apply('searchText = "Query 1"');
+      waitForVirtualRepeat(element);
+
+      var scrollContainer = document.body.querySelector('.md-virtual-repeat-container');
+
+      expect(scrollContainer).toBeTruthy();
+      expect(scrollContainer.style.top).toBe('auto');
+      expect(scrollContainer.style.bottom).toMatch(/[0-9]+px/);
+
+      // Change position and resize to force a DOM update.
+      scope.$apply('position = "bottom"');
+      angular.element($window).triggerHandler('resize');
+
+      expect(scrollContainer.style.top).toMatch(/[0-9]+px/);
+      expect(scrollContainer.style.bottom).toBe('auto');
+
+      parent.remove();
+    }));
+
   });
 
   describe('md-highlight-text', function() {
