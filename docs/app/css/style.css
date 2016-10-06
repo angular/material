@@ -355,8 +355,7 @@ body[dir=rtl] .menu-heading {
   overflow: hidden;
   position: relative;
   z-index: 1;
-  transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
-  transition-property: height;
+  height: 0;
 }
 .docs-menu .menu-toggle-list a.md-button {
   display: block;
