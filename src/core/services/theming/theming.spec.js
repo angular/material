@@ -769,15 +769,17 @@ describe('$mdTheming service', function() {
 describe('md-theme directive', function() {
   beforeEach(module('material.core'));
 
-  it('should watch and set mdTheme controller', inject(function($compile, $rootScope) {
-    $rootScope.themey = 'red';
-    var el = $compile('<div md-theme="{{themey}}">')($rootScope);
-    $rootScope.$apply();
-    var ctrl = el.data('$mdThemeController');
-    expect(ctrl.$mdTheme).toBe('red');
-    $rootScope.$apply('themey = "blue"');
-    expect(ctrl.$mdTheme).toBe('blue');
-  }));
+  it('should watch and set mdTheme controller',
+    inject(function ($compile, $rootScope) {
+      $rootScope.themey = 'red';
+      var el = $compile('<div md-theme="{{themey}}">')($rootScope);
+      $rootScope.$apply();
+      var ctrl = el.data('$mdThemeController');
+      expect(ctrl.$mdTheme).toBe('red');
+      $rootScope.$apply('themey = "blue"');
+      expect(ctrl.$mdTheme).toBe('blue');
+    })
+  );
 
   it('warns when an unregistered theme is used', inject(function ($log, $compile, $rootScope) {
     spyOn($log, 'warn');
@@ -801,6 +803,31 @@ describe('md-theme directive', function() {
     expect(el.hasClass('md-red-theme')).toBeTruthy();
   }));
 
+  it('should accept interpolation string as a theme and automatically watch changes',
+    inject(function ($compile, $rootScope, $mdTheming) {
+      $rootScope.themey = 'red';
+      var el = $compile('<div md-theme="{{themey}}">')($rootScope);
+      $mdTheming(el);
+      $rootScope.$apply();
+      expect(el.hasClass('md-red-theme')).toBeTruthy();
+      $rootScope.$apply('themey = "blue"');
+      expect(el.hasClass('md-blue-theme')).toBeTruthy();
+    })
+  );
+
+  it('should accept onetime bind interpolation string as a theme and not watch changes',
+    inject(function ($compile, $rootScope, $mdTheming) {
+      $rootScope.themey = 'red';
+      var el = $compile('<div md-theme="{{::themey}}">')($rootScope);
+      $mdTheming(el);
+      $rootScope.$apply();
+      expect(el.hasClass('md-red-theme')).toBeTruthy();
+      $rootScope.$apply('themey = "blue"');
+      expect(el.hasClass('md-blue-theme')).toBeFalsy();
+      expect(el.hasClass('md-red-theme')).toBeTruthy();
+    })
+  );
+
   it('should accept $q promise as a theme', inject(function($compile, $rootScope, $q, $mdTheming) {
     $rootScope.promise = $mdTheming.defineTheme('red', { primary: 'red' });
     var el = $compile('<div md-theme="promise"></div>')($rootScope);
@@ -821,6 +848,40 @@ describe('md-theme directive', function() {
       expect(el.hasClass('md-default-theme')).toBeFalsy();
       expect(el.hasClass('md-red-theme')).toBeTruthy();
     }));
+
+  describe('$shouldWatch controller property', function () {
+    it('should set to true if there\'s a md-theme-watch attribute',
+      inject(function ($mdTheming, $compile, $rootScope) {
+        var el = $compile('<div md-theme="default" md-theme-watch></div>')($rootScope);
+        $mdTheming(el);
+        $rootScope.$apply();
+
+        expect(el.controller('mdTheme').$shouldWatch).toBeTruthy();
+      })
+    );
+
+    it('should set to true if there\'s an interpolation',
+      inject(function ($mdTheming, $compile, $rootScope) {
+        $rootScope.theme = 'default';
+        var el = $compile('<div md-theme="{{theme}}"></div>')($rootScope);
+        $mdTheming(el);
+        $rootScope.$apply();
+
+        expect(el.controller('mdTheme').$shouldWatch).toBeTruthy();
+      })
+    );
+
+    it('should set to false if there\'s an interpolation with one way binding',
+      inject(function ($mdTheming, $compile, $rootScope) {
+        $rootScope.theme = 'default';
+        var el = $compile('<div md-theme="{{::theme}}"></div>')($rootScope);
+        $mdTheming(el);
+        $rootScope.$apply();
+
+        expect(el.controller('mdTheme').$shouldWatch).toBeFalsy();
+      })
+    );
+  });
 });
 
 describe('md-themable directive', function() {
@@ -846,29 +907,16 @@ describe('md-themable directive', function() {
     expect(el.children().hasClass('md-red-theme')).toBe(false);
   }));
 
-  it('should not watch parent theme by default', inject(function($compile, $rootScope) {
+  it('should watch parent theme by default', inject(function($compile, $rootScope) {
     $rootScope.themey = 'red';
     var el = $compile('<div md-theme="{{themey}}"><span md-themable></span></div>')($rootScope);
     $rootScope.$apply();
 
     expect(el.children().hasClass('md-red-theme')).toBe(true);
     $rootScope.$apply('themey = "blue"');
-    expect(el.children().hasClass('md-blue-theme')).toBe(false);
-    expect(el.children().hasClass('md-red-theme')).toBe(true);
+    expect(el.children().hasClass('md-blue-theme')).toBe(true);
+    expect(el.children().hasClass('md-red-theme')).toBe(false);
   }));
-
-  it('should support watching parent theme by default', function() {
-    $mdThemingProvider.alwaysWatchTheme(true);
-    inject(function($rootScope, $compile) {
-      $rootScope.themey = 'red';
-      var el = $compile('<div md-theme="{{themey}}"><span md-themable></span></div>')($rootScope);
-      $rootScope.$apply();
-      expect(el.children().hasClass('md-red-theme')).toBe(true);
-      $rootScope.$apply('themey = "blue"');
-      expect(el.children().hasClass('md-blue-theme')).toBe(false);
-      expect(el.children().hasClass('md-red-theme')).toBe(true);
-    });
-  });
 
   it('should not apply a class for an unnested default theme', inject(function($rootScope, $compile) {
     var el = $compile('<div md-themable></div>')($rootScope);
