@@ -35,16 +35,24 @@ angular.module('material.components.navBar', ['material.core'])
  * https://www.w3.org/TR/wai-aria-practices/#Site_Navigator_Tabbed_Style
  *
  * @param {string=} mdSelectedNavItem The name of the current tab; this must
- * match the name attribute of `<md-nav-item>`
+ *     match the name attribute of `<md-nav-item>`
  * @param {boolean=} mdNoInkBar If set to true, the ink bar will be hidden.
  * @param {string=} navBarAriaLabel An aria-label for the nav-bar
  *
  * @usage
  * <hljs lang="html">
  *  <md-nav-bar md-selected-nav-item="currentNavItem">
- *    <md-nav-item md-nav-click="goto('page1')" name="page1">Page One</md-nav-item>
- *    <md-nav-item md-nav-sref="app.page2" name="page2">Page Two</md-nav-item>
- *    <md-nav-item md-nav-href="#page3" name="page3">Page Three</md-nav-item>
+ *    <md-nav-item md-nav-click="goto('page1')" name="page1">
+ *      Page One
+ *    </md-nav-item>
+ *    <md-nav-item md-nav-href="#page2" name="page3">Page Two</md-nav-item>
+ *    <md-nav-item md-nav-sref="page3" name="page2">Page Three</md-nav-item>
+ *    <md-nav-item
+ *      md-nav-sref="app.page4"
+ *      sref-opts="{reload: true, notify: true}"
+ *      name="page4">
+ *      Page Four
+ *    </md-nav-item>
  *  </md-nav-bar>
  *</hljs>
  * <hljs lang="js">
@@ -72,17 +80,20 @@ angular.module('material.components.navBar', ['material.core'])
  * `<md-nav-item>` describes a page navigation link within the `<md-nav-bar>`
  * component. It renders an md-button as the actual link.
  *
- * Exactly one of the mdNavClick, mdNavHref, mdNavSref attributes are required to be
- * specified.
+ * Exactly one of the mdNavClick, mdNavHref, mdNavSref attributes are required
+ * to be specified.
  *
  * @param {Function=} mdNavClick Function which will be called when the
- * link is clicked to change the page. Renders as an `ng-click`.
+ *     link is clicked to change the page. Renders as an `ng-click`.
  * @param {string=} mdNavHref url to transition to when this link is clicked.
- * Renders as an `ng-href`.
+ *     Renders as an `ng-href`.
  * @param {string=} mdNavSref Ui-router state to transition to when this link is
- * clicked. Renders as a `ui-sref`.
+ *     clicked. Renders as a `ui-sref`.
+ * @param {!Object=} srefOpts Ui-router options that are passed to the
+ *     `$state.go()` function. See the [Ui-router documentation for details]
+ *     (https://ui-router.github.io/docs/latest/interfaces/transition.transitionoptions.html).
  * @param {string=} name The name of this link. Used by the nav bar to know
- * which link is currently selected.
+ *     which link is currently selected.
  *
  * @usage
  * See `<md-nav-bar>` for usage.
@@ -394,7 +405,9 @@ function MdNavItem($$rAF) {
       var hasNavClick = tAttrs.mdNavClick;
       var hasNavHref = tAttrs.mdNavHref;
       var hasNavSref = tAttrs.mdNavSref;
+      var hasSrefOpts = tAttrs.srefOpts;
       var navigationAttribute;
+      var navigationOptions;
       var buttonTemplate;
 
       // Cannot specify more than one nav attribute
@@ -412,19 +425,24 @@ function MdNavItem($$rAF) {
       } else if (hasNavSref) {
         navigationAttribute = 'ui-sref="{{ctrl.mdNavSref}}"';
       }
+      
+      navigationOptions = hasSrefOpts ? 'ui-sref-opts="{{ctrl.srefOpts}}" ' : '';
 
       if (navigationAttribute) {
         buttonTemplate = '' +
           '<md-button class="_md-nav-button md-accent" ' +
             'ng-class="ctrl.getNgClassMap()" ' +
             'tabindex="-1" ' +
+            navigationOptions +
             navigationAttribute + '>' +
             '<span ng-transclude class="_md-nav-button-text"></span>' +
           '</md-button>';
       }
 
       return '' +
-        '<li class="md-nav-item" role="option" aria-selected="{{ctrl.isSelected()}}">' +
+        '<li class="md-nav-item" ' +
+          'role="option" ' +
+          'aria-selected="{{ctrl.isSelected()}}">' +
           (buttonTemplate || '') +
         '</li>';
     },
@@ -432,6 +450,7 @@ function MdNavItem($$rAF) {
       'mdNavClick': '&?',
       'mdNavHref': '@?',
       'mdNavSref': '@?',
+      'srefOpts': '=?',
       'name': '@',
     },
     link: function(scope, element, attrs, controllers) {
@@ -439,15 +458,16 @@ function MdNavItem($$rAF) {
       var mdNavBar = controllers[1];
 
       // When accessing the element's contents synchronously, they
-      // may not be defined yet because of transclusion. There is a higher chance
-      // that it will be accessible if we wait one frame.
+      // may not be defined yet because of transclusion. There is a higher
+      // chance that it will be accessible if we wait one frame.
       $$rAF(function() {
         if (!mdNavItem.name) {
-          mdNavItem.name = angular.element(element[0].querySelector('._md-nav-button-text'))
-            .text().trim();
+          mdNavItem.name = angular.element(element[0]
+              .querySelector('._md-nav-button-text')).text().trim();
         }
 
-        var navButton = angular.element(element[0].querySelector('._md-nav-button'));
+        var navButton = angular.element(element[0]
+            .querySelector('._md-nav-button'));
         navButton.on('click', function() {
           mdNavBar.mdSelectedNavItem = mdNavItem.name;
           scope.$apply();
@@ -477,6 +497,10 @@ function MdNavItemController($element) {
   /** @const {?string} */
   this.mdNavHref;
 
+  /** @const {?string} */
+  this.mdNavSref;
+  /** @const {?Object} */
+  this.srefOpts;
   /** @const {?string} */
   this.name;
 
