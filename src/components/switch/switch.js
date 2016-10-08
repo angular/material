@@ -62,7 +62,7 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
         '</div>'+
       '</div>' +
       '<div ng-transclude class="md-label"></div>',
-    require: '?ngModel',
+    require: ['^?mdInputContainer', '?ngModel', '?^form'],
     compile: mdSwitchCompile
   };
 
@@ -71,8 +71,10 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
     // No transition on initial load.
     element.addClass('md-dragging');
 
-    return function (scope, element, attr, ngModel) {
-      ngModel = ngModel || $mdUtil.fakeNgModel();
+    return function (scope, element, attr, ctrls) {
+      var containerCtrl = ctrls[0];
+      var ngModel = ctrls[1] || $mdUtil.fakeNgModel();
+      var formCtrl = ctrls[2];
 
       var disabledGetter = null;
       if (attr.disabled != null) {
@@ -90,7 +92,7 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
         element.removeClass('md-dragging');
       });
 
-      checkboxLink(scope, element, attr, ngModel);
+      checkboxLink(scope, element, attr, ctrls);
 
       if (disabledGetter) {
         scope.$watch(disabledGetter, function(isDisabled) {
