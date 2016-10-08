@@ -792,10 +792,11 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     /**
      * Animate the requested element's scrollTop to the requested scrollPosition with basic easing.
      *
-     * @param element The element to scroll.
-     * @param scrollEnd The new/final scroll position.
+     * @param {!HTMLElement} element The element to scroll.
+     * @param {number} scrollEnd The new/final scroll position.
+     * @param {number=} duration Duration of the scroll. Default is 1000ms.
      */
-    animateScrollTo: function(element, scrollEnd) {
+    animateScrollTo: function(element, scrollEnd, duration) {
       var scrollStart = element.scrollTop;
       var scrollChange = scrollEnd - scrollStart;
       var scrollingDown = scrollStart < scrollEnd;
@@ -814,10 +815,10 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       }
 
       function calculateNewPosition() {
-        var duration = 1000;
+        var easeDuration = duration || 1000;
         var currentTime = $mdUtil.now() - startTime;
 
-        return ease(currentTime, scrollStart, scrollChange, duration);
+        return ease(currentTime, scrollStart, scrollChange, easeDuration);
       }
 
       function ease(currentTime, start, change, duration) {

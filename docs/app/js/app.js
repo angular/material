@@ -575,7 +575,8 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   'menu',
   '$location',
   '$rootScope',
-function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope) {
+  '$mdUtil',
+function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $mdUtil) {
   var self = this;
 
   $scope.COMPONENTS = COMPONENTS;
@@ -587,6 +588,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   $scope.openMenu = openMenu;
   $scope.closeMenu = closeMenu;
   $scope.isSectionSelected = isSectionSelected;
+  $scope.scrollTop = scrollTop;
 
   // Grab the current year so we don't have to update the license every year
   $scope.thisYear = (new Date()).getFullYear();
@@ -615,6 +617,8 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
 
 
   var mainContentArea = document.querySelector("[role='main']");
+  var scrollContentEl = mainContentArea.querySelector('md-content[md-scroll-y]');
+
 
   // *********************
   // Internal methods
@@ -630,6 +634,10 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
 
   function path() {
     return $location.path();
+  }
+
+  function scrollTop() {
+    $mdUtil.animateScrollTo(scrollContentEl, 0, 200);
   }
 
   function goHome($event) {
@@ -825,5 +833,33 @@ function($rootScope, $scope, component, demos, $templateRequest) {
 
     // Just return the original string if we don't know what to do with it
     return str;
+  };
+})
+
+/** Directive which applies a specified class to the element when being scrolled */
+.directive('docsScrollClass', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attr) {
+
+      var scrollParent = element.parent();
+      var isScrolling = false;
+
+      // Initial update of the state.
+      updateState();
+
+      // Register a scroll listener, which updates the state.
+      scrollParent.on('scroll', updateState);
+
+      function updateState() {
+        var newState = scrollParent[0].scrollTop !== 0;
+
+        if (newState !== isScrolling) {
+          element.toggleClass(attr.docsScrollClass, newState);
+        }
+
+        isScrolling = newState;
+      }
+    }
   };
 });
