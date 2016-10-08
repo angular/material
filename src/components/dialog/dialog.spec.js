@@ -1768,14 +1768,21 @@ describe('$mdDialog with custom interpolation symbols', function() {
 });
 
 describe('$mdDialog without ngSanitize loaded', function() {
-  var $mdDialog, $rootScope;
+  var $mdDialog, $rootScope, $exceptionHandler;
 
-  beforeEach(module('material.components.dialog'));
+  beforeEach(function() {
+    module('material.components.dialog');
 
-  beforeEach(inject(function($injector) {
-    $mdDialog = $injector.get('$mdDialog');
-    $rootScope = $injector.get('$rootScope');
-  }));
+    module(function($exceptionHandlerProvider) {
+      $exceptionHandlerProvider.mode('log');
+    });
+
+    inject(function($injector) {
+      $mdDialog = $injector.get('$mdDialog');
+      $rootScope = $injector.get('$rootScope');
+      $exceptionHandler = $injector.get('$exceptionHandler');
+    });
+  });
 
   it('should throw an error when trying to use htmlContent', function() {
     var parent = angular.element('<div>');
@@ -1785,9 +1792,13 @@ describe('$mdDialog without ngSanitize loaded', function() {
       htmlContent('Hello, world !').
       ok('OK');
 
-    expect(function() {
-      $mdDialog.show(dialog);
-      $rootScope.$digest();
-    }).toThrowError(/ngSanitize/);
+    $mdDialog.show(dialog);
+    $rootScope.$digest();
+
+    // Make sure that only our custom error was logged.
+    expect($exceptionHandler.errors.length).toBe(1);
+    expect($exceptionHandler.errors[0].message).toBe(
+      'The ngSanitize module must be loaded in order to use htmlContent.'
+    );
   });
 });

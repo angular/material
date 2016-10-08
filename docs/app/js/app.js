@@ -338,7 +338,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   $rootScope.$on('$locationChangeSuccess', onLocationChange);
 
   $http.get("/docs.json")
-      .success(function(response) {
+      .then(function(response) {
         var versionId = getVersionIdFromPath();
         var head = { type: 'version', url: '/HEAD', id: 'head', name: 'HEAD (master)', github: '' };
         var commonVersions = versionId === 'head' ? [] : [ head ];

@@ -2468,7 +2468,8 @@ describe('$mdPanel', function() {
       spyOn(obj, 'callback');
 
       panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
-      callInterceptors('CLOSE');
+      panelRef._callInterceptors(interceptorTypes.CLOSE);
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalledWith(panelRef);
     });
@@ -2482,8 +2483,9 @@ describe('$mdPanel', function() {
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(1));
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(2));
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(3));
-      callInterceptors('CLOSE').then(obj.callback);
-      $rootScope.$apply();
+
+      panelRef._callInterceptors(interceptorTypes.CLOSE).then(obj.callback);
+      flushPanel();
 
       expect(results).toEqual([3, 2, 1]);
       expect(obj.callback).toHaveBeenCalled();
@@ -2507,8 +2509,8 @@ describe('$mdPanel', function() {
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(2));
       panelRef.registerInterceptor(interceptorTypes.CLOSE, makePromise(3));
 
-      callInterceptors('CLOSE').catch(obj.callback);
-      $rootScope.$apply();
+      panelRef._callInterceptors(interceptorTypes.CLOSE).catch(obj.callback);
+      flushPanel();
 
       expect(results).toEqual([3, 2]);
       expect(obj.callback).toHaveBeenCalled();
@@ -2535,8 +2537,8 @@ describe('$mdPanel', function() {
         return $q.resolve();
       });
 
-      callInterceptors('CLOSE').catch(obj.callback);
-      $rootScope.$apply();
+      panelRef._callInterceptors(interceptorTypes.CLOSE).catch(obj.callback);
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalled();
     });
@@ -2546,8 +2548,8 @@ describe('$mdPanel', function() {
 
       spyOn(obj, 'callback');
 
-      callInterceptors('CLOSE').then(obj.callback);
-      $rootScope.$apply();
+      panelRef._callInterceptors(interceptorTypes.CLOSE).then(obj.callback);
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalled();
     });
@@ -2558,8 +2560,8 @@ describe('$mdPanel', function() {
       spyOn(obj, 'callback');
 
       panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
-
-      callInterceptors('CLOSE');
+      panelRef._callInterceptors(interceptorTypes.CLOSE)
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
 
@@ -2582,16 +2584,17 @@ describe('$mdPanel', function() {
       panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
       panelRef.registerInterceptor('onOpen', obj.otherCallback);
 
-      callInterceptors('CLOSE');
-      callInterceptors('onOpen');
+      panelRef._callInterceptors(interceptorTypes.CLOSE);
+      panelRef._callInterceptors('onOpen');
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
       expect(obj.otherCallback).toHaveBeenCalledTimes(1);
 
       panelRef.removeAllInterceptors();
 
-      callInterceptors('CLOSE');
-      callInterceptors('onOpen');
+      panelRef._callInterceptors(interceptorTypes.CLOSE);
+      panelRef._callInterceptors('onOpen');
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
       expect(obj.otherCallback).toHaveBeenCalledTimes(1);
@@ -2609,16 +2612,18 @@ describe('$mdPanel', function() {
       panelRef.registerInterceptor(interceptorTypes.CLOSE, obj.callback);
       panelRef.registerInterceptor('onOpen', obj.otherCallback);
 
-      callInterceptors('CLOSE');
-      callInterceptors('onOpen');
+      panelRef._callInterceptors(interceptorTypes.CLOSE);
+      panelRef._callInterceptors('onOpen');
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
       expect(obj.otherCallback).toHaveBeenCalledTimes(1);
 
       panelRef.removeAllInterceptors(interceptorTypes.CLOSE);
 
-      callInterceptors('CLOSE');
-      callInterceptors('onOpen');
+      panelRef._callInterceptors(interceptorTypes.CLOSE);
+      panelRef._callInterceptors('onOpen');
+      flushPanel();
 
       expect(obj.callback).toHaveBeenCalledTimes(1);
       expect(obj.otherCallback).toHaveBeenCalledTimes(2);
@@ -2744,17 +2749,6 @@ describe('$mdPanel', function() {
   function flushPanel() {
     $rootScope.$apply();
     $material.flushOutstandingAnimations();
-  }
-
-  function callInterceptors(type) {
-    if (panelRef) {
-      var promise = panelRef._callInterceptors(
-        $mdPanel.interceptorTypes[type] || type
-      );
-
-      flushPanel();
-      return promise;
-    }
   }
 
   function getNumberOfGroups() {
