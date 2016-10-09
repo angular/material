@@ -198,11 +198,13 @@ function MenuProvider($$interimElementProvider) {
        * clicks, keypresses, backdrop closing, etc.
        */
       function activateInteraction() {        
-        var domEl = opts.menuContentEl[0];    // kick off initial focus in the menu on the first enabled element
+        var domEl = opts.menuContentEl[0];    
         var focusTarget = domEl ? domEl.querySelector(prefixer.buildSelector(['md-menu-focus-target', 'md-autofocus'])): undefined;
         
+        // kick off initial focus in the menu on the first enabled element
         if ( !focusTarget ) {
           var childrenLen = domEl ? domEl.children.length: 0;
+          
           for(var childIndex = 0; childIndex < childrenLen; childIndex++) {
             var child = domEl.children[childIndex];
             focusTarget = child.querySelector('.md-button:not([disabled])');
@@ -216,10 +218,7 @@ function MenuProvider($$interimElementProvider) {
           }
         }
 
-        // Wire up keyboard listeners.
-        // - Close on escape,
-        // - focus next item on down arrow,
-        // - focus prev item on up
+        // Wire up click & keyboard listeners.
         
         element.addClass('md-clickable');               
         focusTarget && focusTarget.focus();
