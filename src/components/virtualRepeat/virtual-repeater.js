@@ -26,8 +26,13 @@ angular.module('material.components.virtualRepeat', [
  *
  * ### Common Issues
  *
- * > When having one-time bindings inside of the view template, the VirtualRepeat will not properly
- * > update the bindings for new items, since the view will be recycled.
+ * - When having one-time bindings inside of the view template, the VirtualRepeat will not properly
+ *   update the bindings for new items, since the view will be recycled.
+ *
+ * - Directives inside of a VirtualRepeat will be only compiled (linked) once, because those
+ *   are will be recycled items and used for other items.
+ *   The VirtualRepeat just updates the scope bindings.
+ *
  *
  * ### Notes
  *
@@ -417,9 +422,43 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  * `md-virtual-repeat` specifies an element to repeat using virtual scrolling.
  *
  * Virtual repeat is a limited substitute for ng-repeat that renders only
- * enough dom nodes to fill the container and recycling them as the user scrolls.
+ * enough DOM nodes to fill the container and recycling them as the user scrolls.
+ *
  * Arrays, but not objects are supported for iteration.
  * Track by, as alias, and (key, value) syntax are not supported.
+ *
+ * ### On-Demand Async Item Loading
+ *
+ * When using the `md-on-demand` attribute and loading some asynchronous data, the `getItemAtIndex` function will
+ * mostly return nothing.
+ *
+ * <hljs lang="js">
+ *   DynamicItems.prototype.getItemAtIndex = function(index) {
+ *     if (this.pages[index]) {
+ *       return this.pages[index];
+ *     } else {
+ *       // This is an asynchronous action and does not return any value.
+ *       this.loadPage(index);
+ *     }
+ *   };
+ * </hljs>
+ *
+ * This means that the VirtualRepeat will not have any value for the given index.<br/>
+ * After the data loading completed, the user expects the VirtualRepeat to recognize the change.
+ *
+ * To make sure that the VirtualRepeat properly detects any change, you need to run the operation
+ * in another digest.
+ *
+ * <hljs lang="js">
+ *   DynamicItems.prototype.loadPage = function(index) {
+ *     var self = this;
+ *
+ *     // Trigger a new digest by using $timeout
+ *     $timeout(function() {
+ *       self.pages[index] = Data;
+ *     });
+ *   };
+ * </hljs>
  *
  * > <b>Note:</b> Please also review the
  *   <a ng-href="api/directive/mdVirtualRepeatContainer">VirtualRepeatContainer</a> documentation
