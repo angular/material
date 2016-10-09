@@ -33,6 +33,22 @@ body.docs-body {
   color: inherit;
 }
 
+.md-fab.docs-scroll-fab {
+  position: fixed !important;
+
+  transform: scale(0);
+
+  /* Manually prefix because the docs won't be prefixed. See #9785 */
+  -webkit-transition: transform 0.2s;
+  -moz-transition: transform 0.2s;
+  -o-transition: transform 0.2s;
+  transition: transform 0.2s;
+}
+
+.docs-scroll-fab.scrolling {
+  transform: scale(1);
+}
+
 #license-footer {
   align-self: flex-end;
   padding: 16px 32px;
