@@ -35,7 +35,7 @@ angular
  * @param {string=} md-direction Which direction would you like the tooltip to go?  Supports left, right, top, and bottom.  Defaults to bottom.
  */
 function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdTheming, $animate,
-  $interpolate, $$mdTooltipRegistry) {
+  $interpolate, $mdConstant, $$mdTooltipRegistry) {
 
   var ENTER_EVENTS = 'focus touchstart mouseenter';
   var LEAVE_EVENTS = 'blur touchcancel mouseleave';
@@ -46,7 +46,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $mdUtil, $mdThe
   return {
     restrict: 'E',
     transclude: true,
-    priority: 210, // Before ngAria
+    priority: $mdConstant.BEFORE_NG_ARIA,
     template: '<div class="md-content _md" ng-transclude></div>',
     scope: {
       delay: '=?mdDelay',
