@@ -208,16 +208,17 @@ function MenuProvider($$interimElementProvider) {
         // - focus next item on down arrow,
         // - focus prev item on up
         opts.menuContentEl.on('keydown', onMenuKeyDown);
-        opts.menuContentEl[0] && opts.menuContentEl[0].addEventListener('click', captureClickListener, true);
-
+        
         // kick off initial focus in the menu on the first enabled element
-        var focusTarget = opts.menuContentEl[0] ? opts.menuContentEl[0]
-          .querySelector(prefixer.buildSelector(['md-menu-focus-target', 'md-autofocus'])): undefined;
+        var domEl = opts.menuContentEl[0];
+        var focusTarget = domEl ? domEl.querySelector(prefixer.buildSelector(['md-menu-focus-target', 'md-autofocus'])): undefined;
+        
+        domEl && domEl.addEventListener('click', captureClickListener, true);
 
         if ( !focusTarget ) {
-          var childrenLen = opts.menuContentEl[0] ? opts.menuContentEl[0].children.length: 0;
+          var childrenLen = domEl ? domEl.children.length: 0;
           for(var childIndex = 0; childIndex < childrenLen; childIndex++) {
-            var child = opts.menuContentEl[0].children[childIndex];
+            var child = domEl.children[childIndex];
             focusTarget = child.querySelector('.md-button:not([disabled])');
             if (focusTarget) {
               break;
@@ -232,10 +233,11 @@ function MenuProvider($$interimElementProvider) {
         focusTarget && focusTarget.focus();
 
         return function cleanupInteraction() {
-          element.removeClass('md-clickable');
-          if (opts.backdrop) opts.backdrop.off('click', onBackdropClick);
+          element.removeClass('md-clickable');          
           opts.menuContentEl.off('keydown', onMenuKeyDown);
-          opts.menuContentEl[0] && opts.menuContentEl[0].removeEventListener('click', captureClickListener, true);
+          
+          opts.backdrop && opts.backdrop.off('click', onBackdropClick);
+          domEl && domEl.removeEventListener('click', captureClickListener, true);
         };
 
         // ************************************
