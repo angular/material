@@ -197,24 +197,10 @@ function MenuProvider($$interimElementProvider) {
        * Activate interaction on the menu. Wire up keyboard listerns for
        * clicks, keypresses, backdrop closing, etc.
        */
-      function activateInteraction() {
-        element.addClass('md-clickable');
-
-        // close on backdrop click
-        if (opts.backdrop) opts.backdrop.on('click', onBackdropClick);
-
-        // Wire up keyboard listeners.
-        // - Close on escape,
-        // - focus next item on down arrow,
-        // - focus prev item on up
-        opts.menuContentEl.on('keydown', onMenuKeyDown);
-        
-        // kick off initial focus in the menu on the first enabled element
-        var domEl = opts.menuContentEl[0];
+      function activateInteraction() {        
+        var domEl = opts.menuContentEl[0];    // kick off initial focus in the menu on the first enabled element
         var focusTarget = domEl ? domEl.querySelector(prefixer.buildSelector(['md-menu-focus-target', 'md-autofocus'])): undefined;
         
-        domEl && domEl.addEventListener('click', captureClickListener, true);
-
         if ( !focusTarget ) {
           var childrenLen = domEl ? domEl.children.length: 0;
           for(var childIndex = 0; childIndex < childrenLen; childIndex++) {
@@ -230,12 +216,22 @@ function MenuProvider($$interimElementProvider) {
           }
         }
 
+        // Wire up keyboard listeners.
+        // - Close on escape,
+        // - focus next item on down arrow,
+        // - focus prev item on up
+        
+        element.addClass('md-clickable');               
         focusTarget && focusTarget.focus();
+        
+        opts.menuContentEl.on('keydown', onMenuKeyDown);
+        opts.backdrop && opts.backdrop.on('click', onBackdropClick);
+        domEl && domEl.addEventListener('click', captureClickListener, true);
 
         return function cleanupInteraction() {
           element.removeClass('md-clickable');          
-          opts.menuContentEl.off('keydown', onMenuKeyDown);
           
+          opts.menuContentEl.off('keydown', onMenuKeyDown);          
           opts.backdrop && opts.backdrop.off('click', onBackdropClick);
           domEl && domEl.removeEventListener('click', captureClickListener, true);
         };
