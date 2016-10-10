@@ -37,11 +37,6 @@ body.docs-body {
   position: fixed !important;
 
   transform: scale(0);
-
-  /* Manually prefix because the docs won't be prefixed. See #9785 */
-  -webkit-transition: transform 0.2s;
-  -moz-transition: transform 0.2s;
-  -o-transition: transform 0.2s;
   transition: transform 0.2s;
 }
 
@@ -70,7 +65,7 @@ body.docs-body {
 }
 
 .training_info {
-  opacity:0.4;
+  opacity: 0.4;
   text-transform: none;
 }
 /***************
@@ -79,10 +74,6 @@ body.docs-body {
 a {
   text-decoration: none;
   font-weight: 400;
-  -webkit-transition: border-bottom 0.35s;
-  -moz-transition: border-bottom 0.35s;
-  -ms-transition: border-bottom 0.35s;
-  -o-transition: border-bottom 0.35s;
   transition: border-bottom 0.35s;
 }
 h1, h2, h3, h4, h5, h6 {
@@ -184,8 +175,6 @@ ul.skip-links li a {
   text-decoration: none;
   top: 0;
   width: 92%;
-  -webkit-transition: opacity   0.15s linear;
-  -moz-transition: opacity  0.15s linear;
   transition: opacity   0.15s linear;
 }
 ul.skip-links li a:focus {
@@ -362,19 +351,10 @@ body[dir=rtl] .menu-heading {
   text-align: right;
 }
 
-
-.docs-menu li.parentActive,
-.docs-menu li.parentActive .menu-toggle-list {
-  /*background-color: #2C80D2 !important;*/
-}
 .menu-toggle-list {
   overflow: hidden;
   position: relative;
   z-index: 1;
-  -webkit-transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
-  -webkit-transition-property: height;
-  -moz-transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
-  -moz-transition-property: height;
   transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
   transition-property: height;
 }
@@ -398,13 +378,10 @@ body[dir=rtl] .menu-heading {
   speak: none;
   vertical-align: middle;
   transform: rotate(180deg);
-  -webkit-transform: rotate(180deg);
   transition: transform 0.3s ease-in-out;
-  -webkit-transition: -webkit-transform 0.3s ease-in-out;
 }
 .md-button-toggle .md-toggle-icon.toggled {
   transform: rotate(0deg);
-  -webkit-transform: rotate(0deg);
 }
 
 /* End Docs Menu */
@@ -500,14 +477,12 @@ docs-demo {
 .demo-container {
   border-radius: 4px;
   margin-bottom: 16px;
-  -webkit-transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
   transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
   position: relative;
   padding-bottom: 0;
 }
 .demo-source-tabs {
   z-index: 1;
-  -webkit-transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
   transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
   height: 448px;
   background: #fff;
@@ -542,12 +517,6 @@ md-tabs.demo-source-tabs .active md-tab-label {
 }
 .demo-content {
   position: relative;
-  overflow:hidden;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -moz-flex;
-  display: -ms-flexbox;
   display: flex;
 }
 .small-demo .demo-source-tabs:not(.ng-hide) {
@@ -558,19 +527,9 @@ md-tabs.demo-source-tabs .active md-tab-label {
 }
 
 .doc-content > * {
-  -webkit-box-flex: 1 1 auto;
-  -webkit-flex: 1 1 auto;
-  -moz-box-flex: 1 1 auto;
-  -moz-flex: 1 1 auto;
-  -ms-flex: 1 1 auto;
   flex: 1 1 auto;
 }
 .demo-content > * {
-  -webkit-box-flex: 1 1 0%;
-  -webkit-flex: 1 1 0%;
-  -moz-box-flex: 1 1 0%;
-  -moz-flex: 1 1 0%;
-  -ms-flex: 1 1 0%;
   flex: 1 1 0%;
 }
 
@@ -613,8 +572,6 @@ md-toolbar.demo-toolbar .md-button.active, md-toolbar.demo-toolbar .md-button.ac
 }
 
 md-toolbar.demo-toolbar .md-button {
-  -webkit-transition: all 0.3s linear;
-  -moz-transition: all 0.3s linear;
   transition: all 0.3s linear;
   color: #616161;
 }
@@ -669,7 +626,6 @@ ul.buckets li a {
   font-weight: 500;
   padding: 16px 0;
   text-decoration: none;
-  -webkit-transition: all 0.45s cubic-bezier(0.35, 0, 0.25, 1);
   background-color: #f6f6f6 !important;
   box-shadow: none !important;
   margin-right: 0;
@@ -719,9 +675,6 @@ header.api-profile-header > h2 {
   margin-right: 8px;
   text-align: center;
   margin-top: 14px;
-  -webkit-align-self: flex-start;
-  -moz-align-self: flex-start;
-  -ms-flex-item-align: start;
   align-self: flex-start;
 }
 .api-params-title {
@@ -739,8 +692,6 @@ ul.methods .method-function-syntax {
   font-weight: normal;
   font-size: 2.0rem;
   margin: 0;
-  -webkit-margin-before: 0;
-  -webkit-margin-after: 0;
 }
 
 h3 .method-function-syntax {
@@ -910,11 +861,7 @@ docs-demo .doc-demo-content {
 }
 
 .no-transition {
-  -webkit-transition: none !important;
-  -moz-transition:    none !important;
-  -ms-transition:     none !important;
-  -o-transition:      none !important;
-  transition:         none !important;
+  transition: none !important;
 }
 
 table.attributes, table.md-api-table {

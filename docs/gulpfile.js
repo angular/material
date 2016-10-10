@@ -153,6 +153,7 @@ gulp.task('docs-css', ['docs-app', 'build', 'docs-css-dependencies'], function()
     'docs/app/css/style.css'
   ])
   .pipe(concat('docs.css'))
+  .pipe(utils.autoprefix())
   .pipe(gulp.dest('dist/docs'));
 });
 
