@@ -301,7 +301,7 @@ MdNavBarController.prototype.getFocusedTab = function() {
 MdNavBarController.prototype._findTab = function(fn) {
   var tabs = this._getTabs();
   for (var i = 0; i < tabs.length; i++) {
-    if (fn(tabs[i])) {
+    if (tabs[i] && fn(tabs[i])) {
       return tabs[i];
     }
   }
