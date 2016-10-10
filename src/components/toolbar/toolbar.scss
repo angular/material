@@ -115,6 +115,9 @@ md-toolbar {
     display: flex;
     align-items: center;
   }
+  md-checkbox {
+    margin: inherit;
+  }
   .md-button {
     margin-top: 0;
     margin-bottom: 0;
