@@ -518,6 +518,7 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .demo-content {
   position: relative;
   display: flex;
+  overflow: hidden;
 }
 .small-demo .demo-source-tabs:not(.ng-hide) {
   height: 224px;
