@@ -94,6 +94,14 @@ md-select.md-THEME_NAME-theme {
       }
     }
   }
+
+  .md-select-icon {
+    color: '{{foreground-3}}';
+
+    &:hover {
+      color: '{{foreground-2}}';
+    }
+  }
 }
 
 md-select-menu.md-THEME_NAME-theme {
