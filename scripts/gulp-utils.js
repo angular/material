@@ -3,6 +3,7 @@ var filter = require('gulp-filter');
 var through2 = require('through2');
 var lazypipe = require('lazypipe');
 var gutil = require('gulp-util');
+var autoprefixer = require('gulp-autoprefixer');
 var Buffer = require('buffer').Buffer;
 var fs = require('fs');
 
@@ -308,4 +309,15 @@ exports.cssToNgConstant = function(ngModule, factoryName) {
     this.push(jsFile);
     next();
   });
+};
+
+exports.autoprefix = function() {
+
+  return autoprefixer({browsers: [
+    'last 2 versions',
+    'not ie <= 10',
+    'not ie_mob <= 10',
+    'last 4 Android versions',
+    'Safari >= 8'
+  ]});
 };
