@@ -51,7 +51,7 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
 
   return {
     restrict: 'E',
-    priority: 210, // Run before ngAria
+    priority: $mdConstant.BEFORE_NG_ARIA,
     transclude: true,
     template:
       '<div class="md-container">' +
