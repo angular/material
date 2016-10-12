@@ -717,4 +717,18 @@ describe('util', function() {
       parent.remove();
     });
   });
+
+  describe('uniq', function() {
+    var $mdUtil;
+
+    beforeEach(inject(function(_$mdUtil_) {
+      $mdUtil = _$mdUtil_;
+    }));
+
+    it('returns a copy of the requested array with only unique values', function() {
+      var myArray = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4];
+
+      expect($mdUtil.uniq(myArray)).toEqual([1, 2, 3, 4]);
+    });
+  });
 });
