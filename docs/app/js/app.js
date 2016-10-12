@@ -492,7 +492,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   };
 })
 
-.directive('menuToggle', [ '$timeout', '$mdUtil', function($timeout, $mdUtil) {
+.directive('menuToggle', ['$mdUtil', '$animateCss', '$$rAF', function($mdUtil, $animateCss, $$rAF) {
   return {
     scope: {
       section: '='
@@ -501,59 +501,56 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
     link: function($scope, $element) {
       var controller = $element.parent().controller();
 
+      // Used for toggling the visibility of the accordion's content, after
+      // all of the animations are completed. This prevents users from being
+      // allowed to tab through to the hidden content.
+      $scope.renderContent = false;
+
       $scope.isOpen = function() {
         return controller.isOpen($scope.section);
       };
+
       $scope.toggle = function() {
         controller.toggleOpen($scope.section);
       };
 
       $mdUtil.nextTick(function() {
-        $scope.$watch(
-          function () {
-            return controller.isOpen($scope.section);
-          },
-          function (open) {
-            // We must run this in a next tick so that the getTargetHeight function is correct
-            $mdUtil.nextTick(function() {
-              var $ul = $element.find('ul');
-              var $li = $ul[0].querySelector('a.active');
-              var docsMenuContent = document.querySelector('.docs-menu').parentNode;
-              var targetHeight = open ? getTargetHeight() : 0;
+        $scope.$watch(function () {
+          return controller.isOpen($scope.section);
+        }, function (open) {
+          var $ul = $element.find('ul');
+          var $li = $ul[0].querySelector('a.active');
 
-              $timeout(function () {
-                // Set the height of the list
-                $ul.css({height: targetHeight + 'px'});
-
-                // If we are open and the user has not scrolled the content div; scroll the active
-                // list item into view.
-                if (open && $li && $li.offsetParent && $ul[0].scrollTop === 0) {
-                  $timeout(function() {
-                    var activeHeight = $li.scrollHeight;
-                    var activeOffset = $li.offsetTop;
-                    var parentOffset = $li.offsetParent.offsetTop;
-
-                    // Reduce it a bit (2 list items' height worth) so it doesn't touch the nav
-                    var negativeOffset = activeHeight * 2;
-                    var newScrollTop = activeOffset + parentOffset - negativeOffset;
-
-                    $mdUtil.animateScrollTo(docsMenuContent, newScrollTop);
-                  }, 350, false);
-                }
-              }, 0, false);
-
-              function getTargetHeight() {
-                var targetHeight;
-                $ul.addClass('no-transition');
-                $ul.css('height', '');
-                targetHeight = $ul.prop('clientHeight');
-                $ul.css('height', 0);
-                $ul.removeClass('no-transition');
-                return targetHeight;
-              }
-            }, false);
+          if (open) {
+            $scope.renderContent = true;
           }
-        );
+
+          $$rAF(function() {
+            var targetHeight = open ? $ul[0].scrollHeight : 0;
+
+            $animateCss($ul, {
+              easing: 'cubic-bezier(0.35, 0, 0.25, 1)',
+              to: { height: targetHeight + 'px' },
+              duration: 0.75 // seconds
+            }).start().then(function() {
+              var $li = $ul[0].querySelector('a.active');
+
+              $scope.renderContent = open;
+
+              if (open && $li && $ul[0].scrollTop === 0) {
+                var activeHeight = $li.scrollHeight;
+                var activeOffset = $li.offsetTop;
+                var parentOffset = $li.offsetParent.offsetTop;
+
+                // Reduce it a bit (2 list items' height worth) so it doesn't touch the nav
+                var negativeOffset = activeHeight * 2;
+                var newScrollTop = activeOffset + parentOffset - negativeOffset;
+
+                $mdUtil.animateScrollTo(document.querySelector('.docs-menu').parentNode, newScrollTop);
+              }
+            });
+          });
+        });
       });
 
       var parentNode = $element[0].parentNode.parentNode.parentNode;
