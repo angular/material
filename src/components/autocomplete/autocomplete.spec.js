@@ -1379,6 +1379,104 @@ describe('<md-autocomplete>', function() {
 
   });
 
+  describe('accessibility', function() {
+
+    var $mdLiveAnnouncer, $timeout, $mdConstant = null;
+    var liveEl, scope, element, ctrl = null;
+
+    var BASIC_TEMPLATE =
+      '<md-autocomplete' +
+      '   md-selected-item="selectedItem"' +
+      '   md-search-text="searchText"' +
+      '   md-items="item in match(searchText)"' +
+      '   md-item-text="item.display"' +
+      '   md-min-length="0"' +
+      '   placeholder="placeholder">' +
+      '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+      '</md-autocomplete>';
+
+    beforeEach(inject(function ($injector) {
+      $mdLiveAnnouncer = $injector.get('$mdLiveAnnouncer');
+      $mdConstant = $injector.get('$mdConstant');
+      $timeout = $injector.get('$timeout');
+
+      liveEl = $mdLiveAnnouncer._liveElement;
+      scope = createScope();
+      element = compile(BASIC_TEMPLATE, scope);
+      ctrl = element.controller('mdAutocomplete');
+
+      // Flush the initial autocomplete timeout to gather the elements.
+      $timeout.flush();
+    }));
+
+    it('should announce count on dropdown open', function() {
+
+      ctrl.focus();
+      waitForVirtualRepeat();
+
+      expect(ctrl.hidden).toBe(false);
+
+      expect(liveEl.textContent).toBe('There are 3 matches available.');
+    });
+
+    it('should announce count and selection on dropdown open', function() {
+
+      // Manually enable md-autoselect for the autocomplete.
+      ctrl.index = 0;
+
+      ctrl.focus();
+      waitForVirtualRepeat();
+
+      expect(ctrl.hidden).toBe(false);
+
+      // Expect the announcement to contain the current selection in the dropdown.
+      expect(liveEl.textContent).toBe(scope.items[0].display + ' There are 3 matches available.');
+    });
+
+    it('should announce the selection when using the arrow keys', function() {
+
+      ctrl.focus();
+      waitForVirtualRepeat();
+
+      expect(ctrl.hidden).toBe(false);
+
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+
+      // Flush twice, because the display value will be resolved asynchronously and then the live-announcer will
+      // be triggered.
+      $timeout.flush();
+      $timeout.flush();
+
+      expect(ctrl.index).toBe(0);
+      expect(liveEl.textContent).toBe(scope.items[0].display);
+
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+
+      // Flush twice, because the display value will be resolved asynchronously and then the live-announcer will
+      // be triggered.
+      $timeout.flush();
+      $timeout.flush();
+
+      expect(ctrl.index).toBe(1);
+      expect(liveEl.textContent).toBe(scope.items[1].display);
+    });
+
+    it('should announce the count when matches change', function() {
+
+      ctrl.focus();
+      waitForVirtualRepeat();
+
+      expect(ctrl.hidden).toBe(false);
+      expect(liveEl.textContent).toBe('There are 3 matches available.');
+
+      scope.$apply('searchText = "fo"');
+      $timeout.flush();
+
+      expect(liveEl.textContent).toBe('There is 1 match available.');
+    });
+
+  });
+
   describe('API access', function() {
     it('clears the selected item', inject(function($timeout) {
       var scope = createScope();

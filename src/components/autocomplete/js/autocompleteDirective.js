@@ -264,13 +264,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
                   </li>' + noItemsTemplate + '\
             </ul>\
           </md-virtual-repeat-container>\
-        </md-autocomplete-wrap>\
-        <aria-status\
-            class="md-visually-hidden"\
-            role="status"\
-            aria-live="assertive">\
-          <p ng-repeat="message in $mdAutocompleteCtrl.messages track by $index" ng-if="message">{{message}}</p>\
-        </aria-status>';
+        </md-autocomplete-wrap>';
 
       function getItemTemplate() {
         var templateTag = element.find('md-item-template').detach(),
