@@ -244,8 +244,8 @@ function InterimElementProvider() {
   }
 
   /* @ngInject */
-  function InterimElementFactory($document, $q, $$q, $rootScope, $timeout, $rootElement, $animate,
-                                 $mdUtil, $mdCompiler, $mdTheming, $injector ) {
+  function InterimElementFactory($document, $q, $rootScope, $timeout, $rootElement, $animate,
+                                 $mdUtil, $mdCompiler, $mdTheming, $injector, $exceptionHandler) {
     return function createInterimElementService() {
       var SHOW_CANCELLED = false;
 
@@ -320,9 +320,18 @@ function InterimElementProvider() {
 
         showPromises.push(showAction);
 
+        // In Angular 1.6+, exceptions inside promises will cause a rejection. We need to handle
+        // the rejection and only log it if it's an error.
+        interimElement.deferred.promise.catch(function(fault) {
+          if (fault instanceof Error) {
+            $exceptionHandler(fault);
+          }
+
+          return fault;
+        });
+
         // Return a promise that will be resolved when the interim
         // element is hidden or cancelled...
-
         return interimElement.deferred.promise;
       }
 
@@ -488,8 +497,7 @@ function InterimElementProvider() {
 
                 showAction = showElement(element, options, compiledData.controller)
                   .then(resolve, rejectAll);
-
-              }, rejectAll);
+              }).catch(rejectAll);
 
             function rejectAll(fault) {
               // Force the '$md<xxx>.show()' promise to reject
@@ -523,15 +531,11 @@ function InterimElementProvider() {
             });
 
           } else {
-
-            $q.when(showAction)
-                .finally(function() {
-                  hideElement(options.element, options).then(function() {
-
-                    (isCancelled && rejectAll(response)) || resolveAll(response);
-
-                  }, rejectAll);
-                });
+            $q.when(showAction).finally(function() {
+              hideElement(options.element, options).then(function() {
+                isCancelled ? rejectAll(response) : resolveAll(response);
+              }, rejectAll);
+            });
 
             return self.deferred.promise;
           }
@@ -682,7 +686,12 @@ function InterimElementProvider() {
           // Trigger onComplete callback when the `show()` finishes
           var notifyComplete = options.onComplete || angular.noop;
 
-          notifyShowing(options.scope, element, options, controller);
+          // Necessary for consistency between Angular 1.5 and 1.6.
+          try {
+            notifyShowing(options.scope, element, options, controller);
+          } catch (e) {
+            return $q.reject(e);
+          }
 
           return $q(function (resolve, reject) {
             try {
@@ -693,10 +702,9 @@ function InterimElementProvider() {
                   startAutoHide();
 
                   resolve(element);
+                }, reject);
 
-                }, reject );
-
-            } catch(e) {
+            } catch (e) {
               reject(e.message);
             }
           });
@@ -705,35 +713,29 @@ function InterimElementProvider() {
         function hideElement(element, options) {
           var announceRemoving = options.onRemoving || angular.noop;
 
-          return $$q(function (resolve, reject) {
+          return $q(function (resolve, reject) {
             try {
               // Start transitionIn
-              var action = $$q.when( options.onRemove(options.scope, element, options) || true );
+              var action = $q.when( options.onRemove(options.scope, element, options) || true );
 
               // Trigger callback *before* the remove operation starts
               announceRemoving(element, action);
 
-              if ( options.$destroy ) {
-
+              if (options.$destroy) {
                 // For $destroy, onRemove should be synchronous
                 resolve(element);
-
               } else {
-
                 // Wait until transition-out is done
                 action.then(function () {
-
                   if (!options.preserveScope && options.scope ) {
                     options.scope.$destroy();
                   }
 
                   resolve(element);
-
-                }, reject );
+                }, reject);
               }
-
-            } catch(e) {
-              reject(e);
+            } catch (e) {
+              reject(e.message);
             }
           });
         }
