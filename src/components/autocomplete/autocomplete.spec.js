@@ -399,6 +399,38 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should support ng-pattern for the search input', inject(function() {
+      var scope = createScope(null, {inputId: 'custom-input-id'});
+      var template =
+        '<form name="testForm">' +
+          '<md-autocomplete ' +
+              'md-input-name="autocomplete" ' +
+              'md-selected-item="selectedItem" ' +
+              'md-search-text="searchText" ' +
+              'md-items="item in match(searchText)" ' +
+              'md-item-text="item.display" ' +
+              'ng-pattern="/^[0-9]$/" ' +
+              'placeholder="placeholder">' +
+            '<span md-highlight-text="searchText">{{item.display}}</span>' +
+          '</md-autocomplete>' +
+        '</form>';
+
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      expect(input.attr('ng-pattern')).toBeTruthy();
+
+      scope.$apply('searchText = "Test"');
+
+      expect(scope.testForm.autocomplete.$error['pattern']).toBeTruthy();
+
+      scope.$apply('searchText = "3"');
+
+      expect(scope.testForm.autocomplete.$error['pattern']).toBeFalsy();
+
+      element.remove();
+    }));
+
     it('forwards the tabindex to the input', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
       var template =
