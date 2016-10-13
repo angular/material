@@ -105,11 +105,6 @@ describe('md-datepicker', function() {
     expect(controller.inputElement.placeholder).toBe('Fancy new placeholder');
   });
 
-  it('should forward the aria-label to the generated input', function() {
-    createDatepickerInstance('<md-datepicker ng-model="myDate" aria-label="Enter a date"></md-datepicker>');
-    expect(controller.ngInputElement.attr('aria-label')).toBe('Enter a date');
-  });
-
   it('should throw an error when the model is not a date', function() {
     expect(function() {
       pageScope.myDate = '2015-01-01';
@@ -793,20 +788,53 @@ describe('md-datepicker', function() {
     });
   });
 
-  describe('tabindex behavior', function() {
-    beforeEach(function() {
+  describe('accessibility', function() {
+    it('should forward the aria-label to the generated input', function() {
       ngElement && ngElement.remove();
+      createDatepickerInstance('<md-datepicker ng-model="myDate" aria-label="Enter a date"></md-datepicker>');
+      expect(controller.ngInputElement.attr('aria-label')).toBe('Enter a date');
     });
 
-    it('should remove the datepicker from the tab order, if no tabindex is specified', function() {
-      createDatepickerInstance('<md-datepicker ng-model="myDate"></md-datepicker>');
-      expect(ngElement.attr('tabindex')).toBe('-1');
+    it('should set the aria-owns value, corresponding to the id of the calendar pane', function() {
+      var ariaAttr = controller.ngInputElement.attr('aria-owns');
+
+      expect(ariaAttr).toBeTruthy();
+      expect(controller.calendarPane.id).toBe(ariaAttr);
     });
 
-    it('should forward the tabindex to the input', function() {
-      createDatepickerInstance('<md-datepicker ng-model="myDate" tabindex="1"></md-datepicker>');
-      expect(ngElement.attr('tabindex')).toBeFalsy();
-      expect(controller.ngInputElement.attr('tabindex')).toBe('1');
+    it('should toggle the aria-expanded value', function() {
+      expect(controller.ngInputElement.attr('aria-expanded')).toBe('false');
+
+      controller.openCalendarPane({
+        target: controller.inputElement
+      });
+      scope.$apply();
+
+      expect(controller.ngInputElement.attr('aria-expanded')).toBe('true');
+
+      controller.closeCalendarPane();
+      scope.$apply();
+
+      expect(controller.ngInputElement.attr('aria-expanded')).toBe('false');
     });
+
+    describe('tabindex behavior', function() {
+      beforeEach(function() {
+        ngElement && ngElement.remove();
+      });
+
+      it('should remove the datepicker from the tab order, if no tabindex is specified', function() {
+        createDatepickerInstance('<md-datepicker ng-model="myDate"></md-datepicker>');
+        expect(ngElement.attr('tabindex')).toBe('-1');
+      });
+
+      it('should forward the tabindex to the input', function() {
+        createDatepickerInstance('<md-datepicker ng-model="myDate" tabindex="1"></md-datepicker>');
+        expect(ngElement.attr('tabindex')).toBeFalsy();
+        expect(controller.ngInputElement.attr('tabindex')).toBe('1');
+      });
+    });
+
   });
+
 });
