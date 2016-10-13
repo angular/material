@@ -3,11 +3,11 @@
  * @name material.components.panel
  */
 angular
-    .module('material.components.panel', [
-      'material.core',
-      'material.components.backdrop'
-    ])
-    .service('$mdPanel', MdPanelService);
+  .module('material.components.panel', [
+    'material.core',
+    'material.components.backdrop'
+  ])
+  .service('$mdPanel', MdPanelService);
 
 
 /*****************************************************************************
@@ -1578,12 +1578,6 @@ MdPanelRef.prototype._updatePosition = function(init) {
   var positionConfig = this.config['position'];
 
   if (positionConfig) {
-    // Use the vendor prefixed version of transform.
-    // Note that the offset should be assigned before the position, in
-    // order to avoid tiny jumps in the panel's position, on slower browsers.
-    var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
-    this.panelEl.css(prefixedTransform, positionConfig.getTransform());
-
     positionConfig._setPanelPosition(this.panelEl);
 
     // Hide the panel now that position is known.
@@ -2465,11 +2459,24 @@ MdPanelPosition.prototype.getTransform = function() {
   return (translateX + ' ' + translateY).trim();
 };
 
+
+/**
+ * Sets the `transform` value for a panel element.
+ * @param {!angular.JQLite} panelEl
+ * @returns {!angular.JQLite}
+ * @private
+ */
+MdPanelPosition.prototype._setTransform = function(panelEl) {
+  return panelEl.css(this._$mdConstant.CSS.TRANSFORM, this.getTransform());
+};
+
+
 /**
  * True if the panel is completely on-screen with this positioning; false
  * otherwise.
  * @param {!angular.JQLite} panelEl
  * @return {boolean}
+ * @private
  */
 MdPanelPosition.prototype._isOnscreen = function(panelEl) {
   // this works because we always use fixed positioning for the panel,
@@ -2531,17 +2538,21 @@ MdPanelPosition.prototype._reduceTranslateValues =
 MdPanelPosition.prototype._setPanelPosition = function(panelEl) {
   // Only calculate the position if necessary.
   if (this._absolute) {
+    this._setTransform(panelEl);
     return;
   }
 
   if (this._actualPosition) {
     this._calculatePanelPosition(panelEl, this._actualPosition);
+    this._setTransform(panelEl);
     return;
   }
 
   for (var i = 0; i < this._positions.length; i++) {
     this._actualPosition = this._positions[i];
     this._calculatePanelPosition(panelEl, this._actualPosition);
+    this._setTransform(panelEl);
+
     if (this._isOnscreen(panelEl)) {
       break;
     }
