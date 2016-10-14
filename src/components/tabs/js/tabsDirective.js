@@ -169,7 +169,6 @@ function MdTabs ($$mdSvgRegistry) {
                   'class="md-tab" ' +
                   'tabindex="-1" ' +
                   'id="tab-item-{{::tab.id}}" ' +
-                  'role="tab" ' +
                   'aria-controls="tab-content-{{::tab.id}}" ' +
                   'aria-selected="{{tab.isActive()}}" ' +
                   'aria-disabled="{{tab.scope.disabled || \'false\'}}" ' +
