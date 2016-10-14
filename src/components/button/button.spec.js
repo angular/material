@@ -59,20 +59,52 @@ describe('md-button', function() {
     expect(button.hasClass('md-button')).toBe(true);
   }));
 
-  it('should not set focus state on mousedown', inject(function ($compile, $rootScope){
+  it('should apply focus effect with keyboard interaction', inject(function ($compile, $rootScope){
     var button = $compile('<md-button>')($rootScope.$new());
+    var body = angular.element(document.body);
+
     $rootScope.$apply();
-    button.triggerHandler('mousedown');
-    expect(button[0]).not.toHaveClass('md-focused');
+
+    // Fake a keyboard interaction for the $mdInteraction service.
+    body.triggerHandler('keydown');
+    button.triggerHandler('focus');
+
+    expect(button).toHaveClass('md-focused');
+
+    button.triggerHandler('blur');
+
+    expect(button).not.toHaveClass('md-focused');
   }));
 
-  it('should set focus state on focus and remove on blur', inject(function ($compile, $rootScope){
+  it('should apply focus effect when programmatically focusing', inject(function ($compile, $rootScope){
     var button = $compile('<md-button>')($rootScope.$new());
+
     $rootScope.$apply();
+
     button.triggerHandler('focus');
-    expect(button[0]).toHaveClass('md-focused');
+
+    expect(button).toHaveClass('md-focused');
+
     button.triggerHandler('blur');
-    expect(button[0]).not.toHaveClass('md-focused');
+
+    expect(button).not.toHaveClass('md-focused');
+  }));
+
+  it('should not apply focus effect with mouse interaction', inject(function ($compile, $rootScope){
+    var button = $compile('<md-button>')($rootScope.$new());
+    var body = angular.element(document.body);
+
+    $rootScope.$apply();
+
+    // Fake a mouse interaction for the $mdInteraction service.
+    body.triggerHandler('mousedown');
+    button.triggerHandler('focus');
+
+    expect(button).not.toHaveClass('md-focused');
+
+    button.triggerHandler('blur');
+
+    expect(button).not.toHaveClass('md-focused');
   }));
 
   it('should not set the focus state if focus is disabled', inject(function($compile, $rootScope) {

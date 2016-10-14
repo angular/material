@@ -33,13 +33,15 @@ angular
  * </hljs>
  *
  */
-function MdInteractionService($timeout) {
+function MdInteractionService($timeout, $mdUtil) {
   this.$timeout = $timeout;
+  this.$mdUtil = $mdUtil;
 
   this.bodyElement = angular.element(document.body);
   this.isBuffering = false;
   this.bufferTimeout = null;
   this.lastInteractionType = null;
+  this.lastInteractionTime = null;
 
   // Type Mappings for the different events
   // There will be three three interaction types
@@ -87,7 +89,7 @@ MdInteractionService.prototype.initializeEvents = function() {
 
 /**
  * Event listener for normal interaction events, which should be tracked.
- * @param event {MouseEvent|KeyboardEvent|PointerEvent}
+ * @param event {MouseEvent|KeyboardEvent|PointerEvent|TouchEvent}
  */
 MdInteractionService.prototype.onInputEvent = function(event) {
   if (this.isBuffering) {
@@ -101,6 +103,7 @@ MdInteractionService.prototype.onInputEvent = function(event) {
   }
 
   this.lastInteractionType = type;
+  this.lastInteractionTime = this.$mdUtil.now();
 };
 
 /**
@@ -129,4 +132,18 @@ MdInteractionService.prototype.onBufferInputEvent = function(event) {
  */
 MdInteractionService.prototype.getLastInteractionType = function() {
   return this.lastInteractionType;
+};
+
+/**
+ * @ngdoc method
+ * @name $mdInteraction#isUserInvoked
+ * @description Method to detect whether any interaction happened recently or not.
+ * @param {number=} checkDelay Time to check for any interaction to have been triggered.
+ * @returns {boolean} Whether there was any interaction or not.
+ */
+MdInteractionService.prototype.isUserInvoked = function(checkDelay) {
+  var delay = angular.isNumber(checkDelay) ? checkDelay : 15;
+
+  // Check for any interaction to be within the specified check time.
+  return this.lastInteractionTime >= this.$mdUtil.now() - delay;
 };
