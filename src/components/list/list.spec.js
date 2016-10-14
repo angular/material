@@ -294,7 +294,7 @@ describe('mdListItem directive', function() {
 
     // The actual click button will be a child of the button.md-no-style wrapper.
     var buttonExecutor = buttonWrap.children()[0];
-    
+
     expect(buttonExecutor.nodeName).toBe('MD-BUTTON');
     expect(buttonExecutor.getAttribute('aria-label')).toBe('Hello');
   });
@@ -497,7 +497,7 @@ describe('mdListItem directive', function() {
 
       var mdMenuButton = listItem[0].querySelector('md-menu > md-button');
 
-      expect(mdMenuButton.getAttribute('ng-click')).toBe('$mdOpenMenu($event)');
+      expect(mdMenuButton.getAttribute('ng-click')).toBe('$mdMenu.open($event)');
     });
   });
 

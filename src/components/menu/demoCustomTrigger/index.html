@@ -1,0 +1,21 @@
+<div class="md-menu-demo" ng-cloak>
+  <div class="menu-demo-container" layout-align="center center" layout="column">
+    <h2 class="md-title">Custom triggers</h2>
+    <p>
+      You can customize the events that open and close a menu by using the <code>$mdMenu.open</code> and
+      <code>$mdMenu.close</code> methods. This is an example of triggering a menu on hover, instead of click.
+    </p>
+
+    <md-menu>
+      <md-button aria-label="Open menu with custom trigger" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
+        <md-icon md-menu-origin md-svg-icon="call:textsms"></md-icon>
+      </md-button>
+      <md-menu-content width="4" ng-mouseleave="$mdMenu.close()">
+        <md-menu-item ng-repeat="item in [1, 2, 3]">
+          <md-button>
+            Option {{item}}
+          </md-button>
+        </md-menu-item>
+    </md-menu>
+  </div>
+</div>
