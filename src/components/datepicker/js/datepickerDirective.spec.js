@@ -128,6 +128,15 @@ describe('md-datepicker', function() {
     expect(ngElement.attr('type')).toBe('date');
   });
 
+  it('should pass the timezone to the formatting function', function() {
+    spyOn(dateLocale, 'formatDate');
+
+    createDatepickerInstance('<md-datepicker ng-model="myDate" ' +
+      'ng-model-options="{ timezone: \'utc\' }"></md-datepicker>');
+
+    expect(dateLocale.formatDate).toHaveBeenCalledWith(pageScope.myDate, 'utc');
+  });
+
   describe('ngMessages support', function() {
     it('should set the `required` $error flag', function() {
       pageScope.isRequired = true;
