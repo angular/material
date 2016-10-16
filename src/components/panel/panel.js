@@ -2153,6 +2153,12 @@ MdPanelPosition.absPosition = {
   LEFT: 'left'
 };
 
+/**
+ * Margin between the edges of a panel and the viewport.
+ * @const {number}
+ */
+MdPanelPosition.viewportMargin = 8;
+
 
 /**
  * Sets absolute positioning for the panel.
@@ -2536,6 +2542,9 @@ MdPanelPosition.prototype._reduceTranslateValues =
  * @private
  */
 MdPanelPosition.prototype._setPanelPosition = function(panelEl) {
+  // Remove the class in case it has been added before.
+  panelEl.removeClass('_md-panel-position-adjusted');
+
   // Only calculate the position if necessary.
   if (this._absolute) {
     this._setTransform(panelEl);
@@ -2554,11 +2563,48 @@ MdPanelPosition.prototype._setPanelPosition = function(panelEl) {
     this._setTransform(panelEl);
 
     if (this._isOnscreen(panelEl)) {
-      break;
+      return;
+    }
+  }
+
+  // Class that can be used to re-style the panel if it was repositioned.
+  panelEl.addClass('_md-panel-position-adjusted');
+  this._constrainToViewport(panelEl);
+};
+
+
+/**
+ * Constrains a panel's position to the viewport.
+ * @param {!angular.JQLite} panelEl
+ * @private
+ */
+MdPanelPosition.prototype._constrainToViewport = function(panelEl) {
+  var margin = MdPanelPosition.viewportMargin;
+
+  if (this.getTop()) {
+    var top = parseInt(this.getTop());
+    var bottom = panelEl[0].offsetHeight + top;
+    var viewportHeight = this._$window.innerHeight;
+
+    if (top < margin) {
+      this._top = margin + 'px';
+    } else if (bottom > viewportHeight) {
+      this._top = top - (bottom - viewportHeight + margin) + 'px';
+    }
+  }
+
+  if (this.getLeft()) {
+    var left = parseInt(this.getLeft());
+    var right = panelEl[0].offsetWidth + left;
+    var viewportWidth = this._$window.innerWidth;
+
+    if (left < margin) {
+      this._left = margin + 'px';
+    } else if (right > viewportWidth) {
+      this._left = left - (right - viewportWidth + margin) + 'px';
     }
   }
 };
-
 
 /**
  * Switches between 'start' and 'end'.
