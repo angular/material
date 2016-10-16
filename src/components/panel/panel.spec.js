@@ -2127,8 +2127,8 @@ describe('$mdPanel', function() {
 
           myButton.css({
             position: 'absolute',
-            right: 0,
-            bottom: 0
+            left: '100%',
+            top: '100%'
           });
 
           config.position = position;
