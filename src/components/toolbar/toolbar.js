@@ -122,7 +122,7 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
          *
          */
         function onChangeScrollShrink(shrinkWithScroll) {
-          var closestContent = element.siblings('md-content');
+          var closestContent = element.parent().children('md-content');
 
           // If we have a content element, fake the call; this might still fail
           // if the content element isn't a sibling of the toolbar
