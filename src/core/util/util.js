@@ -283,20 +283,25 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
         var viewportTop = $mdUtil.getViewportTop();
         var clientWidth = body.clientWidth;
+        var hasVerticalScrollbar = body.scrollHeight > body.clientHeight + 1;
 
-        if (body.scrollHeight > body.clientHeight + 1) {
-
+        if (hasVerticalScrollbar) {
           angular.element(body).css({
             position: 'fixed',
             width: '100%',
             top: -viewportTop + 'px'
           });
-
-          documentElement.style.overflowY = 'scroll';
         }
 
         if (body.clientWidth < clientWidth) {
           body.style.overflow = 'hidden';
+        }
+
+        // This should be applied after the manipulation to the body, because
+        // adding a scrollbar can potentially resize it, causing the measurement
+        // to change.
+        if (hasVerticalScrollbar) {
+          documentElement.style.overflowY = 'scroll';
         }
 
         return function restoreScroll() {
