@@ -33,8 +33,6 @@ cache:
 branches:
   only:
   - master
-  - patch
-  - feat/panel
 
 install:
 - npm install
