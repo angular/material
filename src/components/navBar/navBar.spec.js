@@ -33,7 +33,9 @@ describe('mdNavBar', function() {
 
   function createTabs() {
     create(
-        '<md-nav-bar md-selected-nav-item="selectedTabRoute" nav-bar-aria-label="{{ariaLabel}}">' +
+        '<md-nav-bar md-selected-nav-item="selectedTabRoute" ' +
+        '            md-no-ink-bar="noInkBar" ' +
+        '            nav-bar-aria-label="{{ariaLabel}}">' +
         '  <md-nav-item md-nav-href="#1" name="tab1">' +
         '    tab1' +
         '  </md-nav-item>' +
@@ -172,6 +174,21 @@ describe('mdNavBar', function() {
 
       expect(parseInt(getInkbarEl().style.left))
           .toBeCloseTo(getTab('tab3')[0].offsetLeft, 0.1);
+    });
+
+    it('should hide if md-no-ink-bar is enabled', function() {
+      $scope.noInkBar = false;
+      $scope.selectedTabRoute = 'tab1';
+
+      createTabs();
+
+      expect(getInkbarEl().offsetParent).toBeTruthy();
+
+      $scope.$apply('noInkBar = true');
+      expect(getInkbarEl().offsetParent).not.toBeTruthy();
+
+      $scope.$apply('noInkBar = false');
+      expect(getInkbarEl().offsetParent).toBeTruthy();
     });
   });
 

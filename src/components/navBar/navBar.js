@@ -36,6 +36,7 @@ angular.module('material.components.navBar', ['material.core'])
  *
  * @param {string=} mdSelectedNavItem The name of the current tab; this must
  * match the name attribute of `<md-nav-item>`
+ * @param {boolean=} mdNoInkBar If set to true, the ink bar will be hidden.
  * @param {string=} navBarAriaLabel An aria-label for the nav-bar
  *
  * @usage
@@ -101,6 +102,7 @@ function MdNavBar($mdAria, $mdTheming) {
     bindToController: true,
     scope: {
       'mdSelectedNavItem': '=?',
+      'mdNoInkBar': '=?',
       'navBarAriaLabel': '@?',
     },
     template:
@@ -114,7 +116,7 @@ function MdNavBar($mdAria, $mdTheming) {
             'aria-label="{{ctrl.navBarAriaLabel}}">' +
           '</ul>' +
         '</nav>' +
-        '<md-nav-ink-bar></md-nav-ink-bar>' +
+        '<md-nav-ink-bar ng-hide="ctrl.mdNoInkBar"></md-nav-ink-bar>' +
       '</div>',
     link: function(scope, element, attrs, ctrl) {
       $mdTheming(element);
@@ -240,7 +242,7 @@ MdNavBarController.prototype._updateInkBarStyles = function(tab, newIndex, oldIn
 
   this._inkbar.css({display: newIndex < 0 ? 'none' : ''});
 
-  if(tab){
+  if (tab) {
     var tabEl = tab.getButtonEl();
     var left = tabEl.offsetLeft;
 
