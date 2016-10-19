@@ -46,11 +46,13 @@ md-autocomplete {
   }
   &[md-floating-label] {
     border-radius: 0;
+    margin: 18px 0px;
     background: transparent;
     height: auto;
 
     md-input-container {
       padding-bottom: 0px;
+      margin: 0px;
     }
     md-autocomplete-wrap {
       height: auto;
