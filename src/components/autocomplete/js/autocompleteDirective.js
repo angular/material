@@ -65,7 +65,10 @@ angular
  *   </md-autocomplete>
  * </hljs>
  *
+ * ### Styling & CSS
  *
+ * The autocomplete offers the `md-hide-clear-button` class since Version 1.1.2 to allow developers
+ * to hide the clear button if they do not wish to use it.
  *
  * @param {expression} md-items An expression in the format of `item in results` to iterate over
  *     matches for your search.<br/><br/>
@@ -366,6 +369,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
                 aria-activedescendant=""\
                 aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
             <button\
+                class="md-clear-button"\
                 type="button"\
                 tabindex="-1"\
                 ng-if="$mdAutocompleteCtrl.scope.searchText && !$mdAutocompleteCtrl.isDisabled"\

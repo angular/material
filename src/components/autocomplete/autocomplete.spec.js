@@ -2391,4 +2391,63 @@ describe('<md-autocomplete>', function() {
     element.remove();
   });
 
+  describe('CSS API', function() {
+    describe('md-hide-clear-button', function() {
+      it('does not hide the clear button by default', function() {
+        var scope = createScope();
+        var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+
+        var element = compile(template, scope);
+        var ctrl = element.controller('mdAutocomplete');
+
+        // Make sure to append it to the page so getComputedStyle() works below
+        document.body.appendChild(element[0]);
+
+        scope.$apply('searchText = "fa"');
+
+        var clearButton = element[0].querySelector('.md-clear-button');
+
+        expect(window.getComputedStyle(clearButton).display).not.toEqual('none');
+
+        element.remove();
+      });
+
+      it('hides the clear button when utilized', function() {
+        var scope = createScope();
+        var template = '\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder"\
+              class="md-hide-clear-button">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+
+        var element = compile(template, scope);
+        var ctrl = element.controller('mdAutocomplete');
+
+        // Make sure to append it to the page so getComputedStyle() works below
+        document.body.appendChild(element[0]);
+
+        scope.$apply('searchText = "fa"');
+
+        var clearButton = element[0].querySelector('.md-clear-button');
+
+        expect(window.getComputedStyle(clearButton).display).toEqual('none');
+
+        element.remove();
+      });
+    });
+  });
+
 });
