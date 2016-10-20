@@ -125,6 +125,16 @@
   .#{$flexName}-noshrink    { flex: 1 0 auto;  box-sizing: border-box; }
   .#{$flexName}-nogrow      { flex: 0 1 auto;  box-sizing: border-box; }
 
+   .layout-row {
+    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33.33%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
+    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66.66%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
+  }
+
+  .layout-column {
+    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33.33%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
+    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66.66%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
+  }
+
   // (1-20) * 5 = 0-100%
   @for $i from 0 through 20 {
     $value : #{$i * 5 + '%'};
@@ -153,15 +163,7 @@
       box-sizing: border-box;
     }
 
-    .layout-row {
-	    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33.33%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
-	    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66.66%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
-	  }
-
-	  .layout-column {
-	    > .#{$flexName}-33   , > .#{$flexName}-33     {  flex: 1 1 33.33%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
-	    > .#{$flexName}-66   , > .#{$flexName}-66     {  flex: 1 1 66.66%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
-	  }
+   
 
     .layout#{$name}-row > .#{$flexName}-#{$i * 5} {
       flex: 1 1 100%;
