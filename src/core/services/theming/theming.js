@@ -898,11 +898,8 @@ function generateAllThemes($injector, $mdTheming) {
   // components as templates
 
   // Break the CSS into individual rules
-  var rules = themeCss
-                  .split(/\}(?!(\}|'|"|;))/)
-                  .filter(function(rule) { return rule && rule.trim().length; })
-                  .map(function(rule) { return rule.trim() + '}'; });
-
+  var rules = splitCss(themeCss)
+                .map(function(rule) { return rule.trim(); });
 
   var ruleMatchRegex = new RegExp('md-(' + THEME_COLOR_TYPES.join('|') + ')', 'g');
 
@@ -1002,6 +999,48 @@ function generateAllThemes($injector, $mdTheming) {
         }
       }
     });
+  }
+
+  // Split a string representing a CSS file producing an array with a rule in each element of it.
+  function splitCss(themeCss) {
+    var result = [];
+    var currentRule = '';
+    var openedCurlies = 0;
+    var closedCurlies = 0;
+
+    for (var i = 0; i < themeCss.length; i++) {
+      var character = themeCss.charAt(i);
+
+      // Check for content in quotes
+      if (character === '\'' || character === '\"') {
+        // Append text in quotes to current rule
+        var textInQuotes = themeCss.substring(i, themeCss.indexOf(character, i + 1));
+        currentRule += textInQuotes;
+
+        // Jump to the closing quote char
+        i += textInQuotes.length;
+      } else {
+        currentRule += character;
+
+        if (character === '}') {
+          closedCurlies++;
+          if (closedCurlies === openedCurlies) {
+            closedCurlies = 0;
+            openedCurlies = 0;
+            result.push(currentRule);
+            currentRule = '';
+          }
+        } else if (character === '{') {
+          openedCurlies++;
+        }
+      }
+    }
+    // Add comments added after last valid rule.
+    if (currentRule !== '') {
+      result.push(currentRule);
+    }
+
+    return result;
   }
 }
 
