@@ -3,6 +3,7 @@ describe('md-colors', function () {
   var $mdColorPalette, $mdTheming;
   var supplant, scope;
   var compiledElements = [];
+  var usesRGBA;
 
   beforeEach(module('material.components.colors', function ($mdThemingProvider) {
     $mdThemingProvider.theme('myTheme')
@@ -17,6 +18,7 @@ describe('md-colors', function () {
     $mdTheming = $injector.get('$mdTheming');
     supplant = $injector.get('$mdUtil').supplant;
     scope = $rootScope.$new();
+    checkColorMode();
   }));
 
   afterEach(function() {
@@ -27,14 +29,8 @@ describe('md-colors', function () {
     compiledElements = [];
   });
 
-  // documentMode is an only-IE property, which confirms that the specs are currently running inside
-  // of an Internet Explorer.
-  var isIE = !!window.document.documentMode;
-
   function buildColor(red, green, blue, opacity) {
-    // Once the current test browser is IE11, we always have to build a RGBA string, because
-    // IE11 automatically transforms all RGB colors into RGBA.
-    if (angular.isDefined(opacity) || isIE) {
+    if (angular.isDefined(opacity) || usesRGBA) {
       return supplant('rgba({0}, {1}, {2}, {3})', [red, green, blue, opacity || 1]);
     } else {
       return supplant('rgb({0}, {1}, {2})', [red, green, blue]);
@@ -46,6 +42,15 @@ describe('md-colors', function () {
     var element = $compile(template)(scope);
     compiledElements.push(element);
     return element;
+  }
+
+  // Checks whether the current browser uses RGB or RGBA colors. This is
+  // necessary, because IE and Edge automatically convert RGB colors to RGBA.
+  function checkColorMode() {
+    if (angular.isUndefined(usesRGBA)) {
+      var testerElement = compile('<div md-colors="{background: \'red\'}" >');
+      usesRGBA = testerElement[0].style.background.indexOf('rgba') === 0;
+    }
   }
 
   describe('directive', function () {
