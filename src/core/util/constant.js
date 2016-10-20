@@ -5,12 +5,12 @@ angular.module('material.core')
  * Factory function that creates the grab-bag $mdConstant service.
  * @ngInject
  */
-function MdConstantFactory($sniffer, $window, $document) {
+function MdConstantFactory() {
 
-  var vendorPrefix = $sniffer.vendorPrefix;
+  var prefixTestEl = document.createElement('div');
+  var vendorPrefix = getVendorPrefix(prefixTestEl);
   var isWebkit = /webkit/i.test(vendorPrefix);
   var SPECIAL_CHARS_REGEXP = /([:\-_]+(.))/g;
-  var prefixTestEl = document.createElement('div');
 
   function vendorProperty(name) {
     // Add a dash between the prefix and name, to be able to transform the string into camelcase.
@@ -18,19 +18,30 @@ function MdConstantFactory($sniffer, $window, $document) {
     var ucPrefix = camelCase(prefixedName);
     var lcPrefix = ucPrefix.charAt(0).toLowerCase() + ucPrefix.substring(1);
 
-    return hasStyleProperty(name)     ? name     :       // The current browser supports the un-prefixed property
-           hasStyleProperty(ucPrefix) ? ucPrefix :       // The current browser only supports the prefixed property.
-           hasStyleProperty(lcPrefix) ? lcPrefix : name; // Some browsers are only supporting the prefix in lowercase.
+    return hasStyleProperty(prefixTestEl, name)     ? name     :       // The current browser supports the un-prefixed property
+           hasStyleProperty(prefixTestEl, ucPrefix) ? ucPrefix :       // The current browser only supports the prefixed property.
+           hasStyleProperty(prefixTestEl, lcPrefix) ? lcPrefix : name; // Some browsers are only supporting the prefix in lowercase.
   }
 
-  function hasStyleProperty(property) {
-    return angular.isDefined(prefixTestEl.style[property]);
+  function hasStyleProperty(testElement, property) {
+    return angular.isDefined(testElement.style[property]);
   }
 
   function camelCase(input) {
     return input.replace(SPECIAL_CHARS_REGEXP, function(matches, separator, letter, offset) {
       return offset ? letter.toUpperCase() : letter;
     });
+  }
+
+  function getVendorPrefix(testElement) {
+    var prop, match;
+    var vendorRegex = /^(Moz|webkit|ms)(?=[A-Z])/;
+
+    for (prop in testElement.style) {
+      if (match = vendorRegex.exec(prop)) {
+        return match[0];
+      }
+    }
   }
 
   var self = {
