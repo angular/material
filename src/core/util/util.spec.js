@@ -651,6 +651,31 @@ describe('util', function() {
     });
   });
 
+  describe('getSiblings', function() {
+    var $mdUtil;
+
+    beforeEach(inject(function(_$mdUtil_) {
+      $mdUtil = _$mdUtil_;
+    }));
+
+    it('should be able to get the siblings (wihout source element) of a particular node type', function() {
+      var parent = angular.element('<h1>');
+      var element = angular.element('<h2>');
+      var sibling = angular.element('<h2>');
+
+      parent.append(element);
+      parent.append(sibling);
+
+      var result = $mdUtil.getSiblings(element, 'h2');
+
+      expect(result).toBeTruthy();
+      expect(result.length).toBe(1);
+      expect(result[0]).toBe(sibling[0]);
+
+      parent.remove();
+    });
+  });
+
   describe('getClosest', function() {
     var $mdUtil;
 

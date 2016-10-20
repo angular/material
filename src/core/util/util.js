@@ -526,6 +526,21 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       }
     },
 
+    /**
+     * Get an element siblings matching a given tag name
+     *
+     * @param el Element to start walking the DOM from
+     * @param tagName Tag name to match
+     */
+    getSiblings: function getSiblings(element, tagName) {
+      var upperCasedTagName = tagName.toUpperCase();
+      if (element instanceof angular.element) element = element[0];
+      var siblings = Array.prototype.filter.call(element.parentNode.children, function(node) {
+        return element !== node && node.tagName.toUpperCase() === upperCasedTagName;
+      });
+      return angular.element(siblings);
+    },
+
     /*
      * getClosest replicates jQuery.closest() to walk up the DOM tree until it finds a matching nodeName
      *
