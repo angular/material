@@ -525,9 +525,38 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         parent.$$childHead = parent.$$childTail = child;
       }
     },
+    
+    /**
+     * Get an element direct children matching a given tag name
+     *
+     * @param element Element to start walking the DOM from
+     * @param tagName Tag name to match
+     */
+    getChildren: function getChildren(element, tagName) {
+      var upperCasedTagName = tagName.toUpperCase();
+      if (element instanceof angular.element) element = element[0];
+      return Array.prototype.filter.call(element.children, function(node) { 
+        return node.tagName === upperCasedTagName; 
+      });
+    },
+    
+    /**
+     * Get an element siblings matching a given tag name
+     *
+     * @param el Element to start walking the DOM from
+     * @param tagName Tag name to match
+     */
+    getSiblings: function getSiblings(element, tagName) {
+      var upperCasedTagName = tagName.toUpperCase();
+      if (element instanceof angular.element) element = element[0];
+      return Array.prototype.filter.call(element.parentNode.children, function(node) { 
+        return element !== node && node.tagName === upperCasedTagName; 
+      });
+    },
 
     /*
-     * getClosest replicates jQuery.closest() to walk up the DOM tree until it finds a matching nodeName
+     * get
+     replicates jQuery.closest() to walk up the DOM tree until it finds a matching nodeName
      *
      * @param el Element to start walking the DOM from
      * @param check Either a string or a function. If a string is passed, it will be evaluated against
