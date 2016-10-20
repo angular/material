@@ -1055,3 +1055,89 @@ describe('md-themable directive', function() {
     expect(el.hasClass('md-default-theme')).toBe(true);
   }));
 });
+
+describe('$mdThemeProvider with custom styles that include nested rules', function() {
+  it('appends the custom styles taking into account nesting', function() {
+    module('material.core', function($mdThemingProvider) {
+      $mdThemingProvider.generateThemesOnDemand(false);
+      var styles =
+          '@media (min-width: 0) and (max-width: 700px) {'
+          + '  .md-THEME_NAME-theme .layout-row {'
+          + '    background-color: "{{primary-500}}";'
+          + '  }'
+          + '  .md-THEME_NAME-theme .layout-column {'
+          + '    color: blue;'
+          + '    font-weight: bold;'
+          + '  }'
+          + '}';
+
+      $mdThemingProvider.registerStyles(styles);
+      $mdThemingProvider.theme('register-custom-nested-styles');
+    });
+
+    inject(function($MD_THEME_CSS) {
+      // Verify that $MD_THEME_CSS is still set to '/**/' in the test environment.
+      // Check angular-material-mocks.js for $MD_THEME_CSS latest value if this test starts to fail.
+      expect($MD_THEME_CSS).toBe('/**/');
+    });
+
+    var compiledStyles =
+        '@media (min-width: 0) and (max-width: 700px) {'
+        + '  .md-register-custom-nested-styles-theme .layout-row {'
+        + '    background-color: rgb(63,81,181);'
+        + '  }'
+        + '  .md-register-custom-nested-styles-theme .layout-column {'
+        + '    color: blue;'
+        + '    font-weight: bold;'
+        + '  }'
+        + '}';
+
+    // Find the string containing nested rules in the head tag.
+    expect(document.head.innerHTML).toContain(compiledStyles);
+  });
+});
+
+describe('$mdThemeProvider with custom styles that include multiple nested rules', function() {
+  it('appends the custom styles taking into account multiple nesting', function() {
+    module('material.core', function($mdThemingProvider) {
+      $mdThemingProvider.generateThemesOnDemand(false);
+      var styles =
+          '@supports (display: bar) {'
+          + '  @media (min-width: 0) and (max-width: 700px) {'
+          + '    .md-THEME_NAME-theme .layout-row {'
+          + '      background-color: "{{primary-500}}";'
+          + '    }'
+          + '    .md-THEME_NAME-theme .layout-column {'
+          + '      color: blue;'
+          + '      font-weight: bold;'
+          + '    }'
+          + '  }'
+          + '}';
+
+      $mdThemingProvider.registerStyles(styles);
+      $mdThemingProvider.theme('register-custom-multiple-nested-styles');
+    });
+
+    inject(function($MD_THEME_CSS) {
+      // Verify that $MD_THEME_CSS is still set to '/**/' in the test environment.
+      // Check angular-material-mocks.js for $MD_THEME_CSS latest value if this test starts to fail.
+      expect($MD_THEME_CSS).toBe('/**/');
+    });
+
+    var compiledStyles =
+        '@supports (display: bar) {'
+        + '  @media (min-width: 0) and (max-width: 700px) {'
+        + '    .md-register-custom-multiple-nested-styles-theme .layout-row {'
+        + '      background-color: rgb(63,81,181);'
+        + '    }'
+        + '    .md-register-custom-multiple-nested-styles-theme .layout-column {'
+        + '      color: blue;'
+        + '      font-weight: bold;'
+        + '    }'
+        + '  }'
+        + '}';
+
+    // Find the string containing nested rules in the head tag.
+    expect(document.head.innerHTML).toContain(compiledStyles);
+  });
+});
