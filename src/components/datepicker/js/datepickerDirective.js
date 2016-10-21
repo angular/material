@@ -409,11 +409,7 @@
             'Currently the model is a: ' + (typeof value));
       }
 
-      self.date = value;
-      self.inputElement.value = self.dateLocale.formatDate(value);
-      self.mdInputContainer && self.mdInputContainer.setHasValue(!!value);
-      self.resizeInputElement();
-      self.updateErrorState();
+      self.onExternalChange(value);
 
       return value;
     });
@@ -444,12 +440,8 @@
 
     self.$scope.$on('md-calendar-change', function(event, date) {
       self.setModelValue(date);
-      self.date = date;
-      self.inputElement.value = self.dateLocale.formatDate(date);
-      self.mdInputContainer && self.mdInputContainer.setHasValue(!!date);
+      self.onExternalChange(date);
       self.closeCalendarPane();
-      self.resizeInputElement();
-      self.updateErrorState();
     });
 
     self.ngInputElement.on('input', angular.bind(self, self.resizeInputElement));
@@ -860,6 +852,22 @@
    * @param {Date=} value Date to be set as the model value.
    */
   DatePickerCtrl.prototype.setModelValue = function(value) {
-    this.ngModelCtrl.$setViewValue(this.ngDateFilter(value, 'yyyy-MM-dd'));
+    var timezone = this.$mdUtil.getModelOption(this.ngModelCtrl, 'timezone');
+    this.ngModelCtrl.$setViewValue(this.ngDateFilter(value, 'yyyy-MM-dd', timezone));
+  };
+
+  /**
+   * Updates the datepicker when a model change occurred externally.
+   * @param {Date=} value Value that was set to the model.
+   */
+  DatePickerCtrl.prototype.onExternalChange = function(value) {
+    var timezone = this.$mdUtil.getModelOption(this.ngModelCtrl, 'timezone');
+
+    this.date = value;
+    this.inputElement.value = this.dateLocale.formatDate(value, timezone);
+    this.mdInputContainer && this.mdInputContainer.setHasValue(!!value);
+    this.closeCalendarPane();
+    this.resizeInputElement();
+    this.updateErrorState();
   };
 })();

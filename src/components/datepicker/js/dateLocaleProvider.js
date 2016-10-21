@@ -21,7 +21,8 @@
    * @property {(Array<string>)=} firstDayOfWeek The first day of the week. Sunday = 0, Monday = 1,
    *    etc.
    * @property {(function(string): Date)=} parseDate Function to parse a date object from a string.
-   * @property {(function(Date): string)=} formatDate Function to format a date object to a string.
+   * @property {(function(Date, string): string)=} formatDate Function to format a date object to a
+   *     string. The datepicker directive also provides the time zone, if it was specified.
    * @property {(function(Date): string)=} monthHeaderFormatter Function that returns the label for
    *     a month given a date.
    * @property {(function(Date): string)=} monthFormatter Function that returns the full name of a month
@@ -161,9 +162,10 @@
       /**
        * Default date-to-string formatting function.
        * @param {!Date} date
+       * @param {string=} timezone
        * @returns {string}
        */
-      function defaultFormatDate(date) {
+      function defaultFormatDate(date, timezone) {
         if (!date) {
           return '';
         }
@@ -180,7 +182,7 @@
           formatDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 1, 0, 0);
         }
 
-        return $filter('date')(formatDate, 'M/d/yyyy');
+        return $filter('date')(formatDate, 'M/d/yyyy', timezone);
       }
 
       /**
