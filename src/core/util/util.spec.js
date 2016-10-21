@@ -98,7 +98,7 @@ describe('util', function() {
         };
 
         expect(function() {
-          $mdUtil.getModelOption(ngModelCtrl, 'Unknown')
+          $mdUtil.getModelOption(ngModelCtrl, 'Unknown');
         }).not.toThrow();
       }));
 
@@ -268,7 +268,7 @@ describe('util', function() {
         element.remove();
       }));
 
-      it('should not remove the element when being use as scorll mask', inject(function($mdUtil) {
+      it('should not remove the element when being use as scroll mask', inject(function($mdUtil) {
         var element = angular.element('<div>');
 
         document.body.appendChild(element[0]);
@@ -285,6 +285,27 @@ describe('util', function() {
         element.remove();
       }));
 
+      it('should not get thrown off by the scrollbar on the <html> node',
+        inject(function($mdUtil) {
+          var element = angular.element('<div style="height: 2000px">');
+
+          document.body.appendChild(element[0]);
+          document.body.style.overflowX = 'hidden';
+
+          window.scrollTo(0, 1000);
+
+          var enableScrolling = $mdUtil.disableScrollAround(element);
+
+          expect(document.body.style.overflow).not.toBe('hidden');
+
+          // Restore the scrolling.
+          enableScrolling();
+          window.scrollTo(0, 0);
+          document.body.style.overflowX = '';
+
+          element.remove();
+        })
+      );
     });
 
     describe('getViewportTop', function() {
