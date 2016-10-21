@@ -67,7 +67,7 @@ describe('mdProgressCircular', function() {
     expect(progress.attr('aria-valuenow')).toEqual('50');
   });
 
-  it('should\'t set aria-valuenow in indeterminate mode', function() {
+  it('should not set aria-valuenow in indeterminate mode', function() {
     var progress = buildIndicator('<md-progress-circular md-mode="indeterminate" value="100"></md-progress-circular>');
 
     expect(progress.attr('aria-valuenow')).toBeUndefined();
@@ -109,6 +109,27 @@ describe('mdProgressCircular', function() {
   it('should set the transform origin in all dimensions', function() {
     var svg = buildIndicator('<md-progress-circular md-diameter="42px"></md-progress-circular>').find('svg').eq(0);
     expect(svg.css('transform-origin')).toBe('21px 21px 21px');
+  });
+
+  it('should adjust the element size when the diameter changes', function() {
+    $rootScope.diameter = 30;
+
+    var element = buildIndicator(
+      '<md-progress-circular value="50" md-diameter="{{diameter}}"></md-progress-circular>'
+    );
+
+    var path = element.find('path');
+    var initialPathDimensions = path.attr('d');
+
+    expect(element.css('width')).toBe('30px');
+    expect(element.css('height')).toBe('30px');
+    expect(initialPathDimensions).toBeTruthy();
+
+    $rootScope.$apply('diameter = 60');
+
+    expect(element.css('width')).toBe('60px');
+    expect(element.css('height')).toBe('60px');
+    expect(path.attr('d')).not.toBe(initialPathDimensions);
   });
 
   /**

@@ -1,5 +1,9 @@
 angular
-  .module('progressCircularDemo1', ['ngMaterial'])
+  .module('progressCircularDemo1', ['ngMaterial'], function($mdThemingProvider) {
+    $mdThemingProvider.theme('docs-dark', 'default')
+      .primaryPalette('yellow')
+      .dark();
+  })
   .controller('AppCtrl', ['$interval',
     function($interval) {
       var self = this;
