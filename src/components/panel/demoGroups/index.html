@@ -41,6 +41,43 @@
       can be useful in limiting the number of menu panels allowed open at a
       time, etc.
     </p>
+
+    <div layout="row">
+      <div layout="column" flex>
+        <h2>Multiple Groups</h2>
+        <p>
+          Panels can be added to multiple groups. The <code>groupName</code>
+          parameter in the panel configuration can be a string or an array of
+          strings. This allows for the functionality or constraints of multiple
+          groups to apply to each created panel.
+        </p>
+        <p>
+          To give an example, the menus within the toolbar above have been added
+          to the <strong>toolbar</strong> and <strong>menus</strong> groups.
+          The menus to the right have been added to the <strong>menus</strong>
+          group as well. The maximum number of open panels within the
+          <strong>toolbar</strong> group is <strong>2</strong>. Within the
+          <strong>menus</strong> group it is <strong>3</strong>. Opening the
+          menus to the right and more than one in the toolbar will result in
+          the first opened panel to the right to close.
+        </p>
+      </div>
+      <div style="width: 45px;"></div>
+      <div layout="row" flex="nogrow">
+        <md-button
+          class="md-fab md-primary"
+          aria-label="Tools"
+          ng-click="ctrl.showContentMenu($event, ctrl.tools)">
+          <md-icon md-svg-icon="img/icons/ic_build_24px.svg"></md-icon>
+        </md-button>
+        <md-button
+          class="md-fab md-accent"
+          aria-label="Code"
+          ng-click="ctrl.showContentMenu($event, ctrl.code)">
+          <md-icon md-svg-icon="img/icons/ic_code_24px.svg"></md-icon>
+        </md-button>
+      </div>
+    </div>
   </md-content>
 
 </div>

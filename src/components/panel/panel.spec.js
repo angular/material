@@ -1078,6 +1078,17 @@ describe('$mdPanel', function() {
           expect($mdPanel._groups['test']).toExist();
         });
 
+    it('should create multiple groups if an array is given for the config ' +
+        'option groupName', function() {
+          var config = {
+            groupName: ['test1', 'test2']
+          };
+          var panel = $mdPanel.create(config);
+
+          expect($mdPanel._groups['test1']).toExist();
+          expect($mdPanel._groups['test2']).toExist();
+        });
+
     it('should only create a group once', function() {
       var config = {
         groupName: 'test'
@@ -1125,6 +1136,20 @@ describe('$mdPanel', function() {
           expect(getGroupPanels('test')).toContain(panel);
         });
 
+    it('should add a panel to multiple groups when an array is given for the ' +
+        'config option groupName', function() {
+          $mdPanel.newPanelGroup('test1');
+          $mdPanel.newPanelGroup('test2');
+
+          var config = {
+            groupName: ['test1', 'test2']
+          };
+
+          var panel = $mdPanel.create(config);
+          expect(getGroupPanels('test1')).toContain(panel);
+          expect(getGroupPanels('test2')).toContain(panel);
+        });
+
     it('should remove a panel from a group using the removeFromGroup method',
         function() {
           $mdPanel.newPanelGroup('test');
@@ -1139,6 +1164,23 @@ describe('$mdPanel', function() {
           expect(getGroupPanels('test')).not.toContain(panel);
         });
 
+    it('should not remove a panel from every group that it is in using the ' +
+        'removeFromGroup method and only requesting one of the panel\'s ' +
+        'groups', function() {
+          $mdPanel.newPanelGroup('test1');
+          $mdPanel.newPanelGroup('test2');
+
+          var config = {
+            groupName: ['test1', 'test2']
+          };
+
+          var panel = $mdPanel.create(config);
+
+          panel.removeFromGroup('test1');
+          expect(getGroupPanels('test1')).not.toContain(panel);
+          expect(getGroupPanels('test2')).toContain(panel);
+        });
+
     it('should remove a panel from a group on panel destroy', function() {
       $mdPanel.newPanelGroup('test');
 
@@ -1151,6 +1193,22 @@ describe('$mdPanel', function() {
       panel.destroy();
       expect(getGroupPanels('test')).not.toContain(panel);
     });
+
+    it('should remove a panel from all of its groups on panel destroy',
+        function() {
+          $mdPanel.newPanelGroup('test1');
+          $mdPanel.newPanelGroup('test2');
+
+          var config = {
+            groupName: ['test1', 'test2']
+          };
+
+          var panel = $mdPanel.create(config);
+
+          panel.destroy();
+          expect(getGroupPanels('test1')).not.toContain(panel);
+          expect(getGroupPanels('test2')).not.toContain(panel);
+        });
 
     it('should set the maximum number of panels allowed open within a group ' +
         'using the newPanelGroup option', function() {
@@ -1190,9 +1248,27 @@ describe('$mdPanel', function() {
       expect(getGroupOpenPanels('test')).toContain(panelRef);
 
       closePanel();
-      flushPanel();
       expect(getGroupOpenPanels('test')).not.toContain(panelRef);
     });
+
+    it('should update open panels of all of the panel\'s groups when a panel ' +
+        'is closed', function() {
+          $mdPanel.newPanelGroup('test1');
+          $mdPanel.newPanelGroup('test2');
+
+          var config = {
+            groupName: ['test1', 'test2']
+          };
+
+          openPanel(config);
+          flushPanel();
+          expect(getGroupOpenPanels('test1')).toContain(panelRef);
+          expect(getGroupOpenPanels('test2')).toContain(panelRef);
+
+          closePanel();
+          expect(getGroupOpenPanels('test1')).not.toContain(panelRef);
+          expect(getGroupOpenPanels('test2')).not.toContain(panelRef);
+        });
 
     it('should close the first open panel when more than the maximum number ' +
         'of panels is opened', function() {
@@ -1221,6 +1297,64 @@ describe('$mdPanel', function() {
 
           panel2.close();
           panel3.close();
+        });
+
+    it('should close the first open panel of any group that the panel is in ' +
+        'when more than the maxium number of panels is opened', function() {
+          $mdPanel.newPanelGroup('groupWithMaxOpen1', {
+            maxOpen: 1
+          });
+          $mdPanel.newPanelGroup('groupWithMaxOpen2', {
+            maxOpen: 2
+          });
+
+          var config1 = {
+            groupName: 'groupWithMaxOpen1'
+          };
+          var config2 = {
+            groupName: 'groupWithMaxOpen2'
+          };
+          var config3 = {
+            groupName: ['groupWithMaxOpen1', 'groupWithMaxOpen2']
+          };
+
+          var panelInGroupWithMaxOpen1 = $mdPanel.create(config1);
+          var panelInBothGroups = $mdPanel.create(config3);
+          var panelInGroupWithMaxOpen2 = $mdPanel.create(config2);
+          var panel2InGroupWithMaxOpen2 = $mdPanel.create(config2);
+
+          panelInGroupWithMaxOpen1.open();
+          flushPanel();
+          expect(panelInGroupWithMaxOpen1.isAttached).toEqual(true);
+          expect(getGroupOpenPanels('groupWithMaxOpen1'))
+              .toContain(panelInGroupWithMaxOpen1);
+
+          panelInBothGroups.open();
+          flushPanel();
+          expect(panelInGroupWithMaxOpen1.isAttached).toEqual(false);
+          expect(panelInBothGroups.isAttached).toEqual(true);
+          expect(getGroupOpenPanels('groupWithMaxOpen1'))
+              .not.toContain(panelInGroupWithMaxOpen1);
+          expect(getGroupOpenPanels('groupWithMaxOpen1'))
+              .toContain(panelInBothGroups);
+          expect(getGroupOpenPanels('groupWithMaxOpen2'))
+              .toContain(panelInBothGroups);
+
+          panelInGroupWithMaxOpen2.open();
+          panel2InGroupWithMaxOpen2.open();
+          flushPanel();
+          expect(panelInBothGroups.isAttached).toEqual(false);
+          expect(panelInGroupWithMaxOpen2.isAttached).toEqual(true);
+          expect(panel2InGroupWithMaxOpen2.isAttached).toEqual(true);
+          expect(getGroupOpenPanels('groupWithMaxOpen2'))
+              .not.toContain(panelInBothGroups);
+          expect(getGroupOpenPanels('groupWithMaxOpen2'))
+              .toContain(panelInGroupWithMaxOpen2);
+          expect(getGroupOpenPanels('groupWithMaxOpen2'))
+              .toContain(panel2InGroupWithMaxOpen2);
+
+          panelInGroupWithMaxOpen2.close();
+          panel2InGroupWithMaxOpen2.close();
         });
   });
 

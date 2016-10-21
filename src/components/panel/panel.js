@@ -14,6 +14,7 @@ angular
  *                            PUBLIC DOCUMENTATION                           *
  *****************************************************************************/
 
+
 /**
  * @ngdoc service
  * @name $mdPanel
@@ -155,10 +156,11 @@ angular
  *     on when the panel closes. This is commonly the element which triggered
  *     the opening of the panel. If you do not use `origin`, you need to control
  *     the focus manually.
- *   - `groupName` - `{string=}`: Name of a panel group. This group name is used
- *     for configuring the number of open panels and identifying specific
- *     behaviors for groups. For instance, all tooltips could be identified
- *     using the same groupName.
+ *   - `groupName` - `{(string|!Array<string>)=}`: A group name or an array of
+ *     group names. The group name is used for creating a group of panels. The
+ *     group is used for configuring the number of open panels and identifying
+ *     specific behaviors for groups. For instance, all tooltips could be
+ *     identified using the same groupName.
  *
  * @returns {!MdPanelRef} panelRef
  */
@@ -685,6 +687,7 @@ angular
  *                               MdPanelAnimation                            *
  *****************************************************************************/
 
+
 /**
  * @ngdoc type
  * @name MdPanelAnimation
@@ -895,7 +898,12 @@ MdPanelService.prototype.create = function(config) {
   this._config.scope.$on('$destroy', angular.bind(panelRef, panelRef.detach));
 
   if (this._config.groupName) {
-    panelRef.addToGroup(this._config.groupName);
+    if (angular.isString(this._config.groupName)) {
+      this._config.groupName = [this._config.groupName];
+    }
+    angular.forEach(this._config.groupName, function(group) {
+      panelRef.addToGroup(group);
+    });
   }
 
   return panelRef;
@@ -987,7 +995,7 @@ MdPanelService.prototype.setGroupMaxOpen = function(groupName, maxOpen) {
  * @private
  */
 MdPanelService.prototype._openCountExceedsMaxOpen = function(groupName) {
-  if (groupName && this._groups[groupName]) {
+  if (this._groups[groupName]) {
     var group = this._groups[groupName];
     return group.maxOpen > 0 && group.openPanels.length > group.maxOpen;
   }
@@ -1001,9 +1009,7 @@ MdPanelService.prototype._openCountExceedsMaxOpen = function(groupName) {
  * @private
  */
 MdPanelService.prototype._closeFirstOpenedPanel = function(groupName) {
-  if (groupName) {
-    this._groups[groupName].openPanels[0].close();
-  }
+  this._groups[groupName].openPanels[0].close();
 };
 
 
@@ -1137,8 +1143,12 @@ MdPanelRef.prototype.open = function() {
     var done = self._done(resolve, self);
     var show = self._simpleBind(self.show, self);
     var checkGroupMaxOpen = function() {
-      if (self._$mdPanel._openCountExceedsMaxOpen(self.config.groupName)) {
-        self._$mdPanel._closeFirstOpenedPanel(self.config.groupName);
+      if (self.config.groupName) {
+        angular.forEach(self.config.groupName, function(group) {
+          if (self._$mdPanel._openCountExceedsMaxOpen(group)) {
+            self._$mdPanel._closeFirstOpenedPanel(group);
+          }
+        });
       }
     };
 
@@ -1258,8 +1268,11 @@ MdPanelRef.prototype.detach = function() {
  * Destroys the panel. The Panel cannot be opened again after this.
  */
 MdPanelRef.prototype.destroy = function() {
+  var self = this;
   if (this.config.groupName) {
-    this.removeFromGroup(this.config.groupName);
+    angular.forEach(this.config.groupName, function(group) {
+      self.removeFromGroup(group);
+    });
   }
   this.config.scope.$destroy();
   this.config.locals = null;
@@ -1294,8 +1307,9 @@ MdPanelRef.prototype.show = function() {
     var onOpenComplete = self.config['onOpenComplete'] || angular.noop;
     var addToGroupOpen = function() {
       if (self.config.groupName) {
-        var group = self._$mdPanel._groups[self.config.groupName];
-        group.openPanels.push(self);
+        angular.forEach(self.config.groupName, function(group) {
+          self._$mdPanel._groups[group].openPanels.push(self);
+        });
       }
     };
 
@@ -1336,11 +1350,14 @@ MdPanelRef.prototype.hide = function() {
     };
     var removeFromGroupOpen = function() {
       if (self.config.groupName) {
-        var group = self._$mdPanel._groups[self.config.groupName];
-        var index = group.openPanels.indexOf(self);
-        if (index > -1) {
-          group.openPanels.splice(index, 1);
-        }
+        var group, index;
+        angular.forEach(self.config.groupName, function(group) {
+          group = self._$mdPanel._groups[group];
+          index = group.openPanels.indexOf(self);
+          if (index > -1) {
+            group.openPanels.splice(index, 1);
+          }
+        });
       }
     };
     var focusOnOrigin = function() {
@@ -1884,6 +1901,7 @@ MdPanelRef.prototype._animateClose = function() {
   });
 };
 
+
 /**
  * Registers a interceptor with the panel. The callback should return a promise,
  * which will allow the action to continue when it gets resolved, or will
@@ -1913,6 +1931,7 @@ MdPanelRef.prototype.registerInterceptor = function(type, callback) {
 
   return this;
 };
+
 
 /**
  * Removes a registered interceptor.
@@ -2168,6 +2187,7 @@ MdPanelPosition.prototype.absolute = function() {
   this._absolute = true;
   return this;
 };
+
 
 /**
  * Sets the value of a position for the panel. Clears any previously set
@@ -3037,6 +3057,7 @@ MdPanelAnimation.prototype._getBoundingClientRect = function(element) {
  *                                Util Methods                               *
  *****************************************************************************/
 
+
 /**
  * Returns the angular element associated with a css selector or element.
  * @param el {string|!angular.JQLite|!Element}
@@ -3047,6 +3068,7 @@ function getElement(el) {
       document.querySelector(el) : el;
   return angular.element(queryResult);
 }
+
 
 /**
  * Gets the computed values for an element's translateX and translateY in px.
