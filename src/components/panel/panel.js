@@ -94,6 +94,8 @@ angular
  *     [$sce service](https://docs.angularjs.org/api/ng/service/$sce).
  *   - `templateUrl` - `{string=}`: The URL that will be used as the content of
  *     the panel.
+ *   - `contentElement` - `{(string|!angular.JQLite|!Element)=}`: Pre-compiled
+ *     element to be used as the panel's content.
  *   - `controller` - `{(function|string)=}`: The controller to associate with
  *     the panel. The controller can inject a reference to the returned
  *     panelRef, which allows the panel to be closed, hidden, and shown. Any
@@ -1034,6 +1036,24 @@ MdPanelService.prototype._wrapTemplate = function(origTemplate) {
 };
 
 
+/**
+ * Wraps a content element in a md-panel-outer wrapper and
+ * positions it off-screen. Allows for proper control over positoning
+ * and animations.
+ * @param {!angular.JQLite} contentElement Element to be wrapped.
+ * @return {!angular.JQLite} Wrapper element.
+ * @private
+ */
+MdPanelService.prototype._wrapContentElement = function(contentElement) {
+  var wrapper = angular.element('<div class="md-panel-outer-wrapper">');
+
+  contentElement.addClass('md-panel').css('left', '-9999px');
+  wrapper.append(contentElement);
+
+  return wrapper;
+};
+
+
 /*****************************************************************************
  *                                 MdPanelRef                                *
  *****************************************************************************/
@@ -1123,6 +1143,23 @@ function MdPanelRef(config, $injector) {
    * @private {!Object}
    */
   this._interceptors = Object.create(null);
+
+  /**
+   * Cleanup function, provided by `$mdCompiler` and assigned after the element
+   * has been compiled. When `contentElement` is used, the function is used to
+   * restore the element to it's proper place in the DOM.
+   * @private {!Function}
+   */
+  this._compilerCleanup = null;
+
+  /**
+   * Cache for saving and restoring element inline styles, CSS classes etc.
+   * @type {{styles: string, classes: string}}
+   */
+  this._restoreCache = {
+    styles: '',
+    classes: ''
+  };
 }
 
 
@@ -1241,6 +1278,14 @@ MdPanelRef.prototype.detach = function() {
       self._bottomFocusTrap.parentNode.removeChild(self._bottomFocusTrap);
     }
 
+    if (self._restoreCache.classes) {
+      self.panelEl[0].className = self._restoreCache.classes;
+    }
+
+    // Either restore the saved styles or clear the ones set by mdPanel.
+    self.panelEl[0].style.cssText = self._restoreCache.styles || '';
+
+    self._compilerCleanup();
     self.panelContainer.remove();
     self.isAttached = false;
     return self._$q.when(self);
@@ -1474,6 +1519,51 @@ MdPanelRef.prototype.toggleClass = function(toggleClass, onElement) {
 
 
 /**
+ * Compiles the panel, according to the passed in config and appends it to
+ * the DOM. Helps normalize differences in the compilation process between
+ * using a string template and a content element.
+ * @returns {!angular.$q.Promise<!MdPanelRef>} Promise that is resolved when
+ *     the element has been compiled and added to the DOM.
+ * @private
+ */
+MdPanelRef.prototype._compile = function() {
+  var self = this;
+
+  // Compile the element via $mdCompiler. Note that when using a
+  // contentElement, the element isn't actually being compiled, rather the
+  // compiler saves it's place in the DOM and provides a way of restoring it.
+  return self._$mdCompiler.compile(self.config).then(function(compileData) {
+    var config = self.config;
+
+    if (config.contentElement) {
+      var panelEl = compileData.element;
+
+      // Since mdPanel modifies the inline styles and CSS classes, we need
+      // to save them in order to be able to restore on close.
+      self._restoreCache.styles = panelEl[0].style.cssText;
+      self._restoreCache.classes = panelEl[0].className;
+
+      self.panelContainer = self._$mdPanel._wrapContentElement(panelEl);
+      self.panelEl = panelEl;
+    } else {
+      self.panelContainer = compileData.link(config['scope']);
+      self.panelEl = angular.element(
+        self.panelContainer[0].querySelector('.md-panel')
+      );
+    }
+
+    // Save a reference to the cleanup function from the compiler.
+    self._compilerCleanup = compileData.cleanup;
+
+    // Attach the panel to the proper place in the DOM.
+    getElement(self.config['attachTo']).append(self.panelContainer);
+
+    return self;
+  });
+};
+
+
+/**
  * Creates a panel and adds it to the dom.
  * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
  *     created.
@@ -1488,44 +1578,41 @@ MdPanelRef.prototype._createPanel = function() {
     }
 
     self.config.locals.mdPanelRef = self;
-    self._$mdCompiler.compile(self.config)
-        .then(function(compileData) {
-          self.panelContainer = compileData.link(self.config['scope']);
-          getElement(self.config['attachTo']).append(self.panelContainer);
 
-          if (self.config['disableParentScroll']) {
-            self._restoreScroll = self._$mdUtil.disableScrollAround(
-              null,
-              self.panelContainer,
-              { disableScrollMask: true }
-            );
-          }
+    self._compile().then(function() {
+      if (self.config['disableParentScroll']) {
+        self._restoreScroll = self._$mdUtil.disableScrollAround(
+          null,
+          self.panelContainer,
+          { disableScrollMask: true }
+        );
+      }
 
-          self.panelEl = angular.element(
-              self.panelContainer[0].querySelector('.md-panel'));
+      // Add a custom CSS class to the panel element.
+      if (self.config['panelClass']) {
+        self.panelEl.addClass(self.config['panelClass']);
+      }
 
-          // Add a custom CSS class to the panel element.
-          if (self.config['panelClass']) {
-            self.panelEl.addClass(self.config['panelClass']);
-          }
+      // Handle click and touch events for the panel container.
+      if (self.config['propagateContainerEvents']) {
+        self.panelContainer.css('pointer-events', 'none');
+      }
 
-          // Handle click and touch events for the panel container.
-          if (self.config['propagateContainerEvents']) {
-            self.panelContainer.css('pointer-events', 'none');
-          }
+      // Panel may be outside the $rootElement, tell ngAnimate to animate
+      // regardless.
+      if (self._$animate.pin) {
+        self._$animate.pin(
+          self.panelContainer,
+          getElement(self.config['attachTo'])
+        );
+      }
 
-          // Panel may be outside the $rootElement, tell ngAnimate to animate
-          // regardless.
-          if (self._$animate.pin) {
-            self._$animate.pin(self.panelContainer,
-                getElement(self.config['attachTo']));
-          }
+      self._configureTrapFocus();
+      self._addStyles().then(function() {
+        resolve(self);
+      }, reject);
+    }, reject);
 
-          self._configureTrapFocus();
-          self._addStyles().then(function() {
-            resolve(self);
-          }, reject);
-        }, reject);
   });
 };
 
