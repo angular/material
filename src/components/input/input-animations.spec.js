@@ -1,5 +1,5 @@
 describe('md-input-container animations', function() {
-  var $rootScope, $compile, $animateCss, $material,
+  var $rootScope, $compile, $animateCss, $material, $$mdInput,
     el, pageScope, invalidAnimation, messagesAnimation, messageAnimation,
     cssTransitionsDisabled = false, lastAnimateCall;
 
@@ -98,6 +98,93 @@ describe('md-input-container animations', function() {
     expect(lastAnimateCall.options.to).toEqual({"opacity": 1, "margin-top": "0"});
   });
 
+  describe('method tests', function() {
+
+    describe('#showInputMessages', function() {
+      it('logs a warning with no messages element', inject(function($log) {
+        // Note that the element does NOT have a parent md-input-messages-animation class
+        var element = angular.element('<div><div class="md-input-message-animation"></div></div>');
+        var done = jasmine.createSpy('done');
+        var warnSpy = spyOn($log, 'warn');
+
+        $$mdInput.messages.show(element, done);
+
+        expect(done).toHaveBeenCalled();
+        expect(warnSpy).toHaveBeenCalled();
+      }));
+
+      it('logs a warning with no messages children', inject(function($log) {
+        // Note that the element does NOT have any child md-input-message-animation divs
+        var element = angular.element('<div class="md-input-messages-animation"></div>');
+        var done = jasmine.createSpy('done');
+        var warnSpy = spyOn($log, 'warn');
+
+        $$mdInput.messages.show(element, done);
+
+        expect(done).toHaveBeenCalled();
+        expect(warnSpy).toHaveBeenCalled();
+      }));
+    });
+
+    describe('#hideInputMessages', function() {
+      it('logs a warning with no messages element', inject(function($log) {
+        // Note that the element does NOT have a parent md-input-messages-animation class
+        var element = angular.element('<div><div class="md-input-message-animation"></div></div>');
+        var done = jasmine.createSpy('done');
+        var warnSpy = spyOn($log, 'warn');
+
+        $$mdInput.messages.hide(element, done);
+
+        expect(done).toHaveBeenCalled();
+        expect(warnSpy).toHaveBeenCalled();
+      }));
+
+      it('logs a warning with no messages children', inject(function($log) {
+        // Note that the element does NOT have any child md-input-message-animation divs
+        var element = angular.element('<div class="md-input-messages-animation"></div>');
+        var done = jasmine.createSpy('done');
+        var warnSpy = spyOn($log, 'warn');
+
+        $$mdInput.messages.hide(element, done);
+
+        expect(done).toHaveBeenCalled();
+        expect(warnSpy).toHaveBeenCalled();
+      }));
+    });
+
+    describe('#getMessagesElement', function() {
+
+      it('finds the messages element itself', function() {
+        var template = '<div class="md-input-messages-animation"></div>';
+        var dom = angular.element(template);
+        var messages = $$mdInput.messages.getElement(dom);
+
+        expect(dom).toEqual(messages);
+      });
+
+      it('finds a child element', function(){
+        var template = '<div><div class="md-input-messages-animation"></div></div>';
+        var dom = angular.element(template);
+        var realMessages = angular.element(dom[0].querySelector('.md-input-messages-animation'));
+        var messages = $$mdInput.messages.getElement(dom);
+
+        expect(realMessages).toEqual(messages);
+      });
+
+      it('finds the parent of a message animation element', function() {
+        var template =
+              '<div class="md-input-messages-animation">' +
+              '  <div class="md-input-message-animation"></div>' +
+              '</div>';
+        var dom = angular.element(template);
+        var message = angular.element(dom[0].querySelector('.md-input-message-animation'));
+        var messages = $$mdInput.messages.getElement(message);
+
+        expect(dom).toEqual(messages);
+      });
+    });
+  });
+
   /*
    * Test Helper Functions
    */
@@ -168,8 +255,9 @@ describe('md-input-container animations', function() {
       $compile = $injector.get('$compile');
       $animateCss = $injector.get('$animateCss');
       $material = $injector.get('$material');
+      $$mdInput = $injector.get('$$mdInput');
 
-      // Grab our input animations
+      // Grab our input animations (we MUST use the injector to setup dependencies)
       invalidAnimation = $injector.get('mdInputInvalidAnimation');
       messagesAnimation = $injector.get('mdInputMessagesAnimation');
       messageAnimation = $injector.get('mdInputMessageAnimation');
