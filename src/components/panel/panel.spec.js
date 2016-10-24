@@ -566,6 +566,75 @@ describe('$mdPanel', function() {
       expect(PANEL_EL).not.toExist();
     });
 
+    it('should call onCloseSuccess if provided after the panel finishes ' +
+        'closing', function() {
+          var closeReason, closePanelRef;
+          var onCloseSuccessCalled = false;
+
+          var onCloseSuccess = function(panelRef, reason) {
+            closePanelRef = panelRef;
+            closeReason = reason;
+            onCloseSuccessCalled = true;
+            return $q.when(this);
+          };
+
+          var config = angular.extend(
+              {'onCloseSuccess': onCloseSuccess }, DEFAULT_CONFIG);
+
+          openPanel(config);
+          closePanel();
+
+          expect(onCloseSuccessCalled).toBe(true);
+          expect(closeReason).toBe(undefined);
+          expect(closePanelRef).toBe(panelRef);
+    });
+
+    it('should call onCloseSuccess with "clickOutsideToClose" if close ' +
+        'is triggered by clicking on the panel container', function() {
+          var closeReason, closePanelRef;
+          var onCloseSuccessCalled = false;
+
+          var onCloseSuccess = function(panelRef, reason) {
+            closePanelRef = panelRef;
+            closeReason = reason;
+            onCloseSuccessCalled = true;
+            return $q.when(this);
+          };
+
+          var config = angular.extend( {'onCloseSuccess': onCloseSuccess,
+              clickOutsideToClose: true, }, DEFAULT_CONFIG);
+
+          openPanel(config);
+          clickPanelContainer();
+
+          expect(onCloseSuccessCalled).toBe(true);
+          expect(closeReason).toBe($mdPanel.closeReasons.CLICK_OUTSIDE);
+          expect(closePanelRef).toBe(panelRef);
+    });
+
+    it('should call onCloseSuccess with "escapeToClose" if close ' +
+        'is triggered by pressing escape', function() {
+          var closePanelRef, closeReason;
+          var onCloseSuccessCalled = false;
+
+          var onCloseSuccess = function(panelRef, reason) {
+            closePanelRef = panelRef;
+            closeReason = reason;
+            onCloseSuccessCalled = true;
+            return $q.when(this);
+          };
+
+          var config = angular.extend( {'onCloseSuccess': onCloseSuccess,
+              escapeToClose: true }, DEFAULT_CONFIG);
+
+          openPanel(config);
+          pressEscape();
+
+          expect(onCloseSuccessCalled).toBe(true);
+          expect(closeReason).toBe($mdPanel.closeReasons.ESCAPE);
+          expect(closePanelRef).toBe(panelRef);
+    });
+
     it('should create and cleanup focus traps', function() {
       var config = { template: DEFAULT_TEMPLATE, trapFocus: true };
 

@@ -129,6 +129,12 @@ angular
  *     outside the panel to close it. Defaults to false.
  *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to
  *     close the panel. Defaults to false.
+ *   - `onCloseSuccess` - `{function(!panelRef, string)=}`: Function that is
+ *     called after the close successfully finishes. The first parameter passed
+ *     into this function is the current panelRef and the 2nd is an optional
+ *     string explaining the close reason. The currently supported closeReasons
+ *     can be found in the MdPanelRef.closeReasons enum. These are by default
+ *     passed along by the panel.
  *   - `trapFocus` - `{boolean=}`: Whether focus should be trapped within the
  *     panel. If `trapFocus` is true, the user will not be able to interact
  *     with the rest of the page until the panel is dismissed. Defaults to
@@ -870,6 +876,18 @@ function MdPanelService($rootElement, $rootScope, $injector, $window) {
    * @type {enum}
    */
   this.interceptorTypes = MdPanelRef.interceptorTypes;
+
+  /**
+   * Possible values for closing of a panel.
+   * @type {enum}
+   */
+  this.closeReasons = MdPanelRef.closeReasons;
+
+  /**
+   * Possible values of absolute position.
+   * @type {enum}
+   */
+  this.absPosition = MdPanelPosition.absPosition;
 }
 
 
@@ -1200,20 +1218,24 @@ MdPanelRef.prototype.open = function() {
 
 /**
  * Closes the panel.
+ * @param {string} closeReason The event type that triggered the close.
  * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when
  *     the panel is closed and animations finish.
  */
-MdPanelRef.prototype.close = function() {
+MdPanelRef.prototype.close = function(closeReason) {
   var self = this;
 
   return this._$q(function(resolve, reject) {
     self._callInterceptors(MdPanelRef.interceptorTypes.CLOSE).then(function() {
       var done = self._done(resolve, self);
       var detach = self._simpleBind(self.detach, self);
+      var onCloseSuccess = self.config['onCloseSuccess'] || angular.noop;
+      onCloseSuccess = angular.bind(self, onCloseSuccess, self, closeReason);
 
       self.hide()
           .then(detach)
           .then(done)
+          .then(onCloseSuccess)
           .catch(reject);
     }, reject);
   });
@@ -1802,7 +1824,7 @@ MdPanelRef.prototype._configureEscapeToClose = function() {
         ev.stopPropagation();
         ev.preventDefault();
 
-        self.close();
+        self.close(MdPanelRef.closeReasons.ESCAPE);
       }
     };
 
@@ -1845,7 +1867,7 @@ MdPanelRef.prototype._configureClickOutsideToClose = function() {
         ev.stopPropagation();
         ev.preventDefault();
 
-        self.close();
+        self.close(MdPanelRef.closeReasons.CLICK_OUTSIDE);
       }
     };
 
@@ -2154,6 +2176,14 @@ MdPanelRef.prototype.removeFromGroup = function(groupName) {
   }
 };
 
+/**
+ * Possible default closeReasons for the close function.
+ * @enum {string}
+ */
+MdPanelRef.closeReasons = {
+  CLICK_OUTSIDE: 'clickOutsideToClose',
+  ESCAPE: 'escapeToClose',
+};
 
 /*****************************************************************************
  *                               MdPanelPosition                             *
