@@ -165,7 +165,7 @@ describe('mdSidenav', function() {
     });
 
     it('should trigger a resize event when opening',
-      inject(function($rootScope, $material, $window) {
+      inject(function($rootScope, $animate, $$rAF, $window) {
         var el = setup('md-is-open="show"');
         var obj = { callback: function() {} };
 
@@ -173,7 +173,8 @@ describe('mdSidenav', function() {
         angular.element($window).on('resize', obj.callback);
 
         $rootScope.$apply('show = true');
-        $material.flushOutstandingAnimations();
+        $animate.flush();
+        $$rAF.flush();
 
         expect(obj.callback).toHaveBeenCalled();
         angular.element($window).off('resize', obj.callback);
