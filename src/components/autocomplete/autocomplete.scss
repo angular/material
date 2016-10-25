@@ -235,6 +235,13 @@ md-autocomplete {
   }
 }
 
+// Allow hiding of the clear button
+.md-hide-clear-button {
+  .md-clear-button {
+    display: none;
+  }
+}
+
 // IE Only
 @media screen and (-ms-high-contrast: active) {
   md-autocomplete,
