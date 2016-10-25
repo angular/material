@@ -244,16 +244,17 @@ describe('mdNavBar', function() {
          $scope.$apply();
 
          expect(getTab('tab2')).toHaveClass('md-focused');
+         expect(document.activeElement).toBe(getTab('tab2')[0]);
        });
 
-    it('removes tab focus when the navbar blurs', function() {
+    it('removes tab focus when the tab blurs', function() {
       $scope.selectedTabRoute = 'tab2';
       createTabs();
 
       tabContainer.triggerHandler('focus');
       expect(getTab('tab2')).toHaveClass('md-focused');
 
-      tabContainer.triggerHandler('blur');
+      getTab('tab2').triggerHandler('blur');
       expect(getTab('tab2')).not.toHaveClass('md-focused');
     });
 
@@ -273,6 +274,7 @@ describe('mdNavBar', function() {
       $scope.$apply();
 
       expect(getTab('tab1')).toHaveClass('md-focused');
+      expect(document.activeElement).toBe(getTab('tab1')[0]);
       expect(getTab('tab2')).not.toHaveClass('md-focused');
       expect(getTab('tab3')).not.toHaveClass('md-focused');
     });
@@ -295,6 +297,7 @@ describe('mdNavBar', function() {
       expect(getTab('tab1')).not.toHaveClass('md-focused');
       expect(getTab('tab2')).not.toHaveClass('md-focused');
       expect(getTab('tab3')).toHaveClass('md-focused');
+      expect(document.activeElement).toBe(getTab('tab3')[0]);
     });
 
     it('enter selects a tab', function() {
