@@ -47,7 +47,9 @@ describe('<md-toolbar>', function() {
     });
 
     // Manually link so we can give our own elements with spies on them
-    mdToolbarDirective[0].link($rootScope, toolbar, {
+    mdToolbarDirective.filter(function(directive) {
+      return (directive.$$moduleName === 'material.components.toolbar');
+    })[0].link($rootScope, toolbar, {
       mdScrollShrink: true,
       mdShrinkSpeedFactor: 1,
       $observe: function() {}
