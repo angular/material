@@ -1,3 +1,6 @@
+$md-gridlist-title-font-size: rem(1.4) !default;
+$md-gridlist-subtitle-font-size: rem(1.2) !default;
+
 md-grid-list {
   box-sizing: border-box;
   display: block;
@@ -51,11 +54,11 @@ md-grid-list {
       }
 
       h3 {
-        font-size: 14px;
+        font-size: $md-gridlist-title-font-size;
       }
 
       h4 {
-        font-size: 12px;
+        font-size: $md-gridlist-subtitle-font-size;
       }
     }
 

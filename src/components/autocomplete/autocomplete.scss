@@ -1,5 +1,7 @@
 // The default item height is also specified in the JavaScript.
 $md-autocomplete-item-height: 48px !default;
+$md-autocomplete-button-font-size: rem(1.2) !default;
+$md-autocomplete-dropdown-font-size: rem(1.4) !default;
 
 @keyframes md-autocomplete-list-out {
   0% {
@@ -140,7 +142,7 @@ md-autocomplete {
     border: none;
     border-radius: 50%;
     padding: 0;
-    font-size: 12px;
+    font-size: $md-autocomplete-button-font-size;
     background: transparent;
     margin: auto 5px;
     &:after {
@@ -215,7 +217,7 @@ md-autocomplete {
   padding: 0;
 
   li {
-    font-size: 14px;
+    font-size: $md-autocomplete-dropdown-font-size;
     overflow: hidden;
     padding: 0 15px;
     line-height: $md-autocomplete-item-height;
