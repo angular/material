@@ -149,6 +149,13 @@ function buildModule(module, opts) {
       {
         pattern: /\@ngInject/g,
         replacement: 'ngInject'
+      },
+      {
+        // Turns `thing.$inject` into `thing['$inject']` in order to prevent
+        // Closure from stripping it from objects with an @constructor
+        // annotation.
+        pattern: /\.\$inject\b/g,
+        replacement: "['$inject']"
       }
     ];
     return lazypipe()
