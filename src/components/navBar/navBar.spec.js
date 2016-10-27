@@ -158,6 +158,23 @@ describe('mdNavBar', function() {
 
       expect($scope.selectedTabRoute).toBe('tab2');
     });
+
+    it('adds ui-sref-opts attribute to nav item when sref-opts attribute is ' +
+        'defined', function() {
+          create(
+            '<md-nav-bar md-selected-nav-item="selected" nav-bar-aria-label="nav">' +
+              '<md-nav-item md-nav-sref="page1">' +
+                'tab1' +
+              '</md-nav-item>' +
+              '<md-nav-item md-nav-sref="page2" sref-opts="{reload:true,notify:true}">' +
+                'tab2' +
+              '</md-nav-item>' +
+            '</md-nav-bar>'
+          );
+
+          expect(getTab('tab2').attr('ui-sref-opts'))
+              .toBe('{"reload":true,"notify":true}');
+        });
   });
 
   describe('inkbar', function() {
