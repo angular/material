@@ -1337,6 +1337,80 @@ describe('<md-autocomplete>', function() {
 
   });
 
+  describe('clear button', function() {
+
+    it('should show the clear button for inset autocomplete', function() {
+      var scope = createScope();
+
+      var template =
+        '<md-autocomplete ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'placeholder="placeholder"> ' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var wrapEl = element.find('md-autocomplete-wrap');
+
+      expect(ctrl.scope.clearButton).toBe(true);
+      expect(wrapEl).toHaveClass('md-show-clear-button');
+    });
+
+    it('should not show the clear button for floating label autocomplete', function() {
+      var scope = createScope();
+
+      var template =
+        '<md-autocomplete ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'md-floating-label="Label"> ' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var wrapEl = element.find('md-autocomplete-wrap');
+
+      expect(ctrl.scope.clearButton).toBe(false);
+      expect(wrapEl).not.toHaveClass('md-show-clear-button');
+    });
+
+    it('should allow developers to toggle the clear button', function() {
+
+      var scope = createScope();
+
+      var template =
+        '<md-autocomplete ' +
+            'md-selected-item="selectedItem" ' +
+            'md-search-text="searchText" ' +
+            'md-items="item in match(searchText)" ' +
+            'md-item-text="item.display" ' +
+            'md-floating-label="Label" ' +
+            'md-clear-button="showButton">' +
+          '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var wrapEl = element.find('md-autocomplete-wrap');
+
+      expect(ctrl.scope.clearButton).toBeFalsy();
+      expect(wrapEl).not.toHaveClass('md-show-clear-button');
+
+      scope.$apply('showButton = true');
+
+      expect(ctrl.scope.clearButton).toBe(true);
+      expect(wrapEl).toHaveClass('md-show-clear-button');
+    });
+
+  });
+
   describe('xss prevention', function() {
 
     it('should not allow html to slip through', inject(function($timeout, $material) {

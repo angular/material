@@ -1,5 +1,7 @@
 // The default item height is also specified in the JavaScript.
 $md-autocomplete-item-height: 48px !default;
+$md-autocomplete-clear-size: 30px !default;
+$md-autocomplete-input-offset: 20px !default;
 
 md-autocomplete {
   border-radius: 2px;
@@ -24,14 +26,24 @@ md-autocomplete {
     md-autocomplete-wrap {
       height: auto;
     }
-    button {
-      position: absolute;
-      top: auto;
-      bottom: 0;
-      right: 0;
-      width: 30px;
-      height: 30px;
+
+    .md-show-clear-button {
+
+      button {
+        display: block;
+        position: absolute;
+        right: 0;
+        top: $md-autocomplete-input-offset;
+        width: $md-autocomplete-clear-size;
+        height: $md-autocomplete-clear-size;
+      }
+
+      input {
+        // Add padding to the end of the input to avoid overlapping with the clear button.
+        @include rtl-prop(padding-right, padding-left, $md-autocomplete-clear-size, 0);
+      }
     }
+
   }
   md-autocomplete-wrap {
 
@@ -99,12 +111,12 @@ md-autocomplete {
     line-height: 40px;
     height: 40px;
   }
-  button {
+  .md-show-clear-button button {
     position: relative;
     line-height: 20px;
     text-align: center;
-    width: 30px;
-    height: 30px;
+    width: $md-autocomplete-clear-size;
+    height: $md-autocomplete-clear-size;
     cursor: pointer;
     border: none;
     border-radius: 50%;
