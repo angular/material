@@ -624,6 +624,11 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
         return angular.extend({}, PALETTES);
       }
     });
+    Object.defineProperty(applyTheme, 'ALWAYS_WATCH', {
+      get: function () {
+        return alwaysWatchTheme;
+      }
+    });
     applyTheme.inherit = inheritTheme;
     applyTheme.registered = registered;
     applyTheme.defaultTheme = function() { return defaultTheme; };
@@ -674,8 +679,9 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
       updateThemeClass(lookupThemeName());
 
       if (ctrl) {
-        var watchTheme =
-          alwaysWatchTheme || ctrl.$shouldWatch || $mdUtil.parseAttributeBoolean(el.attr('md-theme-watch'));
+        var watchTheme = alwaysWatchTheme ||
+                         ctrl.$shouldWatch ||
+                         $mdUtil.parseAttributeBoolean(el.attr('md-theme-watch'));
 
         var unwatch = ctrl.registerChanges(function (name) {
           updateThemeClass(name);
@@ -723,10 +729,27 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
 
 function ThemingDirective($mdTheming, $interpolate, $parse, $mdUtil, $q, $log) {
   return {
-    priority: 100,
+    priority: 101, // has to be more than 100 to be before interpolation (issue on IE)
     link: {
       pre: function(scope, el, attrs) {
         var registeredCallbacks = [];
+
+        var startSymbol = $interpolate.startSymbol();
+        var endSymbol = $interpolate.endSymbol();
+
+        var theme = attrs.mdTheme.trim();
+
+        var hasInterpolation =
+          theme.substr(0, startSymbol.length) === startSymbol &&
+          theme.lastIndexOf(endSymbol) === theme.length - endSymbol.length;
+
+        var oneTimeOperator = '::';
+        var oneTimeBind = attrs.mdTheme
+            .split(startSymbol).join('')
+            .split(endSymbol).join('')
+            .trim()
+            .substr(0, oneTimeOperator.length) === oneTimeOperator;
+
         var ctrl = {
           registerChanges: function (cb, context) {
             if (context) {
@@ -748,38 +771,49 @@ function ThemingDirective($mdTheming, $interpolate, $parse, $mdUtil, $q, $log) {
               $log.warn('attempted to use unregistered theme \'' + theme + '\'');
             }
 
-
             ctrl.$mdTheme = theme;
 
             // Iterating backwards to support unregistering during iteration
             // http://stackoverflow.com/a/9882349/890293
-            registeredCallbacks.reverse().forEach(function (cb) {
-              cb(theme);
-            });
+            // we don't use `reverse()` of array because it mutates the array and we don't want it to get re-indexed
+            for (var i = registeredCallbacks.length; i--;) {
+              registeredCallbacks[i](theme);
+            }
           },
-          $shouldWatch: $mdUtil.parseAttributeBoolean(el.attr('md-theme-watch'))
+          $shouldWatch: $mdUtil.parseAttributeBoolean(el.attr('md-theme-watch')) ||
+                        $mdTheming.ALWAYS_WATCH ||
+                        (hasInterpolation && !oneTimeBind)
         };
 
         el.data('$mdThemeController', ctrl);
 
-        var getThemeInterpolation = function () { return $interpolate(attrs.mdTheme)(scope); };
+        var getTheme = function () {
+          var interpolation = $interpolate(attrs.mdTheme)(scope);
+          return $parse(interpolation)(scope) || interpolation;
+        };
 
-        var setParsedTheme = function (interpolation) {
-          var theme = $parse(interpolation)(scope) || interpolation;
-
+        var setParsedTheme = function (theme) {
           if (typeof theme === 'string') {
             return ctrl.$setTheme(theme);
           }
 
-          $q.when( (typeof theme === 'function') ?  theme() : theme )
+          $q.when( angular.isFunction(theme) ?  theme() : theme )
             .then(function(name){
-              ctrl.$setTheme(name)
+              ctrl.$setTheme(name);
             });
         };
 
-        setParsedTheme(getThemeInterpolation());
+        setParsedTheme(getTheme());
 
-        scope.$watch(getThemeInterpolation, setParsedTheme);
+        var unwatch = scope.$watch(getTheme, function(theme) {
+          if (theme) {
+            setParsedTheme(theme);
+
+            if (!ctrl.$shouldWatch) {
+              unwatch();
+            }
+          }
+        });
       }
     }
   };
