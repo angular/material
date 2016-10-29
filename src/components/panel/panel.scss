@@ -6,21 +6,16 @@
   width: 100%;
 }
 
-._md-panel-hidden {
-  display: none;
+.md-panel-inner-wrapper {
+  position: fixed;
 }
 
 ._md-panel-offscreen {
   left: -9999px;
 }
 
-._md-panel-fullscreen {
-  border-radius: 0;
-  left: 0;
-  min-height: 100%;
-  min-width: 100%;
-  position: fixed;
-  top: 0;
+._md-panel-hidden {
+  display: none;
 }
 
 // Only used when no animations are present.
@@ -31,7 +26,7 @@
 
 .md-panel {
   opacity: 0;
-  position: fixed;
+  position: relative;
 
   &._md-panel-shown {
     // Only used when custom animations are present.
@@ -57,7 +52,7 @@
 
   &._md-panel-backdrop {
     height: 100%;
-    position: absolute;
+    position: fixed;
     width: 100%;
   }
 
@@ -69,4 +64,13 @@
   &._md-opaque-leave {
     transition: opacity $material-leave-duration $material-leave-timing-function;
   }
+}
+
+._md-panel-fullscreen {
+  border-radius: 0;
+  left: 0;
+  min-height: 100%;
+  min-width: 100%;
+  position: fixed;
+  top: 0;
 }
