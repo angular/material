@@ -1889,23 +1889,24 @@ MdPanelRef.prototype._configureClickOutsideToClose = function() {
  * @private
 */
 MdPanelRef.prototype._configureScrollListener = function() {
-  var updatePosition = angular.bind(this, this._updatePosition);
-  var debouncedUpdatePosition = this._$$rAF.throttle(updatePosition);
-  var self = this;
+  // No need to bind the event if scrolling is disabled.
+  if (!this.config['disableParentScroll']) {
+    var updatePosition = angular.bind(this, this._updatePosition);
+    var debouncedUpdatePosition = this._$$rAF.throttle(updatePosition);
+    var self = this;
 
-  var onScroll = function() {
-    if (!self.config['disableParentScroll']) {
+    var onScroll = function() {
       debouncedUpdatePosition();
-    }
-  };
+    };
 
-  // Add listeners.
-  this._$window.addEventListener('scroll', onScroll, true);
+    // Add listeners.
+    this._$window.addEventListener('scroll', onScroll, true);
 
-  // Queue remove listeners function.
-  this._removeListeners.push(function() {
-    self._$window.removeEventListener('scroll', onScroll, true);
-  });
+    // Queue remove listeners function.
+    this._removeListeners.push(function() {
+      self._$window.removeEventListener('scroll', onScroll, true);
+    });
+  }
 };
 
 
