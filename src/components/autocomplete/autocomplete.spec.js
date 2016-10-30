@@ -2068,6 +2068,7 @@ describe('<md-autocomplete>', function() {
 
       // Update the scrollContainers rectangle, by triggering a reposition of the dropdown.
       angular.element($window).triggerHandler('resize');
+      $timeout.flush();
 
       // The scroll container should have a width of 200px, since we changed the parents width.
       expect(scrollContainer.style.minWidth).toBe('200px');
@@ -2360,12 +2361,62 @@ describe('<md-autocomplete>', function() {
 
       // Change position and resize to force a DOM update.
       scope.$apply('position = "bottom"');
+
       angular.element($window).triggerHandler('resize');
+      $timeout.flush();
 
       expect(scrollContainer.style.top).toMatch(/[0-9]+px/);
       expect(scrollContainer.style.bottom).toBe('auto');
 
       parent.remove();
+    }));
+
+    it('should not position dropdown on resize when being hidden', inject(function($window, $timeout) {
+      var scope = createScope();
+
+      var template =
+        '<div style="width: 400px">' +
+          '<md-autocomplete ' +
+              'md-search-text="searchText" ' +
+              'md-items="item in match(searchText)" ' +
+              'md-item-text="item.display" ' +
+              'md-min-length="0" ' +
+              'placeholder="placeholder">' +
+            '<span md-highlight-text="searchText">{{item.display}}</span>' +
+          '</md-autocomplete>' +
+        '</div>';
+
+      var parent = compile(template, scope);
+      var element = parent.find('md-autocomplete');
+      var ctrl = element.controller('mdAutocomplete');
+
+      // Add container to the DOM to be able to test the rect calculations.
+      document.body.appendChild(parent[0]);
+
+      $timeout.flush();
+
+      expect(ctrl.positionDropdown).toBeTruthy();
+
+      // The scroll repeat container has been moved to the body element to avoid
+      // z-index / overflow issues.
+      var scrollContainer = document.body.querySelector('.md-virtual-repeat-container');
+
+      expect(scrollContainer).toBeTruthy();
+
+      // Expect the scroll container to not have minWidth set, because it was never positioned.
+      expect(scrollContainer.style.minWidth).toBe('');
+
+      // Change the parents width, to be shrink the scrollContainers width.
+      parent.css('width', '200px');
+
+      // Trigger a window resize, which should adjust the width of the scroll container.
+      angular.element($window).triggerHandler('resize');
+      $timeout.flush();
+
+      // The scroll container should still have no minWidth, because there was no positioning called yet.
+      expect(scrollContainer.style.minWidth).toBe('');
+
+      document.body.removeChild(parent[0]);
     }));
 
   });
