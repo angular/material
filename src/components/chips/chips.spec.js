@@ -310,6 +310,66 @@ describe('<md-chips>', function() {
           expect(scope.items.length).toBe(4);
         });
 
+        it('should not append a new chip when requireMatch is enabled', function() {
+          var template =
+            '<md-chips ng-model="items" md-add-on-blur="true" md-require-match="true">' +
+              '<md-autocomplete ' +
+                  'md-selected-item="selectedItem" ' +
+                  'md-search-text="searchText" ' +
+                  'md-items="item in querySearch(searchText)" ' +
+                  'md-item-text="item">' +
+                '<span md-highlight-text="searchText">{{item}}</span>' +
+              '</md-autocomplete>' +
+            '</md-chips>';
+
+          setupScopeForAutocomplete();
+
+          var element = buildChips(template);
+          var ctrl = element.controller('mdChips');
+          var input = element.find('input');
+
+          expect(ctrl.shouldAddOnBlur()).toBeFalsy();
+
+          // Flush the initial timeout of the md-autocomplete.
+          $timeout.flush();
+
+          scope.$apply('searchText = "Hello"');
+
+          expect(ctrl.shouldAddOnBlur()).toBeFalsy();
+        });
+
+        it('should not append a new chip on blur when the autocomplete is showing', function() {
+          var template =
+            '<md-chips ng-model="items" md-add-on-blur="true">' +
+              '<md-autocomplete ' +
+                  'md-selected-item="selectedItem" ' +
+                  'md-search-text="searchText" ' +
+                  'md-items="item in querySearch(searchText)" ' +
+                  'md-item-text="item">' +
+                '<span md-highlight-text="searchText">{{item}}</span>' +
+              '</md-autocomplete>' +
+            '</md-chips>';
+
+          setupScopeForAutocomplete();
+
+          var element = buildChips(template);
+          var ctrl = element.controller('mdChips');
+          var input = element.find('input');
+
+          expect(ctrl.shouldAddOnBlur()).toBeFalsy();
+
+          // Flush the initial timeout of the md-autocomplete.
+          $timeout.flush();
+
+          var autocompleteCtrl = element.find('md-autocomplete').controller('mdAutocomplete');
+
+          // Open the dropdown by searching for a possible item and focusing the input.
+          scope.$apply('searchText = "Ki"');
+          autocompleteCtrl.focus();
+
+          expect(ctrl.shouldAddOnBlur()).toBeFalsy();
+        });
+
       });
 
       describe('when removable', function() {
