@@ -596,7 +596,7 @@ describe('<md-autocomplete>', function() {
 
     describe('md-input-maxlength', function() {
 
-      it('should correctly set the form to invalid', inject(function($timeout) {
+      it('should correctly set the form to invalid if floating label is present', inject(function($timeout) {
         var scope = createScope(null, {inputId: 'custom-input-id'});
         var template =
           '<form name="testForm">' +
@@ -610,6 +610,35 @@ describe('<md-autocomplete>', function() {
                 'md-item-text="item.display" ' +
                 'tabindex="3"' +
                 'md-floating-label="Favorite state">' +
+              '<span md-highlight-text="searchText">{{item.display}}</span>' +
+            '</md-autocomplete>' +
+          '</form>';
+
+        var element = compile(template, scope);
+        var input = element.find('input');
+
+        expect(scope.searchText).toBe('');
+        expect(scope.testForm.$valid).toBe(true);
+
+        scope.$apply('searchText = "Exceeded"');
+
+        expect(scope.testForm.$valid).toBe(false);
+
+        element.remove();
+      }));
+
+      it('should correctly set the form to invalid when no floating label is present', inject(function($timeout) {
+        var scope = createScope(null, {inputId: 'custom-input-id'});
+        var template =
+          '<form name="testForm">' +
+            '<md-autocomplete ' +
+                'md-input-id="{{inputId}}" ' +
+                'md-input-maxlength="5" ' +
+                'md-input-name="testAutocomplete" ' +
+                'md-selected-item="selectedItem" ' +
+                'md-search-text="searchText" ' +
+                'md-items="item in match(searchText)" ' +
+                'md-item-text="item.display" >' +
               '<span md-highlight-text="searchText">{{item.display}}</span>' +
             '</md-autocomplete>' +
           '</form>';
@@ -657,6 +686,72 @@ describe('<md-autocomplete>', function() {
 
         expect(scope.testForm.$valid).toBe(false);
         expect(scope.searchText).toBe('Exceeded');
+
+        element.remove();
+      }));
+
+    });
+
+    describe('md-input-minlength', function() {
+
+      it('should correctly set the form to invalid when floating label is present', inject(function($timeout) {
+        var scope = createScope(null, {inputId: 'custom-input-id'});
+        var template =
+          '<form name="testForm">' +
+            '<md-autocomplete ' +
+                'md-input-id="{{inputId}}" ' +
+                'md-input-minlength="4" ' +
+                'md-input-name="testAutocomplete" ' +
+                'md-selected-item="selectedItem" ' +
+                'md-search-text="searchText" ' +
+                'md-items="item in match(searchText)" ' +
+                'md-item-text="item.display" ' +
+                'tabindex="3"' +
+                'md-floating-label="Favorite state">' +
+              '<span md-highlight-text="searchText">{{item.display}}</span>' +
+            '</md-autocomplete>' +
+          '</form>';
+
+        var element = compile(template, scope);
+        var input = element.find('input');
+
+        scope.$apply('searchText = "abc"');
+
+        expect(scope.testForm.$valid).toBe(false);
+
+        scope.$apply('searchText = "abcde"');
+
+        expect(scope.testForm.$valid).toBe(true);
+
+        element.remove();
+      }));
+
+      it('should correctly set the form to invalid when no floating label is present', inject(function($timeout) {
+        var scope = createScope(null, {inputId: 'custom-input-id'});
+        var template =
+          '<form name="testForm">' +
+            '<md-autocomplete ' +
+                'md-input-id="{{inputId}}" ' +
+                'md-input-minlength="4" ' +
+                'md-input-name="testAutocomplete" ' +
+                'md-selected-item="selectedItem" ' +
+                'md-search-text="searchText" ' +
+                'md-items="item in match(searchText)" ' +
+                'md-item-text="item.display" >' +
+              '<span md-highlight-text="searchText">{{item.display}}</span>' +
+            '</md-autocomplete>' +
+          '</form>';
+
+        var element = compile(template, scope);
+        var input = element.find('input');
+
+        scope.$apply('searchText = "abc"');
+
+        expect(scope.testForm.$valid).toBe(false);
+
+        scope.$apply('searchText = "abcde"');
+
+        expect(scope.testForm.$valid).toBe(true);
 
         element.remove();
       }));
