@@ -1,0 +1,163 @@
+$popover-max-width: 276px !default;
+$popover-inner-padding: 0 !default;
+$popover-border-width: 1px !default;
+$popover-offset-border-width: ($popover-border-width / 14px);
+$popover-border-radius: 4px !default;
+$popover-box-shadow: $whiteframe-shadow-9dp !default;
+$popover-title-padding-x: 14px !default;
+$popover-title-padding-y: $baseline-grid !default;
+$popover-content-padding-x: 14px !default;
+$popover-content-padding-y: $baseline-grid !default;
+$popover-arrow-width: 10px !default;
+$popover-arrow-outer-width: ($popover-arrow-width + 1px) !default;
+$popover-font-size-lg: 12px !default;
+$popover-font-size-sm: $body-font-size-base !default;
+
+.md-popover {
+  max-width: $popover-max-width;
+  padding: $popover-inner-padding;
+  @include reset-text();
+  font-size: $popover-font-size-sm;
+  word-wrap: break-word;
+  background-clip: padding-box;
+  border-width: $popover-border-width;
+  border-style: solid;
+  border-radius: $popover-border-radius;
+  box-shadow: $popover-box-shadow;
+
+  // Popover positions
+
+  &.md-position-top {
+    margin-top: -$popover-arrow-width;
+    &::before,
+    &::after {
+      left: 50%;
+      border-bottom-width: 0;
+    }
+    &::before {
+      bottom: -$popover-arrow-outer-width;
+      margin-left: -$popover-arrow-outer-width;
+    }
+    &::after {
+      bottom: -($popover-arrow-outer-width - 1);
+      margin-left: -$popover-arrow-width;
+    }
+  }
+
+  &.md-position-right {
+    margin-left: $popover-arrow-width;
+    &::before,
+    &::after {
+      top: 50%;
+      border-left-width: 0;
+    }
+    &::before {
+      left: -$popover-arrow-outer-width;
+      margin-top: -$popover-arrow-outer-width;
+    }
+    &::after {
+      left: -($popover-arrow-outer-width - 1);
+      margin-top: -($popover-arrow-outer-width - 1);
+    }
+  }
+
+  &.md-position-bottom {
+    margin-top: $popover-arrow-width;
+    &::before,
+    &::after {
+      left: 50%;
+      border-top-width: 0;
+    }
+    &::before {
+      top: -$popover-arrow-outer-width;
+      margin-left: -$popover-arrow-outer-width;
+    }
+    &::after {
+      top: -($popover-arrow-outer-width - 1);
+      margin-left: -$popover-arrow-width;
+    }
+    // This will remove the `md-popover-title`'s border just below the arrow.
+    md-popover-title::before {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      display: block;
+      width: 20px;
+      margin-left: -10px;
+      content: "";
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+    }
+  }
+
+  &.md-position-left {
+    margin-left: -$popover-arrow-width;
+    &::before,
+    &::after {
+      top: 50%;
+      border-right-width: 0;
+    }
+    &::before {
+      right: -$popover-arrow-outer-width;
+      margin-top: -$popover-arrow-outer-width;
+    }
+    &::after {
+      right: -($popover-arrow-outer-width - 1);
+      margin-top: -($popover-arrow-outer-width - 1);
+    }
+  }
+}
+
+// Popover title and content
+
+md-popover-title {
+  display: inline-block;
+  margin: 0;
+  padding: $popover-title-padding-y $popover-title-padding-x;
+  font-size: $popover-font-size-sm + 3px;
+  border-bottom-width: $popover-border-width;
+  border-bottom-style: solid;
+  border-radius: ($popover-border-radius - $popover-offset-border-width) ($popover-border-radius - $popover-offset-border-width) 0 0;
+  &:empty {
+    display: none;
+  }
+}
+
+md-popover-content {
+  display: inline-block;
+  margin: 0;
+  padding: $popover-content-padding-y $popover-content-padding-x;
+}
+
+// Popover arrow
+
+.md-popover {
+  &::before,
+  &::after {
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+  }
+  &::before {
+    content: "";
+    border-width: $popover-arrow-outer-width;
+  }
+  &::after {
+    content: "";
+    border-width: $popover-arrow-width;
+  }
+}
+
+// Popover for large displays
+
+@media (min-width: $layout-breakpoint-sm) {
+  .md-popover {
+    font-size: $popover-font-size-lg;
+  }
+  md-popover-title {
+    font-size: $popover-font-size-lg + 3px;
+  }
+}

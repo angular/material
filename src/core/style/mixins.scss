@@ -1,3 +1,21 @@
+@mixin reset-text {
+  font-family: $font-family;
+  font-style: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  line-break: auto;
+  line-height: 1.5;
+  text-align: left;
+  // Fallback for where `start` is not supported
+  text-align: start;
+  text-decoration: none;
+  text-shadow: none;
+  text-transform: none;
+  white-space: normal;
+  word-break: normal;
+  word-spacing: normal;
+}
+
 @mixin margin-selectors($before:1em, $after:1em, $start:0px, $end:0px) {
   -webkit-margin-before: $before;
   -webkit-margin-after: $after;

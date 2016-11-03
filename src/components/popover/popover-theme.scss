@@ -1,0 +1,56 @@
+.md-popover.md-THEME_NAME-theme {
+  color: '{{background-700-contrast}}';
+
+  &.md-panel {
+    background-color: '{{background-700}}';
+    border-color: '{{background-700}}';
+  }
+
+  &.md-position-top {
+    &::before {
+      border-top-color: '{{background-600}}';
+    }
+    &::after {
+      border-top-color: '{{background-700}}';
+    }
+  }
+
+  &.md-position-right {
+    &::before {
+      border-right-color: '{{background-600}}';
+    }
+    &::after {
+      border-right-color: '{{background-700}}';
+    }
+  }
+
+  &.md-position-bottom {
+    &::before {
+      border-bottom-color: '{{background-600}}';
+    }
+    &::after {
+      border-bottom-color: '{{background-800}}';
+    }
+    .md-popover-title::before {
+      border-bottom-color: '{{background-800}}';
+    }
+  }
+
+  &.md-position-left {
+    &::before {
+      border-left-color: '{{background-600}}';
+    }
+    &::after {
+      border-left-color: '{{background-700}}';
+    }
+  }
+
+  md-popover-title {
+    background-color: '{{background-800}}';
+    border-bottom-color: '{{background-900}}';
+  }
+
+  md-icon {
+    color: '{{background-700-contrast}}';
+  }
+}

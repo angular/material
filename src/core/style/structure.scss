@@ -78,6 +78,10 @@ input {
   width: 1px;
 }
 
+.md-border-radius-round {
+  border-radius: 50%;
+}
+
 .md-shadow {
   position: absolute;
   top: 0;
@@ -209,4 +213,3 @@ bdo[dir=ltr] {
   direction: ltr;
   unicode-bidi: bidi-override;
 }
-
