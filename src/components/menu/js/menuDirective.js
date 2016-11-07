@@ -152,7 +152,7 @@
  *
  * @param {string} md-position-mode The position mode in the form of
  *           `x`, `y`. Default value is `target`,`target`. Right now the `x` axis
- *           also suppports `target-right`.
+ *           also supports `target-right`.
  * @param {string} md-offset An offset to apply to the dropdown after positioning
  *           `x`, `y`. Default value is `0`,`0`.
  *
