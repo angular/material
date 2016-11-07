@@ -1,4 +1,4 @@
-angular.module('dialogDemo1', ['ngMaterial'])
+angular.module('dialogDemo3', ['ngMaterial'])
   .config(function ($mdThemingProvider) {
     $mdThemingProvider.theme('red')
       .primaryPalette('red');
