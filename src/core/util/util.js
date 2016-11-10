@@ -57,12 +57,27 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
   }
 
+  /**
+   * Bulletproof method to get a function to return the current timestamp
+   * @returns {Function}
+   */
+  function getNowMethod() {
+    if (window.performance && typeof window.performance.now === 'function') {
+      return angular.bind(window.performance, window.performance.now);
+    }
+
+    if (typeof Date.now === 'function') {
+      return Date.now;
+    }
+
+    return function() {
+      return (new Date()).getTime();
+    }
+  }
+
   var $mdUtil = {
     dom: {},
-    now: window.performance && window.performance.now ?
-      angular.bind(window.performance, window.performance.now) : Date.now || function() {
-      return new Date().getTime();
-    },
+    now: getNowMethod(),
 
     /**
      * Cross-version compatibility method to retrieve an option of a ngModel controller,
