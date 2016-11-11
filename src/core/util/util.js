@@ -63,7 +63,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
    */
   function getNowMethod() {
     if (window.performance && typeof window.performance.now === 'function') {
-      return angular.bind(window.performance, window.performance.now);
+      return window.performance.now.bind(window.performance);
     }
 
     if (typeof Date.now === 'function') {
