@@ -71,7 +71,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     }
 
     return function() {
-      return (new Date()).getTime();
+      return new Date().getTime();
     }
   }
 
