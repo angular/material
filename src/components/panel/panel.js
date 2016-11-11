@@ -7,11 +7,124 @@ angular
     'material.core',
     'material.components.backdrop'
   ])
+  .provider('$mdPanelConfig', MdPanelConfigProvider)
   .service('$mdPanel', MdPanelService);
 
 
 /*****************************************************************************
  *                            PUBLIC DOCUMENTATION                           *
+ *****************************************************************************/
+
+
+/**
+ * @ngdoc service
+ * @name $mdPanelConfig
+ * @module material.components.panel
+ *
+ * @description
+ * `$mdPanelConfigProvider` allows users to create configuration objects that
+ * will be stored within the provider itself. When the configuraiton is needed,
+ * the user can request for the configuration object. Configurations are set at
+ * the provider level and retrieved from the service level.
+ *
+ * @usage
+ * <hljs lang="js">
+ * (function(angular, undefined) {
+ *   'use strict';
+ *
+ *   angular
+ *       .module('demoApp', ['ngMaterial'])
+ *       .config(DemoConfig)
+ *       .controller('DemoCtrl', DemoCtrl)
+ *       .controller('DemoMenuCtrl', DemoMenuCtrl);
+ *
+ *   function DemoConfig($mdPanelConfigProvider) {
+ *     var config = {
+ *       name: 'demoConfig',
+ *       options: {
+ *         attachTo: angular.element(document.body),
+ *         controller: DemoMenuCtrl,
+ *         controllerAs: 'ctrl',
+ *         template: '' +
+ *             '<div class="menu-panel" md-whiteframe="4">' +
+ *             '  <div class="menu-content">' +
+ *             '    <div class="menu-item" ng-repeat="item in ctrl.items">' +
+ *             '      <button class="md-button">' +
+ *             '        <span>{{item}}</span>' +
+ *             '      </button>' +
+ *             '    </div>' +
+ *             '    <md-divider></md-divider>' +
+ *             '    <div class="menu-item">' +
+ *             '      <button class="md-button" ng-click="ctrl.closeMenu()">' +
+ *             '        <span>Close Menu</span>' +
+ *             '      </button>' +
+ *             '    </div>' +
+ *             '  </div>' +
+ *             '</div>',
+ *         panelClass: 'menu-panel-container',
+ *         focusOnOpen: false,
+ *         zIndex: 100,
+ *         propagateContainerEvents: true,
+ *         groupName: 'menus'
+ *       }
+ *     };
+ *
+ *     $mdPanelConfigProvider.createConfig(config);
+ *   }
+ *
+ *   function DemoCtrl($mdPanel) {
+ *     $mdPanel.newPanelGroup('menus', {
+ *       maxOpen: 1
+ *     });
+ *
+ *     this.showMenu = function($event) {
+ *       var config = $mdPanel.getConfig('demoConfig');
+ *       config.id = 'menu_demo';
+ *       config.position = $mdPanel.newPanelPosition()
+ *           .relativeTo($event.srcElement)
+ *           .addPanelPosition(
+ *             $mdPanel.xPosition.ALIGN_START,
+ *             $mdPanel.yPosition.BELOW
+ *           );
+ *       config.locals = {
+ *         items: {
+ *           'Account',
+ *           'Sign Out'
+ *         }
+ *       };
+ *       config.openFrom = $event;
+ *
+ *       $mdPanel.open(config);
+ *     };
+ *   }
+ *
+ *   function DemoMenuCtrl(mdPanelRef) {
+ *     this.closeMenu = function() {
+ *       mdPanelRef && mdPanelRef.close();
+ *     };
+ *   }
+ * })(angular);
+ * </hsjs>
+ */
+
+/**
+ * @ngdoc method
+ * @name $mdPanelConfig#createConfig
+ * @description
+ * Takes the passed in panel configuration object and adds it to the `_configs`
+ * object of the provider.
+ *
+ * @param {!Object<string, !Object>} config Specific configuration object that
+ *     is required to contain a name string and an options object. The options
+ *     object can contain any and all of the parameters available within the
+ *     `$mdPanel.create` configuration. However, it does not make sense to
+ *     include parameters that depend on certian interactions of the user,
+ *     positioning, or animation.
+ */
+
+
+/*****************************************************************************
+ *                               MdPanelService                              *
  *****************************************************************************/
 
 
@@ -784,22 +897,71 @@ angular
 
 
 // Default z-index for the panel.
-var defaultZIndex = 80;
+var MD_PANEL_Z_INDEX = 80;
 var MD_PANEL_HIDDEN = '_md-panel-hidden';
-
 var FOCUS_TRAP_TEMPLATE = angular.element(
     '<div class="_md-panel-focus-trap" tabindex="0"></div>');
 
 
 /**
+ * A provider that is used for building configurations for the panel.
+ * @final @constructor @ngInject
+ */
+function MdPanelConfigProvider() {
+  /** @private {!Object} */
+  this._configs = {};
+}
+
+
+/**
+ * Takes the passed in panel configuration object and adds it to the `_configs`
+ * object of the provider.
+ * @param {!Object<string, !Object>} config Specific configuration object that
+ *     is required to contain a name string and an options object. The options
+ *     object can contain any and all of the parameters available within the
+ *     `$mdPanel.create` configuration. However, it does not make sense to
+ *     include parameters that depend on certain interactions of the user,
+ *     positioning, or animation.
+ */
+MdPanelConfigProvider.prototype.createConfig = function(config) {
+  if (angular.isUndefined(config.name) ||
+      angular.isUndefined(config.options)) {
+    throw new Error('mdPanel: Provider panel config is malformed. There can ' +
+        'only be a name and an options parameter within the config.');
+  }
+
+  if (angular.isDefined(config.name) && angular.isDefined(config.options)) {
+    this._configs[config.name] = config.options;
+  }
+};
+
+
+/**
+ * Default $get method required by an Angular provider.
+ * @method $get
+ * @returns {!Object} An object that expresses the provider dependency.
+ */
+MdPanelConfigProvider.prototype.$get = function() {
+  return this;
+};
+
+
+/*****************************************************************************
+ *                                MdPanelService                             *
+ *****************************************************************************/
+
+
+/**
  * A service that is used for controlling/displaying panels on the screen.
+ * @param {!$mdPanelConfig} $mdPanelConfig
  * @param {!angular.JQLite} $rootElement
  * @param {!angular.Scope} $rootScope
  * @param {!angular.$injector} $injector
  * @param {!angular.$window} $window
  * @final @constructor @ngInject
  */
-function MdPanelService($rootElement, $rootScope, $injector, $window) {
+function MdPanelService($mdPanelConfig, $rootElement, $rootScope, $injector,
+    $window) {
   /**
    * Default config options for the panel.
    * Anything angular related needs to be done later. Therefore
@@ -819,11 +981,14 @@ function MdPanelService($rootElement, $rootScope, $injector, $window) {
     propagateContainerEvents: false,
     transformTemplate: angular.bind(this, this._wrapTemplate),
     trapFocus: false,
-    zIndex: defaultZIndex
+    zIndex: MD_PANEL_Z_INDEX
   };
 
   /** @private {!Object} */
   this._config = {};
+
+  /** @private @const */
+  this._$mdPanelConfig = $mdPanelConfig;
 
   /** @private @const */
   this._$rootElement = $rootElement;
@@ -889,6 +1054,22 @@ function MdPanelService($rootElement, $rootScope, $injector, $window) {
    */
   this.absPosition = MdPanelPosition.absPosition;
 }
+
+
+/**
+ * Gets a specific configuration object saved within the `_configs` object of
+ * the `$mdPanelConfig` provider.
+ * @param {string} name The name of the configuration to get.
+ * @return {!Object} The configuration object.
+ */
+MdPanelService.prototype.getConfig = function(name) {
+  if (!name || !this._$mdPanelConfig._configs[name]) {
+    throw new Error('mdPanel: The panel config that you requested does not '+
+        'exist. Use the $mdPanelConfigProvider to create a configuration ' +
+        'before requesting one.');
+  }
+  return this._$mdPanelConfig._configs[name];
+};
 
 
 /**
@@ -2025,7 +2206,8 @@ MdPanelRef.prototype.registerInterceptor = function(type, callback) {
   if (!angular.isString(type)) {
     error = 'Interceptor type must be a string, instead got ' + typeof type;
   } else if (!angular.isFunction(callback)) {
-    error = 'Interceptor callback must be a function, instead got ' + typeof callback;
+    error = 'Interceptor callback must be a function, instead got ' +
+        typeof callback;
   }
 
   if (error) {
@@ -2364,7 +2546,9 @@ MdPanelPosition.prototype.bottom = function(bottom) {
  * @returns {!MdPanelPosition}
  */
 MdPanelPosition.prototype.start = function(start) {
-  var position = this._isRTL ? MdPanelPosition.absPosition.RIGHT : MdPanelPosition.absPosition.LEFT;
+  var position = this._isRTL ?
+      MdPanelPosition.absPosition.RIGHT :
+      MdPanelPosition.absPosition.LEFT;
   return this._setPosition(position, start);
 };
 
@@ -2376,7 +2560,9 @@ MdPanelPosition.prototype.start = function(start) {
  * @returns {!MdPanelPosition}
  */
 MdPanelPosition.prototype.end = function(end) {
-  var position = this._isRTL ? MdPanelPosition.absPosition.LEFT : MdPanelPosition.absPosition.RIGHT;
+  var position = this._isRTL ?
+      MdPanelPosition.absPosition.LEFT :
+      MdPanelPosition.absPosition.RIGHT;
   return this._setPosition(position, end);
 };
 

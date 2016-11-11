@@ -1,6 +1,6 @@
 describe('$mdPanel', function() {
-  var $mdPanel, $rootScope, $rootEl, $templateCache, $q, $material, $mdConstant,
-      $mdUtil, $animate, $$rAF, $window;
+  var $mdPanelConfigProvider, $mdPanel, $rootScope, $rootEl, $templateCache, $q,
+      $material, $mdConstant, $mdUtil, $animate, $$rAF, $window;
   var panelRef;
   var attachedElements = [];
   var PANEL_WRAPPER = '.md-panel-outer-wrapper';
@@ -92,6 +92,84 @@ describe('$mdPanel', function() {
     // TODO(ErinCoughlan) - Remove when close destroys.
     panelRef = null;
     $animate.enabled(true);
+  });
+
+  describe('provider logic:', function() {
+    var config = {
+      name: 'testConfig',
+      options: DEFAULT_CONFIG
+    };
+    var config2 = {
+      name: 'testConfig2',
+      options: DEFAULT_CONFIG
+    };
+
+    it('should have the $mdPanelConfigProvider available',
+        inject(function($mdPanelConfig) {
+      var configProvider = $mdPanelConfig;
+
+      expect(configProvider).toBeDefined();
+    }));
+
+    it('should allow for a custom configuration objects to be created and ' +
+        'stored in the $mdPanelConfigProvider', inject(function($mdPanelConfig) {
+      $mdPanelConfig.createConfig(config);
+
+      expect(Object.keys($mdPanelConfig._configs).length).toBe(1);
+    }));
+
+    it('should allow for more than one custom configuration objects to be ' +
+        'created and stored in the $mdPanelConfigProvider',
+        inject(function($mdPanelConfig) {
+      $mdPanelConfig.createConfig(config);
+      $mdPanelConfig.createConfig(config2);
+
+      expect(Object.keys($mdPanelConfig._configs).length).toBe(2);
+    }));
+
+    it('should throw if a custom configuration object doesn\'t have a name ' +
+        'or options parameter', inject(function($mdPanelConfig) {
+      var testConfig, expression;
+
+      testConfig = {
+        options: DEFAULT_CONFIG
+      };
+      expression = function() {
+        $mdPanelConfig.createConfig(testConfig);
+      };
+
+      expect(expression).toThrow();
+
+      testConfig = {
+        name: 'testConfig'
+      };
+      expression = function() {
+        $mdPanelConfig.createConfig(testConfig);
+      };
+
+      expect(expression).toThrow();
+    }));
+
+    it('should retrieve a config from the $mdPanelConfigProvider',
+        inject(function($mdPanelConfig) {
+      $mdPanelConfig.createConfig(config);
+
+      var storedConfig = $mdPanel.getConfig('testConfig');
+      var testConfig = DEFAULT_CONFIG;
+
+      expect(storedConfig).toBeDefined();
+      expect(storedConfig).toEqual(testConfig);
+    }));
+
+    it('should throw if trying to retrieve a config from the ' +
+        '$mdPanelConfigProvider that has not been created',
+        inject(function($mdPanelConfig) {
+      var expression = function() {
+        $mdPanel.getConfig('notARegisteredConfig');
+      };
+
+      expect(expression).toThrow();
+    }));
   });
 
   it('should create and open a basic panel', function() {
