@@ -46,9 +46,9 @@ function MdProgressCircularProvider() {
     duration: 100,
     easeFn: linearEase,
 
-    durationIndeterminate: 500,
-    startIndeterminate: 3,
-    endIndeterminate: 80,
+    durationIndeterminate: 1333,
+    startIndeterminate: 1,
+    endIndeterminate: 149,
     easeFnIndeterminate: materialEase,
 
     easingPresets: {
