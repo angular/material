@@ -824,7 +824,7 @@ describe('md-datepicker', function() {
     });
 
     it('should set the aria-owns value, corresponding to the id of the calendar pane', function() {
-      var ariaAttr = controller.ngInputElement.attr('aria-owns');
+      var ariaAttr = ngElement.attr('aria-owns');
 
       expect(ariaAttr).toBeTruthy();
       expect(controller.calendarPane.id).toBe(ariaAttr);
