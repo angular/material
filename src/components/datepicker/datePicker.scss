@@ -194,10 +194,10 @@ md-datepicker {
 .md-datepicker-triangle-button {
   position: absolute;
   @include rtl-prop(right, left, 0, auto);
-  top: $md-date-arrow-size;
+  bottom: -$md-date-arrow-size / 2;
 
   // TODO(jelbourn): This position isn't great on all platforms.
-  @include rtl(transform, translateY(-25%) translateX(45%), translateY(-25%) translateX(-45%));
+  @include rtl(transform, translateX(45%), translateX(-45%));
 }
 
 // Need crazy specificity to override .md-button.md-icon-button.
