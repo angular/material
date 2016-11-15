@@ -3,7 +3,7 @@ describe('<md-select>', function() {
   var body, $document, $rootScope, $compile, $timeout, $material;
 
   beforeEach(function() {
-    module('material.components.select', 'material.components.input');
+    module('material.components.select', 'material.components.input', 'ngSanitize');
 
     inject(function($injector) {
       $document = $injector.get('$document');
@@ -435,6 +435,32 @@ describe('<md-select>', function() {
       $material.flushInterimElement();
 
       expect(label.text()).toBe($rootScope.selectedText);
+    });
+
+    it('should sanitize md-selected-html', function() {
+      $rootScope.selectedText = '<b>Hello World</b><script>window.mdSelectXss="YES"</script>';
+
+      var select = setupSelect(
+          'ng-model="someVal", ' +
+          'md-selected-html="selectedText"', null, true).find('md-select');
+      var label = select.find('md-select-value');
+
+      expect(label.text()).toBe('Hello World');
+
+      // The label is loaded into a span that is the first child of the '<md-select-value>`.
+      expect(label[0].childNodes[0].innerHTML).toBe('<b>Hello World</b>');
+      expect(window.mdSelectXss).toBeUndefined();
+    });
+
+    it('should always treat md-selected-text as text, not html', function() {
+      $rootScope.selectedText = '<b>Hello World</b>';
+
+      var select = setupSelect(
+          'ng-model="someVal", ' +
+          'md-selected-text="selectedText"', null, true).find('md-select');
+      var label = select.find('md-select-value');
+
+      expect(label.text()).toBe('<b>Hello World</b>');
     });
 
     it('supports rendering multiple', function() {
@@ -1378,4 +1404,43 @@ describe('<md-select>', function() {
     }
   }
 
+});
+
+describe('<md-select> without ngSanitize loaded', function() {
+  var $compile, pageScope;
+
+  beforeEach(module('material.components.select', 'material.components.input'));
+
+  beforeEach(inject(function($injector) {
+    $compile = $injector.get('$compile');
+    pageScope = $injector.get('$rootScope').$new();
+  }));
+
+  it('should throw an error when using md-selected-html without ngSanitize', function() {
+    var template =
+      '<md-select md-selected-html="myHtml" ng-model="selectedValue">' +
+        '<md-option>One</md-option>' +
+      '</md-select>';
+
+    var select = $compile(template)(pageScope);
+
+    expect(function() {
+      pageScope.myHtml = '<p>Barnacle Pete</p>';
+      pageScope.$apply();
+    }).toThrowError(/\$sce:unsafe/);
+  });
+
+
+  it('should throw an error if using md-selected-text and md-selected-html', function() {
+    var template =
+      '<md-select md-selected-text="myText" md-selected-html="myHtml" ng-model="selectedValue">' +
+        '<md-option>One</md-option>' +
+      '</md-select>';
+
+    var select = $compile(template)(pageScope);
+
+    expect(function() {
+      pageScope.$apply();
+    }).toThrowError('md-select cannot have both `md-selected-text` and `md-selected-html`');
+  });
 });
