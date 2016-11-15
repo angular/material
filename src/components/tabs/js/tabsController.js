@@ -5,8 +5,8 @@ angular
 /**
  * @ngInject
  */
-function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipple,
-                           $mdUtil, $animateCss, $attrs, $compile, $mdTheming) {
+function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipple, $mdUtil,
+                           $animateCss, $attrs, $compile, $mdTheming, $mdInteraction) {
   // define private properties
   var ctrl      = this,
       locked    = false,
@@ -42,7 +42,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   ctrl.tabs              = [];
   ctrl.lastSelectedIndex = null;
   ctrl.hasFocus          = false;
-  ctrl.lastClick         = true;
+  ctrl.styleTabItemFocus = false;
   ctrl.shouldCenterTabs  = shouldCenterTabs();
   ctrl.tabContentPrefix  = 'tab-content-';
 
@@ -293,7 +293,6 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
         if (!locked) select(ctrl.focusIndex);
         break;
     }
-    ctrl.lastClick = false;
   }
 
   /**
@@ -304,7 +303,6 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    */
   function select (index, canSkipClick) {
     if (!locked) ctrl.focusIndex = ctrl.selectedIndex = index;
-    ctrl.lastClick = true;
     // skip the click event if noSelectClick is enabled
     if (canSkipClick && ctrl.noSelectClick) return;
     // nextTick is required to prevent errors in user-defined click events
@@ -431,7 +429,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
           isRight:      function () { return this.getIndex() > ctrl.selectedIndex; },
           shouldRender: function () { return !ctrl.noDisconnect || this.isActive(); },
           hasFocus:     function () {
-            return !ctrl.lastClick
+            return ctrl.styleTabItemFocus
                 && ctrl.hasFocus && this.getIndex() === ctrl.focusIndex;
           },
           id:           $mdUtil.nextUid(),
@@ -671,6 +669,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * issues when attempting to focus an item that is out of view.
    */
   function redirectFocus () {
+    ctrl.styleTabItemFocus = ($mdInteraction.getLastInteractionType() === 'keyboard');
     getElements().dummies[ ctrl.focusIndex ].focus();
   }
 
