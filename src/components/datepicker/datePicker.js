@@ -7,5 +7,6 @@
 angular.module('material.components.datepicker', [
   'material.core',
   'material.components.icon',
-  'material.components.virtualRepeat'
+  'material.components.virtualRepeat',
+  'material.components.panel'
 ]);

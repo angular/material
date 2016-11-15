@@ -1,4 +1,3 @@
-
 describe('md-datepicker', function() {
   // When constructing a Date, the month is zero-based. This can be confusing, since people are
   // used to seeing them one-based. So we create these aliases to make reading the tests easier.
@@ -6,9 +5,11 @@ describe('md-datepicker', function() {
       NOV = 10, DEC = 11;
 
   var initialDate = new Date(2015, FEB, 15);
+  var attachedElements = [];
 
   var ngElement, element, scope, pageScope, controller;
-  var $compile, $timeout, $$rAF, $animate, $window, keyCodes, dateUtil, dateLocale;
+  var $compile, $timeout, $$rAF, $animate, $window, keyCodes;
+  var $material, dateUtil, dateLocale;
 
   var DATEPICKER_TEMPLATE =
     '<md-datepicker name="birthday" ' +
@@ -23,7 +24,12 @@ describe('md-datepicker', function() {
          'ng-disabled="isDisabled">' +
     '</md-datepicker>';
 
-  beforeEach(module('material.components.datepicker', 'material.components.input', 'ngAnimateMock'));
+  beforeEach(module(
+    'material.components.datepicker',
+    'material.components.input',
+    'material.components.panel',
+    'ngAnimateMock'
+  ));
 
   beforeEach(inject(function($rootScope, $injector) {
     $compile = $injector.get('$compile');
@@ -34,6 +40,7 @@ describe('md-datepicker', function() {
     dateLocale = $injector.get('$mdDateLocale');
     $timeout = $injector.get('$timeout');
     keyCodes = $injector.get('$mdConstant').KEY_CODE;
+    $material = $injector.get('$material');
 
     pageScope = $rootScope.$new();
     pageScope.myDate = initialDate;
@@ -45,9 +52,14 @@ describe('md-datepicker', function() {
   }));
 
   afterEach(function() {
-    controller.isAttached && controller.closeCalendarPane();
-    pageScope.$destroy();
-    ngElement.remove();
+    attachedElements.forEach(function(element) {
+      element.controller.closeCalendarPane();
+      element.scope.$destroy();
+      element.element.remove();
+    });
+
+    attachedElements = [];
+    flushCalendar();
   });
 
   /**
@@ -65,6 +77,12 @@ describe('md-datepicker', function() {
     scope = ngElement.isolateScope();
     controller = ngElement.controller('mdDatepicker');
 
+    attachedElements.push({
+      element: outputElement,
+      controller: controller,
+      scope: pageScope
+    });
+
     return outputElement;
   }
 
@@ -73,6 +91,23 @@ describe('md-datepicker', function() {
     controller.ngInputElement.val(inputString).triggerHandler('input');
     $timeout.flush();
     pageScope.$apply();
+  }
+
+  /** Flushes the calendar animations and promises. */
+  function flushCalendar() {
+    if (!pageScope.$$phase) pageScope.$apply();
+    $material.flushOutstandingAnimations();
+  }
+
+  /** Opens a calendar. Should flush in order to avoid the calendars stacking up. */
+  function openCalendar(options) {
+    controller.openCalendarPane(options);
+    flushCalendar();
+  }
+
+  function closeCalendar() {
+    controller.closeCalendarPane();
+    flushCalendar();
   }
 
   it('should set initial value from ng-model', function() {
@@ -375,10 +410,8 @@ describe('md-datepicker', function() {
     it('should become touched from blurring closing the pane', function() {
       populateInputElement('17/1/2015');
 
-      controller.openCalendarPane({
-        target: controller.inputElement
-      });
-      controller.closeCalendarPane();
+      openCalendar({ target: controller.inputElement });
+      closeCalendar();
 
       expect(controller.ngModelCtrl.$touched).toBe(true);
     });
@@ -416,19 +449,36 @@ describe('md-datepicker', function() {
   });
 
   describe('floating calendar pane', function() {
+    function getCalendarHeight() {
+      var panelEl = controller.panelRef.panelEl;
+      return panelEl ? panelEl.prop('offsetHeight') : 0;
+    }
+
     it('should open and close the floating calendar pane element', function() {
       // We can asset that the calendarPane is in the DOM by checking if it has a height.
-      expect(controller.calendarPane.offsetHeight).toBe(0);
+      expect(getCalendarHeight()).toBe(0);
 
       element.querySelector('md-button').click();
-      $timeout.flush();
+      flushCalendar();
 
-      expect(controller.calendarPane.offsetHeight).toBeGreaterThan(0);
-      expect(controller.inputMask[0].style.left).toBeTruthy();
+      expect(getCalendarHeight()).toBeGreaterThan(0);
 
       // Click off of the calendar.
-      document.body.click();
-      expect(controller.calendarPane.offsetHeight).toBe(0);
+      var container = controller.panelRef.panelContainer;
+
+      container.triggerHandler({
+        type: 'mousedown',
+        target: container[0]
+      });
+
+      container.triggerHandler({
+        type: 'mouseup',
+        target: container[0]
+      });
+
+      flushCalendar();
+
+      expect(getCalendarHeight()).toBe(0);
     });
 
     it('should open and close the floating calendar pane element via keyboard', function() {
@@ -437,188 +487,68 @@ describe('md-datepicker', function() {
         altKey: true,
         keyCode: keyCodes.DOWN_ARROW
       });
-      $timeout.flush();
 
-      expect(controller.calendarPane.offsetHeight).toBeGreaterThan(0);
+      flushCalendar();
+
+      expect(getCalendarHeight()).toBeGreaterThan(0);
 
       // Fake an escape event closing the calendar.
       pageScope.$broadcast('md-calendar-close');
+      flushCalendar();
 
+      expect(getCalendarHeight()).toBe(0);
     });
 
     it('should open and close the floating calendar pane element via an expression on the scope', function() {
       pageScope.isOpen = false;
       createDatepickerInstance('<md-datepicker ng-model="myDate" md-is-open="isOpen"></md-datepicker>');
 
-      expect(controller.calendarPane.offsetHeight).toBe(0);
+      expect(getCalendarHeight()).toBe(0);
       expect(controller.isCalendarOpen).toBe(false);
 
-      pageScope.$apply(function() {
-        pageScope.isOpen = true;
-      });
+      pageScope.isOpen = true;
+      flushCalendar();
 
       // Open the calendar externally
-      expect(controller.calendarPane.offsetHeight).toBeGreaterThan(0);
+      expect(getCalendarHeight()).toBeGreaterThan(0);
       expect(controller.isCalendarOpen).toBe(true);
 
       // Close the calendar via the datepicker
-      controller.$scope.$apply(function() {
-        controller.closeCalendarPane();
-      });
+      closeCalendar();
+
       expect(pageScope.isOpen).toBe(false);
       expect(controller.isCalendarOpen).toBe(false);
     });
 
-    it('should adjust the position of the floating pane if it would go off-screen', function() {
-      // Absolutely position the picker near the edge of the screen.
-      var bodyRect = document.body.getBoundingClientRect();
-      element.style.position = 'absolute';
-      element.style.top = bodyRect.bottom + 'px';
-      element.style.left = bodyRect.right + 'px';
-      document.body.appendChild(element);
-
-      // Open the pane.
-      element.querySelector('md-button').click();
-      $timeout.flush();
-
-      // Expect that the whole pane is on-screen.
-      var paneRect = controller.calendarPane.getBoundingClientRect();
-      expect(paneRect.right).toBeLessThan(bodyRect.right + 1);
-      expect(paneRect.bottom).toBeLessThan(bodyRect.bottom + 1);
-      expect(paneRect.top).toBeGreaterThan(0);
-      expect(paneRect.left).toBeGreaterThan(0);
-
-      document.body.removeChild(element);
-    });
-
-    it('should adjust the pane position if it would go off-screen (w/ scrollable)', function() {
-      // Make the body super huge.
-      var superLongElement = document.createElement('div');
-      superLongElement.style.height = '10000px';
-      superLongElement.style.width = '1px';
-      document.body.appendChild(superLongElement);
-
-      // Absolutely position the picker near (say ~30px) the edge of the viewport.
-      element.style.position = 'absolute';
-      element.style.top = (window.innerHeight - 30) + 'px';
-      element.style.left = '0';
-      document.body.appendChild(element);
-
-      // Open the pane.
-      element.querySelector('md-button').click();
-      $timeout.flush();
-
-      // Expect that the pane is on-screen.
-      var paneRect = controller.calendarPane.getBoundingClientRect();
-      expect(paneRect.bottom).toBeLessThan(window.innerHeight + 1);
-
-      document.body.removeChild(element);
-      document.body.removeChild(superLongElement);
-    });
-
-    it('should keep the calendar pane in the right place with body scrolling disabled', function() {
-      // Make the body super huge and scroll down a bunch.
-      var body = document.body;
-      var superLongElement = document.createElement('div');
-      superLongElement.style.height = '10000px';
-      superLongElement.style.width = '1px';
-      body.appendChild(superLongElement);
-      body.scrollTop = 700;
-
-      // Absolutely position the picker such that the pane position doesn't need to be adjusted.
-      // (1/10 of the way down the screen).
-      element.style.position = 'absolute';
-      element.style.top = (document.body.scrollTop + (window.innerHeight * 0.10)) + 'px';
-      element.style.left = '0';
-      body.appendChild(element);
-
-      // Open the pane.
-      element.querySelector('md-button').click();
-      $timeout.flush();
-
-      // Expect that the calendar pane is in the same position as the inline datepicker.
-      var paneRect = controller.calendarPane.getBoundingClientRect();
-      var triggerRect = controller.inputContainer.getBoundingClientRect();
-
-      // We expect the offset to be close to the exact height, because on IE there are some deviations.
-      expect(controller.topMargin).toBeGreaterThan(0);
-      expect(paneRect.top).toBeCloseTo(triggerRect.top - controller.topMargin, 0.5);
-
-      // Restore body to pre-test state.
-      body.removeChild(superLongElement);
-      body.removeChild(element);
-    });
-
-    it('should shink the calendar pane when it would otherwise not fit on the screen', function() {
-      // Fake the window being very narrow so that the calendar pane won't fit on-screen.
-      controller.$window = {innerWidth: 200, innherHeight: 800};
-
-      // Open the calendar pane.
-      controller.openCalendarPane({});
-
-      // Expect the calendarPane to be scaled by an amount between zero and one.
-      expect(controller.calendarPane.style.transform).toMatch(/scale\(0\.\d+\)/);
-    });
-
     it('should not open the calendar pane if disabled', function() {
       controller.setDisabled(true);
-      controller.openCalendarPane({
-        target: controller.inputElement
-      });
-      scope.$apply();
+      openCalendar({ target: controller.inputElement });
+
       expect(controller.isCalendarOpen).toBeFalsy();
-      expect(controller.calendarPane.offsetHeight).toBe(0);
+      expect(getCalendarHeight()).toBe(0);
     });
 
     it('should close the calendar pane on md-calendar-close', function() {
-      controller.openCalendarPane({
-        target: controller.inputElement
-      });
+      openCalendar({ target: controller.inputElement });
+
+      expect(getCalendarHeight()).toBeGreaterThan(0);
 
       scope.$emit('md-calendar-close');
-      scope.$apply();
+      flushCalendar();
+
       expect(controller.calendarPaneOpenedFrom).toBe(null);
       expect(controller.isCalendarOpen).toBe(false);
-    });
-
-    it('should re-enable scrolling probably', function() {
-      var maskLength = getMaskLength();
-
-      controller.openCalendarPane({
-        target: controller.inputElement
-      });
-
-      expect(getMaskLength()).toBe(maskLength + 1);
-
-      controller.closeCalendarPane();
-
-      expect(getMaskLength()).toBe(maskLength);
-
-      controller.openCalendarPane({
-        target: controller.inputElement
-      });
-
-      expect(getMaskLength()).toBe(maskLength + 1);
-
-      // Trigger a scope destruction, like when a route changes.
-      scope.$destroy();
-
-      expect(getMaskLength()).toBe(maskLength);
-
-      function getMaskLength() {
-        return document.body.querySelectorAll('.md-scroll-mask').length;
-      }
     });
   });
 
   describe('md-calendar-change', function() {
     it('should update the model value and close the calendar pane', function() {
       var date = new Date(2015, JUN, 1);
-      controller.openCalendarPane({
-        target: controller.inputElement
-      });
+
+      openCalendar({ target: controller.inputElement });
+
       scope.$emit('md-calendar-change', date);
-      scope.$apply();
+
       expect(pageScope.myDate).toEqual(date);
       expect(controller.ngModelCtrl.$modelValue).toEqual(date);
 
@@ -631,9 +561,7 @@ describe('md-datepicker', function() {
       populateInputElement('cheese');
       expect(controller.inputContainer).toHaveClass('md-datepicker-invalid');
 
-      controller.openCalendarPane({
-        target: controller.inputElement
-      });
+      openCalendar({ target: controller.inputElement });
 
       scope.$emit('md-calendar-change', new Date());
       expect(controller.inputContainer).not.toHaveClass('md-datepicker-invalid');
@@ -647,22 +575,24 @@ describe('md-datepicker', function() {
 
     it('should be able open the calendar when the input is focused', function() {
       controller.ngInputElement.triggerHandler('focus');
+      flushCalendar();
       expect(controller.isCalendarOpen).toBe(true);
     });
 
     it('should not reopen a closed calendar when the window is refocused', inject(function($timeout) {
-      // Focus the input initially to open the calendar.
-      // Note that the element needs to be appended to the DOM so it can be set as the activeElement.
+      // Focus the input initially to open the calendar. Note that the element needs to be
+      // appended to the DOM so it can be set as the activeElement.
       document.body.appendChild(element);
       controller.inputElement.focus();
       controller.ngInputElement.triggerHandler('focus');
+      flushCalendar();
 
       expect(document.activeElement).toBe(controller.inputElement);
       expect(controller.isCalendarOpen).toBe(true);
 
       // Close the calendar, but make sure that the input is still focused.
-      controller.closeCalendarPane();
-      $timeout.flush();
+      closeCalendar();
+
       expect(document.activeElement).toBe(controller.inputElement);
       expect(controller.isCalendarOpen).toBe(false);
 
@@ -672,6 +602,7 @@ describe('md-datepicker', function() {
 
       // Try opening the calendar again.
       controller.ngInputElement.triggerHandler('focus');
+      flushCalendar();
       expect(controller.isCalendarOpen).toBe(false);
 
       // Clean up.
@@ -748,10 +679,6 @@ describe('md-datepicker', function() {
       expect(element).toHaveClass(invalidClass);
     }));
 
-    afterEach(function() {
-      element.remove();
-    });
-
     function compileElement(attrs) {
       var template =
         '<md-input-container>' +
@@ -771,11 +698,12 @@ describe('md-datepicker', function() {
 
     it('should trigger the ngFocus handler when the input is focused', function() {
       controller.ngInputElement.triggerHandler('focus');
+      flushCalendar();
       expect(pageScope.focusHandler).toHaveBeenCalled();
     });
 
     it('should trigger the ngFocus handler when the calendar is opened', function() {
-      controller.openCalendarPane({});
+      openCalendar({ target: controller.inputElement });
       expect(pageScope.focusHandler).toHaveBeenCalled();
     });
 
@@ -784,6 +712,7 @@ describe('md-datepicker', function() {
         'md-open-on-focus></md-datepicker>');
 
       controller.ngInputElement.triggerHandler('focus');
+      flushCalendar();
       expect(pageScope.focusHandler).toHaveBeenCalledTimes(1);
     });
   });
@@ -799,10 +728,8 @@ describe('md-datepicker', function() {
     });
 
     it('should trigger the ngBlur handler when the calendar is closed', function() {
-      controller.openCalendarPane({
-        target: controller.ngInputElement
-      });
-      controller.closeCalendarPane();
+      openCalendar({ target: controller.ngInputElement });
+      closeCalendar();
       expect(pageScope.blurHandler).toHaveBeenCalled();
     });
 
@@ -811,7 +738,10 @@ describe('md-datepicker', function() {
         'md-open-on-focus></md-datepicker>');
 
       controller.ngInputElement.triggerHandler('focus');
-      controller.closeCalendarPane();
+      flushCalendar();
+
+      closeCalendar();
+
       expect(pageScope.blurHandler).toHaveBeenCalledTimes(1);
     });
   });
@@ -826,8 +756,13 @@ describe('md-datepicker', function() {
     it('should set the aria-owns value, corresponding to the id of the calendar pane', function() {
       var ariaAttr = ngElement.attr('aria-owns');
 
+      controller.openCalendarPane({
+        target: controller.inputElement
+      });
+      flushCalendar();
+
       expect(ariaAttr).toBeTruthy();
-      expect(controller.calendarPane.id).toBe(ariaAttr);
+      expect(controller.panelRef.panelEl[0].querySelector('.md-datepicker-calendar-pane').id).toBe(ariaAttr);
     });
 
     it('should toggle the aria-expanded value', function() {

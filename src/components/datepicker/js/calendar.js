@@ -58,7 +58,10 @@
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
         dateFilter: '=mdDateFilter',
-        _currentView: '@mdCurrentView'
+        _currentView: '@mdCurrentView',
+
+        // private way of passing in the panel from the datepicker
+        _panelRef: '=mdPanelRef'
       },
       require: ['ngModel', 'mdCalendar'],
       controller: CalendarCtrl,
@@ -197,13 +200,18 @@
 
     var boundKeyHandler = angular.bind(this, this.handleKeyEvent);
 
-    // Bind the keydown handler to the body, in order to handle cases where the focused
-    // element gets removed from the DOM and stops propagating click events.
-    angular.element(document.body).on('keydown', boundKeyHandler);
+    if (this._panelRef) {
+      // Bind the keydown handler to the body, in order to handle cases where the focused
+      // element gets removed from the DOM and stops propagating key events.
+      angular.element(document.body).on('keydown', boundKeyHandler);
 
-    $scope.$on('$destroy', function() {
-      angular.element(document.body).off('keydown', boundKeyHandler);
-    });
+      $scope.$on('$destroy', function() {
+        angular.element(document.body).off('keydown', boundKeyHandler);
+      });
+    } else {
+      // If the calendar on it's own, it shouldn't bind global key handlers.
+      $element.on('keydown', boundKeyHandler);
+    }
 
     if (this.minDate && this.minDate > $mdDateLocale.firstRenderableDate) {
       this.firstRenderableDate = this.minDate;
@@ -345,27 +353,25 @@
   CalendarCtrl.prototype.handleKeyEvent = function(event) {
     var self = this;
 
-    this.$scope.$apply(function() {
-      // Capture escape and emit back up so that a wrapping component
-      // (such as a date-picker) can decide to close.
-      if (event.which == self.keyCode.ESCAPE || event.which == self.keyCode.TAB) {
-        self.$scope.$emit('md-calendar-close');
-
-        if (event.which == self.keyCode.TAB) {
+    if (!this._panelRef || this._panelRef.isAttached) {
+      this.$scope.$apply(function() {
+        // Capture tabbing and emit back up so that a wrapping component
+        // (such as a date-picker) can decide to close.
+        if (event.which === self.keyCode.TAB) {
+          self.$scope.$emit('md-calendar-close');
           event.preventDefault();
+          return;
         }
 
-        return;
-      }
-
-      // Broadcast the action that any child controllers should take.
-      var action = self.getActionFromKeyEvent(event);
-      if (action) {
-        event.preventDefault();
-        event.stopPropagation();
-        self.$scope.$broadcast('md-calendar-parent-action', action);
-      }
-    });
+        // Broadcast the action that any child controllers should take.
+        var action = self.getActionFromKeyEvent(event);
+        if (action) {
+          event.preventDefault();
+          event.stopPropagation();
+          self.$scope.$broadcast('md-calendar-parent-action', action);
+        }
+      });
+    }
   };
 
   /**

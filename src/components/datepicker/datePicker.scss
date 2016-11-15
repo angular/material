@@ -116,19 +116,8 @@ md-datepicker {
   }
 }
 
-.md-datepicker-is-showing .md-scroll-mask {
-  z-index: $z-index-calendar-pane - 1;
-}
-
 // Floating pane that contains the calendar at the bottom of the input.
 .md-datepicker-calendar-pane {
-  // On most browsers the `scale(0)` below prevents this element from
-  // overflowing it's parent, however IE and Edge seem to disregard it.
-  // The `left: -100%` pulls the element back in order to ensure that
-  // it doesn't cause an overflow.
-  position: absolute;
-  top: 0;
-  left: -100%;
   z-index: $z-index-calendar-pane;
   border-width: 1px;
   border-style: solid;
@@ -149,19 +138,15 @@ md-datepicker {
   width: $md-calendar-width;
   position: relative;
   overflow: hidden;
-
-  background: transparent;
-  pointer-events: none;
-  cursor: text;
 }
 
 // The calendar portion of the floating pane (vs. the input mask).
 .md-datepicker-calendar {
-  opacity: 0;
   // Use a modified timing function (from swift-ease-out) so that the opacity part of the
   // animation doesn't come in as quickly so that the floating pane doesn't ever seem to
   // cover up the trigger input.
   transition: opacity $md-datepicker-open-animation-duration cubic-bezier(0.5, 0, 0.25, 1);
+  opacity: 0;
 
   .md-pane-open & {
     opacity: 1;
@@ -194,7 +179,7 @@ md-datepicker {
 .md-datepicker-triangle-button {
   position: absolute;
   @include rtl-prop(right, left, 0, auto);
-  top: $md-date-arrow-size;
+  top: $md-date-arrow-size / 2;
 
   // TODO(jelbourn): This position isn't great on all platforms.
   @include rtl(transform, translateY(-25%) translateX(45%), translateY(-25%) translateX(-45%));

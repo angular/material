@@ -96,22 +96,6 @@
             'ng-focus="ctrl.setFocused(true)" ' +
             'ng-blur="ctrl.setFocused(false)"> ' +
             triangleButton +
-        '</div>' +
-
-        // This pane will be detached from here and re-attached to the document body.
-        '<div class="md-datepicker-calendar-pane md-whiteframe-z1" id="{{::ctrl.calendarPaneId}}">' +
-          '<div class="md-datepicker-input-mask">' +
-            '<div class="md-datepicker-input-mask-opaque"></div>' +
-          '</div>' +
-          '<div class="md-datepicker-calendar">' +
-            '<md-calendar role="dialog" aria-label="{{::ctrl.locale.msgCalendar}}" ' +
-                'md-current-view="{{::ctrl.currentView}}"' +
-                'md-min-date="ctrl.minDate"' +
-                'md-max-date="ctrl.maxDate"' +
-                'md-date-filter="ctrl.dateFilter"' +
-                'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen">' +
-            '</md-calendar>' +
-          '</div>' +
         '</div>';
       },
       require: ['ngModel', 'mdDatepicker', '?^mdInputContainer', '?^form'],
@@ -224,13 +208,31 @@
   /** Used for checking whether the current user agent is on iOS or Android. */
   var IS_MOBILE_REGEX = /ipad|iphone|ipod|android/i;
 
+  var CALENDAR = '' +
+  '<div class="md-datepicker-calendar-pane md-whiteframe-z1" id="{{::ctrl.calendarPaneId}}">' +
+    '<div class="md-datepicker-input-mask" tabindex="-1" ng-click="ctrl.closeCalendarPane()">' +
+      '<div class="md-datepicker-input-mask-opaque"></div>' +
+    '</div>' +
+    '<div class="md-datepicker-calendar">' +
+      '<md-calendar role="dialog" aria-label="{{::ctrl.locale.msgCalendar}}" ' +
+          'md-current-view="{{::ctrl.currentView}}"' +
+          'md-min-date="ctrl.minDate"' +
+          'md-max-date="ctrl.maxDate"' +
+          'md-date-filter="ctrl.dateFilter"' +
+          'md-panel-ref="ctrl.panelRef"' +
+          'ng-model="ctrl.date">' +
+      '</md-calendar>' +
+    '</div>' +
+  '</div>';
+
   /**
    * Controller for md-datepicker.
    *
    * @ngInject @constructor
    */
   function DatePickerCtrl($scope, $element, $attrs, $window, $mdConstant,
-    $mdTheming, $mdUtil, $mdDateLocale, $$mdDateUtil, $$rAF, $filter) {
+    $mdTheming, $mdUtil, $mdDateLocale, $$mdDateUtil, $$rAF, $filter,
+    $mdPanel) {
 
     /** @final */
     this.$window = $window;
@@ -263,6 +265,9 @@
      */
     this.documentElement = angular.element(document.documentElement);
 
+    /** @final */
+    this.$mdTheming = $mdTheming;
+
     /** @type {!angular.NgModelController} */
     this.ngModelCtrl = null;
 
@@ -275,17 +280,8 @@
     /** @type {HTMLElement} */
     this.inputContainer = $element[0].querySelector('.md-datepicker-input-container');
 
-    /** @type {HTMLElement} Floating calendar pane. */
-    this.calendarPane = $element[0].querySelector('.md-datepicker-calendar-pane');
-
     /** @type {HTMLElement} Calendar icon button. */
     this.calendarButton = $element[0].querySelector('.md-datepicker-button');
-
-    /**
-     * Element covering everything but the input in the top of the floating calendar pane.
-     * @type {!angular.JQLite}
-     */
-    this.inputMask = angular.element($element[0].querySelector('.md-datepicker-input-mask-opaque'));
 
     /** @final {!angular.JQLite} */
     this.$element = $element;
@@ -303,11 +299,22 @@
     this.isFocused = false;
 
     /** @type {boolean} */
-    this.isDisabled;
-    this.setDisabled($element[0].disabled || angular.isString($attrs.disabled));
+    this.isDisabled = false;
+    this.setDisabled($element[0].disabled || $attrs.hasOwnProperty('disabled'));
 
-    /** @type {boolean} Whether the date-picker's calendar pane is open. */
+    /** @type {boolean} Whether the date-picker's calendar pane is open. Used internally. */
     this.isCalendarOpen = false;
+
+    /**
+     * Whether calendar should be open. Used when triggering the calendar externally.
+     * It needs to be separate from `isCalendarOpen` in order to avoid some mixups
+     * where it might trigger the calendar a couple of times in a row.
+     * @type {boolean}
+     */
+    this.isOpen = false;
+
+    /** @type {boolean} Used to prevent infinite loops when using mdOpenOnFocus. */
+    this.preventInputFocus = false;
 
     /** @type {boolean} Whether the calendar should open when the input is focused. */
     this.openOnFocus = $attrs.hasOwnProperty('mdOpenOnFocus');
@@ -324,9 +331,6 @@
 
     /** @type {String} Unique id for the calendar pane. */
     this.calendarPaneId = 'md-date-pane-' + $mdUtil.nextUid();
-
-    /** Pre-bound click handler is saved so that the event listener can be removed. */
-    this.bodyClickHandler = angular.bind(this, this.handleBodyClick);
 
     /**
      * Name of the event that will trigger a close. Necessary to sniff the browser, because
@@ -352,6 +356,25 @@
     /** @type {Number} Extra margin for the top of the floating calendar. Gets determined on the first open. */
     this.topMargin = null;
 
+    /** @type {!MdPanelPosition} Position object for the mdPanel instance. */
+    this.panelPosition = $mdPanel.newPanelPosition()
+      .relativeTo(this.inputContainer)
+      .addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.ALIGN_TOPS)
+      .withOffsetX(-this.leftMargin + 'px')
+      .withOffsetY(angular.bind(this, this.getPanelYOffset));
+
+    /** @type {!MdPanelRef} Reference to the mdPanel instance of the calendar. */
+    this.panelRef = $mdPanel.create({
+      attachTo: document.body,
+      template: CALENDAR,
+      clickOutsideToClose: true,
+      escapeToClose: true,
+      focusOnOpen: false,
+      scope: this.$scope.$new(),
+      position: this.panelPosition,
+      onDomRemoved: angular.bind(this, this.closeCalendarPane)
+    });
+
     // Unless the user specifies so, the datepicker should not be a tab stop.
     // This is necessary because ngAria might add a tabindex to anything with an ng-model
     // (based on whether or not the user has turned that particular feature on/off).
@@ -365,29 +388,27 @@
     $attrs.$set('aria-owns', this.calendarPaneId);
 
     $mdTheming($element);
-    $mdTheming(angular.element(this.calendarPane));
 
     this.installPropertyInterceptors();
     this.attachChangeListeners();
     this.attachInteractionListeners();
 
-    var self = this;
-
-    $scope.$on('$destroy', function() {
-      self.detachCalendarPane();
-    });
-
     if ($attrs.mdIsOpen) {
       $scope.$watch('ctrl.isOpen', function(shouldBeOpen) {
         if (shouldBeOpen) {
-          self.openCalendarPane({
-            target: self.inputElement
-          });
+          self.openCalendarPane({ target: self.inputElement });
         } else {
           self.closeCalendarPane();
         }
       });
     }
+
+    var self = this;
+
+    $scope.$on('$destroy', function() {
+      self.detachCalendarPane();
+      self.panelRef.destroy();
+    });
   }
 
   /**
@@ -470,18 +491,25 @@
   DatePickerCtrl.prototype.attachInteractionListeners = function() {
     var self = this;
     var $scope = this.$scope;
-    var keyCodes = this.$mdConstant.KEY_CODE;
 
     // Add event listener through angular so that we can triggerHandler in unit tests.
     self.ngInputElement.on('keydown', function(event) {
-      if (event.altKey && event.keyCode == keyCodes.DOWN_ARROW) {
+      if (event.altKey && event.keyCode === self.$mdConstant.KEY_CODE.DOWN_ARROW) {
         self.openCalendarPane(event);
         $scope.$digest();
       }
     });
 
     if (self.openOnFocus) {
-      self.ngInputElement.on('focus', angular.bind(self, self.openCalendarPane));
+      self.ngInputElement.on('focus', function(event) {
+        if (!self.preventInputFocus && !self.inputFocusedOnWindowBlur) {
+          self.preventInputFocus = true;
+          self.openCalendarPane(event);
+        } else if (self.inputFocusedOnWindowBlur) {
+          self.inputFocusedOnWindowBlur = false;
+        }
+      });
+
       angular.element(self.$window).on('blur', self.windowBlurHandler);
 
       $scope.$on('$destroy', function() {
@@ -626,103 +654,55 @@
 
   /** Position and attach the floating calendar to the document. */
   DatePickerCtrl.prototype.attachCalendarPane = function() {
-    var calendarPane = this.calendarPane;
-    var body = document.body;
+    var self = this;
 
-    calendarPane.style.transform = '';
-    this.$element.addClass(OPEN_CLASS);
-    this.mdInputContainer && this.mdInputContainer.element.addClass(OPEN_CLASS);
-    angular.element(body).addClass('md-datepicker-is-showing');
+    return this.panelRef.open().then(function(panelRef) {
+      var calendarPane = panelRef.panelEl[0].querySelector('.md-datepicker-calendar-pane');
+      var inputMask = calendarPane.querySelector('.md-datepicker-input-mask-opaque');
+      var elementRect = self.inputContainer.getBoundingClientRect();
 
-    var elementRect = this.inputContainer.getBoundingClientRect();
-    var bodyRect = body.getBoundingClientRect();
+      self.$mdTheming(angular.element(calendarPane));
 
-    if (!this.topMargin || this.topMargin < 0) {
-      this.topMargin = (this.inputMask.parent().prop('clientHeight') - this.ngInputElement.prop('clientHeight')) / 2;
-    }
+      // Creates an overlay with a hole the same size as element. We remove a pixel or two
+      // on each end to make it overlap slightly. The overlay's background is added in
+      // the theme in the form of a box-shadow with a huge spread.
+      angular.element(inputMask).css({
+        position: 'absolute',
+        left: self.leftMargin + 'px',
 
-    // Check to see if the calendar pane would go off the screen. If so, adjust position
-    // accordingly to keep it within the viewport.
-    var paneTop = elementRect.top - bodyRect.top - this.topMargin;
-    var paneLeft = elementRect.left - bodyRect.left - this.leftMargin;
+        // TODO(crisbeto): this should use getPanelYOffset once we ditch the units
+        top: self.topMargin + 'px',
+        width: elementRect.width + 'px',
+        height: (elementRect.height - 2) + 'px'
+      });
 
-    // If ng-material has disabled body scrolling (for example, if a dialog is open),
-    // then it's possible that the already-scrolled body has a negative top/left. In this case,
-    // we want to treat the "real" top as (0 - bodyRect.top). In a normal scrolling situation,
-    // though, the top of the viewport should just be the body's scroll position.
-    var viewportTop = (bodyRect.top < 0 && document.body.scrollTop == 0) ?
-        -bodyRect.top :
-        document.body.scrollTop;
-
-    var viewportLeft = (bodyRect.left < 0 && document.body.scrollLeft == 0) ?
-        -bodyRect.left :
-        document.body.scrollLeft;
-
-    var viewportBottom = viewportTop + this.$window.innerHeight;
-    var viewportRight = viewportLeft + this.$window.innerWidth;
-
-    // Creates an overlay with a hole the same size as element. We remove a pixel or two
-    // on each end to make it overlap slightly. The overlay's background is added in
-    // the theme in the form of a box-shadow with a huge spread.
-    this.inputMask.css({
-      position: 'absolute',
-      left: this.leftMargin + 'px',
-      top: this.topMargin + 'px',
-      width: (elementRect.width - 1) + 'px',
-      height: (elementRect.height - 2) + 'px'
-    });
-
-    // If the right edge of the pane would be off the screen and shifting it left by the
-    // difference would not go past the left edge of the screen. If the calendar pane is too
-    // big to fit on the screen at all, move it to the left of the screen and scale the entire
-    // element down to fit.
-    if (paneLeft + CALENDAR_PANE_WIDTH > viewportRight) {
-      if (viewportRight - CALENDAR_PANE_WIDTH > 0) {
-        paneLeft = viewportRight - CALENDAR_PANE_WIDTH;
-      } else {
-        paneLeft = viewportLeft;
-        var scale = this.$window.innerWidth / CALENDAR_PANE_WIDTH;
-        calendarPane.style.transform = 'scale(' + scale + ')';
-      }
-
-      calendarPane.classList.add('md-datepicker-pos-adjusted');
-    }
-
-    // If the bottom edge of the pane would be off the screen and shifting it up by the
-    // difference would not go past the top edge of the screen.
-    if (paneTop + CALENDAR_PANE_HEIGHT > viewportBottom &&
-        viewportBottom - CALENDAR_PANE_HEIGHT > viewportTop) {
-      paneTop = viewportBottom - CALENDAR_PANE_HEIGHT;
-      calendarPane.classList.add('md-datepicker-pos-adjusted');
-    }
-
-    calendarPane.style.left = paneLeft + 'px';
-    calendarPane.style.top = paneTop + 'px';
-    document.body.appendChild(calendarPane);
-
-    // Add CSS class after one frame to trigger open animation.
-    this.$$rAF(function() {
-      calendarPane.classList.add('md-pane-open');
+      // Add the CSS classes after one frame to trigger open animation. Note that it needs
+      // an extra timeout, because in some casses rAF might fire too early (e.g. when the
+      // input focus opens the calendar), breaking the animation.
+      self.$mdUtil.nextTick(function() {
+        self.$$rAF(function() {
+          calendarPane.classList.add('md-pane-open');
+          self.$element.addClass(OPEN_CLASS);
+          self.mdInputContainer && self.mdInputContainer.element.addClass(OPEN_CLASS);
+        });
+      }, false);
     });
   };
 
   /** Detach the floating calendar pane from the document. */
   DatePickerCtrl.prototype.detachCalendarPane = function() {
+    var panelRef = this.panelRef;
+
     this.$element.removeClass(OPEN_CLASS);
     this.mdInputContainer && this.mdInputContainer.element.removeClass(OPEN_CLASS);
-    angular.element(document.body).removeClass('md-datepicker-is-showing');
-    this.calendarPane.classList.remove('md-pane-open');
-    this.calendarPane.classList.remove('md-datepicker-pos-adjusted');
 
-    if (this.isCalendarOpen) {
-      this.$mdUtil.enableScrolling();
+    if (panelRef.panelEl) {
+      panelRef.panelEl[0]
+        .querySelector('.md-datepicker-calendar-pane')
+        .classList.remove('md-pane-open');
     }
 
-    if (this.calendarPane.parentNode) {
-      // Use native DOM removal because we do not want any of the
-      // angular state of this element to be disposed.
-      this.calendarPane.parentNode.removeChild(this.calendarPane);
-    }
+    panelRef.close();
   };
 
   /**
@@ -730,70 +710,40 @@
    * @param {Event} event
    */
   DatePickerCtrl.prototype.openCalendarPane = function(event) {
-    if (!this.isCalendarOpen && !this.isDisabled && !this.inputFocusedOnWindowBlur) {
+    if (!this.isCalendarOpen && !this.isDisabled) {
+      var self = this;
+
       this.isCalendarOpen = this.isOpen = true;
       this.calendarPaneOpenedFrom = event.target;
 
-      // Because the calendar pane is attached directly to the body, it is possible that the
-      // rest of the component (input, etc) is in a different scrolling container, such as
-      // an md-content. This means that, if the container is scrolled, the pane would remain
-      // stationary. To remedy this, we disable scrolling while the calendar pane is open, which
-      // also matches the native behavior for things like `<select>` on Mac and Windows.
-      this.$mdUtil.disableScrollAround(this.calendarPane);
-
-      this.attachCalendarPane();
-      this.focusCalendar();
-      this.evalAttr('ngFocus');
-
-      // Attach click listener inside of a timeout because, if this open call was triggered by a
-      // click, we don't want it to be immediately propogated up to the body and handled.
-      var self = this;
-      this.$mdUtil.nextTick(function() {
-        // Use 'touchstart` in addition to click in order to work on iOS Safari, where click
-        // events aren't propogated under most circumstances.
-        // See http://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
-        self.documentElement.on('click touchstart', self.bodyClickHandler);
-      }, false);
-
-      window.addEventListener(this.windowEventName, this.windowEventHandler);
+      this.attachCalendarPane().then(function() {
+        self.focusCalendar();
+        self.evalAttr('ngFocus');
+        window.addEventListener(self.windowEventName, self.windowEventHandler);
+      });
     }
   };
 
   /** Close the floating calendar pane. */
   DatePickerCtrl.prototype.closeCalendarPane = function() {
     if (this.isCalendarOpen) {
-      var self = this;
+      this.detachCalendarPane();
+      this.ngModelCtrl.$setTouched();
+      this.evalAttr('ngBlur');
+      window.removeEventListener(this.windowEventName, this.windowEventHandler);
 
-      self.detachCalendarPane();
-      self.ngModelCtrl.$setTouched();
-      self.evalAttr('ngBlur');
+      this.calendarPaneOpenedFrom.focus();
+      this.calendarPaneOpenedFrom = null;
+      this.isCalendarOpen = this.isOpen = false;
 
-      self.documentElement.off('click touchstart', self.bodyClickHandler);
-      window.removeEventListener(self.windowEventName, self.windowEventHandler);
+      if (this.openOnFocus) {
+        var self = this;
 
-      self.calendarPaneOpenedFrom.focus();
-      self.calendarPaneOpenedFrom = null;
-
-      if (self.openOnFocus) {
-        // Ensures that all focus events have fired before resetting
-        // the calendar. Prevents the calendar from reopening immediately
-        // in IE when md-open-on-focus is set. Also it needs to trigger
-        // a digest, in order to prevent issues where the calendar wasn't
-        // showing up on the next open.
-        self.$mdUtil.nextTick(reset);
-      } else {
-        reset();
+        this.$mdUtil.nextTick(function() {
+          self.preventInputFocus = false;
+        }, false);
       }
     }
-
-    function reset(){
-      self.isCalendarOpen = self.isOpen = false;
-    }
-  };
-
-  /** Gets the controller instance for the calendar in the floating pane. */
-  DatePickerCtrl.prototype.getCalendarCtrl = function() {
-    return angular.element(this.calendarPane.querySelector('md-calendar')).controller('mdCalendar');
   };
 
   /** Focus the calendar in the floating pane. */
@@ -801,7 +751,8 @@
     // Use a timeout in order to allow the calendar to be rendered, as it is gated behind an ng-if.
     var self = this;
     this.$mdUtil.nextTick(function() {
-      self.getCalendarCtrl().focus();
+      var calendarEl = angular.element(self.panelRef.panelEl[0].querySelector('md-calendar'));
+      calendarEl.controller('mdCalendar').focus();
     }, false);
   };
 
@@ -821,23 +772,6 @@
     }
 
     this.isFocused = isFocused;
-  };
-
-  /**
-   * Handles a click on the document body when the floating calendar pane is open.
-   * Closes the floating calendar pane if the click is not inside of it.
-   * @param {MouseEvent} event
-   */
-  DatePickerCtrl.prototype.handleBodyClick = function(event) {
-    if (this.isCalendarOpen) {
-      var isInCalendar = this.$mdUtil.getClosest(event.target, 'md-calendar');
-
-      if (!isInCalendar) {
-        this.closeCalendarPane();
-      }
-
-      this.$scope.$digest();
-    }
   };
 
   /**
@@ -882,5 +816,20 @@
     this.mdInputContainer && this.mdInputContainer.setHasValue(!!value);
     this.resizeInputElement();
     this.updateErrorState();
+  };
+
+  /**
+   * Calculates and caches the offset that will be used to position the
+   * calendar overlay over the input element.
+   * @return {string}
+   */
+  DatePickerCtrl.prototype.getPanelYOffset = function() {
+    if (!this.topMargin || this.topMargin < 0) {
+      var inputMask = this.panelRef.panelEl[0].querySelector('.md-datepicker-input-mask');
+      this.topMargin = (inputMask.offsetHeight - this.inputElement.offsetHeight) / 2;
+    }
+
+    // TODO(crisbeto): the units can be removed once #9609 is merged.
+    return -this.topMargin + 'px';
   };
 })();
