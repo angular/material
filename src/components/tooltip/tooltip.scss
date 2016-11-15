@@ -1,71 +1,67 @@
-$tooltip-fontsize-lg: rem(1) !default;
-$tooltip-fontsize-sm: rem(1.4) !default;
-$tooltip-height-lg: rem(2.2) !default;
-$tooltip-height-sm: rem(3.2) !default;
-$tooltip-top-margin-lg: rem(1.4) !default;
-$tooltip-top-margin-sm: rem(2.4) !default;
-$tooltip-lr-padding-lg: rem(0.8) !default;
-$tooltip-lr-padding-sm: rem(1.6) !default;
-$tooltip-max-width: rem(3.20) !default;
+$tooltip-fontsize-lg: 10px !default;
+$tooltip-fontsize-sm: 14px !default;
+$tooltip-height-lg: 22px !default;
+$tooltip-height-sm: 32px !default;
+$tooltip-top-margin-lg: 14px !default;
+$tooltip-top-margin-sm: 24px !default;
+$tooltip-lr-padding-lg: 8px !default;
+$tooltip-lr-padding-sm: 16px !default;
+$tooltip-max-width: 32px !default;
 
-md-tooltip {
-  position: absolute;
-  z-index: $z-index-tooltip;
-  overflow: hidden;
+.md-tooltip {
   pointer-events: none;
   border-radius: 4px;
-
+  overflow: hidden;
+  opacity: 0;
   font-weight: 500;
   font-size: $tooltip-fontsize-sm;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  height: $tooltip-height-sm;
+  line-height: $tooltip-height-sm;
+  padding-right: $tooltip-lr-padding-sm;
+  padding-left: $tooltip-lr-padding-sm;
+  &.md-origin-top {
+    transform-origin: center bottom;
+    margin-top: -$tooltip-top-margin-sm;
+  }
+  &.md-origin-right {
+    transform-origin: left center;
+    margin-left: $tooltip-top-margin-sm;
+  }
+  &.md-origin-bottom {
+    transform-origin: center top;
+    margin-top: $tooltip-top-margin-sm;
+  }
+  &.md-origin-left {
+    transform-origin: right center;
+    margin-left: -$tooltip-top-margin-sm;
+  }
+
   @media (min-width: $layout-breakpoint-sm) {
     font-size: $tooltip-fontsize-lg;
+    height: $tooltip-height-lg;
+    line-height: $tooltip-height-lg;
+    padding-right: $tooltip-lr-padding-lg;
+    padding-left: $tooltip-lr-padding-lg;
+    &.md-origin-top { margin-top: -$tooltip-top-margin-lg; }
+    &.md-origin-right { margin-left: $tooltip-top-margin-lg; }
+    &.md-origin-bottom { margin-top: $tooltip-top-margin-lg; }
+    &.md-origin-left { margin-left: -$tooltip-top-margin-lg; }
   }
 
-  .md-content {
-    position: relative;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transform-origin: center top;
+  &.md-show-add {
     transform: scale(0);
-    opacity: 0;
-    height: $tooltip-height-sm;
-    line-height: $tooltip-height-sm;
-    padding-left: $tooltip-lr-padding-sm;
-    padding-right: $tooltip-lr-padding-sm;
-    @media (min-width: $layout-breakpoint-sm) {
-      height: $tooltip-height-lg;
-      line-height: $tooltip-height-lg;
-      padding-left: $tooltip-lr-padding-lg;
-      padding-right: $tooltip-lr-padding-lg;
-    }
-    &.md-show-add {
-      transition: $swift-ease-out;
-      transition-duration: .2s;
-      transform: scale(0);
-      opacity: 0;
-    }
-    &.md-show, &.md-show-add-active {
-      transform: scale(1);
-      opacity: 0.9;
-      transform-origin: center top;
-    }
-    &.md-show-remove {
-      transition: $swift-ease-out;
-      transition-duration: .2s;
-      &.md-show-remove-active {
-        transform: scale(0);
-        opacity: 0;
-      }
-    }
   }
-
-  &.md-hide {
-    transition: $swift-ease-in;
-  }
-
   &.md-show {
     transition: $swift-ease-out;
-    pointer-events: auto;
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  &.md-hide {
+    transition: $swift-ease-in;
+    transition-duration: .1s;
+    transform: scale(0);
+    opacity: 0;
   }
 }
