@@ -330,7 +330,8 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
             '<md-button class="md-no-style"></md-button>'
           );
 
-          buttonWrap[0].setAttribute('aria-label', tEl[0].textContent);
+          // Expect the root element to have a label set. If not set, determine the label from the text content.
+          $mdAria.expectWithText(tEl, 'aria-label');
 
           copyAttributes(tEl[0], buttonWrap[0]);
 
