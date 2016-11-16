@@ -59,13 +59,11 @@ md-menu-content.md-menu-bar-menu.md-dense {
   .md-button {
     min-height: 0;
     height: 4 * $baseline-grid;
-    display: flex;
     span {
-      flex-grow: 1;
+      @include rtl(float, left, right);
     }
     span.md-alt-text {
-      flex-grow: 0;
-      align-self: flex-end;
+      @include rtl(float, right, left);
       margin: 0 $baseline-grid;
     }
   }
