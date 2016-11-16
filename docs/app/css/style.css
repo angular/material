@@ -844,10 +844,25 @@ table.attributes  tr  td:last-child {
   padding-left: 10px;
 }
 
-table.md-api-table  tr  td:first-child {
+table.md-api-table:not(.md-css-table)  tr  td:first-child {
   font-weight: bold;
 }
 
+table.md-css-table .md-css-selector {
+  display: block;
+  padding: 8px 16px;
+
+  /* Offset the padding of the <td> element */
+  margin: -12px -16px 12px -16px;
+
+  background-color: #0C2238;
+  color: #9ccc65;
+}
+
+/* Fix some odd bottom margin */
+table.md-css-table td p {
+  margin: 0.8em 0;
+}
 
 .layout_note {
   font-size: 0.9em;
