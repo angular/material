@@ -48,6 +48,11 @@ md-switch {
     float: left;
   }
 
+  &.md-inverted .md-container {
+    @include rtl(margin-right, initial, 8px);
+    @include rtl(margin-left, 8px, initial);
+  }
+
   // If the user moves his mouse off the switch, stil display grabbing cursor
   &:not([disabled]) {
     .md-dragging,
