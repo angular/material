@@ -197,12 +197,26 @@
 
     var boundKeyHandler = angular.bind(this, this.handleKeyEvent);
 
+
+
+    // If use the md-calendar directly in the body without datepicker,
+    // handleKeyEvent will disable other inputs on the page.
+    // So only apply the handleKeyEvent on the body when the md-calendar inside datepicker,
+    // otherwise apply on the calendar element only.
+
+    var handleKeyElement;
+    if ($element.parent().hasClass('md-datepicker-calendar')) {
+      handleKeyElement = angular.element(document.body);
+    } else {
+      handleKeyElement = $element;
+    }
+
     // Bind the keydown handler to the body, in order to handle cases where the focused
     // element gets removed from the DOM and stops propagating click events.
-    angular.element(document.body).on('keydown', boundKeyHandler);
+    handleKeyElement.on('keydown', boundKeyHandler);
 
     $scope.$on('$destroy', function() {
-      angular.element(document.body).off('keydown', boundKeyHandler);
+      handleKeyElement.off('keydown', boundKeyHandler);
     });
 
     if (this.minDate && this.minDate > $mdDateLocale.firstRenderableDate) {
