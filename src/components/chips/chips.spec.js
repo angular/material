@@ -1224,6 +1224,19 @@ describe('<md-chips>', function() {
               expect(scope.items.length).toBe(4);
               expect(scope.items[3]).toBe('Grape');
             }));
+
+          it('should use an empty string if ngModel value is falsy', inject(function($timeout) {
+            var element = buildChips(NG_MODEL_TEMPLATE);
+            var ctrl = element.controller('mdChips');
+
+            $timeout.flush();
+
+            var ngModelCtrl = ctrl.userInputNgModelCtrl;
+
+            expect(ngModelCtrl.$viewValue).toBeFalsy();
+            expect(ctrl.getChipBuffer()).toBe('');
+          }));
+
         });
 
         describe('without ngModel', function() {
