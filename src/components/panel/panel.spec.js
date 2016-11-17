@@ -2724,6 +2724,20 @@ describe('$mdPanel', function() {
       expect(panelRef.panelContainer).toHaveClass(HIDDEN_CLASS);
     });
 
+    it('should match the backdrop animation duration with the panel', function() {
+      mdPanelAnimation.duration(500);
+
+      openPanel({
+        hasBackdrop: true,
+        animation: mdPanelAnimation
+      });
+
+      var backdropAnimation = panelRef._backdropRef.config.animation;
+
+      expect(backdropAnimation._openDuration).toBe(mdPanelAnimation._openDuration);
+      expect(backdropAnimation._closeDuration).toBe(mdPanelAnimation._closeDuration);
+    });
+
     describe('should determine openFrom when', function() {
       it('provided a selector', function() {
         var animation = mdPanelAnimation.openFrom('button');
@@ -2811,6 +2825,34 @@ describe('$mdPanel', function() {
 
         expect(animation._openDuration).toBeFalsy();
         expect(animation._closeDuration).toBeFalsy();
+      });
+    });
+
+    describe('updating the animation of a panel', function() {
+      it('should change the animation config of a panel', function() {
+        var newAnimation = $mdPanel.newPanelAnimation();
+
+        openPanel();
+
+        panelRef.updateAnimation(newAnimation);
+
+        expect(panelRef.config.animation).toBe(newAnimation);
+      });
+
+      it('should update the duration of the backdrop animation', function() {
+        var newAnimation = $mdPanel.newPanelAnimation().duration({
+          open: 1000,
+          close: 2000
+        });
+
+        openPanel({ hasBackdrop: true });
+
+        panelRef.updateAnimation(newAnimation);
+
+        var backdropAnimation = panelRef._backdropRef.config.animation;
+
+        expect(backdropAnimation._openDuration).toBe(newAnimation._openDuration);
+        expect(backdropAnimation._closeDuration).toBe(newAnimation._closeDuration);
       });
     });
   });
