@@ -2364,6 +2364,39 @@ describe('$mdPanel', function() {
           });
       });
 
+      it('should keep the panel within the viewport on repeat openings',
+        function() {
+
+          config.position = mdPanelPosition
+            .relativeTo(myButton)
+            .addPanelPosition(xPosition.ALIGN_END, yPosition.ALIGN_TOPS);
+
+          var panelRef = $mdPanel.create(config);
+
+          myButton.css({
+            position: 'absolute',
+            left: '-100px',
+            margin: 0
+          });
+
+          panelRef.open();
+          flushPanel();
+
+          expect(panelRef.panelEl[0].offsetLeft).toBe(VIEWPORT_MARGIN);
+          expect(panelRef.panelEl[0]).toHaveClass(ADJUSTED_CLASS);
+
+          panelRef.close();
+          flushPanel();
+
+          panelRef.open();
+          flushPanel();
+
+          expect(panelRef.panelEl[0].offsetLeft).toBe(VIEWPORT_MARGIN);
+          expect(panelRef.panelEl[0]).toHaveClass(ADJUSTED_CLASS);
+
+          panelRef.destroy();
+        });
+
       describe('vertically', function() {
         it('above an element', function() {
           var position = mdPanelPosition

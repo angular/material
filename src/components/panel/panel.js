@@ -2713,7 +2713,7 @@ MdPanelPosition.prototype._reduceTranslateValues =
  * @private
  */
 MdPanelPosition.prototype._setPanelPosition = function(panelEl) {
-  // Remove the class in case it has been added before.
+  // Remove the "position adjusted" class in case it has been added before.
   panelEl.removeClass('_md-panel-position-adjusted');
 
   // Only calculate the position if necessary.
@@ -2725,6 +2725,7 @@ MdPanelPosition.prototype._setPanelPosition = function(panelEl) {
   if (this._actualPosition) {
     this._calculatePanelPosition(panelEl, this._actualPosition);
     this._setTransform(panelEl);
+    this._constrainToViewport(panelEl);
     return;
   }
 
@@ -2738,8 +2739,6 @@ MdPanelPosition.prototype._setPanelPosition = function(panelEl) {
     }
   }
 
-  // Class that can be used to re-style the panel if it was repositioned.
-  panelEl.addClass('_md-panel-position-adjusted');
   this._constrainToViewport(panelEl);
 };
 
@@ -2751,6 +2750,8 @@ MdPanelPosition.prototype._setPanelPosition = function(panelEl) {
  */
 MdPanelPosition.prototype._constrainToViewport = function(panelEl) {
   var margin = MdPanelPosition.viewportMargin;
+  var initialTop = this._top;
+  var initialLeft = this._left;
 
   if (this.getTop()) {
     var top = parseInt(this.getTop());
@@ -2775,6 +2776,12 @@ MdPanelPosition.prototype._constrainToViewport = function(panelEl) {
       this._left = left - (right - viewportWidth + margin) + 'px';
     }
   }
+
+  // Class that can be used to re-style the panel if it was repositioned.
+  panelEl.toggleClass(
+    '_md-panel-position-adjusted',
+    this._top !== initialTop || this._left !== initialLeft
+  );
 };
 
 
