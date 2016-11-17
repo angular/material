@@ -544,6 +544,20 @@ describe('$mdPanel', function() {
       expect(PANEL_EL).not.toExist();
     });
 
+    it('should close when clickOutsideToClose set to true and ' +
+        'propagateContainerEvents is also set to true', function() {
+          var config = {
+            propagateContainerEvents: true,
+            clickOutsideToClose: true
+          };
+
+          openPanel(config);
+
+          clickPanelContainer(getElement('body'));
+
+          expect(PANEL_EL).not.toExist();
+        });
+
     it('should not close when escapeToClose set to false', function() {
       openPanel();
 
@@ -3094,12 +3108,22 @@ describe('$mdPanel', function() {
     attachedElements.push(element);
   }
 
-  function clickPanelContainer() {
+  /**
+   * Returns the angular element associated with a CSS selector or element.
+   * @param el {string|!angular.JQLite|!Element}
+   * @returns {!angular.JQLite}
+   */
+  function getElement(el) {
+    var queryResult = angular.isString(el) ? document.querySelector(el) : el;
+    return angular.element(queryResult);
+  }
+
+  function clickPanelContainer(container) {
     if (!panelRef) {
       return;
     }
 
-    var container = panelRef.panelContainer;
+    container = container || panelRef.panelContainer;
 
     container.triggerHandler({
       type: 'mousedown',
