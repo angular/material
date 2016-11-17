@@ -1134,6 +1134,82 @@ describe('$mdDialog', function() {
       expect($document.activeElement).toBe(parent[0].querySelector('#focus-target'));
     }));
 
+    it('should restore the focus to the origin upon close', inject(function($mdDialog, $compile, $rootScope) {
+      var scope = $rootScope.$new();
+      var body = angular.element(document.body);
+      var parent = angular.element('<div>');
+      var button = $compile('<button ng-click="openDialog($event)">Open</button>')(scope);
+
+      // Append the button to the body, because otherwise the dialog is not able to determine
+      // the origin rectangle.
+      document.body.appendChild(button[0]);
+
+      scope.openDialog = function($event) {
+        $mdDialog.show({
+          parent: parent,
+          template: '<md-dialog>Test</md-dialog>',
+          targetEvent: $event,
+          scope: scope.$new()
+        });
+      };
+
+      // Emit a keyboard event to fake a keyboard interaction.
+      body.triggerHandler('keydown');
+      button.triggerHandler('click');
+
+      runAnimation();
+
+      expect(parent.find('md-dialog').length).toBe(1);
+      expect(document.activeElement).not.toBe(button[0]);
+
+
+      $mdDialog.hide();
+      runAnimation();
+
+      expect(parent.find('md-dialog').length).toBe(0);
+      expect(document.activeElement).toBe(button[0]);
+
+      button.remove();
+    }));
+
+    it('should not restore the focus without keyboard interaction', inject(function($mdDialog, $compile, $rootScope) {
+      var scope = $rootScope.$new();
+      var body = angular.element(document.body);
+      var parent = angular.element('<div>');
+      var button = $compile('<button ng-click="openDialog($event)">Open</button>')(scope);
+
+      // Append the button to the body, because otherwise the dialog is not able to determine
+      // the origin rectangle.
+      document.body.appendChild(button[0]);
+
+      scope.openDialog = function($event) {
+        $mdDialog.show({
+          parent: parent,
+          template: '<md-dialog>Test</md-dialog>',
+          targetEvent: $event,
+          scope: scope.$new()
+        });
+      };
+
+      // Emit a keyboard event to fake a mouse interaction.
+      body.triggerHandler('mousedown');
+      button.triggerHandler('click');
+
+      runAnimation();
+
+      expect(parent.find('md-dialog').length).toBe(1);
+      expect(document.activeElement).not.toBe(button[0]);
+
+
+      $mdDialog.hide();
+      runAnimation();
+
+      expect(parent.find('md-dialog').length).toBe(0);
+      expect(document.activeElement).not.toBe(button[0]);
+
+      button.remove();
+    }));
+
     it('should focus the dialog element if no actions are set', inject(function($mdDialog, $rootScope, $document) {
       jasmine.mockElementFocus(this);
 
