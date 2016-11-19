@@ -256,12 +256,8 @@
     /** @final */
     this.$$rAF = $$rAF;
 
-    /**
-     * Holds locale-specific formatters, parsers, labels etc. Allows
-     * the user to override specific ones from the $mdDateLocale provider.
-     * @type {!Object}
-     */
-    this.locale = this.dateLocale ? angular.extend({}, $mdDateLocale, this.dateLocale) : $mdDateLocale;
+    /** @final */
+    this.$mdDateLocale = $mdDateLocale;
 
     /**
      * The root document element. This is used for attaching a top-level click handler to
@@ -376,10 +372,6 @@
     $mdTheming($element);
     $mdTheming(angular.element(this.calendarPane));
 
-    this.installPropertyInterceptors();
-    this.attachChangeListeners();
-    this.attachInteractionListeners();
-
     var self = this;
 
     $scope.$on('$destroy', function() {
@@ -397,7 +389,32 @@
         }
       });
     }
+
+    // For Angular 1.4 and older, where there are no lifecycle hooks but bindings are pre-assigned,
+    // manually call the $onInit hook.
+    if (angular.version.major === 1 && angular.version.minor <= 4) {
+      this.$onInit();
+    }
+
   }
+
+  /**
+   * Angular Lifecycle hook for newer Angular versions.
+   * Bindings are not guaranteed to have been assigned in the controller, but they are in the $onInit hook.
+   */
+  DatePickerCtrl.prototype.$onInit = function() {
+
+    /**
+     * Holds locale-specific formatters, parsers, labels etc. Allows
+     * the user to override specific ones from the $mdDateLocale provider.
+     * @type {!Object}
+     */
+    this.locale = this.dateLocale ? angular.extend({}, this.$mdDateLocale, this.dateLocale) : this.$mdDateLocale;
+
+    this.installPropertyInterceptors();
+    this.attachChangeListeners();
+    this.attachInteractionListeners();
+  };
 
   /**
    * Sets up the controller's reference to ngModelController and
