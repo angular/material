@@ -778,6 +778,26 @@ describe('$mdDialog', function() {
 
       expect(response).toBe('responsetext');
     }));
+
+    it('should disable the confirm button if required is set', function(){
+      var parent = angular.element('<div>');
+      var response;
+
+      $mdDialog.show(
+        $mdDialog
+          .prompt()
+          .parent(parent)
+          .require(true)
+          .textContent('Hello world')
+      );
+
+      $rootScope.$apply();
+      runAnimation();
+
+      var buttons = parent.find('md-button');
+
+      expect(buttons.eq(0).text()).toBeDisabled();
+    })
   });
 
   describe('#build()', function() {
