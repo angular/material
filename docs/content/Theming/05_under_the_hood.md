@@ -5,7 +5,7 @@
 ### Under the Hood
 
 Angular Material dynamically generates CSS for registered themes by injecting several
-`<script>` tags into the `<head>` section of the application at runtime. Here is how
+`<style>` tags into the `<head>` section of the application at runtime. Here is how
 that process currently works:
 
 1. During the Angular Material build process, a function in `gulp/util.js` called
