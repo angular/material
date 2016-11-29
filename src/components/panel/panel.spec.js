@@ -1,6 +1,6 @@
 describe('$mdPanel', function() {
-  var $mdPanel, $rootScope, $rootEl, $templateCache, $q, $material, $mdConstant,
-      $mdUtil, $animate, $$rAF, $window;
+  var $mdPanelProvider, $mdPanel, $rootScope, $rootEl, $templateCache, $q,
+      $material, $mdConstant, $mdUtil, $animate, $$rAF, $window;
   var panelRef;
   var attachedElements = [];
   var PANEL_WRAPPER = '.md-panel-outer-wrapper';
@@ -38,6 +38,9 @@ describe('$mdPanel', function() {
 
   beforeEach(function() {
     module('material.components.panel', 'ngSanitize');
+    module(['$mdPanelProvider', function(_$mdPanelProvider) {
+      $mdPanelProvider = _$mdPanelProvider;
+    }]);
 
     inject(injectLocals);
     $animate.enabled(false);
@@ -92,6 +95,98 @@ describe('$mdPanel', function() {
     // TODO(ErinCoughlan) - Remove when close destroys.
     panelRef = null;
     $animate.enabled(true);
+  });
+
+  describe('provider logic', function() {
+    var preset = {
+      panelClass: 'preset-container',
+      template: DEFAULT_TEMPLATE
+    };
+    var preset2 = {
+      panelClass: 'preset2-container',
+      template: DEFAULT_TEMPLATE
+    };
+    var preset3 = {
+      panelClass: 'preset-container',
+      template: '<div>This is cool!</div>'
+    };
+
+    afterEach(function() {
+      $mdPanelProvider.clearPresets();
+    });
+
+    it('should have the $mdPanelProvider available', function() {
+      var provider = $mdPanelProvider;
+
+      expect(provider).toBeDefined();
+    });
+
+    it('should allow for a custom preset configuration object to be defined ' +
+        'and stored in the $mdPanelProvider', function() {
+      $mdPanelProvider.definePreset('testPreset', preset);
+
+      expect(Object.keys($mdPanelProvider.getAllPresets()).length).toBe(1);
+    });
+
+    it('should allow for more than one custom preset configuration objects ' +
+        'to be defined and stored in the $mdPanelProvider', function() {
+      $mdPanelProvider.definePreset('testPreset', preset);
+      $mdPanelProvider.definePreset('testPreset2', preset2);
+
+      expect(Object.keys($mdPanelProvider.getAllPresets()).length).toBe(2);
+    });
+
+    it('should throw if a custom preset configuration object doesn\'t have ' +
+        'a preset name or proper preset config object', function() {
+      var expression;
+
+      expression = function() {
+        $mdPanelProvider.definePreset(preset);
+      };
+
+      expect(expression).toThrow();
+
+      expression = function() {
+        $mdPanelProvider.definePreset('testPreset');
+      };
+
+      expect(expression).toThrow();
+    });
+
+    it('should throw if requesting to define an already defined preset',
+        function() {
+      $mdPanelProvider.definePreset('testPreset', preset);
+
+      var expression = function() {
+        $mdPanelProvider.definePreset('testPreset', preset);
+      };
+
+      expect(expression).toThrow();
+    });
+
+    it('should retrieve and apply a preset when the preset name is provided ' +
+        'during the create or open method', function() {
+      $mdPanelProvider.definePreset('testPreset', preset);
+
+      openPanel('testPreset');
+
+      expect(PANEL_EL + '.preset-container').toContainHtml('Hello World!');
+    });
+
+    it('should throw if trying to retrieve a preset during the create or ' +
+        'open method that has not been created', function() {
+      var expression = function() {
+        $mdPanel.create('testPreset');
+      };
+
+      expect(expression).toThrow();
+
+      expression = function() {
+        $mdPanel.open('testPreset');
+      };
+
+      expect(expression).toThrow();
+    });
   });
 
   it('should create and open a basic panel', function() {
@@ -344,28 +439,55 @@ describe('$mdPanel', function() {
 
     it('should not recreate a panel that is tracked by a user-defined id',
         function() {
-          var config = {
-            id: 'custom-id'
-          };
+      var config = {
+        id: 'custom-id'
+      };
 
-          var panel1 = $mdPanel.create(config);
-          panel1.open();
-          flushPanel();
+      var panel1 = $mdPanel.create(config);
+      panel1.open();
+      flushPanel();
 
-          var panels = document.querySelectorAll(PANEL_EL);
-          expect(panels.length).toEqual(1);
+      var panels = document.querySelectorAll(PANEL_EL);
+      expect(panels.length).toEqual(1);
 
-          var panel2 = $mdPanel.create(config);
-          panel2.open();
-          flushPanel();
+      var panel2 = $mdPanel.create(config);
+      panel2.open();
+      flushPanel();
 
-          panels = document.querySelectorAll(PANEL_EL);
-          expect(panels.length).toEqual(1);
+      panels = document.querySelectorAll(PANEL_EL);
+      expect(panels.length).toEqual(1);
 
-          expect(panel1).toEqual(panel2);
+      expect(panel1).toEqual(panel2);
 
-          panel1.close();
-        });
+      panel1.close();
+    });
+
+    it('should update the config of a panel that is tracked by a ' +
+        'user-defined id when attempting to create the panel more ' +
+        'than one time', function() {
+      var config;
+
+      config = {
+        id: 'custom-id',
+        panelClass: 'custom-class'
+      };
+
+      openPanel(config);
+
+      expect(panelRef.panelEl).toHaveClass('custom-class');
+
+      closePanel();
+      panelRef = undefined;
+
+      config = {
+        id: 'custom-id',
+        panelClass: 'custom-class-2'
+      };
+
+      openPanel(config);
+
+      expect(panelRef.panelEl).toHaveClass('custom-class-2');
+    });
 
     it('should allow multiple panels', function() {
       var customClass = 'custom-class';
@@ -3234,14 +3356,15 @@ describe('$mdPanel', function() {
    * assuming one has already been created.
    * @param {!Object=} opt_config
    */
-  function openPanel(opt_config) {
+  function openPanel(preset, opt_config) {
     // TODO(ErinCoughlan): Investigate why panelRef.open() doesn't return
     // panelRef.
     var openPromise;
+
     if (panelRef) {
       openPromise = panelRef.open();
     } else {
-      openPromise = $mdPanel.open(opt_config);
+      openPromise = $mdPanel.open(preset, opt_config);
     }
 
     openPromise.then(function(createdPanelRef) {
