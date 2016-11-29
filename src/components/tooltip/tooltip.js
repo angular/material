@@ -46,7 +46,7 @@ angular
  *     Defaults to bottom.
  */
 function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
-    $mdUtil, $mdTheming, $mdPanel, $$mdTooltipRegistry) {
+    $mdUtil, $mdPanel, $$mdTooltipRegistry) {
 
   var ENTER_EVENTS = 'focus touchstart mouseenter';
   var LEAVE_EVENTS = 'blur touchcancel mouseleave';
@@ -80,9 +80,6 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
     var mouseActive = false;
     var origin, position, panelPosition, panelRef, autohide, showTimeout,
         elementFocusedOnWindowBlur = null;
-
-    // Initialize the theming of the tooltip.
-    $mdTheming(element);
 
     // Set defaults
     setDefaults();

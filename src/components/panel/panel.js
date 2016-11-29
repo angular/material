@@ -453,15 +453,15 @@ angular
  * @returns {!MdPanelRef}
  */
 
- /**
-  * @ngdoc method
-  * @name MdPanelRef#updateAnimation
-  * @description
-  * Updates the animation configuration for a panel. You can use this to change
-  * the panel's animation without having to re-create it.
-  *
-  * @param {!MdPanelAnimation} animation
-  */
+/**
+ * @ngdoc method
+ * @name MdPanelRef#updateAnimation
+ * @description
+ * Updates the animation configuration for a panel. You can use this to change
+ * the panel's animation without having to re-create it.
+ *
+ * @param {!MdPanelAnimation} animation
+ */
 
 
 /*****************************************************************************
@@ -1108,6 +1108,9 @@ function MdPanelRef(config, $injector) {
   /** @private @const {!angular.$mdUtil} */
   this._$mdUtil = $injector.get('$mdUtil');
 
+  /** @private @const {!angular.$mdTheming} */
+  this._$mdTheming = $injector.get('$mdTheming');
+
   /** @private @const {!angular.Scope} */
   this._$rootScope = $injector.get('$rootScope');
 
@@ -1650,7 +1653,8 @@ MdPanelRef.prototype._createPanel = function() {
 
 
 /**
- * Adds the styles for the panel, such as positioning and z-index.
+ * Adds the styles for the panel, such as positioning and z-index. Also,
+ * themes the panel element and panel container using `$mdTheming`.
  * @returns {!angular.$q.Promise<!MdPanelRef>}
  * @private
  */
@@ -1661,9 +1665,13 @@ MdPanelRef.prototype._addStyles = function() {
     self.panelEl.css('z-index', self.config['zIndex'] + 1);
 
     var hideAndResolve = function() {
+      // Theme the element and container.
+      self._setTheming();
+
       // Remove left: -9999px and add hidden class.
       self.panelEl.css('left', '');
       self.panelContainer.addClass(MD_PANEL_HIDDEN);
+
       resolve(self);
     };
 
@@ -1679,14 +1687,28 @@ MdPanelRef.prototype._addStyles = function() {
       return; // Don't setup positioning.
     }
 
-    // Wait for angular to finish processing the template, then position it
-    // correctly. This is necessary so that the panel will have a defined height
-    // and width.
+    // Wait for angular to finish processing the template
     self._$rootScope['$$postDigest'](function() {
+      // Position it correctly. This is necessary so that the panel will have a
+      // defined height and width.
       self._updatePosition(true);
+
+      // Theme the element and container.
+      self._setTheming();
+
       resolve(self);
     });
   });
+};
+
+
+/**
+ * Sets the `$mdTheming` classes on the `panelContainer` and `panelEl`.
+ * @private
+ */
+MdPanelRef.prototype._setTheming = function() {
+  this._$mdTheming(this.panelEl);
+  this._$mdTheming(this.panelContainer);
 };
 
 
@@ -2210,6 +2232,7 @@ MdPanelRef.prototype.removeFromGroup = function(groupName) {
   }
 };
 
+
 /**
  * Possible default closeReasons for the close function.
  * @enum {string}
@@ -2218,6 +2241,7 @@ MdPanelRef.closeReasons = {
   CLICK_OUTSIDE: 'clickOutsideToClose',
   ESCAPE: 'escapeToClose',
 };
+
 
 /*****************************************************************************
  *                               MdPanelPosition                             *
