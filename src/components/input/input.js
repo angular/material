@@ -664,8 +664,9 @@ function mdMaxlengthDirective($animate, $mdUtil) {
 
       // Stop model from trimming. This makes it so whitespace
       // over the maxlength still counts as invalid.
-      attr.$set('ngTrim', 'false');
-
+      // Edit: Setting the trim is not needed, as the whitespace over maxlength will be trimmed 
+      // attr.$set('ngTrim', 'false');
+ 
       scope.$watch(attr.mdMaxlength, function(value) {
         maxlength = value;
         if (angular.isNumber(value) && value > 0) {
@@ -687,7 +688,7 @@ function mdMaxlengthDirective($animate, $mdUtil) {
 
       // Force the value into a string since it may be a number,
       // which does not have a length property.
-      charCountEl.text(String(element.val() || value || '').length + ' / ' + maxlength);
+      charCountEl.text(String(element.val().trim || value || '').length + ' / ' + maxlength);
       return value;
     }
   }
