@@ -381,7 +381,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       }
     }
 
-    function mouseDownListener() {
+    function mouseDownListener(ev) {
       redrawTicks();
 
       scope.mouseActive = true;
@@ -390,6 +390,8 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       $timeout(function() {
         scope.mouseActive = false;
       }, 100);
+
+     if (ev.currentTarget == wrapper) ev.stopPropagation();
     }
 
     function focusListener() {
