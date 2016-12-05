@@ -2564,8 +2564,6 @@ describe('<md-autocomplete>', function() {
     element.remove();
   });
 
-});
-
   describe('md-autocomplete-snap', function() {
     it('should match the width of the snap element if width is set', inject(function($timeout, $material) {
       var template = '\
