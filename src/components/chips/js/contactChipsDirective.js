@@ -29,6 +29,23 @@ angular
  *    contact's email address.
  * @param {string} md-contact-image The field name of the contact object representing the
  *    contact's image.
+ * @param {boolean=} readonly Disables list manipulation (deleting or adding list items), hiding the input and delete buttons
+ * @param {number=} md-max-chips The maximum number of chips allowed to add through user input.
+ * <br/><br/>The validation property `md-max-chips` can be used when the max chips
+ *  amount is reached.
+ * @param {expression} md-transform-chip An expression of form `myFunction($chip)` that when called
+ *  expects one of the following return values:
+ *    - an object representing the `$chip` input string
+ *    - `undefined` to simply add the `$chip` input string, or
+ *    - `null` to prevent the chip from being appended
+ * @param {expression=} md-on-add An expression which will be called when a contact chip is selected.
+ * @param {expression=} md-on-remove An expression which will be called when a contact chip is removed
+ * @param {expression=} md-on-select An expression which will be called when a contact chip is selected.
+ * @param {string=} delete-hint A string read by screen readers instructing users that pressing
+ *  the delete key will remove the contact chip.
+ * @param {string=} delete-button-label A label for the delete button. Also hidden and read by
+ *  screen readers.
+ * @param {expression=} md-separator-keys An array of key codes used to separate contact chips.
  *
  *
  * @param {expression=} filter-selected Whether to filter selected contacts from the list of
@@ -55,6 +72,15 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
       <md-chips class="md-contact-chips"\
           ng-model="$mdContactChipsCtrl.contacts"\
           md-require-match="$mdContactChipsCtrl.requireMatch"\
+          readonly="$mdContactChipsCtrl.readonly"\
+          md-max-chips="$mdContactChipsCtrl.maxChips"\
+          md-transform-chip="$mdContactChipsCtrl.transformChip($chip)"\
+          md-on-add="$mdContactChipsCtrl.onAdd($chip)"\
+          md-on-remove="$mdContactChipsCtrl.onRemove($chip)"\
+          md-on-select="$mdContactChipsCtrl.onSelect($chip)"\
+          delete-hint="$mdContactChipsCtrl.deleteHint"\
+          delete-button-label="$mdContactChipsCtrl.deleteButtonLabel"\
+          md-separator-keys="$mdContactChipsCtrl.separatorKeys"\
           md-autocomplete-snap>\
           <md-autocomplete\
               md-menu-class="md-contact-chips-suggestions"\
@@ -110,6 +136,7 @@ function MdContactChips($mdTheming, $mdUtil) {
     bindToController: true,
     compile: compile,
     scope: {
+      readonly: '=readonly',
       contactQuery: '&mdContacts',
       placeholder: '@',
       secondaryPlaceholder: '@',
@@ -117,6 +144,14 @@ function MdContactChips($mdTheming, $mdUtil) {
       contactImage: '@mdContactImage',
       contactEmail: '@mdContactEmail',
       contacts: '=ngModel',
+      maxChips: '@mdMaxChips',
+      transformChip: '&mdTransformChip',
+      onAdd: '&mdOnAdd',
+      onRemove: '&mdOnRemove',
+      onSelect: '&mdOnSelect',
+      deleteHint: '@',
+      deleteButtonLabel: '@',
+      separatorKeys: '=?mdSeparatorKeys',
       requireMatch: '=?mdRequireMatch',
       highlightFlags: '@?mdHighlightFlags'
     }
