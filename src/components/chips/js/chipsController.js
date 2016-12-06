@@ -534,20 +534,8 @@ MdChipsCtrl.prototype.onInputFocus = function () {
 MdChipsCtrl.prototype.onInputBlur = function () {
   this.inputHasFocus = false;
 
-  var chipBuffer = this.getChipBuffer().trim();
-
-  // Update the custom chip validators.
-  this.validateModel();
-
-  var isModelValid = this.ngModelCtrl.$valid;
-
-  if (this.userInputNgModelCtrl) {
-    isModelValid &= this.userInputNgModelCtrl.$valid;
-  }
-
-  // Only append the chip and reset the chip buffer if the chips and input ngModel is valid.
-  if (this.addOnBlur && chipBuffer && isModelValid) {
-    this.appendChip(chipBuffer);
+  if (this.shouldAddOnBlur()) {
+    this.appendChip(this.getChipBuffer().trim());
     this.resetChipBuffer();
   }
 };
@@ -600,6 +588,26 @@ MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
         .on('focus',angular.bind(this, this.onInputFocus) )
         .on('blur', angular.bind(this, this.onInputBlur) );
   }
+};
+
+/**
+ * Whether the current chip buffer should be added on input blur or not.
+ * @returns {boolean}
+ */
+MdChipsCtrl.prototype.shouldAddOnBlur = function() {
+
+  // Update the custom ngModel validators from the chips component.
+  this.validateModel();
+
+  var chipBuffer = this.getChipBuffer().trim();
+  var isModelValid = this.ngModelCtrl.$valid;
+  var isAutocompleteShowing = this.autocompleteCtrl && !this.autocompleteCtrl.hidden;
+
+  if (this.userInputNgModelCtrl) {
+    isModelValid = isModelValid && this.userInputNgModelCtrl.$valid;
+  }
+
+  return this.addOnBlur && !this.requireMatch && chipBuffer && isModelValid && !isAutocompleteShowing;
 };
 
 MdChipsCtrl.prototype.hasFocus = function () {
