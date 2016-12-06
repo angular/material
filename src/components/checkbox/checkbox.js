@@ -93,6 +93,8 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
     };
 
     function postLink(scope, element, attr, ngModelCtrl) {
+      element.addClass('md-checkbox');
+
       var isIndeterminate;
       ngModelCtrl = ngModelCtrl || $mdUtil.fakeNgModel();
       $mdTheming(element);

@@ -120,7 +120,9 @@ md-card {
   }
 
   md-card-content {
-    display: block;
+    &:not(.layout-column):not(.layout-row) {
+      display: block;
+    }
     padding: $card-padding;
 
     & > p {

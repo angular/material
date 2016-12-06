@@ -101,7 +101,7 @@ describe('MdIcon directive', function() {
         el = make( '<md-icon md-font-set="fa">email</md-icon>');
 
         expect(el.text()).toEqual('email');
-        expect( clean(el.attr('class')) ).toEqual('fontawesome');
+        expect(el.hasClass('fontawesome')).toBeTruthy();
       });
 
       it('should remove old font set class and apply the new when set changed', function() {
@@ -110,12 +110,13 @@ describe('MdIcon directive', function() {
         el = make( '<md-icon md-font-set="{{ set }}">email</md-icon>');
 
         expect(el.text()).toEqual('email');
-        expect( clean(el.attr('class')) ).toEqual('fontawesome');
+        expect(el.hasClass('fontawesome')).toBeTruthy();
 
         $scope.set = 'material-icons';
         $scope.$apply();
 
-        expect( clean(el.attr('class')) ).toEqual('material-icons');
+        expect(el.hasClass('fontawesome')).toBeFalsy();
+        expect(el.hasClass('material-icons')).toBeTruthy();
       });
 
       it('should render correctly using a md-font-set alias', function() {
@@ -132,7 +133,7 @@ describe('MdIcon directive', function() {
         el = make( '<md-icon md-font-set="fontawesome">email</md-icon>');
 
         expect(el.text()).toEqual('email');
-        expect( clean(el.attr('class')) ).toEqual('fontawesome');
+        expect(el.hasClass('fontawesome')).toBeTruthy();
       });
     });
 
@@ -158,11 +159,13 @@ describe('MdIcon directive', function() {
         $mdIconProvider.defaultFontSet('');
 
         el = make( '<md-icon class="custom-cake"></md-icon>');
-        expect( clean(el.attr('class')) ).toEqual('custom-cake');
+        expect(el.hasClass('material-icons')).toBeFalsy();
+        expect(el.hasClass('custom-cake')).toBeTruthy();
 
         el = make( '<md-icon class="custom-cake">apple</md-icon>');
         expect(el.text()).toEqual('apple');
-        expect( clean(el.attr('class')) ).toEqual('custom-cake');
+        expect(el.hasClass('material-icons')).toBeFalsy();
+        expect(el.hasClass('custom-cake')).toBeTruthy();
 
       });
 
@@ -170,7 +173,8 @@ describe('MdIcon directive', function() {
         $mdIconProvider.defaultFontSet('fa');
 
         el = make( '<md-icon></md-icon>');
-        expect( clean(el.attr('class')) ).toEqual('fa');
+        expect(el.hasClass('material-icons')).toBeFalsy();
+        expect(el.hasClass('fa')).toBeTruthy();
 
         el = make( '<md-icon md-font-icon="fa-apple">apple</md-icon>');
         expect(el.text()).toEqual('apple');

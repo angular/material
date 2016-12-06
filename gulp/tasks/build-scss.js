@@ -39,6 +39,7 @@ exports.task = function() {
       .pipe(concat('angular-material.scss'))
       .pipe(gulp.dest(dest))            // raw uncompiled SCSS
       .pipe(sass())
+      .pipe(util.applyMd2CompatibilityCss())
       .pipe(util.dedupeCss())
       .pipe(util.autoprefix())
       .pipe(insert.prepend(config.banner))
@@ -69,6 +70,7 @@ exports.task = function() {
         .pipe(insert.prepend(config.banner))
         .pipe(gulp.dest(layoutDest))      // raw uncompiled SCSS
         .pipe(sass())
+        .pipe(util.applyMd2CompatibilityCss())
         .pipe(util.dedupeCss())
         .pipe(util.autoprefix())
         .pipe(rename({ extname : '.css'}))
@@ -91,6 +93,7 @@ exports.task = function() {
           .pipe(sassUtils.hoistScssVariables())
           .pipe(gulp.dest(layoutDest))     // raw uncompiled SCSS
           .pipe(sass())
+          .pipe(util.applyMd2CompatibilityCss())
           .pipe(util.dedupeCss())
           .pipe(util.autoprefix())
           .pipe(rename({ extname : '.css'}))
