@@ -724,6 +724,11 @@ function InterimElementProvider() {
               if (options.$destroy) {
                 // For $destroy, onRemove should be synchronous
                 resolve(element);
+
+                if (!options.preserveScope && options.scope ) {
+                  // scope destroy should still be be done after the current digest is done
+                  action.then( function() { options.scope.$destroy(); });
+                }
               } else {
                 // Wait until transition-out is done
                 action.then(function () {
