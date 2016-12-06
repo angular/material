@@ -60,7 +60,7 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
   return {
     restrict: 'E',
     transclude: true,
-    require: '?ngModel',
+    require: ['^?mdInputContainer', '?ngModel', '?^form'],
     priority: $mdConstant.BEFORE_NG_ARIA,
     template:
       '<div class="md-container" md-ink-ripple md-ink-ripple-checkbox>' +
@@ -92,9 +92,22 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
       post: postLink
     };
 
-    function postLink(scope, element, attr, ngModelCtrl) {
+    function postLink(scope, element, attr, ctrls) {
       var isIndeterminate;
-      ngModelCtrl = ngModelCtrl || $mdUtil.fakeNgModel();
+      var containerCtrl = ctrls[0];
+      var ngModelCtrl = ctrls[1] || $mdUtil.fakeNgModel();
+      var formCtrl = ctrls[2];
+
+      if (containerCtrl) {
+        var isErrorGetter = containerCtrl.isErrorGetter || function() {
+          return ngModelCtrl.$invalid && (ngModelCtrl.$touched || (formCtrl && formCtrl.$submitted));
+        };
+
+        containerCtrl.input = element;
+
+        scope.$watch(isErrorGetter, containerCtrl.setInvalid);
+      }
+
       $mdTheming(element);
 
       // Redirect focus events to the root element, because IE11 is always focusing the container element instead

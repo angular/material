@@ -4,7 +4,7 @@ describe('md-input-container animations', function() {
     cssTransitionsDisabled = false, lastAnimateCall;
 
   // Load our modules
-  beforeEach(module('ngAnimate', 'ngMessages', 'material.components.input'));
+  beforeEach(module('ngAnimate', 'ngMessages', 'material.components.input', 'material.components.checkbox'));
 
   // Run pre-test setup
   beforeEach(decorateAnimateCss);
@@ -14,7 +14,7 @@ describe('md-input-container animations', function() {
   // Run after-test teardown
   afterEach(teardown);
 
-  it('set the proper styles when showing messages', function() {
+  it('set the proper styles when showing messages on an input', function() {
     compile(
       '<form name="testForm">' +
       '  <md-input-container>' +
@@ -183,6 +183,75 @@ describe('md-input-container animations', function() {
         expect(dom).toEqual(messages);
       });
     });
+  });
+
+  it('set the proper styles when showing messages on an md-checkbox', function() {
+    compile(
+      '<form name="testForm">' +
+      '  <md-input-container>' +
+      '    <md-checkbox name="cb" ng-model="foo" required>Test</md-checkbox>' +
+      '    <div class="errors" ng-messages="testForm.cb.$error">' +
+      '      <div ng-message="required">required</div>' +
+      '    </div>' +
+      '  </md-input-container>' +
+      '</form>'
+    );
+
+    var container = el.find('md-input-container'),
+      checkbox = el.find('md-checkbox'),
+      doneSpy = jasmine.createSpy('done');
+
+    // Mimic the real validations/animations that fire
+
+    /*
+     * 1. Uncheck the checkbox but don't blur (so it's not invalid yet)
+     *
+     * Expect nothing to happen ($animateCss called with no options)
+     */
+
+    setFoo(true);
+    checkbox.triggerHandler('click');
+    messageAnimation.enter(getError(), doneSpy);
+    flush();
+
+    expectError(getError(), 'required');
+    expect(doneSpy).toHaveBeenCalled();
+    expect(container).not.toHaveClass('md-input-invalid');
+    expect(lastAnimateCall).toEqual({element: getError(), options: {}});
+
+    /*
+     * 2. Blur the checkbox, which adds the md-input-invalid class
+     *
+     * Expect to animate in the required message
+     */
+
+    doneSpy.calls.reset();
+    checkbox.triggerHandler('blur');
+    invalidAnimation.addClass(container, 'md-input-invalid', doneSpy);
+    flush();
+
+    expectError(getError(), 'required');
+    expect(doneSpy).toHaveBeenCalled();
+    expect(container).toHaveClass('md-input-invalid');
+    expect(lastAnimateCall.element).toEqual(getError());
+    expect(lastAnimateCall.options.event).toEqual('enter');
+    expect(lastAnimateCall.options.to).toEqual({"opacity": 1, "margin-top": "0"});
+
+    /*
+     * 3. Clear the field
+     *
+     * Expect to animate away required message
+     */
+
+    doneSpy.calls.reset();
+    messageAnimation.leave(getError(), doneSpy);
+    flush();
+
+    expect(doneSpy).toHaveBeenCalled();
+    expect(lastAnimateCall.element).toEqual(getError());
+    expect(lastAnimateCall.options.event).toEqual('leave');
+    expect(parseInt(lastAnimateCall.options.to["margin-top"])).toBeLessThan(0);
+
   });
 
   /*
