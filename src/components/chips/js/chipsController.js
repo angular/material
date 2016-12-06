@@ -547,8 +547,15 @@ MdChipsCtrl.prototype.onInputBlur = function () {
 
   // Only append the chip and reset the chip buffer if the chips and input ngModel is valid.
   if (this.addOnBlur && chipBuffer && isModelValid) {
-    this.appendChip(chipBuffer);
-    this.resetChipBuffer();
+    if (this.autocompleteCtrl) {
+      var index = this.autocompleteCtrl.index;
+      if (index >= 0) {
+        this.autocompleteCtrl.select(index);
+      }
+    } else {
+      this.appendChip(chipBuffer);
+      this.resetChipBuffer();
+    }
   }
 };
 
