@@ -2659,4 +2659,68 @@ describe('<md-autocomplete>', function() {
     element.remove();
   });
 
+  describe('md-autocomplete-snap', function() {
+    it('should match the width of the snap element if width is set', inject(function($timeout, $material) {
+      var template = '\
+        <div style="width: 1000px" md-autocomplete-snap="width">\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder"\
+              style="width:200px">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>\
+        </div>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var autoEl = element.find('md-autocomplete');
+      var ctrl = autoEl.controller('mdAutocomplete');
+      var ul = element.find('ul');
+
+      angular.element(document.body).append(element);
+
+      $material.flushInterimElement();
+      ctrl.focus();
+
+      autoEl.scope().searchText = 'fo';
+      waitForVirtualRepeat(autoEl);
+
+      expect(ul[0].offsetWidth).toBe(1000);
+      element.remove();
+    }));
+
+    it('should match the width of the wrap element if width is not set', inject(function($timeout, $material) {
+      var template = '\
+        <div style="width: 1000px" md-autocomplete-snap>\
+          <md-autocomplete\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder"\
+              style="width:200px">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>\
+        </div>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var autoEl = element.find('md-autocomplete');
+      var ctrl = autoEl.controller('mdAutocomplete');
+      var ul = element.find('ul');
+
+      angular.element(document.body).append(element);
+
+      $material.flushInterimElement();
+      ctrl.focus();
+
+      autoEl.scope().searchText = 'fo';
+      waitForVirtualRepeat(autoEl);
+
+      expect(ul[0].offsetWidth).toBe(200);
+      element.remove();
+    }));
+  });
+
 });
