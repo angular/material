@@ -89,7 +89,6 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
 
     // Remove the element from its current DOM position.
     element.detach();
-    element.attr('role', 'tooltip');
 
     updatePosition();
     bindEvents();
@@ -385,7 +384,9 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
         panelRef = $mdPanel.create(panelConfig);
       }
 
-      panelRef.open();
+      panelRef.open().then(function() {
+        panelRef.panelEl.attr('role', 'tooltip');
+      });
     }
 
     function hideTooltip() {
