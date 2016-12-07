@@ -380,7 +380,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
                 ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                 ng-blur="$mdAutocompleteCtrl.blur($event)"\
                 ng-focus="$mdAutocompleteCtrl.focus($event)"\
-                placeholder="{{placeholder}}"\
+                ' + (attr.placeholder ? 'placeholder="{{placeholder}}"' : '') + '\
                 aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
                 aria-label="{{placeholder}}"\
                 aria-autocomplete="list"\
