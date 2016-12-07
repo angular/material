@@ -151,14 +151,18 @@
     right: $right;
     bottom: $bottom;
     left: $left;
+    margin-left: auto;
+    margin-right: auto;
     position: absolute;
   }
 }
 
 @mixin fab-all-positions() {
   @include fab-position(bottom-right, auto, ($button-fab-width - $button-fab-padding)/2, ($button-fab-height - $button-fab-padding)/2, auto);
+  @include fab-position(bottom-center, auto, 0, ($button-fab-height - $button-fab-padding)/2, 0);
   @include fab-position(bottom-left, auto, auto, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2);
   @include fab-position(top-right, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2, auto, auto);
+  @include fab-position(top-center, ($button-fab-height - $button-fab-padding)/2, 0, auto, 0);
   @include fab-position(top-left, ($button-fab-height - $button-fab-padding)/2, auto, auto, ($button-fab-width - $button-fab-padding)/2);
 }
 
