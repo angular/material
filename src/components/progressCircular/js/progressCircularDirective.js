@@ -199,13 +199,13 @@ function MdProgressCircularDirective($window, $mdProgressCircular, $mdTheming,
       path.attr('stroke-width', strokeWidth);
       path.attr('stroke-linecap', 'square');
       if (scope.mdMode == MODE_INDETERMINATE) {
-        path.attr('d', getSvgArc(diameter, true));
-        path.attr('stroke-dasharray', diameter * $window.Math.PI * 0.75);
-        path.attr('stroke-dashoffset', getDashLength(diameter, 1, 75));
+        path.attr('d', getSvgArc(diameter, strokeWidth, true));
+        path.attr('stroke-dasharray', (diameter - strokeWidth) * $window.Math.PI * 0.75);
+        path.attr('stroke-dashoffset', getDashLength(diameter, strokeWidth, 1, 75));
       } else {
-        path.attr('d', getSvgArc(diameter, false));
-        path.attr('stroke-dasharray', diameter * $window.Math.PI);
-        path.attr('stroke-dashoffset', getDashLength(diameter, 0, 100));
+        path.attr('d', getSvgArc(diameter, strokeWidth, false));
+        path.attr('stroke-dasharray', (diameter - strokeWidth) * $window.Math.PI);
+        path.attr('stroke-dashoffset', getDashLength(diameter, strokeWidth, 0, 100));
         renderCircle(value, value);
       }
 
@@ -216,6 +216,7 @@ function MdProgressCircularDirective($window, $mdProgressCircular, $mdTheming,
       var startTime = $mdUtil.now();
       var changeInValue = animateTo - animateFrom;
       var diameter = getSize(scope.mdDiameter);
+      var strokeWidth = getStroke(diameter);
       var ease = easing || $mdProgressCircular.easeFn;
       var animationDuration = duration || $mdProgressCircular.duration;
       var rotation = -90 * (iterationCount || 0);
@@ -238,7 +239,7 @@ function MdProgressCircularDirective($window, $mdProgressCircular, $mdTheming,
       }
 
       function renderFrame(value) {
-        path.attr('stroke-dashoffset', getDashLength(diameter, value, dashLimit));
+        path.attr('stroke-dashoffset', getDashLength(diameter, strokeWidth, value, dashLimit));
         path.attr('transform','rotate(' + (rotation) + ' ' + diameter/2 + ' ' + diameter/2 + ')');
       }
     }
@@ -291,28 +292,34 @@ function MdProgressCircularDirective($window, $mdProgressCircular, $mdTheming,
    * Syntax spec: https://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
    *
    * @param {number} diameter Diameter of the container.
+   * @param {number} strokeWidth Stroke width to be used when drawing circle
    * @param {boolean} indeterminate Use if progress circle will be used for indeterminate
    *
    * @returns {string} String representation of an SVG arc.
    */
-  function getSvgArc(diameter, indeterminate) {
+  function getSvgArc(diameter, strokeWidth, indeterminate) {
     var radius = diameter / 2;
-    return 'M' + radius + ',0'
-         + 'A' + radius + ',' + radius + ' 0 1 1 0,' + radius // 75% circle
-         + (indeterminate ? '' : 'A' + radius + ',' + radius + ' 0 0 1 ' + radius + ',0');
+    var offset = strokeWidth / 2;
+    var start = radius + ',' + offset; // ie: (25, 2.5) or 12 o'clock
+    var end = offset + ',' + radius;   // ie: (2.5, 25) or  9 o'clock
+    var arcRadius = radius - offset;
+    return 'M' + start
+         + 'A' + arcRadius + ',' + arcRadius + ' 0 1 1 ' + end // 75% circle
+         + (indeterminate ? '' : 'A' + arcRadius + ',' + arcRadius + ' 0 0 1 ' + start); // loop to start
   }
 
   /**
    * Return stroke length for progress circle
    *
    * @param {number} diameter Diameter of the container.
+   * @param {number} strokeWidth Stroke width to be used when drawing circle
    * @param {number} value Percentage of circle (between 0 and 100)
    * @param {number} limit Max percentage for circle
    *
    * @returns {number} Stroke length for progres circle
    */
-  function getDashLength(diameter, value, limit) {
-    return diameter * $window.Math.PI * ( (3 * (limit || 100) / 100) - (value/100) );
+  function getDashLength(diameter, strokeWidth, value, limit) {
+    return (diameter - strokeWidth) * $window.Math.PI * ( (3 * (limit || 100) / 100) - (value/100) );
   }
 
   /**
