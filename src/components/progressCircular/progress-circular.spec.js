@@ -95,7 +95,7 @@ describe('mdProgressCircular', function() {
       '<md-progress-circular md-diameter="' + diameter + '"></md-progress-circular>'
     ).find('path').eq(0);
 
-    expect(parseFloat(path.attr('stroke-width'))).toBe(diameter / ratio);
+    expect(path.css('stroke-width')).toBe(diameter / ratio + 'px');
   });
 
   it('should hide the element if is disabled', function() {
