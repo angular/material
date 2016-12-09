@@ -297,6 +297,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       parent.one('$destroy', onElementDestroy);
       scope.$on('$destroy', function() {
         setVisible(false);
+        panelRef && panelRef.destroy();
         element.remove();
         attributeObserver && attributeObserver.disconnect();
       });
