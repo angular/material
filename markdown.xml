@@ -1,6 +1,6 @@
 <application>
   <component name="MarkdownApplicationSettings">
-    <MarkdownCssSettings StylesheetUri="jar:file:/private/var/folders/y3/7xxl97wj1y565ytr4994wq2m0000gn/T/AppTranslocation/8155150E-416B-4E51-A6E0-8BB8B50B60C0/d/PhpStorm.app/Contents/plugins/markdown/lib/markdown.jar!/org/intellij/plugins/markdown/settings/darcula.css" />
+    <MarkdownCssSettings StylesheetUri="jar:file:/private/var/folders/y3/7xxl97wj1y565ytr4994wq2m0000gn/T/AppTranslocation/C45BF4B6-5365-4B73-85E9-F969FFE1F91B/d/PhpStorm.app/Contents/plugins/markdown/lib/markdown.jar!/org/intellij/plugins/markdown/settings/darcula.css" />
     <MarkdownPreviewSettings>
       <HtmlPanelProviderInfo>
         <ProviderInfo name="JavaFX WebView" className="org.intellij.plugins.markdown.ui.preview.javafx.JavaFxHtmlPanelProvider" />
