@@ -141,6 +141,8 @@
           backgroundElement.style.width = triggerElement.offsetWidth + 'px';
           backgroundElement.style.height = triggerElement.offsetHeight + 'px';
           backgroundElement.style.transform = 'scale(' + scale + ')';
+          //scale on safari
+          backgroundElement.style.webkitTransform = 'scale(' + scale + ')';
 
           // Set the next close animation to have the proper delays
           backgroundElement.style.transitionDelay = '0ms';
@@ -156,6 +158,8 @@
 
           // Scale it back down to the trigger's size
           backgroundElement.style.transform = 'scale(1)';
+          //scale on safari
+          backgroundElement.style.webkitTransform = 'scale(1)';
 
           // Reset the position
           backgroundElement.style.top = '0';
