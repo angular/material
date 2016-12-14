@@ -159,13 +159,11 @@ md-pagination-wrapper {
   display: flex;
   transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
   position: absolute;
-  width: 999999px;
   @include rtl-prop(left, right, 0, auto);
   transform: translate3d(0, 0, 0);
   &.md-center-tabs {
     position: relative;
-    width: auto;
-    margin: 0 auto;
+    justify-content: center;
   }
 }
 
