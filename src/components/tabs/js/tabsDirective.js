@@ -136,12 +136,14 @@ function MdTabs ($$mdSvgRegistry) {
               'ng-focus="$mdTabsCtrl.redirectFocus()" ' +
               'ng-class="{ ' +
                   '\'md-paginated\': $mdTabsCtrl.shouldPaginate, ' +
-                  '\'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs ' +
+                  '\'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs ' +                  
+                  '\'md-align-right\': $mdTabsCtrl.shouldAlignRight ' +
               '}" ' +
               'ng-keydown="$mdTabsCtrl.keydown($event)" ' +
               'role="tablist"> ' +
             '<md-pagination-wrapper ' +
-                'ng-class="{ \'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs }" ' +
+                'ng-class="{ \'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs,' +
+                  '\'md-align-right\': $mdTabsCtrl.shouldAlignRight }" ' +
                 'md-tab-scroll="$mdTabsCtrl.scroll($event)"> ' +
               '<md-tab-item ' +
                   'tabindex="-1" ' +
