@@ -137,7 +137,7 @@ function MdTabs ($$mdSvgRegistry) {
               'ng-focus="$mdTabsCtrl.redirectFocus()" ' +
               'ng-class="{ ' +
                   '\'md-paginated\': $mdTabsCtrl.shouldPaginate, ' +
-                  '\'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs, ' +                  
+                  '\'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs, ' +
                   '\'md-align-right\': $mdTabsCtrl.shouldAlignRight }" ' +
               'ng-keydown="$mdTabsCtrl.keydown($event)" ' +
               'role="tablist"> ' +
