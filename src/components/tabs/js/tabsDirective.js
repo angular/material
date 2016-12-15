@@ -69,6 +69,7 @@
  * @param {boolean=} md-dynamic-height When enabled, the tab wrapper will resize based on the contents of the selected tab
  * @param {boolean=} md-border-bottom If present, shows a solid `1px` border between the tabs and their content
  * @param {boolean=} md-center-tabs When enabled, tabs will be centered provided there is no need for pagination
+ * @param {boolean=} md-align-right When enabled, tabs will be aligned right provided there is no need for pagination
  * @param {boolean=} md-no-pagination When enabled, pagination will remain off
  * @param {boolean=} md-swipe-content When enabled, swipe gestures will be enabled for the content area to jump between tabs
  * @param {boolean=} md-enable-disconnect When enabled, scopes will be disconnected for tabs that are not being displayed.  This provides a performance boost, but may also cause unexpected issues and is not recommended for most users.
@@ -136,13 +137,12 @@ function MdTabs ($$mdSvgRegistry) {
               'ng-focus="$mdTabsCtrl.redirectFocus()" ' +
               'ng-class="{ ' +
                   '\'md-paginated\': $mdTabsCtrl.shouldPaginate, ' +
-                  '\'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs ' +                  
-                  '\'md-align-right\': $mdTabsCtrl.shouldAlignRight ' +
-              '}" ' +
+                  '\'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs, ' +                  
+                  '\'md-align-right\': $mdTabsCtrl.shouldAlignRight }" ' +
               'ng-keydown="$mdTabsCtrl.keydown($event)" ' +
               'role="tablist"> ' +
             '<md-pagination-wrapper ' +
-                'ng-class="{ \'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs,' +
+                'ng-class="{ \'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs, ' +
                   '\'md-align-right\': $mdTabsCtrl.shouldAlignRight }" ' +
                 'md-tab-scroll="$mdTabsCtrl.scroll($event)"> ' +
               '<md-tab-item ' +
