@@ -921,7 +921,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
 
 }
 
-function OptionDirective($mdButtonInkRipple, $mdUtil) {
+function OptionDirective($mdButtonInkRipple, $mdUtil, $mdTheming) {
 
   return {
     restrict: 'E',
@@ -953,6 +953,8 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
   function postLink(scope, element, attr, ctrls) {
     var optionCtrl = ctrls[0];
     var selectCtrl = ctrls[1];
+
+    $mdTheming(element);
 
     if (selectCtrl.isMultiple) {
       element.addClass('md-checkbox-enabled');
