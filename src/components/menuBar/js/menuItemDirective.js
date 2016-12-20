@@ -4,11 +4,11 @@ angular
   .directive('mdMenuItem', MenuItemDirective);
 
  /* @ngInject */
-function MenuItemDirective($mdUtil, $$mdSvgRegistry) {
+function MenuItemDirective($mdUtil, $mdConstant, $$mdSvgRegistry) {
   return {
     controller: 'MenuItemController',
     require: ['mdMenuItem', '?ngModel'],
-    priority: 210, // ensure that our post link runs after ngAria
+    priority: $mdConstant.BEFORE_NG_ARIA,
     compile: function(templateEl, templateAttrs) {
       var type = templateAttrs.type;
       var inMenuBarClass = 'md-in-menu-bar';

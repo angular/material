@@ -16,6 +16,12 @@
 
 'use strict';
 
+  // Allow our code to know when they are running inside of a test so they can expose extra services
+  // that should NOT be exposed to the public but that should be tested.
+  //
+  // As an example, see input.js which exposes some animation-related methods.
+  window._mdMocksIncluded = true;
+
 /**
  * @ngdoc module
  * @name ngMaterial-mock

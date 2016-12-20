@@ -59,9 +59,28 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
   var $mdUtil = {
     dom: {},
-    now: window.performance ?
+    now: window.performance && window.performance.now ?
       angular.bind(window.performance, window.performance.now) : Date.now || function() {
       return new Date().getTime();
+    },
+
+    /**
+     * Cross-version compatibility method to retrieve an option of a ngModel controller,
+     * which supports the breaking changes in the AngularJS snapshot (SHA 87a2ff76af5d0a9268d8eb84db5755077d27c84c).
+     * @param {!angular.ngModelCtrl} ngModelCtrl
+     * @param {!string} optionName
+     * @returns {Object|undefined}
+     */
+    getModelOption: function (ngModelCtrl, optionName) {
+      if (!ngModelCtrl.$options) {
+        return;
+      }
+
+      var $options = ngModelCtrl.$options;
+
+      // The newer versions of Angular introduced a `getOption function and made the option values no longer
+      // visible on the $options object.
+      return $options.getOption ? $options.getOption(optionName) : $options[optionName]
     },
 
     /**
@@ -198,44 +217,56 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      *     use the passed parent element.
      */
     disableScrollAround: function(element, parent, options) {
-      $mdUtil.disableScrollAround._count = $mdUtil.disableScrollAround._count || 0;
-      ++$mdUtil.disableScrollAround._count;
-      if ($mdUtil.disableScrollAround._enableScrolling) return $mdUtil.disableScrollAround._enableScrolling;
-      var body = $document[0].body,
-        restoreBody = disableBodyScroll(),
-        restoreElement = disableElementScroll(parent);
+      options = options || {};
 
-      return $mdUtil.disableScrollAround._enableScrolling = function() {
-        if (!--$mdUtil.disableScrollAround._count) {
+      $mdUtil.disableScrollAround._count = Math.max(0, $mdUtil.disableScrollAround._count || 0);
+      $mdUtil.disableScrollAround._count++;
+
+      if ($mdUtil.disableScrollAround._restoreScroll) {
+        return $mdUtil.disableScrollAround._restoreScroll;
+      }
+
+      var body = $document[0].body;
+      var restoreBody = disableBodyScroll();
+      var restoreElement = disableElementScroll(parent);
+
+      return $mdUtil.disableScrollAround._restoreScroll = function() {
+        if (--$mdUtil.disableScrollAround._count <= 0) {
           restoreBody();
           restoreElement();
-          delete $mdUtil.disableScrollAround._enableScrolling;
+          delete $mdUtil.disableScrollAround._restoreScroll;
         }
       };
 
-      // Creates a virtual scrolling mask to absorb touchmove, keyboard, scrollbar clicking, and wheel events
+      /**
+       * Creates a virtual scrolling mask to prevent touchmove, keyboard, scrollbar clicking,
+       * and wheel events
+       */
       function disableElementScroll(element) {
         element = angular.element(element || body);
+
         var scrollMask;
-        if (options && options.disableScrollMask) {
+
+        if (options.disableScrollMask) {
           scrollMask = element;
         } else {
-          element = element[0];
           scrollMask = angular.element(
             '<div class="md-scroll-mask">' +
             '  <div class="md-scroll-mask-bar"></div>' +
             '</div>');
-          element.appendChild(scrollMask[0]);
+          element.append(scrollMask);
         }
 
         scrollMask.on('wheel', preventDefault);
         scrollMask.on('touchmove', preventDefault);
 
-        return function restoreScroll() {
+        return function restoreElementScroll() {
           scrollMask.off('wheel');
           scrollMask.off('touchmove');
-          scrollMask[0].parentNode.removeChild(scrollMask[0]);
-          delete $mdUtil.disableScrollAround._enableScrolling;
+
+          if (!options.disableScrollMask) {
+            scrollMask[0].parentNode.removeChild(scrollMask[0]);
+          }
         };
 
         function preventDefault(e) {
@@ -252,20 +283,25 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
         var viewportTop = $mdUtil.getViewportTop();
         var clientWidth = body.clientWidth;
+        var hasVerticalScrollbar = body.scrollHeight > body.clientHeight + 1;
 
-        if (body.scrollHeight > body.clientHeight + 1) {
-
+        if (hasVerticalScrollbar) {
           angular.element(body).css({
             position: 'fixed',
             width: '100%',
             top: -viewportTop + 'px'
           });
-
-          documentElement.style.overflowY = 'scroll';
         }
 
         if (body.clientWidth < clientWidth) {
           body.style.overflow = 'hidden';
+        }
+
+        // This should be applied after the manipulation to the body, because
+        // adding a scrollbar can potentially resize it, causing the measurement
+        // to change.
+        if (hasVerticalScrollbar) {
+          documentElement.style.overflowY = 'scroll';
         }
 
         return function restoreScroll() {
@@ -279,10 +315,12 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       }
 
     },
+
     enableScrolling: function() {
-      var method = this.disableScrollAround._enableScrolling;
-      method && method();
+      var restoreFn = this.disableScrollAround._restoreScroll;
+      restoreFn && restoreFn();
     },
+
     floatingScrollbars: function() {
       if (this.floatingScrollbars.cached === undefined) {
         var tempNode = angular.element('<div><div></div></div>').css({
@@ -759,10 +797,11 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     /**
      * Animate the requested element's scrollTop to the requested scrollPosition with basic easing.
      *
-     * @param element The element to scroll.
-     * @param scrollEnd The new/final scroll position.
+     * @param {!HTMLElement} element The element to scroll.
+     * @param {number} scrollEnd The new/final scroll position.
+     * @param {number=} duration Duration of the scroll. Default is 1000ms.
      */
-    animateScrollTo: function(element, scrollEnd) {
+    animateScrollTo: function(element, scrollEnd, duration) {
       var scrollStart = element.scrollTop;
       var scrollChange = scrollEnd - scrollStart;
       var scrollingDown = scrollStart < scrollEnd;
@@ -781,10 +820,10 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       }
 
       function calculateNewPosition() {
-        var duration = 1000;
+        var easeDuration = duration || 1000;
         var currentTime = $mdUtil.now() - startTime;
 
-        return ease(currentTime, scrollStart, scrollChange, duration);
+        return ease(currentTime, scrollStart, scrollChange, easeDuration);
       }
 
       function ease(currentTime, start, change, duration) {
@@ -799,6 +838,25 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
         return start + change * (-2 * tc + 3 * ts);
       }
+    },
+
+    /**
+     * Provides an easy mechanism for removing duplicates from an array.
+     *
+     *    var myArray = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4];
+     *
+     *    $mdUtil.uniq(myArray) => [1, 2, 3, 4]
+     *
+     * @param {array} array The array whose unique values should be returned.
+     *
+     * @returns {array} A copy of the array containing only unique values.
+     */
+    uniq: function(array) {
+      if (!array) { return; }
+
+      return array.filter(function(value, index, self) {
+        return self.indexOf(value) === index;
+      });
     }
   };
 

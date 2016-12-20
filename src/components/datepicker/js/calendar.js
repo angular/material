@@ -111,19 +111,14 @@
     /** @final */
     this.$$rAF = $$rAF;
 
+    /** @final */
+    this.$mdDateLocale = $mdDateLocale;
+
     /** @final {Date} */
     this.today = this.dateUtil.createDateAtMidnight();
 
     /** @type {!angular.NgModelController} */
     this.ngModelCtrl = null;
-
-    /**
-     * The currently visible calendar view. Note the prefix on the scope value,
-     * which is necessary, because the datepicker seems to reset the real one value if the
-     * calendar is open, but the value on the datepicker's scope is empty.
-     * @type {String}
-     */
-    this.currentView = this._currentView || 'month';
 
     /** @type {String} Class applied to the selected date cell. */
     this.SELECTED_DATE_CLASS = 'md-calendar-selected-date';
@@ -197,26 +192,64 @@
 
     var boundKeyHandler = angular.bind(this, this.handleKeyEvent);
 
+
+
+    // If use the md-calendar directly in the body without datepicker,
+    // handleKeyEvent will disable other inputs on the page.
+    // So only apply the handleKeyEvent on the body when the md-calendar inside datepicker,
+    // otherwise apply on the calendar element only.
+
+    var handleKeyElement;
+    if ($element.parent().hasClass('md-datepicker-calendar')) {
+      handleKeyElement = angular.element(document.body);
+    } else {
+      handleKeyElement = $element;
+    }
+
     // Bind the keydown handler to the body, in order to handle cases where the focused
     // element gets removed from the DOM and stops propagating click events.
-    angular.element(document.body).on('keydown', boundKeyHandler);
+    handleKeyElement.on('keydown', boundKeyHandler);
 
     $scope.$on('$destroy', function() {
-      angular.element(document.body).off('keydown', boundKeyHandler);
+      handleKeyElement.off('keydown', boundKeyHandler);
     });
 
-    if (this.minDate && this.minDate > $mdDateLocale.firstRenderableDate) {
-      this.firstRenderableDate = this.minDate;
-    } else {
-      this.firstRenderableDate = $mdDateLocale.firstRenderableDate;
+    // For Angular 1.4 and older, where there are no lifecycle hooks but bindings are pre-assigned,
+    // manually call the $onInit hook.
+    if (angular.version.major === 1 && angular.version.minor <= 4) {
+      this.$onInit();
     }
 
-    if (this.maxDate && this.maxDate < $mdDateLocale.lastRenderableDate) {
+  }
+
+  /**
+   * Angular Lifecycle hook for newer Angular versions.
+   * Bindings are not guaranteed to have been assigned in the controller, but they are in the $onInit hook.
+   */
+  CalendarCtrl.prototype.$onInit = function() {
+
+    /**
+     * The currently visible calendar view. Note the prefix on the scope value,
+     * which is necessary, because the datepicker seems to reset the real one value if the
+     * calendar is open, but the value on the datepicker's scope is empty.
+     * @type {String}
+     */
+    this.currentView = this._currentView || 'month';
+
+    var dateLocale = this.$mdDateLocale;
+
+    if (this.minDate && this.minDate > dateLocale.firstRenderableDate) {
+      this.firstRenderableDate = this.minDate;
+    } else {
+      this.firstRenderableDate = dateLocale.firstRenderableDate;
+    }
+
+    if (this.maxDate && this.maxDate < dateLocale.lastRenderableDate) {
       this.lastRenderableDate = this.maxDate;
     } else {
-      this.lastRenderableDate = $mdDateLocale.lastRenderableDate;
+      this.lastRenderableDate = dateLocale.lastRenderableDate;
     }
-  }
+  };
 
   /**
    * Sets up the controller's reference to ngModelController.

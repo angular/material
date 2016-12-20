@@ -127,11 +127,29 @@ describe('mdCheckbox', function() {
     expect(checkbox[0]).not.toHaveClass('md-focused');
   });
 
-  it('should set focus state on focus and remove on blur', function() {
+  it('should apply focus effect with keyboard interaction', function() {
     var checkbox = compileAndLink('<md-checkbox ng-model="blue"></md-checkbox>');
+    var body = angular.element(document.body);
 
+    // Fake a keyboard interaction for the $mdInteraction service.
+    body.triggerHandler('keydown');
     checkbox.triggerHandler('focus');
+
     expect(checkbox[0]).toHaveClass('md-focused');
+
+    checkbox.triggerHandler('blur');
+    expect(checkbox[0]).not.toHaveClass('md-focused');
+  });
+
+  it('should not apply focus effect with mouse interaction', function() {
+    var checkbox = compileAndLink('<md-checkbox ng-model="blue"></md-checkbox>');
+    var body = angular.element(document.body);
+
+    // Fake a mouse interaction for the $mdInteraction service.
+    body.triggerHandler('mouse');
+    checkbox.triggerHandler('focus');
+
+    expect(checkbox[0]).not.toHaveClass('md-focused');
 
     checkbox.triggerHandler('blur');
     expect(checkbox[0]).not.toHaveClass('md-focused');

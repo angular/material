@@ -2,7 +2,7 @@ language: node_js
 sudo: false
 
 node_js:
-  - '5.6.0'
+  - '6.9.0'
 
 env:
   global:
@@ -13,38 +13,20 @@ env:
   - BROWSER_STACK_USERNAME=angularteam1
   - BROWSER_STACK_ACCESS_KEY=BWCd4SynLzdDcv8xtzsB
   - secure: X7CNmOMemAJ9Jqrsmv6MXyeh8n8TIL5CKzE9LYsZUbsyKo0l5CyyysJq0y/AbpQS6awsSv2qP/cZ/kand6r6z0wMFbUcxa4HjMZEfRwv3sGtwj1OKJko/GvjcZQzD54FtHy1NU7wR0mYhAlE5IwH7f8bMa/nUiijgD/TOCTtKH8=
-  matrix:
-# TODO(devversion): investigate at parallel sauce instances with the current license
-#  - BROWSER=SL_CHROME
-#  - BROWSER=SL_FIREFOX
-#  - BROWSER=SL_IE11
-  - MODE=NORMAL
-
-# matrix:
-#  fast_finish: true
-#  allow_failures:
-#  - env: "MODE=RELEASE"
 
 cache:
   directories:
-  - node_modules
-  - "$HOME/.pub-cache"
+  - node_modules/
 
 branches:
   only:
   - master
-  - patch
-  - feat/panel
 
 install:
 - npm install
 - npm rebuild node-sass
 
 before_script:
-# Necessary to run test on Travis CI that require a graphical interface.
-# See https://docs.travis-ci.com/user/gui-and-headless-browsers
-- export DISPLAY=:99.0
-- sh -e /etc/init.d/xvfb start
 - mkdir -p $LOGS_DIR
 - git config --global user.email "ngmaterial@googlegroups.com"
 - git config --global user.name "ngMaterial Bot"
@@ -53,4 +35,4 @@ script:
 - ./scripts/travis-run-script.sh
 
 after_success:
-- 'if [[ $MODE == "NORMAL" ]]; then ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT; fi'
+- ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT

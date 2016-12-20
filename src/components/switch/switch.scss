@@ -44,8 +44,13 @@ md-switch {
     height: $switch-height;
     position: relative;
     user-select: none;
-    @include rtl-prop(margin-right, margin-left, 8px, auto);
+    @include rtl-prop(margin-right, margin-left, 8px, 0px);
     float: left;
+  }
+
+  &.md-inverted .md-container {
+    @include rtl(margin-right, initial, 8px);
+    @include rtl(margin-left, 8px, initial);
   }
 
   // If the user moves his mouse off the switch, stil display grabbing cursor

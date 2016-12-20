@@ -306,6 +306,33 @@ describe('md-input-container directive', function() {
       expect(getCharCounter(element).text()).toBe('3 / 6');
     });
 
+    it('should update correctly the counter, when deleting the model value', function() {
+      var el = $compile(
+        '<form name="form">' +
+          '<md-input-container>' +
+          '<input md-maxlength="5" ng-model="foo" name="foo">' +
+          '</md-input-container>' +
+        '</form>'
+      )(pageScope);
+
+      pageScope.$apply();
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('0 / 5');
+
+      pageScope.$apply('foo = "abcdef"');
+      expect(pageScope.form.foo.$error['md-maxlength']).toBe(true);
+      expect(getCharCounter(el).text()).toBe('6 / 5');
+
+
+      pageScope.$apply('foo = ""');
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('0 / 5');
+    });
+
     it('should add and remove maxlength element & error with expression', function() {
       var el = $compile(
         '<form name="form">' +

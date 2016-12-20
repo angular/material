@@ -64,6 +64,46 @@ describe('util', function() {
 
     });
 
+    describe('getModelOption', function() {
+
+      it('should support the old ngModelCtrl options', inject(function($mdUtil) {
+        var ngModelCtrl = {
+          $options: {
+            trackBy: 'Test'
+          }
+        };
+
+        expect($mdUtil.getModelOption(ngModelCtrl, 'trackBy')).toBe('Test');
+      }));
+
+      it('should support the newer ngModelCtrl options', inject(function($mdUtil) {
+        var ngModelCtrl = {
+          $options: {
+            getOption: function() {
+              return 'Test';
+            }
+          }
+        };
+
+        expect($mdUtil.getModelOption(ngModelCtrl, 'trackBy')).toBe('Test');
+      }));
+
+      it('should return nothing if $options is not set', inject(function($mdUtil) {
+        expect($mdUtil.getModelOption({}, 'trackBy')).toBeFalsy();
+      }));
+
+      it('should not throw if an option is not available', inject(function($mdUtil) {
+        var ngModelCtrl = {
+          $options: {}
+        };
+
+        expect(function() {
+          $mdUtil.getModelOption(ngModelCtrl, 'Unknown');
+        }).not.toThrow();
+      }));
+
+    });
+
     describe('findFocusTarget', function() {
 
       it('should not find valid focus target', inject(function($rootScope, $compile, $mdUtil) {
@@ -210,6 +250,7 @@ describe('util', function() {
     });
 
     describe('disableScrollAround', function() {
+
       it('should prevent scrolling of the passed element', inject(function($mdUtil) {
         var element = angular.element('<div style="height: 2000px">');
         document.body.appendChild(element[0]);
@@ -226,6 +267,45 @@ describe('util', function() {
 
         element.remove();
       }));
+
+      it('should not remove the element when being use as scroll mask', inject(function($mdUtil) {
+        var element = angular.element('<div>');
+
+        document.body.appendChild(element[0]);
+
+        var enableScrolling = $mdUtil.disableScrollAround(element, null, {
+          disableScrollMask: true
+        });
+
+        // Restore the scrolling.
+        enableScrolling();
+
+        expect(element[0].parentNode).toBeTruthy();
+
+        element.remove();
+      }));
+
+      it('should not get thrown off by the scrollbar on the <html> node',
+        inject(function($mdUtil) {
+          var element = angular.element('<div style="height: 2000px">');
+
+          document.body.appendChild(element[0]);
+          document.body.style.overflowX = 'hidden';
+
+          window.scrollTo(0, 1000);
+
+          var enableScrolling = $mdUtil.disableScrollAround(element);
+
+          expect(document.body.style.overflow).not.toBe('hidden');
+
+          // Restore the scrolling.
+          enableScrolling();
+          window.scrollTo(0, 0);
+          document.body.style.overflowX = '';
+
+          element.remove();
+        })
+      );
     });
 
     describe('getViewportTop', function() {
@@ -656,6 +736,20 @@ describe('util', function() {
       parent.append(element);
       expect($mdUtil.getClosest(element, 'svg')).toBeTruthy();
       parent.remove();
+    });
+  });
+
+  describe('uniq', function() {
+    var $mdUtil;
+
+    beforeEach(inject(function(_$mdUtil_) {
+      $mdUtil = _$mdUtil_;
+    }));
+
+    it('returns a copy of the requested array with only unique values', function() {
+      var myArray = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4];
+
+      expect($mdUtil.uniq(myArray)).toEqual([1, 2, 3, 4]);
     });
   });
 });

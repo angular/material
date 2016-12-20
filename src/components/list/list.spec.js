@@ -2,7 +2,13 @@ describe('mdListItem directive', function() {
   var attachedElements = [];
   var $compile, $rootScope;
 
-  beforeEach(module('material.components.list', 'material.components.checkbox', 'material.components.switch'));
+  beforeEach(module(
+    'material.components.list',
+    'material.components.checkbox',
+    'material.components.switch',
+    'material.components.button'
+  ));
+
   beforeEach(inject(function(_$compile_, _$rootScope_) {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
@@ -294,8 +300,8 @@ describe('mdListItem directive', function() {
 
     // The actual click button will be a child of the button.md-no-style wrapper.
     var buttonExecutor = buttonWrap.children()[0];
-    
-    expect(buttonExecutor.nodeName).toBe('MD-BUTTON');
+
+    expect(buttonExecutor.nodeName).toBe('BUTTON');
     expect(buttonExecutor.getAttribute('aria-label')).toBe('Hello');
   });
 
@@ -321,7 +327,7 @@ describe('mdListItem directive', function() {
 
     // The secondary container should contain the md-icon,
     // which has been transformed to an icon button.
-    expect(secondaryContainer.children()[0].nodeName).toBe('MD-BUTTON');
+    expect(secondaryContainer.children()[0].nodeName).toBe('BUTTON');
   });
 
   it('should copy ng-show to the generated button parent of a clickable secondary item', function() {
@@ -348,7 +354,7 @@ describe('mdListItem directive', function() {
     // which has been transformed to an icon button.
     var iconButton = secondaryContainer.children()[0];
 
-    expect(iconButton.nodeName).toBe('MD-BUTTON');
+    expect(iconButton.nodeName).toBe('BUTTON');
     expect(iconButton.hasAttribute('ng-show')).toBe(true);
 
     // The actual `md-icon` element, should not have the ng-show attribute anymore.
@@ -379,8 +385,8 @@ describe('mdListItem directive', function() {
     // The secondary container should hold the two secondary items.
     expect(secondaryContainer.children().length).toBe(2);
 
-    expect(secondaryContainer.children()[0].nodeName).toBe('MD-BUTTON');
-    expect(secondaryContainer.children()[1].nodeName).toBe('MD-BUTTON');
+    expect(secondaryContainer.children()[0].nodeName).toBe('BUTTON');
+    expect(secondaryContainer.children()[1].nodeName).toBe('BUTTON');
   });
 
   it('should not detect a normal button as a proxy element', function() {
@@ -407,7 +413,7 @@ describe('mdListItem directive', function() {
       '</md-list-item>'
     );
 
-    var button = listItem.find('md-button');
+    var button = listItem.find('button');
 
     expect(button[0].hasAttribute('ng-click')).toBeTruthy();
     expect(button[0].hasAttribute('ng-disabled')).toBeTruthy();
@@ -479,7 +485,7 @@ describe('mdListItem directive', function() {
 
       var listItem = setup(template);
 
-      var mdMenuButton = listItem[0].querySelector('md-menu > md-button');
+      var mdMenuButton = listItem[0].querySelector('md-menu > button');
 
       expect(mdMenuButton.getAttribute('aria-label')).toBe('Open List Menu');
     });
@@ -495,10 +501,48 @@ describe('mdListItem directive', function() {
 
       var listItem = setup(template);
 
-      var mdMenuButton = listItem[0].querySelector('md-menu > md-button');
+      var mdMenuButton = listItem[0].querySelector('md-menu > button');
 
-      expect(mdMenuButton.getAttribute('ng-click')).toBe('$mdOpenMenu($event)');
+      expect(mdMenuButton.getAttribute('ng-click')).toBe('$mdMenu.open($event)');
     });
+  });
+
+  describe('aria-label', function() {
+
+    it('should copy label to the button executor element', function() {
+      var listItem = setup('<md-list-item ng-click="null" aria-label="Test">');
+      var buttonEl = listItem.find('button');
+
+      // The aria-label attribute should be moved to the button element.
+      expect(buttonEl.attr('aria-label')).toBe('Test');
+      expect(listItem.attr('aria-label')).toBeFalsy();
+    });
+
+    it('should determine the label from the content if not set', function() {
+      var listItem = setup(
+        '<md-list-item ng-click="null">' +
+          '<span>Content</span>' +
+          '<span aria-hidden="true">Hidden</span>' +
+        '</md-list-item>'
+      );
+
+      var buttonEl = listItem.find('button');
+
+      // The aria-label attribute should be determined from the content.
+      expect(buttonEl.attr('aria-label')).toBe('Content');
+    });
+
+    it('should warn when label is missing and content is empty', inject(function($log) {
+      // Clear the log stack to assert that a new warning has been added.
+      $log.reset();
+
+      setup('<md-list-item ng-click="null">');
+
+      // Expect $log to have two warnings. A warning for the md-list-item and a second one for the later compiled
+      // button executor.
+      expect($log.warn.logs.length).toBe(2);
+    }));
+
   });
 
   describe('with a clickable item', function() {
@@ -511,10 +555,10 @@ describe('mdListItem directive', function() {
         '</md-list-item>'
       );
 
-      var buttons = listItem.find('md-button');
+      var buttons = listItem.find('button');
 
       // Check that we wrapped the icon
-      expect(listItem[0].querySelector('md-button > md-icon')).toBeTruthy();
+      expect(listItem[0].querySelector('button > md-icon')).toBeTruthy();
 
       // Check the button actions
       expect(buttons[0].attributes['ng-click'].value).toBe("something()");
@@ -529,9 +573,8 @@ describe('mdListItem directive', function() {
         '</md-list-item>'
       );
 
-      // There should only be 1 md-button (the wrapper) and one button (the unwrapped one)
-      expect(listItem.find('md-button').length).toBe(1);
-      expect(listItem.find('button').length).toBe(1);
+      // There should be two buttons (the button executor, and the secondary item)
+      expect(listItem.find('button').length).toBe(2);
 
       // Check that we didn't wrap the button in an md-button
       expect(listItem[0].querySelector('md-button button.md-secondary')).toBeFalsy();
@@ -545,11 +588,11 @@ describe('mdListItem directive', function() {
         '</md-list-item>'
       );
 
-      // There should be 2 md-buttons that are siblings
-      expect(listItem.find('md-button').length).toBe(2);
+      // There should be 2 buttons that are siblings
+      expect(listItem.find('button').length).toBe(2);
 
       // Check that we didn't wrap the md-button in an md-button
-      expect(listItem[0].querySelector('md-button md-button.md-secondary')).toBeFalsy();
+      expect(listItem[0].querySelector('button.md-button button.md-button.md-secondary')).toBeFalsy();
     });
   });
 

@@ -29,6 +29,12 @@ md-input-container.md-THEME_NAME-theme {
     }
   }
 
+  &.md-input-focused {
+    .md-input {
+      @include input-placeholder-color('\'{{foreground-2}}\'');
+    }
+  }
+
   &:not(.md-input-invalid) {
     &.md-input-has-value {
       label {
