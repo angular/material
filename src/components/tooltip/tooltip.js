@@ -127,16 +127,11 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       // Create the position of the panel based off of the mdDirection.
       position = TOOLTIP_DIRECTIONS[scope.mdDirection];
 
-      // Updates the aria-label when the element text changes. This watch
-      // doesn't need to be set up if the element doesn't have any data
-      // bindings.
-      if (element.text().indexOf($interpolate.startSymbol()) > -1) {
-        var originalText = element.text().trim();
-        parent.scope().$watch($interpolate(originalText), function() {
-          addAriaLabel(originalText);
-        });
-      }
-    }
+      // Using the newly created position object, use the MdPanel
+      // panelPosition API to build the panel's position.
+      panelPosition = $mdPanel.newPanelPosition()
+          .relativeTo(parent)
+          .addPanelPosition(position.x, position.y);
 
       // If the panel has already been created, add the new origin class to
       // the panel element and update it's position with the panelPosition.
