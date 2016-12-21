@@ -250,6 +250,53 @@ describe('$$interimElement service', function() {
       });
     });
 
+    it('should support multiple interims as a preset method', function() {
+
+      var showCount = 0;
+
+      createInterimProvider('interimTest');
+
+      inject(function(interimTest) {
+
+        showInterim(interimTest);
+        expect(showCount).toBe(1);
+
+        showInterim(interimTest);
+        expect(showCount).toBe(2);
+
+        interimTest.hide();
+        flush();
+
+        expect(showCount).toBe(1);
+
+        interimTest.hide();
+        flush();
+
+        expect(showCount).toBe(0);
+
+      });
+
+      function showInterim(service) {
+
+        var preset = service
+          .build()
+          .template('<div>Interim Element</div>')
+          .multiple(true);
+
+        preset._options.onShow = function() {
+          showCount++;
+        };
+
+        preset._options.onRemove = function() {
+          showCount--;
+        };
+
+        service.show(preset);
+        flush();
+      }
+
+    });
+
   });
 
   describe('a service', function() {
@@ -340,6 +387,109 @@ describe('$$interimElement service', function() {
 
         expect(showFinished).toBe(true);
 
+      }));
+
+      it('should show multiple interim elements', function() {
+        var showCount = 0;
+
+        showInterim();
+        expect(showCount).toBe(1);
+
+        showInterim();
+        expect(showCount).toBe(2);
+
+        function showInterim() {
+          Service.show({
+            template: '<div>First Interim</div>',
+            onShow: function() {
+              showCount++;
+            },
+            onRemove: function() {
+              showCount--;
+            },
+            multiple: true
+          });
+        }
+      });
+
+      it('should hide multiple elements', function() {
+        var showCount = 0;
+
+        showInterim();
+        expect(showCount).toBe(1);
+
+        showInterim();
+        expect(showCount).toBe(2);
+
+        Service.hide();
+        expect(showCount).toBe(1);
+
+        Service.hide();
+        expect(showCount).toBe(0);
+
+        function showInterim() {
+          Service.show({
+            template: '<div>Interim Element</div>',
+            onShow: function() {
+              showCount++;
+            },
+            onRemove: function() {
+              showCount--;
+            },
+            multiple: true
+          });
+        }
+
+      });
+
+      it('should not show multiple interim elements by default', function() {
+        var showCount = 0;
+
+        showInterim();
+        expect(showCount).toBe(1);
+
+        showInterim();
+        expect(showCount).toBe(1);
+
+        function showInterim() {
+          Service.show({
+            template: '<div>First Interim</div>',
+            onShow: function() {
+              showCount++;
+            },
+            onRemove: function() {
+              showCount--;
+            }
+          });
+        }
+      });
+
+      it('should cancel a previous interim after a second shows up', inject(function($q, $timeout) {
+        var hidePromise = $q.defer();
+        var isShown = false;
+
+        Service.show({
+          template: '<div>First Interim</div>',
+          onRemove: function() {
+            return hidePromise.promise;
+          }
+        });
+
+        // Once we show the second interim, the first interim should be cancelled and new interim
+        // will successfully show up after the first interim hides completely.
+        Service.show({
+          template: '<div>Second Interim</div>',
+          onShow: function() {
+            isShown = true;
+          }
+        });
+
+        expect(isShown).toBe(false);
+
+        hidePromise.resolve();
+        $timeout.flush();
+
+        expect(isShown).toBe(true);
       }));
 
       it('should cancel a previous shown interim element', inject(function() {

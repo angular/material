@@ -15,10 +15,9 @@ $md-calendar-height:
     ($md-calendar-weeks-to-show * $md-calendar-cell-size) + $md-calendar-header-height !default;
 
 // Styles for date cells, including day-of-the-week header cells.
-@mixin md-calendar-cell() {
-  height: $md-calendar-cell-size;
+@mixin md-calendar-cell($height: $md-calendar-cell-size) {
+  height: $height;
   width: $md-calendar-cell-size;
-
   text-align: center;
 
   // Remove all padding and borders so we can completely
@@ -33,11 +32,11 @@ $md-calendar-height:
   // because we want the header background and the month dividing border to
   // extend the entire width of the calendar.
   &:first-child {
-    @include rtl-prop(padding-left, padding-right, $md-calendar-side-padding);
+    @include rtl-prop(padding-left, padding-right, $md-calendar-side-padding, 0);
   }
 
   &:last-child {
-    @include rtl-prop(padding-right, padding-left, $md-calendar-side-padding);
+    @include rtl-prop(padding-right, padding-left, $md-calendar-side-padding, 0);
   }
 }
 
@@ -131,6 +130,14 @@ md-calendar {
   md-calendar-month &:not(.md-calendar-month-label-disabled) {
     cursor: pointer;
   }
+
+  md-icon {
+    @include rtl(transform, rotate(180deg), none);
+  }
+
+  span {
+    vertical-align: middle;
+  }
 }
 
 // Table containing the day-of-the-week header.
@@ -138,9 +145,8 @@ md-calendar {
   @include md-calendar-table();
 
   th {
-    @include md-calendar-cell();
+    @include md-calendar-cell($md-calendar-header-height);
     font-weight: normal;
-    height: $md-calendar-header-height;
   }
 }
 

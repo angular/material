@@ -132,6 +132,22 @@ describe('$mdCompiler service', function() {
         expect(data.element.controller().injectedOne).toBe(1);
       }));
 
+      it('should instantiate the controller with $element as local', inject(function($rootScope) {
+        var ctrlElement = null;
+
+        var data = compile({
+          template: '<span>hello</span>',
+          controller: function Ctrl($scope, $element) {
+            ctrlElement = $element;
+          }
+        });
+
+        var scope = $rootScope.$new();
+        data.link(scope);
+
+        expect(ctrlElement).toBe(data.element);
+      }));
+
       it('should compile with controllerAs', inject(function($rootScope) {
         var data = compile({
           template: '<span>hello</span>',
@@ -161,6 +177,136 @@ describe('$mdCompiler service', function() {
         expect(scope.ctrl.name).toBe('Bob');
         expect(called).toBe(true);
       }));
+
     });
+
   });
+
+  describe('with contentElement', function() {
+
+    var $rootScope, $compile = null;
+    var element, parent = null;
+
+    beforeEach(inject(function($injector) {
+      $rootScope = $injector.get('$rootScope');
+      $compile = $injector.get('$compile');
+
+      parent = angular.element('<div>');
+      element = angular.element('<div class="contentEl">Content Element</div>');
+
+      parent.append(element);
+
+      // Append the content parent to the document, otherwise contentElement is not able
+      // to detect it properly.
+      document.body.appendChild(parent[0]);
+
+    }));
+
+    afterEach(function() {
+      parent.remove();
+    });
+
+    it('should also work with a virtual DOM element', function() {
+
+      var virtualEl = angular.element('<div>Virtual</div>');
+
+      var data = compile({
+        contentElement: virtualEl
+      });
+
+      var contentElement = data.link($rootScope);
+
+      expect(contentElement[0]).toBe(virtualEl[0]);
+      expect(contentElement.parentNode).toBeFalsy();
+
+      data.cleanup();
+
+      expect(contentElement.parentNode).toBeFalsy();
+    });
+
+    it('should also support a CSS selector as query', function() {
+
+      var data = compile({
+        contentElement: '.contentEl'
+      });
+
+      var contentElement = data.link($rootScope);
+
+      expect(element[0].parentNode).toBe(parent[0]);
+      expect(contentElement[0]).toBe(element[0]);
+
+      // Remove the element from the DOM to simulate a element move.
+      contentElement.remove();
+
+      expect(element[0].parentNode).not.toBe(parent[0]);
+
+      // Cleanup the compilation by restoring it at its old DOM position.
+      data.cleanup();
+
+      expect(element[0].parentNode).toBe(parent[0]);
+    });
+
+    it('should restore the contentElement at its previous position', function() {
+
+      var data = compile({
+        contentElement: element
+      });
+
+      var contentElement = data.link($rootScope);
+
+      expect(element[0].parentNode).toBe(parent[0]);
+      expect(contentElement[0]).toBe(element[0]);
+
+      // Remove the element from the DOM to simulate a element move.
+      contentElement.remove();
+
+      expect(element[0].parentNode).not.toBe(parent[0]);
+
+      // Cleanup the compilation by restoring it at its old DOM position.
+      data.cleanup();
+
+      expect(element[0].parentNode).toBe(parent[0]);
+    });
+
+    it('should not link to a new scope', function() {
+
+      var data = compile({
+        contentElement: element
+      });
+
+      var contentElement = data.link($rootScope);
+
+      expect(contentElement.scope()).toBeFalsy();
+    });
+
+    it('should preserve a previous linked scope', function() {
+
+      var scope = $rootScope.$new();
+
+      var data = compile({
+        contentElement: $compile('<div>With Scope</div>')(scope)
+      });
+
+      var contentElement = data.link($rootScope);
+
+      expect(contentElement.scope()).toBe(scope);
+    });
+
+    it('should not instantiate a new controller', function() {
+
+      var controllerSpy = jasmine.createSpy('Controller Function');
+
+      var data = compile({
+        contentElement: element,
+        controller: controllerSpy
+      });
+
+      data.link($rootScope);
+
+      expect(controllerSpy).not.toHaveBeenCalled();
+    });
+
+  });
+
+
 });

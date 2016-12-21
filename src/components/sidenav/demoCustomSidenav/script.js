@@ -7,6 +7,6 @@ angular
     function buildToggler(componentId) {
       return function() {
         $mdSidenav(componentId).toggle();
-      }
+      };
     }
   });

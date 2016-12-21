@@ -11,7 +11,7 @@ describe('mdSubheader', function() {
       $delegate.checkStickySupport = angular.noop;
 
       return $delegate;
-    })
+    });
   }));
 
   beforeEach(inject(function($injector) {
@@ -166,12 +166,34 @@ describe('mdSubheader', function() {
       '</div>'
     );
 
-    // TODO(devversion): Remove this expectation and update to correctly detect 6 subheaders
-    // TODO(devversion) See related issue: https://github.com/angular/material/issues/8647
-    expect(contentElement[0].querySelectorAll('.md-subheader').length).toEqual(12);
+    expect(contentElement[0].querySelectorAll('.md-subheader').length).toEqual(6);
 
     // Check if there were no exceptions caused.
     expect($exceptionHandler.errors).toEqual([]);
+  });
+
+  it('adds the proper aria attributes only to the source element', function() {
+    build(
+      '<div>' +
+        '<md-subheader>Subheader</md-subheader>' +
+      '</div>'
+    );
+
+    expect(element.attr('role')).toBe('heading');
+    expect(element.attr('aria-level')).toBe('2');
+
+    expect(cloneElement.attr('role')).toBeFalsy();
+    expect(cloneElement.parent().attr('aria-hidden')).toBe('true');
+  });
+
+  it('allows for the aria-level to be overwritten', function() {
+    build(
+      '<div>' +
+        '<md-subheader aria-level="1">Subheader</md-subheader>' +
+      '</div>'
+    );
+
+    expect(element.attr('aria-level')).toBe('1');
   });
 
   function build(template) {

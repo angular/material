@@ -338,11 +338,16 @@ describe('<md-tabs>', function () {
 
           done();
         });
-      })
+      });
     });
   });
 
   describe('aria', function () {
+    var $timeout;
+
+    beforeEach(inject(function(_$timeout_) {
+      $timeout = _$timeout_;
+    }));
 
     it('should link tab content to tabItem with auto-generated ids', function () {
       var tabs       = setup('<md-tabs>' +
@@ -351,10 +356,11 @@ describe('<md-tabs>', function () {
       var tabItem    = tabs.find('md-dummy-tab');
       var tabContent = angular.element(tabs[ 0 ].querySelector('md-tab-content'));
 
+      $timeout.flush();
+
       expect(tabs.find('md-tabs-canvas').attr('role')).toBe('tablist');
 
       expect(tabItem.attr('id')).toBeTruthy();
-      expect(tabItem.attr('role')).toBe('tab');
       expect(tabItem.attr('aria-controls')).toBe(tabContent.attr('id'));
 
       expect(tabContent.attr('id')).toBeTruthy();
@@ -363,6 +369,36 @@ describe('<md-tabs>', function () {
 
       //Unique ids check
       expect(tabContent.attr('id')).not.toEqual(tabItem.attr('id'));
+    });
+
+    it('should not assign role to dummy tabs', function () {
+      var tabs       = setup('<md-tabs>' +
+                             '<md-tab label="label!">content!</md-tab>' +
+                             '</md-tabs>');
+      var tabItem    = tabs.find('md-dummy-tab');
+
+      expect(tabItem.attr('role')).toBeFalsy();
+    });
+
+    it('should assign role to visible tabs', function () {
+      var tabs       = setup('<md-tabs>' +
+                             '<md-tab label="label!">content!</md-tab>' +
+                             '</md-tabs>');
+      var tabItem    = tabs.find('md-tab-item');
+
+      expect(tabItem.attr('role')).toBe('tab');
+    });
+
+    it('should not set `aria-controls` if the tab does not have content', function () {
+      var tabs = setup(
+        '<md-tabs>' +
+          '<md-tab label="label!"></md-tab>' +
+        '</md-tabs>'
+      );
+
+      $timeout.flush();
+
+      expect(tabs.find('md-dummy-tab').attr('aria-controls')).toBeFalsy();
     });
   });
 
@@ -507,5 +543,37 @@ describe('<md-tabs>', function () {
       expect(element.find('md-pagination-wrapper').attr('style').indexOf('width')).toBe(-1);
       element.remove();
     }));
+  });
+
+  describe('no element content', function() {
+    it('should not add the `md-no-tab-content` class if the element has content', function() {
+      var tabs = setup(
+        '<md-tabs>' +
+           '<md-tab label="label!">content!</md-tab>' +
+        '</md-tabs>'
+      );
+
+      expect(tabs).not.toHaveClass('md-no-tab-content');
+    });
+
+    it('should add the `md-no-tab-content` class if the element does not have content', function() {
+      var tabs = setup(
+        '<md-tabs>' +
+           '<md-tab label="label!"></md-tab>' +
+        '</md-tabs>'
+      );
+
+      expect(tabs).toHaveClass('md-no-tab-content');
+    });
+
+    it('should trim before determining whether the element has content', function() {
+      var tabs = setup(
+        '<md-tabs>' +
+           '<md-tab label="label!">\n\n\n</md-tab>' +
+        '</md-tabs>'
+      );
+
+      expect(tabs).toHaveClass('md-no-tab-content');
+    });
   });
 });

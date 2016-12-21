@@ -111,9 +111,9 @@ before investing significant effort in a planned Pull Request submission; it's l
 working on a related PR.
 
 * All contributions must be consistent with the Angular Material coding conventions. See the
-  [Coding Guidelines](docs/guides/CODING.md)
+  [Coding Guidelines](../docs/guides/CODING.md)
 * Submit proposed changes or additions as GitHub pull requests. See the
-  [Pull Request Guidelines](docs/guides/PULL_REQUESTS.md)
+  [Pull Request Guidelines](../docs/guides/PULL_REQUESTS.md)
 
 <br/>
 ## <a name="commit"></a> Git Commit Guidelines
@@ -200,7 +200,11 @@ refactor(content): prefix mdContent scroll- attributes
 <br/>
 ## <a name="pr_forks"></a> Guidelines for Developer Commit Authorizations
 
-Please review the [Commit Level and Authorization Guidelines](https://github.com/angular/material/blob/master/docs/guides/COMMIT_LEVELS.md) for details on how to implement and submit your fixes, changes, or enchancements to Angular Material. This guideline provides details on creating a repository Fork of the Angular Material repository and how to submit Pull Requests.
+Please review the [Commit Level and Authorization Guidelines](../docs/guides/COMMIT_LEVELS.md) for
+details on how to implement and submit your fixes, changes, or enhancements to Angular Material.
+
+This guideline provides details on creating a repository Fork of the Angular Material repository
+and how to submit Pull Requests.
 
 
 

@@ -1,0 +1,41 @@
+<md-content ng-controller="AppCtrl as ctrl" layout-padding ng-cloak>
+  <div layout-gt-xs="row">
+    <div flex-gt-xs>
+      <h4>Date-picker with min date and max date</h4>
+      <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"
+          md-min-date="ctrl.minDate" md-max-date="ctrl.maxDate"></md-datepicker>
+    </div>
+
+    <div flex-gt-xs>
+      <h4>Only weekends are selectable</h4>
+      <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"
+          md-date-filter="ctrl.onlyWeekendsPredicate"></md-datepicker>
+    </div>
+  </div>
+
+  <div layout-gt-xs="row">
+    <div flex-gt-xs>
+      <h4>Only weekends within given range are selectable</h4>
+      <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"
+          md-min-date="ctrl.minDate" md-max-date="ctrl.maxDate"
+          md-date-filter="ctrl.onlyWeekendsPredicate"></md-datepicker>
+    </div>
+
+    <form name="myForm" flex-gt-xs>
+      <h4>Inside a md-input-container</h4>
+
+      <md-input-container>
+        <label>Enter date</label>
+        <md-datepicker ng-model="ctrl.myDate" name="dateField" md-min-date="ctrl.minDate"
+          md-max-date="ctrl.maxDate"></md-datepicker>
+
+        <div ng-messages="myForm.dateField.$error">
+          <div ng-message="valid">The entered value is not a date!</div>
+          <div ng-message="required">This date is required!</div>
+          <div ng-message="mindate">Date is too early!</div>
+          <div ng-message="maxdate">Date is too late!</div>
+        </div>
+      </md-input-container>
+    </form>
+  </div>
+</md-content>

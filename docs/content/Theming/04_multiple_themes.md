@@ -75,3 +75,31 @@ directives) you can use the `$mdThemingProvider` to enable it.
 <hljs lang="js">
 $mdThemingProvider.alwaysWatchTheme(true);
 </hljs>
+
+#### Lazy Generate Themes
+
+By default, every theme is generated when defined. You can disable this in the
+configuration section using the `$mdThemingProvider`.
+
+<hljs lang="js">
+angular.module('myApp', ['ngMaterial'])
+.config(function($mdThemingProvider) {
+  //disable theme generation
+  $mdThemingProvider.generateThemesOnDemand(true);
+
+  //themes are still defined in config, but the css is not generated
+  $mdThemingProvider.theme('altTheme')
+    .primaryPalette('purple')
+    .accentPalette('green');
+});
+</hljs>
+
+If you do this, you must generate the theme before using it using `$mdTheming`.
+
+<hljs lang="js">
+//generate the predefined theme named altTheme
+$mdTheming.generateTheme('altTheme');
+</hljs>
+
+The theme name that is passed in must match the name of the theme that was
+defined as part of the configuration block.

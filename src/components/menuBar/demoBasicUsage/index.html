@@ -9,7 +9,7 @@
         <h2 class="md-toolbar-tools">Untitled document</h2>
         <md-menu-bar>
           <md-menu>
-            <button ng-click="$mdOpenMenu()">
+            <button ng-click="$mdMenu.open()">
               File
             </button>
             <md-menu-content>
@@ -21,7 +21,7 @@
               <md-menu-divider></md-menu-divider>
               <md-menu-item>
                 <md-menu>
-                  <md-button ng-click="$mdOpenMenu()">New</md-button>
+                  <md-button ng-click="$mdMenu.open()">New</md-button>
                   <md-menu-content>
                     <md-menu-item><md-button ng-click="ctrl.sampleAction('New Document', $event)">Document</md-button></md-menu-item>
                     <md-menu-item><md-button ng-click="ctrl.sampleAction('New Spreadsheet', $event)">Spreadsheet</md-button></md-menu-item>
@@ -52,7 +52,7 @@
             </md-menu-content>
           </md-menu>
           <md-menu>
-            <button ng-click="$mdOpenMenu()">
+            <button ng-click="$mdMenu.open()">
               Edit
             </button>
             <md-menu-content>
@@ -102,14 +102,14 @@
             </md-menu-content>
           </md-menu>
           <md-menu>
-            <button ng-click="$mdOpenMenu()">
+            <button ng-click="$mdMenu.open()">
               View
             </button>
             <md-menu-content>
               <md-menu-item type="checkbox" ng-model="ctrl.settings.printLayout">Print layout</md-menu-item>
               <md-menu-item class="md-indent">
                 <md-menu>
-                  <md-button ng-click="$mdOpenMenu()">Mode</md-button>
+                  <md-button ng-click="$mdMenu.open()">Mode</md-button>
                   <md-menu-content width="3">
                     <md-menu-item type="radio" ng-model="ctrl.settings.presentationMode" value="'presentation'">Presentation</md-menu-item>
                     <md-menu-item type="radio" ng-model="ctrl.settings.presentationMode" value="'edit'">Edit</md-menu-item>
@@ -127,7 +127,7 @@
             </md-menu-content>
           </md-menu>
           <md-menu>
-            <button ng-click="$mdOpenMenu()">
+            <button ng-click="$mdMenu.open()">
               Format
             </button>
             <md-menu-content>

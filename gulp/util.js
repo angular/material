@@ -8,7 +8,6 @@ var path = require('path');
 var rename = require('gulp-rename');
 var filter = require('gulp-filter');
 var concat = require('gulp-concat');
-var autoprefixer = require('gulp-autoprefixer');
 var series = require('stream-series');
 var lazypipe = require('lazypipe');
 var glob = require('glob').sync;
@@ -16,9 +15,11 @@ var uglify = require('gulp-uglify');
 var sass = require('gulp-sass');
 var plumber = require('gulp-plumber');
 var ngAnnotate = require('gulp-ng-annotate');
-var minifyCss = require('gulp-minify-css');
 var insert = require('gulp-insert');
 var gulpif = require('gulp-if');
+var nano = require('gulp-cssnano');
+var postcss = require('postcss');
+var _ = require('lodash');
 var constants = require('./const');
 var VERSION = constants.VERSION;
 var BUILD_MODE = constants.BUILD_MODE;
@@ -27,11 +28,13 @@ var ROOT = constants.ROOT;
 var utils = require('../scripts/gulp-utils.js');
 
 exports.buildJs = buildJs;
-exports.autoprefix = autoprefix;
+exports.autoprefix = utils.autoprefix;
 exports.buildModule = buildModule;
 exports.filterNonCodeFiles = filterNonCodeFiles;
 exports.readModuleArg = readModuleArg;
 exports.themeBuildStream = themeBuildStream;
+exports.minifyCss = minifyCss;
+exports.dedupeCss = dedupeCss;
 exports.args = args;
 
 /**
@@ -69,10 +72,15 @@ function buildJs () {
   }
 }
 
-function autoprefix () {
-  return autoprefixer({browsers: [
-    'last 2 versions', 'last 4 Android versions'
-  ]});
+function minifyCss(extraOptions) {
+  var options = {
+    autoprefixer: false,
+    reduceTransforms: false,
+    svgo: false,
+    safe: true
+  };
+
+  return nano(_.assign(options, extraOptions));
 }
 
 function buildModule(module, opts) {
@@ -104,9 +112,12 @@ function buildModule(module, opts) {
 
   function splitStream (stream) {
     var js = series(stream, themeBuildStream())
-        .pipe(filter('*.js'))
+        .pipe(filter('**/*.js'))
         .pipe(concat('core.js'));
-    var css = stream.pipe(filter('*.css'));
+
+    var css = stream
+      .pipe(filter(['**/*.css', '!**/ie_fixes.css']))
+
     return series(js, css);
   }
 
@@ -138,6 +149,13 @@ function buildModule(module, opts) {
       {
         pattern: /\@ngInject/g,
         replacement: 'ngInject'
+      },
+      {
+        // Turns `thing.$inject` into `thing['$inject']` in order to prevent
+        // Closure from stripping it from objects with an @constructor
+        // annotation.
+        pattern: /\.\$inject\b/g,
+        replacement: "['$inject']"
       }
     ];
     return lazypipe()
@@ -166,7 +184,8 @@ function buildModule(module, opts) {
         // In some cases there are multiple theme SCSS files, which should be concatenated together.
         .pipe(gulpif, /default-theme.scss/, concat(name + '-default-theme.scss'))
         .pipe(sass)
-        .pipe(autoprefix)
+        .pipe(dedupeCss)
+        .pipe(utils.autoprefix)
     (); // Invoke the returning lazypipe function to create our new pipe.
   }
 
@@ -206,5 +225,53 @@ function themeBuildStream() {
       .pipe(concat('default-theme.scss'))
       .pipe(utils.hoistScssVariables())
       .pipe(sass())
+      .pipe(dedupeCss())
+      // The PostCSS orderedValues plugin modifies the theme color expressions.
+      .pipe(minifyCss({ orderedValues: false }))
       .pipe(utils.cssToNgConstant('material.core', '$MD_THEME_CSS'));
+}
+
+// Removes duplicated CSS properties.
+function dedupeCss() {
+  var prefixRegex = /-(webkit|moz|ms|o)-.+/;
+
+  return insert.transform(function(contents) {
+    // Parse the CSS into an AST.
+    var parsed = postcss.parse(contents);
+
+    // Walk through all the rules, skipping comments, media queries etc.
+    parsed.walk(function(rule) {
+      // Skip over any comments, media queries and rules that have less than 2 properties.
+      if (rule.type !== 'rule' || !rule.nodes || rule.nodes.length < 2) return;
+
+      // Walk all of the properties within a rule.
+      rule.walk(function(prop) {
+        // Check if there's a similar property that comes after the current one.
+        var hasDuplicate = validateProp(prop) && _.find(rule.nodes, function(otherProp) {
+          return prop !== otherProp && prop.prop === otherProp.prop && validateProp(otherProp);
+        });
+
+        // Remove the declaration if it's duplicated.
+        if (hasDuplicate) {
+          prop.remove();
+
+          gutil.log(gutil.colors.yellow(
+            'Removed duplicate property: "' +
+              prop.prop + ': ' + prop.value + '" from "' + rule.selector + '"...'
+          ));
+        }
+      });
+    });
+
+    // Turn the AST back into CSS.
+    return parsed.toResult().css;
+  });
+
+  // Checks if a property is a style declaration and that it
+  // doesn't contain any vendor prefixes.
+  function validateProp(prop) {
+    return prop && prop.type === 'decl' && ![prop.prop, prop.value].some(function(value) {
+      return value.indexOf('-') > -1 && prefixRegex.test(value);
+    });
+  }
 }

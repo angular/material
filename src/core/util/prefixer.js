@@ -22,7 +22,8 @@ function MdPrefixer(initialAttributes, buildSelector) {
   return {
     buildList: _buildList,
     buildSelector: _buildSelector,
-    hasAttribute: _hasAttribute
+    hasAttribute: _hasAttribute,
+    removeAttribute: _removeAttribute
   };
 
   function _buildList(attributes) {
@@ -41,14 +42,18 @@ function MdPrefixer(initialAttributes, buildSelector) {
     attributes = angular.isArray(attributes) ? attributes : [attributes];
 
     return _buildList(attributes)
-      .map(function (item) {
-        return '[' + item + ']'
+      .map(function(item) {
+        return '[' + item + ']';
       })
       .join(',');
   }
 
   function _hasAttribute(element, attribute) {
-    element = element[0] || element;
+    element = _getNativeElement(element);
+
+    if (!element) {
+      return false;
+    }
 
     var prefixedAttrs = _buildList(attribute);
 
@@ -60,4 +65,32 @@ function MdPrefixer(initialAttributes, buildSelector) {
 
     return false;
   }
+
+  function _removeAttribute(element, attribute) {
+    element = _getNativeElement(element);
+
+    if (!element) {
+      return;
+    }
+
+    _buildList(attribute).forEach(function(prefixedAttribute) {
+      element.removeAttribute(prefixedAttribute);
+    });
+  }
+
+  /**
+   * Transforms a jqLite or DOM element into a HTML element.
+   * This is useful when supporting jqLite elements and DOM elements at
+   * same time.
+   * @param element {JQLite|Element} Element to be parsed
+   * @returns {HTMLElement} Parsed HTMLElement
+   */
+  function _getNativeElement(element) {
+    element =  element[0] || element;
+
+    if (element.nodeType) {
+      return element;
+    }
+  }
+
 }

@@ -11,7 +11,15 @@
     border-bottom-color: '{{foreground-4}}';
 
     &.md-datepicker-focused {
-      border-bottom-color: '{{primary-color}}'
+      border-bottom-color: '{{primary-color}}';
+
+      .md-accent & {
+        border-bottom-color: '{{accent-color}}';
+      }
+
+      .md-warn & {
+        border-bottom-color: '{{warn-A700}}';
+      }
     }
 
     &.md-datepicker-invalid {
@@ -36,16 +44,34 @@
   // Open state for all of the elements of the picker.
   .md-datepicker-open {
     .md-datepicker-calendar-icon {
-      fill: '{{primary-500}}';
+      color: '{{primary-color}}';
     }
-  }
 
-  .md-datepicker-open .md-datepicker-input-container,
-  .md-datepicker-input-mask-opaque {
-    background: '{{background-hue-1}}';
+    &.md-accent, .md-accent & {
+      .md-datepicker-calendar-icon {
+        color: '{{accent-color}}';
+      }
+    }
+
+    &.md-warn, .md-warn & {
+      .md-datepicker-calendar-icon {
+        color: '{{warn-A700}}';
+      }
+    }
   }
 
   .md-datepicker-calendar {
     background: '{{background-A100}}';
+  }
+
+  $mask-color: '{{background-hue-1}}';
+
+  // The box-shadow acts as the background for the overlay.
+  .md-datepicker-input-mask-opaque {
+    box-shadow: 0 0 0 9999px $mask-color;
+  }
+
+  .md-datepicker-open .md-datepicker-input-container {
+    background: $mask-color;
   }
 }

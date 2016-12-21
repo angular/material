@@ -3,7 +3,7 @@ angular.module('selectDemoValidation', ['ngMaterial', 'ngMessages'])
   $scope.clearValue = function() {
     $scope.quest = undefined;
     $scope.favoriteColor = undefined;
-    $scope.myForm.$setPristine();;
+    $scope.myForm.$setPristine();
   };
   $scope.save = function() {
     if ($scope.myForm.$valid) {

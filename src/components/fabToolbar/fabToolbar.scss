@@ -51,23 +51,23 @@ md-fab-toolbar {
 
   &.md-left {
     md-fab-trigger {
-      @include rtl-prop(right, left, 0);
+      @include rtl-prop(right, left, 0, auto);
     }
 
     .md-toolbar-tools {
       flex-direction: row-reverse;
 
       > .md-button:first-child {
-        @include rtl-prop(margin-right, margin-left, 0.6rem)
+        @include rtl-prop(margin-right, margin-left, 0.6rem, auto)
       }
 
       > .md-button:first-child {
-        @include rtl-prop(margin-left, margin-right, -0.8rem);
+        @include rtl-prop(margin-left, margin-right, -0.8rem, auto);
       }
 
 
       > .md-button:last-child {
-        @include rtl-prop(margin-right, margin-left, 8px);
+        @include rtl-prop(margin-right, margin-left, 8px, auto);
       }
 
     }
@@ -75,7 +75,7 @@ md-fab-toolbar {
 
   &.md-right {
     md-fab-trigger {
-      @include rtl-prop(left, right, 0);
+      @include rtl-prop(left, right, 0, auto);
     }
 
     .md-toolbar-tools {

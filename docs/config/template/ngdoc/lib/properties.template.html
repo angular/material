@@ -1,9 +1,34 @@
 {%- if doc.properties %}
 <section class="api-section">
   <h2>Properties</h2>
-  <div class="api-param-table">
-    {$ propertyTable(doc.properties) $}
-  </div>
+  <br/>
+  <ul class="methods">
+    {%- for property in doc.properties %}
+    <li id="{$ property.name $}">
+      <h3 class="method-function-syntax">
+        <code class="method-function-syntax">{$ doc.name $}.{$ property.name $}</code>
+      </h3>
+      <div class="service-desc">{$ property.description | marked $}</div>
+
+      <div class="method-param-table">
+
+        {% if property.params %}
+        {$ paramTable(property.params) $}
+        {% endif %}
+
+        {% if method.this %}
+        <h4>Property's {% code %}this{% endcode %}</h4>
+        {$ property.this | marked $}
+        {% endif %}
+
+        {% if property.returns %}
+        {$ returnTable(property.returns) $}
+        {% endif %}
+
+      </div>
+
+    </li>
+    {% endfor -%}
   </ul>
 </section>
 {%- endif -%}

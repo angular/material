@@ -47,6 +47,6 @@
           templateUrl: 'dialog.html',
           targetEvent: $event
         });
-      }
+      };
     });
 })();

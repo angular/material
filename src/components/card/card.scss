@@ -16,13 +16,13 @@ md-card {
 
     &:first-child {
       md-card-avatar {
-       @include rtl-prop(margin-right, margin-left, 12px);
+       @include rtl-prop(margin-right, margin-left, 12px, auto);
       }
     }
 
     &:last-child {
       md-card-avatar {
-        @include rtl-prop(margin-left, margin-right, 12px);
+        @include rtl-prop(margin-left, margin-right, 12px, auto);
       }
     }
 
@@ -37,6 +37,11 @@ md-card {
 
       md-icon {
         padding: 8px;
+        > svg {
+          // Safari workaround for any SVG with padded parent
+          height: inherit;
+          width: inherit;
+        }
       }
 
       & + md-card-header-text {
@@ -60,7 +65,8 @@ md-card {
   }
 
   > img,
-  > md-card-header img {
+  > md-card-header img,
+  md-card-title-media img {
     box-sizing: border-box;
     display: flex;
     flex: 0 0 auto;
@@ -169,11 +175,11 @@ md-card {
         margin: 0 $baseline-grid * .5;
 
         &:first-of-type {
-          @include rtl-prop(margin-left, margin-right, 0);
+          @include rtl-prop(margin-left, margin-right, 0, auto);
         }
 
         &:last-of-type {
-          @include rtl-prop(margin-right, margin-left, 0);
+          @include rtl-prop(margin-right, margin-left, 0, auto);
         }
       }
 
@@ -182,11 +188,11 @@ md-card {
         margin-right: 3 * $baseline-grid / 4;
 
         &:first-of-type {
-          @include rtl-prop(margin-left, margin-right, 3 * $baseline-grid / 2);
+          @include rtl-prop(margin-left, margin-right, 3 * $baseline-grid / 2, auto);
         }
 
         &:last-of-type {
-          @include rtl-prop(margin-right, margin-left, 3 * $baseline-grid / 2);
+          @include rtl-prop(margin-right, margin-left, 3 * $baseline-grid / 2, auto);
         }
       }
 

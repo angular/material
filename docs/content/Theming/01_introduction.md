@@ -12,6 +12,10 @@ etc) you will need to either write CSS rules with custom selectors, or build a
 custom version of the `angular-material.css` file using SASS and custom
 variables.
 
+> <b>Note:</b> The Material Theming system provides the
+  [`$mdThemingProvider.setNonce()`](/api/service/$mdThemingProvider#setNonce) method to meet the
+  requirements of a CSP-policy enabled application.
+
 <img src="https://cloud.githubusercontent.com/assets/210413/4816236/bf7783dc-5edd-11e4-88ef-1f8b6e87e1d7.png" alt="color palette" style="max-width: 100%;">
 
 ## Theming Approach
@@ -19,7 +23,7 @@ variables.
 Angular Material makes it easy to design an app which follows the Material style
 guide's suggested design patterns:
 
-> Limit your selection of colors by choosing three color hues from the primary palette and one accent color 
+> Limit your selection of colors by choosing three color hues from the primary palette and one accent color
 > from the secondary palette. The accent color may or may not need fallback options.
 
 This concept is central to how Angular Material approaches theming.
@@ -58,7 +62,7 @@ palettes from the material design spec built in. Valid palettes include:
 ### Color Intentions
 
 A color intention is a mapping of a palette for a given intention within your
-application. 
+application.
 
 Valid color intentions in Angular Material include:
 

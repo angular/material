@@ -19,7 +19,7 @@ md-checkbox.md-THEME_NAME-theme {
     color: '{{accent-color-0.87}}';
   }
 
-  .md-icon {
+  &:not(.md-checked) .md-icon {
     border-color: '{{foreground-2}}';
   }
 
@@ -49,7 +49,7 @@ md-checkbox.md-THEME_NAME-theme {
         color: '{{warn-color-0.87}}';
       }
 
-      .md-icon {
+      &:not(.md-checked) .md-icon {
         border-color: '{{foreground-2}}';
       }
 
@@ -68,7 +68,7 @@ md-checkbox.md-THEME_NAME-theme {
   }
 
   &[disabled] {
-    .md-icon {
+    &:not(.md-checked) .md-icon {
       border-color: '{{foreground-3}}';
     }
 

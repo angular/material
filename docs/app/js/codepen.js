@@ -1,5 +1,5 @@
 (function() {
-  DocsApp
+  angular.module('docsApp')
     .factory('codepenDataAdapter', CodepenDataAdapter)
     .factory('codepen', ['$demoAngularScripts', '$document', 'codepenDataAdapter', Codepen]);
 
@@ -41,7 +41,14 @@
     function escapeJsonQuotes(json) {
       return JSON.stringify(json)
         .replace(/'/g, "&amp;apos;")
-        .replace(/"/g, "&amp;quot;");
+        .replace(/"/g, "&amp;quot;")
+        /**
+         * Codepen was unescaping &lt; (<) and &gt; (>) which caused, on some demos,
+         * an unclosed elements (like <md-select>). 
+         * Used different unicode lookalike characters so it won't be considered as an element
+         */
+        .replace(/&amp;lt;/g, "&#x02C2;") // http://graphemica.com/%CB%82
+        .replace(/&amp;gt;/g, "&#x02C3;"); // http://graphemica.com/%CB%83
     }
   }
 

@@ -205,12 +205,6 @@ describe('MdIcon directive', function() {
       module(function($provide) {
         var $mdIconMock = function(id) {
 
-          wasLastSvgSrcTrusted = false;
-          if (!angular.isString(id)) {
-            id = $sce.getTrustedUrl(id);
-            wasLastSvgSrcTrusted = true;
-          }
-
           return {
             then: function(fn) {
               switch(id) {
@@ -221,8 +215,6 @@ describe('MdIcon directive', function() {
                 case 'android.svg'      : fn('<svg><g id="android"></g></svg>');
                   break;
                 case 'cake.svg'         : fn('<svg><g id="cake"></g></svg>');
-                  break;
-                case 'galactica.svg'         : fn('<svg><g id="galactica"></g></svg>');
                   break;
                 case 'image:android'    : fn('');
                   break;
@@ -272,17 +264,10 @@ describe('MdIcon directive', function() {
         $sce = _$sce_;
       }));
 
-      it('should mark as trusted static URLs', function() {
-        el = make('<md-icon md-svg-src="galactica.svg"></md-icon>');
-        expect(wasLastSvgSrcTrusted).toBe(true);
-        expect(el[0].innerHTML).toContain('galactica')
-      });
-
       it('should update mdSvgSrc when attribute value changes', function() {
         $scope.url = 'android.svg';
         el = make('<md-icon md-svg-src="{{ url }}"></md-icon>');
         expect(el.attr('md-svg-src')).toEqual('android.svg');
-        expect(wasLastSvgSrcTrusted).toBe(false);
         $scope.url = 'cake.svg';
         $scope.$digest();
         expect(el.attr('md-svg-src')).toEqual('cake.svg');
@@ -297,13 +282,19 @@ describe('MdIcon directive', function() {
 
       describe('with a data URL', function() {
         it('should set mdSvgSrc from a function expression', inject(function() {
-          var svgData = '<svg><g><circle r="50" cx="100" cy="100"></circle></g></svg>';
+          var svgData = '<svg><g><circle cx="100" cy="100" r="50"></circle></g></svg>';
           $scope.getData = function() {
             return 'data:image/svg+xml;base64,' + window.btoa(svgData);
           };
-          el = make('<md-icon md-svg-src="{{ getData() }}"></md-icon>');
+          el = make('<md-icon md-svg-src="{{ getData() }}"></md-icon>')[0];
           $scope.$digest();
-          expect(el[0].innerHTML).toEqual(svgData);
+
+          // Notice that we only compare the tag names here.
+          // Checking the innerHTML to be the same as the svgData variable is not working, because
+          // some browsers (like IE) are swapping some attributes, adding an SVG namespace etc.
+          expect(el.firstElementChild.tagName).toBe('svg');
+          expect(el.firstElementChild.firstElementChild.tagName).toBe('g');
+          expect(el.firstElementChild.firstElementChild.firstElementChild.tagName).toBe('circle');
         }));
       });
     });
