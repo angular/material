@@ -102,6 +102,26 @@ describe('MdTooltip Component', function() {
 
         expect(element.attr('aria-label')).toBe('test 2');
       });
+  
+  it('should not interpolate interpolated values', function() {
+    buildTooltip(
+        '<md-button>' +
+         '<md-tooltip>{{ testModel.ariaTest }}</md-tooltip>' +
+        '</md-button>'
+      );
+
+      $rootScope.$apply(function() {
+        $rootScope.testModel.ariaTest = 'test {{1+1}}';
+      });
+
+      expect(element.attr('aria-label')).toBe('test {{1+1}}');
+
+      $rootScope.$apply(function() {
+        $rootScope.testModel.ariaTest = 'test {{1+1336}}';
+      });
+
+      expect(element.attr('aria-label')).toBe('test {{1+1336}}');
+  });
 
   it('should not set parent to items with no pointer events',
       inject(function($window) {
