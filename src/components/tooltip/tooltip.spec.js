@@ -24,7 +24,7 @@ describe('MdTooltip Component', function() {
     // Make sure to remove/cleanup after each test.
     element.remove();
     var scope = element && element.scope();
-    scope && scope.$destroy;
+    scope && scope.$destroy();
     element = undefined;
   });
 
@@ -102,7 +102,7 @@ describe('MdTooltip Component', function() {
 
         expect(element.attr('aria-label')).toBe('test 2');
       });
-  
+
   it('should not interpolate interpolated values', function() {
     buildTooltip(
         '<md-button>' +

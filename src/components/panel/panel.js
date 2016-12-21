@@ -910,9 +910,12 @@ MdPanelService.prototype.create = function(config) {
   config = config || {};
 
   // If the passed-in config contains an ID and the ID is within _trackedPanels,
-  // return the tracked panel.
+  // return the tracked panel after updating its config with the passed in
+  // config.
   if (angular.isDefined(config.id) && this._trackedPanels[config.id]) {
-    return this._trackedPanels[config.id];
+    var trackedPanel = this._trackedPanels[config.id];
+    angular.extend(trackedPanel.config, config);
+    return trackedPanel;
   }
 
   this._config = {
