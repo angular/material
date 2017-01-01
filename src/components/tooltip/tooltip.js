@@ -270,12 +270,13 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       if (element[0] && 'MutationObserver' in $window) {
         var attributeObserver = new MutationObserver(function(mutations) {
           mutations.forEach(function(mutation) {
-            if (mutation.attributeName === 'md-visible' &&
-                !scope.visibleWatcher ) {
-              scope.visibleWatcher = scope.$watch('mdVisible',
-                  onVisibleChanged);
-            } else if (mutation.attributeName === 'md-direction') {
-              $mdUtil.nextTick(updatePosition);
+            switch (mutation.attributeName) {
+              case "md-visible":
+                scope.visibleWatcher = scope.visibleWatcher || scope.$watch('mdVisible', onVisibleChanged);
+                break;
+              case "md-direction":
+                $mdUtil.nextTick(updatePosition);
+                break;
             }
           });
         });
@@ -311,8 +312,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       parent.one('$destroy', onElementDestroy);
       scope.$on('$destroy', function() {
         setVisible(false);
-        element.remove();
         attributeObserver && attributeObserver.disconnect();
+        element.remove();
       });
 
       // Updates the aria-label when the element text changes. This watch
