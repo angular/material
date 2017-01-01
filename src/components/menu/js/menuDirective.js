@@ -177,26 +177,33 @@ function MenuDirective($mdUtil) {
 
   function compile(templateElement) {
     templateElement.addClass('md-menu');
-    var triggerElement = templateElement.children()[0];
+
+    var triggerEl = templateElement.children()[0];
+    var contentEl = templateElement.children()[1];
+
     var prefixer = $mdUtil.prefixer();
 
-    if (!prefixer.hasAttribute(triggerElement, 'ng-click')) {
-      triggerElement = triggerElement
-          .querySelector(prefixer.buildSelector(['ng-click', 'ng-mouseenter'])) || triggerElement;
-    }
-    if (triggerElement && (
-      triggerElement.nodeName == 'MD-BUTTON' ||
-      triggerElement.nodeName == 'BUTTON'
-    ) && !triggerElement.hasAttribute('type')) {
-      triggerElement.setAttribute('type', 'button');
+    if (!prefixer.hasAttribute(triggerEl, 'ng-click')) {
+      triggerEl = triggerEl
+          .querySelector(prefixer.buildSelector(['ng-click', 'ng-mouseenter'])) || triggerEl;
     }
 
-    if (templateElement.children().length != 2) {
-      throw Error(INVALID_PREFIX + 'Expected two children elements.');
+    var isButtonTrigger = triggerEl.nodeName === 'MD-BUTTON' || triggerEl.nodeName === 'BUTTON';
+
+    if (triggerEl && isButtonTrigger && !triggerEl.hasAttribute('type')) {
+      triggerEl.setAttribute('type', 'button');
+    }
+
+    if (!triggerEl) {
+      throw Error(INVALID_PREFIX + 'Expected the menu to have a trigger element.');
+    }
+
+    if (!contentEl || contentEl.nodeName !== 'MD-MENU-CONTENT') {
+      throw Error(INVALID_PREFIX + 'Expected the menu to contain a `md-menu-content` element.');
     }
 
     // Default element for ARIA attributes has the ngClick or ngMouseenter expression
-    triggerElement && triggerElement.setAttribute('aria-haspopup', 'true');
+    triggerEl && triggerEl.setAttribute('aria-haspopup', 'true');
 
     var nestedMenus = templateElement[0].querySelectorAll('md-menu');
     var nestingDepth = parseInt(templateElement[0].getAttribute('md-nest-level'), 10) || 0;
