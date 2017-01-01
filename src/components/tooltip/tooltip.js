@@ -78,8 +78,19 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
     var parent = $mdUtil.getParentWithPointerEvents(element);
     var debouncedOnResize = $$rAF.throttle(updatePosition);
     var mouseActive = false;
-    var origin, position, panelPosition, panelRef, autohide, showTimeout,
-        elementFocusedOnWindowBlur = null;
+    var origin, position, panelPosition, panelAnimation, panelRef, autohide,
+        showTimeout, elementFocusedOnWindowBlur, template = null;
+    var id = 'tooltip-' + $mdUtil.nextUid();
+    var attachTo = angular.element(document.body);
+    if (parent && parent[0]) {
+      panelAnimation = $mdPanel.newPanelAnimation()
+          .openFrom(parent)
+          .closeTo(parent)
+          .withAnimation({
+            open: 'md-show',
+            close: 'md-hide'
+          });
+    }
 
     // Set defaults
     setDefaults();
@@ -114,10 +125,12 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
     function updatePosition() {
       setDefaults();
 
-      // If the panel has already been created, remove the current origin
-      // class from the panel element.
+      // If the panel has already been created, remove all possible origin
+      // classes from the panelEl.
       if (panelRef && panelRef.panelEl) {
-        panelRef.panelEl.removeClass(origin);
+        angular.forEach(TOOLTIP_DIRECTIONS, function(value, key) {
+          panelRef.panelEl.removeClass('md-origin-' + key);
+        });
       }
 
       // Set the panel element origin class based off of the current
@@ -254,33 +267,17 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
     }
 
     function configureWatchers() {
-      if (element[0] && 'MutationObserver' in $window) {
-        var attributeObserver = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            if (mutation.attributeName === 'md-visible' &&
-                !scope.visibleWatcher ) {
-              scope.visibleWatcher = scope.$watch('mdVisible',
-                  onVisibleChanged);
-            }
-          });
-        });
+      if ( !buildMutationObserver() ) {
+        // Build watcher only if attribute is being used.
 
-        attributeObserver.observe(element[0], {
-          attributes: true
-        });
-
-        // Build watcher only if mdVisible is being used.
         if (attr.hasOwnProperty('mdVisible')) {
-          scope.visibleWatcher = scope.$watch('mdVisible',
-              onVisibleChanged);
+          scope.visibleWatcher = scope.$watch('mdVisible', onVisibleChanged);
         }
-      } else {
-        // MutationObserver not supported
-        scope.visibleWatcher = scope.$watch('mdVisible', onVisibleChanged);
+        if (attr.hasOwnProperty('mdDirection')) {
+          scope.directionWatcher = scope.$watch('mdDirection', updatePosition);
+        }
       }
 
-      // Direction watcher
-      scope.$watch('mdDirection', updatePosition);
 
       // Clean up if the element or parent was removed via jqLite's .remove.
       // A couple of notes:
@@ -299,7 +296,6 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       scope.$on('$destroy', function() {
         setVisible(false);
         element.remove();
-        attributeObserver && attributeObserver.disconnect();
       });
 
       // Updates the aria-label when the element text changes. This watch
@@ -314,7 +310,35 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       function onElementDestroy() {
         scope.$destroy();
       }
+
+      /**
+       * For performance reasons, use mutationObserver IF available
+       */
+      function buildMutationObserver() {
+        var node = element ? element[0] : null;
+        var attributeObserver;
+
+        if (node && 'MutationObserver' in $window) {
+           attributeObserver = new MutationObserver( function onChanges(mutations) {
+            mutations.forEach(function(mutation) {
+              switch (mutation.attributeName) {
+                case "md-visible": onVisibleChanged(node.getAttribute("md-visible"));   break;
+                case "md-direction":  $mdUtil.nextTick(updatePosition);   break;
+              }
+            });
+           });
+
+          // Only watch for ATTRIBUTE changes...
+          attributeObserver.observe(element[0], { 'attributes': true  });
+          scope.$on('$destroy', function() {  attributeObserver.disconnect(); });
+        }
+        // Announce construction
+        return !!attributeObserver;
+      }
+
     }
+
+
 
     function setVisible(value) {
       // Break if passed value is already in queue or there is no queue and
@@ -356,34 +380,23 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       if (!element[0].textContent.trim()) {
         throw new Error('Text for the tooltip has not been provided. ' +
             'Please include text within the mdTooltip element.');
+      } else {
+        template = element[0].textContent.trim();
       }
 
-      if (!panelRef) {
-        var id = 'tooltip-' + $mdUtil.nextUid();
-        var attachTo = angular.element(document.body);
-        var panelAnimation = $mdPanel.newPanelAnimation()
-            .openFrom(parent)
-            .closeTo(parent)
-            .withAnimation({
-              open: 'md-show',
-              close: 'md-hide'
-            });
+      var panelConfig = {
+        id: id,
+        attachTo: attachTo,
+        template: template,
+        propagateContainerEvents: true,
+        panelClass: 'md-tooltip ' + origin,
+        animation: panelAnimation,
+        position: panelPosition,
+        zIndex: scope.mdZIndex,
+        focusOnOpen: false
+      };
 
-        var panelConfig = {
-          id: id,
-          attachTo: attachTo,
-          contentElement: element,
-          propagateContainerEvents: true,
-          panelClass: 'md-tooltip ' + origin,
-          animation: panelAnimation,
-          position: panelPosition,
-          zIndex: scope.mdZIndex,
-          focusOnOpen: false
-        };
-
-        panelRef = $mdPanel.create(panelConfig);
-      }
-
+      panelRef = $mdPanel.create(panelConfig);
       panelRef.open().then(function() {
         panelRef.panelEl.attr('role', 'tooltip');
       });
