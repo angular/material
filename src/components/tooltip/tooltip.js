@@ -298,8 +298,8 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       scope.$on('$destroy', function() {
         setVisible(false);
         panelRef && panelRef.destroy();
-        element.remove();
         attributeObserver && attributeObserver.disconnect();
+        element.remove();
       });
 
       // Updates the aria-label when the element text changes. This watch
