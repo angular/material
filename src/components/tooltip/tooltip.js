@@ -267,34 +267,17 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
     }
 
     function configureWatchers() {
-      if (element[0] && 'MutationObserver' in $window) {
-        var attributeObserver = new MutationObserver(function(mutations) {
-          mutations.forEach(function(mutation) {
-            switch (mutation.attributeName) {
-              case "md-visible":
-                scope.visibleWatcher = scope.visibleWatcher || scope.$watch('mdVisible', onVisibleChanged);
-                break;
-              case "md-direction":
-                $mdUtil.nextTick(updatePosition);
-                break;
-            }
-          });
-        });
+      if ( !buildMutationObserver() ) {
+        // Build watcher only if attribute is being used.
 
-        attributeObserver.observe(element[0], {
-          attributes: true
-        });
-
-        // Build watcher only if mdVisible is being used.
         if (attr.hasOwnProperty('mdVisible')) {
-          scope.visibleWatcher = scope.$watch('mdVisible',
-              onVisibleChanged);
+          scope.visibleWatcher = scope.$watch('mdVisible', onVisibleChanged);
         }
-      } else {
-        // MutationObserver not supported
-        scope.visibleWatcher = scope.$watch('mdVisible', onVisibleChanged);
-        scope.$watch('mdDirection', updatePosition);
+        if (attr.hasOwnProperty('mdDirection')) {
+          scope.directionWatcher = scope.$watch('mdDirection', updatePosition);
+        }
       }
+
 
       // Clean up if the element or parent was removed via jqLite's .remove.
       // A couple of notes:
@@ -312,7 +295,6 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       parent.one('$destroy', onElementDestroy);
       scope.$on('$destroy', function() {
         setVisible(false);
-        attributeObserver && attributeObserver.disconnect();
         element.remove();
       });
 
@@ -328,7 +310,35 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       function onElementDestroy() {
         scope.$destroy();
       }
+
+      /**
+       * For performance reasons, use mutationObserver IF available
+       */
+      function buildMutationObserver() {
+        var node = element ? element[0] : null;
+        var attributeObserver;
+
+        if (node && 'MutationObserver' in $window) {
+           attributeObserver = new MutationObserver( function onChanges(mutations) {
+            mutations.forEach(function(mutation) {
+              switch (mutation.attributeName) {
+                case "md-visible": onVisibleChanged(node.getAttribute("md-visible"));   break;
+                case "md-direction":  $mdUtil.nextTick(updatePosition);   break;
+              }
+            });
+           });
+
+          // Only watch for ATTRIBUTE changes...
+          attributeObserver.observe(element[0], { 'attributes': true  });
+          scope.$on('$destroy', function() {  attributeObserver.disconnect(); });
+        }
+        // Announce construction
+        return !!attributeObserver;
+      }
+
     }
+
+
 
     function setVisible(value) {
       // Break if passed value is already in queue or there is no queue and
