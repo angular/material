@@ -369,7 +369,7 @@ describe('material.components.menu', function() {
       $log = $injector.get('$log');
     }));
 
-    fit('should warn when the md-menu-content element is missing', function() {
+    it('should warn when the md-menu-content element is missing', function() {
       spyOn($log, 'warn');
 
       var parent = angular.element('<div>');
@@ -393,6 +393,10 @@ describe('material.components.menu', function() {
       $timeout.flush();
 
       expect($log.warn).toHaveBeenCalledTimes(1);
+
+      // Close the menu and remove the parent container
+      $mdMenu.hide();
+      parent.remove();
     });
 
     function createFakeMenuController() {

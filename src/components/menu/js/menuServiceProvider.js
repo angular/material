@@ -220,18 +220,24 @@ function MenuProvider($$interimElementProvider) {
       function setupBackdrop() {
         if (!opts.backdrop) return angular.noop;
 
-        opts.backdrop.on('click', function(event) {
-          event.preventDefault();
-          event.stopPropagation();
-
-          scope.$apply(function() {
-            opts.mdMenuCtrl.close(true, { closeAll: true });
-          });
-        });
+        opts.backdrop.on('click', onBackdropClick);
 
         return function() {
           opts.backdrop.off('click', onBackdropClick);
         }
+      }
+
+      /**
+       * Function to be called whenever the backdrop is clicked.
+       * @param {!MouseEvent} event
+       */
+      function onBackdropClick(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        scope.$apply(function() {
+          opts.mdMenuCtrl.close(true, { closeAll: true });
+        });
       }
 
       /**
