@@ -49,6 +49,18 @@ describe('MdTooltip Component', function() {
     expect(findTooltip()).toHaveClass('md-origin-bottom');
   });
 
+  it('should not re-templatize tooltip content', function() {
+    $rootScope.name = '{{2 + 2}}';
+
+    buildTooltip(
+      '<md-button>' +
+        '<md-tooltip md-visible="true">{{name}}</md-tooltip>' +
+      '</md-button>'
+    );
+
+    expect(findTooltip().text()).toBe('{{2 + 2}}');
+  });
+
   it('should preserve parent text', function() {
     buildTooltip(
       '<md-button>' +

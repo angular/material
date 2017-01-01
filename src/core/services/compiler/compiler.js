@@ -296,7 +296,9 @@ MdCompilerService.prototype._fetchContentElement = function(options) {
       restoreFn = createRestoreFn(contentEl);
     } else {
       restoreFn = function() {
-        contentEl.parentNode.removeChild(contentEl);
+        if (contentEl.parentNode) {
+          contentEl.parentNode.removeChild(contentEl);
+        }
       }
     }
   }
