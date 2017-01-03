@@ -94,6 +94,7 @@ angular.module('material.components.navBar', ['material.core'])
  *     (https://ui-router.github.io/docs/latest/interfaces/transition.transitionoptions.html).
  * @param {string=} name The name of this link. Used by the nav bar to know
  *     which link is currently selected.
+ * @param {boolean=} disabled Whether the item is selectable.
  *
  * @usage
  * See `<md-nav-bar>` for usage.
@@ -381,7 +382,7 @@ MdNavBarController.prototype.onKeydown = function(e) {
 /**
  * @ngInject
  */
-function MdNavItem($$rAF) {
+function MdNavItem($$rAF, $mdUtil) {
   return {
     restrict: 'E',
     require: ['mdNavItem', '^mdNavBar'],
@@ -422,6 +423,7 @@ function MdNavItem($$rAF) {
           '<md-button class="_md-nav-button md-accent" ' +
             'ng-class="ctrl.getNgClassMap()" ' +
             'ng-blur="ctrl.setFocused(false)" ' +
+            'ng-disabled="ctrl.disabled"' +
             'tabindex="-1" ' +
             navigationOptions +
             navigationAttribute + '>' +
@@ -442,6 +444,7 @@ function MdNavItem($$rAF) {
       'mdNavSref': '@?',
       'srefOpts': '=?',
       'name': '@',
+      'disabled': '@?'
     },
     link: function(scope, element, attrs, controllers) {
       // When accessing the element's contents synchronously, they
@@ -461,6 +464,10 @@ function MdNavItem($$rAF) {
           mdNavBar.mdSelectedNavItem = mdNavItem.name;
           scope.$apply();
         });
+      });
+
+      attrs.$observe('disabled', function (value) {
+        mdNavItem.disabled = $mdUtil.parseAttributeBoolean(value, false);
       });
     }
   };
