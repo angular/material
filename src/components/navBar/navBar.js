@@ -94,6 +94,7 @@ angular.module('material.components.navBar', ['material.core'])
  *     (https://ui-router.github.io/docs/latest/interfaces/transition.transitionoptions.html).
  * @param {string=} name The name of this link. Used by the nav bar to know
  *     which link is currently selected.
+ * @param {boolean=} ngDisabled If present and expression evaluates to truthy, disabled item selection.
  *
  * @usage
  * See `<md-nav-bar>` for usage.
@@ -422,6 +423,7 @@ function MdNavItem($$rAF) {
           '<md-button class="_md-nav-button md-accent" ' +
             'ng-class="ctrl.getNgClassMap()" ' +
             'ng-blur="ctrl.setFocused(false)" ' +
+            'ng-disabled="ctrl.disabled"' +
             'tabindex="-1" ' +
             navigationOptions +
             navigationAttribute + '>' +
@@ -442,6 +444,7 @@ function MdNavItem($$rAF) {
       'mdNavSref': '@?',
       'srefOpts': '=?',
       'name': '@',
+      'disabled': '=?ngDisabled',
     },
     link: function(scope, element, attrs, controllers) {
       // When accessing the element's contents synchronously, they
