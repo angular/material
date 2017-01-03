@@ -26,6 +26,9 @@
    * is also placed as a sibling to the chip content (on which there are also click listeners) to
    * avoid a nested ng-click situation.
    *
+   * <!-- Note: We no longer want to include this in the site docs; but it should remain here for
+   * future developers and those looking at the documentation.
+   *
    * <h3> Pending Features </h3>
    * <ul style="padding-left:20px;">
    *
@@ -56,10 +59,7 @@
    *   </ul>
    * </ul>
    *
-   * <span style="font-size:.8em;text-align:center">
-   *   Warning: This component is a WORK IN PROGRESS. If you use it now,
-   *   it will probably break on you in the future.
-   * </span>
+   * //-->
    *
    * Sometimes developers want to limit the amount of possible chips.<br/>
    * You can specify the maximum amount of chips by using the following markup.
@@ -82,7 +82,21 @@
    *   </md-chips>
    * </hljs>
    *
-   * @param {string=|object=} ng-model A model to bind the list of items to
+   * ### Accessibility
+   *
+   * The `md-chips` component supports keyboard and screen reader users since Version 1.1.2. In
+   * order to achieve this, we modified the chips behavior to select newly appended chips for
+   * `300ms` before re-focusing the input and allowing the user to type.
+   *
+   * For most users, this delay is small enough that it will not be noticeable but allows certain
+   * screen readers to function properly (JAWS and NVDA in particular).
+   *
+   * We introduced a new `md-chip-append-delay` option to allow developers to better control this
+   * behavior.
+   *
+   * Please refer to the documentation of this option (below) for more information.
+   *
+   * @param {string=|object=} ng-model A model to which the list of items will be bound.
    * @param {string=} placeholder Placeholder text that will be forwarded to the input.
    * @param {string=} secondary-placeholder Placeholder text that will be forwarded to the input,
    *    displayed when there is at least one item in the list
@@ -112,11 +126,28 @@
    * @param {expression=} md-on-select An expression which will be called when a chip is selected.
    * @param {boolean} md-require-match If true, and the chips template contains an autocomplete,
    *    only allow selection of pre-defined chips (i.e. you cannot add new ones).
+   * @param {string=} input-aria-label A string read by screen readers to identify the input.
+   * @param {string=} container-hint A string read by screen readers informing users of how to
+   *    navigate the chips. Used in readonly mode.
    * @param {string=} delete-hint A string read by screen readers instructing users that pressing
    *    the delete key will remove the chip.
    * @param {string=} delete-button-label A label for the delete button. Also hidden and read by
    *    screen readers.
    * @param {expression=} md-separator-keys An array of key codes used to separate chips.
+   * @param {string=} md-chip-append-delay The number of milliseconds that the component will select
+   *    a newly appended chip before allowing a user to type into the input. This is **necessary**
+   *    for keyboard accessibility for screen readers. It defaults to 300ms and any number less than
+   *    300 can cause issues with screen readers (particularly JAWS and sometimes NVDA).
+   *
+   *    _Available since Version 1.1.2._
+   *
+   *    **Note:** You can safely set this to `0` in one of the following two instances:
+   *
+   *    1. You are targeting an iOS or Safari-only application (where users would use VoiceOver) or
+   *    only ChromeVox users.
+   *
+   *    2. If you have utilized the `md-separator-keys` to disable the `enter` keystroke in
+   *    favor of another one (such as `,` or `;`).
    *
    * @usage
    * <hljs lang="html">
@@ -146,25 +177,34 @@
    *
    */
 
-
   var MD_CHIPS_TEMPLATE = '\
       <md-chips-wrap\
+          id="{{$mdChipsCtrl.wrapperId}}"\
+          tabindex="{{$mdChipsCtrl.readonly ? 0 : -1}}"\
           ng-keydown="$mdChipsCtrl.chipKeydown($event)"\
           ng-class="{ \'md-focused\': $mdChipsCtrl.hasFocus(), \
                       \'md-readonly\': !$mdChipsCtrl.ngModelCtrl || $mdChipsCtrl.readonly,\
                       \'md-removable\': $mdChipsCtrl.isRemovable() }"\
+          aria-setsize="{{$mdChipsCtrl.items.length}}"\
           class="md-chips">\
+        <span ng-if="$mdChipsCtrl.readonly" class="md-visually-hidden">\
+          {{$mdChipsCtrl.containerHint}}\
+        </span>\
         <md-chip ng-repeat="$chip in $mdChipsCtrl.items"\
             index="{{$index}}"\
             ng-class="{\'md-focused\': $mdChipsCtrl.selectedChip == $index, \'md-readonly\': !$mdChipsCtrl.ngModelCtrl || $mdChipsCtrl.readonly}">\
           <div class="md-chip-content"\
-              tabindex="-1"\
-              aria-hidden="true"\
+              tabindex="{{$mdChipsCtrl.ariaTabIndex == $index ? 0 : -1}}"\
+              id="{{$mdChipsCtrl.contentIdFor($index)}}"\
+              role="option"\
+              aria-selected="{{$mdChipsCtrl.selectedChip == $index}}" \
+              aria-posinset="{{$index}}"\
               ng-click="!$mdChipsCtrl.readonly && $mdChipsCtrl.focusChip($index)"\
               ng-focus="!$mdChipsCtrl.readonly && $mdChipsCtrl.selectChip($index)"\
               md-chip-transclude="$mdChipsCtrl.chipContentsTemplate"></div>\
           <div ng-if="$mdChipsCtrl.isRemovable()"\
                class="md-chip-remove-container"\
+               tabindex="-1"\
                md-chip-transclude="$mdChipsCtrl.chipRemoveTemplate"></div>\
         </md-chip>\
         <div class="md-chip-input-container" ng-if="!$mdChipsCtrl.readonly && $mdChipsCtrl.ngModelCtrl">\
@@ -176,8 +216,8 @@
         <input\
             class="md-input"\
             tabindex="0"\
+            aria-label="{{$mdChipsCtrl.inputAriaLabel}}" \
             placeholder="{{$mdChipsCtrl.getPlaceholder()}}"\
-            aria-label="{{$mdChipsCtrl.getPlaceholder()}}"\
             ng-model="$mdChipsCtrl.chipBuffer"\
             ng-focus="$mdChipsCtrl.onInputFocus()"\
             ng-blur="$mdChipsCtrl.onInputBlur()"\
@@ -192,7 +232,6 @@
           ng-if="$mdChipsCtrl.isRemovable()"\
           ng-click="$mdChipsCtrl.removeChipAndFocusInput($$replacedScope.$index)"\
           type="button"\
-          aria-hidden="true"\
           tabindex="-1">\
         <md-icon md-svg-src="{{ $mdChipsCtrl.mdCloseIcon }}"></md-icon>\
         <span class="md-visually-hidden">\
@@ -233,10 +272,13 @@
         onAdd: '&mdOnAdd',
         onRemove: '&mdOnRemove',
         onSelect: '&mdOnSelect',
+        inputAriaLabel: '@',
+        containerHint: '@',
         deleteHint: '@',
         deleteButtonLabel: '@',
         separatorKeys: '=?mdSeparatorKeys',
-        requireMatch: '=?mdRequireMatch'
+        requireMatch: '=?mdRequireMatch',
+        chipAppendDelayString: '@?mdChipAppendDelay'
       }
     };
 
@@ -323,7 +365,7 @@
         mdChipsCtrl.mdCloseIcon = $$mdSvgRegistry.mdClose;
 
         element
-            .attr({ 'aria-hidden': true, tabindex: -1 })
+            .attr({ tabindex: -1 })
             .on('focus', function () { mdChipsCtrl.onFocus(); });
 
         if (attr.ngModel) {

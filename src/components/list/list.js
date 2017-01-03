@@ -330,10 +330,13 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
             '<md-button class="md-no-style"></md-button>'
           );
 
-          // Expect the root element to have a label set. If not set, determine the label from the text content.
-          $mdAria.expectWithText(tEl, 'aria-label');
-
           copyAttributes(tEl[0], buttonWrap[0]);
+
+          // If there is no aria-label set on the button (previously copied over if present)
+          // we determine the label from the content and copy it to the button.
+          if (!buttonWrap.attr('aria-label')) {
+            buttonWrap.attr('aria-label', $mdAria.getText(tEl));
+          }
 
           // We allow developers to specify the `md-no-focus` class, to disable the focus style
           // on the button executor. Once more classes should be forwarded, we should probably make the

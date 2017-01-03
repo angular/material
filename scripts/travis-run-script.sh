@@ -3,6 +3,14 @@
 # Terminate the execution if anything fails in the pipeline.
 set -e
 
+# Ensure that scripts will run from project dir.
+cd $(dirname $0)/..
+
+# When Travis CI specifies an Angular version, try to install those for tests.
+if [[ -n "$NG_VERSION" ]]; then
+  ./scripts/fetch-angular-version.sh "$NG_VERSION"
+fi
+
 # Run our check to make sure all tests will actually run
 gulp ddescribe-iit
 gulp build

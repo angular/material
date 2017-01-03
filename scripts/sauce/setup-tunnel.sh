@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SAUCE_BINARY_FILE="sc-4.4.1-linux.tar.gz"
+SAUCE_BINARY_FILE="sc-4.4.2-linux.tar.gz"
 SAUCE_BINARY_DIR="/tmp/sauce"
 SAUCE_ACCESS_KEY=`echo $SAUCE_ACCESS_KEY | rev`
 
@@ -17,7 +17,7 @@ CONNECT_ARGS="--readyfile $SAUCE_READY_FILE"
 
 # Apply the Travis Job Number to the tunnel
 if [ ! -z "$TRAVIS_JOB_NUMBER" ]; then
-  CONNECT_ARGS="$CONNECT_ARGS --tunnel-identifier $TRAVIS_JOB_NUMBER"
+  CONNECT_ARGS="$CONNECT_ARGS --tunnel-identifier $TRAVIS_JOB_ID"
 fi
 
 echo "Starting Sauce Connector Tunnel"

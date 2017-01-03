@@ -647,24 +647,27 @@ describe('md-input-container directive', function() {
     });
 
     it('should select the input value on focus', inject(function($timeout) {
-      var container = setup('md-select-on-focus');
-      var input = container.find('input');
-      input.val('Auto Text Select');
+      var input = $compile('<input md-select-on-focus value="Text">')($rootScope);
 
-      document.body.appendChild(container[0]);
+      document.body.appendChild(input[0]);
 
       expect(isTextSelected(input[0])).toBe(false);
 
+      input.focus();
       input.triggerHandler('focus');
+      $timeout.flush();
 
       expect(isTextSelected(input[0])).toBe(true);
 
-      document.body.removeChild(container[0]);
+      input.remove();
+
 
       function isTextSelected(input) {
-        // The selection happens in a timeout which needs to be flushed.
-        $timeout.flush();
-        return input.selectionStart === 0 && input.selectionEnd == input.value.length;
+        if (typeof input.selectionStart === "number") {
+          return input.selectionStart === 0 && input.selectionEnd === input.value.length;
+        } else if (typeof document.selection !== "undefined") {
+          return document.selection.createRange().text === input.value;
+        }
       }
     }));
 

@@ -1,0 +1,52 @@
+<div ng-controller="PanelProviderCtrl as ctrl" ng-cloak>
+
+  <md-content layout-padding>
+
+    <div layout="row" layout-align="space-between center" flex>
+      <md-button
+        class="md-fab md-primary"
+        aria-label="Navigation"
+        ng-click="ctrl.showMenu($event, ctrl.navigation)">
+        <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+      </md-button>
+      <md-button
+        class="md-fab md-accent"
+        aria-label="Favorites"
+        ng-click="ctrl.showMenu($event, ctrl.favorites)">
+        <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
+      </md-button>
+      <md-button
+        class="md-fab md-background"
+        aria-label="More"
+        ng-click="ctrl.showMenu($event, ctrl.more)">
+        <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
+      </md-button>
+    </div>
+
+    <p>
+      Configuration preset for upcoming panel elements can be created at the
+      <code>.config</code> level of your Angular application. To create a
+      preset configuration object, use the <code>$mdPanelProvider</code>
+      dependency within a <code>.config</code> method and call
+      <code>$mdPanelProvider.definePreset</code> with the preset name and an
+      object containing the options needed for the configuration of a panel.
+      This object will be stored for you so that the next time you need to
+      <code>create</code> or <code>open</code> a panel, you can include the
+      preset name in the method request, <code>$mdPanel.create('name', {...})</code>,
+      to have the preset configuration options be added to the panel.
+    </p>
+    <p>
+      The configuration object takes all of the options found within the
+      <code>$mdPanel.create</code> method; however, it will not accept any
+      options that depend on user interaction, panel positioning, or panel
+      animation.
+    </p>
+    <p>
+      This will help you reduce the necessary lines of configuration code that
+      are required to create a panel when you are wanting to have multiple
+      panels that are largely the same.
+    </p>
+
+  </md-content>
+
+</div>

@@ -532,15 +532,30 @@ describe('mdListItem directive', function() {
       expect(buttonEl.attr('aria-label')).toBe('Content');
     });
 
+    it('should determine the label from the bound content if aria-label is not set', function() {
+      var listItem = setup(
+        '<md-list-item ng-click="null">' +
+        '<span>{{ content }}</span>' +
+        '<span aria-hidden="true">Hidden</span>' +
+        '</md-list-item>'
+      );
+
+      $rootScope.$apply('content = "Content"');
+
+      var buttonEl = listItem.find('button');
+
+      // The aria-label attribute should be determined from the content.
+      expect(buttonEl.attr('aria-label')).toBe('Content');
+    });
+
     it('should warn when label is missing and content is empty', inject(function($log) {
       // Clear the log stack to assert that a new warning has been added.
       $log.reset();
 
       setup('<md-list-item ng-click="null">');
 
-      // Expect $log to have two warnings. A warning for the md-list-item and a second one for the later compiled
-      // button executor.
-      expect($log.warn.logs.length).toBe(2);
+      // Expect $log to have one $mdAria warning, because the button misses an aria-label.
+      expect($log.warn.logs.length).toBe(1);
     }));
 
   });
