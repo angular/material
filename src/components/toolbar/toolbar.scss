@@ -74,7 +74,7 @@ md-toolbar {
   }
 
   ~ md-content {
-    > md-list, md-list.md-dense {
+    > md-list {
       padding: 0;
 
       md-list-item:last-child {

@@ -54,11 +54,11 @@
         </md-list-item>
         <md-divider ></md-divider>
         <md-subheader class="md-no-sticky">Classes</md-subheader>
-        <md-list-item class="md-2-line" ng-repeat="phone in phones" ng-class="{'md-offset': phone.options.offset }">
+        <md-list-item class="md-2-line" ng-repeat="phone in phones">
           <md-icon md-svg-icon="{{phone.options.icon}}" ng-if="phone.options.icon" ng-class="{'md-avatar-icon': phone.options.avatarIcon}"></md-icon>
           <img ng-src="{{phone.options.face}}?25" class="md-avatar" alt="{{phone.options.face}}"
                ng-if="phone.options.face"/>
-          <div class="md-list-item-text">
+          <div class="md-list-item-text" ng-class="{'md-offset': phone.options.offset }">
             <h3> {{ phone.number }} </h3>
             <p> {{ phone.type }} </p>
           </div>
@@ -127,11 +127,11 @@
         </md-list-item>
         <md-divider ></md-divider>
         <md-subheader class="md-no-sticky">Classes</md-subheader>
-        <md-list-item class="md-2-line" ng-repeat="phone in phones" ng-class="{'md-offset': phone.options.offset }">
+        <md-list-item class="md-2-line" ng-repeat="phone in phones">
           <md-icon md-svg-icon="{{phone.options.icon}}" ng-if="phone.options.icon" ng-class="{'md-avatar-icon': phone.options.avatarIcon}"></md-icon>
           <img ng-src="{{phone.options.face}}?25" class="md-avatar" alt="{{phone.options.face}}"
                ng-if="phone.options.face"/>
-          <div class="md-list-item-text">
+          <div class="md-list-item-text" ng-class="{'md-offset': phone.options.offset }">
             <h3> {{ phone.number }} </h3>
             <p> {{ phone.type }} </p>
           </div>
