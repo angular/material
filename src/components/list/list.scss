@@ -1,419 +1,90 @@
-$dense-baseline-grid: $baseline-grid / 2 !default;
+/**
+ * Dynamic variables which can change due higher pixel density.
+ */
+$md-list-item-height-1: 6 * $baseline-grid !default;
+$md-list-item-height-2: 9 * $baseline-grid !default;
+$md-list-item-height-3: 11 * $baseline-grid !default;
+$md-list-item-font-size: rem(1.6);
+$md-list-item-avatar-width: $baseline-grid * 5 !default;
+$md-list-item-icon-width: $baseline-grid * 3 !default;
+$md-list-item-title-font-size: $subhead-font-size-base !default;
+$md-list-item-subtitle-font-size: $body-font-size-base !default;
+$md-list-item-title-line-height: 1.2em !default;
+$md-list-item-subtitle-line-height: 1.6em;
+$md-list-padding-vertical: $baseline-grid !default;
+$md-list-item-avatar-padding: $baseline-grid !default;
 
-$list-h3-margin: 0 0 0px 0 !default;
-$list-h4-margin: 3px 0 1px 0 !default;
-$list-h4-font-weight: 400 !default;
-$list-header-line-height: 1.2em !default;
-$list-p-margin: 0 0 0 0 !default;
-$list-p-line-height: 1.6em !default;
+/**
+ * High Pixel Density mode for the list component.
+ */
+$md-list-item-dense-dpi: 192;
 
-$list-padding-top: $baseline-grid !default;
-$list-padding-right: 0px !default;
-$list-padding-left: 0px !default;
-$list-padding-bottom: $baseline-grid !default;
+//TODO(devversion): make function generic and use for other components
+@function dense($pixels) {
+  $densePixels: ($pixels * 160) / $md-list-item-dense-dpi;
+  @return round(($densePixels * 10) / 10);
+}
 
-$item-padding-top: 0px !default;
-$item-padding-right: 0px !default;
-$item-padding-left: 0px !default;
-$item-padding-bottom: 0px !default;
-$list-item-padding-vertical: 0px !default;
-$list-item-padding-horizontal: $baseline-grid * 2 !default;
-$list-item-primary-width: $baseline-grid * 7 !default;
-$list-item-primary-avatar-width: $baseline-grid * 5 !default;
-$list-item-primary-icon-width: $baseline-grid * 3 !default;
-$list-item-secondary-left-margin: $baseline-grid * 2 !default;
-$list-item-secondary-button-width: $baseline-grid * 6 !default;
-$list-item-inset-divider-offset: 9 * $baseline-grid !default;
-$list-item-height: 6 * $baseline-grid !default;
-$list-item-two-line-height: 9 * $baseline-grid !default;
-$list-item-three-line-height: 11 * $baseline-grid !default;
+/** Dynamic variables in high density pixels */
+$md-list-item-height-1-dense: dense($md-list-item-height-1);
+$md-list-item-height-2-dense: dense($md-list-item-height-2);
+$md-list-item-height-3-dense: 9.5 * $baseline-grid;
+$md-list-item-font-size-dense: dense($md-list-item-font-size);
+$md-list-item-avatar-width-dense: 4.5 * $baseline-grid;
+$md-list-item-icon-width-dense: dense($md-list-item-icon-width);
+$md-list-item-title-font-size-dense: dense($subhead-font-size-base);
+$md-list-item-subtitle-font-size-dense: dense($body-font-size-base);
+$md-list-item-title-line-height-dense: 1.05em;
+$md-list-item-subtitle-line-height-dense: $md-list-item-title-line-height-dense;
+$md-list-padding-vertical-dense: $baseline-grid / 2;
+$md-list-item-avatar-padding-dense: $baseline-grid;
 
-$list-item-dense-height: 12 * $dense-baseline-grid !default;
-$list-item-dense-two-line-height: 15 * $dense-baseline-grid !default;
-$list-item-dense-three-line-height: 19 * $dense-baseline-grid !default;
-$list-item-dense-primary-icon-width: $dense-baseline-grid * 5 !default;
-$list-item-dense-primary-avatar-width: $dense-baseline-grid * 9 !default;
-$list-item-dense-header-font-size: round($subhead-font-size-base * 0.8) !default;
-$list-item-dense-font-size: round($body-font-size-base * 0.85) !default;
-$list-item-dense-line-height: 1.05 !default;
-
+/**
+ * Basic List Component
+ */
 md-list {
-  display: block;
-  padding: $list-padding-top $list-padding-right $list-padding-bottom $list-padding-left;
-
-  .md-subheader {
-    font-size: $body-font-size-base;
-    font-weight: 500;
-    letter-spacing: 0.010em;
-    line-height: $list-header-line-height;
-  }
-
-  &.md-dense {
-    md-list-item {
-      &,
-      .md-list-item-inner {
-        min-height: $list-item-dense-height;
-        @include ie11-min-height-flexbug($list-item-dense-height);
-
-
-        // Layout for controls in primary or secondary divs, or auto-infered first child
-
-        md-icon:first-child {
-          width: $list-item-dense-primary-icon-width;
-          height: $list-item-dense-primary-icon-width;
-        }
-
-        > md-icon:first-child:not(.md-avatar-icon) {
-          @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-dense-primary-icon-width, auto);
-        }
-        .md-avatar, .md-avatar-icon {
-          @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-dense-primary-avatar-width, auto);
-        }
-        .md-avatar {
-          flex: none;
-          width: $list-item-dense-primary-avatar-width;
-          height: $list-item-dense-primary-avatar-width;
-        }
-      }
-
-      &.md-2-line,
-      &.md-3-line {
-        &, & > .md-no-style {
-          .md-list-item-text {
-            &.md-offset {
-              @include rtl-prop(margin-left, margin-right, $list-item-primary-width, auto);
-            }
-
-            h3,
-            h4,
-            p {
-              line-height: $list-item-dense-line-height;
-              font-size: $list-item-dense-font-size;
-            }
-
-            h3 {
-              font-size: $list-item-dense-header-font-size;
-            }
-          }
-        }
-      }
-
-      &.md-2-line {
-        &, & > .md-no-style {
-          min-height: $list-item-dense-two-line-height;
-          @include ie11-min-height-flexbug($list-item-dense-two-line-height);
-
-          > .md-avatar, .md-avatar-icon {
-            margin-top: $baseline-grid * 1.5;
-          }
-        }
-      }
-
-      &.md-3-line {
-        &, & > .md-no-style {
-
-          min-height: $list-item-dense-three-line-height;
-          @include ie11-min-height-flexbug($list-item-dense-three-line-height);
-
-          > md-icon:first-child,
-          > .md-avatar {
-            margin-top: $baseline-grid * 2;
-          }
-        }
-      }
-    }
-  }
+  @include md-list(
+      $md-list-item-font-size,
+      $md-list-padding-vertical
+  );
 }
 
 md-list-item {
-  // Ensure nested dividers are properly positioned
-  position: relative;
+  @include md-list-item(
+      $md-list-item-height-1,
+      $md-list-item-height-2,
+      $md-list-item-height-3,
+      $md-list-item-avatar-width,
+      $md-list-item-icon-width,
+      $md-list-item-title-font-size,
+      $md-list-item-title-line-height,
+      $md-list-item-subtitle-font-size,
+      $md-list-item-subtitle-line-height,
+      $md-list-item-avatar-padding
+  );
+}
 
-  &.md-proxy-focus.md-focused .md-no-style {
-    transition: background-color 0.15s linear;
-  }
+/**
+ * List Component in Dense Mode
+ */
+md-list.md-dense {
+  @include md-list(
+      $md-list-item-font-size-dense,
+      $md-list-padding-vertical-dense
+  );
+}
 
-  &._md-button-wrap {
-    position: relative;
-
-    > div.md-button:first-child {
-      // Layout - Vertically align the item content.
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-
-      padding: 0 16px;
-      margin: 0;
-
-      font-weight: 400;
-      @include rtl(text-align, left, right);
-      border: medium none;
-
-      // The button executor should fill the whole list item.
-      > .md-button:first-child {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-
-        margin: 0;
-        padding: 0;
-      }
-
-      .md-list-item-inner {
-        // The list item content should fill the complete width.
-        width: 100%;
-        min-height: inherit;
-      }
-
-    }
-
-  }
-
-  &.md-no-proxy,
-  .md-no-style {
-    position: relative;
-    padding: $list-item-padding-vertical $list-item-padding-horizontal;
-
-    // Layout [flex='auto']
-    flex: 1 1 auto;
-
-    &.md-button {
-      font-size: inherit;
-      height: inherit;
-      @include rtl(text-align, left, right);
-      text-transform: none;
-      width: 100%;
-      white-space: normal;
-      flex-direction: inherit;
-      align-items: inherit;
-      border-radius: 0;
-      margin: 0;
-
-      & > .md-ripple-container {
-        border-radius: 0;
-      }
-    }
-    &:focus {
-      outline: none
-    }
-  }
-  &.md-clickable:hover {
-    cursor: pointer;
-  }
-
-  md-divider {
-    position: absolute;
-    bottom: 0;
-    @include rtl-prop(left, right, 0, auto);
-    width: 100%;
-    &[md-inset] {
-      @include rtl-prop(left, right, $list-item-inset-divider-offset, auto);
-      width: calc(100% - #{$list-item-inset-divider-offset});
-      margin: 0 !important;
-    }
-  }
-
-  &,
-  .md-list-item-inner {
-
-    // Layout [flex layout-align='start center']
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-
-    min-height: $list-item-height;
-    @include ie11-min-height-flexbug($list-item-height);
-
-    height: auto;
-
-    // Layout for controls in primary or secondary divs, or auto-infered first child
-    & > div.md-primary > md-icon:not(.md-avatar-icon),
-    & > div.md-secondary > md-icon:not(.md-avatar-icon),
-    & > md-icon:first-child:not(.md-avatar-icon),
-    > md-icon.md-secondary:not(.md-avatar-icon) {
-      width: $list-item-primary-icon-width;
-      margin-top: 16px;
-      margin-bottom: 12px;
-      box-sizing: content-box;
-    }
-    & > div.md-primary > md-checkbox,
-    & > div.md-secondary > md-checkbox,
-    & > md-checkbox,
-    md-checkbox.md-secondary {
-      align-self: center;
-      .md-label {
-        display: none;
-      }
-    }
-
-    & > md-icon:first-child:not(.md-avatar-icon) {
-      @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-primary-icon-width, auto);
-    }
-
-    & .md-avatar, .md-avatar-icon {
-      margin-top: $baseline-grid;
-      margin-bottom: $baseline-grid;
-      @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-primary-avatar-width, auto);
-      border-radius: 50%;
-      box-sizing: content-box;
-    }
-    & .md-avatar {
-      flex: none;
-      width: $list-item-primary-avatar-width;
-      height: $list-item-primary-avatar-width;
-    }
-    & .md-avatar-icon {
-      padding: 8px;
-
-      // Set the width/height to the same as the icon to fix issue on iOS Safari where the
-      // height: 100% was causing it to be larger than it's parent
-      svg {
-        width: $icon-size;
-        height: $icon-size;
-      }
-    }
-
-    & > md-checkbox {
-      width: 3 * $baseline-grid;
-      @include rtl(margin-left, 3px, 29px);
-      @include rtl(margin-right, 29px, 3px);
-      margin-top: 16px;
-    }
-
-    .md-secondary-container {
-      display: flex;
-      align-items: center;
-
-      // Per W3C: https://www.w3.org/TR/css-flexbox/#flex-common
-      // By default, flex items won’t shrink below their minimum content size.
-      // Safari doesn't follow that specification due to a bug and expects the developer to
-      // explicitly disable flex shrinking.
-      flex-shrink: 0;
-
-      // Using margin auto to move them to the end of the list item is more elegant, because it has
-      // a lower priority than a flex filler and isn't introducing any overflow issues.
-      // The margin on the top is important to align multiple secondary items vertically.
-      margin: auto;
-
-      @include rtl(margin-right, 0, auto);
-      @include rtl(margin-left, auto, 0);
-
-      .md-button, .md-icon-button {
-        &:last-of-type {
-          // Reset 6px margin for the button.
-          @include rtl-prop(margin-right, margin-left, 0, auto);
-        }
-      }
-
-      md-checkbox {
-        margin-top: 0;
-        margin-bottom: 0;
-
-        &:last-child {
-          width: 3 * $baseline-grid;
-          @include rtl-prop(margin-right, margin-left, 0, auto);
-        }
-      }
-
-      md-switch {
-        margin-top: 0;
-        margin-bottom: 0;
-
-        @include rtl-prop(margin-right, margin-left, -6px, auto);
-      }
-    }
-
-    & > p, & > .md-list-item-inner > p {
-      flex: 1 1 auto;
-      margin: 0;
-    }
-  }
-
-  &.md-2-line,
-  &.md-3-line {
-    &, & > .md-no-style {
-      align-items: flex-start;
-      justify-content: center;
-
-      &.md-long-text {
-        margin-top: $baseline-grid;
-        margin-bottom: $baseline-grid;
-      }
-
-      .md-list-item-text {
-        flex: 1 1 auto;
-        margin: auto;
-        text-overflow: ellipsis;
-        overflow: hidden;
-
-        &.md-offset {
-          @include rtl-prop(margin-left, margin-right, $list-item-primary-width, auto);
-        }
-
-        h3 {
-          font-size: $subhead-font-size-base;
-          font-weight: 400;
-          letter-spacing: 0.010em;
-          margin: $list-h3-margin;
-          line-height: $list-header-line-height;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-        h4 {
-          font-size: $body-font-size-base;
-          letter-spacing: 0.010em;
-          margin: $list-h4-margin;
-          font-weight: $list-h4-font-weight;
-          line-height: $list-header-line-height;
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-        p {
-          font-size: $body-font-size-base;
-          font-weight: 500;
-          letter-spacing: 0.010em;
-          margin: $list-p-margin;
-          line-height: $list-p-line-height;
-        }
-      }
-    }
-  }
-
-  &.md-2-line {
-    &, & > .md-no-style {
-      height: auto;
-
-      min-height: $list-item-two-line-height;
-      @include ie11-min-height-flexbug($list-item-two-line-height);
-
-      > .md-avatar, .md-avatar-icon {
-        margin-top: $baseline-grid * 1.5;
-      }
-
-      > md-icon:first-child {
-        align-self: flex-start;
-      }
-
-      .md-list-item-text {
-        flex: 1 1 auto;
-      }
-    }
-  }
-
-  &.md-3-line {
-    &, & > .md-no-style {
-      height: auto;
-
-      min-height: $list-item-three-line-height;
-      @include ie11-min-height-flexbug($list-item-three-line-height);
-
-      > md-icon:first-child,
-      > .md-avatar {
-        margin-top: $baseline-grid * 2;
-      }
-    }
-  }
+md-list.md-dense md-list-item {
+  @include md-list-item(
+      $md-list-item-height-1-dense,
+      $md-list-item-height-2-dense,
+      $md-list-item-height-3-dense,
+      $md-list-item-avatar-width-dense,
+      $md-list-item-icon-width-dense,
+      $md-list-item-title-font-size-dense,
+      $md-list-item-title-line-height-dense,
+      $md-list-item-subtitle-font-size-dense,
+      $md-list-item-subtitle-line-height-dense,
+      $md-list-item-avatar-padding-dense
+  );
 }
