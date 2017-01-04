@@ -117,7 +117,7 @@ function MenuProvider($$interimElementProvider) {
 
       if (opts.menuContentEl[0]) {
         // Inherit the theme from the target element.
-        $mdTheming(opts.menuContentEl, opts.target);
+        $mdTheming.inherit(opts.menuContentEl, opts.target);
       } else {
         $log.warn(
           '$mdMenu: Menu elements should always contain a `md-menu-content` element,' +
