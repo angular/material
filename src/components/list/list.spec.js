@@ -88,7 +88,6 @@ describe('mdListItem directive', function() {
     switchEl.click();
     expect($rootScope.modelVal).toBeTruthy();
 
-    expect(listItem).toHaveClass('md-list-item-content');
     expect(listItem).not.toHaveClass('md-clickable')
   });
 
@@ -174,109 +173,119 @@ describe('mdListItem directive', function() {
     var listItem = setup(
       '<md-list-item ng-click="sayHello()" ng-disabled="true">' +
         '<p>Hello world</p>' +
-      '</md-list-item>'
-    );
+      '</md-list-item>');
 
-    expect(listItem).toHaveClass('md-button-wrap');
+    // List items, which are clickable always contain a button wrap at the top level.
+    var buttonWrap = listItem.children().eq(0);
+    expect(listItem).toHaveClass('_md-button-wrap');
 
-    // The item should contain the button executor and the item content.
-    expect(listItem.children().length).toBe(2);
+    // The button wrap should contain the button executor, the inner content and the
+    // secondary item container as children.
+    expect(buttonWrap.children().length).toBe(3);
 
-    var buttonExecutor = listItem.children()[0];
+    var buttonExecutor = buttonWrap.children()[0];
 
     // The list item should forward the click and disabled attributes.
     expect(buttonExecutor.hasAttribute('ng-click')).toBe(true);
     expect(buttonExecutor.hasAttribute('ng-disabled')).toBe(true);
 
-    var itemContent = listItem.children()[1];
+    var innerContent = buttonWrap.children()[1];
 
-    expect(itemContent.nodeName).toBe('DIV');
-    expect(itemContent.firstElementChild.nodeName).toBe('P');
+    expect(innerContent.nodeName).toBe('DIV');
+    expect(innerContent.firstElementChild.nodeName).toBe('P');
   });
 
   it('creates buttons when used with ng-dblclick', function() {
     var listItem = setup(
       '<md-list-item ng-dblclick="sayHello()" ng-disabled="true">' +
         '<p>Hello world</p>' +
-      '</md-list-item>'
-    );
+      '</md-list-item>');
 
-    expect(listItem).toHaveClass('md-button-wrap');
+    // List items, which are clickable always contain a button wrap at the top level.
+    var buttonWrap = listItem.children().eq(0);
+    expect(listItem).toHaveClass('_md-button-wrap');
 
-    // The item should contain the button executor and the item content.
-    expect(listItem.children().length).toBe(2);
+    // The button wrap should contain the button executor, the inner content and the
+    // secondary item container as children.
+    expect(buttonWrap.children().length).toBe(3);
 
-    var buttonExecutor = listItem.children()[0];
+    var buttonExecutor = buttonWrap.children()[0];
 
     // The list item should forward the click and disabled attributes.
     expect(buttonExecutor.hasAttribute('ng-dblclick')).toBe(true);
     expect(buttonExecutor.hasAttribute('ng-disabled')).toBe(true);
 
-    var itemContent = listItem.children()[1];
+    var innerContent = buttonWrap.children()[1];
 
-    expect(itemContent.nodeName).toBe('DIV');
-    expect(itemContent.firstElementChild.nodeName).toBe('P');
+    expect(innerContent.nodeName).toBe('DIV');
+    expect(innerContent.firstElementChild.nodeName).toBe('P');
   });
 
   it('creates buttons when used with ui-sref', function() {
     var listItem = setup(
       '<md-list-item ui-sref="somestate">' +
         '<p>Hello world</p>' +
-      '</md-list-item>'
-    );
+      '</md-list-item>');
 
-    expect(listItem).toHaveClass('md-button-wrap');
+    // List items, which are clickable always contain a button wrap at the top level.
+    var buttonWrap = listItem.children().eq(0);
+    expect(listItem).toHaveClass('_md-button-wrap');
 
-    // The item should contain the button executor and the item content.
-    expect(listItem.children().length).toBe(2);
+    // The button wrap should contain the button executor, the inner content and the
+    // secondary item container as children.
+    expect(buttonWrap.children().length).toBe(3);
 
-    var buttonExecutor = listItem.children()[0];
+    var buttonExecutor = buttonWrap.children()[0];
 
     // The list item should forward the ui-sref attribute.
     expect(buttonExecutor.hasAttribute('ui-sref')).toBe(true);
 
-    var itemContent = listItem.children()[1];
+    var innerContent = buttonWrap.children()[1];
 
-    expect(itemContent.nodeName).toBe('DIV');
-    expect(itemContent.firstElementChild.nodeName).toBe('P');
+    expect(innerContent.nodeName).toBe('DIV');
+    expect(innerContent.firstElementChild.nodeName).toBe('P');
   });
 
   it('creates buttons when used with href', function() {
     var listItem = setup(
       '<md-list-item href="/somewhere">' +
         '<p>Hello world</p>' +
-      '</md-list-item>'
-    );
+      '</md-list-item>');
 
-    expect(listItem).toHaveClass('md-button-wrap');
+    // List items, which are clickable always contain a button wrap at the top level.
+    var buttonWrap = listItem.children().eq(0);
+    expect(listItem).toHaveClass('_md-button-wrap');
 
-    // The item should contain the button executor and the item content.
-    expect(listItem.children().length).toBe(2);
+    // The button wrap should contain the button executor, the inner content and the
+    // secondary item container as children.
+    expect(buttonWrap.children().length).toBe(3);
 
-    var buttonExecutor = listItem.children()[0];
+    var buttonExecutor = buttonWrap.children()[0];
 
     // The list item should forward the href attribute.
     expect(buttonExecutor.hasAttribute('href')).toBe(true);
 
-    var itemContent = listItem.children()[1];
+    var innerContent = buttonWrap.children()[1];
 
-    expect(itemContent.nodeName).toBe('DIV');
-    expect(itemContent.firstElementChild.nodeName).toBe('P');
+    expect(innerContent.nodeName).toBe('DIV');
+    expect(innerContent.firstElementChild.nodeName).toBe('P');
   });
 
   it('should forward the md-no-focus class', function() {
     var listItem = setup(
       '<md-list-item ng-click="null" class="md-no-focus">' +
         '<p>Clickable - Without Focus Style</p>' +
-      '</md-list-item>'
-    );
+      '</md-list-item>');
 
-    expect(listItem).toHaveClass('md-button-wrap');
+    // List items, which are clickable always contain a button wrap at the top level.
+    var buttonWrap = listItem.children().eq(0);
+    expect(listItem).toHaveClass('_md-button-wrap');
 
-    // The item should contain the button executor and the item content.
-    expect(listItem.children().length).toBe(2);
+    // The button wrap should contain the button executor, the inner content and the
+    // secondary item container as children.
+    expect(buttonWrap.children().length).toBe(3);
 
-    var buttonExecutor = listItem.children();
+    var buttonExecutor = buttonWrap.children();
 
     // The list item should forward the href and md-no-focus-style attribute.
     expect(buttonExecutor.attr('ng-click')).toBeTruthy();
@@ -286,11 +295,12 @@ describe('mdListItem directive', function() {
   it('moves aria-label to primary action', function() {
     var listItem = setup('<md-list-item ng-click="sayHello()" aria-label="Hello"></md-list-item>');
 
-    expect(listItem).toHaveClass('md-button-wrap');
+    var buttonWrap = listItem.children().eq(0);
+    expect(listItem).toHaveClass('_md-button-wrap');
 
     // The actual click button will be a child of the button.md-no-style wrapper.
-    var buttonExecutor = listItem.children()[0];
-    
+    var buttonExecutor = buttonWrap.children()[0];
+
     expect(buttonExecutor.nodeName).toBe('BUTTON');
     expect(buttonExecutor.getAttribute('aria-label')).toBe('Hello');
   });
@@ -300,17 +310,19 @@ describe('mdListItem directive', function() {
       '<md-list-item ng-click="sayHello()">' +
         '<p>Hello World</p>' +
         '<md-icon class="md-secondary" ng-click="goWild()"></md-icon>' +
-      '</md-list-item>'
-    );
+      '</md-list-item>');
 
-    expect(listItem).toHaveClass('md-button-wrap');
+    // First child is our button wrap
+    var firstChild = listItem.children().eq(0);
+    expect(firstChild[0].nodeName).toBe('DIV');
 
-    // The item should contain the button executor and the item content.
-    expect(listItem.children().length).toBe(2);
+    expect(listItem).toHaveClass('_md-button-wrap');
 
-    var itemContent = listItem.children().eq(1);
-    var secondaryContainer = itemContent.children().eq(1);
+    // It should contain three elements, the button overlay, inner content
+    // and the secondary container.
+    expect(firstChild.children().length).toBe(3);
 
+    var secondaryContainer = firstChild.children().eq(2);
     expect(secondaryContainer).toHaveClass('md-secondary-container');
 
     // The secondary container should contain the md-icon,
@@ -323,17 +335,19 @@ describe('mdListItem directive', function() {
       '<md-list-item ng-click="sayHello()">' +
         '<p>Hello World</p>' +
         '<md-icon class="md-secondary" ng-show="isShown" ng-click="goWild()"></md-icon>' +
-      '</md-list-item>'
-    );
+      '</md-list-item>');
 
-    expect(listItem).toHaveClass('md-button-wrap');
+    // First child is our button wrap
+    var firstChild = listItem.children().eq(0);
+    expect(firstChild[0].nodeName).toBe('DIV');
 
-    // The item should contain the button executor and the item content.
-    expect(listItem.children().length).toBe(2);
+    expect(listItem).toHaveClass('_md-button-wrap');
 
-    var itemContent = listItem.children().eq(1);
-    var secondaryContainer = itemContent.children().eq(1);
+    // It should contain three elements, the button overlay, inner content
+    // and the secondary container.
+    expect(firstChild.children().length).toBe(3);
 
+    var secondaryContainer = firstChild.children().eq(2);
     expect(secondaryContainer).toHaveClass('md-secondary-container');
 
     // The secondary container should contain the md-icon,
@@ -347,70 +361,25 @@ describe('mdListItem directive', function() {
     expect(iconButton.firstElementChild.hasAttribute('ng-show')).toBe(false);
   });
 
-  it('should not create a parent button for proxied secondary elements with ng-click', function() {
-    var listItem = setup(
-      '<md-list-item ng-click="sayHello()">' +
-        '<p>Hello World</p>' +
-        '<md-checkbox class="md-secondary" ng-click="goWild()"></md-checkbox>' +
-      '</md-list-item>'
-    );
-
-    expect(listItem).toHaveClass('md-button-wrap');
-
-    // The item should contain the button executor and the item content.
-    expect(listItem.children().length).toBe(2);
-
-    var itemContent = listItem.children().eq(1);
-    var secondaryContainer = itemContent.children().eq(1);
-
-    expect(secondaryContainer).toHaveClass('md-secondary-container');
-
-    // The secondary container should contain the md-checkbox, without any button as parent.
-    var checkboxItem = secondaryContainer.children()[0];
-
-    expect(checkboxItem.nodeName).toBe('MD-CHECKBOX');
-    expect(checkboxItem.hasAttribute('ng-click')).toBe(true);
-  });
-
-  it('should not use as a proxied element when using ng-click on the element', function() {
-    var listItem = setup(
-      '<md-list-item ng-click="sayHello()">' +
-        '<p>Hello World</p>' +
-        '<md-checkbox class="md-secondary" ng-click="null" ng-model="isChecked"></md-checkbox>' +
-      '</md-list-item>'
-    );
-
-    var checkboxEl = listItem.find('md-checkbox');
-
-    expect($rootScope.isChecked).toBeFalsy();
-
-    // Element which handles all clicks for the list item.
-    var clickTarget = listItem[0].querySelector('div');
-
-    clickTarget.click();
-    expect($rootScope.isChecked).toBeFalsy();
-
-    checkboxEl[0].click();
-    expect($rootScope.isChecked).toBeTruthy();
-  });
-
   it('moves multiple md-secondary items outside of the button', function() {
     var listItem = setup(
       '<md-list-item ng-click="sayHello()">' +
         '<p>Hello World</p>' +
         '<md-icon class="md-secondary" ng-click="goWild()"></md-icon>' +
         '<md-icon class="md-secondary" ng-click="goWild2()"></md-icon>' +
-      '</md-list-item>'
-    );
+      '</md-list-item>');
 
-    expect(listItem).toHaveClass('md-button-wrap');
+    // First child is our button wrap
+    var firstChild = listItem.children().eq(0);
+    expect(firstChild[0].nodeName).toBe('DIV');
 
-    // The item should contain the button executor and the item content.
-    expect(listItem.children().length).toBe(2);
+    expect(listItem).toHaveClass('_md-button-wrap');
 
-    var itemContent = listItem.children().eq(1);
-    var secondaryContainer = itemContent.children().eq(1);
+    // It should contain three elements, the button overlay, inner content,
+    // and the secondary container.
+    expect(firstChild.children().length).toBe(3);
 
+    var secondaryContainer = firstChild.children().eq(2);
     expect(secondaryContainer).toHaveClass('md-secondary-container');
 
     // The secondary container should hold the two secondary items.
