@@ -32,9 +32,10 @@ angular
  * @param {number=} md-min-length Specifies the minimum length of text before autocomplete will
  *    make suggestions
  *
- *
  * @param {expression=} filter-selected Whether to filter selected contacts from the list of
- *    suggestions shown in the autocomplete. This attribute has been removed but may come back.
+ *    suggestions shown in the autocomplete.
+ *
+ *    ***Note:** This attribute has been removed but may come back.*
  *
  *
  *
@@ -57,6 +58,7 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
       <md-chips class="md-contact-chips"\
           ng-model="$mdContactChipsCtrl.contacts"\
           md-require-match="$mdContactChipsCtrl.requireMatch"\
+          md-chip-append-delay="{{$mdContactChipsCtrl.chipAppendDelay}}" \
           md-autocomplete-snap>\
           <md-autocomplete\
               md-menu-class="md-contact-chips-suggestions"\
@@ -122,17 +124,23 @@ function MdContactChips($mdTheming, $mdUtil) {
       contacts: '=ngModel',
       requireMatch: '=?mdRequireMatch',
       minLength: '=?mdMinLength',
-      highlightFlags: '@?mdHighlightFlags'
+      highlightFlags: '@?mdHighlightFlags',
+      chipAppendDelay: '@?mdChipAppendDelay'
     }
   };
 
   function compile(element, attr) {
     return function postLink(scope, element, attrs, controllers) {
+      var contactChipsController = controllers;
 
       $mdUtil.initOptionalProperties(scope, attr);
       $mdTheming(element);
 
       element.attr('tabindex', '-1');
+
+      attrs.$observe('mdChipAppendDelay', function(newValue) {
+        contactChipsController.chipAppendDelay = newValue;
+      });
     };
   }
 }
