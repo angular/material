@@ -9,7 +9,7 @@ describe('<md-chips>', function() {
   var CHIP_ADD_TEMPLATE =
     '<md-chips ng-model="items" md-on-add="addChip($chip, $index)"></md-chips>';
   var CHIP_REMOVE_TEMPLATE =
-    '<md-chips ng-model="items" md-on-remove="removeChip($chip, $index)"></md-chips>';
+    '<md-chips ng-model="items" md-on-remove="removeChip($chip, $index, $event)"></md-chips>';
   var CHIP_SELECT_TEMPLATE =
     '<md-chips ng-model="items" md-on-select="selectChip($chip)"></md-chips>';
   var CHIP_READONLY_TEMPLATE =
@@ -190,6 +190,17 @@ describe('<md-chips>', function() {
         expect(scope.removeChip.calls.mostRecent().args[1]).toBe(0);       // Index
       });
 
+      it('should make the event available when removing a chip', function() {
+        var element = buildChips(CHIP_REMOVE_TEMPLATE);
+        var chips = getChipElements(element);
+ 
+        scope.removeChip = jasmine.createSpy('removeChip');
+        var chipButton = angular.element(chips[1]).find('button');
+        chipButton[0].click();
+ 
+        expect(scope.removeChip).toHaveBeenCalled();
+        expect(scope.removeChip.calls.mostRecent().args[2].type).toBe('click');
+      });
 
       it('should call the select method when selecting a chip', function() {
         var element = buildChips(CHIP_SELECT_TEMPLATE);
@@ -1387,16 +1398,16 @@ describe('<md-chips>', function() {
         expect(chips.length).toBe(3);
 
         // Remove 'Banana'
-        var db = angular.element(chips[1]).find('button');
-        db[0].click();
+        var chipButton = angular.element(chips[1]).find('button');
+        chipButton[0].click();
 
         scope.$digest();
         chips = getChipElements(element);
         expect(chips.length).toBe(2);
 
         // Remove 'Orange'
-        db = angular.element(chips[1]).find('button');
-        db[0].click();
+        chipButton = angular.element(chips[1]).find('button');
+        chipButton[0].click();
 
         scope.$digest();
         chips = getChipElements(element);
