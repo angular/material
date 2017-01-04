@@ -889,7 +889,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
       var newVal = self.isMultiple ? values : values[0];
       var prevVal = self.ngModel.$modelValue;
 
-      if (usingTrackBy ? !angular.equals(prevVal, newVal) : prevVal != newVal) {
+      if (usingTrackBy ? !angular.equals(prevVal, newVal) : prevVal !== newVal) {
         self.ngModel.$setViewValue(newVal);
         self.ngModel.$render();
       }
