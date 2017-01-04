@@ -12,9 +12,8 @@ etc) you will need to either write CSS rules with custom selectors, or build a
 custom version of the `angular-material.css` file using SASS and custom
 variables.
 
-> <b>Note:</b> The Material Theming system provides the
-  [`$mdThemingProvider.setNonce()`](/api/service/$mdThemingProvider#setNonce) method to meet the
-  requirements of a CSP-policy enabled application.
+> <b>Note:</b> The Material Theming system provides the <a ng-href="/api/service/$mdThemingProvider#setNonce">
+  `$mdThemingProvider.setNonce()`</a> method to meet the requirements of a CSP-policy enabled application.
 
 <img src="https://cloud.githubusercontent.com/assets/210413/4816236/bf7783dc-5edd-11e4-88ef-1f8b6e87e1d7.png" alt="color palette" style="max-width: 100%;">
 

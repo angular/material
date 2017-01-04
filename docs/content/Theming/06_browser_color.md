@@ -43,5 +43,5 @@ Below are usage examples for both the Angular configuration phase, and during ru
     })
 </hljs>
 
-For api reference please visit [$mdThemingProvider](/api/service/$mdThemingProvider#enableBrowserColor) documentation.
+For api reference please visit <a ng-href="/api/service/$mdThemingProvider#enableBrowserColor">$mdThemingProvider</a> documentation.
 
