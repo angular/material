@@ -842,7 +842,8 @@ describe('<md-chips>', function() {
         expect(document.activeElement).toHaveClass('md-chip-content');
 
         // At/after 300ms timeout, focus should be on the input
-        $timeout.flush(1);
+        $timeout.flush();
+
         expect(document.activeElement.tagName.toUpperCase()).toEqual('INPUT');
 
         // cleanup
@@ -864,7 +865,7 @@ describe('<md-chips>', function() {
         expect(document.activeElement).toHaveClass('md-chip-content');
 
         // At/after custom timeout, focus should be on the input
-        $timeout.flush(1);
+        $timeout.flush();
         expect(document.activeElement.tagName.toUpperCase()).toEqual('INPUT');
 
         // cleanup
