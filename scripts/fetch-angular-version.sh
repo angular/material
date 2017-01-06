@@ -19,11 +19,9 @@ ANGULAR_FILES=(
 VERSION=$1
 
 # Download the Angular repository for `find-max-versions` if not present.
-if [ ! -e ./tmp ]; then
-  mkdir -p ./tmp
-fi
-
-if [ ! -e ./tmp/angular.js ]; then
+if [ ! -e ./tmp/angular.js/.git ]; then
+  # Cleanup potential broken repository files.
+  rm -rf ./tmp/angular.js/
   git clone https://github.com/angular/angular.js ./tmp/angular.js
 fi
 
