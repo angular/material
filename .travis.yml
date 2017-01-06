@@ -13,6 +13,14 @@ env:
   - BROWSER_STACK_USERNAME=angularteam1
   - BROWSER_STACK_ACCESS_KEY=BWCd4SynLzdDcv8xtzsB
   - secure: X7CNmOMemAJ9Jqrsmv6MXyeh8n8TIL5CKzE9LYsZUbsyKo0l5CyyysJq0y/AbpQS6awsSv2qP/cZ/kand6r6z0wMFbUcxa4HjMZEfRwv3sGtwj1OKJko/GvjcZQzD54FtHy1NU7wR0mYhAlE5IwH7f8bMa/nUiijgD/TOCTtKH8=
+  matrix:
+    - NG_VERSION=1.5.9
+    - NG_VERSION=1.6.1
+
+matrix:
+  fast_finish: true
+  allow_failures:
+  - env: "NG_VERSION=1.6.1"
 
 cache:
   directories:
