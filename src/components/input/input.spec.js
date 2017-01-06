@@ -659,6 +659,8 @@ describe('md-input-container directive', function() {
       input.triggerHandler('focus');
       $timeout.flush();
 
+      console.log("User Agent:", navigator.userAgent);
+
       expect(isTextSelected(input[0])).toBe(true);
 
       document.body.removeChild(container[0]);
