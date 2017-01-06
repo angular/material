@@ -3,7 +3,7 @@
     "base": "SauceLabs",
     "browserName": "chrome",
     "platform": "Windows 10",
-    "version": "50"
+    "version": "latest"
   },
   "SL_CHROMEBETA": {
     "base": "SauceLabs",
@@ -19,7 +19,7 @@
     "base": "SauceLabs",
     "browserName": "firefox",
     "platform": "Windows 10",
-    "version": "46"
+    "version": "latest"
   },
   "SL_FIREFOXBETA": {
     "base": "SauceLabs",
