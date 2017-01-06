@@ -655,16 +655,16 @@ describe('md-input-container directive', function() {
 
       expect(isTextSelected(input[0])).toBe(false);
 
+      input.focus();
       input.triggerHandler('focus');
+      $timeout.flush();
 
       expect(isTextSelected(input[0])).toBe(true);
 
       document.body.removeChild(container[0]);
 
       function isTextSelected(input) {
-        // The selection happens in a timeout which needs to be flushed.
-        $timeout.flush();
-        return input.selectionStart === 0 && input.selectionEnd == input.value.length;
+        return input.selectionStart === 0 && input.selectionEnd === input.value.length;
       }
     }));
 
