@@ -17,7 +17,7 @@ CONNECT_ARGS="--readyfile $SAUCE_READY_FILE"
 
 # Apply the Travis Job Number to the tunnel
 if [ ! -z "$TRAVIS_JOB_NUMBER" ]; then
-  CONNECT_ARGS="$CONNECT_ARGS --tunnel-identifier $TRAVIS_JOB_NUMBER"
+  CONNECT_ARGS="$CONNECT_ARGS --tunnel-identifier $TRAVIS_JOB_ID"
 fi
 
 echo "Starting Sauce Connector Tunnel"
