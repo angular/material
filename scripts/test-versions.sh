@@ -21,7 +21,7 @@
 # [CONFIG VALUES]
 
 # Available Options are: 1.X, 1.X.X, 1.X.X-(beta|rc).X or snapshot
-VERSIONS=(1.3 1.4 1.5 snapshot)
+VERSIONS=(1.3 1.4 1.5 1.6 snapshot)
 BROWSERS="Firefox"
 
 #
