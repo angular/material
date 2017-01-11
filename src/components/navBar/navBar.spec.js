@@ -42,7 +42,7 @@ describe('mdNavBar', function() {
         '  <md-nav-item md-nav-href="#2" name="tab2">' +
         '    tab2' +
         '  </md-nav-item>' +
-        '  <md-nav-item md-nav-href="#3" name="tab3">' +
+        '  <md-nav-item md-nav-href="#3" name="tab3" aria-label="foo">' +
         '    tab3' +
         '  </md-nav-item>' +
         '</md-nav-bar>');
@@ -327,6 +327,17 @@ describe('mdNavBar', function() {
       $timeout.flush();
 
       expect(tab2Ctrl.getButtonEl().click).toHaveBeenCalled();
+    });
+
+    it('automatically adds label to nav items', function() {
+      createTabs();
+      expect(getTab('tab1').parent().attr('aria-label')).toBe('tab1');
+      expect(getTab('tab2').parent().attr('aria-label')).toBe('tab2');
+    });
+
+    it('does not change aria-label on nav items', function() {
+      createTabs();
+      expect(getTab('tab3').parent().attr('aria-label')).toBe('foo');
     });
   });
 
