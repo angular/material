@@ -38,7 +38,7 @@
    *
    *   <ul>Validation
    *     <li>allow a validation callback</li>
-   *     <li>hilighting style for invalid chips</li>
+   *     <li>highlighting style for invalid chips</li>
    *   </ul>
    *
    *   <ul>Item mutation
