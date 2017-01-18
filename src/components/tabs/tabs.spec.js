@@ -515,36 +515,6 @@ describe('<md-tabs>', function () {
     }));
   });
 
-  describe('md-pagination-wrapper', function () {
-    var template =  '<md-tabs md-stretch-tabs="{{stretch}}">' +
-                    '  <md-tab label="label!">content!</md-tab>' +
-                    '</md-tabs>';
-
-    it('should have inline width if md-stretch-tabs="never"',
-      inject(function ($timeout, $document) {
-      var scope = { 'stretch': 'never' };
-      var element = setup(template, scope);
-      // Appending to body is required for style checks
-      angular.element($document.body).append(element);
-      // $timeout.flush required to run nextTick inside init();
-      $timeout.flush();
-      expect(element.find('md-pagination-wrapper').attr('style').indexOf('width')).toBeGreaterThan(-1);
-      element.remove();
-    }));
-
-    it('should not have inline width if md-stretch-tabs="always"',
-      inject(function ($timeout, $document) {
-      var scope = { 'stretch': 'always' };
-      var element = setup(template, scope);
-      // Appending to body is required for style checks
-      angular.element($document.body).append(element);
-      // $timeout.flush required to run nextTick inside init();
-      $timeout.flush();
-      expect(element.find('md-pagination-wrapper').attr('style').indexOf('width')).toBe(-1);
-      element.remove();
-    }));
-  });
-
   describe('no element content', function() {
     it('should not add the `md-no-tab-content` class if the element has content', function() {
       var tabs = setup(
