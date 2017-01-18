@@ -147,7 +147,7 @@ button.md-button::-moz-focus-inner {
     transition-property: background-color, box-shadow, transform;
     md-icon {
         transition: $swift-ease-in;
-        transition-property: background-color, box-shadow, transform;
+        transition-property: background-color, color, transform;
     }
     .md-ripple-container {
       border-radius: $button-fab-border-radius;
