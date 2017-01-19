@@ -314,7 +314,8 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
      *  Update the `aria-activedescendant` attribute.
      */
     function render() {
-      var checked = rgCtrl.getViewValue() == attr.value;
+      var viewValue = rgCtrl.getViewValue();
+      var checked = typeof viewValue =='object' ? angular.equals(viewValue, attr.value) : viewValue == attr.value;
 
       if (checked === lastChecked) return;
 
