@@ -106,7 +106,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       if (override || !parent.attr('aria-label')) {
         // Only interpolate the text from the HTML element because otherwise the custom text
         // could be interpolated twice and cause XSS violations.
-        var interpolatedText = override || $interpolate(element.text().trim())(parent.scope);
+        var interpolatedText = override || $interpolate(element.text().trim())(scope.$parent);
         parent.attr('aria-label', interpolatedText);
       }
     }
