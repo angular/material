@@ -217,6 +217,7 @@ md-tab-content {
   }
   > div {
     flex: 1 0 100%;
+    min-width: 0;
     &.ng-leave {
       animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
     }
