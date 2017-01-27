@@ -27,7 +27,7 @@ module.exports = function(config) {
     reporters: ['dots', 'saucelabs'],
 
     sauceLabs: {
-      testName: 'Angular Material 1.x Unit Tests',
+      testName: 'AngularJS Material 1.x Unit Tests',
       tunnelIdentifier: process.env.TRAVIS_JOB_ID,
       build: 'Build ' + process.env.TRAVIS_JOB_ID,
 

@@ -78,7 +78,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
       var $options = ngModelCtrl.$options;
 
-      // The newer versions of Angular introduced a `getOption function and made the option values no longer
+      // The newer versions of AngularJS introduced a `getOption function and made the option values no longer
       // visible on the $options object.
       return $options.getOption ? $options.getOption(optionName) : $options[optionName]
     },
@@ -783,7 +783,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     /**
      * Returns true if the parent form of the element has been submitted.
      *
-     * @param element An Angular or HTML5 element.
+     * @param element An AngularJS or HTML5 element.
      *
      * @returns {boolean}
      */

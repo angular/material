@@ -202,7 +202,7 @@
       var matchAngularModule =  /\.module\(('[^']*'|"[^"]*")\s*,(\s*\[([^\]]*)\]\s*\))/ig;
       var modules = "['ngMaterial', 'ngMessages', 'material.svgAssetsCache']";
 
-      // See scripts.js for list of external Angular libraries used for the demos
+      // See scripts.js for list of external AngularJS libraries used for the demos
 
       return file.replace(matchAngularModule, ".module('MyApp',"+ modules + ")");
     }

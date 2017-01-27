@@ -320,7 +320,7 @@ function InterimElementProvider() {
 
         showPromises.push(showAction);
 
-        // In Angular 1.6+, exceptions inside promises will cause a rejection. We need to handle
+        // In AngularJS 1.6+, exceptions inside promises will cause a rejection. We need to handle
         // the rejection and only log it if it's an error.
         interimElement.deferred.promise.catch(function(fault) {
           if (fault instanceof Error) {
@@ -403,7 +403,7 @@ function InterimElementProvider() {
 
         hidePromises.push(cancelAction);
 
-        // Since Angular 1.6.7, promises will be logged to $exceptionHandler when the promise
+        // Since AngularJS 1.6.7, promises will be logged to $exceptionHandler when the promise
         // is not handling the rejection. We create a pseudo catch handler, which will prevent the
         // promise from being logged to the $exceptionHandler.
         return interim.deferred.promise.catch(angular.noop);
@@ -686,7 +686,7 @@ function InterimElementProvider() {
           // Trigger onComplete callback when the `show()` finishes
           var notifyComplete = options.onComplete || angular.noop;
 
-          // Necessary for consistency between Angular 1.5 and 1.6.
+          // Necessary for consistency between AngularJS 1.5 and 1.6.
           try {
             notifyShowing(options.scope, element, options, controller);
           } catch (e) {

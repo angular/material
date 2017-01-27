@@ -471,7 +471,7 @@ describe('md-input-container directive', function() {
     pageScope.placeholder = 'bar';
     pageScope.$digest();
 
-    // We should check again to make sure that Angular didn't
+    // We should check again to make sure that AngularJS didn't
     // re-add the placeholder attribute and cause double labels.
     expect(input.hasAttribute('placeholder')).toBe(false);
     expect(label.textContent).toEqual('bar');

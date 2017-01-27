@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Bash Script to replace the current Angular version in the node modules.
+# Bash Script to replace the current AngularJS version in the node modules.
 # Accepts a version as an argument. The resolved version will be downloaded, extracted and replaced.
 
 CDN="https://code.angularjs.org"
@@ -18,7 +18,7 @@ ANGULAR_FILES=(
 # The version will be specified from the first argument.
 VERSION=$1
 
-# Download the Angular repository for `find-max-versions` if not present.
+# Download the AngularJS repository for `find-max-versions` if not present.
 if [ ! -e ./tmp/angular.js/.git ]; then
   # Cleanup potential broken repository files.
   rm -rf ./tmp/angular.js/
@@ -50,13 +50,13 @@ ZIP_FILE="angular-$VERSION.zip"
 ZIP_FILE_PATH="./tmp/$ZIP_FILE"
 BASE_DIR="./tmp/angular-$VERSION"
 
-# Downloads and extracts the resolved Angular version.
+# Downloads and extracts the resolved AngularJS version.
 rm -rf $BASE_DIR
 curl $ZIP_URL > $ZIP_FILE_PATH
 unzip -q -d $BASE_DIR $ZIP_FILE_PATH
 mv "$BASE_DIR/angular-$ZIP_FILE_SHA" "$BASE_DIR/files"
 
-# Copies over all Angular files into the node modules.
+# Copies over all AngularJS files into the node modules.
 for ANGULAR_FILE in "${ANGULAR_FILES[@]}"; do
   REPLACEMENT_FILE="$BASE_DIR/files/$ANGULAR_FILE.js"
   MIN_REPLACEMENT_FILE="$BASE_DIR/files/$ANGULAR_FILE.min.js"
