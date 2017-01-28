@@ -1273,6 +1273,25 @@ describe('$mdDialog', function() {
       expect($document.activeElement).toBe(parent[0].querySelector('#focus-target'));
     }));
 
+    it('should warn if the deprecated .md-actions class is used', inject(function($mdDialog, $rootScope, $log, $timeout) {
+       spyOn($log, 'warn');
+
+      var parent = angular.element('<div>');
+      $mdDialog.show({
+        template:
+          '<md-dialog>' +
+            '<div class="md-actions">' +
+              '<button class="md-button">Ok good</button>' +
+            '</div>' +
+          '</md-dialog>',
+        parent: parent
+      });
+
+      runAnimation();
+
+      expect($log.warn).toHaveBeenCalled();
+    }));
+
     it('should only allow one open at a time', inject(function($mdDialog, $rootScope, $animate) {
       var parent = angular.element('<div>');
       $mdDialog.show({
