@@ -1,6 +1,8 @@
 <application>
   <component name="FindSettings">
     <option name="localCaseSensitive" value="true" />
+    <option name="regularExpressions" value="true" />
     <option name="LOCAL_CASE_SENSITIVE_SEARCH" value="true" />
+    <option name="REGULAR_EXPRESSIONS" value="true" />
   </component>
 </application>
