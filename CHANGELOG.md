@@ -1,3 +1,11 @@
+<a name="1.1.3"></a>
+## [Angular Material 1.1.3](https://github.com/angular/material/compare/v1.1.2...v1.1.3) (2017-01-31)
+
+### Bug Fixes
+
+* **gestures:** slider and swipe touch ([#10314](https://github.com/angular/material/issues/10314)) ([b2562cf](https://github.com/angular/material/commit/b2562cf)), closes [#10294](https://github.com/angular/material/issues/10294) [#10187](https://github.com/angular/material/issues/10187) [#10145](https://github.com/angular/material/issues/10145)
+* **select:** don't override initial model value ([#10273](https://github.com/angular/material/issues/10273)) ([2240114](https://github.com/angular/material/commit/2240114))
+
 <a name="1.1.2"></a>
 ## [Angular Material 1.1.2](https://github.com/angular/material/compare/g3_v0_x...v1.1.2) (2017-01-30)
 
@@ -146,9 +154,8 @@
 * autocomplete: The autocomplete validator `md-require-match` no longer matches if the search text is empty
 
 
-
 <a name="1.1.1"></a>
-## [1.1.1](https://github.com/angular/material/compare/v1.1.0...v1.1.1) (2016-09-01)
+## [Angular Material 1.1.1](https://github.com/angular/material/compare/v1.1.0...v1.1.1) (2016-09-01)
 
 We continue to maintain our momentum with Angular Material. Today we published a patch release for Angular Material; a patch that contains more than 60 improvements and fixes.
 
