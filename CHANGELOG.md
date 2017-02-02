@@ -1,5 +1,5 @@
 <a name="1.1.3"></a>
-## [Angular Material 1.1.3](https://github.com/angular/material/compare/v1.1.2...v1.1.3) (2017-01-31)
+## [AngularJS Material 1.1.3](https://github.com/angular/material/compare/v1.1.2...v1.1.3) (2017-01-31)
 
 ### Bug Fixes
 
@@ -180,7 +180,7 @@ Thank you to the continued support from these great v1.1.2 contributors:
 
 
 <a name="1.1.1"></a>
-## [Angular Material 1.1.1](https://github.com/angular/material/compare/v1.1.0...v1.1.1) (2016-09-01)
+## [AngularJS Material 1.1.1](https://github.com/angular/material/compare/v1.1.0...v1.1.1) (2016-09-01)
 
 We continue to maintain our momentum with Angular Material. Today we published a patch release for Angular Material; a patch that contains more than 60 improvements and fixes.
 
