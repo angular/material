@@ -798,6 +798,27 @@ describe('<md-select>', function() {
         expect($rootScope.model).toBe(4);
       });
 
+      it('should allow switching between falsy options', inject(function($rootScope) {
+        $rootScope.model = false;
+        var el = setupSelect('ng-model="$root.model"', [false, 0]);
+
+        openSelect(el);
+        clickOption(el, 1);
+
+        expect($rootScope.model).toBe(0);
+      }));
+
+      it('should not override the initial model value', inject(function($rootScope) {
+        $rootScope.model = 2;
+
+        var el = setupSelect('ng-model="$root.model"', ['1', '2', '3']);
+        var selectedOption = selectedOptions(el)[0];
+
+        expect($rootScope.model).toBe(2, 'Expected value not to have been overwritten.');
+        expect(selectedOption).toBeTruthy('Expected an option to be selected.');
+        expect(selectedOption.getAttribute('value')).toBe('2',
+            'Expected the corresponding option to have been selected');
+      }));
     });
   });
 

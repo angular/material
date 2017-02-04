@@ -339,6 +339,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
 
   $http.get("/docs.json")
       .then(function(response) {
+        response = response.data;
         var versionId = getVersionIdFromPath();
         var head = { type: 'version', url: '/HEAD', id: 'head', name: 'HEAD (master)', github: '' };
         var commonVersions = versionId === 'head' ? [] : [ head ];

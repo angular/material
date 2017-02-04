@@ -1,5 +1,14 @@
 (function () {
   'use strict';
+
+  // If we do not have CryptoJS defined; import it
+  if (typeof CryptoJS == 'undefined') {
+    var cryptoSrc = '//cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js';
+    var scriptTag = document.createElement('script');
+    scriptTag.setAttribute('src', cryptoSrc);
+    document.body.appendChild(scriptTag);
+  }
+
   angular
       .module('contactChipsDemo', ['ngMaterial'])
       .controller('ContactChipDemoCtrl', DemoCtrl);
@@ -7,7 +16,7 @@
   function DemoCtrl ($q, $timeout) {
     var self = this;
     var pendingSearch, cancelSearch = angular.noop;
-    var cachedQuery, lastSearch;
+    var lastSearch;
 
     self.allContacts = loadContacts();
     self.contacts = [self.allContacts[0]];
@@ -21,8 +30,7 @@
      * Search for contacts; use a random delay to simulate a remote call
      */
     function querySearch (criteria) {
-      cachedQuery = cachedQuery || criteria;
-      return cachedQuery ? self.allContacts.filter(createFilterFor(cachedQuery)) : [];
+      return criteria ? self.allContacts.filter(createFilterFor(criteria)) : [];
     }
 
     /**
@@ -30,7 +38,6 @@
      * Also debounce the queries; since the md-contact-chips does not support this
      */
     function delayedQuerySearch(criteria) {
-      cachedQuery = criteria;
       if ( !pendingSearch || !debounceSearch() )  {
         cancelSearch();
 
@@ -39,7 +46,7 @@
           cancelSearch = reject;
           $timeout(function() {
 
-            resolve( self.querySearch() );
+            resolve( self.querySearch(criteria) );
 
             refreshDebounce();
           }, Math.random() * 500, true)
@@ -72,7 +79,7 @@
       var lowercaseQuery = angular.lowercase(query);
 
       return function filterFn(contact) {
-        return (contact._lowername.indexOf(lowercaseQuery) != -1);;
+        return (contact._lowername.indexOf(lowercaseQuery) != -1);
       };
 
     }
@@ -92,10 +99,13 @@
 
       return contacts.map(function (c, index) {
         var cParts = c.split(' ');
+        var email = cParts[0][0].toLowerCase() + '.' + cParts[1].toLowerCase() + '@example.com';
+        var hash = CryptoJS.MD5(email);
+
         var contact = {
           name: c,
-          email: cParts[0][0].toLowerCase() + '.' + cParts[1].toLowerCase() + '@example.com',
-          image: 'http://lorempixel.com/50/50/people?' + index
+          email: email,
+          image: '//www.gravatar.com/avatar/' + hash + '?s=50&d=retro'
         };
         contact._lowername = contact.name.toLowerCase();
         return contact;

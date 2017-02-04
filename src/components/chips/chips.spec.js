@@ -20,6 +20,8 @@ describe('<md-chips>', function() {
     '</md-chips>';
   var CHIP_NOT_REMOVABLE_TEMPLATE =
     '<md-chips ng-model="items" readonly="true" md-removable="false"></md-chips>';
+  var CHIP_APPEND_DELAY_TEMPLATE =
+        '<md-chips ng-model="items" md-chip-append-delay="800"></md-chips>';
 
   afterEach(function() {
     attachedElements.forEach(function(element) {
@@ -170,7 +172,7 @@ describe('<md-chips>', function() {
 
         expect(scope.addChip).toHaveBeenCalled();
         expect(scope.addChip.calls.mostRecent().args[0]).toBe('Grape'); // Chip
-        expect(scope.addChip.calls.mostRecent().args[1]).toBe(4);       // Index
+        expect(scope.addChip.calls.mostRecent().args[1]).toBe(3);       // Index
       });
 
 
@@ -426,7 +428,7 @@ describe('<md-chips>', function() {
 
           var updatedChips = getChipElements(element);
 
-          expect(chips.length).not.toBe(updatedChips.length);
+          expect(updatedChips.length).toBe(chips.length - 1);
         }));
 
         it('should set removable to true by default', function() {
@@ -824,6 +826,50 @@ describe('<md-chips>', function() {
         }));
 
       });
+
+      it('utilizes the default chip append delay of 300ms', inject(function($timeout) {
+        var element = buildChips(BASIC_CHIP_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        // Append element to body
+        angular.element(document.body).append(element);
+
+        // Append a new chips which will fire the delay
+        ctrl.appendChip('test');
+
+        // Before 300ms timeout, focus should be on the chip (i.e. the chip content)
+        $timeout.flush(299);
+        expect(document.activeElement).toHaveClass('md-chip-content');
+
+        // At/after 300ms timeout, focus should be on the input
+        $timeout.flush(1);
+        expect(document.activeElement.tagName.toUpperCase()).toEqual('INPUT');
+
+        // cleanup
+        element.remove();
+      }));
+
+      it('utilizes a custom chip append delay', inject(function($timeout) {
+        var element = buildChips(CHIP_APPEND_DELAY_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        // Append element to body
+        angular.element(document.body).append(element);
+
+        // Append a new chips which will fire the delay
+        ctrl.appendChip('test');
+
+        // Before custom timeout, focus should be on the chip (i.e. the chip content)
+        $timeout.flush(ctrl.chipAppendDelay - 1);
+        expect(document.activeElement).toHaveClass('md-chip-content');
+
+        // At/after custom timeout, focus should be on the input
+        $timeout.flush(1);
+        expect(document.activeElement.tagName.toUpperCase()).toEqual('INPUT');
+
+        // cleanup
+        element.remove();
+      }));
 
     });
 
@@ -1402,6 +1448,84 @@ describe('<md-chips>', function() {
         chips = getChipElements(element);
         expect(chips.length).toBe(1);
 
+      });
+    });
+
+    describe('keyboard navigation', function() {
+      var leftEvent, rightEvent;
+
+      beforeEach(inject(function($mdConstant) {
+        leftEvent = {
+          type: 'keydown',
+          keyCode: $mdConstant.KEY_CODE.LEFT_ARROW,
+          which: $mdConstant.KEY_CODE.LEFT_ARROW
+        };
+        rightEvent = {
+          type: 'keydown',
+          keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW,
+          which: $mdConstant.KEY_CODE.RIGHT_ARROW
+        };
+      }));
+
+      describe('when readonly', function() {
+        // TODO: Add readonly specific tests
+      });
+
+      describe('when we have an input', function() {
+        it('clears the selected chip when the input is focused', inject(function($timeout) {
+          var element = buildChips(BASIC_CHIP_TEMPLATE);
+          var ctrl = element.controller('mdChips');
+
+          // Focus the input
+          ctrl.focusInput();
+          $timeout.flush();
+
+          // Expect no chip to be selected
+          expect(ctrl.selectedChip).toBe(-1);
+        }));
+
+        it('selects the previous chip', inject(function($timeout) {
+          var element = buildChips(BASIC_CHIP_TEMPLATE);
+          var ctrl = element.controller('mdChips');
+          var chips = getChipElements(element);
+
+          // Select the second chip
+          ctrl.selectAndFocusChipSafe(1);
+          $timeout.flush();
+
+          expect(ctrl.selectedChip).toBe(1);
+
+          // Select the 1st chip
+          element.find('md-chips-wrap').triggerHandler(angular.copy(leftEvent));
+          $timeout.flush();
+
+          expect(ctrl.selectedChip).toBe(0);
+        }));
+
+        it('and the first chip is selected, selects the input', inject(function($timeout) {
+          var element = buildChips(BASIC_CHIP_TEMPLATE);
+          var ctrl = element.controller('mdChips');
+          var chips = getChipElements(element);
+
+          // Append so we can focus the input
+          angular.element(document.body).append(element);
+
+          // Select the second chip
+          ctrl.selectAndFocusChipSafe(0);
+          $timeout.flush();
+
+          expect(ctrl.selectedChip).toBe(0);
+
+          // Selecting past the first should wrap back to the input
+          element.find('md-chips-wrap').triggerHandler(angular.copy(leftEvent));
+          $timeout.flush();
+
+          expect(ctrl.selectedChip).toBe(-1);
+          expect(document.activeElement).toBe(element.find('input')[0]);
+
+          // Cleanup after ourselves
+          element.remove();
+        }));
       });
     });
   });
