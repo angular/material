@@ -767,6 +767,8 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
       this.$scope.$eval(this.$attrs.mdStartIndex) :
       this.container.topIndex;
     this.container.scrollToIndex(startIndex);
+    // call it twice since DOM manipulations may alter scroll position
+    this.container.scrollToIndex(startIndex);
   }
 
   // Detach and pool any blocks that are no longer in the viewport.
