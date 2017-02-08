@@ -574,7 +574,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
             if (!node || node.hasAttribute('disabled')) return;
             var optionCtrl = angular.element(node).controller('mdOption');
             if (!selectMenuCtrl.isMultiple) {
-              selectMenuCtrl.deselect(Object.keys(selectMenuCtrl.selected)[0]);
+              selectMenuCtrl.deselect(Array.from(selectMenuCtrl.selected.keys())[0]);
             }
             selectMenuCtrl.select(optionCtrl.hashKey, optionCtrl.value);
             selectMenuCtrl.refreshViewValue();
@@ -647,7 +647,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
       }
 
       var optionHashKey = selectCtrl.hashGetter(optionCtrl.value);
-      var isSelected = angular.isDefined(selectCtrl.selected[optionHashKey]);
+      var isSelected = angular.isDefined(selectCtrl.selected.get(optionHashKey));
 
       scope.$apply(function() {
         if (selectCtrl.isMultiple) {
@@ -658,7 +658,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
           }
         } else {
           if (!isSelected) {
-            selectCtrl.deselect(Object.keys(selectCtrl.selected)[0]);
+            selectCtrl.deselect(Array.from(selectCtrl.selected.keys())[0]);
             selectCtrl.select(optionHashKey, optionCtrl.value);
           }
         }
@@ -671,10 +671,10 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
     var self = this;
     self.isMultiple = angular.isDefined($attrs.multiple);
     // selected is an object with keys matching all of the selected options' hashed values
-    self.selected = {};
+    self.selected = new Map();
     // options is an object with keys matching every option's hash value,
     // and values matching every option's controller.
-    self.options = {};
+    self.options = new Map();
 
     $scope.$watchCollection(function() {
       return self.options;
@@ -829,26 +829,26 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
     };
 
     self.select = function(hashKey, hashedValue) {
-      var option = self.options[hashKey];
+      var option = self.options.get(hashKey);
       option && option.setSelected(true);
-      self.selected[hashKey] = hashedValue;
+      self.selected.set(hashKey, hashedValue);
     };
     self.deselect = function(hashKey) {
-      var option = self.options[hashKey];
+      var option = self.options.get(hashKey);
       option && option.setSelected(false);
-      delete self.selected[hashKey];
+      self.selected.delete(hashKey);
     };
 
     self.addOption = function(hashKey, optionCtrl) {
-      if (angular.isDefined(self.options[hashKey])) {
+      if (angular.isDefined(self.options.get(hashKey))) {
         throw new Error('Duplicate md-option values are not allowed in a select. ' +
           'Duplicate value "' + optionCtrl.value + '" found.');
       }
 
-      self.options[hashKey] = optionCtrl;
+      self.options.set(hashKey, optionCtrl);
 
       // If this option's value was already in our ngModel, go ahead and select it.
-      if (angular.isDefined(self.selected[hashKey])) {
+      if (angular.isDefined(self.selected.get(hashKey))) {
         self.select(hashKey, optionCtrl.value);
 
         // When the current $modelValue of the ngModel Controller is using the same hash as
@@ -863,7 +863,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
       }
     };
     self.removeOption = function(hashKey) {
-      delete self.options[hashKey];
+      self.options.delete(hashKey);
       // Don't deselect an option when it's removed - the user's ngModel should be allowed
       // to have values that do not match a currently available option.
     };
@@ -871,9 +871,9 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
     self.refreshViewValue = function() {
       var values = [];
       var option;
-      for (var hashKey in self.selected) {
+      self.selected.forEach(function(hashValue, hashKey) {
         // If this hashKey has an associated option, push that option's value to the model.
-        if ((option = self.options[hashKey])) {
+        if ((option = self.options.get(hashKey))) {
           values.push(option.value);
         } else {
           // Otherwise, the given hashKey has no associated option, and we got it
@@ -881,9 +881,9 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
           // this hashKey to the model.
           // This allows the developer to put a value in the model that doesn't yet have
           // an associated option.
-          values.push(self.selected[hashKey]);
+          values.push(hashValue);
         }
-      }
+      });
       var usingTrackBy = $mdUtil.getModelOption(self.ngModel, 'trackBy');
 
       var newVal = self.isMultiple ? values : values[0];
@@ -899,7 +899,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
       var newSelectedValues = self.ngModel.$modelValue || self.ngModel.$viewValue || [];
       if (!angular.isArray(newSelectedValues)) return;
 
-      var oldSelected = Object.keys(self.selected);
+      var oldSelected = Array.from(self.selected.keys());
 
       var newSelectedHashes = newSelectedValues.map(self.hashGetter);
       var deselected = oldSelected.filter(function(hash) {
@@ -914,7 +914,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
 
     function renderSingular() {
       var value = self.ngModel.$viewValue || self.ngModel.$modelValue;
-      Object.keys(self.selected).forEach(self.deselect);
+      Array.from(self.selected.keys()).forEach(self.deselect);
       self.select(self.hashGetter(value), value);
     }
   }
@@ -983,7 +983,7 @@ function OptionDirective($mdButtonInkRipple, $mdUtil) {
         if (typeof selected == 'string') selected = true;
         if (selected) {
           if (!selectCtrl.isMultiple) {
-            selectCtrl.deselect(Object.keys(selectCtrl.selected)[0]);
+            selectCtrl.deselect(Array.from(selectCtrl.selected.keys())[0]);
           }
           selectCtrl.select(optionCtrl.hashKey, optionCtrl.value);
         } else {
