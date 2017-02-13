@@ -97,13 +97,96 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
       // (IE/Edge) lose them and start throwing "Invalid calling object" errors, when we
       // compile the element contents down in `compileElement`.
       elements = getElements();
+      // Should be called before updateHeightFromContent() because it has an impact on
+      // calculating height properly
+      initTabsDisplay(elements);
       updateHeightFromContent();
       adjustOffset();
       updateInkBarStyles();
-      ctrl.tabs[ ctrl.selectedIndex ] && ctrl.tabs[ ctrl.selectedIndex ].scope.select();
       loaded = true;
       updatePagination();
     });
+  }
+
+  function initTabsDisplay(elements) {
+    angular.forEach(elements.contents, function (content) {
+      angular.element(content).css({display: 'none'});
+    });
+    angular.forEach(ctrl.tabs, function (tab) {
+      initTabDisplayCallbacks(tab);
+    });
+
+    ctrl.tabs[ ctrl.selectedIndex ] && ctrl.tabs[ ctrl.selectedIndex ].scope.select();
+  }
+
+  function getContentByTabId(tabId) {
+    return $element[0]
+      .querySelector('md-tabs-content-wrapper > md-tab-content#' + (ctrl.tabContentPrefix + tabId));
+  }
+
+  /**
+   * @param element
+   * @returns transition duration in ms
+   */
+  function parseTransitionDuration(element) {
+    var computedStyle;
+    if (angular.isUndefined(computedStyle = element.currentStyle)) {
+      computedStyle = document.defaultView.getComputedStyle(element, '');
+    }
+    var transitionDuration = computedStyle['transitionDuration'];
+    var isMs = /^[\d.]+m/gi.test(transitionDuration);
+    transitionDuration = parseFloat(transitionDuration);
+    transitionDuration = !isMs ? (transitionDuration * 1000) : transitionDuration;
+    return transitionDuration;
+  }
+
+  /**
+   * Overrides tab.scope.deselect() & tab.scope.select() by adding displaying functionality.
+   *   - If tab is not visible we should set display property to 'none' to reduce
+   *     reflows / repaint of invisible contents
+   *   - Set display: 'none' only after tab transition ended. If it's terminated clear timeout.
+   *
+   * deselect() or select() should be called before updateHeightFromContent() because it depends
+   * on block height.
+   *
+   * Original deselect() and select() should be called when element is still visible.
+   * Because user's code could possibly contain DOM logic
+   * @param tab
+   */
+  function initTabDisplayCallbacks(tab) {
+    var tabScope = tab.scope,
+        deselect = tabScope.deselect,
+        select   = tabScope.select;
+
+    tabScope.tab = tab;
+
+    tabScope.deselect = function () {
+      deselect();
+
+      var deselectedTabContent = getContentByTabId(this.tab.id);
+      var $deselectedTabContent = angular.element(deselectedTabContent);
+
+      // Calculate transition duration here because transition can be overridden externally.
+      // Can't do that in controller setup because md-no-transition is applied.
+      if (deselectedTabContent && angular.isUndefined(this.slideTransitionDuration)) {
+        this.slideTransitionDuration = parseTransitionDuration(deselectedTabContent);
+      }
+
+      this.clearHideTimeout = setTimeout(angular.bind(this, function () {
+        $deselectedTabContent.css({display: 'none'});
+        delete this.clearHideTimeout;
+      }), this.slideTransitionDuration);
+    };
+
+    tabScope.select = function () {
+      var $selectedTabContent = angular.element(getContentByTabId(this.tab.id));
+      $selectedTabContent.css('display', '');
+      if (this.clearHideTimeout) {
+        clearTimeout(this.clearHideTimeout);
+      }
+
+      select();
+    };
   }
 
   /**
@@ -465,7 +548,10 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
 
       // if autoselect is enabled, select the newly added tab
       if (hasLoaded && ctrl.autoselect) $mdUtil.nextTick(function () {
-        $mdUtil.nextTick(function () { select(ctrl.tabs.indexOf(tab)); });
+        $mdUtil.nextTick(function () {
+          initTabDisplayCallbacks(tab);
+          select(ctrl.tabs.indexOf(tab));
+        });
       });
     });
     return tab;
