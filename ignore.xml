@@ -1,5 +1,5 @@
 <application>
-  <component name="IgnoreSettings" missingGitignore="true" ignoredFileStatus="true" outerIgnoreRules="true" outerIgnoreWrapperHeight="100" version="1.6" starredTemplates="" unignoreActions="true" settingsFixed="true">
+  <component name="IgnoreSettings" missingGitignore="true" ignoredFileStatus="true" outerIgnoreRules="true" outerIgnoreWrapperHeight="100" version="1.7.5" starredTemplates="" unignoreActions="true" hideIgnoredFiles="false" informTrackedIgnored="true" settingsFixed="true">
     <languages>
       <language id="Bazaar" NEW_FILE="true" ENABLE="true" />
       <language id="CloudFoundry" NEW_FILE="true" ENABLE="false" />
@@ -20,6 +20,7 @@
       <language id="Npm" NEW_FILE="true" ENABLE="false" />
       <language id="Perforce" NEW_FILE="true" ENABLE="true" />
       <language id="StyleLint" NEW_FILE="true" ENABLE="false" />
+      <language id="Stylint" NEW_FILE="true" ENABLE="false" />
       <language id="Team Foundation" NEW_FILE="true" ENABLE="true" />
     </languages>
     <userTemplates>
