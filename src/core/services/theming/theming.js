@@ -145,6 +145,12 @@ function detectDisabledThemes($mdThemingProvider) {
 
 /**
  * @ngdoc method
+ * @name $mdThemingProvider#appendTo
+ * @param {element} element to append the styles too. By default it picks document head
+ */
+
+/**
+ * @ngdoc method
  * @name $mdThemingProvider#enableBrowserColor
  * @param {Object=} options Options object for the browser color<br/>
  * `theme`   - A defined theme via `$mdThemeProvider` to use the palettes from. Default is `default` theme. <br/>
@@ -257,7 +263,7 @@ var themeConfig = {
   generateOnDemand : false, // Whether or not themes are to be generated on-demand (vs. eagerly).
   registeredStyles : [],    // Custom styles registered to be used in the theming of custom components.
   nonce : null,              // Nonce to be added as an attribute to the generated themes style tags.
-  appendTo: document.head   // Allow users to decide where to append the themes.
+  appendTo: document.head
 };
 
 /**
@@ -367,6 +373,10 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
 
     alwaysWatchTheme: function(alwaysWatch) {
       alwaysWatchTheme = alwaysWatch;
+    },
+
+    appendTo: function (head) {
+      themeConfig.appendTo = head;
     },
 
     enableBrowserColor: enableBrowserColor,
