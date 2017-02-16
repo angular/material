@@ -257,7 +257,7 @@ var themeConfig = {
   generateOnDemand : false, // Whether or not themes are to be generated on-demand (vs. eagerly).
   registeredStyles : [],    // Custom styles registered to be used in the theming of custom components.
   nonce : null,              // Nonce to be added as an attribute to the generated themes style tags.
-  appendTo: document.head
+  appendTo: document.head   // Allow users to decide where to append the themes.
 };
 
 /**
