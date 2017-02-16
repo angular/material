@@ -342,7 +342,8 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
       return angular.extend( { }, themeConfig, {
         defaultTheme : defaultTheme,
         alwaysWatchTheme : alwaysWatchTheme,
-        registeredStyles : [].concat(themeConfig.registeredStyles)
+        registeredStyles : [].concat(themeConfig.registeredStyles),
+        appendTo: appendTo
       });
     },
 
@@ -375,7 +376,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
       alwaysWatchTheme = alwaysWatch;
     },
 
-    appendTo: function (head) {
+    appendTo: function(head) {
       themeConfig.appendTo = head;
     },
 
