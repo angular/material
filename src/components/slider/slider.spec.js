@@ -801,4 +801,18 @@ describe('md-slider', function() {
     expect(wrapper.attr('tabindex')).toBe('2');
   });
 
+  it('should attr unit contain %', function() {
+    var slider = setup('ng-model="value" min="0" max="100" unit="%"');
+    pageScope.$apply('value = 150');
+
+    expect(slider.attr('unit')).toEqual('%');
+  });
+
+  it('should thumb text contain unit ', function() {
+    var slider = setup('ng-model="value" min="0" max="100" unit="cm"');
+
+    pageScope.$apply('value = 30');
+    expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30cm');
+  });
+
 });

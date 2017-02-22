@@ -118,12 +118,12 @@ function SliderContainerDirective() {
  * </hljs>
  * <h4>Discrete Mode</h4>
  * <hljs lang="html">
- * <md-slider md-discrete ng-model="myDiscreteValue" step="10" min="10" max="130">
+ * <md-slider md-discrete ng-model="myDiscreteValue" unit="%" step="10" min="10" max="130">
  * </md-slider>
  * </hljs>
  * <h4>Invert Mode</h4>
  * <hljs lang="html">
- * <md-slider md-invert ng-model="myValue" step="10" min="10" max="130">
+ * <md-slider md-invert ng-model="myValue" unit="%" step="10" min="10" max="130">
  * </md-slider>
  * </hljs>
  *
@@ -218,6 +218,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     angular.isDefined(attr.max) ? attr.$observe('max', updateMax) : updateMax(100);
     angular.isDefined(attr.step)? attr.$observe('step', updateStep) : updateStep(1);
     angular.isDefined(attr.round)? attr.$observe('round', updateRound) : updateRound(DEFAULT_ROUND);
+    angular.isDefined(attr.unit)? attr.$observe('unit', updateUnit) : updateUnit(null);
 
     // We have to manually stop the $watch on ngDisabled because it exists
     // on the parent scope, and won't be automatically destroyed when
@@ -268,6 +269,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     var max;
     var step;
     var round;
+    var unit;
     function updateMin(value) {
       min = parseFloat(value);
       element.attr('aria-valuemin', value);
@@ -280,6 +282,10 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     }
     function updateStep(value) {
       step = parseFloat(value);
+    }
+
+    function updateUnit(value) {
+      unit = value;
     }
     function updateRound(value) {
       // Set max round digits to 6, after 6 the input uses scientific notation
@@ -421,7 +427,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       scope.modelValue = ngModelCtrl.$viewValue;
       element.attr('aria-valuenow', ngModelCtrl.$viewValue);
       setSliderPercent(percent);
-      thumbText.text( ngModelCtrl.$viewValue );
+      thumbText.text( ngModelCtrl.$viewValue + unit );
     }
 
     function minMaxValidator(value, minValue, maxValue) {
@@ -548,7 +554,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       var exactVal = percentToValue( positionToPercent( x ));
       var closestVal = minMaxValidator( stepValidator(exactVal) );
       setSliderPercent( positionToPercent(x) );
-      thumbText.text( closestVal );
+      thumbText.text( closestVal + unit );
     }
 
     /**
@@ -573,7 +579,6 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       if (!vertical && $mdUtil.bidi() === 'rtl') {
         calc = 1 - calc;
       }
-
       return Math.max(0, Math.min(1, vertical ? 1 - calc : calc));
     }
 
