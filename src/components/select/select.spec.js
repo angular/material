@@ -1294,6 +1294,62 @@ describe('<md-select>', function() {
         expect($rootScope.someModel).toBe(2);
       });
 
+      it('supports typing non-english option names', inject(function($document, $rootScope) {
+        var words = ['algebra', 'álgebra'];
+        var el = setupSelect('ng-model="someModel"', words).find('md-select');
+
+        pressKey(el, words[1].charCodeAt(0));
+        expect($rootScope.someModel).toBe(words[1]);
+      }));
+
+      it('supports typing unicode option names', inject(function($document, $rootScope) {
+        var words = ['algebra', '太阳'];
+        var el = setupSelect('ng-model="someModel"', words).find('md-select');
+
+        pressKey(el, words[1].charCodeAt(0));
+        expect($rootScope.someModel).toBe(words[1]);
+      }));
+
+      // Note, this test is designed to check the shouldHandleKey() method which is the default
+      // method if the keypress doesn't match one of the KNOWN keys such as up/down/enter/escape/etc.
+      it('does not swallow useful keys (fn, arrow, etc)', function() {
+        var keyCodes = [17, 92, 113]; // ctrl, comma (`,`), and F3
+        var customEvent = {
+          type: 'keydown',
+          preventDefault: jasmine.createSpy('preventDefault')
+        };
+
+        var words = ['algebra', 'math', 'science'];
+        var el = setupSelect('ng-model="someModel"', words).find('md-select');
+
+        keyCodes.forEach(function(code) {
+          customEvent.keyCode = code;
+          pressKey(el, null, customEvent);
+          expect(customEvent.preventDefault).not.toHaveBeenCalled();
+        });
+      });
+
+      it('does not swallow modifier keys', function() {
+        var customEvent = {
+          type: 'keydown',
+          preventDefault: jasmine.createSpy('preventDefault')
+        };
+
+        var words = ['algebra', 'math', 'science'];
+        var el = setupSelect('ng-model="someModel"', words).find('md-select');
+
+        customEvent.keyCode = 70;
+        customEvent.ctrlKey = true;
+        pressKey(el, null, customEvent);
+        expect(customEvent.preventDefault).not.toHaveBeenCalled();
+
+        customEvent.keyCode = 82;
+        customEvent.ctrlKey = false;
+        customEvent.metaKey = true;
+        pressKey(el, null, customEvent);
+        expect(customEvent.preventDefault).not.toHaveBeenCalled();
+      });
+
       it('disallows selection of disabled options', function() {
         var optsTemplate =
           '<md-option value="1">1</md-option>' +
@@ -1385,11 +1441,13 @@ describe('<md-select>', function() {
   }
 
 
-  function pressKey(el, code) {
-    el.triggerHandler({
+  function pressKey(el, code, customEvent) {
+    var event = customEvent || {
       type: 'keydown',
       keyCode: code
-    });
+    };
+
+    el.triggerHandler(event);
   }
 
   function clickOption(select, index) {
