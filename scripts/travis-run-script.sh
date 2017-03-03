@@ -1,10 +1,16 @@
 #!/bin/bash
 
-# Terminate the execution if anything fails in the pipeline.
-set -e
+# Enable tracing and Terminate the execution if anything fails in the pipeline.
+set -xe
 
 # Ensure that scripts will run from project dir.
 cd $(dirname $0)/..
+
+# This is the default set of browsers to use on the CI server unless overridden via env variable
+if [[ -z "$BROWSERS" ]]
+then
+  BROWSERS="Chrome,Firefox"
+fi
 
 # When Travis CI specifies an Angular version, try to install those for tests.
 if [[ -n "$NG_VERSION" ]]; then
