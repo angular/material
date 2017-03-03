@@ -50,9 +50,11 @@ for VERSION in "${VERSIONS[@]}"; do
   node ./node_modules/gulp/bin/gulp.js karma --config=config/karma-ci.conf.js --reporters='dots' --browsers=$BROWSERS
   LAST_EXIT_CODE=$?
 
-  echo "######################################################################"
-  echo "#######        Finished:  ngM1 + AngularJS (${VERSION})        #######"
-  echo "######################################################################"
+  echo "\n"
+  echo "......................................................................"
+  echo ".......  Finished:  ngM1 + AngularJS (${VERSION})        ............."
+  echo "......................................................................"
+  echo "\n"
 
   if [ $LAST_EXIT_CODE != "0" ]; then
     echo "STATUS: FAILED"
