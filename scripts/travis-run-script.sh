@@ -21,7 +21,11 @@ gulp build
 # Wait for the tunnel to be ready
 ./scripts/sauce/wait-tunnel.sh
 
-gulp karma --config=config/karma-sauce.conf.js --browsers=$BROWSERS --reporters='dots'
+if [[ -n "$BROWSERS" ]]; then
+    gulp karma --config=config/karma-sauce.conf.js --browsers=$BROWSERS --reporters='dots'
+else
+    gulp karma --config=config/karma-sauce.conf.js --reporters='dots'
+fi
 
 # Shutdown the tunnel
 ./scripts/sauce/stop-tunnel.sh
