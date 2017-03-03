@@ -16,7 +16,7 @@ module.exports = function(config) {
     // Maximum 10 browsers - SauceLabs limit
     // Those pre-configured browsers will always run in the CI Release Mode to confirm, that all
     // previous jobs have passed.
-    browsers: ['SL_CHROME', 'SL_FIREFOX', 'SL_IE11'],
+    browsers: ['SL_CHROME'],   //, 'SL_FIREFOX', 'SL_IE11'],
     customLaunchers: require('./sauce-browsers.json'),
 
     captureTimeout: 180 * 1000,
