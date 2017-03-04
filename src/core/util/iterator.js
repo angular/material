@@ -195,7 +195,7 @@
      * @param {boolean} backwards Specifies the direction of searching (forwards/backwards)
      * @param {*} item The item whose subsequent item we are looking for
      * @param {Function=} validate The `validate` function
-     * @param {integer=} limit The recursion limit
+     * @param {number=} limit The recursion limit
      *
      * @returns {*} The subsequent item or null
      */
