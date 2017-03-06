@@ -3,8 +3,4 @@
     <option name="COLLAPSE_DOC_COMMENTS" value="true" />
     <option name="COLLAPSE_CUSTOM_FOLDING_REGIONS" value="true" />
   </component>
-  <component name="JSCodeFoldingSettings">
-    <option name="collapseArrayLiterals" value="true" />
-    <option name="COLLAPSE_ARRAY_LITERALS" value="true" />
-  </component>
 </application>
