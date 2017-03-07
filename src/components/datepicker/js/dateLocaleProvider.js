@@ -15,7 +15,7 @@
    * @property {(Array<string>)=} months Array of month names (in order).
    * @property {(Array<string>)=} shortMonths Array of abbreviated month names.
    * @property {(Array<string>)=} days Array of the days of the week (in order).
-   * @property {(Array<string>)=} shortDays Array of abbreviated dayes of the week.
+   * @property {(Array<string>)=} shortDays Array of abbreviated days of the week.
    * @property {(Array<string>)=} dates Array of dates of the month. Only necessary for locales
    *     using a numeral system other than [1, 2, 3...].
    * @property {(Array<string>)=} firstDayOfWeek The first day of the week. Sunday = 0, Monday = 1,
