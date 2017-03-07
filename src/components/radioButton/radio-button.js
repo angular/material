@@ -227,9 +227,6 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
  * the `<md-radio-button>` directive provides ink effects, ARIA support, and
  * supports use within named radio groups.
  *
- * @param {string} ngModel Assignable angular expression to data-bind to.
- * @param {string=} ngChange Angular expression to be executed when input changes due to user
- *    interaction with the input element.
  * @param {string} ngValue Angular expression which sets the value to which the expression should
  *    be set when selected.
  * @param {string} value The value to which the expression should be set when selected.
