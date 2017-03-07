@@ -125,7 +125,7 @@ function VirtualRepeatContainerController($$rAF, $mdUtil, $mdConstant, $parse, $
   this.maxElementPixels = $mdConstant.ELEMENT_MAX_PIXELS;
 
   if (this.$attrs.mdTopIndex) {
-    /** @type {function(angular.Scope): number} Binds to topIndex on Angular scope */
+    /** @type {function(angular.Scope): number} Binds to topIndex on AngularJS scope */
     this.bindTopIndex = $parse(this.$attrs.mdTopIndex);
     /** @type {number} The index of the item that is at the top of the scroll container */
     this.topIndex = this.bindTopIndex(this.$scope);
@@ -761,12 +761,14 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
     this.container.setScrollSize(itemsLength * this.itemSize);
   }
 
+  var cleanupFirstRender = false, firstRenderStartIndex;
   if (this.isFirstRender) {
+    cleanupFirstRender = true;
     this.isFirstRender = false;
-    var startIndex = this.$attrs.mdStartIndex ?
+    firstRenderStartIndex = this.$attrs.mdStartIndex ?
       this.$scope.$eval(this.$attrs.mdStartIndex) :
       this.container.topIndex;
-    this.container.scrollToIndex(startIndex);
+    this.container.scrollToIndex(firstRenderStartIndex);
   }
 
   // Detach and pool any blocks that are no longer in the viewport.
@@ -820,6 +822,10 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
         this.blocks[maxIndex] && this.blocks[maxIndex].element[0].nextSibling);
   }
 
+  // DOM manipulation may have altered scroll, so scroll again
+  if (cleanupFirstRender) {
+    this.container.scrollToIndex(firstRenderStartIndex);
+  }
   // Restore $$checkUrlChange.
   this.$browser.$$checkUrlChange = this.browserCheckUrlChange;
 

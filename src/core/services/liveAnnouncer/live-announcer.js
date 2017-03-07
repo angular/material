@@ -2,7 +2,7 @@
  * @ngdoc module
  * @name material.core.liveannouncer
  * @description
- * Angular Material Live Announcer to provide accessibility for Voice Readers.
+ * AngularJS Material Live Announcer to provide accessibility for Voice Readers.
  */
 angular
   .module('material.core')

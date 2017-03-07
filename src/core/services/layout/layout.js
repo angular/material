@@ -35,7 +35,7 @@
   /**
    *   registerLayoutAPI()
    *
-   *   The original ngMaterial Layout solution used attribute selectors and CSS.
+   *   The original AngularJS Material Layout solution used attribute selectors and CSS.
    *
    *  ```html
    *  <div layout="column"> My Content </div>
@@ -239,8 +239,8 @@
 
   // *********************************************************************************
   //
-  // These functions create registration functions for ngMaterial Layout attribute directives
-  // This provides easy translation to switch ngMaterial attribute selectors to
+  // These functions create registration functions for AngularJS Material Layout attribute directives
+  // This provides easy translation to switch AngularJS Material attribute selectors to
   // CLASS selectors and directives; which has huge performance implications
   // for IE Browsers
   //
@@ -295,7 +295,7 @@
   }
 
   /**
-   * Creates a registration function for ngMaterial Layout attribute directive.
+   * Creates a registration function for AngularJS Material Layout attribute directive.
    * This is a `simple` transpose of attribute usage to class usage; where we ignore
    * any attribute value
    */

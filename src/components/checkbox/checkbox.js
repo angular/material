@@ -24,7 +24,7 @@ angular
  * @param {string=} name Property name of the form under which the control is published.
  * @param {expression=} ng-true-value The value to which the expression should be set when selected.
  * @param {expression=} ng-false-value The value to which the expression should be set when not selected.
- * @param {string=} ng-change Angular expression to be executed when input changes due to user interaction with the input element.
+ * @param {string=} ng-change AngularJS expression to be executed when input changes due to user interaction with the input element.
  * @param {boolean=} md-no-ink Use of attribute indicates use of ripple ink effects
  * @param {string=} aria-label Adds label to checkbox for accessibility.
  *     Defaults to checkbox's text. If no default text is found, a warning will be logged.
@@ -135,7 +135,7 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
 
       $mdAria.expectWithText(element, 'aria-label');
 
-      // Reuse the original input[type=checkbox] directive from Angular core.
+      // Reuse the original input[type=checkbox] directive from AngularJS core.
       // This is a bit hacky as we need our own event listener and own render
       // function.
       inputDirective.link.pre(scope, {

@@ -1,11 +1,11 @@
 # Introduction
 
-Angular Material is a cutting edge framework, which uses extensively advanced css features. Internet Explorer is known to have performance issues with these features. Some of the notable issues are with Layout calculations, animations and border rendering. In this documentation we will provide a couple of optimizations which could make the performance in Internet Explorer better.
+AngularJS Material is a cutting edge framework, which uses extensively advanced css features. Internet Explorer is known to have performance issues with these features. Some of the notable issues are with Layout calculations, animations and border rendering. In this documentation we will provide a couple of optimizations which could make the performance in Internet Explorer better.
 This document should just be consulted after the angular part of the application was optimized: Reducing the number of watchers, enable production mode, etc.
 
 # Theming
 
-The Angular Material theming works by injecting inline styles to the head. The obvious benefit is that the theme can be switched at runtime.  Unfortunately these inline styles are a performance burden for Internet Explorer. When switching of themes at runtime are not important, the theming css could be exported to an external file. The following stages should be performed:
+The AngularJS Material theming works by injecting inline styles to the head. The obvious benefit is that the theme can be switched at runtime.  Unfortunately these inline styles are a performance burden for Internet Explorer. When switching of themes at runtime are not important, the theming css could be exported to an external file. The following stages should be performed:
 
 * Configure your theme as explained [here](https://material.angularjs.org/latest/Theming/03_configuring_a_theme) - This step is just required when a custom theme is used
 * Run the application in chrome 
@@ -97,7 +97,7 @@ See the app [Material Adaptive Shrine](https://github.com/angular/material-adapt
 
 #Bells and whistles
 
-Angular material comes with all bells and whistles turned on by default. These could be switched off selectively for Internet Explorer.
+AngularJS Material comes with all bells and whistles turned on by default. These could be switched off selectively for Internet Explorer.
 
 ##Animations
 

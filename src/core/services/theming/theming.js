@@ -121,7 +121,7 @@ function detectDisabledThemes($mdThemingProvider) {
 /**
  * @ngdoc method
  * @name $mdThemingProvider#registerStyles
- * @param {string} styles The styles to be appended to Angular Material's built in theme css.
+ * @param {string} styles The styles to be appended to AngularJS Material's built in theme css.
  */
 /**
  * @ngdoc method

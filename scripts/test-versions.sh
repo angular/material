@@ -1,9 +1,9 @@
 # The purpose of this file is to download
 # assigned AngularJS source files and test
-# them against this build of AngularMaterial.
+# them against this build of AngularJS Material.
 
 # This works by pulling in all of the tags
-# from angular.js, finding the highest version
+# from AngularJS, finding the highest version
 # numbers for each branch (e.g. 1.3 => 1.3.X where
 # X is the highest patch release). For each
 # detected version it will then copy over each
@@ -21,8 +21,8 @@
 # [CONFIG VALUES]
 
 # Available Options are: 1.X, 1.X.X, 1.X.X-(beta|rc).X or snapshot
-VERSIONS=(1.3 1.4 1.5 1.6 snapshot)
-BROWSERS="Firefox"
+VERSIONS=(1.4 1.5 1.6 snapshot)
+BROWSERS="Chrome"
 
 #
 # DO NOT EDIT PAST THIS LINE
@@ -38,7 +38,10 @@ fi;
 
 for VERSION in "${VERSIONS[@]}"; do
 
-  echo "\n\n--- Testing AngularMaterial against AngularJS (${VERSION}) ---\n"
+  echo "######################################################################"
+  echo "#######                     Jenkins Build                      #######"
+  echo "#######   Testing AngularJS Material + AngularJS (${VERSION})  #######"
+  echo "######################################################################"
 
   ./scripts/fetch-angular-version.sh $VERSION
 
@@ -47,7 +50,11 @@ for VERSION in "${VERSIONS[@]}"; do
   node ./node_modules/gulp/bin/gulp.js karma --config=config/karma-ci.conf.js --reporters='dots' --browsers=$BROWSERS
   LAST_EXIT_CODE=$?
 
-  echo "\n\n--- Finished Testing AngularMaterial against AngularJS (${VERSION}) ---"
+  echo "\n"
+  echo "......................................................................"
+  echo ".......  Finished:  ngM1 + AngularJS (${VERSION})        ............."
+  echo "......................................................................"
+  echo "\n"
 
   if [ $LAST_EXIT_CODE != "0" ]; then
     echo "STATUS: FAILED"

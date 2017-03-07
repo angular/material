@@ -18,7 +18,6 @@
   "SL_FIREFOX": {
     "base": "SauceLabs",
     "browserName": "firefox",
-    "platform": "Windows 10",
     "version": "latest-1"
   },
   "SL_FIREFOXBETA": {
@@ -83,7 +82,7 @@
     "base": "SauceLabs",
     "browserName": "internet explorer",
     "platform": "Windows 10",
-    "version": "11"
+    "version": "11.103"
   },
   "SL_EDGE": {
     "base": "SauceLabs",
@@ -151,6 +150,12 @@
     "os": "OS X",
     "os_version": "El Capitan"
   },
+  "BS_SAFARI10": {
+      "base": "BrowserStack",
+      "browser": "safari",
+      "os": "OS X",
+      "os_version": "Sierra"
+    },
   "BS_IOS7": {
     "base": "BrowserStack",
     "device": "iPhone 5S",

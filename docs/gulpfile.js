@@ -125,7 +125,7 @@ gulp.task('docs-js', ['docs-app', 'docs-html2js', 'demos', 'build', 'docs-js-dep
   return series(
     gulp.src([
       'node_modules/angularytics/dist/angularytics.js',
-      'dist/docs/js/app.js', // Load the Angular module initialization at first.
+      'dist/docs/js/app.js', // Load the AngularJS module initialization at first.
       'dist/docs/js/**/*.js'
     ])
       .pipe(concat('docs.js'))

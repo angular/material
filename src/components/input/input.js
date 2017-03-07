@@ -296,7 +296,7 @@ function labelDirective() {
  * - The textarea's height gets set on initialization, as well as while the user is typing. In certain situations
  * (e.g. while animating) the directive might have been initialized, before the element got it's final height. In
  * those cases, you can trigger a resize manually by broadcasting a `md-resize-textarea` event on the scope.
- * - If you wan't a `textarea` to stop growing at a certain point, you can specify the `max-rows` attribute.
+ * - If you want a `textarea` to stop growing at a certain point, you can specify the `max-rows` attribute.
  * - The textarea's bottom border acts as a handle which users can drag, in order to resize the element vertically.
  * Once the user has resized a `textarea`, the autogrowing functionality becomes disabled. If you don't want a
  * `textarea` to be resizeable by the user, you can add the `md-no-resize` attribute.
@@ -372,7 +372,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
     scope.$watch(isErrorGetter, containerCtrl.setInvalid);
 
     // When the developer uses the ngValue directive for the input, we have to observe the attribute, because
-    // Angular's ngValue directive is just setting the `value` attribute.
+    // AngularJS's ngValue directive is just setting the `value` attribute.
     if (attr.ngValue) {
       attr.$observe('value', inputCheckValue);
     }
@@ -447,7 +447,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
       }, 10, false);
 
       // We could leverage ngModel's $parsers here, however it
-      // isn't reliable, because Angular trims the input by default,
+      // isn't reliable, because AngularJS trims the input by default,
       // which means that growTextarea won't fire when newlines and
       // spaces are added.
       element.on('input', growTextarea);
@@ -699,7 +699,7 @@ function placeholderDirective($compile) {
       // Note that we need to do this in the pre-link, as opposed to the post link, if we want to
       // support data bindings in the placeholder. This is necessary, because we have a case where
       // we transfer the placeholder value to the `<label>` and we remove it from the original `<input>`.
-      // If we did this in the post-link, Angular would have set up the observers already and would be
+      // If we did this in the post-link, AngularJS would have set up the observers already and would be
       // re-adding the attribute, even though we removed it from the element.
       pre: preLink
     }
@@ -724,7 +724,7 @@ function placeholderDirective($compile) {
       // Move the placeholder expression to the label
       var newLabel = angular.element('<label ng-click="delegateClick()" tabindex="-1">' + attr.placeholder + '</label>');
 
-      // Note that we unset it via `attr`, in order to get Angular
+      // Note that we unset it via `attr`, in order to get AngularJS
       // to remove any observers that it might have set up. Otherwise
       // the attribute will be added on the next digest.
       attr.$set('placeholder', null);

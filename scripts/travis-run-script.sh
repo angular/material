@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Terminate the execution if anything fails in the pipeline.
-set -e
+# Enable tracing and Terminate the execution if anything fails in the pipeline.
+set -xe
 
 # Ensure that scripts will run from project dir.
 cd $(dirname $0)/..
 
-# When Travis CI specifies an Angular version, try to install those for tests.
+# When Travis CI specifies an AngularJS version, try to install those for tests.
 if [[ -n "$NG_VERSION" ]]; then
   ./scripts/fetch-angular-version.sh "$NG_VERSION"
 fi
@@ -21,7 +21,11 @@ gulp build
 # Wait for the tunnel to be ready
 ./scripts/sauce/wait-tunnel.sh
 
-gulp karma --config=config/karma-sauce.conf.js --browsers=$BROWSER --reporters='dots'
+if [[ -n "$BROWSERS" ]]; then
+    gulp karma --config=config/karma-sauce.conf.js --browsers=$BROWSERS --reporters='dots'
+else
+    gulp karma --config=config/karma-sauce.conf.js --reporters='dots'
+fi
 
 # Shutdown the tunnel
 ./scripts/sauce/stop-tunnel.sh

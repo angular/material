@@ -26,7 +26,7 @@
    * @module material.components.colors
    *
    * @description
-   * With only defining themes, one couldn't get non ngMaterial elements colored with Material colors,
+   * With only defining themes, one couldn't get non AngularJS Material elements colored with Material colors,
    * `$mdColors` service is used by the md-color directive to convert the 1..n color expressions to RGBA values and will apply
    * those values to element as CSS property values.
    *

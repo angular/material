@@ -4,7 +4,7 @@
 
 # &lt;md-button&gt;
 
-Below is a snapshot of the Angular Material **button** component demos with the default themes and standard options:
+Below is a snapshot of the AngularJS Material **button** component demos with the default themes and standard options:
 
 ![buttonsdemo](https://cloud.githubusercontent.com/assets/210413/7947020/fafde934-093f-11e5-9584-27eb2deedd0f.png)
 
@@ -43,7 +43,7 @@ When defining custom CSS overrides, developers should create their own CSS class
 <br/>
 ### Theme Requirements
 
-All Angular Material components have specific CSS rules constructed using the theme name and theme-class overrides. For the **Default** theme, however, these rules are added to the components styles using the `.md-default-theme` class. If, however, you have configured a custom theme called `companyX` that is **NOT** the default theme, then any CSS overrides **must** use fully-specified classname. For `<md-button>` the **fully-specified classname** will be `.md-button.md-companyX-theme.btn1`.
+All AngularJS Material components have specific CSS rules constructed using the theme name and theme-class overrides. For the **Default** theme, however, these rules are added to the components styles using the `.md-default-theme` class. If, however, you have configured a custom theme called `companyX` that is **NOT** the default theme, then any CSS overrides **must** use fully-specified classname. For `<md-button>` the **fully-specified classname** will be `.md-button.md-companyX-theme.btn1`.
 
 <hljs lang="css">
 .md-button.md-companyX-theme.btn1            {  }

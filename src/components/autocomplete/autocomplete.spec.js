@@ -2624,18 +2624,18 @@ describe('<md-autocomplete>', function() {
       var template = '<div md-highlight-text="query">{{message}}</div>';
 
       var scope = createScope(null, {
-        message: 'Angular&Material',
-        query: 'Angular&'
+        message: 'AngularJS&Material',
+        query: 'AngularJS&'
       });
 
       var element = compile(template, scope);
 
-      expect(element.html()).toBe('<span class="highlight">Angular&amp;</span>Material');
+      expect(element.html()).toBe('<span class="highlight">AngularJS&amp;</span>Material');
 
-      scope.query = 'Angular&Material';
+      scope.query = 'AngularJS&Material';
       scope.$apply();
 
-      expect(element.html()).toBe('<span class="highlight">Angular&amp;Material</span>');
+      expect(element.html()).toBe('<span class="highlight">AngularJS&amp;Material</span>');
 
       element.remove();
     });
@@ -2644,24 +2644,24 @@ describe('<md-autocomplete>', function() {
       var template = '<div md-highlight-text="query">{{message}}</div>';
 
       var scope = createScope(null, {
-        message: 'Angular&amp;Material',
+        message: 'AngularJS&amp;Material',
         query: ''
       });
 
       var element = compile(template, scope);
 
-      expect(element.html()).toBe('Angular&amp;amp;Material');
+      expect(element.html()).toBe('AngularJS&amp;amp;Material');
 
-      scope.query = 'Angular&amp;Material';
+      scope.query = 'AngularJS&amp;Material';
       scope.$apply();
 
-      expect(element.html()).toBe('<span class="highlight">Angular&amp;amp;Material</span>');
+      expect(element.html()).toBe('<span class="highlight">AngularJS&amp;amp;Material</span>');
 
 
-      scope.query = 'Angular&';
+      scope.query = 'AngularJS&';
       scope.$apply();
 
-      expect(element.html()).toBe('<span class="highlight">Angular&amp;</span>amp;Material');
+      expect(element.html()).toBe('<span class="highlight">AngularJS&amp;</span>amp;Material');
 
       element.remove();
     });
@@ -2673,13 +2673,13 @@ describe('<md-autocomplete>', function() {
       var template = '<div md-highlight-text="query">{{message}}</div>';
 
       var scope = createScope(null, {
-        message: 'Angular Material',
+        message: 'AngularJS Material',
         query: '<img src="img" onerror="alert(1)">'
       });
 
       var element = compile(template, scope);
 
-      expect(element.html()).toBe('Angular Material');
+      expect(element.html()).toBe('AngularJS Material');
       expect(window.alert).not.toHaveBeenCalled();
 
       element.remove();

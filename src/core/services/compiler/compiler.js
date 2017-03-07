@@ -2,7 +2,7 @@
  * @ngdoc module
  * @name material.core.compiler
  * @description
- * Angular Material template and element compiler.
+ * AngularJS Material template and element compiler.
  */
 angular
   .module('material.core')
@@ -13,10 +13,10 @@ angular
  * @name $mdCompiler
  * @module material.core.compiler
  * @description
- * The $mdCompiler service is an abstraction of Angular's compiler, that allows developers
+ * The $mdCompiler service is an abstraction of AngularJS's compiler, that allows developers
  * to easily compile an element with options like in a Directive Definition Object.
  *
- * > The compiler powers a lot of components inside of Angular Material.
+ * > The compiler powers a lot of components inside of AngularJS Material.
  * > Like the `$mdPanel` or `$mdDialog`.
  *
  * @usage
@@ -103,8 +103,8 @@ function MdCompilerService($q, $templateRequest, $injector, $compile, $controlle
  * @name $mdCompiler#compile
  * @description
  *
- * A method to compile a HTML template with the Angular compiler.
- * The `$mdCompiler` is wrapper around the Angular compiler and provides extra functionality
+ * A method to compile a HTML template with the AngularJS compiler.
+ * The `$mdCompiler` is wrapper around the AngularJS compiler and provides extra functionality
  * like controller instantiation or async resolves.
  *
  * @param {!Object} options An options object, with the following properties:
@@ -256,7 +256,7 @@ MdCompilerService.prototype._compileElement = function(locals, element, options)
 
       var ctrl = invokeCtrl();
 
-      // Unique identifier for Angular Route ngView controllers.
+      // Unique identifier for AngularJS Route ngView controllers.
       element.data('$ngControllerController', ctrl);
       element.children().data('$ngControllerController', ctrl);
 
@@ -264,7 +264,7 @@ MdCompilerService.prototype._compileElement = function(locals, element, options)
       compileData.controller = ctrl;
     }
 
-    // Invoke the Angular $compile link function.
+    // Invoke the AngularJS $compile link function.
     return ngLinkFn(scope);
   }
 

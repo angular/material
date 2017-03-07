@@ -243,7 +243,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
 
       // Adds an extra option that will hold the selected value for the
       // cases where the select is a part of a non-angular form. This can be done with a ng-model,
-      // however if the `md-option` is being `ng-repeat`-ed, Angular seems to insert a similar
+      // however if the `md-option` is being `ng-repeat`-ed, AngularJS seems to insert a similar
       // `option` node, but with a value of `? string: <value> ?` which would then get submitted.
       // This also goes around having to prepend a dot to the name attribute.
       autofillClone.append(
@@ -567,7 +567,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
           e.preventDefault();
           openSelect(e);
         } else {
-          if ($mdConstant.isInputKey(e) || $mdConstant.isNumPadKey(e)) {
+          if (shouldHandleKey(e, $mdConstant)) {
             e.preventDefault();
 
             var node = selectMenuCtrl.optNodeForKeyboardSearch(e);
@@ -1396,7 +1396,7 @@ function SelectProvider($$interimElementProvider) {
               $mdUtil.nextTick($mdSelect.hide, true);
               break;
             default:
-              if ($mdConstant.isInputKey(ev) || $mdConstant.isNumPadKey(ev)) {
+              if (shouldHandleKey(ev, $mdConstant)) {
                 var optNode = dropDown.controller('mdSelectMenu').optNodeForKeyboardSearch(ev);
                 opts.focusedNode = optNode || opts.focusedNode;
                 optNode && optNode.focus();
@@ -1673,4 +1673,13 @@ function SelectProvider($$interimElementProvider) {
     }
     return isScrollable;
   }
+
+}
+
+function shouldHandleKey(ev, $mdConstant) {
+  var char = String.fromCharCode(ev.keyCode);
+  var isNonUsefulKey = (ev.keyCode <= 31);
+
+  return (char && char.length && !isNonUsefulKey &&
+    !$mdConstant.isMetaKey(ev) && !$mdConstant.isFnLockKey(ev) && !$mdConstant.hasModifierKey(ev));
 }
