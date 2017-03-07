@@ -75,7 +75,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
 
   function linkFunc(scope, element, attr) {
     // Set constants.
-    var tooltipId = 'tooltip-' + $mdUtil.nextUid();
+    var tooltipId = 'md-tooltip-' + $mdUtil.nextUid();
     var parent = $mdUtil.getParentWithPointerEvents(element);
     var debouncedOnResize = $$rAF.throttle(updatePosition);
     var mouseActive = false;
