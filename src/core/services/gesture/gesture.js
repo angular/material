@@ -524,7 +524,7 @@ function attachToDocument( $mdGesture, $$MdGestureHandler ) {
   if (!isInitialized && $mdGesture.isHijackingClicks ) {
     /*
      * If hijack clicks is true, we preventDefault any click that wasn't
-     * sent by ngMaterial. This is because on older Android & iOS, a false, or 'ghost',
+     * sent by AngularJS Material. This is because on older Android & iOS, a false, or 'ghost',
      * click event will be sent ~400ms after a touchend event happens.
      * The only way to know if this click is real is to prevent any normal
      * click events, and add a flag to events sent by material so we know not to prevent those.

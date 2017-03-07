@@ -348,7 +348,7 @@
     /** Pre-bound handler for the window blur event. Allows for it to be removed later. */
     this.windowBlurHandler = angular.bind(this, this.handleWindowBlur);
 
-    /** The built-in Angular date filter. */
+    /** The built-in AngularJS date filter. */
     this.ngDateFilter = $filter('date');
 
     /** @type {Number} Extra margin for the left side of the floating calendar pane. */
@@ -390,7 +390,7 @@
       });
     }
 
-    // For Angular 1.4 and older, where there are no lifecycle hooks but bindings are pre-assigned,
+    // For AngularJS 1.4 and older, where there are no lifecycle hooks but bindings are pre-assigned,
     // manually call the $onInit hook.
     if (angular.version.major === 1 && angular.version.minor <= 4) {
       this.$onInit();
@@ -399,7 +399,7 @@
   }
 
   /**
-   * Angular Lifecycle hook for newer Angular versions.
+   * AngularJS Lifecycle hook for newer AngularJS versions.
    * Bindings are not guaranteed to have been assigned in the controller, but they are in the $onInit hook.
    */
   DatePickerCtrl.prototype.$onInit = function() {
@@ -418,20 +418,20 @@
 
   /**
    * Sets up the controller's reference to ngModelController and
-   * applies Angular's `input[type="date"]` directive.
+   * applies AngularJS's `input[type="date"]` directive.
    * @param {!angular.NgModelController} ngModelCtrl Instance of the ngModel controller.
    * @param {Object} mdInputContainer Instance of the mdInputContainer controller.
-   * @param {Object} inputDirective Config for Angular's `input` directive.
+   * @param {Object} inputDirective Config for AngularJS's `input` directive.
    */
   DatePickerCtrl.prototype.configureNgModel = function(ngModelCtrl, mdInputContainer, inputDirective) {
     this.ngModelCtrl = ngModelCtrl;
     this.mdInputContainer = mdInputContainer;
 
-    // The input needs to be [type="date"] in order to be picked up by Angular.
+    // The input needs to be [type="date"] in order to be picked up by AngularJS.
     this.$attrs.$set('type', 'date');
 
     // Invoke the `input` directive link function, adding a stub for the element.
-    // This allows us to re-use Angular's logic for setting the timezone via ng-model-options.
+    // This allows us to re-use AngularJS's logic for setting the timezone via ng-model-options.
     // It works by calling the link function directly which then adds the proper `$parsers` and
     // `$formatters` to the ngModel controller.
     inputDirective[0].link.pre(this.$scope, {
@@ -467,7 +467,7 @@
     ngModelCtrl.$viewChangeListeners.unshift(angular.bind(this, this.updateErrorState));
 
     // Forwards any events from the input to the root element. This is necessary to get `updateOn`
-    // working for events that don't bubble (e.g. 'blur') since Angular binds the handlers to
+    // working for events that don't bubble (e.g. 'blur') since AngularJS binds the handlers to
     // the `<md-datepicker>`.
     var updateOn = self.$mdUtil.getModelOption(ngModelCtrl, 'updateOn');
 
@@ -896,7 +896,7 @@
 
   /**
    * Sets the ng-model value by first converting the date object into a strng. Converting it
-   * is necessary, in order to pass Angular's `input[type="date"]` validations. Angular turns
+   * is necessary, in order to pass AngularJS's `input[type="date"]` validations. AngularJS turns
    * the value into a Date object afterwards, before setting it on the model.
    * @param {Date=} value Date to be set as the model value.
    */

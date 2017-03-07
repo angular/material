@@ -125,7 +125,7 @@
     };
 
     /**
-     * Add special matchers used in the Angular-Material spec.
+     * Add special matchers used in the AngularJS-Material spec.
      */
     jasmine.addMatchers({
 

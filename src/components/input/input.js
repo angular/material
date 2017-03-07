@@ -372,7 +372,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
     scope.$watch(isErrorGetter, containerCtrl.setInvalid);
 
     // When the developer uses the ngValue directive for the input, we have to observe the attribute, because
-    // Angular's ngValue directive is just setting the `value` attribute.
+    // AngularJS's ngValue directive is just setting the `value` attribute.
     if (attr.ngValue) {
       attr.$observe('value', inputCheckValue);
     }
@@ -447,7 +447,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
       }, 10, false);
 
       // We could leverage ngModel's $parsers here, however it
-      // isn't reliable, because Angular trims the input by default,
+      // isn't reliable, because AngularJS trims the input by default,
       // which means that growTextarea won't fire when newlines and
       // spaces are added.
       element.on('input', growTextarea);
@@ -699,7 +699,7 @@ function placeholderDirective($compile) {
       // Note that we need to do this in the pre-link, as opposed to the post link, if we want to
       // support data bindings in the placeholder. This is necessary, because we have a case where
       // we transfer the placeholder value to the `<label>` and we remove it from the original `<input>`.
-      // If we did this in the post-link, Angular would have set up the observers already and would be
+      // If we did this in the post-link, AngularJS would have set up the observers already and would be
       // re-adding the attribute, even though we removed it from the element.
       pre: preLink
     }
@@ -724,7 +724,7 @@ function placeholderDirective($compile) {
       // Move the placeholder expression to the label
       var newLabel = angular.element('<label ng-click="delegateClick()" tabindex="-1">' + attr.placeholder + '</label>');
 
-      // Note that we unset it via `attr`, in order to get Angular
+      // Note that we unset it via `attr`, in order to get AngularJS
       // to remove any observers that it might have set up. Otherwise
       // the attribute will be added on the next digest.
       attr.$set('placeholder', null);

@@ -19,7 +19,7 @@ Before you submit your pull request consider the following guidelines:
 
 * Create your patch.
 
-* Run the full Angular Material test suite, as described in the [developer documentation](BUILD.md),
+* Run the full AngularJS Material test suite, as described in the [developer documentation](BUILD.md),
   and ensure that all tests pass.
 
 * Commit your changes using a descriptive commit message that follows our
@@ -48,7 +48,7 @@ Before you submit your pull request consider the following guidelines:
 * If we suggest changes then:
   * Make the required updates.
 
-  * Re-run the Angular Material test suite to ensure tests are still passing.
+  * Re-run the AngularJS Material test suite to ensure tests are still passing.
 
   * Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
 

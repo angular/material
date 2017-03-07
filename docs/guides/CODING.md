@@ -147,7 +147,7 @@ function SliderDirective($mdTheming) {
 
 * All source files will be automatically wrapped inside an anonymous closure using the Module Pattern.
 * Use the **Revealing Pattern** as a coding style.
-* Do **not** use the global variable namespace, export our API explicitly via Angular DI.
+* Do **not** use the global variable namespace, export our API explicitly via AngularJS DI.
 * Instead of complex inheritance hierarchies, use **simple** objects.
 * Avoid prototypal inheritance unless warranted by performance or other considerations.
 * We **love** functions and closures and, whenever possible, prefer them over objects.<br/>
@@ -160,4 +160,4 @@ function SliderDirective($mdTheming) {
 * To write concise code that can be better minified, we **use aliases internally** that map to the
   external API.
 * Use of argument **type annotations** for private internal APIs is not encouraged, unless it's an
-  internal API that is used throughout Angular Material.
+  internal API that is used throughout AngularJS Material.

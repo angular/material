@@ -4,7 +4,7 @@
 
 ## Configuring a theme
 
-By default your Angular Material application will use the default theme, a theme
+By default your AngularJS Material application will use the default theme, a theme
 that is pre-configured with the following palettes for intention groups:
 
 - *primary* - indigo
@@ -72,7 +72,7 @@ angular.module('myApp', ['ngMaterial'])
 
 ### Defining Custom Palettes
 
-As mentioned before, Angular Material ships with the Material Design
+As mentioned before, AngularJS Material ships with the Material Design
 Spec's color palettes built in. In the event that you need to define a custom color palette, you can use `$mdThemingProvider` to define it, thereby making 
 it available to your theme for use in its intention groups. Note that you must
 specify all hues in the definition map.

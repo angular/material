@@ -37,14 +37,14 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   ctrl.updateTabOrder     = $mdUtil.debounce(updateTabOrder, 100);
   ctrl.getFocusedTabId    = getFocusedTabId;
 
-  // For Angular 1.4 and older, where there are no lifecycle hooks but bindings are pre-assigned,
+  // For AngularJS 1.4 and older, where there are no lifecycle hooks but bindings are pre-assigned,
   // manually call the $onInit hook.
   if (angular.version.major === 1 && angular.version.minor <= 4) {
     this.$onInit();
   }
 
   /**
-   * Angular Lifecycle hook for newer Angular versions.
+   * AngularJS Lifecycle hook for newer AngularJS versions.
    * Bindings are not guaranteed to have been assigned in the controller, but they are in the $onInit hook.
    */
   function $onInit() {
@@ -135,7 +135,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   }
 
   /**
-   * Creates a one-way binding manually rather than relying on Angular's isolated scope
+   * Creates a one-way binding manually rather than relying on AngularJS's isolated scope
    * @param key
    * @param handler
    */

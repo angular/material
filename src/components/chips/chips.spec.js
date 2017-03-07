@@ -295,7 +295,7 @@ describe('<md-chips>', function() {
           input.triggerHandler('blur');
 
           // Flush the timeout after each blur, because custom inputs have listeners running
-          // in an Angular digest.
+          // in an AngularJS digest.
           $timeout.flush();
 
           expect(scope.items.length).toBe(4);
@@ -306,7 +306,7 @@ describe('<md-chips>', function() {
           input.triggerHandler('blur');
 
           // Flush the timeout after each blur, because custom inputs have listeners running
-          // in an Angular digest.
+          // in an AngularJS digest.
           $timeout.flush();
 
           expect(scope.items.length).toBe(4);

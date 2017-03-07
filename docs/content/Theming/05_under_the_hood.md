@@ -4,11 +4,11 @@
 
 ### Under the Hood
 
-Angular Material dynamically generates CSS for registered themes by injecting several
+AngularJS Material dynamically generates CSS for registered themes by injecting several
 `<script>` tags into the `<head>` section of the application at runtime. Here is how
 that process currently works:
 
-1. During the Angular Material build process, a function in `gulp/util.js` called
+1. During the AngularJS Material build process, a function in `gulp/util.js` called
 [themeBuildStream()](https://github.com/angular/material/blob/master/gulp/util.js#L223)
 compiles all `*-theme.scss` files from components into a single CSS string that is
 injected into the `material.core` module as a constant called `$MD_THEME_CSS`.

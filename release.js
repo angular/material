@@ -384,7 +384,7 @@
   function header () {
     clear();
     line();
-    log(center('Angular Material Release'));
+    log(center('AngularJS Material Release'));
     line();
   }
 

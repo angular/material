@@ -225,9 +225,9 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
  * supports use within named radio groups.
  *
  * @param {string} ngModel Assignable angular expression to data-bind to.
- * @param {string=} ngChange Angular expression to be executed when input changes due to user
+ * @param {string=} ngChange AngularJS expression to be executed when input changes due to user
  *    interaction with the input element.
- * @param {string} ngValue Angular expression which sets the value to which the expression should
+ * @param {string} ngValue AngularJS expression which sets the value to which the expression should
  *    be set when selected.
  * @param {string} value The value to which the expression should be set when selected.
  * @param {string=} name Property name of the form under which the control is published.

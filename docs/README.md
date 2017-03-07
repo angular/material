@@ -1,7 +1,7 @@
 Documentation
 -------------
 
-The Angular Material **Live Docs** are generated from the source code. In fact, the Angular Material documentation itself uses the Angular Material layout, components and themes.
+The AngularJS Material **Live Docs** are generated from the source code. In fact, the AngularJS Material documentation itself uses the AngularJS Material layout, components and themes.
 
 > Our build process uses **[dgeni](https://github.com/angular/dgeni)**, the wonderful documentation
 generator built by [Pete Bacon Darwin](https://github.com/petebacondarwin).

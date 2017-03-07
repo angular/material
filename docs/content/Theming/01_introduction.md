@@ -4,9 +4,9 @@
 
 Material Design is a visual language with specifications for innovative user experiences (UX) and user interface (UI) elements. Themes convey meaning through color, tones, and contrasts, similar to how Layouts convey meaning through keylines and alignments.
 
-Theme [**color palettes**](http://www.google.com/design/spec/style/color.html#color-ui-color-palette), alphas, and shadows deliver a consistent tone to your application and a unified feel for all Angular Material UI components.
+Theme [**color palettes**](http://www.google.com/design/spec/style/color.html#color-ui-color-palette), alphas, and shadows deliver a consistent tone to your application and a unified feel for all AngularJS Material UI components.
 
-Theming allows changing the color of your Angular Material application. If you
+Theming allows changing the color of your AngularJS Material application. If you
 need more custom styling (such as layout changes including padding, margins,
 etc) you will need to either write CSS rules with custom selectors, or build a
 custom version of the `angular-material.css` file using SASS and custom
@@ -19,13 +19,13 @@ variables.
 
 ## Theming Approach
 
-Angular Material makes it easy to design an app which follows the Material style
+AngularJS Material makes it easy to design an app which follows the Material style
 guide's suggested design patterns:
 
 > Limit your selection of colors by choosing three color hues from the primary palette and one accent color
 > from the secondary palette. The accent color may or may not need fallback options.
 
-This concept is central to how Angular Material approaches theming.
+This concept is central to how AngularJS Material approaches theming.
 
 ## Important Terms
 
@@ -35,7 +35,7 @@ A hue/shade is a single color within a palette.
 
 ### Palettes
 
-A palette is a collection of hues. By default, Angular Material ships with all
+A palette is a collection of hues. By default, AngularJS Material ships with all
 palettes from the material design spec built in. Valid palettes include:
 
 - red
@@ -63,7 +63,7 @@ palettes from the material design spec built in. Valid palettes include:
 A color intention is a mapping of a palette for a given intention within your
 application.
 
-Valid color intentions in Angular Material include:
+Valid color intentions in AngularJS Material include:
 
 - *primary* - used to represent primary interface elements for a user
 - *accent* - used to represent secondary interface elements for a user

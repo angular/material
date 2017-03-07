@@ -182,7 +182,7 @@ Thank you to the continued support from these great v1.1.2 contributors:
 <a name="1.1.1"></a>
 ## [AngularJS Material 1.1.1](https://github.com/angular/material/compare/v1.1.0...v1.1.1) (2016-09-01)
 
-We continue to maintain our momentum with Angular Material. Today we published a patch release for Angular Material; a patch that contains more than 60 improvements and fixes.
+We continue to maintain our momentum with AngularJS Material. Today we published a patch release for AngularJS Material; a patch that contains more than 60 improvements and fixes.
 
 --
 
@@ -451,7 +451,7 @@ Closes #8691. Closes #8734 ([d04dfc5d](https://github.com/angular/material/commi
   * Alter dropdown icon to conform to spec. ([9fa6a97a](https://github.com/angular/material/commit/9fa6a97a), closes [#9290](https://github.com/angular/material/issues/9290))
   * Allow 0 as default value. ([e435e092](https://github.com/angular/material/commit/e435e092), closes [#9232](https://github.com/angular/material/issues/9232), [#9237](https://github.com/angular/material/issues/9237))
   * handle input from number pad ([11cbe3a2](https://github.com/angular/material/commit/11cbe3a2), closes [#9104](https://github.com/angular/material/issues/9104), [#9106](https://github.com/angular/material/issues/9106))
-  * Failing tests on Angular 1.6 (snapshot). ([d897b830](https://github.com/angular/material/commit/d897b830), closes [#9012](https://github.com/angular/material/issues/9012))
+  * Failing tests on AngularJS 1.6 (snapshot). ([d897b830](https://github.com/angular/material/commit/d897b830), closes [#9012](https://github.com/angular/material/issues/9012))
   * Fix empty option stlying issue. ([fcd42df8](https://github.com/angular/material/commit/fcd42df8), closes [#6851](https://github.com/angular/material/issues/6851), [#8907](https://github.com/angular/material/issues/8907))
   * ngModel validator should use option hashkeys. ([87584881](https://github.com/angular/material/commit/87584881), closes [#8666](https://github.com/angular/material/issues/8666), [#8763](https://github.com/angular/material/issues/8763))
   * Fix pristine/dirty error, scope conflict, and many styles. ([024e9798](https://github.com/angular/material/commit/024e9798), closes [#8529](https://github.com/angular/material/issues/8529), [#7988](https://github.com/angular/material/issues/7988), [#8527](https://github.com/angular/material/issues/8527), [#8672](https://github.com/angular/material/issues/8672))
@@ -611,7 +611,7 @@ Thanks to the great contributors who helped with this release:
 * **backdrop:** adjust the backdrop height when the viewport resizes ([918e335e](https://github.com/angular/material/commit/918e335e), closes [#8155](https://github.com/angular/material/issues/8155), [#8285](https://github.com/angular/material/issues/8285))
 * **build:**
   * fix a warning when running local server ([b09dcbb0](https://github.com/angular/material/commit/b09dcbb0), closes [#8463](https://github.com/angular/material/issues/8463))
-  * Fix failing tests with Angular 1.6. ([2b0e0fd9](https://github.com/angular/material/commit/2b0e0fd9), closes [#8404](https://github.com/angular/material/issues/8404))
+  * Fix failing tests with AngularJS 1.6. ([2b0e0fd9](https://github.com/angular/material/commit/2b0e0fd9), closes [#8404](https://github.com/angular/material/issues/8404))
   * remove use of template strings in build-contributors ([93921f8e](https://github.com/angular/material/commit/93921f8e))
 * **checkbox:**
   * md-checkbox documentation update & indeterminate color fix. ([65151504](https://github.com/angular/material/commit/65151504), closes [#8513](https://github.com/angular/material/issues/8513))
@@ -648,10 +648,10 @@ Thanks to the great contributors who helped with this release:
 * **layout:** IE10-IE11 column-flex bug fix ([ce0ebbfc](https://github.com/angular/material/commit/ce0ebbfc), closes [#8161](https://github.com/angular/material/issues/8161))
 * **list:** remove secondary container flex filler. ([621cc952](https://github.com/angular/material/commit/621cc952), closes [#8094](https://github.com/angular/material/issues/8094), [#7976](https://github.com/angular/material/issues/7976), [#8075](https://github.com/angular/material/issues/8075))
 * **menu:** type checkbox should not affect a normal menu item. ([560474f7](https://github.com/angular/material/commit/560474f7), closes [#8110](https://github.com/angular/material/issues/8110), [#8117](https://github.com/angular/material/issues/8117))
-* **navbar:** fixes navbar logic in angular 1.3 ([2b8d18fb](https://github.com/angular/material/commit/2b8d18fb), closes [#8419](https://github.com/angular/material/issues/8419))
+* **navbar:** fixes navbar logic in AngularJS 1.3 ([2b8d18fb](https://github.com/angular/material/commit/2b8d18fb), closes [#8419](https://github.com/angular/material/issues/8419))
 * **panel:**
   * attached panels to body ([b9b6203a](https://github.com/angular/material/commit/b9b6203a), closes [#8420](https://github.com/angular/material/issues/8420))
-  * Fix panel tests in Angular 1.3. ([296f1c71](https://github.com/angular/material/commit/296f1c71), closes [#8418](https://github.com/angular/material/issues/8418))
+  * Fix panel tests in AngularJS 1.3. ([296f1c71](https://github.com/angular/material/commit/296f1c71), closes [#8418](https://github.com/angular/material/issues/8418))
   * positions panel offscreen when calculating height/width ([46492407](https://github.com/angular/material/commit/46492407), closes [#8405](https://github.com/angular/material/issues/8405))
   * css and docs fixes ([c13feb76](https://github.com/angular/material/commit/c13feb76))
   * updates to positioning ([0168e867](https://github.com/angular/material/commit/0168e867))
@@ -1082,7 +1082,7 @@ Closes #7246
 
 #### Bug Fixes
 
-* **build:** Fix failing tests with Angular 1.6. ([af1e2269](https://github.com/angular/material/commit/af1e2269), closes [#8404](https://github.com/angular/material/issues/8404))
+* **build:** Fix failing tests with AngularJS 1.6. ([af1e2269](https://github.com/angular/material/commit/af1e2269), closes [#8404](https://github.com/angular/material/issues/8404))
 
 
 <a name"1.0.8"></a>
@@ -1474,7 +1474,7 @@ This is a landmark release - announcing public availability of version 1.0.0!
 * **dialog:** guard against missing focus traps upon removal. ([8d7ec062](https://github.com/angular/material/commit/8d7ec062))
 * **input:**
   * Fix input errors CSS to properly display. ([0eb7d8a6](https://github.com/angular/material/commit/0eb7d8a6), closes [#5837](https://github.com/angular/material/issues/5837), [#6298](https://github.com/angular/material/issues/6298))
-  * guard against null access on parentForm (Angular 1.3). ([1d71928e](https://github.com/angular/material/commit/1d71928e))
+  * guard against null access on parentForm (AngularJS 1.3). ([1d71928e](https://github.com/angular/material/commit/1d71928e))
   * Remove unneccessary CSS error margin. ([5ca31706](https://github.com/angular/material/commit/5ca31706), closes [#6235](https://github.com/angular/material/issues/6235))
 * **layout:** 'flex' change per recommended workarounds and added `flex=nogrow` ([f3761781](https://github.com/angular/material/commit/f3761781), closes [#6205](https://github.com/angular/material/issues/6205))
 * **layouts:** do not replace invalid attribute values ([16486dbf](https://github.com/angular/material/commit/16486dbf))
@@ -1646,7 +1646,7 @@ Detect `ng-touch` usages and provide integration warnings regarding interference
 
 #### Breaking Changes
 
-* Dialog presets for `alert` and `confirm` no longer have a `content` option.  There is now `textContent` and `htmlContent`.  In order to use `htmlContent` you must load the `ngSanitize` module.  HTML will not be compiled as an Angular template to prevent XSS attack vectors.
+* Dialog presets for `alert` and `confirm` no longer have a `content` option.  There is now `textContent` and `htmlContent`.  In order to use `htmlContent` you must load the `ngSanitize` module.  HTML will not be compiled as an AngularJS template to prevent XSS attack vectors.
 
 
 #### Bug Fixes
@@ -1958,19 +1958,19 @@ This release resolves many issues and include the following notable changes:
   *  fix flex-33 and flex-67 max-width and max-heights
   *  fix layout-align to use max-width
 * A consistent API is now provided for flushing animation states during testing.
-* CI testing now performs sandbox testing for Angular 1.3.x, 1.4.x, and 1.5.x.
+* CI testing now performs sandbox testing for AngularJS 1.3.x, 1.4.x, and 1.5.x.
 
 
 Developers are requested to always test with the latest versions. And any CodePens provided in issue reports should use:
 
-*  Angular Material HEAD (0.11.1 or greater)
+*  AngularJS Material HEAD (0.11.1 or greater)
   *  Bower Install - https://github.com/angular/bower-material/blob/master/angular-material.js
   *  Bower Install - https://github.com/angular/bower-material/blob/master/angular-material.css
   *  RAWGIT - https://rawgit.com/angular/bower-material/master/angular-material.js
   *  RAWGIT - https://rawgit.com/angular/bower-material/master/angular-material.css
-* AngularJS Latest Release versions:
-  *  Angular 1.3.19 (or greater)
-  *  Angular 1.4.6 (or greater).
+  *  AngularJS Latest Release versions:
+  *  AngularJS 1.3.19 (or greater)
+  *  AngularJS 1.4.6 (or greater).
 
 #### Features
 
@@ -2181,7 +2181,7 @@ This release is comprised of three major efforts:
 
 * Ripples are completely rewritten
 
-* modify scope of `box-sizing: border-box` to be specific to only to elements owned by ngMaterial.
+* modify scope of `box-sizing: border-box` to be specific to only to elements owned by AngularJS Material.
 
 Before:
 
@@ -2236,8 +2236,8 @@ Fixes #1495.
 
 * **autocomplete:** not found message no longer gets stuck ([f2e6b162](https://github.com/angular/material/commit/f2e6b162), closes [#4309](https://github.com/angular/material/issues/4309))
 * **build:**
-  * lock CI tests to use Angular 1.4.4 ([8157dece](https://github.com/angular/material/commit/8157dece))
-  * correct detection and generation ngMaterial module definition ([d85e14af](https://github.com/angular/material/commit/d85e14af))
+  * lock CI tests to use AngularJS 1.4.4 ([8157dece](https://github.com/angular/material/commit/8157dece))
+  * correct detection and generation AngularJS Material module definition ([d85e14af](https://github.com/angular/material/commit/d85e14af))
   * parse module definitions for material only or general ([e4ca61f0](https://github.com/angular/material/commit/e4ca61f0))
   * buildNgMaterialDefinition RegExp updated ([391cff58](https://github.com/angular/material/commit/391cff58), closes [#4305](https://github.com/angular/material/issues/4305))
 * **calendar:**
@@ -2384,7 +2384,7 @@ styles
 * **backdrop:**
   * use absolute positioning and anchors ([87bdf36a](https://github.com/angular/material/commit/87bdf36a))
   * set css `position: fixed` to `md-backdrop` ([4011df9c](https://github.com/angular/material/commit/4011df9c))
-* **build:** reset to using Angular v1.3.15 until animation issues resolve ([17490baf](https://github.com/angular/material/commit/17490baf))
+* **build:** reset to using AngularJS v1.3.15 until animation issues resolve ([17490baf](https://github.com/angular/material/commit/17490baf))
 * **button:**
   * fixes button styles for components that override their default styles ([b1046bc0](https://github.com/angular/material/commit/b1046bc0))
   * fixes button styles so that <a> and <button> examples look identical ([b1a144db](https://github.com/angular/material/commit/b1a144db))
@@ -2467,7 +2467,7 @@ styles
   * theme palettes will no longer be inherited from parent elements ([0667380d](https://github.com/angular/material/commit/0667380d), closes [#3150](https://github.com/angular/material/issues/3150))
   * fixes errors thrown when user-defined click events triggered their own digest cy ([1b984ed6](https://github.com/angular/material/commit/1b984ed6))
   * internal scope will now be the same as external scope ([c5c148df](https://github.com/angular/material/commit/c5c148df), closes [#3300](https://github.com/angular/material/issues/3300))
-  * prevents error when navigating away from tabs section while using Angular 1.4.x ([31bb1210](https://github.com/angular/material/commit/31bb1210))
+  * prevents error when navigating away from tabs section while using AngularJS 1.4.x ([31bb1210](https://github.com/angular/material/commit/31bb1210))
   * focused item will once again scroll into view properly on focus ([5616f48f](https://github.com/angular/material/commit/5616f48f))
   * fixes `md-swipe-content` support ([0982c76a](https://github.com/angular/material/commit/0982c76a), closes [#3225](https://github.com/angular/material/issues/3225))
   * `md-center-tabs` should work now ([aa1e47d3](https://github.com/angular/material/commit/aa1e47d3))
@@ -2488,7 +2488,7 @@ styles
   * differentiate between hide action clicks and hide timeouts ([285ac72d](https://github.com/angular/material/commit/285ac72d), closes [#3745](https://github.com/angular/material/issues/3745))
   * replace cancel with hide on hideDelay ([2b687133](https://github.com/angular/material/commit/2b687133), closes [#3558](https://github.com/angular/material/issues/3558))
 * **util:** fix timeouts in transitionEndPromise() ([602f4904](https://github.com/angular/material/commit/602f4904))
-* **utils:** update for Angular 1.4.1 compatibility ([7ca139af](https://github.com/angular/material/commit/7ca139af), closes [#3315](https://github.com/angular/material/issues/3315), [#3325](https://github.com/angular/material/issues/3325))
+* **utils:** update for AngularJS 1.4.1 compatibility ([7ca139af](https://github.com/angular/material/commit/7ca139af), closes [#3315](https://github.com/angular/material/issues/3315), [#3325](https://github.com/angular/material/issues/3325))
 
 
 <a name"0.10.0"></a>
@@ -2543,7 +2543,7 @@ changed to `viewBoxSize`
   * fixes centered tabs for Safari ([25526864](https://github.com/angular/material/commit/25526864), closes [#3198](https://github.com/angular/material/issues/3198))
   * nested tabs should now work properly when using md-tab-label and md-tab-body ([e3e52c2c](https://github.com/angular/material/commit/e3e52c2c), closes [#3206](https://github.com/angular/material/issues/3206))
   * fixes infinite digests bug in Firefox ([781929d7](https://github.com/angular/material/commit/781929d7))
-  * fixes issue with tab pagination in Angular 1.4 ([4273f52b](https://github.com/angular/material/commit/4273f52b))
+  * fixes issue with tab pagination in AngularJS 1.4 ([4273f52b](https://github.com/angular/material/commit/4273f52b))
 * **theming:** fixes bugs with progress circular and select theming ([3ac50acc](https://github.com/angular/material/commit/3ac50acc))
 
 
@@ -2880,7 +2880,7 @@ This release is also using enhanced scripting to automate the build and release 
   * select/deselect methods will now be called in the proper scope ([02a4af56](https://github.com/angular/material/commit/02a4af565862d3da5caebbc059f388c942f11e1f), closes [#2489](https://github.com/angular/material/issues/2489))
   * removes top border radius when tabs immediately follows md-toolbar ([6372111c](https://github.com/angular/material/commit/6372111c8048d0f13dc6d47609e777b8c26940ee), closes [#2394](https://github.com/angular/material/issues/2394))
   * fixes styles for Firefox ([6996edd3](https://github.com/angular/material/commit/6996edd39378f366416c59dc8e781fecddad19b5), closes [#2543](https://github.com/angular/material/issues/2543))
-* **tests:** support for Angular 1.4 and improved use of angular-mocks. ([48ee9867](https://github.com/angular/material/commit/48ee9867cd44f7a387e78d4a323f5a9e44382550))
+* **tests:** support for AngularJS 1.4 and improved use of angular-mocks. ([48ee9867](https://github.com/angular/material/commit/48ee9867cd44f7a387e78d4a323f5a9e44382550))
 
 
 <a name="0.9.0-rc2"></a>
@@ -2954,7 +2954,7 @@ This RC2 release contains more polish and bug fixes to stabilize performance, la
   * apply ARIA only to dummy tabs ([5ad44728](https://github.com/angular/material/commit/5ad447284c7cda2261da1440819e3e0101a7b1ae))
   * cleans up label/template fetch logic ([17aecd2d](https://github.com/angular/material/commit/17aecd2dbc3acfe48006ff5adb12cad5e15aa70b))
   * id's should no longer cause issues when used within tab labels or contents ([ea185eab](https://github.com/angular/material/commit/ea185eabd13bbcce3e07628891836b0626f609e5), closes [#2326](https://github.com/angular/material/issues/2326))
-* **tests:** mock .flush() added for Angular 1.4.x ([1e3f1a59](https://github.com/angular/material/commit/1e3f1a591f8f2f7c6bd54153df080367970b8a2d))
+* **tests:** mock .flush() added for AngularJS 1.4.x ([1e3f1a59](https://github.com/angular/material/commit/1e3f1a591f8f2f7c6bd54153df080367970b8a2d))
 * **textfield:** removed unstable, deprecated textfield component Replaced with md-input-container ([b5c4390b](https://github.com/angular/material/commit/b5c4390bf7cb81809fea0df93c7d01e410b5585a))
 
 
@@ -3889,7 +3889,7 @@ Version 0.5.0 introduces [theming support](https://material.angularjs.org/#/Them
 <a name="0.4.2"></a>
 ## 0.4.2  (2014-10-16)
 
-This release adds support for the [official Angular 1.3 release](https://github.com/angular/angular.js/blob/master/CHANGELOG.md) and includes improvements to both the document generator and component demos.
+This release adds support for the [official AngularJS 1.3 release](https://github.com/angular/angular.js/blob/master/CHANGELOG.md) and includes improvements to both the document generator and component demos.
 
 > Note that `<md-input-group>` and `<md-input>` are deprecated in favor on `<md-text-float>`. While both directives are still available for more granular control, developers are encouraged to use the `<md-text-float>` directive whenever possible.
 
@@ -4046,7 +4046,7 @@ Note: If you previously provided a `controller` option to `$materialToast`, that
 
 v0.0.3 includes many bug fixes, performance, and usability improvements to existing components, as well as introducing the slider, switch, divider, and linear progress components.
 
-Additionally, accessibility support is added to material-button, material-checkbox, material-radio-button, material-slider, material-dialog and material-list. With added ARIA support including roles, states and properties, Angular Material directives now also communicate to users of assistive technologies. Additionally, tabIndex and focus management are handled dynamically where appropriate.
+Additionally, accessibility support is added to material-button, material-checkbox, material-radio-button, material-slider, material-dialog and material-list. With added ARIA support including roles, states and properties, AngularJS Material directives now also communicate to users of assistive technologies. Additionally, tabIndex and focus management are handled dynamically where appropriate.
 
 0.0.3 is tested on desktop Chrome, Safari and Firefox, as well as Android 4.4+ and iOS 7+. Also tested with VoiceOver on OSX and iOS7, ChromeVox, JAWS, NVDA and ZoomText.
 

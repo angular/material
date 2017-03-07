@@ -214,7 +214,7 @@
       handleKeyElement.off('keydown', boundKeyHandler);
     });
 
-    // For Angular 1.4 and older, where there are no lifecycle hooks but bindings are pre-assigned,
+    // For AngularJS 1.4 and older, where there are no lifecycle hooks but bindings are pre-assigned,
     // manually call the $onInit hook.
     if (angular.version.major === 1 && angular.version.minor <= 4) {
       this.$onInit();
@@ -223,7 +223,7 @@
   }
 
   /**
-   * Angular Lifecycle hook for newer Angular versions.
+   * AngularJS Lifecycle hook for newer AngularJS versions.
    * Bindings are not guaranteed to have been assigned in the controller, but they are in the $onInit hook.
    */
   CalendarCtrl.prototype.$onInit = function() {

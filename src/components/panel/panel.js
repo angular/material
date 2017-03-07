@@ -216,7 +216,7 @@ angular
  *     interaction when there is no backdrop and events are propagated. Defaults
  *     to an arbitrary string that is not tracked.
  *   - `template` - `{string=}`: HTML template to show in the panel. This
- *     **must** be trusted HTML with respect to Angular’s
+ *     **must** be trusted HTML with respect to AngularJS’s
  *     [$sce service](https://docs.angularjs.org/api/ng/service/$sce).
  *   - `templateUrl` - `{string=}`: The URL that will be used as the content of
  *     the panel.
@@ -987,7 +987,7 @@ function clearPresets() {
 
 
 /**
- * Represents the `$get` method of the Angular provider. From here, a new
+ * Represents the `$get` method of the AngularJS provider. From here, a new
  * reference to the MdPanelService is returned where the needed arguments are
  * passed in including the MdPanelProvider `_presets`.
  * @param {!Object} _presets
@@ -1724,7 +1724,7 @@ MdPanelRef.prototype.hide = function() {
 MdPanelRef.prototype.addClass = function(newClass, toElement) {
   this._$log.warn(
       'mdPanel: The addClass method is in the process of being deprecated. ' +
-      'Full deprecation is scheduled for the Angular Material 1.2 release. ' +
+      'Full deprecation is scheduled for the AngularJS Material 1.2 release. ' +
       'To achieve the same results, use the panelContainer or panelEl ' +
       'JQLite elements that are referenced in MdPanelRef.');
 
@@ -1755,7 +1755,7 @@ MdPanelRef.prototype.addClass = function(newClass, toElement) {
 MdPanelRef.prototype.removeClass = function(oldClass, fromElement) {
   this._$log.warn(
       'mdPanel: The removeClass method is in the process of being deprecated. ' +
-      'Full deprecation is scheduled for the Angular Material 1.2 release. ' +
+      'Full deprecation is scheduled for the AngularJS Material 1.2 release. ' +
       'To achieve the same results, use the panelContainer or panelEl ' +
       'JQLite elements that are referenced in MdPanelRef.');
 
@@ -1786,7 +1786,7 @@ MdPanelRef.prototype.removeClass = function(oldClass, fromElement) {
 MdPanelRef.prototype.toggleClass = function(toggleClass, onElement) {
   this._$log.warn(
       'mdPanel: The toggleClass method is in the process of being deprecated. ' +
-      'Full deprecation is scheduled for the Angular Material 1.2 release. ' +
+      'Full deprecation is scheduled for the AngularJS Material 1.2 release. ' +
       'To achieve the same results, use the panelContainer or panelEl ' +
       'JQLite elements that are referenced in MdPanelRef.');
 
