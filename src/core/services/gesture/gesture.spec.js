@@ -688,4 +688,64 @@ describe('$mdGesture', function() {
 
   });
 
+  describe('contenteditable', function() {
+
+    var spyClick, spyMouseDown, spyMouseUp;
+    var el;
+
+    beforeEach(function() {
+      inject(function($mdGesture) {
+        spyClick = jasmine.createSpy('click');
+        spyMouseDown = jasmine.createSpy('mousedown');
+        spyMouseUp = jasmine.createSpy('mouseup');
+
+        el = angular.element('<div contenteditable="true">');
+
+        el.on('click', spyClick);
+        el.on('mousedown', spyMouseDown);
+        el.on('mouseup', spyMouseUp);
+      });
+    });
+
+    it('should not hijack click on contenteditable element', inject(function($document, $mdGesture) {
+      $document.triggerHandler('$$mdGestureReset');
+
+      $document.triggerHandler({
+        type: 'click',
+        target: el[0]
+      });
+
+      expect(spyClick).not.toHaveBeenCalled();
+
+      el.triggerHandler('click');
+
+      expect(spyClick).toHaveBeenCalled();
+    }));
+
+    it('should not hijack mousedown/mouseup on contenteditable element', inject(function($document, $mdGesture) {
+      $document.triggerHandler('$$mdGestureReset');
+
+      $document.triggerHandler({
+        type: 'mousedown',
+        target: el[0]
+      });
+
+      expect(spyMouseDown).not.toHaveBeenCalled();
+
+      el.triggerHandler('mousedown');
+
+      expect(spyMouseDown).toHaveBeenCalled();
+
+      $document.triggerHandler({
+        type: 'mouseup',
+        target: el[0]
+      });
+
+      expect(spyMouseUp).not.toHaveBeenCalled();
+
+      el.triggerHandler('mouseup');
+
+      expect(spyMouseUp).toHaveBeenCalled();
+    }));
+  });
 });
