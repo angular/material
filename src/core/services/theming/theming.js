@@ -69,6 +69,20 @@ function detectDisabledThemes($mdThemingProvider) {
  *   });
  * </hljs>
  *
+ * ### Dyanmic Themes Target
+ *
+ * By default, the dynamic styles are always appended to the head section.<br />
+ * If you want to change the target, so the styles are appended to a particular element instead, you could use this option.<br />
+ * Note: This is very useful if you are initiating angular material app inside a shadow dom element.
+ *
+ * <hljs lang="js">
+ *   myAppModule.config(function($mdThemingProvider) {
+ *     // append dynamic styles to a custom element.
+ *     const shadowRoot = document.getElementById('myEleId').attachShadow({mode: 'open'});
+ *     $mdThemingProvider.appendTo(shadowRoot);
+ *   });
+ * </hljs>
+ *
  * ### Custom Theme Styles
  *
  * Sometimes you may want to use your own theme styles for some custom components.<br/>
@@ -141,6 +155,12 @@ function detectDisabledThemes($mdThemingProvider) {
  * @name $mdThemingProvider#alwaysWatchTheme
  * @param {boolean} watch Whether or not to always watch themes for changes and re-apply
  * classes when they change. Default is `false`. Enabling can reduce performance.
+ */
+
+/**
+ * @ngdoc method
+ * @name $mdThemingProvider#appendTo
+ * @param {element} element to append the styles too. By default it picks document head
  */
 
 /**
@@ -256,7 +276,8 @@ var themeConfig = {
   disableTheming : false,   // Generate our themes at run time; also disable stylesheet DOM injection
   generateOnDemand : false, // Whether or not themes are to be generated on-demand (vs. eagerly).
   registeredStyles : [],    // Custom styles registered to be used in the theming of custom components.
-  nonce : null              // Nonce to be added as an attribute to the generated themes style tags.
+  nonce : null,              // Nonce to be added as an attribute to the generated themes style tags.
+  appendTo: document.head   // Set default configuration to have styles append to the document.head element.
 };
 
 /**
@@ -366,6 +387,10 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
 
     alwaysWatchTheme: function(alwaysWatch) {
       alwaysWatchTheme = alwaysWatch;
+    },
+
+    appendTo: function(elem) {
+      themeConfig.appendTo = elem;
     },
 
     enableBrowserColor: enableBrowserColor,
@@ -632,7 +657,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
     applyTheme.inherit = inheritTheme;
     applyTheme.registered = registered;
     applyTheme.defaultTheme = function() { return defaultTheme; };
-    applyTheme.generateTheme = function(name) { generateTheme(THEMES[name], name, themeConfig.nonce); };
+    applyTheme.generateTheme = function(name) { generateTheme(THEMES[name], name, themeConfig.nonce, themeConfig.appendTo); };
     applyTheme.defineTheme = function(name, options) {
       options = options || {};
 
@@ -973,7 +998,7 @@ function generateAllThemes($injector, $mdTheming) {
 
   angular.forEach($mdTheming.THEMES, function(theme) {
     if (!GENERATED[theme.name] && !($mdTheming.defaultTheme() !== 'default' && theme.name === 'default')) {
-      generateTheme(theme, theme.name, themeConfig.nonce);
+      generateTheme(theme, theme.name, themeConfig.nonce, themeConfig.appendTo);
     }
   });
 
@@ -1039,9 +1064,8 @@ function generateAllThemes($injector, $mdTheming) {
   }
 }
 
-function generateTheme(theme, name, nonce) {
-  var head = document.head;
-  var firstChild = head ? head.firstElementChild : null;
+function generateTheme(theme, name, nonce, appendToElement) {
+  var firstChild = appendToElement ? appendToElement.firstElementChild : null;
 
   if (!GENERATED[name]) {
     // For each theme, use the color palettes specified for
@@ -1057,7 +1081,7 @@ function generateTheme(theme, name, nonce) {
             style.setAttribute('nonce', nonce);
           }
           style.appendChild(document.createTextNode(styleContent));
-          head.insertBefore(style, firstChild);
+            appendToElement.insertBefore(style, firstChild);
         }
       }
     });

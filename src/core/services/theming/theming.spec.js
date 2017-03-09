@@ -419,6 +419,7 @@ describe('$mdThemingProvider', function() {
       expect(config.registeredStyles.length).toBe(0);
       expect(config.nonce).toBe(null);
       expect(config.alwaysWatchTheme).toBe(false);
+      expect(config.appendTo.tagName).toBe(document.head.tagName);
 
       // Change local copies
       config.disableTheming = true;
@@ -435,6 +436,7 @@ describe('$mdThemingProvider', function() {
       expect(config2.registeredStyles.length).toBe(0);
       expect(config2.nonce).toBe(null);
       expect(config2.alwaysWatchTheme).toBe(false);
+      expect(config2.appendTo.tagName).toBe(document.head.tagName);
 
     });
 
