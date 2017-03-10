@@ -267,7 +267,7 @@ MdChipsCtrl.prototype.inputKeydown = function(event) {
     event.preventDefault();
 
     // Only append the chip and reset the chip buffer if the max chips limit isn't reached.
-    if (this.hasMaxChipsReached()) return;
+    if (!this.shouldAdd()) return;
 
     this.appendChip(chipBuffer.trim());
     this.resetChipBuffer();
@@ -710,7 +710,7 @@ MdChipsCtrl.prototype.onInputFocus = function () {
 MdChipsCtrl.prototype.onInputBlur = function () {
   this.inputHasFocus = false;
 
-  if (this.shouldAddOnBlur()) {
+  if (this.shouldAdd(true)) {
     this.appendChip(this.getChipBuffer().trim());
     this.resetChipBuffer();
   }
@@ -770,7 +770,7 @@ MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
  * Whether the current chip buffer should be added on input blur or not.
  * @returns {boolean}
  */
-MdChipsCtrl.prototype.shouldAddOnBlur = function() {
+MdChipsCtrl.prototype.shouldAdd = function(onBlur) {
 
   // Update the custom ngModel validators from the chips component.
   this.validateModel();
@@ -783,7 +783,7 @@ MdChipsCtrl.prototype.shouldAddOnBlur = function() {
     isModelValid = isModelValid && this.userInputNgModelCtrl.$valid;
   }
 
-  return this.addOnBlur && !this.requireMatch && chipBuffer && isModelValid && !isAutocompleteShowing;
+  return (!onBlur || this.addOnBlur) && !this.requireMatch && chipBuffer && isModelValid && !isAutocompleteShowing;
 };
 
 MdChipsCtrl.prototype.hasFocus = function () {

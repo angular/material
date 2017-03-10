@@ -330,14 +330,14 @@ describe('<md-chips>', function() {
           var ctrl = element.controller('mdChips');
           var input = element.find('input');
 
-          expect(ctrl.shouldAddOnBlur()).toBeFalsy();
+          expect(ctrl.shouldAdd(true)).toBeFalsy();
 
           // Flush the initial timeout of the md-autocomplete.
           $timeout.flush();
 
           scope.$apply('searchText = "Hello"');
 
-          expect(ctrl.shouldAddOnBlur()).toBeFalsy();
+          expect(ctrl.shouldAdd(true)).toBeFalsy();
         });
 
         it('should not append a new chip on blur when the autocomplete is showing', function() {
@@ -358,7 +358,7 @@ describe('<md-chips>', function() {
           var ctrl = element.controller('mdChips');
           var input = element.find('input');
 
-          expect(ctrl.shouldAddOnBlur()).toBeFalsy();
+          expect(ctrl.shouldAdd(true)).toBeFalsy();
 
           // Flush the initial timeout of the md-autocomplete.
           $timeout.flush();
@@ -369,7 +369,7 @@ describe('<md-chips>', function() {
           scope.$apply('searchText = "Ki"');
           autocompleteCtrl.focus();
 
-          expect(ctrl.shouldAddOnBlur()).toBeFalsy();
+          expect(ctrl.shouldAdd(true)).toBeFalsy();
         });
 
       });
