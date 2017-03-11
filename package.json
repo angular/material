@@ -61,7 +61,7 @@
     "jquery": "^3.0.0",
     "jshint": "^2.9.2",
     "jshint-summary": "^0.4.0",
-    "karma": "^1.0.0",
+    "karma": "1.4.1",
     "karma-chrome-launcher": "^2.0.0",
     "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",

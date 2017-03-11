@@ -6,7 +6,22 @@
  */
 angular
   .module('material.core')
-  .service('$mdCompiler', MdCompilerService);
+  .service('$mdCompiler', MdCompilerService)
+  .provider('$$mdPreAssignBindings', PreAssignBindingsProvider);
+
+/**
+ * Provider that is used to report the preAssignBindingsEnabled state to the $mdCompiler service.
+ */
+function PreAssignBindingsProvider($compileProvider) {
+  // To avoid that the preAssignBindings state causes issues when upgrading from AngularJS 1.5 to
+  // AngularJS 1.6, AngularJS Material will only respect the preAssignBindingsEnabled state in 1.6
+  var respectPreAssignState = angular.version.major === 1 && angular.version.minor === 6;
+  var fallbackValue = !!$compileProvider.preAssignBindingsEnabled;
+
+  this.$get = function() {
+    return respectPreAssignState ? $compileProvider.preAssignBindingsEnabled() : fallbackValue;
+  };
+}
 
 /**
  * @ngdoc service
@@ -81,7 +96,9 @@ angular
  * </hljs>
  *
  */
-function MdCompilerService($q, $templateRequest, $injector, $compile, $controller) {
+function MdCompilerService($q, $templateRequest, $injector, $compile, $controller,
+                           $$mdPreAssignBindings) {
+
   /** @private @const {!angular.$q} */
   this.$q = $q;
 
@@ -96,6 +113,9 @@ function MdCompilerService($q, $templateRequest, $injector, $compile, $controlle
 
   /** @private @const {!angular.$controller} */
   this.$controller = $controller;
+
+  /** @private @const {boolean} */
+  this.preAssignBindingsEnabled = $$mdPreAssignBindings;
 }
 
 /**
@@ -244,17 +264,12 @@ MdCompilerService.prototype._compileElement = function(locals, element, options)
     // Instantiate controller if the developer provided one.
     if (options.controller) {
 
-      var injectLocals = angular.extend(locals, {
+      var injectLocals = angular.extend({}, locals, {
         $element: element
       });
 
-      var invokeCtrl = self.$controller(options.controller, injectLocals, true, options.controllerAs);
-
-      if (options.bindToController) {
-        angular.extend(invokeCtrl.instance, locals);
-      }
-
-      var ctrl = invokeCtrl();
+      // Create the specified controller instance.
+      var ctrl = self._createController(options, injectLocals, locals);
 
       // Unique identifier for Angular Route ngView controllers.
       element.data('$ngControllerController', ctrl);
@@ -270,6 +285,34 @@ MdCompilerService.prototype._compileElement = function(locals, element, options)
 
   return compileData;
 
+};
+
+/**
+ * Creates and instantiates a new controller with the specified options.
+ * @param {!Object} options Options that include the controller
+ * @param {!Object} injectLocals Locals to to be provided in the controller DI.
+ * @param {!Object} locals Locals to be injected to the controller.
+ * @returns {!Object} Created controller instance.
+ * @private
+ */
+MdCompilerService.prototype._createController = function(options, injectLocals, locals) {
+  var invokeCtrl = this.$controller(options.controller, injectLocals, true, options.controllerAs);
+
+  if (this.preAssignBindingsEnabled && options.bindToController) {
+    angular.extend(invokeCtrl.instance, locals);
+  }
+
+  // Instantiate and initialize the specified controller.
+  var ctrl = invokeCtrl();
+
+  if (!this.preAssignBindingsEnabled && options.bindToController) {
+    angular.extend(invokeCtrl.instance, locals);
+  }
+
+  // Call the $onInit hook if it's present on the controller.
+  angular.isFunction(ctrl.$onInit) && ctrl.$onInit();
+
+  return ctrl;
 };
 
 /**

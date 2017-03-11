@@ -12,6 +12,13 @@ describe('$mdCompiler service', function() {
     return compileData;
   }
 
+  function setPreAssignBindings(preAssignBindingsEnabled) {
+    module(function($compileProvider) {
+      $compileProvider.preAssignBindingsEnabled(preAssignBindingsEnabled);
+    });
+  }
+
+
   describe('setup', function() {
 
     it('element should use templateUrl', inject(function($templateCache) {
@@ -159,25 +166,75 @@ describe('$mdCompiler service', function() {
         expect(scope.myControllerAs).toBe(data.element.controller());
       }));
 
-      it('should work with bindToController', inject(function($rootScope) {
-        var called = false;
-        var data = compile({
-          template: 'hello',
-          controller: function($scope) {
-            expect(this.name).toBe('Bob');
-            expect($scope.$apply).toBeTruthy(); // test DI working properly
-            called = true;
-          },
-          controllerAs: 'ctrl',
-          bindToController: true,
-          locals: { name: 'Bob' }
-        });
-        var scope = $rootScope.$new();
-        data.link(scope);
-        expect(scope.ctrl.name).toBe('Bob');
-        expect(called).toBe(true);
-      }));
+    });
 
+  });
+
+  describe('with preAssignBindings', function() {
+
+    function compileAndLink(options, preAssignBindings) {
+      var compileData;
+
+      inject(function($mdCompiler, $rootScope) {
+        $mdCompiler.preAssignBindingsEnabled = preAssignBindings;
+        $mdCompiler.compile(options).then(function(data) {
+          data.link($rootScope);
+          compileData = data;
+        });
+
+        $rootScope.$apply();
+      });
+
+      return compileData;
+    }
+
+    it('enabled should assign bindings at instantiation', function() {
+      var isInstantiated = false;
+
+      function TestController($scope) {
+        isInstantiated = true;
+        expect($scope.$apply).toBeTruthy();
+        expect(this.name).toBe('Bob');
+      }
+
+      compileAndLink({
+        template: 'hello',
+        controller: TestController,
+        controllerAs: 'ctrl',
+        bindToController: true,
+        locals: { name: 'Bob' }
+      }, true);
+
+      expect(isInstantiated).toBe(true);
+    });
+
+    it('disabled should assign bindings after constructor', function() {
+      setPreAssignBindings(false);
+
+      var isInstantiated = false;
+
+      function TestController($scope) {
+        isInstantiated = true;
+        expect($scope.$apply).toBeTruthy();
+        expect(this.name).toBeUndefined();
+      }
+
+      TestController.prototype.$onInit = function() {
+        expect(this.name).toBe('Bob');
+      };
+
+      spyOn(TestController.prototype, '$onInit').and.callThrough();
+
+      compileAndLink({
+        template: 'hello',
+        controller: TestController,
+        controllerAs: 'ctrl',
+        bindToController: true,
+        locals: { name: 'Bob' }
+      }, false);
+
+      expect(TestController.prototype.$onInit).toHaveBeenCalledTimes(1);
+      expect(isInstantiated).toBe(true);
     });
 
   });
