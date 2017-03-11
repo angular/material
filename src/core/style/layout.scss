@@ -136,10 +136,25 @@
       box-sizing: border-box;
     }
 
+    @if ($i * 5 == 30) {
+      .#{$flexName}-33 {
+        flex: 1 1 100%;
+        max-width: 33.33%;
+        max-height: 100%;
+        box-sizing: border-box;
+      }
+
+    } @else if ($i * 5 == 65) {
+      .#{$flexName}-66 {
+        flex: 1 1 100%;
+        max-width: 66.66%;
+        max-height: 100%;
+        box-sizing: border-box;
+      }
+    }
   }
 
   $flexGtMap: (
-          flex:       flex-gt-xs flex-gt-sm flex-gt-md flex-gt-lg,
           flex-gt-xs: flex-gt-xs flex-gt-sm flex-gt-md flex-gt-lg,
           flex-sm:    flex-gt-xs,
           flex-gt-sm: flex-gt-sm flex-gt-md flex-gt-lg,
@@ -147,6 +162,7 @@
           flex-gt-md: flex-gt-md flex-gt-lg,
           flex-lg:    flex-gt-xs flex-gt-sm flex-gt-md,
           flex-gt-lg: flex-gt-lg,
+          flex:       flex-gt-xs flex-gt-sm flex-gt-md flex-gt-lg,
   );
 
   $flexGt2Breakpoint: (
