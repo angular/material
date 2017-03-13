@@ -21,20 +21,16 @@ $tooltip-max-width: 32px !default;
   line-height: $tooltip-height-sm;
   padding-right: $tooltip-lr-padding-sm;
   padding-left: $tooltip-lr-padding-sm;
-  &.md-origin-top {
-    transform-origin: center bottom;
+  &.md-position-top {
     margin-top: -$tooltip-top-margin-sm;
   }
-  &.md-origin-right {
-    transform-origin: left center;
+  &.md-position-right {
     margin-left: $tooltip-top-margin-sm;
   }
-  &.md-origin-bottom {
-    transform-origin: center top;
+  &.md-position-bottom {
     margin-top: $tooltip-top-margin-sm;
   }
-  &.md-origin-left {
-    transform-origin: right center;
+  &.md-position-left {
     margin-left: -$tooltip-top-margin-sm;
   }
 
@@ -44,24 +40,9 @@ $tooltip-max-width: 32px !default;
     line-height: $tooltip-height-lg;
     padding-right: $tooltip-lr-padding-lg;
     padding-left: $tooltip-lr-padding-lg;
-    &.md-origin-top { margin-top: -$tooltip-top-margin-lg; }
-    &.md-origin-right { margin-left: $tooltip-top-margin-lg; }
-    &.md-origin-bottom { margin-top: $tooltip-top-margin-lg; }
-    &.md-origin-left { margin-left: -$tooltip-top-margin-lg; }
-  }
-
-  &.md-show-add {
-    transform: scale(0);
-  }
-  &.md-show {
-    transition: $swift-ease-out;
-    transform: scale(1);
-    opacity: 0.9;
-  }
-  &.md-hide {
-    transition: $swift-ease-in;
-    transition-duration: .1s;
-    transform: scale(0);
-    opacity: 0;
+    &.md-position-top { margin-top: -$tooltip-top-margin-lg; }
+    &.md-position-right { margin-left: $tooltip-top-margin-lg; }
+    &.md-position-bottom { margin-top: $tooltip-top-margin-lg; }
+    &.md-position-left { margin-left: -$tooltip-top-margin-lg; }
   }
 }
