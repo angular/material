@@ -1,3 +1,58 @@
+@mixin md-nav-bar-primary {
+  > .md-nav-bar {
+    background-color: '{{primary-color}}';
+    .md-button._md-nav-button {
+      & {
+        color: '{{primary-100}}';
+      }
+      &.md-active, &.md-focused {
+        color: '{{primary-contrast}}';
+      }
+      &.md-focused {
+        background: '{{primary-contrast-0.1}}';
+      }
+    }
+  }
+}
+
+@mixin md-nav-bar-warn {
+  > .md-nav-bar {
+    background-color: '{{warn-color}}';
+    .md-button._md-nav-button {
+      & {
+        color: '{{warn-100}}';
+      }
+      &.md-active, &.md-focused {
+        color: '{{warn-contrast}}';
+      }
+      &.md-focused {
+        background: '{{warn-contrast-0.1}}';
+      }
+    }
+  }
+}
+
+@mixin md-nav-bar-accent {
+  > .md-nav-bar {
+    background-color: '{{accent-color}}';
+    .md-button._md-nav-button {
+      & {
+        color: '{{accent-A100}}';
+      }
+      &.md-active, &.md-focused {
+        color: '{{accent-contrast}}';
+      }
+      &.md-focused {
+        background: '{{accent-contrast-0.1}}';
+      }
+    }
+    md-nav-ink-bar {
+      color: '{{primary-600-1}}';
+      background: '{{primary-600-1}}';
+    }
+  }
+}
+
 md-nav-bar.md-THEME_NAME-theme {
 
   .md-nav-bar {
@@ -13,4 +68,26 @@ md-nav-bar.md-THEME_NAME-theme {
     color: '{{accent-color}}';
     background: '{{accent-color}}';
   }
+
+  &.md-accent {
+    @include md-nav-bar-accent();
+  }
+
+  &.md-warn {
+    @include md-nav-bar-warn();
+  }
+
+  &.md-primary {
+    @include md-nav-bar-primary();
+  }
+}
+
+md-toolbar > md-nav-bar.md-THEME_NAME-theme {
+  @include md-nav-bar-primary();
+}
+md-toolbar.md-accent > md-nav-bar.md-THEME_NAME-theme {
+  @include md-nav-bar-accent();
+}
+md-toolbar.md-warn > md-nav-bar.md-THEME_NAME-theme {
+  @include md-nav-bar-warn();
 }
