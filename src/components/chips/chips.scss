@@ -129,6 +129,8 @@ $contact-chip-name-width: rem(12) !default;
       md-icon {
         height: $chip-delete-icon-size;
         width: $chip-delete-icon-size;
+        min-height: $chip-delete-icon-size;
+        min-width: $chip-delete-icon-size;
         position: absolute;
         top: 50%;
         left: 50%;
