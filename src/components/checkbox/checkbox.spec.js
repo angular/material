@@ -272,6 +272,14 @@ describe('mdCheckbox', function() {
       expect(checkbox.hasClass(CHECKED_CSS)).toBe(false);
     });
 
+    it('properly handles click event when ng-checked is set', function() {
+      pageScope.checked = false;
+      var checkbox = compileAndLink('<md-checkbox ng-checked="checked"></md-checkbox>');
+
+      checkbox.triggerHandler('click');
+      expect(isChecked(checkbox)).toBe(true);
+    });
+
     it('should mark the checkbox as selected on load with ng-checked', function() {
       pageScope.isChecked = function() { return true; };
 
