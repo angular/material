@@ -184,10 +184,10 @@ angular
  *     <md-item-template>
  *       <span md-highlight-text="searchText">{{item.display}}</span>
  *     </md-item-template>
- *     <div ng-messages="autocompleteForm.autocomplete.$error">
- *       <div ng-message="required">This field is required</div>
- *     </div>
  *   </md-autocomplete>
+ *   <div ng-messages="autocompleteForm.autocomplete.$error">
+ *     <div ng-message="required">This field is required</div>
+ *   </div>
  * </form>
  * </hljs>
  *
