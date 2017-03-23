@@ -218,6 +218,7 @@ md-tab-content {
   > div {
     flex: 1 0 100%;
     min-width: 0;
+    overflow: auto; // Fixes not being able to swipe to scroll in certain touch devices.
     &.ng-leave {
       animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
     }
