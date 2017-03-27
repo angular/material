@@ -1,5 +1,6 @@
 <application>
-  <component name="EditorSettings">
-    <option name="ARE_LINE_NUMBERS_SHOWN" value="true" />
+  <component name="SqlEditorOptions">
+    <option name="concatenateStringsOnEnter" value="true" />
+    <option name="qualificationType" value="On collisions" />
   </component>
 </application>
