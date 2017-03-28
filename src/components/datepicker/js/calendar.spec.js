@@ -26,6 +26,9 @@ describe('md-calendar', function() {
     if (activeViewController) {
       angular.element(activeViewController.calendarScroller).triggerHandler('scroll');
     }
+
+    // Need this to handle the nextTick when setting first scroll.
+    $timeout.flush();
   }
 
   /** Extracts text as an array (one element per cell) from a tr element. */
