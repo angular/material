@@ -1130,25 +1130,63 @@ function MdDialogProvider($$interimElementProvider) {
       };
 
       /**
+       * Thanks goes to https://gomakethings.com/climbing-up-and-down-the-dom-tree-with-vanilla-javascript/
+       * Get all of an element's parent elements up the DOM tree
+       * @param  {Node}   elem     The element
+       * @param  {String} selector Selector to match against [optional]
+       * @return {Array}           The parent elements
+       */
+      function getParents( elem, selector ) {
+
+        // Element.matches() polyfill
+        if (!Element.prototype.matches) {
+          Element.prototype.matches =
+            Element.prototype.matchesSelector ||
+            Element.prototype.mozMatchesSelector ||
+            Element.prototype.msMatchesSelector ||
+            Element.prototype.oMatchesSelector ||
+            Element.prototype.webkitMatchesSelector ||
+            function(s) {
+              var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+                i = matches.length;
+              while (--i >= 0 && matches.item(i) !== this) {}
+              return i > -1;
+            };
+        }
+
+        // Setup parents array
+        var parents = [];
+
+        // Get matching parent elements
+        for ( ; elem && elem !== document; elem = elem.parentNode ) {
+
+          // Add matching parents to array
+          if ( selector ) {
+            if ( elem.matches( selector ) ) {
+              parents.push( elem );
+            }
+          } else {
+            parents.push( elem );
+          }
+        }
+
+        return parents;
+      }
+
+      /**
        * Walk DOM to apply or remove aria-hidden on sibling nodes
        * and parent sibling nodes
        *
        */
       function walkDOM(element) {
-        while (element.parentNode) {
-          if (element === document.body) {
-            return;
-          }
-          var children = element.parentNode.children;
-          for (var i = 0; i < children.length; i++) {
-            // skip over child if it is an ascendant of the dialog
-            // or a script or style tag
-            if (element !== children[i] && !isNodeOneOf(children[i], ['SCRIPT', 'STYLE'])) {
-              children[i].setAttribute('aria-hidden', isHidden);
-            }
-          }
+        var elements = getParents(element.parentNode);
 
-          walkDOM(element = element.parentNode);
+        for (var i = 0; i < elements.length; i++) {
+          // skip over child if it is an ascendant of the dialog
+          // or a script or style tag
+          if (!isNodeOneOf(elements[i], ['SCRIPT', 'STYLE'])) {
+              elements[i].setAttribute('aria-hidden', isHidden);
+          }
         }
       }
     }
