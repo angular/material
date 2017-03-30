@@ -279,7 +279,7 @@
     replaceBaseHref('latest');
 
     //-- update firebase.json file
-    writeFirebaseJson();
+    updateFirebaseJson();
     exec([ 'git commit --amend --no-edit -a' ], options);
     done();
 
@@ -292,18 +292,20 @@
         'cd ..'
     );
 
-    function writeFirebaseJson () {
+    function updateFirebaseJson () {
       fs.writeFileSync(options.cwd + '/firebase.json', getFirebaseJson());
       function getFirebaseJson () {
-        var json      = require(options.cwd + '/firebase.json');
-        json.rewrites = json.rewrites || [];
-        switch (json.rewrites.length) {
+        var json = require(options.cwd + '/firebase.json');
+        json.hosting.rewrites = json.hosting.rewrites || [];
+        var rewrites = json.hosting.rewrites;
+
+        switch (rewrites.length) {
           case 0:
-            json.rewrites.push(getRewrite('HEAD'));
+            rewrites.push(getRewrite('HEAD'));
           case 1:
-            json.rewrites.push(getRewrite('latest'));
+            rewrites.push(getRewrite('latest'));
           default:
-            json.rewrites.push(getRewrite(newVersion));
+            rewrites.push(getRewrite(newVersion));
         }
         return JSON.stringify(json, null, 2);
         function getRewrite (str) {
@@ -384,7 +386,7 @@
   function header () {
     clear();
     line();
-    log(center('Angular Material Release'));
+    log(center('AngularJS Material Release'));
     line();
   }
 

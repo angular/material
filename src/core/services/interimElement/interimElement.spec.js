@@ -250,6 +250,53 @@ describe('$$interimElement service', function() {
       });
     });
 
+    it('should support multiple interims as a preset method', function() {
+
+      var showCount = 0;
+
+      createInterimProvider('interimTest');
+
+      inject(function(interimTest) {
+
+        showInterim(interimTest);
+        expect(showCount).toBe(1);
+
+        showInterim(interimTest);
+        expect(showCount).toBe(2);
+
+        interimTest.hide();
+        flush();
+
+        expect(showCount).toBe(1);
+
+        interimTest.hide();
+        flush();
+
+        expect(showCount).toBe(0);
+
+      });
+
+      function showInterim(service) {
+
+        var preset = service
+          .build()
+          .template('<div>Interim Element</div>')
+          .multiple(true);
+
+        preset._options.onShow = function() {
+          showCount++;
+        };
+
+        preset._options.onRemove = function() {
+          showCount--;
+        };
+
+        service.show(preset);
+        flush();
+      }
+
+    });
+
   });
 
   describe('a service', function() {
@@ -365,6 +412,35 @@ describe('$$interimElement service', function() {
         }
       });
 
+      it('should hide multiple elements', function() {
+        var showCount = 0;
+
+        showInterim();
+        expect(showCount).toBe(1);
+
+        showInterim();
+        expect(showCount).toBe(2);
+
+        Service.hide();
+        expect(showCount).toBe(1);
+
+        Service.hide();
+        expect(showCount).toBe(0);
+
+        function showInterim() {
+          Service.show({
+            template: '<div>Interim Element</div>',
+            onShow: function() {
+              showCount++;
+            },
+            onRemove: function() {
+              showCount--;
+            },
+            multiple: true
+          });
+        }
+
+      });
 
       it('should not show multiple interim elements by default', function() {
         var showCount = 0;

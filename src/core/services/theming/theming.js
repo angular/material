@@ -36,7 +36,7 @@ function detectDisabledThemes($mdThemingProvider) {
  * ### Default Theme
  * The `$mdThemingProvider` uses by default the following theme configuration:
  *
- * - Primary Palette: `Primary`
+ * - Primary Palette: `Blue`
  * - Accent Palette: `Pink`
  * - Warn Palette: `Deep-Orange`
  * - Background Palette: `Grey`
@@ -121,7 +121,7 @@ function detectDisabledThemes($mdThemingProvider) {
 /**
  * @ngdoc method
  * @name $mdThemingProvider#registerStyles
- * @param {string} styles The styles to be appended to Angular Material's built in theme css.
+ * @param {string} styles The styles to be appended to AngularJS Material's built in theme css.
  */
 /**
  * @ngdoc method
@@ -532,6 +532,12 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    *     restrict: 'e',
    *     link: function(scope, el, attrs) {
    *       $mdTheming(el);
+   *
+   *       $mdTheming.defineTheme('myTheme', {
+   *         primary: 'blue',
+   *         accent: 'pink',
+   *         dark: true
+   *       })
    *     }
    *   };
    * });
@@ -605,8 +611,26 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    * @returns {Function} remove function of the browser color
    */
 
+  /**
+   * @ngdoc method
+   * @name $mdTheming#defineTheme
+   * @description
+   * Dynamically define a theme by an options object
+   *
+   * options are:<br/>
+   * `primary`    - The primary palette of the theme.<br/>
+   * `accent`     - The accent palette of the theme.<br/>
+   * `warn`       - The warn palette of the theme.<br/>
+   * `background` - The background palette of the theme.<br/>
+   * `dark`       - Indicates if it's a dark theme.<br/>
+   *
+   * @param {String} name Theme name to define
+   * @param {Object} options Theme definition options
+   * @returns {Promise<string>} A resolved promise with the theme name
+   */
+
   /* @ngInject */
-  function ThemingService($rootScope, $log) {
+  function ThemingService($rootScope, $mdUtil, $q, $log) {
         // Allow us to be invoked via a linking function signature.
     var applyTheme = function (scope, el) {
           if (el === undefined) { el = scope; scope = undefined; }
@@ -614,12 +638,50 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
           applyTheme.inherit(el, el);
         };
 
-    applyTheme.THEMES = angular.extend({}, THEMES);
-    applyTheme.PALETTES = angular.extend({}, PALETTES);
+    Object.defineProperty(applyTheme, 'THEMES', {
+      get: function () {
+        return angular.extend({}, THEMES);
+      }
+    });
+    Object.defineProperty(applyTheme, 'PALETTES', {
+      get: function () {
+        return angular.extend({}, PALETTES);
+      }
+    });
+    Object.defineProperty(applyTheme, 'ALWAYS_WATCH', {
+      get: function () {
+        return alwaysWatchTheme;
+      }
+    });
     applyTheme.inherit = inheritTheme;
     applyTheme.registered = registered;
     applyTheme.defaultTheme = function() { return defaultTheme; };
     applyTheme.generateTheme = function(name) { generateTheme(THEMES[name], name, themeConfig.nonce); };
+    applyTheme.defineTheme = function(name, options) {
+      options = options || {};
+
+      var theme = registerTheme(name);
+
+      if (options.primary) {
+        theme.primaryPalette(options.primary);
+      }
+      if (options.accent) {
+        theme.accentPalette(options.accent);
+      }
+      if (options.warn) {
+        theme.warnPalette(options.warn);
+      }
+      if (options.background) {
+        theme.backgroundPalette(options.background);
+      }
+      if (options.dark){
+        theme.dark();
+      }
+
+      this.generateTheme(name);
+
+      return $q.resolve(name);
+    };
     applyTheme.setBrowserColor = enableBrowserColor;
 
     return applyTheme;
@@ -636,14 +698,25 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
      * Get theme name for the element, then update with Theme CSS class
      */
     function inheritTheme (el, parent) {
-      var ctrl = parent.controller('mdTheme');
-      var attrThemeValue = el.attr('md-theme-watch');
-      var watchTheme = (alwaysWatchTheme || angular.isDefined(attrThemeValue)) && attrThemeValue != 'false';
+      var ctrl = parent.controller('mdTheme') || el.data('$mdThemeController');
 
       updateThemeClass(lookupThemeName());
 
-      if ((alwaysWatchTheme && !registerChangeCallback()) || (!alwaysWatchTheme && watchTheme)) {
-        el.on('$destroy', $rootScope.$watch(lookupThemeName, updateThemeClass) );
+      if (ctrl) {
+        var watchTheme = alwaysWatchTheme ||
+                         ctrl.$shouldWatch ||
+                         $mdUtil.parseAttributeBoolean(el.attr('md-theme-watch'));
+
+        var unwatch = ctrl.registerChanges(function (name) {
+          updateThemeClass(name);
+
+          if (!watchTheme) {
+            unwatch();
+          }
+          else {
+            el.on('$destroy', unwatch);
+          }
+        });
       }
 
       /**
@@ -651,7 +724,6 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
        */
       function lookupThemeName() {
         // As a few components (dialog) add their controllers later, we should also watch for a controller init.
-        ctrl = parent.controller('mdTheme') || el.data('$mdThemeController');
         return ctrl && ctrl.$mdTheme || (defaultTheme == 'default' ? '' : defaultTheme);
       }
 
@@ -674,29 +746,34 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
           el.data('$mdThemeController', ctrl);
         }
       }
-
-      /**
-       * Register change callback with parent mdTheme controller
-       */
-      function registerChangeCallback() {
-        var parentController = parent.controller('mdTheme');
-        if (!parentController) return false;
-        el.on('$destroy', parentController.registerChanges( function() {
-          updateThemeClass(lookupThemeName());
-        }));
-        return true;
-      }
     }
 
   }
 }
 
-function ThemingDirective($mdTheming, $interpolate, $log) {
+function ThemingDirective($mdTheming, $interpolate, $parse, $mdUtil, $q, $log) {
   return {
-    priority: 100,
+    priority: 101, // has to be more than 100 to be before interpolation (issue on IE)
     link: {
       pre: function(scope, el, attrs) {
         var registeredCallbacks = [];
+
+        var startSymbol = $interpolate.startSymbol();
+        var endSymbol = $interpolate.endSymbol();
+
+        var theme = attrs.mdTheme.trim();
+
+        var hasInterpolation =
+          theme.substr(0, startSymbol.length) === startSymbol &&
+          theme.lastIndexOf(endSymbol) === theme.length - endSymbol.length;
+
+        var oneTimeOperator = '::';
+        var oneTimeBind = attrs.mdTheme
+            .split(startSymbol).join('')
+            .split(endSymbol).join('')
+            .trim()
+            .substr(0, oneTimeOperator.length) === oneTimeOperator;
+
         var ctrl = {
           registerChanges: function (cb, context) {
             if (context) {
@@ -717,16 +794,50 @@ function ThemingDirective($mdTheming, $interpolate, $log) {
             if (!$mdTheming.registered(theme)) {
               $log.warn('attempted to use unregistered theme \'' + theme + '\'');
             }
+
             ctrl.$mdTheme = theme;
 
-            registeredCallbacks.forEach(function (cb) {
-              cb();
-            });
-          }
+            // Iterating backwards to support unregistering during iteration
+            // http://stackoverflow.com/a/9882349/890293
+            // we don't use `reverse()` of array because it mutates the array and we don't want it to get re-indexed
+            for (var i = registeredCallbacks.length; i--;) {
+              registeredCallbacks[i](theme);
+            }
+          },
+          $shouldWatch: $mdUtil.parseAttributeBoolean(el.attr('md-theme-watch')) ||
+                        $mdTheming.ALWAYS_WATCH ||
+                        (hasInterpolation && !oneTimeBind)
         };
+
         el.data('$mdThemeController', ctrl);
-        ctrl.$setTheme($interpolate(attrs.mdTheme)(scope));
-        attrs.$observe('mdTheme', ctrl.$setTheme);
+
+        var getTheme = function () {
+          var interpolation = $interpolate(attrs.mdTheme)(scope);
+          return $parse(interpolation)(scope) || interpolation;
+        };
+
+        var setParsedTheme = function (theme) {
+          if (typeof theme === 'string') {
+            return ctrl.$setTheme(theme);
+          }
+
+          $q.when( angular.isFunction(theme) ?  theme() : theme )
+            .then(function(name){
+              ctrl.$setTheme(name);
+            });
+        };
+
+        setParsedTheme(getTheme());
+
+        var unwatch = scope.$watch(getTheme, function(theme) {
+          if (theme) {
+            setParsedTheme(theme);
+
+            if (!ctrl.$shouldWatch) {
+              unwatch();
+            }
+          }
+        });
       }
     }
   };

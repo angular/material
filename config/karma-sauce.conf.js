@@ -16,7 +16,7 @@ module.exports = function(config) {
     // Maximum 10 browsers - SauceLabs limit
     // Those pre-configured browsers will always run in the CI Release Mode to confirm, that all
     // previous jobs have passed.
-    browsers: ['SL_CHROME', 'SL_FIREFOX', 'SL_IE11'],
+    browsers: ['SL_CHROME'],   //, 'SL_FIREFOX', 'SL_IE11'],
     customLaunchers: require('./sauce-browsers.json'),
 
     captureTimeout: 180 * 1000,
@@ -27,9 +27,9 @@ module.exports = function(config) {
     reporters: ['dots', 'saucelabs'],
 
     sauceLabs: {
-      testName: 'Angular Material 1.x Unit Tests',
-      tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER,
-      build: 'Build ' + process.env.TRAVIS_BUILD_NUMBER + '.' + process.env.TRAVIS_BUILD_ID,
+      testName: 'AngularJS Material 1.x Unit Tests',
+      tunnelIdentifier: process.env.TRAVIS_JOB_ID,
+      build: 'Build ' + process.env.TRAVIS_JOB_ID,
 
       // Don't start the Sauce Connector. We use the integrated from Travis CI.
       startConnect: false,

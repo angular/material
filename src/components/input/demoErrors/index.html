@@ -69,6 +69,27 @@
         </div>
       </md-input-container>
 
+      <md-input-container class="md-block">
+        <md-checkbox name="tos" ng-model="project.tos" required>
+          I accept the terms of service.
+        </md-checkbox>
+        <div ng-messages="projectForm.tos.$error" multiple md-auto-hide="false">
+          <div ng-message="required">
+            You must accept the terms of service before you can proceed.
+          </div>
+        </div>
+      </md-input-container>
+
+      <md-input-container class="md-block">
+        <md-switch class="md-primary" name="special" ng-model="project.special" required>
+          Enable special options.
+        </md-switch>
+        <div ng-messages="projectForm.special.$error" multiple>
+          <div ng-message="required">
+            You must enable all special options before you can proceed.
+          </div>
+        </div>
+      </md-input-container>
       <div>
         <md-button type="submit">Submit</md-button>
       </div>

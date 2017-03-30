@@ -13,7 +13,7 @@ Enables browser header coloring with [Material Design Colors](https://material.g
 For more information, please visit:<br/> 
 https://developers.google.com/web/fundamentals/design-and-ui/browser-customization/theme-color.
  
-Below are usage examples for both the Angular configuration phase, and during runtime.
+Below are usage examples for both the AngularJS configuration phase, and during runtime.
 ### Config Phase
 <hljs lang="js">
   myAppModule
@@ -43,5 +43,5 @@ Below are usage examples for both the Angular configuration phase, and during ru
     })
 </hljs>
 
-For api reference please visit [$mdThemingProvider](/api/service/$mdThemingProvider#enableBrowserColor) documentation.
+For api reference please visit <a ng-href="/api/service/$mdThemingProvider#enableBrowserColor">$mdThemingProvider</a> documentation.
 

@@ -1,36 +1,7 @@
 // The default item height is also specified in the JavaScript.
 $md-autocomplete-item-height: 48px !default;
-
-@keyframes md-autocomplete-list-out {
-  0% {
-    animation-timing-function: linear;
-  }
-  50% {
-    opacity: 0;
-    height: 40px;
-    animation-timing-function: ease-in;
-  }
-  100% {
-    height: 0;
-    opacity: 0;
-  }
-}
-
-@keyframes md-autocomplete-list-in {
-  0% {
-    opacity: 0;
-    height: 0;
-    animation-timing-function: ease-out;
-  }
-  50% {
-    opacity: 0;
-    height: 40px;
-  }
-  100% {
-    opacity: 1;
-    height: 40px;
-  }
-}
+$md-autocomplete-clear-size: 30px !default;
+$md-autocomplete-input-offset: 20px !default;
 
 md-autocomplete {
   border-radius: 2px;
@@ -50,19 +21,29 @@ md-autocomplete {
     height: auto;
 
     md-input-container {
-      padding-bottom: 0px;
+      padding-bottom: 0;
     }
     md-autocomplete-wrap {
       height: auto;
     }
-    button {
-      position: absolute;
-      top: auto;
-      bottom: 0;
-      right: 0;
-      width: 30px;
-      height: 30px;
+
+    .md-show-clear-button {
+
+      button {
+        display: block;
+        position: absolute;
+        right: 0;
+        top: $md-autocomplete-input-offset;
+        width: $md-autocomplete-clear-size;
+        height: $md-autocomplete-clear-size;
+      }
+
+      input {
+        // Add padding to the end of the input to avoid overlapping with the clear button.
+        @include rtl-prop(padding-right, padding-left, $md-autocomplete-clear-size, 0);
+      }
     }
+
   }
   md-autocomplete-wrap {
 
@@ -80,9 +61,9 @@ md-autocomplete {
 
     md-input-container, input {
       // Layout [flex]
-      flex:1 1 0%;
-      box-sizing:border-box;
-      min-width :0;
+      flex: 1 1 0%;
+      box-sizing: border-box;
+      min-width : 0;
     }
 
     md-progress-linear {
@@ -130,12 +111,12 @@ md-autocomplete {
     line-height: 40px;
     height: 40px;
   }
-  button {
+  .md-show-clear-button button {
     position: relative;
     line-height: 20px;
     text-align: center;
-    width: 30px;
-    height: 30px;
+    width: $md-autocomplete-clear-size;
+    height: $md-autocomplete-clear-size;
     cursor: pointer;
     border: none;
     border-radius: 50%;
@@ -203,6 +184,10 @@ md-autocomplete {
   position: absolute;
   box-shadow: 0 2px 5px rgba(black, 0.25);
   z-index: $z-index-tooltip;
+
+  // Expand the virtualRepeatContainer as much as the max-height from the JavaScript allows.
+  // This is necessary for the virtualRepeatContainer to be able to grow back.
+  height: 100%;
 }
 
 .md-virtual-repeat-container.md-not-found {

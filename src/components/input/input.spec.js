@@ -306,6 +306,33 @@ describe('md-input-container directive', function() {
       expect(getCharCounter(element).text()).toBe('3 / 6');
     });
 
+    it('should update correctly the counter, when deleting the model value', function() {
+      var el = $compile(
+        '<form name="form">' +
+          '<md-input-container>' +
+          '<input md-maxlength="5" ng-model="foo" name="foo">' +
+          '</md-input-container>' +
+        '</form>'
+      )(pageScope);
+
+      pageScope.$apply();
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('0 / 5');
+
+      pageScope.$apply('foo = "abcdef"');
+      expect(pageScope.form.foo.$error['md-maxlength']).toBe(true);
+      expect(getCharCounter(el).text()).toBe('6 / 5');
+
+
+      pageScope.$apply('foo = ""');
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('0 / 5');
+    });
+
     it('should add and remove maxlength element & error with expression', function() {
       var el = $compile(
         '<form name="form">' +
@@ -444,7 +471,7 @@ describe('md-input-container directive', function() {
     pageScope.placeholder = 'bar';
     pageScope.$digest();
 
-    // We should check again to make sure that Angular didn't
+    // We should check again to make sure that AngularJS didn't
     // re-add the placeholder attribute and cause double labels.
     expect(input.hasAttribute('placeholder')).toBe(false);
     expect(label.textContent).toEqual('bar');
@@ -620,24 +647,27 @@ describe('md-input-container directive', function() {
     });
 
     it('should select the input value on focus', inject(function($timeout) {
-      var container = setup('md-select-on-focus');
-      var input = container.find('input');
-      input.val('Auto Text Select');
+      var input = $compile('<input md-select-on-focus value="Text">')($rootScope);
 
-      document.body.appendChild(container[0]);
+      document.body.appendChild(input[0]);
 
       expect(isTextSelected(input[0])).toBe(false);
 
+      input.focus();
       input.triggerHandler('focus');
+      $timeout.flush();
 
       expect(isTextSelected(input[0])).toBe(true);
 
-      document.body.removeChild(container[0]);
+      input.remove();
+
 
       function isTextSelected(input) {
-        // The selection happens in a timeout which needs to be flushed.
-        $timeout.flush();
-        return input.selectionStart === 0 && input.selectionEnd == input.value.length;
+        if (typeof input.selectionStart === "number") {
+          return input.selectionStart === 0 && input.selectionEnd === input.value.length;
+        } else if (typeof document.selection !== "undefined") {
+          return document.selection.createRange().text === input.value;
+        }
       }
     }));
 

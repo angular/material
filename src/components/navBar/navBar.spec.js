@@ -33,14 +33,16 @@ describe('mdNavBar', function() {
 
   function createTabs() {
     create(
-        '<md-nav-bar md-selected-nav-item="selectedTabRoute" nav-bar-aria-label="{{ariaLabel}}">' +
+        '<md-nav-bar md-selected-nav-item="selectedTabRoute" ' +
+        '            md-no-ink-bar="noInkBar" ' +
+        '            nav-bar-aria-label="{{ariaLabel}}">' +
         '  <md-nav-item md-nav-href="#1" name="tab1">' +
         '    tab1' +
         '  </md-nav-item>' +
         '  <md-nav-item md-nav-href="#2" name="tab2">' +
         '    tab2' +
         '  </md-nav-item>' +
-        '  <md-nav-item md-nav-href="#3" name="tab3">' +
+        '  <md-nav-item md-nav-href="#3" name="tab3" aria-label="foo">' +
         '    tab3' +
         '  </md-nav-item>' +
         '</md-nav-bar>');
@@ -156,6 +158,34 @@ describe('mdNavBar', function() {
 
       expect($scope.selectedTabRoute).toBe('tab2');
     });
+
+    it('adds ui-sref-opts attribute to nav item when sref-opts attribute is ' +
+        'defined', function() {
+          create(
+            '<md-nav-bar md-selected-nav-item="selected" nav-bar-aria-label="nav">' +
+              '<md-nav-item md-nav-sref="page1">' +
+                'tab1' +
+              '</md-nav-item>' +
+              '<md-nav-item md-nav-sref="page2" sref-opts="{reload:true,notify:true}">' +
+                'tab2' +
+              '</md-nav-item>' +
+            '</md-nav-bar>'
+          );
+
+          expect(getTab('tab2').attr('ui-sref-opts'))
+              .toBe('{"reload":true,"notify":true}');
+        });
+
+    it('does not update tabs if tab controller is undefined', function() {
+      $scope.selectedTabRoute = 'tab1';
+
+      spyOn(Object.getPrototypeOf(ctrl), '_updateInkBarStyles');
+      spyOn(Object.getPrototypeOf(ctrl), '_getTabs').and.returnValue(null);
+      createTabs();
+
+      expect(ctrl._updateInkBarStyles)
+        .not.toHaveBeenCalled();
+    });
   });
 
   describe('inkbar', function() {
@@ -172,6 +202,21 @@ describe('mdNavBar', function() {
 
       expect(parseInt(getInkbarEl().style.left))
           .toBeCloseTo(getTab('tab3')[0].offsetLeft, 0.1);
+    });
+
+    it('should hide if md-no-ink-bar is enabled', function() {
+      $scope.noInkBar = false;
+      $scope.selectedTabRoute = 'tab1';
+
+      createTabs();
+
+      expect(getInkbarEl().offsetParent).toBeTruthy();
+
+      $scope.$apply('noInkBar = true');
+      expect(getInkbarEl().offsetParent).not.toBeTruthy();
+
+      $scope.$apply('noInkBar = false');
+      expect(getInkbarEl().offsetParent).toBeTruthy();
     });
   });
 
@@ -210,16 +255,17 @@ describe('mdNavBar', function() {
          $scope.$apply();
 
          expect(getTab('tab2')).toHaveClass('md-focused');
+         expect(document.activeElement).toBe(getTab('tab2')[0]);
        });
 
-    it('removes tab focus when the navbar blurs', function() {
+    it('removes tab focus when the tab blurs', function() {
       $scope.selectedTabRoute = 'tab2';
       createTabs();
 
       tabContainer.triggerHandler('focus');
       expect(getTab('tab2')).toHaveClass('md-focused');
 
-      tabContainer.triggerHandler('blur');
+      getTab('tab2').triggerHandler('blur');
       expect(getTab('tab2')).not.toHaveClass('md-focused');
     });
 
@@ -239,6 +285,7 @@ describe('mdNavBar', function() {
       $scope.$apply();
 
       expect(getTab('tab1')).toHaveClass('md-focused');
+      expect(document.activeElement).toBe(getTab('tab1')[0]);
       expect(getTab('tab2')).not.toHaveClass('md-focused');
       expect(getTab('tab3')).not.toHaveClass('md-focused');
     });
@@ -261,6 +308,7 @@ describe('mdNavBar', function() {
       expect(getTab('tab1')).not.toHaveClass('md-focused');
       expect(getTab('tab2')).not.toHaveClass('md-focused');
       expect(getTab('tab3')).toHaveClass('md-focused');
+      expect(document.activeElement).toBe(getTab('tab3')[0]);
     });
 
     it('enter selects a tab', function() {
@@ -279,6 +327,17 @@ describe('mdNavBar', function() {
       $timeout.flush();
 
       expect(tab2Ctrl.getButtonEl().click).toHaveBeenCalled();
+    });
+
+    it('automatically adds label to nav items', function() {
+      createTabs();
+      expect(getTab('tab1').parent().attr('aria-label')).toBe('tab1');
+      expect(getTab('tab2').parent().attr('aria-label')).toBe('tab2');
+    });
+
+    it('does not change aria-label on nav items', function() {
+      createTabs();
+      expect(getTab('tab3').parent().attr('aria-label')).toBe('foo');
     });
   });
 

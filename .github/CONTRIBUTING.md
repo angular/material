@@ -1,4 +1,4 @@
-# Contributing to Angular Material
+# Contributing to AngularJS Material
 
  - [Code of Conduct](#coc)
  - [Signing the CLA](#cla)<br/><br/>
@@ -9,7 +9,7 @@
  - [Submission Guidelines](#submit)
 
 ## <a name="coc"></a> Code of Conduct
-Help us keep Angular open and inclusive.
+Help us keep AngularJS open and inclusive.
 
 Please read and follow our
 [Code of Conduct](https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md).
@@ -17,8 +17,8 @@ Please read and follow our
 <br/>
 ## <a name="question"></a> Have a Question, Problem, or Idea?
 
-If you have questions or ideas regarding Angular Material, please direct these to the
-[Angular Material Forum](https://groups.google.com/forum/#!forum/ngmaterial).
+If you have questions or ideas regarding AngularJS Material, please direct these to the
+[AngularJS Material Forum](https://groups.google.com/forum/#!forum/ngmaterial).
 
 Otherwise, do you:
 
@@ -44,7 +44,7 @@ You can request a new feature by
 implement a new feature then consider what kind of change it is:
 
 * **Major Changes** that you wish to contribute to the project should be discussed first on our
-  [Angular Material Forum](https://groups.google.com/forum/#!forum/ngmaterial), so that we can better
+  [AngularJS Material Forum](https://groups.google.com/forum/#!forum/ngmaterial), so that we can better
   coordinate our efforts, prevent duplication of work, and help you to craft the change so that it is
   successfully accepted into the project.
 * **Small Changes** can be crafted and submitted to the
@@ -80,12 +80,12 @@ quickly:
 
 * **Overview of the Issue** - if an error is being thrown, a non-minified stack trace helps.
 
-* **Angular Material Version** - check the header of your `angular-material.js` file to determine
+* **AngularJS Material Version** - check the header of your `angular-material.js` file to determine
                                  your specific version #.
 
 ```js
 /*!
- * Angular Material Design
+ * AngularJS Material Design
  * https://github.com/angular/material
  * @license MIT
  * v0.6.0-rc1-master-57f10f7
@@ -104,13 +104,13 @@ Here are two examples of well-defined issues:
 #### <a name="submitpr"></a>Submitting Pull Requests
 
 **Important**: With the exception of minor bugs and doc fixes, we are not actively reviewing
-unsolicited PRs to Angular Material.
+unsolicited PRs to AngularJS Material.
 
 Please check with us via [the discussion forum](https://groups.google.com/forum/#!forum/ngmaterial)
 before investing significant effort in a planned Pull Request submission; it's likely that we are already
 working on a related PR.
 
-* All contributions must be consistent with the Angular Material coding conventions. See the
+* All contributions must be consistent with the AngularJS Material coding conventions. See the
   [Coding Guidelines](../docs/guides/CODING.md)
 * Submit proposed changes or additions as GitHub pull requests. See the
   [Pull Request Guidelines](../docs/guides/PULL_REQUESTS.md)
@@ -120,7 +120,7 @@ working on a related PR.
 
 We have very precise rules over how our git commit messages can be formatted. This leads to **more
 readable messages** that are easy to follow when looking through the **project history**. It is
-important to note that we use the git commit messages to **generate** the Angular Material
+important to note that we use the git commit messages to **generate** the AngularJS Material
 [Changelog](../../CHANGELOG.md) document.
 
 > A detailed explanation of guidelines and conventions can be found in this
@@ -201,9 +201,9 @@ refactor(content): prefix mdContent scroll- attributes
 ## <a name="pr_forks"></a> Guidelines for Developer Commit Authorizations
 
 Please review the [Commit Level and Authorization Guidelines](../docs/guides/COMMIT_LEVELS.md) for
-details on how to implement and submit your fixes, changes, or enhancements to Angular Material.
+details on how to implement and submit your fixes, changes, or enhancements to AngularJS Material.
 
-This guideline provides details on creating a repository Fork of the Angular Material repository
+This guideline provides details on creating a repository Fork of the AngularJS Material repository
 and how to submit Pull Requests.
 
 

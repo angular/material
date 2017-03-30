@@ -2,7 +2,7 @@ describe('mdRadioButton component', function() {
 
   var CHECKED_CSS = 'md-checked';
 
-  beforeEach(module('material.components.radioButton'));
+  beforeEach(module('material.components.radioButton', 'ngAria'));
 
   describe('md-radio-group', function() {
 
@@ -207,6 +207,27 @@ describe('mdRadioButton component', function() {
       });
 
       expect(element[0]).toHaveClass('md-focused');
+    }));
+
+    it('should apply aria-checked properly when using ng-value', inject(function($compile, $rootScope, $timeout) {
+      $rootScope.color = 'blue';
+
+      var element = $compile(
+        '<md-radio-group ng-model="color">' +
+          '<md-radio-button ng-value="\'red\'"></md-radio-button>' +
+          '<md-radio-button ng-value="\'blue\'"></md-radio-button>' +
+          '<md-radio-button ng-value="\'green\'"></md-radio-button>' +
+        '</md-radio-group>')
+      ($rootScope);
+
+      $timeout.flush();
+
+      var checkedItems = element[0].querySelectorAll('[aria-checked="true"]');
+      var uncheckedItems = element[0].querySelectorAll('[aria-checked="false"]');
+
+      expect(checkedItems.length).toBe(1);
+      expect(uncheckedItems.length).toBe(2);
+      expect(checkedItems[0].getAttribute('value')).toBe($rootScope.color);
     }));
 
   });

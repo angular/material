@@ -6,9 +6,9 @@
  -  `CodePen Demo which shows your issue:`
  -  `Details:`
 
-**Angular Versions**: *
- -  `Angular Version:`
- -  `Angular Material Version:`
+**AngularJS Versions**: *
+ -  `AngularJS Version:`
+ -  `AngularJS Material Version:`
 
 **Additional Information**:
  -  `Browser Type: *`

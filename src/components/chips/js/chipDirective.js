@@ -1,6 +1,6 @@
 angular
-    .module('material.components.chips')
-    .directive('mdChip', MdChip);
+  .module('material.components.chips')
+  .directive('mdChip', MdChip);
 
 /**
  * @ngdoc directive
@@ -33,36 +33,46 @@ var DELETE_HINT_TEMPLATE = '\
  * @param $mdUtil
  * @ngInject
  */
-function MdChip($mdTheming, $mdUtil) {
-  var hintTemplate = $mdUtil.processTemplate(DELETE_HINT_TEMPLATE);
+function MdChip($mdTheming, $mdUtil, $compile, $timeout) {
+  var deleteHintTemplate = $mdUtil.processTemplate(DELETE_HINT_TEMPLATE);
 
   return {
     restrict: 'E',
     require: ['^?mdChips', 'mdChip'],
-    compile:  compile,
+    link: postLink,
     controller: 'MdChipCtrl'
   };
 
-  function compile(element, attr) {
-    // Append the delete template
-    element.append($mdUtil.processTemplate(hintTemplate));
+  function postLink(scope, element, attr, ctrls) {
+    var chipsController = ctrls.shift();
+    var chipController = ctrls.shift();
+    var chipContentElement = angular.element(element[0].querySelector('.md-chip-content'));
 
-    return function postLink(scope, element, attr, ctrls) {
-      var chipsController = ctrls.shift();
-      var chipController  = ctrls.shift();
-      $mdTheming(element);
+    $mdTheming(element);
 
-      if (chipsController) {
-        chipController.init(chipsController);
+    if (chipsController) {
+      chipController.init(chipsController);
 
-        angular
-          .element(element[0]
-          .querySelector('.md-chip-content'))
-          .on('blur', function () {
-            chipsController.resetSelectedChip();
-            chipsController.$scope.$applyAsync();
-          });
+      // Append our delete hint to the div.md-chip-content (which does not exist at compile time)
+      chipContentElement.append($compile(deleteHintTemplate)(scope));
+
+      // When a chip is blurred, make sure to unset (or reset) the selected chip so that tabbing
+      // through elements works properly
+      chipContentElement.on('blur', function() {
+        chipsController.resetSelectedChip();
+        chipsController.$scope.$applyAsync();
+      });
+    }
+
+    // Use $timeout to ensure we run AFTER the element has been added to the DOM so we can focus it.
+    $timeout(function() {
+      if (!chipsController) {
+        return;
       }
-    };
+
+      if (chipsController.shouldFocusLastChip) {
+        chipsController.focusLastChipThenInput();
+      }
+    });
   }
 }

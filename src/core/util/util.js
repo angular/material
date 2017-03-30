@@ -59,9 +59,28 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
   var $mdUtil = {
     dom: {},
-    now: window.performance ?
+    now: window.performance && window.performance.now ?
       angular.bind(window.performance, window.performance.now) : Date.now || function() {
       return new Date().getTime();
+    },
+
+    /**
+     * Cross-version compatibility method to retrieve an option of a ngModel controller,
+     * which supports the breaking changes in the AngularJS snapshot (SHA 87a2ff76af5d0a9268d8eb84db5755077d27c84c).
+     * @param {!angular.ngModelCtrl} ngModelCtrl
+     * @param {!string} optionName
+     * @returns {Object|undefined}
+     */
+    getModelOption: function (ngModelCtrl, optionName) {
+      if (!ngModelCtrl.$options) {
+        return;
+      }
+
+      var $options = ngModelCtrl.$options;
+
+      // The newer versions of AngularJS introduced a `getOption function and made the option values no longer
+      // visible on the $options object.
+      return $options.getOption ? $options.getOption(optionName) : $options[optionName]
     },
 
     /**
@@ -264,20 +283,25 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
         var viewportTop = $mdUtil.getViewportTop();
         var clientWidth = body.clientWidth;
+        var hasVerticalScrollbar = body.scrollHeight > body.clientHeight + 1;
 
-        if (body.scrollHeight > body.clientHeight + 1) {
-
+        if (hasVerticalScrollbar) {
           angular.element(body).css({
             position: 'fixed',
             width: '100%',
             top: -viewportTop + 'px'
           });
-
-          documentElement.style.overflowY = 'scroll';
         }
 
         if (body.clientWidth < clientWidth) {
           body.style.overflow = 'hidden';
+        }
+
+        // This should be applied after the manipulation to the body, because
+        // adding a scrollbar can potentially resize it, causing the measurement
+        // to change.
+        if (hasVerticalScrollbar) {
+          documentElement.style.overflowY = 'scroll';
         }
 
         return function restoreScroll() {
@@ -759,7 +783,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     /**
      * Returns true if the parent form of the element has been submitted.
      *
-     * @param element An Angular or HTML5 element.
+     * @param element An AngularJS or HTML5 element.
      *
      * @returns {boolean}
      */
@@ -773,10 +797,11 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     /**
      * Animate the requested element's scrollTop to the requested scrollPosition with basic easing.
      *
-     * @param element The element to scroll.
-     * @param scrollEnd The new/final scroll position.
+     * @param {!HTMLElement} element The element to scroll.
+     * @param {number} scrollEnd The new/final scroll position.
+     * @param {number=} duration Duration of the scroll. Default is 1000ms.
      */
-    animateScrollTo: function(element, scrollEnd) {
+    animateScrollTo: function(element, scrollEnd, duration) {
       var scrollStart = element.scrollTop;
       var scrollChange = scrollEnd - scrollStart;
       var scrollingDown = scrollStart < scrollEnd;
@@ -795,10 +820,10 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       }
 
       function calculateNewPosition() {
-        var duration = 1000;
+        var easeDuration = duration || 1000;
         var currentTime = $mdUtil.now() - startTime;
 
-        return ease(currentTime, scrollStart, scrollChange, duration);
+        return ease(currentTime, scrollStart, scrollChange, easeDuration);
       }
 
       function ease(currentTime, start, change, duration) {
@@ -813,6 +838,25 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
         return start + change * (-2 * tc + 3 * ts);
       }
+    },
+
+    /**
+     * Provides an easy mechanism for removing duplicates from an array.
+     *
+     *    var myArray = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4];
+     *
+     *    $mdUtil.uniq(myArray) => [1, 2, 3, 4]
+     *
+     * @param {array} array The array whose unique values should be returned.
+     *
+     * @returns {array} A copy of the array containing only unique values.
+     */
+    uniq: function(array) {
+      if (!array) { return; }
+
+      return array.filter(function(value, index, self) {
+        return self.indexOf(value) === index;
+      });
     }
   };
 

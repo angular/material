@@ -15,7 +15,11 @@
   </span>
 </md-button>
 
-<ul id="docs-menu-{{section.name | nospace}}" class="menu-toggle-list">
+<ul id="docs-menu-{{section.name | nospace}}"
+  class="menu-toggle-list"
+  aria-hidden="{{!renderContent}}"
+  ng-style="{ visibility: renderContent ? 'visible' : 'hidden' }">
+
   <li ng-repeat="page in section.pages">
     <menu-link section="page"></menu-link>
   </li>

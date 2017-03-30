@@ -127,6 +127,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
   });
 
   $routeProvider.otherwise('/');
+
+  // Change hash prefix of the AngularJS router, because we use the hash symbol for anchor links.
+  // The hash will be not used by the docs, because we use the HTML5 mode for our links.
+  $locationProvider.hashPrefix('!');
+
 }])
 
 .config(['AngularyticsProvider', function(AngularyticsProvider) {
@@ -333,7 +338,8 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   $rootScope.$on('$locationChangeSuccess', onLocationChange);
 
   $http.get("/docs.json")
-      .success(function(response) {
+      .then(function(response) {
+        response = response.data;
         var versionId = getVersionIdFromPath();
         var head = { type: 'version', url: '/HEAD', id: 'head', name: 'HEAD (master)', github: '' };
         var commonVersions = versionId === 'head' ? [] : [ head ];
@@ -487,7 +493,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   };
 })
 
-.directive('menuToggle', [ '$timeout', '$mdUtil', function($timeout, $mdUtil) {
+.directive('menuToggle', ['$mdUtil', '$animateCss', '$$rAF', function($mdUtil, $animateCss, $$rAF) {
   return {
     scope: {
       section: '='
@@ -496,59 +502,57 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
     link: function($scope, $element) {
       var controller = $element.parent().controller();
 
+      // Used for toggling the visibility of the accordion's content, after
+      // all of the animations are completed. This prevents users from being
+      // allowed to tab through to the hidden content.
+      $scope.renderContent = false;
+
       $scope.isOpen = function() {
         return controller.isOpen($scope.section);
       };
+
       $scope.toggle = function() {
         controller.toggleOpen($scope.section);
       };
 
       $mdUtil.nextTick(function() {
-        $scope.$watch(
-          function () {
-            return controller.isOpen($scope.section);
-          },
-          function (open) {
-            // We must run this in a next tick so that the getTargetHeight function is correct
-            $mdUtil.nextTick(function() {
-              var $ul = $element.find('ul');
-              var $li = $ul[0].querySelector('a.active');
-              var docsMenuContent = document.querySelector('.docs-menu').parentNode;
-              var targetHeight = open ? getTargetHeight() : 0;
+        $scope.$watch(function () {
+          return controller.isOpen($scope.section);
+        }, function (open) {
+          var $ul = $element.find('ul');
+          var $li = $ul[0].querySelector('a.active');
 
-              $timeout(function () {
-                // Set the height of the list
-                $ul.css({height: targetHeight + 'px'});
-
-                // If we are open and the user has not scrolled the content div; scroll the active
-                // list item into view.
-                if (open && $li && $li.offsetParent && $ul[0].scrollTop === 0) {
-                  $timeout(function() {
-                    var activeHeight = $li.scrollHeight;
-                    var activeOffset = $li.offsetTop;
-                    var parentOffset = $li.offsetParent.offsetTop;
-
-                    // Reduce it a bit (2 list items' height worth) so it doesn't touch the nav
-                    var negativeOffset = activeHeight * 2;
-                    var newScrollTop = activeOffset + parentOffset - negativeOffset;
-
-                    $mdUtil.animateScrollTo(docsMenuContent, newScrollTop);
-                  }, 350, false);
-                }
-              }, 0, false);
-
-              function getTargetHeight() {
-                var targetHeight;
-                $ul.addClass('no-transition');
-                $ul.css('height', '');
-                targetHeight = $ul.prop('clientHeight');
-                $ul.css('height', 0);
-                $ul.removeClass('no-transition');
-                return targetHeight;
-              }
-            }, false);
+          if (open) {
+            $scope.renderContent = true;
           }
-        );
+
+          $$rAF(function() {
+            var targetHeight = open ? $ul[0].scrollHeight : 0;
+
+            $animateCss($ul, {
+              easing: 'cubic-bezier(0.35, 0, 0.25, 1)',
+              to: { height: targetHeight + 'px' },
+              duration: 0.75 // seconds
+            }).start().then(function() {
+              var $li = $ul[0].querySelector('a.active');
+
+              $scope.renderContent = open;
+
+              if (open && $li && $ul[0].scrollTop === 0) {
+                var activeHeight = $li.scrollHeight;
+                var activeOffset = $li.offsetTop;
+                var offsetParent = $li.offsetParent;
+                var parentScrollPosition = offsetParent ? offsetParent.offsetTop : 0;
+
+                // Reduce it a bit (2 list items' height worth) so it doesn't touch the nav
+                var negativeOffset = activeHeight * 2;
+                var newScrollTop = activeOffset + parentScrollPosition - negativeOffset;
+
+                $mdUtil.animateScrollTo(document.querySelector('.docs-menu').parentNode, newScrollTop);
+              }
+            });
+          });
+        });
       });
 
       var parentNode = $element[0].parentNode.parentNode.parentNode;
@@ -570,7 +574,8 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   'menu',
   '$location',
   '$rootScope',
-function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope) {
+  '$mdUtil',
+function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $mdUtil) {
   var self = this;
 
   $scope.COMPONENTS = COMPONENTS;
@@ -582,6 +587,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   $scope.openMenu = openMenu;
   $scope.closeMenu = closeMenu;
   $scope.isSectionSelected = isSectionSelected;
+  $scope.scrollTop = scrollTop;
 
   // Grab the current year so we don't have to update the license every year
   $scope.thisYear = (new Date()).getFullYear();
@@ -610,6 +616,8 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
 
 
   var mainContentArea = document.querySelector("[role='main']");
+  var scrollContentEl = mainContentArea.querySelector('md-content[md-scroll-y]');
+
 
   // *********************
   // Internal methods
@@ -625,6 +633,10 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
 
   function path() {
     return $location.path();
+  }
+
+  function scrollTop() {
+    $mdUtil.animateScrollTo(scrollContentEl, 0, 200);
   }
 
   function goHome($event) {
@@ -820,5 +832,33 @@ function($rootScope, $scope, component, demos, $templateRequest) {
 
     // Just return the original string if we don't know what to do with it
     return str;
+  };
+})
+
+/** Directive which applies a specified class to the element when being scrolled */
+.directive('docsScrollClass', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attr) {
+
+      var scrollParent = element.parent();
+      var isScrolling = false;
+
+      // Initial update of the state.
+      updateState();
+
+      // Register a scroll listener, which updates the state.
+      scrollParent.on('scroll', updateState);
+
+      function updateState() {
+        var newState = scrollParent[0].scrollTop !== 0;
+
+        if (newState !== isScrolling) {
+          element.toggleClass(attr.docsScrollClass, newState);
+        }
+
+        isScrolling = newState;
+      }
+    }
   };
 });

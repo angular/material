@@ -13,7 +13,7 @@
 
 ## <a name="intro"></a> Introduction
 
-Angular Material has a sophisticated collection of build process and commands available... to deploy
+AngularJS Material has a sophisticated collection of build process and commands available... to deploy
 distribution files, test components, and more.
 
 These commands are defined within two (2) **gulp** files:
@@ -42,8 +42,8 @@ The following command line tasks are available:
 
 ###<a name="livedocs"></a> Building the Documentation
 
-The Angular Material **Live Docs** are generated from the source code and demos and actually use the
-Angular Material components and themes.
+The AngularJS Material **Live Docs** are generated from the source code and demos and actually use the
+AngularJS Material components and themes.
 
 > Our build process uses **[dgeni](https://github.com/angular/dgeni)**, the wonderful documentation
   generator built by [Pete Bacon Darwin](https://github.com/petebacondarwin).
@@ -52,7 +52,7 @@ See the [Building the Live Documentation](../README.md#docs) document for detail
 
 ###<a name="builds"></a> Building the Library
 
-Developers can build the entire Angular Material library or individual component modules. The
+Developers can build the entire AngularJS Material library or individual component modules. The
 library comprises:
 
 * `angular-material.js` - components
@@ -81,8 +81,8 @@ gulp build --release
 
 ###<a name="bower"></a> Using the Library with Bower
 
-For developers not interested in building the Angular Material library, use **bower** to install and
-use the Angular Material distribution files.
+For developers not interested in building the AngularJS Material library, use **bower** to install and
+use the AngularJS Material distribution files.
 
 Change to your project's root directory.
 
@@ -95,14 +95,14 @@ bower install angular-material#master
 ```
 
 Visit [Bower-Material](https://github.com/angular/bower-material/blob/master/README.md) for more
-details on how to install and use the Angular Material distribution files within your own local
+details on how to install and use the AngularJS Material distribution files within your own local
 project.
 
 <br/>
 ##<a name="comp"></a> Introducing Components
 
-Angular Material supports the construction and deployment of individual component builds. Within
-Angular Material, each component is contained within its own module and specifies its own
+AngularJS Material supports the construction and deployment of individual component builds. Within
+AngularJS Material, each component is contained within its own module and specifies its own
 dependencies.
 
 > At a minimum, all components have a dependency upon the `core` module.
@@ -185,7 +185,7 @@ gulp watch-demo -c textfield
 gulp server
 ```
 
-The demo build process will deploy a *self-contained* Angular application that runs the specified
+The demo build process will deploy a *self-contained* AngularJS application that runs the specified
 component's demo(s). E.g.:
 
 * `dist/demos/textfield/**/*.*`

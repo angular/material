@@ -8,7 +8,6 @@ var path = require('path');
 var rename = require('gulp-rename');
 var filter = require('gulp-filter');
 var concat = require('gulp-concat');
-var autoprefixer = require('gulp-autoprefixer');
 var series = require('stream-series');
 var lazypipe = require('lazypipe');
 var glob = require('glob').sync;
@@ -29,7 +28,7 @@ var ROOT = constants.ROOT;
 var utils = require('../scripts/gulp-utils.js');
 
 exports.buildJs = buildJs;
-exports.autoprefix = autoprefix;
+exports.autoprefix = utils.autoprefix;
 exports.buildModule = buildModule;
 exports.filterNonCodeFiles = filterNonCodeFiles;
 exports.readModuleArg = readModuleArg;
@@ -71,17 +70,6 @@ function buildJs () {
     return gulp.src(config.mockFiles)
         .pipe(gulp.dest(config.outputDir));
   }
-}
-
-function autoprefix () {
-
-  return autoprefixer({browsers: [
-    'last 2 versions',
-    'not ie <= 10',
-    'not ie_mob <= 10',
-    'last 4 Android versions',
-    'Safari >= 8'
-  ]});
 }
 
 function minifyCss(extraOptions) {
@@ -161,6 +149,13 @@ function buildModule(module, opts) {
       {
         pattern: /\@ngInject/g,
         replacement: 'ngInject'
+      },
+      {
+        // Turns `thing.$inject` into `thing['$inject']` in order to prevent
+        // Closure from stripping it from objects with an @constructor
+        // annotation.
+        pattern: /\.\$inject\b/g,
+        replacement: "['$inject']"
       }
     ];
     return lazypipe()
@@ -190,7 +185,7 @@ function buildModule(module, opts) {
         .pipe(gulpif, /default-theme.scss/, concat(name + '-default-theme.scss'))
         .pipe(sass)
         .pipe(dedupeCss)
-        .pipe(autoprefix)
+        .pipe(utils.autoprefix)
     (); // Invoke the returning lazypipe function to create our new pipe.
   }
 

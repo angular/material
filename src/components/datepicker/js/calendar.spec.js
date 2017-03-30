@@ -70,7 +70,8 @@ describe('md-calendar', function() {
 
   /** Find the `tbody` for a year in the calendar. */
   function findYearElement(year) {
-    var years = element.querySelectorAll('[md-calendar-year-body]');
+    var node = element[0] || element;
+    var years = node.querySelectorAll('[md-calendar-year-body]');
     var yearHeader = year.toString();
     var target;
 
@@ -113,7 +114,8 @@ describe('md-calendar', function() {
   function dispatchKeyEvent(keyCode, opt_modifiers) {
     var mod = opt_modifiers || {};
 
-    angular.element(document.body).triggerHandler({
+
+    angular.element(element).triggerHandler({
       type: 'keydown',
       keyCode: keyCode,
       which: keyCode,
@@ -313,6 +315,31 @@ describe('md-calendar', function() {
         expect(pageScope.myDate).toBeSameDayAs(initialDate);
       });
 
+      it('should ensure that all month elements have a height when the max ' +
+        'date is in the same month as the current date', function() {
+
+        ngElement.remove();
+        var newScope = $rootScope.$new();
+        newScope.myDate = new Date(2016, JUN, 15);
+        newScope.maxDate = new Date(2016, JUN, 20);
+        element = createElement(newScope)[0];
+        applyDateChange();
+
+        var monthWrapper = angular.element(element.querySelector('md-calendar-month'));
+        var scroller = monthWrapper.controller('mdCalendarMonth').calendarScroller;
+
+        scroller.scrollTop -= 50;
+        angular.element(scroller).triggerHandler('scroll');
+
+        var monthElements = $mdUtil.nodesToArray(
+          element.querySelectorAll('[md-calendar-month-body]')
+        );
+
+        expect(monthElements.every(function(currentMonthElement) {
+          return currentMonthElement.offsetHeight > 0;
+        })).toBe(true);
+      });
+
       describe('weeks header', function() {
         it('should display the weeks header in the first row', function() {
           var header = element.querySelector('.md-calendar-day-header tr');
@@ -480,12 +507,38 @@ describe('md-calendar', function() {
         var newScope = $rootScope.$new();
         newScope.minDate = new Date(2014, JUN, 5);
         newScope.myDate = new Date(2014, JUL, 15);
-        element = createElement(newScope)[0];
-        angular.element(element).controller('mdCalendar').setCurrentView('year');
+        element = createElement(newScope);
+        element.controller('mdCalendar').setCurrentView('year');
         applyDateChange();
 
         expect(findYearElement(2014)).not.toBeNull();
         expect(findYearElement(2013)).toBeNull();
+      });
+
+      it('should ensure that all year elements have a height when the ' +
+        'current date is in the same month as the max date', function() {
+
+        ngElement.remove();
+        var newScope = $rootScope.$new();
+        newScope.myDate = new Date(2016, JUN, 15);
+        newScope.maxDate = new Date(2016, JUN, 20);
+        element = createElement(newScope);
+        element.controller('mdCalendar').setCurrentView('year');
+        applyDateChange();
+
+        var yearWrapper = angular.element(element[0].querySelector('md-calendar-year'));
+        var scroller = yearWrapper.controller('mdCalendarYear').calendarScroller;
+
+        scroller.scrollTop -= 50;
+        angular.element(scroller).triggerHandler('scroll');
+
+        var yearElements = $mdUtil.nodesToArray(
+          element[0].querySelectorAll('[md-calendar-year-body]')
+        );
+
+        expect(yearElements.every(function(currentYearElement) {
+          return currentYearElement.offsetHeight > 0;
+        })).toBe(true);
       });
     });
 

@@ -1,7 +1,7 @@
 /**
  * @ngdoc directive
  * @name mdMenuBar
- * @module material.components.menu-bar
+ * @module material.components.menuBar
  * @restrict E
  * @description
  *
@@ -12,7 +12,7 @@
  * <hljs lang="html">
  * <md-menu-bar>
  *   <md-menu>
- *     <button ng-click="$mdOpenMenu()">
+ *     <button ng-click="$mdMenu.open()">
  *       File
  *     </button>
  *     <md-menu-content>
@@ -25,7 +25,7 @@
  *       <md-menu-item>
  *       <md-menu-item>
  *         <md-menu>
- *           <md-button ng-click="$mdOpenMenu()">New</md-button>
+ *           <md-button ng-click="$mdMenu.open()">New</md-button>
  *           <md-menu-content>
  *             <md-menu-item><md-button ng-click="ctrl.sampleAction('New Document', $event)">Document</md-button></md-menu-item>
  *             <md-menu-item><md-button ng-click="ctrl.sampleAction('New Spreadsheet', $event)">Spreadsheet</md-button></md-menu-item>
@@ -52,7 +52,7 @@
  * <hljs lang="html">
  * <md-menu-bar>
  *  <md-menu>
- *    <button ng-click="$mdOpenMenu()">
+ *    <button ng-click="$mdMenu.open()">
  *      Sample Menu
  *    </button>
  *    <md-menu-content>
@@ -74,7 +74,7 @@
  * <hljs lang="html">
  * <md-menu-item>
  *   <md-menu>
- *     <button ng-click="$mdOpenMenu()">New</md-button>
+ *     <button ng-click="$mdMenu.open()">New</md-button>
  *     <md-menu-content>
  *       <md-menu-item><md-button ng-click="ctrl.sampleAction('New Document', $event)">Document</md-button></md-menu-item>
  *       <md-menu-item><md-button ng-click="ctrl.sampleAction('New Spreadsheet', $event)">Spreadsheet</md-button></md-menu-item>

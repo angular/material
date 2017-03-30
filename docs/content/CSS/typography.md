@@ -2,7 +2,7 @@
 @name Typography
 @description
 
-Angular Material provides typography CSS classes you can use to create visual
+AngularJS Material provides typography CSS classes you can use to create visual
 consistency across your application.
 
 <p style="text-align: center;">
@@ -17,12 +17,12 @@ consistency across your application.
   </md-toolbar>
   <div class="md-whiteframe-z1 docs-list">
     <p>
-      Angular Material uses the [Roboto](https://fonts.google.com/?selection.family=Roboto)
+      AngularJS Material uses the [Roboto](https://fonts.google.com/?selection.family=Roboto)
       font for all of its components.
     </p>
 
     <p>
-      The `Roboto` font will be <b>not</b> automatically loaded by Angular Material itself. The
+      The `Roboto` font will be <b>not</b> automatically loaded by AngularJS Material itself. The
       developer is responsible for loading all fonts used in their application. Shown below is a
       sample <i>link</i> markup used to load the `Roboto` font from a CDN.
     </p>
@@ -58,11 +58,11 @@ consistency across your application.
     </div>
     <md-divider></md-divider>
     <ul>
-      <li layout="column" layout-gt-md="row" layout-align="start center">
+      <li layout="row" layout-sm="column" layout-xs="column" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
           <code>.md-display-4</code>
         </span>
-        <h5 aria-describedby="headings-output" class="md-display-4 docs-output">Light 112px</h5>
+        <h5 flex aria-describedby="headings-output" class="md-display-4 docs-output">Light 112px</h5>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
