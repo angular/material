@@ -1159,8 +1159,6 @@ function MdDialogProvider($$interimElementProvider) {
        */
       function walkDOM(element) {
         var elements = getParents(element);
-        console.log(elements.length);
-
         for (var i = 0; i < elements.length; i++) {
           elements[i].setAttribute('aria-hidden', isHidden);
         }
