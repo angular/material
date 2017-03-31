@@ -1139,28 +1139,40 @@ function MdDialogProvider($$interimElementProvider) {
         options.unlockScreenReader = null;
       };
 
-      /**
-       * Walk DOM to apply or remove aria-hidden on sibling nodes
-       * and parent sibling nodes
-       *
-       */
-      function walkDOM(element) {
-        while (element.parentNode) {
-          if (element === document.body) {
-            return;
-          }
-          var children = element.parentNode.children;
-          for (var i = 0; i < children.length; i++) {
-            // skip over child if it is an ascendant of the dialog
-            // or a script or style tag
-            if (element !== children[i] && !isNodeOneOf(children[i], ['SCRIPT', 'STYLE'])) {
-              children[i].setAttribute('aria-hidden', isHidden);
+        /**
+         * Get all of an element's parent elements up the DOM tree
+         * @return {Array} The parent elements
+         */
+        function getParents(element) {
+          var parents = [];
+          while (element.parentNode) {
+            if (element === document.body) {
+              return parents;
             }
+            var children = element.parentNode.children;
+            for (var i = 0; i < children.length; i++) {
+              // skip over child if it is an ascendant of the dialog
+              // or a script or style tag
+              if (element !== children[i] && !isNodeOneOf(children[i], ['SCRIPT', 'STYLE'])) {
+                parents.push(children[i]);
+              }
+            }
+            element = element.parentNode;
           }
-
-          walkDOM(element = element.parentNode);
+          return parents;
         }
-      }
+
+        /**
+         * Walk DOM to apply or remove aria-hidden on sibling nodes
+         * and parent sibling nodes
+         *
+         */
+        function walkDOM(element) {
+          var elements = getParents(element);
+          for (var i = 0; i < elements.length; i++) {
+            elements[i].setAttribute('aria-hidden', isHidden);
+          }
+        }
     }
 
     /**
