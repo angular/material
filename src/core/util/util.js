@@ -284,6 +284,11 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         var viewportTop = $mdUtil.getViewportTop();
         var clientWidth = body.clientWidth;
         var hasVerticalScrollbar = body.scrollHeight > body.clientHeight + 1;
+        
+        // Scroll may be set on <html> element (for example by overflow-y: scroll)
+        // but Chrome is reporting the scrollTop position always on <body>.
+        // scrollElement will allow to restore the scrollTop position to proper target.
+        var scrollElement = documentElement.scrollTop > 0 ? documentElement : body;
 
         if (hasVerticalScrollbar) {
           angular.element(body).css({
@@ -310,7 +315,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
           documentElement.style.cssText = prevDocumentStyle;
 
           // The body loses its scroll position while being fixed.
-          body.scrollTop = viewportTop;
+          scrollElement.scrollTop = viewportTop;
         };
       }
 
