@@ -66,8 +66,8 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     defineBooleanAttribute('noDisconnect');
     defineBooleanAttribute('autoselect');
     defineBooleanAttribute('noSelectClick');
-    defineBooleanAttribute('centerTabs', handleCenterTabs, false);    
-    defineBooleanAttribute('alignRight', handleAlignRight, false);
+    defineBooleanAttribute('centerTabs', handleCenterTabs, false);
+    defineBooleanAttribute('alignRight', handleAlignEnd, false);
     defineBooleanAttribute('enableDisconnect');
 
     // Define public properties
@@ -78,7 +78,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     ctrl.hasFocus          = false;
     ctrl.styleTabItemFocus = false;
     ctrl.shouldCenterTabs  = shouldCenterTabs();
-    ctrl.shouldAlignRight  = shouldAlignRight();
+    ctrl.shouldAlignEnd  = shouldAlignEnd();
     ctrl.tabContentPrefix  = 'tab-content-';
 
     // Setup the tabs controller after all bindings are available.
@@ -187,8 +187,8 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     ctrl.shouldCenterTabs = shouldCenterTabs();
   }
 
-  function handleAlignRight (newValue) {
-    ctrl.shouldAlignRight = shouldAlignRight();
+  function handleAlignEnd (newValue) {
+    ctrl.shouldAlignEnd = shouldAlignEnd();
   }
 
   function handleMaxTabWidth (newWidth, oldWidth) {
@@ -206,7 +206,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     if (newValue !== oldValue) {
       ctrl.maxTabWidth      = getMaxTabWidth();
       ctrl.shouldCenterTabs = shouldCenterTabs();
-      ctrl.shouldAlignRight = shouldAlignRight();
+      ctrl.shouldAlignEnd = shouldAlignEnd();
       $mdUtil.nextTick(function () {
         ctrl.maxTabWidth = getMaxTabWidth();
         adjustOffset(ctrl.selectedIndex);
@@ -228,7 +228,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    */
   function handleOffsetChange (left) {
     var elements = getElements();
-    var newValue = ctrl.shouldCenterTabs || ctrl.shouldAlignRight ? '' : '-' + left + 'px';
+    var newValue = ctrl.shouldCenterTabs || ctrl.shouldAlignEnd ? '' : '-' + left + 'px';
 
     angular.element(elements.paging).css($mdConstant.CSS.TRANSFORM, 'translate3d(' + newValue + ', 0, 0)');
     $scope.$broadcast('$mdTabsPaginationChanged');
@@ -554,7 +554,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   function shouldCenterTabs () {
     return ctrl.centerTabs && !ctrl.shouldPaginate;
   }
-    function shouldAlignRight () {
+    function shouldAlignEnd () {
     return ctrl.alignRight && !ctrl.shouldPaginate;
   }
 
@@ -706,7 +706,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
 
     if (!angular.isNumber(index)) index = ctrl.focusIndex;
     if (!elements.tabs[ index ]) return;
-    if (ctrl.shouldCenterTabs || ctrl.shouldAlignRight) return;
+    if (ctrl.shouldCenterTabs || ctrl.shouldAlignEnd) return;
     var tab         = elements.tabs[ index ],
         left        = tab.offsetLeft,
         right       = tab.offsetWidth + left;
@@ -833,7 +833,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
         left       = tab.offsetLeft,
         right      = totalWidth - left - tab.offsetWidth;
 
-    if (ctrl.shouldCenterTabs || ctrl.shouldAlignRight) {
+    if (ctrl.shouldCenterTabs || ctrl.shouldAlignEnd) {
       // We need to use the same calculate process as in the pagination wrapper, to avoid rounding deviations.
       var tabWidth = calcTabsWidth(elements.tabs);
 
