@@ -67,7 +67,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     defineBooleanAttribute('autoselect');
     defineBooleanAttribute('noSelectClick');
     defineBooleanAttribute('centerTabs', handleCenterTabs, false);
-    defineBooleanAttribute('alignRight', handleAlignEnd, false);
+    defineBooleanAttribute('alignEnd', handleAlignEnd, false);
     defineBooleanAttribute('enableDisconnect');
 
     // Define public properties
@@ -555,7 +555,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     return ctrl.centerTabs && !ctrl.shouldPaginate;
   }
     function shouldAlignEnd () {
-    return ctrl.alignRight && !ctrl.shouldPaginate;
+    return ctrl.alignEnd && !ctrl.shouldPaginate;
   }
 
   /**
