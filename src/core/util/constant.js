@@ -19,7 +19,7 @@ function MdConstantFactory() {
     var lcPrefix = ucPrefix.charAt(0).toLowerCase() + ucPrefix.substring(1);
 
     return hasStyleProperty(prefixTestEl, name)     ? name     :       // The current browser supports the un-prefixed property
-           hasStyleProperty(prefixTestEl, ucPrefix) ? ucPrefix :       // The current browser only supports the prefixed property.
+           hasStyleProperty(prefixTestEl, ucPrefix) ? ucPrefix :       // The current browser only supports the prefixed property. 
            hasStyleProperty(prefixTestEl, lcPrefix) ? lcPrefix : name; // Some browsers are only supporting the prefix in lowercase.
   }
 
