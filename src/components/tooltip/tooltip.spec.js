@@ -14,7 +14,8 @@ describe('MdTooltip Component', function() {
   // Test filter for ensuring tooltip expressions are evaluated against the correct scope.
   angular.module('fullNameFilter', []).filter('fullName', function() {
     return function(user) {
-      return user ? user.name.first + ' ' + user.name.last : "";
+        // Intentionally dereference user without checking whether it is defined. Do not change!
+        return user.name.first + ' ' + user.name.last;
     }
   });
 
