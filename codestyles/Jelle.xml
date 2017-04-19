@@ -1,7 +1,6 @@
 <code_scheme name="Jelle">
   <JSCodeStyleSettings>
     <option name="FORCE_SEMICOLON_STYLE" value="true" />
-    <option name="ALIGN_OBJECT_PROPERTIES" value="2" />
     <option name="USE_DOUBLE_QUOTES" value="false" />
     <option name="ENFORCE_TRAILING_COMMA" value="Remove" />
   </JSCodeStyleSettings>
