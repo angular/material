@@ -113,13 +113,13 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       // tooltip directive.
       if (
         (!parent.attr('aria-label') && !parent.attr('aria-labelledby')) ||
-        parent.attr('aria-labelledby') === tooltipId
+        parent.attr('md-labeled-by-tooltip')
       ) {
         parent.attr('aria-label', interpolatedText);
 
-        // Set the `aria-labelledby` attribute if it has not already been set.
-        if (!parent.attr('aria-labelledby')) {
-          parent.attr('aria-labelledby', tooltipId);
+        // Set the `md-labeled-by-tooltip` attribute if it has not already been set.
+        if (!parent.attr('md-labeled-by-tooltip')) {
+          parent.attr('md-labeled-by-tooltip', tooltipId);
         }
       }
     }

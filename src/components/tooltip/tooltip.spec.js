@@ -105,7 +105,7 @@ describe('MdTooltip Component', function() {
     );
 
     expect(element.attr('aria-label')).toEqual('Tooltip');
-    expect(element.attr('aria-labelledby')).toBeDefined();
+    expect(element.attr('md-labeled-by-tooltip')).toBeDefined();
   });
 
   it('should not label the parent if it already has a label', function() {
@@ -118,7 +118,7 @@ describe('MdTooltip Component', function() {
     );
 
     expect(element.attr('aria-label')).toEqual('Button Label');
-    expect(element.attr('aria-labelledby')).toBeUndefined();
+    expect(element.attr('md-labeled-by-tooltip')).toBeUndefined();
   });
 
   it('should not label the parent if it has already been labelled by ' +
@@ -143,12 +143,12 @@ describe('MdTooltip Component', function() {
     );
 
     expect(element.attr('aria-label')).toBe('HELLO');
-    expect(element.attr('aria-labelledby')).toBeDefined();
+    expect(element.attr('md-labeled-by-tooltip')).toBeDefined();
   });
 
   it('should update the aria-label when the interpolated value changes', function() {
-    var ariaLabelledby;
-    var ariaLabelledby2;
+    var labeledByTooltip;
+    var labeledByTooltip2;
 
     buildTooltip(
       '<md-button>' +
@@ -161,16 +161,16 @@ describe('MdTooltip Component', function() {
     });
 
     expect(element.attr('aria-label')).toBe('test 1');
-    ariaLabelledby = element.attr('aria-labelledby');
-    expect(ariaLabelledby).toBeDefined();
+    labeledByTooltip = element.attr('md-labeled-by-tooltip');
+    expect(labeledByTooltip).toBeDefined();
 
     parentScope.$apply(function() {
       parentScope.testModel.ariaText = 'test 2';
     });
 
     expect(element.attr('aria-label')).toBe('test 2');
-    ariaLabelledby2 = element.attr('aria-labelledby');
-    expect(ariaLabelledby2).toEqual(ariaLabelledby);
+    labeledByTooltip2 = element.attr('md-labeled-by-tooltip');
+    expect(labeledByTooltip2).toEqual(labeledByTooltip);
   });
 
   it('should not update the parent aria-label when the interpolated' +
@@ -187,19 +187,19 @@ describe('MdTooltip Component', function() {
     });
 
     expect(element.attr('aria-label')).toBe('Button Label');
-    expect(element.attr('aria-labelledby')).toBeUndefined();
+    expect(element.attr('md-labeled-by-tooltip')).toBeUndefined();
 
     parentScope.$apply(function() {
       parentScope.testModel.ariaText = 'test 2';
     });
 
     expect(element.attr('aria-label')).toBe('Button Label');
-    expect(element.attr('aria-labelledby')).toBeUndefined();
+    expect(element.attr('md-labeled-by-tooltip')).toBeUndefined();
   });
 
   it('should not interpolate interpolated values', function() {
-    var ariaLabelledby;
-    var ariaLabelledby2;
+    var labeledByTooltip;
+    var labeledByTooltip2;
 
     buildTooltip(
       '<md-button>' +
@@ -212,16 +212,16 @@ describe('MdTooltip Component', function() {
     });
 
     expect(element.attr('aria-label')).toBe('test {{1+1}}');
-    ariaLabelledby = element.attr('aria-labelledby');
-    expect(ariaLabelledby).toBeDefined();
+    labeledByTooltip = element.attr('md-labeled-by-tooltip');
+    expect(labeledByTooltip).toBeDefined();
 
     parentScope.$apply(function() {
       parentScope.testModel.ariaTest = 'test {{1+1336}}';
     });
 
     expect(element.attr('aria-label')).toBe('test {{1+1336}}');
-    ariaLabelledby2 = element.attr('aria-labelledby');
-    expect(ariaLabelledby2).toEqual(ariaLabelledby);
+    labeledByTooltip2 = element.attr('md-labeled-by-tooltip');
+    expect(labeledByTooltip2).toEqual(labeledByTooltip);
   });
 
   it('should not set parent to items with no pointer events',
