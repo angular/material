@@ -516,13 +516,14 @@ function VirtualRepeatDirective($parse) {
 
 /** @ngInject */
 function VirtualRepeatController($scope, $element, $attrs, $browser, $document, $rootScope,
-    $$rAF, $mdUtil) {
+    $timeout, $$rAF, $mdUtil) {
   this.$scope = $scope;
   this.$element = $element;
   this.$attrs = $attrs;
   this.$browser = $browser;
   this.$document = $document;
   this.$rootScope = $rootScope;
+  this.$timeout = $timeout;
   this.$$rAF = $$rAF;
 
   /** @type {boolean} Whether we are in on-demand mode. */
@@ -761,14 +762,14 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
     this.container.setScrollSize(itemsLength * this.itemSize);
   }
 
-  var cleanupFirstRender = false, firstRenderStartIndex;
   if (this.isFirstRender) {
-    cleanupFirstRender = true;
     this.isFirstRender = false;
-    firstRenderStartIndex = this.$attrs.mdStartIndex ?
+    var firstRenderStartIndex = this.$attrs.mdStartIndex ?
       this.$scope.$eval(this.$attrs.mdStartIndex) :
       this.container.topIndex;
-    this.container.scrollToIndex(firstRenderStartIndex);
+
+    // Use timeout to trigger scroll, otherwise scroll position is wrong.
+    this.$timeout(this.container.scrollToIndex.bind(this.container, firstRenderStartIndex), 100);
   }
 
   // Detach and pool any blocks that are no longer in the viewport.
@@ -822,10 +823,6 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
         this.blocks[maxIndex] && this.blocks[maxIndex].element[0].nextSibling);
   }
 
-  // DOM manipulation may have altered scroll, so scroll again
-  if (cleanupFirstRender) {
-    this.container.scrollToIndex(firstRenderStartIndex);
-  }
   // Restore $$checkUrlChange.
   this.$browser.$$checkUrlChange = this.browserCheckUrlChange;
 
