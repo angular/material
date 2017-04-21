@@ -75,6 +75,10 @@ describe('md-datepicker', function() {
     pageScope.$apply();
   }
 
+  it('should be the same date object as the initial ng-model', function() {
+    expect(pageScope.myDate).toBe(initialDate);
+  });
+
   it('should set initial value from ng-model', function() {
     expect(controller.inputElement.value).toBe(dateLocale.formatDate(initialDate));
   });
