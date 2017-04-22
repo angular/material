@@ -631,7 +631,7 @@ describe('$mdDialog', function() {
 
   describe('#prompt()', function() {
     hasConfigurationMethods('prompt', ['title', 'htmlContent', 'textContent',
-      'content', 'placeholder', 'ariaLabel', 'ok', 'cancel', 'theme', 'css'
+      'content', 'placeholder', 'ariaLabel', 'ok', 'cancel', 'theme', 'css', 'inputType'
     ]);
 
     it('shows a basic prompt dialog', inject(function($animate, $rootScope, $mdDialog) {
