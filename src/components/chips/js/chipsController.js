@@ -551,13 +551,11 @@ MdChipsCtrl.prototype.resetChipBuffer = function() {
 
 MdChipsCtrl.prototype.hasMinChipsReached = function() {
   if (angular.isString(this.minChips)) this.minChips = parseInt(this.minChips, 10) || 0;
-
   return this.items.length <= this.maxChips;
 };
 
 MdChipsCtrl.prototype.hasMaxChipsReached = function() {
   if (angular.isString(this.maxChips)) this.maxChips = parseInt(this.maxChips, 10) || 0;
-
   return this.maxChips > 0 && this.items.length >= this.maxChips;
 };
 
