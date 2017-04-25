@@ -276,7 +276,6 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
             shouldStartDrag = Math.abs(pointer.distanceY) > this.state.options.minDistance;
             shouldCancel = Math.abs(pointer.distanceX) > this.state.options.minDistance * this.state.options.cancelMultiplier;
           }
-
           if (shouldStartDrag) {
             // Create a new pointer representing this drag, starting at this point where the drag started.
             this.state.dragPointer = makeStartPointer(ev);

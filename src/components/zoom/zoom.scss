@@ -1,0 +1,63 @@
+md-zoom {
+    position: relative;
+    .md-zoom-zoomed-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        z-index: 4;
+
+        img {
+            position: absolute;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+        }
+    }
+
+    .md-zoom-thumb-container {
+        display: block;
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        align-content: center;
+        
+        .overlay {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1002;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+        img {
+            width: 100%;
+            z-index: -1;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+        }
+    }
+
+    .md-zoom-message {
+        position: absolute;
+        top: 0;
+        padding: $baseline-grid 0;
+        background-color: rgba(250,250,250,0.3);
+        width: 100%;
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: 300;
+    }
+}
