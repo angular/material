@@ -7,8 +7,7 @@ angular.module('material.components.virtualRepeat', [
   'material.components.showHide'
 ])
 .directive('mdVirtualRepeatContainer', VirtualRepeatContainerDirective)
-.directive('mdVirtualRepeat', VirtualRepeatDirective)
-.directive('mdForceHeight', ForceHeightDirective);
+.directive('mdVirtualRepeat', VirtualRepeatDirective);
 
 
 /**
@@ -85,14 +84,6 @@ function virtualRepeatContainerTemplate($element) {
       $element[0].innerHTML +
     '</div></div>';
 }
-
-/**
- * Number of additional elements to render above and below the visible area inside
- * of the virtual repeat container. A higher number results in less flicker when scrolling
- * very quickly in Safari, but comes with a higher rendering and dirty-checking cost.
- * @const {number}
- */
-var NUM_EXTRA = 3;
 
 /** @ngInject */
 function VirtualRepeatContainerController($$rAF, $mdUtil, $mdConstant, $parse, $rootScope, $window, $scope,
@@ -363,12 +354,11 @@ VirtualRepeatContainerController.prototype.scrollTo = function(position) {
  * @param {number} index
  */
 VirtualRepeatContainerController.prototype.scrollToIndex = function(index) {
-  var itemSize = this.repeater.getItemSize();
   var itemsLength = this.repeater.itemsLength;
   if(index > itemsLength) {
     index = itemsLength - 1;
   }
-  this.scrollTo(itemSize * index);
+  this.scrollTo(this.repeater.getPreviousItemSizes(index));
 };
 
 VirtualRepeatContainerController.prototype.resetScroll = function() {
@@ -387,20 +377,10 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
       : this.scroller.scrollTop;
   if (offset === this.scrollOffset || offset > this.scrollSize - this.size) return;
 
-  var itemSize = this.repeater.getItemSize();
-  if (!itemSize) return;
-
-  var numItems = Math.max(0, Math.floor(offset / itemSize) - NUM_EXTRA);
-
-  var transform = (this.isHorizontal() ? 'translateX(' : 'translateY(') +
-      (!this.isHorizontal() || ltr ? (numItems * itemSize) : - (numItems * itemSize))  + 'px)';
-
   this.scrollOffset = offset;
-  this.offsetter.style.webkitTransform = transform;
-  this.offsetter.style.transform = transform;
 
   if (this.bindTopIndex) {
-    var topIndex = Math.floor(offset / itemSize);
+    var topIndex = scrollOffsetItemLength;
     if (topIndex !== this.topIndex && topIndex < this.repeater.getItemCount()) {
       this.topIndex = topIndex;
       this.bindTopIndex.assign(this.$scope, topIndex);
@@ -523,7 +503,6 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
   this.$attrs = $attrs;
   this.$browser = $browser;
   this.$document = $document;
-  this.$mdUtil = $mdUtil;
   this.$rootScope = $rootScope;
   this.$$rAF = $$rAF;
 
@@ -545,6 +524,11 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
   // getComputedStyle?
   /** @type {?number} Height/width of repeated elements. */
   this.itemSize = $scope.$eval($attrs.mdItemSize) || null;
+  /** @type {number} Minimum number of items to auto-shrink to */
+  this.numExtra = parseInt($attrs.mdNumExtra, 10) || 3;
+
+  /** @type {array} Contains the heights of elements **/
+  this.itemSizeArray = [];
 
   /** @type {boolean} Whether this is the first time that items are rendered. */
   this.isFirstRender = true;
@@ -618,29 +602,39 @@ VirtualRepeatController.prototype.cleanupBlocks_ = function() {
 
 /** @private Attempts to set itemSize by measuring a repeated element in the dom */
 VirtualRepeatController.prototype.readItemSize_ = function() {
-  if (this.itemSize) {
-    // itemSize was successfully read in a different asynchronous call.
-    return;
-  }
-
-  this.items = this.repeatListExpression(this.$scope);
   this.parentNode = this.$element[0].parentNode;
-  var block = this.getBlock_(0);
-  if (!block.element[0].parentNode) {
-    this.parentNode.appendChild(block.element[0]);
+  this.items = this.repeatListExpression(this.$scope);
+
+  var containerUpdated = false;
+  if (!this.itemSize) {
+    var block = this.getBlock_(0);
+    if (!block.element[0].parentNode) {
+      this.parentNode.appendChild(block.element[0]);
+    }
+
+    this.itemSize = block.element[0][
+        this.container.isHorizontal() ? 'offsetWidth' : 'offsetHeight'] || 0;
+
+    this.blocks[0] = block;
+    this.poolBlock_(0);
+
+    containerUpdated = true;
   }
 
-  this.itemSize = block.element[0][
-      this.container.isHorizontal() ? 'offsetWidth' : 'offsetHeight'] || null;
+  // Initialize the elements in the itemSizeArray based on the default sizing supplied
+  if (this.itemSizeArray.length == 0) {
+    for (var index = 0; index < this.items.length; index++) {
+      if (!this.itemSizeArray[index] || this.itemSizeArray[index] == 0) {
+        this.itemSizeArray[index] = this.itemSize;
+        containerUpdated = true;
+      }
+    }
+  }
 
-  this.blocks[0] = block;
-  this.poolBlock_(0);
-
-  if (this.itemSize) {
+  if (containerUpdated) {
     this.containerUpdated();
   }
 };
-
 
 /**
  * Returns the user-specified repeat list, transforming it into an array-like
@@ -666,32 +660,27 @@ VirtualRepeatController.prototype.repeatListExpression_ = function(scope) {
  * changed.
  */
 VirtualRepeatController.prototype.containerUpdated = function() {
-  // If itemSize is unknown, attempt to measure it.
-  if (!this.itemSize) {
-    // Make sure to clean up watchers if we can (see #8178)
+  if (!this.itemSize || this.itemSizeArray.length == 0) {
+     // Make sure to clean up watchers if we can (see #8178)
     if(this.unwatchItemSize_ && this.unwatchItemSize_ !== angular.noop){
-      this.unwatchItemSize_();
-    }
-    this.unwatchItemSize_ = this.$scope.$watchCollection(
-        this.repeatListExpression,
-        angular.bind(this, function(items) {
-          if (items && items.length) {
-            this.readItemSize_();
-          }
-        }));
-    if (!this.$rootScope.$$phase) this.$scope.$digest();
-
-    return;
-  } else if (!this.sized) {
-    this.items = this.repeatListExpression(this.$scope);
-  }
-
-  if (!this.sized) {
+       this.unwatchItemSize_();
+     }
+     this.unwatchItemSize_ = this.$scope.$watchCollection(
+         this.repeatListExpression,
+         angular.bind(this, function(items) {
+           if (items && items.length) {
+             this.readItemSize_();
+           }
+         }));
+     if (!this.$rootScope.$$phase) this.$scope.$digest();
+   } else if (!this.sized) {
     this.unwatchItemSize_();
     this.sized = true;
     this.$scope.$watchCollection(this.repeatListExpression,
         angular.bind(this, function(items, oldItems) {
           if (!this.isVirtualRepeatUpdating_) {
+            this.isVirtualRepeatUpdating_ = true;
+            this.readItemSize_();
             this.virtualRepeatUpdate_(items, oldItems);
           }
         }));
@@ -716,6 +705,44 @@ VirtualRepeatController.prototype.containerUpdated = function() {
  */
 VirtualRepeatController.prototype.getItemSize = function() {
   return this.itemSize;
+};
+
+VirtualRepeatController.prototype.getTotalItemSize = function() {
+  var totalItemSize = 0;
+  for (var index = 0; index < this.itemSizeArray.length; index++) {
+    var currentItemSize =  this.itemSizeArray[index];
+    if (currentItemSize) {
+      totalItemSize += this.itemSizeArray[index];
+    }
+  }
+
+  return totalItemSize;
+};
+
+VirtualRepeatController.prototype.getPreviousItemSizes = function(requestedEndIndex) {
+  return this.getItemSizes(0, requestedEndIndex);
+};
+
+VirtualRepeatController.prototype.getItemSizes = function(startIndex, endIndex) {
+  var length = endIndex;
+  if (length > this.itemsLength) {
+    length = itemsLength;
+  }
+  if (startIndex >= length) {
+    return 0;
+  }
+
+  var size = 0;
+  for (var index = startIndex; index < length; index++) {
+    if (this.itemSizeArray[index]) {
+      size += this.itemSizeArray[index];
+    }
+  }
+  return size;
+};
+
+VirtualRepeatController.prototype.getItemSizeArray = function() {
+  return this.itemSizeArray;
 };
 
 
@@ -759,8 +786,13 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
 
   this.parentNode = this.$element[0].parentNode;
 
-  if (lengthChanged) {
-    this.container.setScrollSize(itemsLength * this.itemSize);
+  this.container.setScrollSize(this.getTotalItemSize());
+  if (this.isFirstRender) {
+    this.isFirstRender = false;
+    var firstRenderStartIndex = this.$attrs.mdStartIndex ?
+      this.$scope.$eval(this.$attrs.mdStartIndex) :
+      this.container.topIndex;
+    this.container.scrollToIndex(firstRenderStartIndex);
   }
 
   // Detach and pool any blocks that are no longer in the viewport.
@@ -786,7 +818,7 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
   for (i = this.newStartIndex; i < this.newEndIndex && this.blocks[i] == null; i++) {
     block = this.getBlock_(i);
     this.updateBlock_(block, i);
-    newStartBlocks.push(block);
+    newStartBlocks.push({index: i, block: block});
   }
 
   // Update blocks that are already rendered.
@@ -799,7 +831,7 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
   for (; i < this.newEndIndex; i++) {
     block = this.getBlock_(i);
     this.updateBlock_(block, i);
-    newEndBlocks.push(block);
+    newEndBlocks.push({index: i, block: block});
   }
 
   // Attach collected blocks to the document.
@@ -820,18 +852,11 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
   this.startIndex = this.newStartIndex;
   this.endIndex = this.newEndIndex;
 
-  if (this.isFirstRender) {
-    this.isFirstRender = false;
-    var firstRenderStartIndex = this.$attrs.mdStartIndex ?
-      this.$scope.$eval(this.$attrs.mdStartIndex) :
-      this.container.topIndex;
-
-    // The first call to virtualRepeatUpdate_ may not be when the virtual repeater is ready.
-    // Introduce a slight delay so that the update happens when it is actually ready.
-    this.$mdUtil.nextTick(function() {
-      this.container.scrollToIndex(firstRenderStartIndex);
-    }.bind(this));
-  }
+  var offsetItemSize = this.getPreviousItemSizes(this.startIndex);
+  var transform = (this.container.isHorizontal() ? 'translateX(' : 'translateY(') +
+      (!this.container.isHorizontal() || ltr ? offsetItemSize : - offsetItemSize)  + 'px)';
+  this.container.offsetter.style.webkitTransform = transform;
+  this.container.offsetter.style.transform = transform;
 
   this.isVirtualRepeatUpdating_ = false;
 };
@@ -925,12 +950,53 @@ VirtualRepeatController.prototype.poolBlock_ = function(index) {
  */
 VirtualRepeatController.prototype.domFragmentFromBlocks_ = function(blocks) {
   var fragment = this.$document[0].createDocumentFragment();
-  blocks.forEach(function(block) {
-    fragment.appendChild(block.element[0]);
-  });
+
+  var virtualRepeater = this;
+
+  for (var index = 0; index < blocks.length; index++) {
+    var blockObject = blocks[index];
+
+    fragment.appendChild(blockObject.block.element[0]);
+  }
+
+  // After dom renders, figure out the added blocks true sizes and store them off for a more accurate scrolling experience for flex height elements
+  setTimeout(function(){
+    for (var index = 0; index < blocks.length; index++) {
+      var blockObject = blocks[index];
+
+      var sizeUpdated = false;
+
+      var currentBlockSize = virtualRepeater.container.isHorizontal() ? getWidth(blockObject.block.element[0]) : getHeight(blockObject.block.element[0]) || virtualRepeater.itemSize;
+      if (!virtualRepeater.itemSizeArray[blockObject.index] || virtualRepeater.itemSizeArray[blockObject.index] != currentBlockSize) {
+        virtualRepeater.itemSizeArray[blockObject.index] = currentBlockSize;
+        sizeUpdated = true;
+      }
+
+      if (sizeUpdated) {
+        virtualRepeater.container.updateSize();
+      }
+    }
+  }, 0);
   return fragment;
 };
 
+function getWidth(element) {
+  var boundingRect = element.getBoundingClientRect();
+
+  if (boundingRect.width) {
+    return boundingRect.width;
+  }
+  return boundingRect.right - boundingRect.left;
+}
+
+function getHeight(element) {
+    var boundingRect = element.getBoundingClientRect();
+
+    if (boundingRect.height) {
+      return boundingRect.height;
+    }
+    return boundingRect.bottom - boundingRect.top;
+}
 
 /**
  * Updates start and end indexes based on length of repeated items and container size.
@@ -938,14 +1004,40 @@ VirtualRepeatController.prototype.domFragmentFromBlocks_ = function(blocks) {
  */
 VirtualRepeatController.prototype.updateIndexes_ = function() {
   var itemsLength = this.items ? this.items.length : 0;
-  var containerLength = Math.ceil(this.container.getSize() / this.itemSize);
+
+  var containerSize = this.container.getSize();
+  var containerScrollOffset = this.container.getScrollOffset();
+  var containerLength = 0;
+  var containerScrollOffsetLength = 0;
+
+  for (var index = 0; index < this.itemSizeArray.length; index++) {
+    var currentItemSize = this.itemSizeArray[index];
+
+    if (containerScrollOffset >= currentItemSize) {
+      containerScrollOffset -= currentItemSize;
+      containerScrollOffsetLength += 1;
+    } else {
+      break;
+    }
+  }
+
+  for (var index = containerScrollOffsetLength + 1; index < this.itemSizeArray.length; index++) {
+    var currentItemSize = this.itemSizeArray[index];
+
+    if (containerSize >= 0) {
+      containerSize -= currentItemSize;
+      containerLength += 1;
+    } else {
+      break;
+    }
+  }
 
   this.newStartIndex = Math.max(0, Math.min(
       itemsLength - containerLength,
-      Math.floor(this.container.getScrollOffset() / this.itemSize)));
-  this.newVisibleEnd = this.newStartIndex + containerLength + NUM_EXTRA;
+      containerScrollOffsetLength));
+  this.newVisibleEnd = this.newStartIndex + containerLength + this.numExtra;
   this.newEndIndex = Math.min(itemsLength, this.newVisibleEnd);
-  this.newStartIndex = Math.max(0, this.newStartIndex - NUM_EXTRA);
+  this.newStartIndex = Math.max(0, this.newStartIndex - this.numExtra);
 };
 
 /**
@@ -990,32 +1082,3 @@ VirtualRepeatModelArrayLike.prototype.$$includeIndexes = function(start, end) {
   }
   this.length = this.model.getLength();
 };
-
-/**
- * @ngdoc directive
- * @name mdForceHeight
- * @module material.components.virtualRepeat
- * @restrict A
- * @description
- *
- * Force an element to have a certain px height. This is used in place of a style tag in order to
- * conform to the Content Security Policy regarding unsafe-inline style tags.
- *
- * @usage
- * <hljs lang="html">
- *   <div md-force-height="'100px'"></div>
- * </hljs>
- */
-function ForceHeightDirective($mdUtil) {
-  return {
-    restrict: 'A',
-    link: function(scope, element, attrs) {
-      var height = scope.$eval(attrs.mdForceHeight) || null;
-
-      if (height && element) {
-        element[0].style.height = height;
-      }
-    }
-  }
-}
-ForceHeightDirective.$inject = ['$mdUtil'];
