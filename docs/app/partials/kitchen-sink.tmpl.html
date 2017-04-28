@@ -1,0 +1,21 @@
+<style>
+  body > md-sidenav {
+    display: none !important;
+  }
+  body > md-sidenav + div > md-toolbar {
+    display: none !important;
+  }
+  .layout-content, .doc-content {
+    max-width: inherit !important;
+  }
+</style>
+<div ng-controller="KitchenCtrl" class="doc-content">
+  <md-content>
+    <div ng-repeat="item in items">
+      <div class="doc-content">
+        <h3>{{item.name}}</h3>
+      </div>
+      <div resolve-controller="DemoCtrl" ng-include="'partials/demo.tmpl.html'" resolve="item"></div>
+    </div>
+  </md-content>
+</div>
