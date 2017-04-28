@@ -46,6 +46,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
       .ariaLabel('Dog name')
       .initialValue('Buddy')
       .targetEvent(ev)
+      .required(true)
       .ok('Okay!')
       .cancel('I\'m a cat person');
 
