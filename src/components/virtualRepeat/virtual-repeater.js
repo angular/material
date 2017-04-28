@@ -7,7 +7,8 @@ angular.module('material.components.virtualRepeat', [
   'material.components.showHide'
 ])
 .directive('mdVirtualRepeatContainer', VirtualRepeatContainerDirective)
-.directive('mdVirtualRepeat', VirtualRepeatDirective);
+.directive('mdVirtualRepeat', VirtualRepeatDirective)
+.directive('mdForceHeight', ForceHeightDirective);
 
 
 /**
@@ -503,6 +504,7 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
   this.$attrs = $attrs;
   this.$browser = $browser;
   this.$document = $document;
+  this.$mdUtil = $mdUtil;
   this.$rootScope = $rootScope;
   this.$$rAF = $$rAF;
 
@@ -777,6 +779,10 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
   if (itemsLength !== this.itemsLength) {
     lengthChanged = true;
     this.itemsLength = itemsLength;
+
+    if (virtualRepeater.itemSizeArray.length > virtualRepeater.itemsLength) {
+      virtualRepeater.itemSizeArray.splice(virtualRepeater.itemsLength, virtualRepeater.itemSizeArray.length);
+    }
   }
 
   this.items = items;
@@ -787,13 +793,6 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
   this.parentNode = this.$element[0].parentNode;
 
   this.container.setScrollSize(this.getTotalItemSize());
-  if (this.isFirstRender) {
-    this.isFirstRender = false;
-    var firstRenderStartIndex = this.$attrs.mdStartIndex ?
-      this.$scope.$eval(this.$attrs.mdStartIndex) :
-      this.container.topIndex;
-    this.container.scrollToIndex(firstRenderStartIndex);
-  }
 
   // Detach and pool any blocks that are no longer in the viewport.
   Object.keys(this.blocks).forEach(function(blockIndex) {
@@ -857,6 +856,18 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
       (!this.container.isHorizontal() || ltr ? offsetItemSize : - offsetItemSize)  + 'px)';
   this.container.offsetter.style.webkitTransform = transform;
   this.container.offsetter.style.transform = transform;
+
+  if (this.isFirstRender) {
+    this.isFirstRender = false;
+    var firstRenderStartIndex = this.$attrs.mdStartIndex ?
+      this.$scope.$eval(this.$attrs.mdStartIndex) :
+      this.container.topIndex;
+      // The first call to virtualRepeatUpdate_ may not be when the virtual repeater is ready.
+      // Introduce a slight delay so that the update happens when it is actually ready.
+    this.$mdUtil.nextTick(function() {
+      this.container.scrollToIndex(firstRenderStartIndex);
+    }.bind(this));
+  }
 
   this.isVirtualRepeatUpdating_ = false;
 };
@@ -1082,3 +1093,32 @@ VirtualRepeatModelArrayLike.prototype.$$includeIndexes = function(start, end) {
   }
   this.length = this.model.getLength();
 };
+
+/**
+ * @ngdoc directive
+ * @name mdForceHeight
+ * @module material.components.virtualRepeat
+ * @restrict A
+ * @description
+ *
+ * Force an element to have a certain px height. This is used in place of a style tag in order to
+ * conform to the Content Security Policy regarding unsafe-inline style tags.
+ *
+ * @usage
+ * <hljs lang="html">
+ *   <div md-force-height="'100px'"></div>
+ * </hljs>
+ */
+function ForceHeightDirective($mdUtil) {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attrs) {
+      var height = scope.$eval(attrs.mdForceHeight) || null;
+
+      if (height && element) {
+        element[0].style.height = height;
+      }
+    }
+  }
+}
+ForceHeightDirective.$inject = ['$mdUtil'];
