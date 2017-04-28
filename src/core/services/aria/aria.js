@@ -171,6 +171,7 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
         }
       }
     }
+
     return hasAttr;
   }
 
