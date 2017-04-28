@@ -78,6 +78,7 @@ function MdAnchorDirective($mdTheming) {
  * </hljs>
  *
  * @param {boolean=} md-no-ink If present, disable ripple ink effects.
+ * @param {boolean=} download Enable downloading anchor href.
  * @param {expression=} ng-disabled En/Disable based on the expression
  * @param {string=} md-ripple-size Overrides the default ripple size logic. Options: `full`, `partial`, `auto`
  * @param {string=} aria-label Adds alternative text to button for accessibility, useful for icon buttons.
@@ -145,6 +146,11 @@ function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $mdInteracti
     // Use async expect to support possible bindings in the button label
     $mdAria.expectWithoutText(element, 'aria-label');
 
+    // Append download attribute if boolean is defined
+    if (isAnchor(attr) && angular.isDefined(attr.download) ) {
+      element.attr('download', '');
+    }
+
     // For anchor elements, we have to set tabindex manually when the
     // element is disabled
     if (isAnchor(attr) && angular.isDefined(attr.ngDisabled) ) {
@@ -157,6 +163,8 @@ function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $mdInteracti
     element.on('click', function(e){
       if (attr.disabled === true) {
         e.preventDefault();
+        e.stopImmediatePropagation();
+      } else if (angular.isDefined(attr.download)) {
         e.stopImmediatePropagation();
       }
     });
