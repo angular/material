@@ -780,8 +780,8 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
     lengthChanged = true;
     this.itemsLength = itemsLength;
 
-    if (virtualRepeater.itemSizeArray.length > virtualRepeater.itemsLength) {
-      virtualRepeater.itemSizeArray.splice(virtualRepeater.itemsLength, virtualRepeater.itemSizeArray.length);
+    if (this.itemSizeArray.length > this.itemsLength) {
+      this.itemSizeArray.splice(this.itemsLength, this.itemSizeArray.length);
     }
   }
 
