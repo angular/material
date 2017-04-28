@@ -9,7 +9,7 @@ angular.module('dialogDemo2', ['ngMaterial'])
         .textContent('Closing to the right!')
         .ariaLabel('Left to right demo')
         .ok('Nice!')
-        // You can specify either sting with query selector
+        // You can specify either string with query selector
         .openFrom('#left')
         // or an element
         .closeTo(angular.element(document.querySelector('#right')))
