@@ -353,6 +353,9 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInterac
 
       var restorePositioning = updateContainerPositions(parent, isOpen);
 
+      // Scroll the parent element to top, to prevent animate delay
+      parent[0].scrollTop = 0;
+
       if ( isOpen ) {
         // Capture upon opening..
         triggeringElement = $document[0].activeElement;
