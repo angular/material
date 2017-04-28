@@ -36,6 +36,11 @@ fi;
 
 
 
+# this will gaurantee that we have the latest versions
+# of AngularJS when testing material incase the HEAD
+# of ./tmp/angular.js is outdated.
+git --git-dir ./tmp/angular.js/.git fetch
+
 for VERSION in "${VERSIONS[@]}"; do
 
   echo "######################################################################"
