@@ -439,6 +439,12 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       return;
     }
 
+    if (path == '/') {
+      self.selectSection(null);
+      self.selectPage(null, null);
+      return;
+    }
+
     var matchPage = function(section, page) {
       if (path.indexOf(page.url) !== -1) {
         self.selectSection(section);
