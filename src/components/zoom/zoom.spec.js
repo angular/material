@@ -1,0 +1,3 @@
+describe('md-zoom', function() {
+
+});
