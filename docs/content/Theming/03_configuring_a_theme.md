@@ -10,7 +10,7 @@ that is pre-configured with the following palettes for intention groups:
 - *primary* - indigo
 - *accent* - pink
 - *warn* - red
-- *background* - grey (note that white is in this palette)
+- *background* - grey
 
 Configuring of the default theme is done by using the `$mdThemingProvider`
 during application configuration.
