@@ -183,7 +183,7 @@ angular
  *       clickOutsideToClose: true,
  *       escapeToClose: true,
  *       focusOnOpen: true
- *     }
+ *     };
  *
  *     $mdPanel.open(config)
  *         .then(function(result) {
