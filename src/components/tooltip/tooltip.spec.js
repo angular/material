@@ -550,6 +550,7 @@ describe('MdTooltip Component', function() {
     }
     parentScope.testModel.isVisible = !!isVisible;
     parentScope.$apply();
+    $timeout.flush();
     $material.flushOutstandingAnimations();
   }
 
