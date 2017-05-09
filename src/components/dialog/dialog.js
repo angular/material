@@ -475,6 +475,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  * - $mdDialogPreset#initialValue(string) - Sets the initial value for the prompt input.
  * - $mdDialogPreset#ok(string) - Sets the prompt "Okay" button text.
  * - $mdDialogPreset#cancel(string) - Sets the prompt "Cancel" button text.
+ * - $mdDialogPreset#required(bool) - When `true`, the "Okay" button is disabled until a value is entered.
  * - $mdDialogPreset#theme(string) - Sets the theme of the prompt dialog.
  * - $mdDialogPreset#targetEvent(DOMClickEvent=) - A click's event object. When passed in as an option,
  *     the location of the click will be used as the starting point for the opening animation
@@ -593,7 +594,7 @@ function MdDialogProvider($$interimElementProvider) {
     })
     .addPreset('confirm', {
       methods: ['title', 'htmlContent', 'textContent', 'content', 'ariaLabel', 'ok', 'cancel',
-          'theme', 'css'],
+          'theme', 'css', 'required'],
       options: advancedDialogOptions
     })
     .addPreset('prompt', {
@@ -624,7 +625,7 @@ function MdDialogProvider($$interimElementProvider) {
         '               ng-click="dialog.abort()" class="md-primary md-cancel-button">',
         '      {{ dialog.cancel }}',
         '    </md-button>',
-        '    <md-button ng-click="dialog.hide()" class="md-primary md-confirm-button" md-autofocus="dialog.$type===\'alert\'">',
+        '    <md-button ng-click="dialog.hide()" class="md-primary md-confirm-button" md-autofocus="dialog.$type===\'alert\'" ng-disabled="{{ ::dialog.$type == \'prompt\' && ::dialog.required && !dialog.result }}">',
         '      {{ dialog.ok }}',
         '    </md-button>',
         '  </md-dialog-actions>',
