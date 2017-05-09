@@ -407,7 +407,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
               'type="button" ' +
               'aria-label="Clear Input" ' +
               'tabindex="-1" ' +
-              'ng-if="clearButton && $mdAutocompleteCtrl.scope.searchText && !$mdAutocompleteCtrl.isDisabled" ' +
+              'ng-if="clearButton && $mdAutocompleteCtrl.scope.searchText" ' +
               'ng-click="$mdAutocompleteCtrl.clear($event)">' +
             '<md-icon md-svg-src="' + $$mdSvgRegistry.mdClose + '"></md-icon>' +
           '</button>';
