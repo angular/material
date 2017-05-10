@@ -6,7 +6,7 @@ var HANDLERS = {};
  * as well as other information abstracted from the DOM.
  */
 
-var pointer, lastPointer, forceSkipClickHijack = false;
+var pointer, lastPointer, forceSkipClickHijack = false, maxClickDistance = 6;
 
 /**
  * The position of the most recent click if that click was on a label element.
@@ -21,7 +21,7 @@ angular
   .module('material.core.gestures', [ ])
   .provider('$mdGesture', MdGestureProvider)
   .factory('$$MdGestureHandler', MdGestureHandler)
-  .run( attachToDocument );
+  .run(attachToDocument );
 
 /**
    * @ngdoc service
@@ -32,6 +32,7 @@ angular
    * In some scenarios on Mobile devices (without jQuery), the click events should NOT be hijacked.
    * `$mdGestureProvider` is used to configure the Gesture module to ignore or skip click hijacking on mobile
    * devices.
+   * You can also change max click distance (6px by default) if you have issues on some touch screens.
    *
    * <hljs lang="js">
    *   app.config(function($mdGestureProvider) {
@@ -39,6 +40,9 @@ angular
    *     // For mobile devices without jQuery loaded, do not
    *     // intercept click events during the capture phase.
    *     $mdGestureProvider.skipClickHijack();
+   *
+   *     // If hijcacking clicks, change default 6px click distance
+   *     $mdGestureProvider.setMaxClickDistance(12);
    *
    *   });
    * </hljs>
@@ -52,6 +56,10 @@ MdGestureProvider.prototype = {
   // $mdGesture service is instantiated...
   skipClickHijack: function() {
     return forceSkipClickHijack = true;
+  },
+
+  setMaxClickDistance: function(clickDistance) {
+    maxClickDistance = parseInt(clickDistance);
   },
 
   /**
@@ -84,7 +92,6 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
   };
 
   if (self.isHijackingClicks) {
-    var maxClickDistance = 6;
     self.handler('click', {
       options: {
         maxDistance: maxClickDistance
