@@ -195,6 +195,7 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
 
           element.css($mdConstant.CSS.TRANSFORM, translateY([-y * shrinkSpeedFactor]));
           contentElement.css($mdConstant.CSS.TRANSFORM, translateY([(toolbarHeight - y) * shrinkSpeedFactor]));
+          contentElement.css('margin-bottom', (toolbarHeight - y) * shrinkSpeedFactor);
 
           prevScrollTop = scrollTop;
 
@@ -240,11 +241,11 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
           //
           // As the user scrolls down, the content will be transformed up slowly
           // to put the content underneath where the toolbar was.
-          var margin = (-toolbarHeight * shrinkSpeedFactor) + 'px';
+          var margin = (-toolbarHeight * shrinkSpeedFactor);
 
           contentElement.css({
-            "margin-top": margin,
-            "margin-bottom": margin
+            "margin-top": margin + 'px',
+            "margin-bottom": -margin + 'px'
           });
 
           onContentScroll();
