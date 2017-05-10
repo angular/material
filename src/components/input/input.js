@@ -506,9 +506,7 @@ function inputTextareaDirective($mdUtil, $window, $mdAria, $timeout, $mdGesture)
       }
 
       function getHeight() {
-        var offsetHeight = node.offsetHeight;
-        var line = node.scrollHeight - offsetHeight;
-        return offsetHeight + Math.max(line, 0);
+        return node.offsetHeight + Math.max(node.scrollHeight - node.clientHeight, 0);
       }
 
       function formattersListener(value) {
