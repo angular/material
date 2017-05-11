@@ -572,7 +572,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         event.stopPropagation();
 
         clearSelectedItem();
-        if ($scope.searchText && hasEscapeOption('clear')) {
+        if (isTextClearable() && hasEscapeOption('clear')) {
           clearSearchText();
         }
 
@@ -687,6 +687,14 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   }
 
   /**
+   * Determines if there is text that can cleared
+   * @returns {boolean}
+   */
+  function isTextClearable() {
+    return $scope.searchText || elements.input.value;
+  }
+
+  /**
    * Determines if an escape option is set
    * @returns {boolean}
    */
@@ -797,7 +805,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   }
 
   /**
-   * Clears the searchText value
+   * Clears the searchText value and autocomplete's input value
    */
   function clearSearchText () {
     // Set the loading to true so we don't see flashes of content.
