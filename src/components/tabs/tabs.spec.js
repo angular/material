@@ -129,7 +129,7 @@ describe('<md-tabs>', function () {
 
     }));
 
-    it('should select tab on space or enter', inject(function ($mdConstant) {
+    it('should select tab on space or enter', inject(function ($document, $mdConstant) {
       var tabs     = setup('<md-tabs>' +
                            '<md-tab></md-tab>' +
                            '<md-tab></md-tab>' +
@@ -140,10 +140,15 @@ describe('<md-tabs>', function () {
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
       expect(tabItems.eq(1)).toBeActiveTab();
+      expect(tabItems.eq(1).attr('tabindex')).toBe('0');
 
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.SPACE);
       expect(tabItems.eq(0)).toBeActiveTab();
+      // Active tab should be added to the tab order as per ARIA practices.
+      expect(tabItems.eq(0).attr('tabindex')).toBe('0');
+      // Deactivated tab should be removed from the tab order.
+      expect(tabItems.eq(1).attr('tabindex')).toBe('-1');
     }));
 
     it('should bind to selected', function () {
@@ -157,14 +162,11 @@ describe('<md-tabs>', function () {
 
       expect(tabItems.eq(0)).toBeActiveTab();
       expect(tabs.scope().current).toBe(0);
-      expect(dummyTabs.eq(0).attr('aria-selected')).toBe('true');
 
       tabs.scope().$apply('current = 1');
       expect(tabItems.eq(1)).toBeActiveTab();
 
       expect(tabItems.eq(0).attr('aria-selected')).toBe('false');
-      expect(dummyTabs.eq(0).attr('aria-selected')).toBe('false');
-      expect(dummyTabs.eq(1).attr('aria-selected')).toBe('true');
 
       tabItems.eq(2).triggerHandler('click');
       expect(tabs.scope().current).toBe(2);
@@ -176,27 +178,39 @@ describe('<md-tabs>', function () {
                             '<md-tab ng-disabled="disabled1"></md-tab>' +
                             '</md-tabs>');
       var tabItems  = tabs.find('md-tab-item');
-      var dummyTabs = tabs.find('md-dummy-tab');
 
       expect(tabItems.eq(0)).toBeActiveTab();
-      expect(dummyTabs.eq(0).attr('aria-selected')).toBe('true');
+      expect(tabItems.eq(0).attr('aria-selected')).toBe('true');
 
       tabs.scope().$apply('disabled0 = true');
       expect(tabItems.eq(1)).toBeActiveTab();
 
       expect(tabItems.eq(0).attr('aria-disabled')).toBe('true');
-      expect(dummyTabs.eq(0).attr('aria-disabled')).toBe('true');
       expect(tabItems.eq(1).attr('aria-disabled')).toBe('false');
-      expect(dummyTabs.eq(1).attr('aria-disabled')).toBe('false');
 
       tabs.scope().$apply('disabled0 = false; disabled1 = true');
       expect(tabItems.eq(0)).toBeActiveTab();
 
       expect(tabItems.eq(0).attr('aria-disabled')).toBe('false');
-      expect(dummyTabs.eq(0).attr('aria-disabled')).toBe('false');
       expect(tabItems.eq(1).attr('aria-disabled')).toBe('true');
-      expect(dummyTabs.eq(1).attr('aria-disabled')).toBe('true');
     });
+
+    it('should reconcile focused and active tabs', inject(function($mdConstant) {
+      var tabs = setup('<md-tabs>' +
+                       '<md-tab label="super label"></md-tab>' +
+                       '<md-tab label="super label two"></md-tab>' +
+                       '</md-tabs>' +
+                       '<div tabindex="0">Focusable element</div>');
+      var ctrl = tabs.controller('mdTabs');
+      var tabItems = tabs.find('md-tab-item');
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
+      expect(tabItems.eq(0)).toBeActiveTab();
+      expect(ctrl.getFocusedTabId()).toBe(tabItems.eq(1).attr('id'));
+
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.TAB);
+      expect(tabItems.eq(0)).toBeActiveTab();
+      expect(ctrl.getFocusedTabId()).toBe(tabItems.eq(0).attr('id'));
+    }));
 
   });
 
@@ -353,12 +367,12 @@ describe('<md-tabs>', function () {
       var tabs       = setup('<md-tabs>' +
                              '<md-tab label="label!">content!</md-tab>' +
                              '</md-tabs>');
-      var tabItem    = tabs.find('md-dummy-tab');
+      var tabItem    = tabs.find('md-tab-item');
       var tabContent = angular.element(tabs[ 0 ].querySelector('md-tab-content'));
 
       $timeout.flush();
 
-      expect(tabs.find('md-tabs-canvas').attr('role')).toBe('tablist');
+      expect(tabs.find('md-pagination-wrapper').attr('role')).toBe('tablist');
 
       expect(tabItem.attr('id')).toBeTruthy();
       expect(tabItem.attr('aria-controls')).toBe(tabContent.attr('id'));
