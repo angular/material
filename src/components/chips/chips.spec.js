@@ -739,33 +739,6 @@ describe('<md-chips>', function() {
             input.triggerHandler(backspaceEvent);
             expect(backspaceEvent.preventDefault).toHaveBeenCalledTimes(1);
           });
-
-          it('should properly handle the cursor position when using a number input', function() {
-            createChips(
-              '<md-chips ng-model="items">' +
-                '<input type="number" placeholder="Enter a number">' +
-              '</md-chips>'
-            );
-
-            input.val('2');
-            updateInputCursor();
-            input.triggerHandler('change');
-
-            input.triggerHandler(backspaceEvent);
-            $timeout.flush();
-
-            expect(backspaceEvent.preventDefault).not.toHaveBeenCalled();
-
-            input.val('');
-            updateInputCursor();
-            input.triggerHandler('change');
-
-            input.triggerHandler(backspaceEvent);
-            $timeout.flush();
-
-            expect(backspaceEvent.preventDefault).toHaveBeenCalledTimes(1);
-          });
-
         });
 
       });
