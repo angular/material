@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SAUCE_BINARY_FILE="sc-4.4.2-linux.tar.gz"
+SAUCE_BINARY_FILE="sc-4.4.6-linux.tar.gz"
 SAUCE_BINARY_DIR="/tmp/sauce"
 SAUCE_ACCESS_KEY=`echo $SAUCE_ACCESS_KEY | rev`
 
