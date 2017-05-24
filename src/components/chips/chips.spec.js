@@ -698,7 +698,18 @@ describe('<md-chips>', function() {
            */
           function updateInputCursor() {
             if (isValidInput) {
-              input[0].selectionStart = input[0].selectionEnd = input[0].value.length;
+              var inputLength = input[0].value.length;
+
+              try {
+                input[0].selectionStart = input[0].selectionEnd = inputLength;
+              } catch (e) {
+                // Chrome does not allow setting a selection for number inputs and just throws
+                // a DOMException as soon as something tries to set a selection programmatically.
+                // Faking the selection properties for the ChipsController works for our tests.
+                var selectionDescriptor = { writable: true, value: inputLength };
+                Object.defineProperty(input[0], 'selectionStart', selectionDescriptor);
+                Object.defineProperty(input[0], 'selectionEnd', selectionDescriptor);
+              }
             }
           }
 
