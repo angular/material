@@ -1,0 +1,101 @@
+$tooltip-fontsize-lg: rem(1) !default;
+$tooltip-fontsize-sm: rem(1.4) !default;
+$tooltip-height-lg: rem(2.2) !default;
+$tooltip-height-sm: rem(3.2) !default;
+$tooltip-top-margin-lg: rem(1.4) !default;
+$tooltip-top-margin-sm: rem(2.4) !default;
+$tooltip-lr-padding-lg: rem(0.8) !default;
+$tooltip-lr-padding-sm: rem(1.6) !default;
+$tooltip-max-width: rem(3.2) !default;
+
+.md-tooltip-md-panel {
+  overflow: hidden;
+  pointer-events: none;
+
+  font-weight: 500;
+  font-size: $tooltip-fontsize-sm;
+  @media (min-width: $layout-breakpoint-sm) {
+    font-size: $tooltip-fontsize-lg;
+  }
+
+  ._md-content {
+    position: relative;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 4px;
+
+    transform-origin: center top; // This is the default for when the tooltip opens below the parent
+    transform: scale(0);
+    opacity: 0;
+
+    height: $tooltip-height-sm;
+    line-height: $tooltip-height-sm;
+    padding-left: $tooltip-lr-padding-sm;
+    padding-right: $tooltip-lr-padding-sm;
+    @media (min-width: $layout-breakpoint-sm) {
+      height: $tooltip-height-lg;
+      line-height: $tooltip-height-lg;
+      padding-left: $tooltip-lr-padding-lg;
+      padding-right: $tooltip-lr-padding-lg;
+    }
+  }
+
+  &._md-origin-top {
+    margin-top: -$tooltip-top-margin-sm;
+    @media (min-width: $layout-breakpoint-sm) {
+      margin-top: -$tooltip-top-margin-lg;
+    }
+    ._md-content {
+      transform-origin: center bottom;
+    }
+  }
+  &._md-origin-right {
+    margin-left: $tooltip-top-margin-sm;
+    @media (min-width: $layout-breakpoint-sm) {
+      margin-left: $tooltip-top-margin-lg;
+    }
+    ._md-content {
+      transform-origin: left center;
+    }
+  }
+  &._md-origin-bottom {
+    margin-top: $tooltip-top-margin-sm;
+    @media (min-width: $layout-breakpoint-sm) {
+      margin-top: $tooltip-top-margin-lg;
+    }
+    ._md-content {
+      transform-origin: center top;
+    }
+  }
+  &._md-origin-left {
+    margin-left: -$tooltip-top-margin-sm;
+    @media (min-width: $layout-breakpoint-sm) {
+      margin-left: -$tooltip-top-margin-lg;
+    }
+    ._md-content {
+      transform-origin: right center;
+    }
+  }
+
+  &._md-show {
+    transition: $swift-ease-out;
+    opacity: 1;
+    ._md-content {
+      transition: $swift-ease-out;
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  &._md-hide {
+    transition: $swift-ease-in;
+    opacity: 0;
+    ._md-content {
+      transition: $swift-ease-in;
+      transition-duration: .1s;
+      transform: scale(0);
+      opacity: 0;
+    }
+  }
+}
