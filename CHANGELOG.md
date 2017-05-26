@@ -2779,7 +2779,7 @@ This release is also using enhanced scripting to automate the build and release 
 <br>
 
 <a name="0.9.0"></a>
-## 0.9.0  (2015-05-04)
+### 0.9.0  (2015-05-04)
 
 
 #### Features
