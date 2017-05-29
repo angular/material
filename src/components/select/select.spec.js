@@ -271,6 +271,27 @@ describe('<md-select>', function() {
       expect(label.textContent).toBe('4');
     });
 
+    it('it should be able to reopen if the element was destroyed while the close ' +
+      'animation is running', function() {
+        $rootScope.showSelect = true;
+
+        var container = setupSelect('ng-model="val" ng-if="showSelect"', [1, 2, 3]);
+        var select = container.find('md-select');
+
+        openSelect(select);
+        expectSelectOpen(select);
+
+        clickOption(select, 0);
+        $rootScope.$apply('showSelect = false');
+        expectSelectClosed(select);
+
+        $rootScope.$apply('showSelect = true');
+        select = container.find('md-select');
+
+        openSelect(select);
+        expectSelectOpen(select);
+      });
+
     describe('when required', function() {
       it('allows 0 as a valid default value', function() {
         $rootScope.model = 0;

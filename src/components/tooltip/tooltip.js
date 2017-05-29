@@ -106,20 +106,20 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
     function addAriaLabel(labelText) {
       // Only interpolate the text from the HTML element because otherwise the custom text could
       // be interpolated twice and cause XSS violations.
-      var interpolatedText = labelText || $interpolate(element.text().trim())(parent.scope);
+      var interpolatedText = labelText || $interpolate(element.text().trim())(scope.$parent);
 
       // Only add the `aria-label` to the parent if there isn't already one, if there isn't an
       // already present `aria-labelledby`, or if the previous `aria-label` was added by the
       // tooltip directive.
       if (
         (!parent.attr('aria-label') && !parent.attr('aria-labelledby')) ||
-        parent.attr('aria-labelledby') === tooltipId
+        parent.attr('md-labeled-by-tooltip')
       ) {
         parent.attr('aria-label', interpolatedText);
 
-        // Set the `aria-labelledby` attribute if it has not already been set.
-        if (!parent.attr('aria-labelledby')) {
-          parent.attr('aria-labelledby', tooltipId);
+        // Set the `md-labeled-by-tooltip` attribute if it has not already been set.
+        if (!parent.attr('md-labeled-by-tooltip')) {
+          parent.attr('md-labeled-by-tooltip', tooltipId);
         }
       }
     }
