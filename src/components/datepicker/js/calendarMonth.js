@@ -153,7 +153,7 @@
     return this.dateUtil.getMonthDistance(
       calendarCtrl.firstRenderableDate,
       calendarCtrl.displayDate || calendarCtrl.selectedDate || calendarCtrl.today
-    );
+    ) -1;
   };
 
   /**
