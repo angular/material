@@ -19,7 +19,7 @@ function MdConstantFactory() {
     var lcPrefix = ucPrefix.charAt(0).toLowerCase() + ucPrefix.substring(1);
 
     return hasStyleProperty(prefixTestEl, name)     ? name     :       // The current browser supports the un-prefixed property
-           hasStyleProperty(prefixTestEl, ucPrefix) ? ucPrefix :       // The current browser only supports the prefixed property.
+           hasStyleProperty(prefixTestEl, ucPrefix) ? ucPrefix :       // The current browser only supports the prefixed property. 
            hasStyleProperty(prefixTestEl, lcPrefix) ? lcPrefix : name; // Some browsers are only supporting the prefix in lowercase.
   }
 
@@ -46,7 +46,7 @@ function MdConstantFactory() {
 
   var self = {
     isInputKey : function(e) { return (e.keyCode >= 31 && e.keyCode <= 90); },
-    isNumPadKey : function(e) { return (3 === e.location && e.keyCode >= 97 && e.keyCode <= 105); },
+    isNumPadKey : function(e) { return (3 === e.location && e.keyCode >= 96 && e.keyCode <= 105); },
     isMetaKey: function(e) { return (e.keyCode >= 91 && e.keyCode <= 93); },
     isFnLockKey: function(e) { return (e.keyCode >= 112 && e.keyCode <= 145); },
     isNavigationKey : function(e) {
