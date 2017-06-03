@@ -236,17 +236,6 @@ describe('$mdToast service', function() {
         expect(toast[0].querySelector('.md-toast-content').textContent).toBe('Message');
       }));
 
-      it('should add position class to toast', inject(function($rootElement, $timeout) {
-        setup({
-          template: '<md-toast>',
-          position: 'top left'
-        });
-        var toast = $rootElement.find('md-toast');
-        $timeout.flush();
-        expect(toast.hasClass('md-top')).toBe(true);
-        expect(toast.hasClass('md-left')).toBe(true);
-      }));
-
       it('should wrap toast content with .md-toast-content', inject(function($rootElement, $timeout) {
         setup({
           template: '<md-toast><p>Charmander</p></md-toast>',
@@ -263,7 +252,38 @@ describe('$mdToast service', function() {
         expect(contentSpan).not.toHaveClass('md-toast-text');
       }));
 
+      it('should add position class to toast', inject(function($rootElement, $timeout) {
+        setup({
+          template: '<md-toast>',
+          position: 'top left'
+        });
+        var toast = $rootElement.find('md-toast');
+        $timeout.flush();
+        expect(toast.hasClass('md-top')).toBe(true);
+        expect(toast.hasClass('md-left')).toBe(true);
+      }));
 
+      describe('when user supplies "top" position', function() {
+        it('should add "top left" class to toast parent', inject(function($rootElement) {
+          setup({
+            template: '<md-toast>',
+            position: 'top',
+            parent: $rootElement
+          });
+          expect($rootElement.hasClass('md-toast-open-top-left')).toBe(true);
+        }));
+      });
+
+      ['top left', 'top right', 'bottom left', 'bottom right'].forEach(function(position) {
+        it('should add "' + position + '" class to toast parent', inject(function($rootElement) {
+          setup({
+            template: '<md-toast>',
+            position: position,
+            parent: $rootElement
+          });
+          expect($rootElement.hasClass('md-toast-open-' + position.replace(' ', '-'))).toBe(true);
+        }));
+      });
 
       describe('sm screen', function () {
         beforeEach(function () {
@@ -438,15 +458,17 @@ describe('$mdToast service', function() {
       setup({
         template: '<md-toast>'
       });
-      expect($rootElement.hasClass('md-toast-open-bottom')).toBe(true);
-
+      expect($rootElement.hasClass('md-toast-open-bottom-left')).toBe(true);
       $material.flushInterimElement();
 
+      // If we only provide `top`, the toast will reset the position to `top left` so that the
+      // CSS will work properly
       setup({
         template: '<md-toast>',
         position: 'top'
       });
-      expect($rootElement.hasClass('md-toast-open-top')).toBe(true);
+      expect($rootElement.hasClass('md-toast-open-top-left')).toBe(true);
+      $material.flushInterimElement();
     }));
   });
 

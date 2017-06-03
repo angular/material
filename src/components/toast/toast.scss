@@ -154,6 +154,10 @@ md-toast {
     bottom: 0;
     padding: 0;
 
+    .md-toast-content {
+      border-radius: 0;
+    }
+
     &.ng-leave.ng-leave-active {
       &.md-swipeup {
         .md-toast-content {
@@ -186,11 +190,11 @@ md-toast {
     }
 
     // Support for RTL alignment
-    &._md-start {
+    &.md-start {
       @include rtl-prop(left, right, 0, auto);
     }
 
-    &._md-end {
+    &.md-end {
       @include rtl-prop(right, left, 0, auto);
     }
 

@@ -56,6 +56,13 @@
    *  - `md-fab-bottom-left`
    *  - `md-fab-bottom-right`
    *
+   *  Additionally, we now offer the following bi-direction classes which automatically change
+   *  position based on the current `dir` setting (i.e. `ltr` or `rtl`).
+   *  - `md-fab-top-start`
+   *  - `md-fab-top-end`
+   *  - `md-fab-bottom-start`
+   *  - `md-fab-bottom-end`
+   *
    * These CSS classes use `position: absolute`, so you need to ensure that the container element
    * also uses `position: absolute` or `position: relative` in order for them to work.
    *

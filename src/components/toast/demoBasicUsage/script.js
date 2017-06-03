@@ -1,48 +1,33 @@
 
 angular.module('toastDemo1', ['ngMaterial'])
 
-.controller('AppCtrl', function($scope, $mdToast) {
-  var last = {
-      bottom: false,
-      top: true,
-      left: false,
-      right: true
-    };
+.controller('AppCtrl', function($mdToast) {
+  var $ctrl = this;
 
-  $scope.toastPosition = angular.extend({},last);
+  this.delay = 3000;
+  this.topBottomOptions = ['top', 'bottom'];
+  this.positionOptions = ['left', 'right', 'start', 'end'];
 
-  $scope.getToastPosition = function() {
-    sanitizePosition();
+  this.topBottom = 'top';
+  this.position = 'left';
 
-    return Object.keys($scope.toastPosition)
-      .filter(function(pos) { return $scope.toastPosition[pos]; })
-      .join(' ');
+  this.getToastPosition = function() {
+    return this.topBottom + ' ' + this.position;
   };
 
-  function sanitizePosition() {
-    var current = $scope.toastPosition;
-
-    if ( current.bottom && last.top ) current.top = false;
-    if ( current.top && last.bottom ) current.bottom = false;
-    if ( current.right && last.left ) current.left = false;
-    if ( current.left && last.right ) current.right = false;
-
-    last = angular.extend({},current);
-  }
-
-  $scope.showSimpleToast = function() {
-    var pinTo = $scope.getToastPosition();
+  this.showSimpleToast = function() {
+    var pinTo = $ctrl.getToastPosition();
 
     $mdToast.show(
       $mdToast.simple()
         .textContent('Simple Toast!')
-        .position(pinTo )
-        .hideDelay(3000)
+        .position(pinTo)
+        .hideDelay($ctrl.delay)
     );
   };
 
-  $scope.showActionToast = function() {
-    var pinTo = $scope.getToastPosition();
+  this.showActionToast = function() {
+    var pinTo = $ctrl.getToastPosition();
     var toast = $mdToast.simple()
       .textContent('Marked as read')
       .action('UNDO')
