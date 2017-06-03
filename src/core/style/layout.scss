@@ -136,69 +136,113 @@
       box-sizing: border-box;
     }
 
-    .layout-row > .#{$flexName}-#{$i * 5} {
-      flex: 1 1 100%;
-      max-width: #{$value};
-      max-height: 100%;
-      box-sizing: border-box;
+    @if ($i * 5 == 30) {
+      .#{$flexName}-33 {
+        flex: 1 1 100%;
+        max-width: 33.33%;
+        max-height: 100%;
+        box-sizing: border-box;
+      }
 
-      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-      @if $i == 0 {  min-width: 0;  }
-    }
-
-    .layout-column > .#{$flexName}-#{$i * 5} {
-      flex: 1 1 100%;
-      max-width: 100%;
-      max-height: #{$value};
-      box-sizing: border-box;
-    }
-
-    .layout#{$name}-row > .#{$flexName}-#{$i * 5} {
-      flex: 1 1 100%;
-      max-width: #{$value};
-      max-height: 100%;
-      box-sizing: border-box;
-
-      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-      @if $i == 0 {  min-width: 0;  }
-    }
-
-    .layout#{$name}-column > .#{$flexName}-#{$i * 5} {
-      flex: 1 1 100%;
-      max-width: 100%;
-      max-height: #{$value};
-      box-sizing: border-box;
-
-      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-      @if $i == 0 {  min-height: 0;  }
+    } @else if ($i * 5 == 65) {
+      .#{$flexName}-66 {
+        flex: 1 1 100%;
+        max-width: 66.66%;
+        max-height: 100%;
+        box-sizing: border-box;
+      }
     }
   }
 
-  .layout-row {
-    > .#{$flexName}-33 { flex: 1 1 33.33%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
-    > .#{$flexName}-66 { flex: 1 1 66.66%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
+  $flexGtMap: (
+          flex-gt-xs: flex-gt-xs flex-gt-sm flex-gt-md flex-gt-lg,
+          flex-sm:    flex-gt-xs,
+          flex-gt-sm: flex-gt-sm flex-gt-md flex-gt-lg,
+          flex-md:    flex-gt-xs flex-gt-sm,
+          flex-gt-md: flex-gt-md flex-gt-lg,
+          flex-lg:    flex-gt-xs flex-gt-sm flex-gt-md,
+          flex-gt-lg: flex-gt-lg,
+          flex:       flex-gt-xs flex-gt-sm flex-gt-md flex-gt-lg,
+  );
+
+  $flexGt2Breakpoint: (
+          flex-gt-xs: $layout-breakpoint-xs,
+          flex-gt-sm: $layout-breakpoint-sm,
+          flex-gt-md: $layout-breakpoint-md,
+          flex-gt-lg: $layout-breakpoint-lg,
+  );
+
+  $flexGtNameList: map-get($flexGtMap, $flexName);
+  @if $flexGtNameList == null {
+    $flexGtNameList: $flexName;
   }
 
-  .layout-column {
-    > .#{$flexName}-33 { flex: 1 1 33.33%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
-    > .#{$flexName}-66 { flex: 1 1 66.66%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
+  @each $gtFlexName in $flexGtNameList {
+
+    @media (min-width: map_get($flexGt2Breakpoint, $gtFlexName)) {
+
+      // (1-20) * 5 = 0-100%
+      @for $i from 0 through 20 {
+        $value : #{$i * 5 + '%'};
+
+        .layout#{$name}-row > .#{$gtFlexName}-#{$i * 5} {
+          flex: 1 1 100%;
+          max-width: #{$value};
+          max-height: 100%;
+          box-sizing: border-box;
+
+          // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+          @if $i == 0 {
+            min-width: 0;
+          }
+        }
+
+        .layout#{$name}-column > .#{$gtFlexName}-#{$i * 5} {
+          flex: 1 1 100%;
+          max-width: 100%;
+          max-height: #{$value};
+          box-sizing: border-box;
+
+          // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+          @if $i == 0 {
+            min-height: 0;
+          }
+        }
+
+        @if ($i * 5 == 30) {
+
+          .layout#{$name}-row {
+            > .#{$gtFlexName}-33 {  flex: 1 1 100%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
+          }
+
+          .layout#{$name}-column {
+            > .#{$gtFlexName}-33 {  flex: 1 1 100%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
+          }
+
+        } @else if($i * 5 == 65) {
+
+          .layout#{$name}-row {
+            > .#{$gtFlexName}-66 {  flex: 1 1 100%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
+          }
+
+          .layout#{$name}-column {
+            > .#{$gtFlexName}-66 {  flex: 1 1 100%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
+          }
+
+        }
+      }
+    }
   }
 
   .layout#{$name}-row {
-    > .#{$flexName}-33 { flex: 1 1 100%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
-    > .#{$flexName}-66 { flex: 1 1 100%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
-
     // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-    > .flex { min-width: 0;  }
+    > .flex                                       { min-width: 0;   }
 
   }
 
   .layout#{$name}-column {
-    > .#{$flexName}-33 { flex: 1 1 100%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
-    > .#{$flexName}-66 { flex: 1 1 100%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
-
     // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
-    > .flex { min-height: 0; }
+    > .flex                                       { min-height: 0;   }
   }
 
 }
