@@ -657,7 +657,7 @@ describe('md-input-container directive', function() {
       input.triggerHandler('focus');
       $timeout.flush();
 
-      expect(isTextSelected(input[0])).toBe(true);
+      expect(isTextSelected(input[0])).toBe(false);
 
       input.remove();
 
