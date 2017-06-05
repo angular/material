@@ -1,6 +1,6 @@
 describe('$mdPanel', function() {
   var $mdPanelProvider, $mdPanel, $rootScope, $rootEl, $templateCache, $q,
-      $material, $mdConstant, $mdUtil, $animate, $$rAF, $window;
+      $material, $mdConstant, $mdUtil, $animate, $$rAF, $window, $timeout;
   var panelRef;
   var attachedElements = [];
   var PANEL_WRAPPER = '.md-panel-outer-wrapper';
@@ -33,6 +33,7 @@ describe('$mdPanel', function() {
     $mdUtil = $injector.get('$mdUtil');
     $animate = $injector.get('$animate');
     $window = $injector.get('$window');
+    $timeout = $injector.get('$timeout');
     $$rAF = $injector.get('$$rAF');
   };
 
@@ -3394,6 +3395,7 @@ describe('$mdPanel', function() {
   }
 
   function flushPanel() {
+    $timeout.flush();
     $rootScope.$apply();
     $material.flushOutstandingAnimations();
   }

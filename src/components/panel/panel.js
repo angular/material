@@ -1378,6 +1378,9 @@ function MdPanelRef(config, $injector) {
   /** @private @const {!angular.$window} */
   this._$window = $injector.get('$window');
 
+  /** @private @const {!angular.$timeout} */
+  this._$timeout = $injector.get('$timeout');
+
   /** @private @const {!Function} */
   this._$$rAF = $injector.get('$$rAF');
 
@@ -1942,14 +1945,19 @@ MdPanelRef.prototype._addStyles = function() {
 
     // Wait for angular to finish processing the template
     self._$rootScope['$$postDigest'](function() {
-      // Position it correctly. This is necessary so that the panel will have a
-      // defined height and width.
-      self._updatePosition(true);
+      // Wait one digest cycle to ensure that updatePosition can retrieve the
+      // final bounds of the panel. If we don't wait, we risk a race-condition
+      // where the bounds of the panel are partially still 0.
+      self._$timeout(function() {
+        // Position it correctly. This is necessary so that the panel will have a
+        // defined height and width.
+        self._updatePosition(true);
 
-      // Theme the element and container.
-      self._setTheming();
+        // Theme the element and container.
+        self._setTheming();
 
-      resolve(self);
+        resolve(self);
+      });
     });
   });
 };
