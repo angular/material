@@ -14,7 +14,7 @@
   user-select: $value;
 }
 
-@mixin input-placeholder-color($color) {
+@mixin input-placeholder-color($color, $target-pseudo-colors: (), $contentInBase: true) {
   $pseudos: '::-webkit-input-placeholder', ':-moz-placeholder', '::-moz-placeholder',
             ':-ms-input-placeholder',  '::-webkit-input-placeholder';
 
@@ -23,6 +23,17 @@
   @each $pseudo in $pseudos {
     &#{$pseudo} {
       color: unquote($color);
+      @if ($contentInBase) {
+        @content;
+      }
+    }
+    @each $target-pseudo, $target-pseudo-color in $target-pseudo-colors {
+      &:#{$target-pseudo}#{$pseudo} {
+        color: unquote($target-pseudo-color);
+        @if (not $contentInBase) {
+          @content;
+        }
+      }
     }
   }
 }
