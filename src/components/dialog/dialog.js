@@ -935,11 +935,14 @@ function MdDialogProvider($$interimElementProvider) {
       }, 60);
 
       var removeListeners = [];
-      var smartClose = function() {
+      var smartClose = function(key) {
         // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
         // cancel or fallback to hide.
-        var closeFn = ( options.$type == 'alert' ) ? $mdDialog.hide : $mdDialog.cancel;
-        $mdUtil.nextTick(closeFn, true);
+        var closeFn = options.$type == 'alert' ? $mdDialog.hide : $mdDialog.cancel;
+        var curriedCloseFn = angular.bind(this, closeFn, options[key]);
+        var tickFn = angular.isDefined(options[key]) && options[key] !== true ? curriedCloseFn : closeFn;
+
+        $mdUtil.nextTick(tickFn, true);
       };
 
       if (options.escapeToClose) {
@@ -949,7 +952,7 @@ function MdDialogProvider($$interimElementProvider) {
             ev.stopPropagation();
             ev.preventDefault();
 
-            smartClose();
+            smartClose('escapeToClose');
           }
         };
 
@@ -993,7 +996,7 @@ function MdDialogProvider($$interimElementProvider) {
             ev.stopPropagation();
             ev.preventDefault();
 
-            smartClose();
+            smartClose('clickOutsideToClose')
           }
         };
 
