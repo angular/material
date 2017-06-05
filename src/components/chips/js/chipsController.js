@@ -456,7 +456,7 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
   }
 
   // Check for a null (but not undefined), or existing chip and cancel appending
-  if (newChip == null || this.items.indexOf(newChip) + 1) return;
+  if (angular.isUndefined(newChip) || newChip == null || this.items.indexOf(newChip) + 1) return;
 
   // Append the new chip onto our list
   var length = this.items.push(newChip);

@@ -473,6 +473,26 @@ describe('<md-chips>', function() {
         });
 
       });
+      
+      it('should ignore chip appending if return value is undefined', function() {
+        var element = buildChips(CHIP_APPEND_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        var chipObj = function(chip) {
+          //no return
+        };
+
+        scope.appendChip = jasmine.createSpy('appendChip').and.callFake(chipObj);
+
+        element.scope().$apply(function() {
+          ctrl.chipBuffer = 'Grape';
+          simulateInputEnterKey(ctrl);
+        });
+
+        expect(scope.appendChip).toHaveBeenCalled();
+        expect(scope.appendChip.calls.mostRecent().args[0]).toBe('Grape');
+        expect(scope.items.length).toBe(3);
+      });
 
       describe('when readonly', function() {
         var element, ctrl;
