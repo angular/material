@@ -266,6 +266,7 @@
         removable: '=mdRemovable',
         placeholder: '@',
         secondaryPlaceholder: '@',
+        minChips: '@mdMinChips',
         maxChips: '@mdMaxChips',
         transformChip: '&mdTransformChip',
         onAppend: '&mdOnAppend',
