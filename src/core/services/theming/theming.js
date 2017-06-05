@@ -145,6 +145,12 @@ function detectDisabledThemes($mdThemingProvider) {
 
 /**
  * @ngdoc method
+ * @name $mdThemingProvider#appendTo
+ * @param {element} element to append the styles too. By default it picks document head
+ */
+
+/**
+ * @ngdoc method
  * @name $mdThemingProvider#enableBrowserColor
  * @param {Object=} options Options object for the browser color<br/>
  * `theme`   - A defined theme via `$mdThemeProvider` to use the palettes from. Default is `default` theme. <br/>
@@ -256,7 +262,8 @@ var themeConfig = {
   disableTheming : false,   // Generate our themes at run time; also disable stylesheet DOM injection
   generateOnDemand : false, // Whether or not themes are to be generated on-demand (vs. eagerly).
   registeredStyles : [],    // Custom styles registered to be used in the theming of custom components.
-  nonce : null              // Nonce to be added as an attribute to the generated themes style tags.
+  nonce : null,              // Nonce to be added as an attribute to the generated themes style tags.
+  appendTo: document.head
 };
 
 /**
@@ -366,6 +373,10 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
 
     alwaysWatchTheme: function(alwaysWatch) {
       alwaysWatchTheme = alwaysWatch;
+    },
+
+    appendTo: function(head) {
+      themeConfig.appendTo = head;
     },
 
     enableBrowserColor: enableBrowserColor,
@@ -656,7 +667,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
     applyTheme.inherit = inheritTheme;
     applyTheme.registered = registered;
     applyTheme.defaultTheme = function() { return defaultTheme; };
-    applyTheme.generateTheme = function(name) { generateTheme(THEMES[name], name, themeConfig.nonce); };
+    applyTheme.generateTheme = function(name) { generateTheme(THEMES[name], name, themeConfig.nonce, themeConfig.appendTo); };
     applyTheme.defineTheme = function(name, options) {
       options = options || {};
 
@@ -997,7 +1008,7 @@ function generateAllThemes($injector, $mdTheming) {
 
   angular.forEach($mdTheming.THEMES, function(theme) {
     if (!GENERATED[theme.name] && !($mdTheming.defaultTheme() !== 'default' && theme.name === 'default')) {
-      generateTheme(theme, theme.name, themeConfig.nonce);
+      generateTheme(theme, theme.name, themeConfig.nonce, themeConfig.appendTo);
     }
   });
 
@@ -1063,8 +1074,7 @@ function generateAllThemes($injector, $mdTheming) {
   }
 }
 
-function generateTheme(theme, name, nonce) {
-  var head = document.head;
+function generateTheme(theme, name, nonce, head) {
   var firstChild = head ? head.firstElementChild : null;
 
   if (!GENERATED[name]) {
