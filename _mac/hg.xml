@@ -1,0 +1,5 @@
+<application>
+  <component name="HgGlobalSettings">
+    <option name="myHgExecutable" value="hg" />
+  </component>
+</application>
