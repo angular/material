@@ -61,6 +61,8 @@ md-sidenav {
 
   // locked|closed => unlock|closed
   &.md-locked-open-remove.md-closed {
+    transition: width $swift-ease-in-duration $swift-ease-in-timing-function,
+                min-width $swift-ease-in-duration $swift-ease-in-timing-function;
     position: static;
     display: flex;
     transform: translate3d(0, 0, 0);
