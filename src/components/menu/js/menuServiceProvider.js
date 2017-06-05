@@ -133,6 +133,7 @@ function MenuProvider($$interimElementProvider) {
       // Return the promise for when our menu is done animating in
       return showMenu()
         .then(function(response) {
+          opts.isAnimating = false;
           opts.alreadyOpen = true;
           opts.cleanupInteraction = activateInteraction();
           opts.cleanupBackdrop = setupBackdrop();
@@ -154,6 +155,9 @@ function MenuProvider($$interimElementProvider) {
           var position = calculateMenuPosition(element, opts);
 
           element.removeClass('md-leave');
+
+          // Prevent container scaling while running animation
+          opts.isAnimating = true;
 
           // Animate the menu scaling, and opacity [from its position origin (default == top-left)]
           // to normal scale.
@@ -543,7 +547,7 @@ function MenuProvider($$interimElementProvider) {
         top: Math.round(position.top),
         left: Math.round(position.left),
         // Animate a scale out if we aren't just repositioning
-        transform: !opts.alreadyOpen ? $mdUtil.supplant('scale({0},{1})', [scaleX, scaleY]) : undefined,
+        transform: !opts.alreadyOpen && !opts.isAnimating ? $mdUtil.supplant('scale({0},{1})', [scaleX, scaleY]) : undefined,
         transformOrigin: transformOrigin
       };
 
