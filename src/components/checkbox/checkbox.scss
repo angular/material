@@ -66,5 +66,9 @@ md-checkbox {
     @include rtl(margin-left, $checkbox-text-margin + $checkbox-width, 0);
     @include rtl(margin-right, 0, $checkbox-text-margin + $checkbox-width);
 
+    &:empty {
+      display: none
+    }
+
   }
 }
