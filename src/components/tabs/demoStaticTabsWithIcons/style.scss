@@ -1,0 +1,25 @@
+md-tab-content {
+  padding: 25px;
+  &:nth-child(1) {
+    background-color: #42A5F5;
+  }
+  &:nth-child(2) {
+    background-color: #689F38;
+  }
+  &:nth-child(3) {
+    background-color: #26C6DA;
+  }
+}
+.after-tabs-area {
+  > span {
+    margin-top:25px;
+    padding-right: 15px;
+    vertical-align: middle;
+    line-height: 30px;
+    height: 35px;
+  }
+  > md-checkbox {
+    margin-top:26px;
+    margin-left: 0;
+  }
+}
