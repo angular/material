@@ -1,0 +1,20 @@
+md-menu-filter {
+  &:focus {
+    outline: none;
+  }
+  ._md-search-clear-button {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    font-size: 12px;
+    height: 30px;
+    margin: auto 5px;
+    padding: 0;
+    position: absolute;
+    right: 5px;
+    transform: translateY(25%);
+    top: 0;
+    width: 30px;
+  }
+}
