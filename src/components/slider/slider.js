@@ -568,7 +568,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     function positionToPercent( position ) {
       var offset = vertical ? sliderDimensions.top : sliderDimensions.left;
       var size = vertical ? sliderDimensions.height : sliderDimensions.width;
-      var calc = (position - offset) / size;
+      var calc = (position - (vertical ? document.body.scrollTop : document.body.scrollLeft) - offset) / size;
 
       if (!vertical && $mdUtil.bidi() === 'rtl') {
         calc = 1 - calc;
