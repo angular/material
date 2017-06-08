@@ -76,6 +76,13 @@
       var lowercaseQuery = angular.lowercase(query);
 
       return function filterFn(state) {
+        /**
+         * Searches state to find a partial match for string
+         */
+        return state.value.match(lowercaseQuery); 
+        /**
+         * Searches state to find a complete match for string
+         */
         return (state.value.indexOf(lowercaseQuery) === 0);
       };
 
