@@ -203,6 +203,9 @@ md-tab-content {
       transition: visibility 0s linear;
       transition-delay: $swift-ease-in-out-duration;
       visibility: hidden;
+      label{
+        visibility: inherit;
+      }
     }
   }
   &.md-right:not(.md-active) {
@@ -213,6 +216,9 @@ md-tab-content {
       transition: visibility 0s linear;
       transition-delay: $swift-ease-in-out-duration;
       visibility: hidden;
+      label{
+        visibility: inherit;
+      }
     }
   }
   > div {
