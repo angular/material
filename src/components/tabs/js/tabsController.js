@@ -307,6 +307,13 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
         event.preventDefault();
         if (!locked) select(ctrl.focusIndex);
         break;
+      case $mdConstant.KEY_CODE.TAB:
+        // On tabbing out of the tablist, reset hasFocus to reset ng-focused and
+        // its md-focused class if the focused tab is not the active tab.
+        if (ctrl.focusIndex !== ctrl.selectedIndex) {
+          ctrl.focusIndex = ctrl.selectedIndex;
+        }
+        break;
     }
   }
 
@@ -667,12 +674,12 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   }
 
   /**
-   * This is used to forward focus to dummy elements.  This method is necessary to avoid animation
-   * issues when attempting to focus an item that is out of view.
+   * This is used to forward focus to tab container elements.  This method is necessary to avoid
+   * animation issues when attempting to focus an item that is out of view.
    */
   function redirectFocus () {
     ctrl.styleTabItemFocus = ($mdInteraction.getLastInteractionType() === 'keyboard');
-    getElements().dummies[ ctrl.focusIndex ].focus();
+    getElements().tabs[ ctrl.focusIndex ].focus();
   }
 
   /**
