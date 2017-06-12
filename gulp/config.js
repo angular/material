@@ -52,7 +52,14 @@ module.exports = {
   cssIEPaths : ['src/**/ie_fixes.css'],
   paths: 'src/+(components|core)/**',
   outputDir: 'dist/',
-  demoFolder: 'demo-partials'
+  demoFolder: 'demo-partials',
+  browsers: [
+    'last 2 versions',
+    'not ie <= 10',
+    'not ie_mob <= 10',
+    'last 4 Android versions',
+    'Safari >= 8'
+  ]
 };
 
 

@@ -10,6 +10,8 @@ var fs = require('fs');
 var path = require('path');
 var findModule = require('../config/ngModuleData.js');
 
+const {browsers} = require('../gulp/config');
+
 exports.humanizeCamelCase = function(str) {
   switch (str) {
     case 'fabSpeedDial':
@@ -311,13 +313,4 @@ exports.cssToNgConstant = function(ngModule, factoryName) {
   });
 };
 
-exports.autoprefix = function() {
-
-  return autoprefixer({browsers: [
-    'last 2 versions',
-    'not ie <= 10',
-    'not ie_mob <= 10',
-    'last 4 Android versions',
-    'Safari >= 8'
-  ]});
-};
+exports.autoprefix = () => autoprefixer({browsers});

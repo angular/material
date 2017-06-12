@@ -18,6 +18,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var insert = require('gulp-insert');
 var gulpif = require('gulp-if');
 var nano = require('gulp-cssnano');
+var babel = require('gulp-babel');
 var postcss = require('postcss');
 var _ = require('lodash');
 var constants = require('./const');
@@ -48,6 +49,9 @@ function buildJs () {
 
   var jsBuildStream = gulp.src( jsFiles )
       .pipe(filterNonCodeFiles())
+      .pipe(babel({
+          presets: [["env", {targets: {browsers: config.browsers}}]]
+      }))
       .pipe(utils.buildNgMaterialDefinition())
       .pipe(plumber())
       .pipe(ngAnnotate())
