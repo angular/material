@@ -13,7 +13,7 @@ function run {
 
   echo "-- Cloning code.material.angularjs.org..."
   rm -rf code.material.angularjs.org
-  git clone https://angular:$GH_TOKEN@github.com/angular/code.material.angularjs.org.git --depth=1
+  git clone https://github.com/angular/code.material.angularjs.org --depth=1
 
   echo "-- Remove previous snapshot..."
   rm -rf code.material.angularjs.org/HEAD
@@ -27,6 +27,8 @@ function run {
   cp -Rf dist/docs code.material.angularjs.org/HEAD
 
   cd code.material.angularjs.org
+  # GitHub token specified as Travis environment variable
+  echo "https://${ANGULARJS_MATERIAL_DOCS_SITE_TOKEN}:@github.com" > .git/credentials
 
   echo "-- Commiting snapshot..."
   git add -A

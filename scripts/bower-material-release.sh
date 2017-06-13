@@ -16,7 +16,7 @@ function run {
 
   echo "-- Cloning bower-material..."
   rm -rf bower-material
-  git clone https://angular:$GH_TOKEN@github.com/angular/bower-material \
+  git clone https://github.com/angular/bower-material \
     bower-material --depth=2
 
   echo "-- Copying in build files..."
@@ -29,6 +29,8 @@ function run {
   cp -Rf dist/* bower-material/
 
   cd bower-material
+  # GitHub token specified as Travis environment variable
+  echo "https://${ANGULARJS_MATERIAL_BOWER_TOKEN}:@github.com" > .git/credentials
 
   # Remove stale files from older builds
   rm -f ./angular-material.layouts.css
