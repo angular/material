@@ -114,6 +114,7 @@ describe('$mdDialog', function() {
       expect(css).toContain('someClass');
       expect(css).toContain('anotherClass');
       expect(mdDialog.attr('role')).toBe('alertdialog');
+      expect(mdDialog.attr('aria-label')).toBe('Title');
 
       buttons.eq(0).triggerHandler('click');
 
@@ -374,6 +375,7 @@ describe('$mdDialog', function() {
       expect(buttons.length).toBe(2);
       expect(buttons.eq(0).text()).toBe('Next');
       expect(buttons.eq(1).text()).toBe('Forget it');
+      expect(dialog.attr('aria-label')).toBe('Title');
 
       buttons.eq(1).triggerHandler('click');
       runAnimation();
@@ -679,6 +681,7 @@ describe('$mdDialog', function() {
       expect(css).toContain('someClass');
       expect(css).toContain('anotherClass');
       expect(mdDialog.attr('role')).toBe('dialog');
+      expect(mdDialog.attr('aria-label')).toBe('Title');
 
       inputElement.eq(0).text('responsetext');
       inputElement.scope().$apply("dialog.result = 'responsetext'");
@@ -1622,7 +1625,7 @@ describe('$mdDialog', function() {
         expect(childNodes.indexOf(contentElement[0])).toBe(0);
 
         document.body.removeChild(contentParent[0]);
-      })
+      });
 
     });
 
