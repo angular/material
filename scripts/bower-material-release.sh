@@ -30,6 +30,11 @@ function run {
 
   cd bower-material
   # GitHub token specified as Travis environment variable
+  commitAuthorName=$(git --no-pager show -s --format='%an' HEAD)
+  commitAuthorEmail=$(git --no-pager show -s --format='%ae' HEAD)
+  git config user.name "${commitAuthorName}"
+  git config user.email "${commitAuthorEmail}"
+  git config credential.helper "store --file=.git/credentials"
   echo "https://${ANGULARJS_MATERIAL_BOWER_TOKEN}:@github.com" > .git/credentials
 
   # Remove stale files from older builds
