@@ -492,6 +492,22 @@ describe('md-input-container directive', function() {
     expect(input.attr('aria-label')).toBe('baz');
   }));
 
+  it('should put an aria-labelled on the input when it is present on the container', inject(function($timeout) {
+    var el = $compile(
+      '<div id="outerlabel">Test</div>' +
+      '<form name="form">' +
+      '  <md-input-container md-no-float aria-labelledby="outerlabel">' +
+      '    <input placeholder="baz" ng-model="foo" name="foo">' +
+      '  </md-input-container>' +
+      '</form>')(pageScope);
+
+    // Flushes the $mdUtil.nextTick
+    $timeout.flush();
+
+    var input = el.find('input');
+    expect(input.attr('aria-labelledby')).toBe('outerlabel');
+  }));
+
   it('should evaluate the placeholder expression before setting the aria-label', function() {
     pageScope.placeholder = 'baz';
     var el = $compile(
