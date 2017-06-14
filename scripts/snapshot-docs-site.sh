@@ -34,7 +34,7 @@ function run {
   git config user.name "${commitAuthorName}"
   git config user.email "${commitAuthorEmail}"
   git config credential.helper "store --file=.git/credentials"
-  echo "https://${ANGULARJS_MATERIAL_DOCS_SITE_TOKEN}:@github.com" > .git/credentials
+  echo "https://${ANGULARJS_MATERIAL_BOWER_TOKEN}:@github.com" > .git/credentials
 
   echo "-- Commiting snapshot..."
   git add -A
