@@ -17,7 +17,6 @@ env:
     - NG_VERSION=1.5
     - NG_VERSION=1.6
     - NG_VERSION=snapshot
-    - MODE=saucelabs_required
 
 matrix:
   fast_finish: true
@@ -33,6 +32,15 @@ branches:
   only:
   - master
 
+jobs:
+  include:
+    - env: "NG_VERSION=1.5"
+    - env: "NG_VERSION=1.6"
+    - env: "NG_VERSION=snapshot"
+    - stage: Deploy
+      script: ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT
+      env: "MODE=release"
+
 install:
 - npm install
 - npm rebuild node-sass
@@ -45,5 +53,3 @@ before_script:
 script:
 - ./scripts/travis-run-script.sh
 
-after_success:
-- ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT
