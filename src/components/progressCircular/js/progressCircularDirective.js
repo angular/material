@@ -211,6 +211,23 @@ function MdProgressCircularDirective($window, $mdProgressCircular, $mdTheming,
 
     });
 
+    
+    // When using ng-show or ng-hide, 
+    // the animation won't stop because requestAnimationFrame is still running.
+    // Do this to stop requestAnimationFrame can save some usage of system resources.
+    scope.$watch(function() {
+      var style = $window.getComputedStyle(node);
+      return style && style.display;
+    }, function(newValue, oldValue) {
+      if(newValue && newValue !== oldValue) {
+        if(newValue === 'none') {
+          cleanupIndeterminateAnimation();
+        } else {
+          startIndeterminateAnimation();
+        }
+      }
+    });
+
     function renderCircle(animateFrom, animateTo, easing, duration, iterationCount, maxValue) {
       var id = ++lastAnimationId;
       var startTime = $mdUtil.now();
