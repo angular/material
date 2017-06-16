@@ -521,7 +521,9 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
 
       var containerId = 'select_container_' + $mdUtil.nextUid();
       selectContainer.attr('id', containerId);
-      ariaAttrs['aria-owns'] = containerId;
+      if (!element.find('md-select-menu').length) {
+        ariaAttrs['aria-owns'] = containerId;
+      }
       element.attr(ariaAttrs);
 
       scope.$on('$destroy', function() {
@@ -1075,6 +1077,7 @@ function OptgroupDirective() {
         el.prepend(labelElement);
       }
       labelElement.addClass('md-container-ignore');
+      labelElement.attr('role', 'presentation');
       if (attrs.label) labelElement.text(attrs.label);
     }
   }
