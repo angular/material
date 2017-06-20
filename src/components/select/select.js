@@ -259,7 +259,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
     // Use everything that's left inside element.contents() as the contents of the menu
     var multipleContent = isMultiple ? 'multiple' : '';
     var selectTemplate = '' +
-      '<div class="md-select-menu-container" aria-hidden="true">' +
+      '<div class="md-select-menu-container" aria-hidden="true" role="presentation">' +
       '<md-select-menu role="presentation" {0}>{1}</md-select-menu>' +
       '</div>';
 
@@ -1152,7 +1152,6 @@ function SelectProvider($$interimElementProvider) {
         element
           .removeClass('md-active')
           .attr('aria-hidden', 'true')
-          .removeAttr('role')
           .css('display', 'none');
         element.parent().find('md-select-value').removeAttr('aria-hidden');
 
@@ -1178,7 +1177,6 @@ function SelectProvider($$interimElementProvider) {
       return showDropDown(scope, element, opts)
         .then(function(response) {
           element.attr('aria-hidden', 'false');
-          element.attr('role', 'presentation');
           opts.alreadyOpen = true;
           opts.cleanupInteraction = activateInteraction();
           opts.cleanupResizing = activateResizing();
