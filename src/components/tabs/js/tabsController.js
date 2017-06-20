@@ -67,6 +67,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     defineBooleanAttribute('noDisconnect');
     defineBooleanAttribute('autoselect');
     defineBooleanAttribute('noSelectClick');
+    defineBooleanAttribute('noKeypress');
     defineBooleanAttribute('centerTabs', handleCenterTabs, false);
     defineBooleanAttribute('enableDisconnect');
 
@@ -300,10 +301,11 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   // Event handlers / actions
 
   /**
-   * Handle user keyboard interactions
+   * Handle user keyboard interactions if `md-no-keypress` are false.
    * @param event
    */
   function keydown (event) {
+    if (ctrl.noKeypress) return;
     switch (event.keyCode) {
       case $mdConstant.KEY_CODE.LEFT_ARROW:
         event.preventDefault();
