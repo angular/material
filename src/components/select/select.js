@@ -526,6 +526,11 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
       ariaAttrs['aria-owns'] = containerId;
       element.attr(ariaAttrs);
 
+      // Describe displayed selection
+      if(!element.attr('aria-describedby')){
+        element.attr('aria-describedby', valueEl.attr('id'));
+      }
+
       scope.$on('$destroy', function() {
         $mdSelect
           .destroy()
@@ -792,8 +797,11 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
       var selectedOptionEls = $mdUtil.nodesToArray($element[0].querySelectorAll('md-option[selected]'));
       if (selectedOptionEls.length) {
         var mapFn;
+        var descriptionPrefix = '';
 
         if (mode == 'html') {
+          // Insert a hidden description for aria-describedby on the select element
+          descriptionPrefix = '<span class="md-visually-hidden">Selected Value' + (selectedOptionEls.length === 1 ? '' : 's') +': </span>';
           // Map the given element to its innerHTML string. If the element has a child ripple
           // container remove it from the HTML string, before returning the string.
           mapFn = function(el) {
@@ -824,7 +832,13 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
         }
 
         // Ensure there are no duplicates; see https://github.com/angular/material/issues/9442
-        return $mdUtil.uniq(selectedOptionEls.map(mapFn)).join(', ');
+        var selectedDescription = $mdUtil.uniq(selectedOptionEls.map(mapFn)).join(', ');
+
+        // Only add "Selected Value:" prefix if there is a value selected
+        if(selectedDescription !== '')
+          selectedDescription = descriptionPrefix + selectedDescription;
+
+        return selectedDescription;
       } else {
         return '';
       }
