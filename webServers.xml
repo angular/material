@@ -1,0 +1,14 @@
+<application>
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="264f73c2-eec3-41b7-89ea-67d50de98b40" name="RyPharma" url="http://ftp.whappa.com">
+        <fileTransfer host="ftp.whappa.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</application>

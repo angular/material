@@ -1,0 +1,10 @@
+<code_scheme name="Jelle">
+  <JSCodeStyleSettings>
+    <option name="FORCE_SEMICOLON_STYLE" value="true" />
+    <option name="USE_DOUBLE_QUOTES" value="false" />
+    <option name="ENFORCE_TRAILING_COMMA" value="Remove" />
+  </JSCodeStyleSettings>
+  <codeStyleSettings language="JavaScript">
+    <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+  </codeStyleSettings>
+</code_scheme>

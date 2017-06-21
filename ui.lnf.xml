@@ -1,0 +1,6 @@
+<application>
+  <component name="UISettings">
+    <option name="HIDE_TOOL_STRIPES" value="false" />
+    <option name="MAX_LOOKUP_LIST_HEIGHT" value="5" />
+  </component>
+</application>
