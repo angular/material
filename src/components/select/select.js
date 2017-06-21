@@ -975,6 +975,19 @@ function OptionDirective($mdButtonInkRipple, $mdUtil, $mdTheming) {
     if (selectCtrl.isMultiple) {
       element.addClass('md-checkbox-enabled');
       element.prepend(CHECKBOX_SELECTION_INDICATOR.clone());
+      
+      // Focus means selected on multiple select
+      // Because the multi-select only supports
+      // Single focus, this should be done with
+      // aria-activedescendant when support is more
+      // common
+      element.on('focus', function selectOnFocus(){
+        element.attr('aria-selected', true);
+      });
+      
+      element.on('blur', function selectOnFocus(){
+        element.attr('aria-selected', false);
+      });
     }
 
     if (angular.isDefined(attr.ngValue)) {
@@ -1052,15 +1065,22 @@ function OptionDirective($mdButtonInkRipple, $mdUtil, $mdTheming) {
 
   function OptionController($element) {
     this.selected = false;
+
+    // Handled differently via events in post-link for multi-select
     this.setSelected = function(isSelected) {
-      if (isSelected && !this.selected) {
-        $element.attr({
-          'selected': 'selected',
-          'aria-selected': 'true'
-        });
-      } else if (!isSelected && this.selected) {
-        $element.removeAttr('selected');
-        $element.attr('aria-selected', 'false');
+      var isMultiple = this.selectCtrl && this.selectCtrl.isMultiple;
+
+      // Multiple select manages selection changes with event handlers
+      if(!isMultiple){
+        if (isSelected && !this.selected) {
+            $element.attr({
+              'selected': 'selected',
+              'aria-selected': 'true'
+            });
+        } else if (!isSelected && this.selected) {
+          $element.removeAttr('selected');
+          $element.attr('aria-selected', 'false');
+        }
       }
       this.selected = isSelected;
     };
