@@ -1,0 +1,20 @@
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.md-fab:hover, .md-fab.md-focused {
+  background-color: #000 !important;
+}
+
+p.note {
+  font-size: 1.2rem;
+}
+
+.lock-size {
+  min-width: 300px;
+  min-height: 300px;
+  width: 300px;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}

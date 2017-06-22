@@ -1,0 +1,48 @@
+#fake-app {
+  position: relative;
+  height: 400px;
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+
+  border: 1px solid #333;
+
+  .sidebar {
+    position: absolute;
+    width: 50px;
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    background-color: #333;
+
+    md-icon {
+      display: block;
+      color: #ddd;
+      margin-top: 15px;
+    }
+  }
+
+  .app-body {
+    position: absolute;
+    left: 50px;
+    right: 100px;
+    top: 0;
+    bottom: 0;
+
+    background-color: white;
+    padding: 10px;
+    overflow: auto;
+  }
+
+  .rightbar {
+    position: absolute;
+    width: 100px;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    background: #ddd;
+    padding: 10px;
+  }
+}
