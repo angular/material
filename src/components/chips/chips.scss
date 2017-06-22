@@ -158,11 +158,20 @@ $contact-chip-name-width: rem(12) !default;
       height: $chip-height;
     }
     md-autocomplete {
+      box-shadow: none;
+
       md-autocomplete-wrap {
         box-shadow: none;
+
+        .md-autocomplete-placeholder {
+          font-family: $font-family;
+          font-size: $chip-font-size;
+          line-height: $chip-height;
+          padding: 0;
+        }
       }
       input {
-        position: relative;
+        position: absolute;
       }
     }
     input {
@@ -172,15 +181,6 @@ $contact-chip-name-width: rem(12) !default;
       padding: 0;
       &:focus {
         outline:none;
-      }
-    }
-    md-autocomplete, md-autocomplete-wrap {
-      height: $chip-height;
-    }
-    md-autocomplete {
-      box-shadow: none;
-      input {
-        position: relative;
       }
     }
     &:not(:first-child) {
