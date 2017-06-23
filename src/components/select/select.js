@@ -180,7 +180,7 @@ angular.module('material.components.select', [
  * </hljs>
  */
 function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $parse, $sce,
-    $injector) {
+    $injector, $interpolate) {
   var keyCodes = $mdConstant.KEY_CODE;
   var NAVIGATION_KEYS = [keyCodes.SPACE, keyCodes.ENTER, keyCodes.UP_ARROW, keyCodes.DOWN_ARROW];
 
@@ -430,6 +430,8 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
         var labelText = element.attr('aria-label') || element.attr('placeholder');
         if (!labelText && containerCtrl && containerCtrl.label) {
           labelText = containerCtrl.label.text();
+        } else {
+          labelText = $interpolate(labelText)(scope);
         }
         ariaLabelBase = labelText;
         $mdAria.expect(element, 'aria-label', labelText);
@@ -523,6 +525,11 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
       selectContainer.attr('id', containerId);
       ariaAttrs['aria-owns'] = containerId;
       element.attr(ariaAttrs);
+
+      // Describe displayed selection
+      if(!element.attr('aria-describedby')){
+        element.attr('aria-describedby', valueEl.attr('id'));
+      }
 
       scope.$on('$destroy', function() {
         $mdSelect
@@ -790,8 +797,11 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
       var selectedOptionEls = $mdUtil.nodesToArray($element[0].querySelectorAll('md-option[selected]'));
       if (selectedOptionEls.length) {
         var mapFn;
+        var descriptionPrefix = '';
 
         if (mode == 'html') {
+          // Insert a hidden description for aria-describedby on the select element
+          descriptionPrefix = '<span class="md-visually-hidden">Selected Value' + (selectedOptionEls.length === 1 ? '' : 's') +': </span>';
           // Map the given element to its innerHTML string. If the element has a child ripple
           // container remove it from the HTML string, before returning the string.
           mapFn = function(el) {
@@ -822,7 +832,13 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
         }
 
         // Ensure there are no duplicates; see https://github.com/angular/material/issues/9442
-        return $mdUtil.uniq(selectedOptionEls.map(mapFn)).join(', ');
+        var selectedDescription = $mdUtil.uniq(selectedOptionEls.map(mapFn)).join(', ');
+
+        // Only add "Selected Value:" prefix if there is a value selected
+        if(selectedDescription !== '')
+          selectedDescription = descriptionPrefix + selectedDescription;
+
+        return selectedDescription;
       } else {
         return '';
       }
@@ -959,6 +975,19 @@ function OptionDirective($mdButtonInkRipple, $mdUtil, $mdTheming) {
     if (selectCtrl.isMultiple) {
       element.addClass('md-checkbox-enabled');
       element.prepend(CHECKBOX_SELECTION_INDICATOR.clone());
+      
+      // Focus means selected on multiple select
+      // Because the multi-select only supports
+      // Single focus, this should be done with
+      // aria-activedescendant when support is more
+      // common
+      element.on('focus', function selectOnFocus(){
+        element.attr('aria-selected', true);
+      });
+      
+      element.on('blur', function selectOnFocus(){
+        element.attr('aria-selected', false);
+      });
     }
 
     if (angular.isDefined(attr.ngValue)) {
@@ -1036,15 +1065,22 @@ function OptionDirective($mdButtonInkRipple, $mdUtil, $mdTheming) {
 
   function OptionController($element) {
     this.selected = false;
+
+    // Handled differently via events in post-link for multi-select
     this.setSelected = function(isSelected) {
-      if (isSelected && !this.selected) {
-        $element.attr({
-          'selected': 'selected',
-          'aria-selected': 'true'
-        });
-      } else if (!isSelected && this.selected) {
-        $element.removeAttr('selected');
-        $element.attr('aria-selected', 'false');
+      var isMultiple = this.selectCtrl && this.selectCtrl.isMultiple;
+
+      // Multiple select manages selection changes with event handlers
+      if(!isMultiple){
+        if (isSelected && !this.selected) {
+            $element.attr({
+              'selected': 'selected',
+              'aria-selected': 'true'
+            });
+        } else if (!isSelected && this.selected) {
+          $element.removeAttr('selected');
+          $element.attr('aria-selected', 'false');
+        }
       }
       this.selected = isSelected;
     };

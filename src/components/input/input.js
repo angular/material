@@ -121,10 +121,11 @@ function mdInputContainerDirective($mdTheming, $parse) {
     };
   }
 
-  function ContainerCtrl($scope, $element, $attrs, $animate) {
+  function ContainerCtrl($scope, $element, $attrs, $animate, $interpolate) {
     var self = this;
 
     self.isErrorGetter = $attrs.mdIsError && $parse($attrs.mdIsError);
+    self.labelledBy = $attrs.ariaLabelledby && $interpolate($attrs.ariaLabelledby)($scope);
 
     self.delegateClick = function() {
       self.input.focus();
@@ -147,10 +148,13 @@ function mdInputContainerDirective($mdTheming, $parse) {
       }
     };
     $scope.$watch(function() {
-      return self.label && self.input;
+      return (self.label || self.labelledBy) && self.input;
     }, function(hasLabelAndInput) {
-      if (hasLabelAndInput && !self.label.attr('for')) {
+      if (hasLabelAndInput && self.label && !self.label.attr('for')) {
         self.label.attr('for', self.input.attr('id'));
+      }
+      if (hasLabelAndInput && self.labelledBy && !self.input.attr('aria-labelledby')) {
+        self.input.attr('aria-labelledby', self.labelledBy);
       }
     });
   }

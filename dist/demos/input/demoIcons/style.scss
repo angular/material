@@ -1,0 +1,14 @@
+.inputIconDemo { min-height: 48px; }
+md-input-container:not(.md-input-invalid) > md-icon.email { color: green; }
+md-input-container:not(.md-input-invalid) > md-icon.name { color: dodgerblue; }
+md-input-container.md-input-invalid > md-icon.email,
+md-input-container.md-input-invalid > md-icon.name { color: red; }
+/*
+.right-icon {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  left: auto;
+  margin-top: 0;
+}
+*/
