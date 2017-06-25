@@ -103,6 +103,7 @@ angular
  * @param {boolean=} md-autoselect If set to true, the first item will be automatically selected
  *     in the dropdown upon open.
  * @param {string=} md-menu-class This will be applied to the dropdown menu for styling
+ * @param {string=} md-input-class This will be applied to the input for styling
  * @param {string=} md-floating-label This will add a floating label to autocomplete and wrap it in
  *     `md-input-container`
  * @param {string=} md-input-name The name attribute given to the input element to be used with
@@ -249,6 +250,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
       floatingLabel:    '@?mdFloatingLabel',
       autoselect:       '=?mdAutoselect',
       menuClass:        '@?mdMenuClass',
+      inputClass:       '@?mdInputClass',
       inputId:          '@?mdInputId',
       escapeOptions:    '@?mdEscapeOptions',
       dropdownItems:    '=?mdDropdownItems',
@@ -353,6 +355,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
                   ' + (tabindex != null ? 'tabindex="' + tabindex + '"' : '') + '\
                   id="{{ inputId || \'fl-input-\' + $mdAutocompleteCtrl.id }}"\
                   name="{{inputName}}"\
+                  ng-class="::inputClass"\
                   autocomplete="off"\
                   ng-required="$mdAutocompleteCtrl.isRequired"\
                   ng-readonly="$mdAutocompleteCtrl.isReadonly"\
@@ -379,6 +382,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
                 ' + (tabindex != null ? 'tabindex="' + tabindex + '"' : '') + '\
                 id="{{ inputId || \'input-\' + $mdAutocompleteCtrl.id }}"\
                 name="{{inputName}}"\
+                ng-class="::inputClass"\
                 ng-if="!floatingLabel"\
                 autocomplete="off"\
                 ng-required="$mdAutocompleteCtrl.isRequired"\
