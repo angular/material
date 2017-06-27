@@ -119,7 +119,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         bot    = root.bottom - vrect.top,
         left   = hrect.left - root.left,
         width  = hrect.width,
-        offset = getVerticalOffset(),
+        offset = getVerticalOffset(vrect),
         position = $scope.dropdownPosition,
         styles;
 
@@ -157,16 +157,17 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
      * Calculates the vertical offset for floating label examples to account for ngMessages
      * @returns {number}
      */
-    function getVerticalOffset () {
+    function getVerticalOffset (vrect) {
       var offset = 0;
       var inputContainer = $element.find('md-input-container');
       if (inputContainer.length) {
+       var offsetDiff = 0;
         var input = inputContainer.find('input');
-        offset = inputContainer.prop('offsetHeight');
-        offset -= input.prop('offsetTop');
-        offset -= input.prop('offsetHeight');
+        offset = (vrect && vrect.height) || inputContainer.prop('offsetHeight');
+        offsetDiff += inputContainer.prop('offsetTop');
+        offsetDiff += input.prop('offsetHeight');
         // add in the height left up top for the floating label text
-        offset += inputContainer.prop('offsetTop');
+        offset -= offsetDiff;
       }
       return offset;
     }
