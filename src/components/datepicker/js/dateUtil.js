@@ -38,7 +38,7 @@
      * @returns {Date}
      */
     function getFirstDateOfMonth(date) {
-      return new Date(date.getFullYear(), date.getMonth(), 1);
+      return new Date(Date.UTC(date.getFullYear(), date.getMonth(), 1));
     }
 
     /**
@@ -47,7 +47,7 @@
      * @returns {number}
      */
     function getNumberOfDaysInMonth(date) {
-      return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+      return new Date(Date.UTC(date.getFullYear(), date.getMonth() + 1, 0)).getDate();
     }
 
     /**
@@ -56,7 +56,7 @@
      * @returns {Date}
      */
     function getDateInNextMonth(date) {
-      return new Date(date.getFullYear(), date.getMonth() + 1, 1);
+      return new Date(Date.UTC(date.getFullYear(), date.getMonth() + 1, 1));
     }
 
     /**
@@ -65,7 +65,7 @@
      * @returns {Date}
      */
     function getDateInPreviousMonth(date) {
-      return new Date(date.getFullYear(), date.getMonth() - 1, 1);
+      return new Date(Date.UTC(date.getFullYear(), date.getMonth() - 1, 1));
     }
 
     /**
@@ -153,7 +153,7 @@
       // automatically advance *another* month by the number of missing days.
       // For example, if you try to go from Jan. 30 to Feb. 30, you'll end up on March 2.
       // So, we check if the month overflowed and go to the last day of the target month instead.
-      var dateInTargetMonth = new Date(date.getFullYear(), date.getMonth() + numberOfMonths, 1);
+      var dateInTargetMonth = new Date(Date.UTC(date.getFullYear(), date.getMonth() + numberOfMonths, 1));
       var numberOfDaysInMonth = getNumberOfDaysInMonth(dateInTargetMonth);
       if (numberOfDaysInMonth < date.getDate()) {
         dateInTargetMonth.setDate(numberOfDaysInMonth);
@@ -201,7 +201,7 @@
      */
     function setDateTimeToMidnight(date) {
       if (isValidDate(date)) {
-        date.setHours(0, 0, 0, 0);
+        date.setUTCHours(0, 0, 0, 0);
       }
     }
 
