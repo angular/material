@@ -83,7 +83,7 @@ describe('$mdGesture', function() {
       expect(endSpy1).toHaveBeenCalled();
     }));
 
-    it('gesture{down,move,up,cancel}', inject(function($document) {
+    it('gesture{down,move,up}', inject(function($document) {
       $document.triggerHandler({
         type: 'pointerdown',
         target: childEl[0]
@@ -106,7 +106,7 @@ describe('$mdGesture', function() {
       $document.triggerHandler('pointermove');
       expect(moveSpy1).toHaveBeenCalled();
       $document.triggerHandler('pointercancel');
-      expect(endSpy1).toHaveBeenCalled();
+      expect(endSpy1).not.toHaveBeenCalled();
     }));
 
     it('mouse{down,move,up,leave}', inject(function($document) {
