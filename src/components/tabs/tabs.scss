@@ -205,7 +205,7 @@ md-tab-content {
   &.md-left:not(.md-active) {
     @include rtl(transform, translateX(-100%), translateX(+100%));
     animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
-    opacity: 0;
+    visibility: hidden;
     * {
       transition: visibility 0s linear;
       transition-delay: $swift-ease-in-out-duration;
@@ -215,7 +215,7 @@ md-tab-content {
   &.md-right:not(.md-active) {
     @include rtl(transform, translateX(100%), translateX(-100%));
     animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
-    opacity: 0;
+    visibility: hidden;
     * {
       transition: visibility 0s linear;
       transition-delay: $swift-ease-in-out-duration;
