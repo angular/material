@@ -1083,9 +1083,15 @@ function MdDialogProvider($$interimElementProvider) {
       }
       else {
         $mdAria.expectAsync(element, 'aria-label', function() {
-          var words = dialogContent.text().split(/\s+/);
-          if (words.length > 3) words = words.slice(0, 3).concat('...');
-          return words.join(' ');
+          // If dialog title is specified, set aria-label with it
+          // See https://github.com/angular/material/issues/10582
+          if (options.title) {
+            return options.title;
+          } else {
+            var words = dialogContent.text().split(/\s+/);
+            if (words.length > 3) words = words.slice(0, 3).concat('...');
+            return words.join(' ');
+          }
         });
       }
 
