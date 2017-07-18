@@ -87,6 +87,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
       gatherElements();
       moveDropdown();
+      moveLiveRegion();
 
       // Forward all focus events to the input element when autofocus is enabled
       if ($scope.autofocus) {
@@ -193,6 +194,16 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     elements.$.scrollContainer.detach();
     elements.$.root.append(elements.$.scrollContainer);
     if ($animate.pin) $animate.pin(elements.$.scrollContainer, $rootElement);
+  }
+
+  /**
+   * Moves the live region within the autocomplete to ensure the live region is
+   * is not hidden from screen readers when the autocomplete appears within
+   * a dialog
+   */
+  function moveLiveRegion () {
+    angular.element($mdLiveAnnouncer._liveElement).detach();
+    elements.$.main.append($mdLiveAnnouncer._liveElement)
   }
 
   /**
