@@ -202,9 +202,11 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
     }
 
     // There's got to be an md-content inside. If there's not one, let's add it.
-    if (!element.find('md-content').length) {
+    var mdContentEl = element.find('md-content');
+    if (!mdContentEl.length) {
       element.append(angular.element('<md-content>').append(element.contents()));
     }
+    mdContentEl.attr('role', 'presentation');
 
 
     // Add progress spinner for md-options-loading
@@ -258,8 +260,8 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
     // Use everything that's left inside element.contents() as the contents of the menu
     var multipleContent = isMultiple ? 'multiple' : '';
     var selectTemplate = '' +
-      '<div class="md-select-menu-container" aria-hidden="true">' +
-      '<md-select-menu {0}>{1}</md-select-menu>' +
+      '<div class="md-select-menu-container" aria-hidden="true" role="presentation">' +
+      '<md-select-menu role="presentation" {0}>{1}</md-select-menu>' +
       '</div>';
 
     selectTemplate = $mdUtil.supplant(selectTemplate, [multipleContent, element.html()]);
@@ -521,7 +523,10 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
 
       var containerId = 'select_container_' + $mdUtil.nextUid();
       selectContainer.attr('id', containerId);
-      ariaAttrs['aria-owns'] = containerId;
+      // Only add aria-owns if element ownership is NOT represented in the DOM.
+      if (!element.find('md-select-menu').length) {
+        ariaAttrs['aria-owns'] = containerId;
+      }
       element.attr(ariaAttrs);
 
       scope.$on('$destroy', function() {
@@ -1075,6 +1080,7 @@ function OptgroupDirective() {
         el.prepend(labelElement);
       }
       labelElement.addClass('md-container-ignore');
+      labelElement.attr('aria-hidden', 'true');
       if (attrs.label) labelElement.text(attrs.label);
     }
   }
@@ -1149,6 +1155,7 @@ function SelectProvider($$interimElementProvider) {
           .removeClass('md-active')
           .attr('aria-hidden', 'true')
           .css('display', 'none');
+        element.parent().find('md-select-value').removeAttr('aria-hidden');
 
         announceClosed(opts);
 
@@ -1175,6 +1182,7 @@ function SelectProvider($$interimElementProvider) {
           opts.alreadyOpen = true;
           opts.cleanupInteraction = activateInteraction();
           opts.cleanupResizing = activateResizing();
+          autoFocus(opts.focusedNode);
 
           return response;
         }, opts.hideBackdrop);
@@ -1188,6 +1196,11 @@ function SelectProvider($$interimElementProvider) {
        *  and scalings...
        */
       function showDropDown(scope, element, opts) {
+        if (opts.parent !== element.parent()) {
+          element.parent().attr('aria-owns', element.attr('id'));
+        }
+        element.parent().find('md-select-value').attr('aria-hidden', 'true');
+
         opts.parent.append(element);
 
         return $q(function(resolve, reject) {
@@ -1208,7 +1221,7 @@ function SelectProvider($$interimElementProvider) {
 
       /**
        * Initialize container and dropDown menu positions/scale, then animate
-       * to show... and autoFocus.
+       * to show.
        */
       function positionAndFocusMenu() {
         return $q(function(resolve) {
@@ -1223,7 +1236,6 @@ function SelectProvider($$interimElementProvider) {
             element.addClass('md-active');
             info.dropDown.element.css(animator.toCss({transform: ''}));
 
-            autoFocus(opts.focusedNode);
             resolve();
           });
 

@@ -92,11 +92,19 @@ describe('<md-select>', function() {
       expect(container.classList.contains('test')).toBe(true);
     });
 
-    it('sets aria-owns between the select and the container', function() {
+    it('does not set aria-owns on select if DOM ownership is implied', function() {
       var select = setupSelect('ng-model="val"').find('md-select');
       var ownsId = select.attr('aria-owns');
+      expect(select.find('md-option')).toBeTruthy();
+      expect(ownsId).toBeFalsy();
+    });
+
+    it('sets aria-owns between the select and the container if element moved outside parent', function() {
+      var select = setupSelect('ng-model="val"').find('md-select');
+      openSelect(select);
+      var ownsId = select.attr('aria-owns');
       expect(ownsId).toBeTruthy();
-      var containerId = select[0].querySelector('.md-select-menu-container').getAttribute('id');
+      var containerId = $document[0].querySelector('.md-select-menu-container').getAttribute('id');
       expect(ownsId).toBe(containerId);
     });
 
