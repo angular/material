@@ -100,23 +100,24 @@ describe('<md-tabs>', function () {
                            '<md-tab ng-disabled="true"></md-tab>' +
                            '<md-tab></md-tab>' +
                            '</md-tabs>');
+      var ctrl = tabs.controller('mdTabs');
       var tabItems = tabs.find('md-tab-item');
 
       expect(tabItems.eq(0)).toBeActiveTab();
 
-      // Boundary case, do nothing
+      // Focus should move to the last tab if left arrow is pressed
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
-      expect(tabItems.eq(0)).toBeActiveTab();
+      expect(ctrl.getFocusedTabId()).toBe(tabItems.eq(2).attr('id'));
+
+      // Focus should move to the first tab if right arrow is pressed
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
+      expect(ctrl.getFocusedTabId()).toBe(tabItems.eq(0).attr('id'));
 
       // Tab 0 should still be active, but tab 2 focused (skip tab 1 it's disabled)
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
       expect(tabItems.eq(0)).toBeActiveTab();
 
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
-      expect(tabItems.eq(2)).toBeActiveTab();
-
-      // Boundary case, do nothing
-      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
       expect(tabItems.eq(2)).toBeActiveTab();
 
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
