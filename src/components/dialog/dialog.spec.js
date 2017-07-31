@@ -801,7 +801,7 @@ describe('$mdDialog', function() {
 
       function onShowing(scope, element, options) {
         showing = true;
-        container = angular.element(parent[0].querySelector('.md-dialog-container'));
+        var container = angular.element(parent[0].querySelector('.md-dialog-container'));
         expect(container.length).toBe(0);
       }
 

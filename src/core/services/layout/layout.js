@@ -441,7 +441,6 @@
         case 'layout-margin'  :
         case 'layout-fill'    :
         case 'layout-wrap'    :
-        case 'layout-nowrap'  :
         case 'layout-nowrap' :
           value = '';
           break;

@@ -593,7 +593,7 @@ describe('$mdThemeProvider with disabled themes', function() {
 
     it('should not set any classnames', function() {
       inject(function($rootScope, $compile, $mdTheming) {
-        el = $compile('<h1>Test</h1>')($rootScope);
+        var el = $compile('<h1>Test</h1>')($rootScope);
         $mdTheming(el);
         expect(el.hasClass('md-default-theme')).toBe(false);
       });
@@ -601,7 +601,7 @@ describe('$mdThemeProvider with disabled themes', function() {
 
     it('should not inject any styles', function() {
       inject(function($rootScope, $compile, $mdTheming) {
-        el = $compile('<h1>Test</h1>')($rootScope);
+        var el = $compile('<h1>Test</h1>')($rootScope);
         $mdTheming(el);
 
         var styles = getThemeStyleElements();
