@@ -886,8 +886,8 @@ function parseRules(theme, colorType, rules) {
 
   var themeNameRegex = new RegExp('\\.md-' + theme.name + '-theme', 'g');
   // Matches '{{ primary-color }}', etc
-  var hueRegex = new RegExp('(\'|")?{{\\s*(' + colorType + ')-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}(\"|\')?','g');
-  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow|default)-?(\d\.?\d*)?(contrast)?\s*\}\}'?"?/g;
+  var hueRegex = new RegExp('(\'|")?{{\\s*(' + colorType + ')-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}("|\')?','g');
+  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue-[0-3]|shadow|default)-?(\d\.?\d*)?(contrast)?\s*\}\}'?"?/g;
   var palette = PALETTES[color.name];
 
   // find and replace simple variables where we use a specific hue, not an entire palette
