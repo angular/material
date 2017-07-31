@@ -233,7 +233,8 @@
         "yield-star-spacing": "error",
         "yoda": "off",
         "no-unused-vars": "off",
-        "no-cond-assign": "off"
+        "no-cond-assign": "off",
+        "no-unexpected-multiline": "off"
     },
     "env": {
         "browser": true
