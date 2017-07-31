@@ -316,10 +316,10 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
           var vGutterShare = (rowCount - 1) / rowCount;
 
           // Percent of the available vertical space that one row takes up.
-          var vShare = (1 / rowCount) * 100;
+          vShare = (1 / rowCount) * 100;
 
           // Base vertical size of a row.
-          var vUnit = UNIT({share: vShare, gutterShare: vGutterShare, gutter: gutter});
+          vUnit = UNIT({share: vShare, gutterShare: vGutterShare, gutter: gutter});
 
           style.top = POSITION({unit: vUnit, offset: position.row, gutter: gutter});
           style.height = DIMENSION({unit: vUnit, span: spans.row, gutter: gutter});

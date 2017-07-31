@@ -1480,7 +1480,9 @@ describe('<md-select>', function() {
       el.triggerHandler('click');
       $material.flushInterimElement();
       el.triggerHandler('blur');
-    } catch (e) { }
+    } catch (e) {
+      // ignore error
+    }
   }
 
   function closeSelect() {
