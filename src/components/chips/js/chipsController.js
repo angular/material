@@ -669,7 +669,9 @@ MdChipsCtrl.prototype.resetChipBuffer = function() {
  * @returns {boolean} true if the max chips limit has been reached, false otherwise.
  */
 MdChipsCtrl.prototype.hasMaxChipsReached = function() {
-  if (angular.isString(this.maxChips)) this.maxChips = parseInt(this.maxChips, 10) || 0;
+  if (angular.isString(this.maxChips)) {
+    this.maxChips = parseInt(this.maxChips, 10) || 0;
+  }
 
   return this.maxChips > 0 && this.items.length >= this.maxChips;
 };
