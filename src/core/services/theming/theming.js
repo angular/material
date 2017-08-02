@@ -239,6 +239,16 @@ var VALID_HUE_VALUES = [
   '700', '800', '900', 'A100', 'A200', 'A400', 'A700'
 ];
 
+function browserColorSetter() {
+  var browserColor = {};
+  return {
+    setBrowserColor: function setBrowserColor(color) {
+      browserColor.color = color;
+    },
+    browserColor: browserColor,
+  }
+}
+
 /**
  * @ngInject
  */
@@ -247,11 +257,12 @@ function ThemingProvider($mdColorPalette, $injector) {
   var THEMES = { };
 
   var themingProvider;
-  var browserColor;
-  var doEnableBrowserColor;
 
   var alwaysWatchTheme = false;
   var defaultTheme = 'default';
+  var bcs = browserColorSetter();
+  var doBrowserColor = bcs.setBrowserColor;
+  var browserColor = bcs.browserColor;
 
   // Load JS Defined Palettes
   angular.extend(PALETTES, $mdColorPalette);
@@ -263,7 +274,7 @@ function ThemingProvider($mdColorPalette, $injector) {
    * @param {string} color Hex value of the wanted browser color
    * @returns {Function} Remove function of the meta tags
    */
-  var setBrowserColor = function (color, $$mdMeta) {
+  var setBrowserColor = function ($$mdMeta, color) {
     // Chrome, Firefox OS and Opera
     var removeChrome = $$mdMeta.setMeta('theme-color', color);
     // Windows Phone
@@ -358,15 +369,12 @@ function ThemingProvider($mdColorPalette, $injector) {
     },
 
     enableBrowserColor: function(color) {
-      if ($injector.has('$mdTheming')) {
-        $injector.get('$mdTheming').setBrowserColor(color);
-      } else {
-        doEnableBrowserColor = true;
-        browserColor = color;
-      }
+      doBrowserColor(color);
     },
 
-    $get: ThemingService,
+    $get: ['$injector', function($injector) {
+      return $injector.invoke(themingService, undefined, { browserColor: browserColor });
+    }],
     _LIGHT_DEFAULT_HUES: LIGHT_DEFAULT_HUES,
     _DARK_DEFAULT_HUES: DARK_DEFAULT_HUES,
     _PALETTES: PALETTES,
@@ -627,7 +635,7 @@ function ThemingProvider($mdColorPalette, $injector) {
    */
 
   /* @ngInject */
-  function ThemingService($rootScope, $mdUtil, $q, $log, $document, $$mdMeta) {
+  function themingService($rootScope, $mdUtil, $q, $log, $document, $$mdMeta, browserColor) {
         // Allow us to be invoked via a linking function signature.
     var applyTheme = function (scope, el) {
           if (el === undefined) { el = scope; scope = undefined; }
@@ -684,9 +692,14 @@ function ThemingProvider($mdColorPalette, $injector) {
       return enableBrowserColor($$mdMeta, color);
     };
 
-    if (doEnableBrowserColor) {
+    doBrowserColor = function (color) {
       $log.warn("$mdThemingProvider.enableBrowserColor() is deprecated, use $mdTheming.setBrowserColor(); in run.");
-      applyTheme.setBrowserColor(browserColor);
+      applyTheme.setBrowserColor(color);
+    };
+
+    if ('color' in browserColor) {
+      doBrowserColor(browserColor.color);
+      delete browserColor.color;
     }
 
     applyTheme.isDisabled = function() {
