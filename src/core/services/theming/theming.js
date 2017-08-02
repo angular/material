@@ -979,6 +979,7 @@ function generateAllThemes($injector, $mdTheming, $document) {
    * If yes, then immediately disable all theme stylesheet generation and DOM injection
    */
   var isDisabled = (
+    !$mdTheming.isDisabled ||  // tests tinker with $mdTheming
     $mdTheming.isDisabled() ||
     $document[0].querySelector('[md-themes-disabled]')
   );
@@ -987,7 +988,7 @@ function generateAllThemes($injector, $mdTheming, $document) {
   var themeCss = !isDisabled && $injector.has('$MD_THEME_CSS') ? $injector.get('$MD_THEME_CSS') : '';
 
   // Append our custom registered styles to the theme stylesheet.
-  themeCss += $mdTheming.registeredStyles();
+  themeCss += $mdTheming.registeredStyles ? $mdTheming.registeredStyles() : '';
 
   if ( !firstChild ) return;
   if (themeCss.length === 0) return; // no rules, so no point in running this expensive task
@@ -1040,7 +1041,7 @@ function generateAllThemes($injector, $mdTheming, $document) {
 
   angular.forEach($mdTheming.THEMES, function(theme) {
     if (!GENERATED[theme.name] && !($mdTheming.defaultTheme() !== 'default' && theme.name === 'default')) {
-      generateTheme(theme, theme.name, $mdTheming.nonce());
+      generateTheme($document[0], theme, theme.name, $mdTheming.nonce());
     }
   });
 

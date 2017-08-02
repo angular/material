@@ -37,8 +37,8 @@ function MdAriaProvider() {
 
   return {
     disableWarnings: disableWarnings,
-    $get: function($$rAF, $log, $window, $interpolate) {
-      return MdAriaService.apply(config, arguments);
+    $get: function($injector) {
+      return $injector.invoke(mdAriaService, undefined, config);
     }
   };
 
@@ -55,12 +55,7 @@ function MdAriaProvider() {
 /*
  * @ngInject
  */
-function MdAriaService($$rAF, $log, $window, $interpolate, $document) {
-
-  // Load the showWarnings option from the current context and store it inside of a scope variable,
-  // because the context will be probably lost in some function calls.
-  var showWarnings = this.showWarnings;
-
+function mdAriaService($$rAF, $log, $window, $interpolate, $document, showWarnings) {
   return {
     expect: expect,
     expectAsync: expectAsync,

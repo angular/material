@@ -244,6 +244,10 @@
     /** @final */
     this.$window = $window;
 
+    // Super secret window that the tests don't muck with.
+    /** @final */
+    this.$$window = $window;
+
     /** @final */
     this.dateUtil = $$mdDateUtil;
 
@@ -770,7 +774,7 @@
    * @param {Event} event
    */
   DatePickerCtrl.prototype.openCalendarPane = function(event) {
-    var $window = this.$window;
+    var $$window = this.$$window;
     if (!this.isCalendarOpen && !this.isDisabled && !this.inputFocusedOnWindowBlur) {
       this.isCalendarOpen = this.isOpen = true;
       this.calendarPaneOpenedFrom = event.target;
@@ -796,7 +800,7 @@
         self.documentElement.on('click touchstart', self.bodyClickHandler);
       }, false);
 
-      $window.addEventListener(this.windowEventName, this.windowEventHandler);
+      $$window.addEventListener(this.windowEventName, this.windowEventHandler);
     }
   };
 

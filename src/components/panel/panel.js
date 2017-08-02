@@ -1385,8 +1385,8 @@ function MdPanelRef(config, $injector) {
   /** @private @const {!angular.$window} */
   this._$window = $injector.get('$window');
 
-  /** @private @const {!angular.$window} */
-  this._$window = $injector.get('$window');
+  /** @private @const {!angular.$document} */
+  this._$document = $injector.get('$document');
 
   /** @private @const {!Function} */
   this._$$rAF = $injector.get('$$rAF');
