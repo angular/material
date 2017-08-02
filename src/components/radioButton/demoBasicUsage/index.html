@@ -1,5 +1,5 @@
 <div>
-  <form ng-submit="submit()" ng-controller="AppCtrl" ng-cloak>
+  <form ng-submit="submit($event)" ng-controller="AppCtrl" ng-cloak>
     <p>Selected Value: <span class="radioValue">{{ data.group1 }}</span> </p>
 
     <md-radio-group ng-model="data.group1">

@@ -1639,7 +1639,7 @@ function SelectProvider($$interimElementProvider) {
 
         minWidth = Math.min(targetRect.width + centeredRect.paddingLeft + centeredRect.paddingRight, maxWidth);
 
-        fontSize = window.getComputedStyle(targetNode)['font-size'];
+        fontSize = $window.getComputedStyle(targetNode)['font-size'];
       }
 
       // Keep left and top within the window

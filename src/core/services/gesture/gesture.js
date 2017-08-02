@@ -77,7 +77,9 @@ MdGestureProvider.prototype = {
  * MdGesture factory construction function
  * @ngInject
  */
-function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
+function MdGesture($$MdGestureHandler, $$rAF, $timeout, $window, $document) {
+  var window = $window;
+  var navigator = $window.navigator;
   var userAgent = navigator.userAgent || navigator.vendor || window.opera;
   var isIos = userAgent.match(/ipad|iphone|ipod/i);
   var isAndroid = userAgent.match(/android/i);
@@ -328,7 +330,7 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
     });
 
   function getTouchAction() {
-    var testEl = document.createElement('div');
+    var testEl = $document[0].createElement('div');
     var vendorPrefixes = ['', 'webkit', 'Moz', 'MS', 'ms', 'o'];
 
     for (var i = 0; i < vendorPrefixes.length; i++) {
@@ -358,8 +360,11 @@ function GestureHandler (name) {
   this.state = {};
 }
 
-function MdGestureHandler() {
-  var hasJQuery =  (typeof window.jQuery !== 'undefined') && (angular.element === window.jQuery);
+/**
+ * @ngInject
+ */
+function MdGestureHandler($window, $document) {
+  var hasJQuery =  (typeof $window.jQuery !== 'undefined') && (angular.element === $window.jQuery);
 
   GestureHandler.prototype = {
     options: {},
@@ -481,13 +486,14 @@ function MdGestureHandler() {
    * @param eventPointer the pointer object that matches this event.
    */
   function nativeDispatchEvent(srcEvent, eventType, eventPointer) {
+    var document = $document[0];
     eventPointer = eventPointer || pointer;
     var eventObj;
 
     if (eventType === 'click' || eventType == 'mouseup' || eventType == 'mousedown' ) {
       eventObj = document.createEvent('MouseEvents');
       eventObj.initMouseEvent(
-        eventType, true, true, window, srcEvent.detail,
+        eventType, true, true, $window, srcEvent.detail,
         eventPointer.x, eventPointer.y, eventPointer.x, eventPointer.y,
         srcEvent.ctrlKey, srcEvent.altKey, srcEvent.shiftKey, srcEvent.metaKey,
         srcEvent.button, srcEvent.relatedTarget || null
@@ -509,10 +515,11 @@ function MdGestureHandler() {
  * Attach Gestures: hook document and check shouldHijack clicks
  * @ngInject
  */
-function attachToDocument( $mdGesture, $$MdGestureHandler ) {
+function attachToDocument( $mdGesture, $$MdGestureHandler, $document) {
 
   // Polyfill document.contains for IE11.
-  // TODO: move to util
+  // TODO: avoid muating $document!
+  var document = $document[0];
   document.contains || (document.contains = function (node) {
     return document.body.contains(node);
   });

@@ -1196,12 +1196,19 @@ MdPanelService.prototype.open = function(preset, config) {
  * @returns {!Object} The preset configuration object.
  */
 MdPanelService.prototype._getPresetByName = function(preset) {
-  if (!this._presets[preset]) {
+  var $injector = this._$injector;
+  var v = this._presets[preset];
+  if (!v) {
     throw new Error('mdPanel: The panel preset configuration that you ' +
         'requested does not exist. Use the $mdPanelProvider to create a ' +
         'preset before requesting one.');
   }
-  return this._presets[preset];
+
+  if (angular.isArray(v) || angular.isFunction(v)) {
+    return $injector.invoke(v);
+  }
+
+  return v;
 };
 
 
@@ -1374,6 +1381,9 @@ function MdPanelRef(config, $injector) {
 
   /** @private @const {!angular.$log} */
   this._$log = $injector.get('$log');
+
+  /** @private @const {!angular.$window} */
+  this._$window = $injector.get('$window');
 
   /** @private @const {!angular.$window} */
   this._$window = $injector.get('$window');
@@ -1662,6 +1672,7 @@ MdPanelRef.prototype.show = function() {
  *     the panel has hidden and animations finish.
  */
 MdPanelRef.prototype.hide = function() {
+  var getElement = getElementGetter(this._$document);
   if (!this.panelContainer) {
     return this._$q(function(resolve, reject) {
       reject('mdPanel: Panel does not exist yet. Call open() or attach().');
@@ -1814,6 +1825,7 @@ MdPanelRef.prototype.toggleClass = function(toggleClass, onElement) {
  * @private
  */
 MdPanelRef.prototype._compile = function() {
+  var getElement = getElementGetter(this._$document);
   var self = this;
 
   // Compile the element via $mdCompiler. Note that when using a
@@ -1857,6 +1869,7 @@ MdPanelRef.prototype._compile = function() {
  * @private
  */
 MdPanelRef.prototype._createPanel = function() {
+  var getElement = getElementGetter(this._$document);
   var self = this;
 
   return this._$q(function(resolve, reject) {
@@ -2101,6 +2114,7 @@ MdPanelRef.prototype._removeEventListeners = function() {
  * @private
  */
 MdPanelRef.prototype._configureEscapeToClose = function() {
+  var getElement = getElementGetter(this._$document);
   if (this.config['escapeToClose']) {
     var parentTarget = getElement(this.config['attachTo']);
     var self = this;
@@ -2132,9 +2146,10 @@ MdPanelRef.prototype._configureEscapeToClose = function() {
  * @private
  */
 MdPanelRef.prototype._configureClickOutsideToClose = function() {
+  var $document = this._$document;
   if (this.config['clickOutsideToClose']) {
     var target = this.config['propagateContainerEvents'] ?
-        angular.element(document.body) :
+        angular.element($document[0].body) :
         this.panelContainer;
     var sourceEl;
 
@@ -2532,6 +2547,9 @@ function MdPanelPosition($injector) {
   /** @private @const {!angular.$mdConstant} */
   this._$mdConstant = $injector.get('$mdConstant');
 
+  /** @private @const {!angular.$document} */
+  this._$document = $injector.get('$document');
+
   /** @private {boolean} */
   this._absolute = false;
 
@@ -2759,6 +2777,7 @@ MdPanelPosition.prototype.center = function() {
  * @returns {!MdPanelPosition}
  */
 MdPanelPosition.prototype.relativeTo = function(element) {
+  var getElement = getElementGetter(this._$document);
   this._absolute = false;
   this._relativeToEl = getElement(element);
   return this;
@@ -2941,7 +2960,7 @@ MdPanelPosition.prototype._isOnscreen = function(panelEl) {
 
   if (this._translateX.length || this._translateY.length) {
     var prefixedTransform = this._$mdConstant.CSS.TRANSFORM;
-    var offsets = getComputedTranslations(panelEl, prefixedTransform);
+    var offsets = getComputedTranslations(this._$window, panelEl, prefixedTransform);
     left += offsets.x;
     top += offsets.y;
   }
@@ -3182,6 +3201,9 @@ function MdPanelAnimation($injector) {
   /** @private @const {!angular.$mdUtil} */
   this._$mdUtil = $injector.get('$mdUtil');
 
+  /** @private @const {!angular.$document} */
+  this._$document = $injector.get('$document');
+
   /**
    * @private {{element: !angular.JQLite|undefined, bounds: !DOMRect}|
    *     undefined}
@@ -3286,6 +3308,7 @@ MdPanelAnimation.prototype.duration = function(duration) {
  * @private
  */
 MdPanelAnimation.prototype._getPanelAnimationTarget = function(location) {
+  var getElement = getElementGetter(this._$document);
   if (angular.isDefined(location.top) || angular.isDefined(location.left)) {
     return {
       element: undefined,
@@ -3498,28 +3521,31 @@ MdPanelAnimation.prototype._getBoundingClientRect = function(element) {
 
 
 /**
- * Returns the angular element associated with a css selector or element.
- * @param el {string|!angular.JQLite|!Element}
- * @returns {!angular.JQLite}
+ * Returns a function that returns the angular element associated with a css selector or element.
+ * @param $document {!angular.JQLite}
+ * @returns {(el: string,!angular.JQLite,!Element) => !angular.JQLite}
  */
-function getElement(el) {
-  var queryResult = angular.isString(el) ?
-      document.querySelector(el) : el;
-  return angular.element(queryResult);
+function getElementGetter($document) {
+  return function getElement(el) {
+    var queryResult = angular.isString(el) ?
+        $document[0].querySelector(el) : el;
+    return angular.element(queryResult);
+  };
 }
 
 
 /**
  * Gets the computed values for an element's translateX and translateY in px.
+ * @param {!angular.$window} $window
  * @param {!angular.JQLite|!Element} el
  * @param {string} property
  * @return {{x: number, y: number}}
  */
-function getComputedTranslations(el, property) {
+function getComputedTranslations($window, el, property) {
   // The transform being returned by `getComputedStyle` is in the format:
   // `matrix(a, b, c, d, translateX, translateY)` if defined and `none`
   // if the element doesn't have a transform.
-  var transform = getComputedStyle(el[0] || el)[property];
+  var transform = $window.getComputedStyle(el[0] || el)[property];
   var openIndex = transform.indexOf('(');
   var closeIndex = transform.lastIndexOf(')');
   var output = { x: 0, y: 0 };

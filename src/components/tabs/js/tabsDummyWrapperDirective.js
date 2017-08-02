@@ -36,7 +36,7 @@ function MdTabsDummyWrapper ($mdUtil, $window) {
           characterData: true
         };
 
-        observer = new MutationObserver(mutationCallback);
+        observer = new $window.MutationObserver(mutationCallback);
         observer.observe(element[0], config);
         disconnect = observer.disconnect.bind(observer);
       } else {
