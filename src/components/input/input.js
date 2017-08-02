@@ -1,8 +1,17 @@
+function mockService(service) {
+  return ['$injector', '$window', (function ($injector, $window) {
+    if (!$window._mdMocksIncluded) {
+      return;
+    }
+    return $injector.invoke(service);
+  })];
+}
+
 /**
  * @ngdoc module
  * @name material.components.input
  */
-var inputModule = angular.module('material.components.input', [
+angular.module('material.components.input', [
     'material.core'
   ])
   .directive('mdInputContainer', mdInputContainerDirective)
@@ -18,26 +27,27 @@ var inputModule = angular.module('material.components.input', [
 
   .animation('.md-input-invalid', mdInputInvalidMessagesAnimation)
   .animation('.md-input-messages-animation', ngMessagesAnimation)
-  .animation('.md-input-message-animation', ngMessageAnimation);
-
-// If we are running inside of tests; expose some extra services so that we can test them
-if (window._mdMocksIncluded) {
-  inputModule.service('$$mdInput', function() {
+  .animation('.md-input-message-animation', ngMessageAnimation)
+  // If we are running inside of tests; expose some extra functions so that we can test them
+  .service('$$mdInput', mockService(['$window', function($window) {
     return {
       // special accessor to internals... useful for testing
       messages: {
-        show        : showInputMessages,
-        hide        : hideInputMessages,
+        show        : function(element, done) {
+          return showInputMessages($window, element, done);
+        },
+        hide        : function(element, done) {
+          return hideInputMessages($window, element, done);
+        },
         getElement  : getMessagesElement
       }
-    }
-  })
+    };
+  }]))
 
   // Register a service for each animation so that we can easily inject them into unit tests
-  .service('mdInputInvalidAnimation', mdInputInvalidMessagesAnimation)
-  .service('mdInputMessagesAnimation', ngMessagesAnimation)
-  .service('mdInputMessageAnimation', ngMessageAnimation);
-}
+  .service('mdInputInvalidAnimation', mockService(mdInputInvalidMessagesAnimation))
+  .service('mdInputMessagesAnimation', mockService(ngMessagesAnimation))
+  .service('mdInputMessageAnimation', mockService(ngMessageAnimation));
 
 /**
  * @ngdoc directive
@@ -858,7 +868,7 @@ function ngMessagesDirective() {
   }
 }
 
-function ngMessageDirective($mdUtil) {
+function ngMessageDirective($mdUtil, $window) {
   return {
     restrict: 'EA',
     compile: compile,
@@ -887,7 +897,7 @@ function ngMessageDirective($mdUtil) {
     function isInsideFragment() {
       var nextNode = tElement[0];
       while (nextNode = nextNode.parentNode) {
-        if (nextNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+        if (nextNode.nodeType === $window.Node.DOCUMENT_FRAGMENT_NODE) {
           return true;
         }
       }
@@ -907,33 +917,33 @@ function ngMessageDirective($mdUtil) {
 
 var $$AnimateRunner, $animateCss, $mdUtil, $log;
 
-function mdInputInvalidMessagesAnimation($$AnimateRunner, $animateCss, $mdUtil, $log) {
+function mdInputInvalidMessagesAnimation($$AnimateRunner, $animateCss, $mdUtil, $log, $window) {
   saveSharedServices($$AnimateRunner, $animateCss, $mdUtil, $log);
 
   return {
     addClass: function(element, className, done) {
-      showInputMessages(element, done);
+      showInputMessages($window, element, done);
     }
 
     // NOTE: We do not need the removeClass method, because the message ng-leave animation will fire
   };
 }
 
-function ngMessagesAnimation($$AnimateRunner, $animateCss, $mdUtil, $log) {
+function ngMessagesAnimation($$AnimateRunner, $animateCss, $mdUtil, $log, $window) {
   saveSharedServices($$AnimateRunner, $animateCss, $mdUtil, $log);
 
   return {
     enter: function(element, done) {
-      showInputMessages(element, done);
+      showInputMessages($window, element, done);
     },
 
     leave: function(element, done) {
-      hideInputMessages(element, done);
+      hideInputMessages($window, element, done);
     },
 
     addClass: function(element, className, done) {
       if (className == "ng-hide") {
-        hideInputMessages(element, done);
+        hideInputMessages($window, element, done);
       } else {
         done();
       }
@@ -941,7 +951,7 @@ function ngMessagesAnimation($$AnimateRunner, $animateCss, $mdUtil, $log) {
 
     removeClass: function(element, className, done) {
       if (className == "ng-hide") {
-        showInputMessages(element, done);
+        showInputMessages($window, element, done);
       } else {
         done();
       }
@@ -949,25 +959,25 @@ function ngMessagesAnimation($$AnimateRunner, $animateCss, $mdUtil, $log) {
   };
 }
 
-function ngMessageAnimation($$AnimateRunner, $animateCss, $mdUtil, $log) {
+function ngMessageAnimation($$AnimateRunner, $animateCss, $mdUtil, $log, $window) {
   saveSharedServices($$AnimateRunner, $animateCss, $mdUtil, $log);
 
   return {
     enter: function(element, done) {
-      var animator = showMessage(element);
+      var animator = showMessage($window, element);
 
       animator.start().done(done);
     },
 
     leave: function(element, done) {
-      var animator = hideMessage(element);
+      var animator = hideMessage($window, element);
 
       animator.start().done(done);
     }
   };
 }
 
-function showInputMessages(element, done) {
+function showInputMessages($window, element, done) {
   var animators = [], animator;
   var messages = getMessagesElement(element);
   var children = messages.children();
@@ -979,7 +989,7 @@ function showInputMessages(element, done) {
   }
 
   angular.forEach(children, function(child) {
-    animator = showMessage(angular.element(child));
+    animator = showMessage($window, angular.element(child));
 
     animators.push(animator.start());
   });
@@ -987,7 +997,7 @@ function showInputMessages(element, done) {
   $$AnimateRunner.all(animators, done);
 }
 
-function hideInputMessages(element, done) {
+function hideInputMessages($window, element, done) {
   var animators = [], animator;
   var messages = getMessagesElement(element);
   var children = messages.children();
@@ -999,7 +1009,7 @@ function hideInputMessages(element, done) {
   }
 
   angular.forEach(children, function(child) {
-    animator = hideMessage(angular.element(child));
+    animator = hideMessage($window, angular.element(child));
 
     animators.push(animator.start());
   });
@@ -1007,9 +1017,9 @@ function hideInputMessages(element, done) {
   $$AnimateRunner.all(animators, done);
 }
 
-function showMessage(element) {
-  var height = parseInt(window.getComputedStyle(element[0]).height);
-  var topMargin = parseInt(window.getComputedStyle(element[0]).marginTop);
+function showMessage($window, element) {
+  var height = parseInt($window.getComputedStyle(element[0]).height);
+  var topMargin = parseInt($window.getComputedStyle(element[0]).marginTop);
 
   var messages = getMessagesElement(element);
   var container = getInputElement(element);
@@ -1031,9 +1041,9 @@ function showMessage(element) {
   });
 }
 
-function hideMessage(element) {
+function hideMessage($window, element) {
   var height = element[0].offsetHeight;
-  var styles = window.getComputedStyle(element[0]);
+  var styles = $window.getComputedStyle(element[0]);
 
   // If we are already hidden, just return an empty animation
   if (parseInt(styles.opacity) === 0) {

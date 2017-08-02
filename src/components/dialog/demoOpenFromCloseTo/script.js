@@ -1,6 +1,6 @@
 angular.module('dialogDemo2', ['ngMaterial'])
 
-.controller('AppCtrl', function($scope, $mdDialog) {
+.controller('AppCtrl', function($scope, $mdDialog, $document) {
   $scope.openFromLeft = function() {
     $mdDialog.show(
       $mdDialog.alert()
@@ -12,7 +12,7 @@ angular.module('dialogDemo2', ['ngMaterial'])
         // You can specify either sting with query selector
         .openFrom('#left')
         // or an element
-        .closeTo(angular.element(document.querySelector('#right')))
+        .closeTo(angular.element($document[0].querySelector('#right')))
     );
   };
 

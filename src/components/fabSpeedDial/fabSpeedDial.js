@@ -117,7 +117,7 @@
     }
   }
 
-  function MdFabSpeedDialFlingAnimation($timeout) {
+  function MdFabSpeedDialFlingAnimation($timeout, $window) {
     function delayDone(done) { $timeout(done, cssAnimationDuration, false); }
 
     function runAnimation(element) {
@@ -137,7 +137,7 @@
       var variablesElement = el.querySelector('._md-css-variables');
 
       // Setup JS variables based on our CSS variables
-      var startZIndex = parseInt(window.getComputedStyle(variablesElement).zIndex);
+      var startZIndex = parseInt($window.getComputedStyle(variablesElement).zIndex);
 
       // Always reset the items to their natural position/state
       angular.forEach(items, function(item, index) {
@@ -208,7 +208,7 @@
     };
   }
 
-  function MdFabSpeedDialScaleAnimation($timeout) {
+  function MdFabSpeedDialScaleAnimation($timeout, $window) {
     function delayDone(done) { $timeout(done, cssAnimationDuration, false); }
 
     var delay = 65;
@@ -222,7 +222,7 @@
       var variablesElement = el.querySelector('._md-css-variables');
 
       // Setup JS variables based on our CSS variables
-      var startZIndex = parseInt(window.getComputedStyle(variablesElement).zIndex);
+      var startZIndex = parseInt($window.getComputedStyle(variablesElement).zIndex);
 
       // Always reset the items to their natural position/state
       angular.forEach(items, function(item, index) {

@@ -1107,7 +1107,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       // Set up elements before and after the dialog content to capture focus and
       // redirect back into the dialog.
-      topFocusTrap = document.createElement('div');
+      topFocusTrap = $document[0].createElement('div');
       topFocusTrap.classList.add('md-dialog-focus-trap');
       topFocusTrap.tabIndex = 0;
 
@@ -1151,7 +1151,7 @@ function MdDialogProvider($$interimElementProvider) {
        */
       function walkDOM(element) {
         while (element.parentNode) {
-          if (element === document.body) {
+          if (element === $document[0].body) {
             return;
           }
           var children = element.parentNode.children;

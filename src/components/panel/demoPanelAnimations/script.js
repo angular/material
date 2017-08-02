@@ -6,7 +6,7 @@ angular.module('panelAnimationsDemo', ['ngMaterial'])
     .controller('DialogCtrl', DialogCtrl);
 
 
-function AnimationCtrl($mdPanel) {
+function AnimationCtrl($mdPanel, $document) {
   this._mdPanel = $mdPanel;
   this.openFrom = 'button';
   this.closeTo = 'button';
@@ -26,6 +26,7 @@ AnimationCtrl.prototype.showDialog = function() {
       .top();
 
   var animation = this._mdPanel.newPanelAnimation();
+  var document = this.$document[0];
 
   animation.duration(this.duration || this.separateDurations);
 

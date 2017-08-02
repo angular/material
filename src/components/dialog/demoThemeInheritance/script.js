@@ -7,7 +7,7 @@ angular.module('dialogDemo3', ['ngMaterial'])
       .primaryPalette('blue');
 
   })
-.controller('AppCtrl', function($scope, $mdDialog, $interval) {
+.controller('AppCtrl', function($scope, $mdDialog, $interval, $document) {
   $scope.theme = 'red';
 
   var isThemeRed = true;
@@ -22,7 +22,7 @@ angular.module('dialogDemo3', ['ngMaterial'])
     $mdDialog.show({
       controller: DialogController,
       templateUrl: 'dialog1.tmpl.html',
-      parent: angular.element(document.body),
+      parent: angular.element($document[0].body),
       targetEvent: ev,
       clickOutsideToClose:true
     })
