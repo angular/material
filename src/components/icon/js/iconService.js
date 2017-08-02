@@ -400,7 +400,7 @@ function ConfigurationItem(url, viewBoxSize) {
  */
 
 /* @ngInject */
-function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
+function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce, $window) {
   var iconCache = {};
   var svgCache = {};
   var urlRegex = /[-\w@:%+.~#?&//=]{2,}\.[a-z]{2,4}\b(\/[-\w@:%+.~#?&//=]*)?/i;
@@ -534,7 +534,7 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
     function loadByDataUrl(url) {
       var results = dataUrlRegex.exec(url);
       var isBase64 = /base64/i.test(url);
-      var data = isBase64 ? window.atob(results[2]) : results[2];
+      var data = isBase64 ? $window.atob(results[2]) : results[2];
 
       return $q.when(angular.element(data)[0]);
     }

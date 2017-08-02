@@ -36,7 +36,7 @@
    * Controller for a single year.
    * @ngInject @constructor
    */
-  function CalendarYearBodyCtrl($element, $$mdDateUtil, $mdDateLocale) {
+  function CalendarYearBodyCtrl($element, $$mdDateUtil, $mdDateLocale, $document) {
     /** @final {!angular.JQLite} */
     this.$element = $element;
 
@@ -45,6 +45,9 @@
 
     /** @final */
     this.dateLocale = $mdDateLocale;
+
+    /** @final */
+    this.$document = $document;
 
     /** @type {Object} Reference to the calendar. */
     this.calendarCtrl = null;
@@ -88,6 +91,7 @@
    * @returns {HTMLElement}
    */
   CalendarYearBodyCtrl.prototype.buildMonthCell = function(year, month) {
+    var $document = this.$document;
     var calendarCtrl = this.calendarCtrl;
     var yearCtrl = this.yearCtrl;
     var cell = this.buildBlankCell();
@@ -114,7 +118,7 @@
 
     if (this.dateUtil.isMonthWithinRange(firstOfMonth,
         calendarCtrl.minDate, calendarCtrl.maxDate)) {
-      var selectionIndicator = document.createElement('span');
+      var selectionIndicator = $document[0].createElement('span');
       selectionIndicator.classList.add('md-calendar-date-selection-indicator');
       selectionIndicator.textContent = cellText;
       cell.appendChild(selectionIndicator);
@@ -136,7 +140,7 @@
    * @return {HTMLTableCellElement}
    */
   CalendarYearBodyCtrl.prototype.buildBlankCell = function() {
-    var cell = document.createElement('td');
+    var cell = this.$document[0].createElement('td');
     cell.tabIndex = -1;
     cell.classList.add('md-calendar-date');
     cell.setAttribute('role', 'gridcell');
@@ -151,6 +155,7 @@
    * @returns {DocumentFragment} A document fragment containing the months within the year.
    */
   CalendarYearBodyCtrl.prototype.buildCalendarForYear = function(date) {
+    var document = this.$document[0];
     // Store rows for the month in a document fragment so that we can append them all at once.
     var year = date.getFullYear();
     var yearBody = document.createDocumentFragment();

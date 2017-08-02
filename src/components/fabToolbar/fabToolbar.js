@@ -101,7 +101,10 @@
     }
   }
 
-  function MdFabToolbarAnimation() {
+  /**
+   * @ngInject
+   */
+  function MdFabToolbarAnimation($window) {
 
     function runAnimation(element, className, done) {
       // If no className was specified, don't do anything
@@ -122,7 +125,7 @@
       // If we have both elements, use them to position the new background
       if (triggerElement && backgroundElement) {
         // Get our variables
-        var color = window.getComputedStyle(triggerElement).getPropertyValue('background-color');
+        var color = $window.getComputedStyle(triggerElement).getPropertyValue('background-color');
         var width = el.offsetWidth;
         var height = el.offsetHeight;
 
