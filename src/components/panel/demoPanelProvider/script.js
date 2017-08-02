@@ -17,32 +17,34 @@
    *     API.
    */
   function PanelProviderConfig($mdPanelProvider) {
-    $mdPanelProvider.definePreset('demoPreset', {
-      attachTo: angular.element(document.body),
-      controller: PanelMenuCtrl,
-      controllerAs: 'ctrl',
-      template: '' +
-          '<div class="menu-panel" md-whiteframe="4">' +
-          '  <div class="menu-content">' +
-          '    <div class="menu-item" ng-repeat="item in ctrl.items">' +
-          '      <button class="md-button">' +
-          '        <span>{{item}}</span>' +
-          '      </button>' +
-          '    </div>' +
-          '    <md-divider></md-divider>' +
-          '    <div class="menu-item">' +
-          '      <button class="md-button" ng-click="ctrl.closeMenu()">' +
-          '        <span>Close Menu</span>' +
-          '      </button>' +
-          '    </div>' +
-          '  </div>' +
-          '</div>',
-      panelClass: 'menu-panel-container',
-      focusOnOpen: false,
-      zIndex: 100,
-      propagateContainerEvents: true,
-      groupName: 'menus'
-    });
+    $mdPanelProvider.definePreset('demoPreset', ['$document', function($document) {
+      return {
+        attachTo: angular.element($document[0].body),
+        controller: PanelMenuCtrl,
+        controllerAs: 'ctrl',
+        template: '' +
+            '<div class="menu-panel" md-whiteframe="4">' +
+            '  <div class="menu-content">' +
+            '    <div class="menu-item" ng-repeat="item in ctrl.items">' +
+            '      <button class="md-button">' +
+            '        <span>{{item}}</span>' +
+            '      </button>' +
+            '    </div>' +
+            '    <md-divider></md-divider>' +
+            '    <div class="menu-item">' +
+            '      <button class="md-button" ng-click="ctrl.closeMenu()">' +
+            '        <span>Close Menu</span>' +
+            '      </button>' +
+            '    </div>' +
+            '  </div>' +
+            '</div>',
+        panelClass: 'menu-panel-container',
+        focusOnOpen: false,
+        zIndex: 100,
+        propagateContainerEvents: true,
+        groupName: 'menus'
+     };
+    }]);
   }
 
   function PanelProviderCtrl($mdPanel) {

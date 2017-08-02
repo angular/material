@@ -55,7 +55,7 @@ function MdAriaProvider() {
 /*
  * @ngInject
  */
-function MdAriaService($$rAF, $log, $window, $interpolate) {
+function MdAriaService($$rAF, $log, $window, $interpolate, $document) {
 
   // Load the showWarnings option from the current context and store it inside of a scope variable,
   // because the context will be probably lost in some function calls.
@@ -130,7 +130,7 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
 
   function getText(element) {
     element = element[0] || element;
-    var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+    var walker = $document[0].createTreeWalker(element, $window.NodeFilter.SHOW_TEXT, null, false);
     var text = '';
 
     var node;

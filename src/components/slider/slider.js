@@ -30,7 +30,10 @@ angular.module('material.components.slider', [
  *  </md-slider-container>
  * </hljs>
  */
-function SliderContainerDirective() {
+/**
+ * @ngInject
+ */
+function SliderContainerDirective($window) {
   return {
     controller: function () {},
     compile: function (elem) {
@@ -82,7 +85,7 @@ function SliderContainerDirective() {
           var input = element[0].querySelector('md-input-container');
 
           if (input) {
-            var computedStyle = getComputedStyle(input);
+            var computedStyle = $window.getComputedStyle(input);
             var minWidth = parseInt(computedStyle.minWidth);
             var padding = parseInt(computedStyle.paddingLeft) + parseInt(computedStyle.paddingRight);
 
@@ -173,6 +176,10 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       '</div>',
     compile: compile
   };
+
+  function setTimeout(fn, delay) {
+    return $timeout(fn, delay, false);
+  }
 
   // **********************************************************
   // Private Methods
