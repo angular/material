@@ -58,6 +58,7 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
       <md-chips class="md-contact-chips"\
           ng-model="$mdContactChipsCtrl.contacts"\
           md-require-match="$mdContactChipsCtrl.requireMatch"\
+          md-max-chips="$mdContactChipsCtrl.maxChips"\
           md-chip-append-delay="{{$mdContactChipsCtrl.chipAppendDelay}}" \
           md-autocomplete-snap>\
           <md-autocomplete\
@@ -124,6 +125,7 @@ function MdContactChips($mdTheming, $mdUtil) {
       contacts: '=ngModel',
       requireMatch: '=?mdRequireMatch',
       minLength: '=?mdMinLength',
+      maxChips: '=?mdMaxChips',
       highlightFlags: '@?mdHighlightFlags',
       chipAppendDelay: '@?mdChipAppendDelay'
     }
