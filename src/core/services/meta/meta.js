@@ -5,16 +5,16 @@
  *
  * @description
  *
- * A provider and a service that simplifies meta tags access
+ * A service that simplifies meta tags access
  *
  * Note: This is intended only for use with dynamic meta tags such as browser color and title.
  * Tags that are only processed when the page is rendered (such as `charset`, and `http-equiv`)
  * will not work since `$$mdMeta` adds the tags after the page has already been loaded.
  *
  * ```js
- * app.config(function($$mdMetaProvider) {
- *   var removeMeta = $$mdMetaProvider.setMeta('meta-name', 'content');
- *   var metaValue  = $$mdMetaProvider.getMeta('meta-name'); // -> 'content'
+ * app.run(function($$mdMeta) {
+ *   var removeMeta = $$mdMeta.setMeta('meta-name', 'content');
+ *   var metaValue  = $$mdMeta.getMeta('meta-name'); // -> 'content'
  *
  *   removeMeta();
  * });
@@ -31,8 +31,8 @@
  *
  */
 angular.module('material.core.meta', [])
-  .provider('$$mdMeta', function () {
-    var head = angular.element(document.head);
+  .factory('$$mdMeta', ['$document', function ($document) {
+    var head = angular.element($document[0].head);
     var metaElements = {};
 
     /**
@@ -46,7 +46,7 @@ angular.module('material.core.meta', [])
         return true;
       }
 
-      var element = document.getElementsByName(name)[0];
+      var element = $document[0].getElementsByName(name)[0];
 
       if (!element) {
         return false;
@@ -107,14 +107,8 @@ angular.module('material.core.meta', [])
       return metaElements[name].attr('content');
     }
 
-    var module = {
+    return {
       setMeta: setMeta,
       getMeta: getMeta
     };
-
-    return angular.extend({}, module, {
-      $get: function () {
-        return module;
-      }
-    });
-  });
+  }]);

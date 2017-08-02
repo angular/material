@@ -14,7 +14,7 @@ angular
 /**
  * Factory function that requires special injections
  */
-function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
+function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss, $window) {
   var self;
   return self = {
     /**
@@ -92,7 +92,7 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
          * @returns {boolean} True if there is no transition/duration; false otherwise.
          */
         function noTransitionFound(styles) {
-          styles = styles || window.getComputedStyle(element[0]);
+          styles = styles || $window.getComputedStyle(element[0]);
 
           return styles.transitionDuration == '0s' || (!styles.transition && !styles.transitionProperty);
         }

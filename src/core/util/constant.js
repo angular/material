@@ -5,9 +5,9 @@ angular.module('material.core')
  * Factory function that creates the grab-bag $mdConstant service.
  * @ngInject
  */
-function MdConstantFactory() {
+function MdConstantFactory($document) {
 
-  var prefixTestEl = document.createElement('div');
+  var prefixTestEl = $document[0].createElement('div');
   var vendorPrefix = getVendorPrefix(prefixTestEl);
   var isWebkit = /webkit/i.test(vendorPrefix);
   var SPECIAL_CHARS_REGEXP = /([:\-_]+(.))/g;
