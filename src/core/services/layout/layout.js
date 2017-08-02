@@ -11,25 +11,6 @@
   var ALIGNMENT_MAIN_AXIS= [ "", "start", "center", "end", "stretch", "space-around", "space-between" ];
   var ALIGNMENT_CROSS_AXIS= [ "", "start", "center", "end", "stretch" ];
 
-  var config = {
-    /**
-     * Enable directive attribute-to-class conversions
-     * Developers can use `<body md-layout-css />` to quickly
-     * disable the Layout directives and prohibit the injection of Layout classNames
-     */
-    enabled: true,
-
-    /**
-     * List of mediaQuery breakpoints and associated suffixes
-     *
-     *   [
-     *    { suffix: "sm", mediaQuery: "screen and (max-width: 599px)" },
-     *    { suffix: "md", mediaQuery: "screen and (min-width: 600px) and (max-width: 959px)" }
-     *   ]
-     */
-    breakpoints: []
-  };
-
   registerLayoutAPI( angular.module('material.core.layout', ['ng']) );
 
   /**
@@ -102,10 +83,28 @@
     // Register other, special directive functions for the Layout features:
     module
 
-      .provider('$$mdLayout'     , function() {
+      .provider('$$mdLayout', function() {
+        /**
+         * Enable directive attribute-to-class conversions
+         * Developers can use `<body md-layout-css />` to quickly
+         * disable the Layout directives and prohibit the injection of Layout classNames
+         */
+        var enabled = true;
         // Publish internal service for Layouts
         return {
-          $get : angular.noop,
+          $get : function() {
+            return {
+              enabled: function() {
+                return enabled;
+              },
+              disabled: function() {
+                return !enabled;
+              },
+              disable: function() {
+                enabled = false;
+              }
+            };
+          },
           validateAttributeValue : validateAttributeValue,
           validateAttributeUsage : validateAttributeUsage,
           /**
@@ -113,7 +112,7 @@
            * When disabled, this stops all attribute-to-classname generations
            */
           disableLayouts  : function(isDisabled) {
-            config.enabled =  (isDisabled !== true);
+            enabled =  (isDisabled !== true);
           }
         };
       })
@@ -145,8 +144,7 @@
       .directive('showLtMd'       , warnAttrNotSupported('show-lt-md'))
       .directive('showLtLg'       , warnAttrNotSupported('show-lt-lg'))
 
-      // Determine if
-      .config( detectDisabledLayouts );
+      .run( detectDisabledLayouts );
 
     /**
      * Converts snake_case to camelCase.
@@ -173,9 +171,10 @@
    /**
     * @ngInject
     */
-   function detectDisabledLayouts() {
-     var isDisabled = !!document.querySelector('[md-layouts-disabled]');
-     config.enabled = !isDisabled;
+   function detectDisabledLayouts($document, $$mdLayout) {
+     if ($document[0].querySelector('[md-layouts-disabled]')) {
+       $$mdLayout.disable();
+     }
    }
 
   /**
@@ -198,9 +197,12 @@
    * conversions; this would obviate the use of the `md-layout-css` directive
    *
    */
-  function disableLayoutDirective() {
+  /**
+   * @ngInject
+   */
+  function disableLayoutDirective($$mdLayout) {
     // Return a 1x-only, first-match attribute directive
-    config.enabled = false;
+    $$mdLayout.disable();
 
     return {
       restrict : 'A',
@@ -213,12 +215,12 @@
    * finish processing. Eliminates flicker with Material.Layouts
    */
   function buildCloakInterceptor(className) {
-    return [ '$timeout', function($timeout){
+    return [ '$timeout', '$$mdLayout', function($timeout, $$mdLayout){
       return {
         restrict : 'A',
         priority : -10,   // run after normal ng-cloak
         compile  : function( element ) {
-          if (!config.enabled) return angular.noop;
+          if ($$mdLayout.disabled()) return angular.noop;
 
           // Re-add the cloak
           element.addClass(className);
@@ -253,7 +255,7 @@
    */
   function attributeWithObserve(className) {
 
-    return ['$mdUtil', '$interpolate', "$log", function(_$mdUtil_, _$interpolate_, _$log_) {
+    return ['$mdUtil', '$interpolate', "$log", '$$mdLayout', function(_$mdUtil_, _$interpolate_, _$log_, $$mdLayout) {
       $mdUtil = _$mdUtil_;
       $interpolate = _$interpolate_;
       $log = _$log_;
@@ -262,7 +264,7 @@
         restrict: 'A',
         compile: function(element, attr) {
           var linkFn;
-          if (config.enabled) {
+          if ($$mdLayout.enabled()) {
             // immediately replace static (non-interpolated) invalid values...
 
             validateAttributeUsage(className, attr, element, $log);
@@ -300,7 +302,7 @@
    * any attribute value
    */
   function attributeWithoutValue(className) {
-    return ['$mdUtil', '$interpolate', "$log", function(_$mdUtil_, _$interpolate_, _$log_) {
+    return ['$mdUtil', '$interpolate', "$log", '$$mdLayout', function(_$mdUtil_, _$interpolate_, _$log_, $$mdLayout) {
       $mdUtil = _$mdUtil_;
       $interpolate = _$interpolate_;
       $log = _$log_;
@@ -309,7 +311,7 @@
         restrict: 'A',
         compile: function(element, attr) {
           var linkFn;
-          if (config.enabled) {
+          if ($$mdLayout.enabled()) {
             // immediately replace static (non-interpolated) invalid values...
 
             validateAttributeValue( className,
