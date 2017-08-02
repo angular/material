@@ -261,9 +261,6 @@
             "parserOptions": {
                 "ecmaVersion": 5
             },
-            "env": {
-                "browser": true
-            },
             "rules": {
                 "arrow-parens": "error",
                 "global-require": "error",
@@ -272,6 +269,9 @@
                 ],
                 "no-process-env": "error",
                 "no-sync": "error"
+            },
+            "env": {
+              "node": false
             },
             "globals": {
                 "angular": true,
@@ -292,6 +292,7 @@
                 "**/*.spec.js"
             ],
             "env": {
+                "browser": true,
                 "jasmine": true
             },
             "rules": {

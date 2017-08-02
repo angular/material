@@ -8,7 +8,8 @@ var ITEM_HEIGHT   = 48,
     INPUT_PADDING = 2; // Padding provided by `md-input-container`
 
 function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming, $window,
-                             $animate, $rootElement, $attrs, $q, $log, $mdLiveAnnouncer) {
+                             $animate, $rootElement, $attrs, $q, $log, $mdLiveAnnouncer,
+                             $document) {
 
   // Internal Variables.
   var ctrl                 = this,
@@ -22,7 +23,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       fetchesInProgress    = 0,
       enableWrapScroll     = null,
       inputModelCtrl       = null,
-      debouncedOnResize    = $mdUtil.debounce(onWindowResize);
+      debouncedOnResize    = $mdUtil.debounce(onWindowResize),
+      document             = $document[0];
 
   // Public Exported Variables with handlers
   defineProperty('hidden', handleHiddenChange, true);
