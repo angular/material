@@ -59,8 +59,8 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
   var $mdUtil = {
     dom: {},
-    now: window.performance && window.performance.now ?
-      angular.bind(window.performance, window.performance.now) : Date.now || function() {
+    now: $window.performance && $window.performance.now ?
+      angular.bind($window.performance, $window.performance.now) : Date.now || function() {
       return new Date().getTime();
     },
 
@@ -121,7 +121,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
     clientRect: function(element, offsetParent, isOffsetRect) {
       var node = getNode(element);
-      offsetParent = getNode(offsetParent || node.offsetParent || document.body);
+      offsetParent = getNode(offsetParent || node.offsetParent || $document[0].body);
       var nodeRect = node.getBoundingClientRect();
 
       // The user can ask for an offsetRect: a rect relative to the offsetParent,
@@ -157,7 +157,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * @returns {number}
      */
     getViewportTop: function() {
-      return window.scrollY || window.pageYOffset || 0;
+      return $window.scrollY || $window.pageYOffset || 0;
     },
 
     /**
@@ -348,7 +348,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     forceFocus: function(element) {
       var node = element[0] || element;
 
-      document.addEventListener('click', function focusOnClick(ev) {
+      $document[0].addEventListener('click', function focusOnClick(ev) {
         if (ev.target === node && ev.$focus) {
           node.focus();
           ev.stopImmediatePropagation();
@@ -357,8 +357,8 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         }
       }, true);
 
-      var newEvent = document.createEvent('MouseEvents');
-      newEvent.initMouseEvent('click', false, true, window, {}, 0, 0, 0, 0,
+      var newEvent = $document[0].createEvent('MouseEvents');
+      newEvent.initMouseEvent('click', false, true, $window, {}, 0, 0, 0, 0,
         false, false, false, false, 0, null);
       newEvent.$material = true;
       newEvent.$focus = true;
@@ -570,7 +570,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * Build polyfill for the Node.contains feature (if needed)
      */
     elementContains: function(node, child) {
-      var hasContains = (window.Node && window.Node.prototype && Node.prototype.contains);
+      var hasContains = ($window.Node && $window.Node.prototype && $window.Node.prototype.contains);
       var findFn = hasContains ? angular.bind(node, node.contains) : angular.bind(node, function(arg) {
         // compares the positions of two nodes and returns a bitmask
         return (node === child) || !!(this.compareDocumentPosition(arg) & 16)
@@ -736,7 +736,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     getNearestContentElement: function (element) {
       var current = element.parent()[0];
       // Look for the nearest parent md-content, stopping at the rootElement.
-      while (current && current !== $rootElement[0] && current !== document.body && current.nodeName.toUpperCase() !== 'MD-CONTENT') {
+      while (current && current !== $rootElement[0] && current !== $document[0].body && current.nodeName.toUpperCase() !== 'MD-CONTENT') {
         current = current.parentNode;
       }
       return current;

@@ -236,17 +236,14 @@
         "no-cond-assign": "off",
         "no-unexpected-multiline": "off"
     },
-    "env": {
-        "browser": true
-    },
     "globals": {
-        "angular": true,
-        "CryptoJS": true
+        "angular": true
     },
     "overrides": [
         {
             "files": ["**/*.spec.js"],
             "env": {
+                "browser": true,
                 "jasmine": true
             },
             "rules": {

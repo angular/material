@@ -18,7 +18,7 @@
         </md-item-template>
         <md-not-found>
           No states matching "{{ctrl.searchText}}" were found.
-          <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
+          <md-button ng-click="ctrl.newState(ctrl.searchText, $event)">Create a new one!</md-button>
         </md-not-found>
       </md-autocomplete>
       <br/>

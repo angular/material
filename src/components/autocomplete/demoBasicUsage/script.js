@@ -4,7 +4,7 @@
       .module('autocompleteDemo', ['ngMaterial'])
       .controller('DemoCtrl', DemoCtrl);
 
-  function DemoCtrl ($timeout, $q, $log) {
+  function DemoCtrl ($timeout, $q, $log, $mdDialog) {
     var self = this;
 
     self.simulateQuery = false;
@@ -18,8 +18,14 @@
 
     self.newState = newState;
 
-    function newState(state) {
-      alert("Sorry! You'll need to create a Constitution for " + state + " first!");
+    function newState(state, $event) {
+      $mdDialog.show(
+        $mdDialog
+          .alert()
+          .title('state creation failed.')
+          .textContent("Sorry! You'll need to create a Constitution for " + state + " first!")
+          .targetEvent($event)
+      );
     }
 
     // ******************************

@@ -2,23 +2,61 @@
   'use strict';
 
   // If we do not have CryptoJS defined; import it
-  if (typeof CryptoJS == 'undefined') {
-    var cryptoSrc = '//cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js';
-    var scriptTag = document.createElement('script');
-    scriptTag.setAttribute('src', cryptoSrc);
-    document.body.appendChild(scriptTag);
+  function cryptoJsLoader() {
+    var prom;
+    var src = '//cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js';
+    function loadCryptoJSInner($document, $q, $window) {
+      var document = $document[0];
+
+      function resolveCrypto() {
+        if (typeof $window.CryptoJS !== 'undefined') {
+          return $q.resolve($window.CryptoJS);
+        }
+
+        return $q.reject(new Error("Can't resolve CryptoJS"));
+      }
+
+      function loadCrypto() {
+        return $q(function (resolve, reject) {
+          var s;
+          s = document.createElement('script');
+          s.src = src;
+          s.onload = resolve;
+          s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      }
+
+      return $q.resolve(undefined)
+        .then(resolveCrypto)
+        .catch(loadCrypto)
+        .then(resolveCrypto);
+    }
+
+    return function($document, $q, $window) {
+      if (prom) {
+        return prom;
+      }
+
+      prom = loadCryptoJSInner($document, $q, $window);
+    };
   }
+
+  var loader = cryptoJsLoader();
 
   angular
       .module('contactChipsDemo', ['ngMaterial'])
       .controller('ContactChipDemoCtrl', DemoCtrl);
 
-  function DemoCtrl ($q, $timeout) {
+  function DemoCtrl ($q, $timeout, $document, $window) {
     var self = this;
     var pendingSearch, cancelSearch = angular.noop;
     var lastSearch;
 
-    self.allContacts = loadContacts();
+    loader($document, $q).then(function (CryptoJS) {
+      self.allContacts = loadContacts(CryptoJS);
+    });
+ 
     self.contacts = [self.allContacts[0]];
     self.asyncContacts = [];
     self.filterSelected = true;
@@ -49,7 +87,7 @@
             resolve( self.querySearch(criteria) );
 
             refreshDebounce();
-          }, Math.random() * 500, true)
+          }, Math.random() * 500, true);
         });
       }
 
@@ -84,7 +122,7 @@
 
     }
 
-    function loadContacts() {
+    function loadContacts(CryptoJS) {
       var contacts = [
         'Marina Augustine',
         'Oddr Sarno',
