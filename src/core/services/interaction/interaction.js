@@ -33,10 +33,14 @@ angular
  * </hljs>
  *
  */
+/**
+ * @ngInject
+ */
 function MdInteractionService($timeout, $mdUtil, $document, $window) {
   this.$timeout = $timeout;
   this.$mdUtil = $mdUtil;
   this.$window = $window;
+  this.$document = $document;
 
   this.bodyElement = angular.element($document[0].body);
   this.isBuffering = false;

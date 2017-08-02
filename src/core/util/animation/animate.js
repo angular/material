@@ -1,20 +1,23 @@
 // Polyfill angular < 1.4 (provide $animateCss)
 angular
   .module('material.core')
-  .factory('$$mdAnimate', function($q, $timeout, $mdConstant, $animateCss){
+  .factory('$$mdAnimate', function($injector){
 
      // Since $$mdAnimate is injected into $mdUtil... use a wrapper function
      // to subsequently inject $mdUtil as an argument to the AnimateDomUtils
 
      return function($mdUtil) {
-       return AnimateDomUtils( $mdUtil, $q, $timeout, $mdConstant, $animateCss);
+       return $injector.invoke(animateDomUtils, undefined, { $mdUtil: $mdUtil });
      };
    });
 
 /**
  * Factory function that requires special injections
  */
-function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss, $window) {
+/**
+ * @ngInject
+ */
+function animateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss, $window) {
   var self;
   return self = {
     /**
