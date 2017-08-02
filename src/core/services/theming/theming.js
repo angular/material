@@ -11,20 +11,7 @@ angular.module('material.core.theming', ['material.core.theming.palette', 'mater
   .directive('mdThemable', ThemableDirective)
   .directive('mdThemesDisabled', disableThemesDirective )
   .provider('$mdTheming', ThemingProvider)
-  .config( detectDisabledThemes )
   .run(generateAllThemes);
-
-/**
- * Detect if the HTML or the BODY tags has a [md-themes-disabled] attribute
- * If yes, then immediately disable all theme stylesheet generation and DOM injection
- */
-/**
- * @ngInject
- */
-function detectDisabledThemes($mdThemingProvider, $document) {
-  var isDisabled = !!$document[0].querySelector('[md-themes-disabled]');
-  $mdThemingProvider.disableTheming(isDisabled);
-}
 
 /**
  * @ngdoc service
@@ -252,13 +239,6 @@ var VALID_HUE_VALUES = [
   '700', '800', '900', 'A100', 'A200', 'A400', 'A700'
 ];
 
-var themeConfig = {
-  disableTheming : false,   // Generate our themes at run time; also disable stylesheet DOM injection
-  generateOnDemand : false, // Whether or not themes are to be generated on-demand (vs. eagerly).
-  registeredStyles : [],    // Custom styles registered to be used in the theming of custom components.
-  nonce : null              // Nonce to be added as an attribute to the generated themes style tags.
-};
-
 /**
  * @ngInject
  */
@@ -323,6 +303,13 @@ function ThemingProvider($mdColorPalette, $injector) {
     var color = angular.isObject(palette[hue]) ? palette[hue].hex : palette[hue];
 
     return setBrowserColor($$mdMeta, color);
+  };
+
+  var themeConfig = {
+    disableTheming : false,   // Generate our themes at run time; also disable stylesheet DOM injection
+    generateOnDemand : false, // Whether or not themes are to be generated on-demand (vs. eagerly).
+    registeredStyles : [],    // Custom styles registered to be used in the theming of custom components.
+    nonce : null              // Nonce to be added as an attribute to the generated themes style tags.
   };
 
   return themingProvider = {
@@ -702,6 +689,22 @@ function ThemingProvider($mdColorPalette, $injector) {
       applyTheme.setBrowserColor(browserColor);
     }
 
+    applyTheme.isDisabled = function() {
+      return themeConfig.disableTheming;
+    };
+
+    applyTheme.registeredStyles = function() {
+      return themeConfig.registeredStyles.join('');
+    };
+
+    applyTheme.generateOnDemand = function() {
+      return themeConfig.generateOnDemand;
+    };
+
+    applyTheme.nonce = function() {
+      return themeConfig.nonce;
+    };
+
     return applyTheme;
 
     /**
@@ -881,8 +884,6 @@ function ThemingDirective($mdTheming, $interpolate, $parse, $mdUtil, $q, $log) {
  *
  */
 function disableThemesDirective() {
-  themeConfig.disableTheming = true;
-
   // Return a 1x-only, first-match attribute directive
   return {
     restrict : 'A',
@@ -960,12 +961,20 @@ var rulesByType = {};
  * @ngInject
  */
 function generateAllThemes($injector, $mdTheming, $document) {
+  /**
+   * Detect if the HTML or the BODY tags has a [md-themes-disabled] attribute
+   * If yes, then immediately disable all theme stylesheet generation and DOM injection
+   */
+  var isDisabled = (
+    $mdTheming.isDisabled() ||
+    $document[0].querySelector('[md-themes-disabled]')
+  );
   var head = $document[0].head;
   var firstChild = head ? head.firstElementChild : null;
-  var themeCss = !themeConfig.disableTheming && $injector.has('$MD_THEME_CSS') ? $injector.get('$MD_THEME_CSS') : '';
+  var themeCss = !isDisabled && $injector.has('$MD_THEME_CSS') ? $injector.get('$MD_THEME_CSS') : '';
 
   // Append our custom registered styles to the theme stylesheet.
-  themeCss += themeConfig.registeredStyles.join('');
+  themeCss += $mdTheming.registeredStyles();
 
   if ( !firstChild ) return;
   if (themeCss.length === 0) return; // no rules, so no point in running this expensive task
@@ -1014,11 +1023,11 @@ function generateAllThemes($injector, $mdTheming, $document) {
 
   // If themes are being generated on-demand, quit here. The user will later manually
   // call generateTheme to do this on a theme-by-theme basis.
-  if (themeConfig.generateOnDemand) return;
+  if ($mdTheming.generateOnDemand()) return;
 
   angular.forEach($mdTheming.THEMES, function(theme) {
     if (!GENERATED[theme.name] && !($mdTheming.defaultTheme() !== 'default' && theme.name === 'default')) {
-      generateTheme(theme, theme.name, themeConfig.nonce);
+      generateTheme(theme, theme.name, $mdTheming.nonce());
     }
   });
 
