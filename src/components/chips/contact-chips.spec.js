@@ -50,12 +50,12 @@ describe('<md-contact-chips>', function() {
   });
 
   describe('basic functionality', function() {
-    it('should show the placeholder', inject(function() {
+    it('should show the "placeholder" label inline', inject(function() {
       var element = buildChips(CONTACT_CHIPS_TEMPLATE);
       var ctrl = element.controller('mdContactChips');
 
-      expect(element.find('input').length).toBe(1);
-      expect(element.find('input')[0].placeholder).toBe('To');
+      expect(element.find('label').length).toBe(1);
+      expect(element.find('label')[0].textContent.trim()).toBe('To');
     }));
 
     it('binds the md-highlight-flags to the controller', function() {

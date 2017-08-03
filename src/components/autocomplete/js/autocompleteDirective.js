@@ -312,15 +312,16 @@ function MdAutocomplete ($$mdSvgRegistry) {
               ng-mouseup="$mdAutocompleteCtrl.mouseUp()"\
               ng-hide="$mdAutocompleteCtrl.hidden"\
               class="md-autocomplete-suggestions-container md-whiteframe-z1"\
-              ng-class="{ \'md-not-found\': $mdAutocompleteCtrl.notFoundVisible() }"\
-              role="presentation">\
+              ng-class="{ \'md-not-found\': $mdAutocompleteCtrl.notFoundVisible() }">\
             <ul class="md-autocomplete-suggestions"\
                 ng-class="::menuClass"\
-                id="ul-{{$mdAutocompleteCtrl.id}}">\
+                id="ul-{{$mdAutocompleteCtrl.id}}"\
+                role="listbox">\
               <li md-virtual-repeat="item in $mdAutocompleteCtrl.matches"\
                   ng-class="{ selected: $index === $mdAutocompleteCtrl.index }"\
                   ng-click="$mdAutocompleteCtrl.select($index)"\
-                  md-extra-name="$mdAutocompleteCtrl.itemName">\
+                  md-extra-name="$mdAutocompleteCtrl.itemName"\
+                  role="option">\
                   ' + itemTemplate + '\
                   </li>' + noItemsTemplate + '\
             </ul>\
@@ -339,6 +340,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
             template = templateTag.length ? templateTag.html() : '';
         return template
             ? '<li ng-if="$mdAutocompleteCtrl.notFoundVisible()"\
+                         role="option"\
                          md-autocomplete-parent-scope>' + template + '</li>'
             : '';
 
@@ -368,13 +370,17 @@ function MdAutocomplete ($$mdSvgRegistry) {
                   aria-label="{{floatingLabel}}"\
                   aria-autocomplete="list"\
                   role="combobox"\
-                  aria-haspopup="true"\
                   aria-activedescendant=""\
                   aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
               <div md-autocomplete-parent-scope md-autocomplete-replace>' + leftover + '</div>\
             </md-input-container>';
         } else {
           return '\
+            <label for="{{ inputId || \'input-\' + $mdAutocompleteCtrl.id }}"\
+                class="md-autocomplete-placeholder"\
+                ng-class="{\'md-visually-hidden\': $mdAutocompleteCtrl.scope.searchText.length > 0}">\
+              {{placeholder}}\
+            </label>\
             <input type="search"\
                 ' + (tabindex != null ? 'tabindex="' + tabindex + '"' : '') + '\
                 id="{{ inputId || \'input-\' + $mdAutocompleteCtrl.id }}"\
@@ -390,12 +396,9 @@ function MdAutocomplete ($$mdSvgRegistry) {
                 ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                 ng-blur="$mdAutocompleteCtrl.blur($event)"\
                 ng-focus="$mdAutocompleteCtrl.focus($event)"\
-                placeholder="{{placeholder}}"\
                 aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
-                aria-label="{{placeholder}}"\
                 aria-autocomplete="list"\
                 role="combobox"\
-                aria-haspopup="true"\
                 aria-activedescendant=""\
                 aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>';
         }
