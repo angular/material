@@ -49,6 +49,7 @@ module.exports = function(config) {
     basePath: __dirname + '/..',
     frameworks: ['jasmine'],
     files: dependencies.concat(testSrc),
+    customLaunchers: require('./sauce-browsers.json'),
 
     browserDisconnectTimeout:500,
 
