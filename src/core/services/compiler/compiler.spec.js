@@ -12,6 +12,7 @@ describe('$mdCompiler service', function() {
     return compileData;
   }
 
+
   describe('setup', function() {
 
     it('element should use templateUrl', inject(function($templateCache) {
@@ -159,27 +160,145 @@ describe('$mdCompiler service', function() {
         expect(scope.myControllerAs).toBe(data.element.controller());
       }));
 
-      it('should work with bindToController', inject(function($rootScope) {
-        var called = false;
-        var data = compile({
-          template: 'hello',
-          controller: function($scope) {
-            expect(this.name).toBe('Bob');
-            expect($scope.$apply).toBeTruthy(); // test DI working properly
-            called = true;
-          },
-          controllerAs: 'ctrl',
-          bindToController: true,
-          locals: { name: 'Bob' }
-        });
-        var scope = $rootScope.$new();
-        data.link(scope);
-        expect(scope.ctrl.name).toBe('Bob');
-        expect(called).toBe(true);
-      }));
-
     });
 
+  });
+
+  [
+      {respectPreAssignBindingsEnabled: true},
+      {respectPreAssignBindingsEnabled: false},
+      // TODO change `equivalentTo` to `true` in Material 1.2.
+      {respectPreAssignBindingsEnabled: '"default"', equivalentTo: false}
+  ].forEach(function(options) {
+    var realRespectPreAssignBindingsEnabled = options.respectPreAssignBindingsEnabled;
+    var respectPreAssignBindingsEnabled = angular.isDefined(options.equivalentTo) ?
+      options.equivalentTo :
+      realRespectPreAssignBindingsEnabled;
+
+    describe('with respectPreAssignBindingsEnabled set to ' + realRespectPreAssignBindingsEnabled, function() {
+      var preAssignBindingsEnabledInAngularJS = angular.version.minor < 6;
+
+      beforeEach(function() {
+        module(function($mdCompilerProvider) {
+          // Don't set the value so that the default state can be tested.
+          if (typeof realRespectPreAssignBindingsEnabled === 'boolean') {
+            $mdCompilerProvider.respectPreAssignBindingsEnabled(realRespectPreAssignBindingsEnabled);
+          }
+        });
+      });
+      
+      function compileAndLink(options) {
+        var compileData;
+
+        inject(function($mdCompiler, $rootScope) {
+          $mdCompiler.compile(options).then(function(data) {
+            data.link($rootScope);
+            compileData = data;
+          });
+
+          $rootScope.$apply();
+        });
+
+        return compileData;
+      }
+
+      it('should call $onInit even if bindToController is set to false', function() {
+        var isInstantiated = false;
+
+        function TestController($scope, name) {
+          isInstantiated = true;
+          expect($scope.$apply).toBeTruthy();
+          expect(name).toBe('Bob');
+        }
+
+        TestController.prototype.$onInit = jasmine.createSpy('$onInit');
+
+        compileAndLink({
+          template: 'hello',
+          controller: TestController,
+          bindToController: false,
+          locals: {name: 'Bob'}
+        });
+
+        expect(TestController.prototype.$onInit).toHaveBeenCalledTimes(1);
+        expect(isInstantiated).toBe(true);
+      });
+
+      // Bindings are not preassigned only if we respect the AngularJS config and they're
+      // disabled there. This logic will change in Material 1.2.0.
+      if (respectPreAssignBindingsEnabled && !preAssignBindingsEnabledInAngularJS) {
+        it('disabled should assign bindings after constructor', function() {
+          var isInstantiated = false;
+
+          function TestController($scope) {
+            isInstantiated = true;
+            expect($scope.$apply).toBeTruthy();
+            expect(this.name).toBeUndefined();
+          }
+
+          TestController.prototype.$onInit = function() {
+            expect(this.name).toBe('Bob');
+          };
+
+          spyOn(TestController.prototype, '$onInit').and.callThrough();
+
+          compileAndLink({
+            template: 'hello',
+            controller: TestController,
+            controllerAs: 'ctrl',
+            bindToController: true,
+            locals: {name: 'Bob'}
+          });
+
+          expect(TestController.prototype.$onInit).toHaveBeenCalledTimes(1);
+          expect(isInstantiated).toBe(true);
+        });
+      } else {
+        it('enabled should assign bindings at instantiation', function() {
+          var isInstantiated = false;
+
+          function TestController($scope) {
+            isInstantiated = true;
+            expect($scope.$apply).toBeTruthy();
+            expect(this.name).toBe('Bob');
+          }
+
+          compileAndLink({
+            template: 'hello',
+            controller: TestController,
+            controllerAs: 'ctrl',
+            bindToController: true,
+            locals: {name: 'Bob'}
+          });
+
+          expect(isInstantiated).toBe(true);
+        });
+
+        it('enabled should assign bindings at instantiation even if $onInit defined', function() {
+          var isInstantiated = false;
+
+          function TestController($scope) {
+            isInstantiated = true;
+            expect($scope.$apply).toBeTruthy();
+            expect(this.name).toBe('Bob');
+          }
+
+          TestController.prototype.$onInit = jasmine.createSpy('$onInit');
+
+          compileAndLink({
+            template: 'hello',
+            controller: TestController,
+            controllerAs: 'ctrl',
+            bindToController: true,
+            locals: {name: 'Bob'}
+          }, true);
+
+          expect(TestController.prototype.$onInit).toHaveBeenCalledTimes(1);
+          expect(isInstantiated).toBe(true);
+        });
+      }
+
+    });
   });
 
   describe('with contentElement', function() {

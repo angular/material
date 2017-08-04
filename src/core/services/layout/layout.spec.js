@@ -132,6 +132,13 @@ describe("Layout API ", function() {
         expect(element.hasClass('flex-gt-sm')).toBeTruthy();
       });
 
+      it('should support untrimmed attribute values with spaces', inject(function($rootScope, $compile) {
+        var scope = pageScope;
+        var element = angular.element($compile('<div flex-gt-xs="50 "></div>')(scope));
+
+        expect(element.hasClass('flex-gt-xs-50')).toBe(true);
+      }));
+
       it('should observe the attribute value and update the layout class(es)', inject(function($rootScope, $compile) {
         var scope = pageScope;
         var element = angular.element($compile('<div flex-gt-md="{{size}}"></div>')(scope));
