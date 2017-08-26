@@ -1259,7 +1259,7 @@ function SelectProvider($$interimElementProvider) {
         if (options.hasBackdrop) {
           // Override duration to immediately show invisible backdrop
           options.backdrop = $mdUtil.createBackdrop(scope, "md-select-backdrop md-click-catcher");
-          $animate.enter(options.backdrop, $document[0].body, null, {duration: 0});
+          $animate.enter(options.backdrop, options.parent, null, {duration: 0});
         }
 
         /**
