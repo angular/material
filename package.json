@@ -78,11 +78,11 @@
     "through2": "^2.0.1"
   },
   "scripts": {
-    "contributors": "rm -f ./docs/app/contributors.json; githubcontrib --owner=angular --repository=material --cols=6 --format=json --showlogin=true --sortBy=login --sha=master > ./docs/app/contributors.json",
-    "watch": "gulp watch site --dev",
-    "prom": "git pull --rebase origin master",
-    "current-branch": "git rev-parse --abbrev-ref HEAD",
-    "merge-base": "git merge-base $(npm run -s current-branch) origin/master",
-    "squash": "git rebase -i $(npm run -s merge-base)"
+    "build": "gulp build",
+    "build:contributors": "rm -f ./docs/app/contributors.json; githubcontrib --owner=angular --repository=material --cols=6 --format=json --showlogin=true --sortBy=login --sha=master > ./docs/app/contributors.json",
+    "docs:build": "gulp docs",
+    "docs:watch": "gulp watch site --dev",
+    "test:fast": "gulp karma-fast",
+    "test:full": "gulp karma"
   }
 }
