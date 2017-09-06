@@ -6,7 +6,8 @@ var HANDLERS = {};
  * as well as other information abstracted from the DOM.
  */
 
-var pointer, lastPointer, forceSkipClickHijack = false, maxClickDistance = 6;
+var pointer, lastPointer, maxClickDistance = 6;
+var forceSkipClickHijack = false, disableAllGestures = false;
 
 /**
  * The position of the most recent click if that click was on a label element.
@@ -51,6 +52,11 @@ angular
 function MdGestureProvider() { }
 
 MdGestureProvider.prototype = {
+
+  disableAll : function() {
+    debugger;
+    disableAllGestures = true;
+  },
 
   // Publish access to setter to configure a variable  BEFORE the
   // $mdGesture service is instantiated...
@@ -510,6 +516,7 @@ function MdGestureHandler() {
  * @ngInject
  */
 function attachToDocument( $mdGesture, $$MdGestureHandler ) {
+  if ( disableAllGestures ) return;
 
   // Polyfill document.contains for IE11.
   // TODO: move to util
