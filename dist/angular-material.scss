@@ -3774,13 +3774,6 @@ md-input-container {
     overflow: hidden;
     @include rtl(clear, left, right);
 
-    &.ng-enter {
-      // Upon entering the DOM, messages should be hidden
-      .md-input-message-animation {
-        opacity: 0;
-        margin-top: -100px;
-      }
-    }
   }
 
   .md-input-message-animation, .md-char-counter {
@@ -3814,16 +3807,16 @@ md-input-container {
     }
   }
 
-  // Note: This is a workaround to fix an ng-enter flicker bug
   .md-input-message-animation {
-    &:not(.ng-animate) {
+    // Enter animation
+    // Pre-animation state is transparent and off target
+    &.ng-enter-prepare {
       opacity: 0;
       margin-top: -100px;
     }
-  }
 
-  .md-input-message-animation {
-    &.ng-enter {
+    // First keyframe of entry animation
+    &.ng-enter:not(.ng-enter-active) {
       opacity: 0;
       margin-top: -100px;
     }
@@ -4385,6 +4378,8 @@ $max-dense-menu-height: 2 * $baseline-grid + $max-visible-items * $dense-menu-it
   z-index: $z-index-menu;
   opacity: 0;
   border-radius: $menu-border-radius;
+  max-height: calc(100vh - 10px);
+  overflow: auto;
 
   md-menu-divider {
     margin-top: $baseline-grid / 2;
@@ -6173,6 +6168,14 @@ $subheader-sticky-shadow: 0px 2px 4px 0 rgba(0,0,0,0.16) !default;
   }
 }
 
+[md-swipe-left], [md-swipe-right] {
+    touch-action : pan-y;
+}
+
+[md-swipe-up], [md-swipe-down] {
+    touch-action : pan-x;
+}
+
 $switch-width: 36px !default;
 $switch-height: $baseline-grid * 3 !default;
 $switch-bar-height: 14px !default;
@@ -6450,6 +6453,11 @@ md-tabs-wrapper {
       left: 50%;
       transform: translate3d(-50%, -50%, 0);
     }
+
+    // For RTL tabs, rotate the buttons
+    [dir="rtl"] & {
+      transform: rotateY(180deg) translateY(-50%);
+    }
   }
   md-prev-button {
     @include rtl-prop(left, right, 0, auto);
@@ -6458,6 +6466,8 @@ md-tabs-wrapper {
   md-next-button {
     @include rtl-prop(right, left, 0, auto);
     background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMzM2IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTAsNiA4LjYsNy40IDEzLjIsMTIgOC42LDE2LjYgMTAsMTggMTYsMTIgCQkiIHN0eWxlPSJmaWxsOndoaXRlOyIvPiA8cmVjdCBmaWxsPSJub25lIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz4gPC9nPiA8L2c+IDxnIGlkPSJHcmlkIiBkaXNwbGF5PSJub25lIj4gPGcgZGlzcGxheT0iaW5saW5lIj4gPC9nPiA8L2c+IDwvc3ZnPg0K');
+
+    // In regular mode, we need to flip the chevron icon to point the other way
     md-icon {
       transform: translate3d(-50%, -50%, 0) rotate(180deg);
     }
@@ -6543,7 +6553,7 @@ md-tab-content {
   &.md-left:not(.md-active) {
     @include rtl(transform, translateX(-100%), translateX(+100%));
     animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
-    opacity: 0;
+    visibility: hidden;
     * {
       transition: visibility 0s linear;
       transition-delay: $swift-ease-in-out-duration;
@@ -6553,7 +6563,7 @@ md-tab-content {
   &.md-right:not(.md-active) {
     @include rtl(transform, translateX(100%), translateX(-100%));
     animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
-    opacity: 0;
+    visibility: hidden;
     * {
       transition: visibility 0s linear;
       transition-delay: $swift-ease-in-out-duration;
@@ -6608,7 +6618,7 @@ md-tab {
   box-sizing: border-box;
   overflow: hidden;
   text-overflow: ellipsis;
-  &.md-focused {
+  &.md-focused, &:focus {
     box-shadow: none;
     outline: none;
   }
@@ -6628,7 +6638,7 @@ md-tab {
   }
 }
 
-md-toolbar + md-tabs {
+md-toolbar + md-tabs, md-toolbar + md-dialog-content md-tabs {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
