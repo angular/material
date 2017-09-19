@@ -13,16 +13,6 @@ env:
   - BROWSER_STACK_USERNAME=angularteam1
   - BROWSER_STACK_ACCESS_KEY=BWCd4SynLzdDcv8xtzsB
   - secure: X7CNmOMemAJ9Jqrsmv6MXyeh8n8TIL5CKzE9LYsZUbsyKo0l5CyyysJq0y/AbpQS6awsSv2qP/cZ/kand6r6z0wMFbUcxa4HjMZEfRwv3sGtwj1OKJko/GvjcZQzD54FtHy1NU7wR0mYhAlE5IwH7f8bMa/nUiijgD/TOCTtKH8=
-  matrix:
-    - NG_VERSION=1.5
-    - NG_VERSION=1.6
-    - NG_VERSION=snapshot
-    - MODE=saucelabs_required
-
-matrix:
-  fast_finish: true
-  allow_failures:
-  - env: "NG_VERSION=snapshot"
 
 cache:
   directories:
@@ -32,6 +22,15 @@ cache:
 branches:
   only:
   - master
+
+jobs:
+  include:
+    - env: "NG_VERSION=1.5"
+    - env: "NG_VERSION=1.6"
+    - env: "NG_VERSION=snapshot"
+    - stage: Deploy
+      script: ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT
+      env: "MODE=release"
 
 install:
 - npm install
@@ -45,5 +44,3 @@ before_script:
 script:
 - ./scripts/travis-run-script.sh
 
-after_success:
-- ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT

@@ -79,9 +79,9 @@ function VirtualRepeatContainerDirective() {
 
 
 function virtualRepeatContainerTemplate($element) {
-  return '<div class="md-virtual-repeat-scroller">' +
-    '<div class="md-virtual-repeat-sizer"></div>' +
-    '<div class="md-virtual-repeat-offsetter">' +
+  return '<div class="md-virtual-repeat-scroller" role="presentation">' +
+    '<div class="md-virtual-repeat-sizer" role="presentation"></div>' +
+    '<div class="md-virtual-repeat-offsetter" role="presentation">' +
       $element[0].innerHTML +
     '</div></div>';
 }

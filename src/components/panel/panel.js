@@ -3071,7 +3071,7 @@ MdPanelPosition.prototype._constrainToViewport = function(panelEl) {
  */
 MdPanelPosition.prototype._reverseXPosition = function(position) {
   if (position === MdPanelPosition.xPosition.CENTER) {
-    return;
+    return position;
   }
 
   var start = 'start';
