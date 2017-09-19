@@ -7,9 +7,17 @@ ARG_DEFS=(
 function run {
   cd ../
 
-  if [[ "$GH_TOKEN" == "" ]]; then
-    echo "ERROR: Environment variable GH_TOKEN needed to push a release."
-    echo "Please set GH_TOKEN to a valid github push token for angular/material,"
+
+  # GitHub token specified as Travis environment variable
+  #   e.g. echo "https://${ANGULARJS_MATERIAL_BOWER_TOKEN}:@github.com" > .git/credentials
+  #
+  # Both `snapshot-docs-site.sh` and `bower-material-release.sh` use
+  # this ANGULARJS_MATERIAL_BOWER_TOKEN variable
+
+
+  if [[ "$ANGULARJS_MATERIAL_BOWER_TOKEN" == "" ]]; then
+    echo "ERROR: Environment variable ANGULARJS_MATERIAL_BOWER_TOKEN needed to push a release."
+    echo "Please set ANGULARJS_MATERIAL_BOWER_TOKEN to a valid github push token for angular/material,"
     echo "then try again."
     exit 1
   fi
