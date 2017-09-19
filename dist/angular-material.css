@@ -2,7 +2,7 @@
  * AngularJS Material Design
  * https://github.com/angular/material
  * @license MIT
- * v1.1.4
+ * v1.1.5
  */
 html, body {
   height: 100%;
@@ -2464,9 +2464,6 @@ md-input-container {
     clear: left; }
     [dir=rtl] md-input-container .md-input-messages-animation {
       clear: right; }
-    md-input-container .md-input-messages-animation.ng-enter .md-input-message-animation {
-      opacity: 0;
-      margin-top: -100px; }
   md-input-container .md-input-message-animation, md-input-container .md-char-counter {
     font-size: 12px;
     line-height: 14px;
@@ -2486,10 +2483,10 @@ md-input-container {
   md-input-container:not(.md-input-invalid) .md-auto-hide .md-input-message-animation {
     opacity: 0;
     margin-top: -100px; }
-  md-input-container .md-input-message-animation:not(.ng-animate) {
+  md-input-container .md-input-message-animation.ng-enter-prepare {
     opacity: 0;
     margin-top: -100px; }
-  md-input-container .md-input-message-animation.ng-enter {
+  md-input-container .md-input-message-animation.ng-enter:not(.ng-enter-active) {
     opacity: 0;
     margin-top: -100px; }
   md-input-container.md-input-focused label:not(.md-no-float), md-input-container.md-input-has-placeholder label:not(.md-no-float), md-input-container.md-input-has-value label:not(.md-no-float) {
@@ -2988,7 +2985,9 @@ md-list-item {
   top: 0;
   z-index: 100;
   opacity: 0;
-  border-radius: 2px; }
+  border-radius: 2px;
+  max-height: calc(100vh - 10px);
+  overflow: auto; }
   .md-open-menu-container md-menu-divider {
     margin-top: 4px;
     margin-bottom: 4px;
@@ -4660,6 +4659,12 @@ md-slider-container {
     z-index: 1;
     position: relative; }
 
+[md-swipe-left], [md-swipe-right] {
+  touch-action: pan-y; }
+
+[md-swipe-up], [md-swipe-down] {
+  touch-action: pan-x; }
+
 .md-inline-form md-switch {
   margin-top: 18px;
   margin-bottom: 19px; }
@@ -4904,6 +4909,9 @@ md-tabs-wrapper {
       left: 50%;
       -webkit-transform: translate3d(-50%, -50%, 0);
               transform: translate3d(-50%, -50%, 0); }
+    [dir="rtl"] md-tabs-wrapper md-prev-button, [dir="rtl"] md-tabs-wrapper md-next-button {
+      -webkit-transform: rotateY(180deg) translateY(-50%);
+              transform: rotateY(180deg) translateY(-50%); }
   md-tabs-wrapper md-prev-button {
     left: 0;
     background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMjA4IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTUuNCw3LjQgMTQsNiA4LDEyIDE0LDE4IDE1LjQsMTYuNiAxMC44LDEyIAkJIiBzdHlsZT0iZmlsbDp3aGl0ZTsiLz4gPHJlY3QgZmlsbD0ibm9uZSIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ii8+IDwvZz4gPC9nPiA8ZyBpZD0iR3JpZCIgZGlzcGxheT0ibm9uZSI+IDxnIGRpc3BsYXk9ImlubGluZSI+IDwvZz4gPC9nPiA8L3N2Zz4NCg=="); }
@@ -5023,7 +5031,7 @@ md-tab-content {
             transform: translateX(-100%);
     -webkit-animation: 1s md-tab-content-hide;
             animation: 1s md-tab-content-hide;
-    opacity: 0; }
+    visibility: hidden; }
     [dir=rtl] md-tab-content.md-left:not(.md-active) {
       -webkit-transform: translateX(100%);
               transform: translateX(100%); }
@@ -5038,7 +5046,7 @@ md-tab-content {
             transform: translateX(100%);
     -webkit-animation: 1s md-tab-content-hide;
             animation: 1s md-tab-content-hide;
-    opacity: 0; }
+    visibility: hidden; }
     [dir=rtl] md-tab-content.md-right:not(.md-active) {
       -webkit-transform: translateX(-100%);
               transform: translateX(-100%); }
@@ -5093,7 +5101,7 @@ md-tab {
   text-overflow: ellipsis; }
   [dir=rtl] .md-tab {
     float: right; }
-  .md-tab.md-focused {
+  .md-tab.md-focused, .md-tab:focus {
     box-shadow: none;
     outline: none; }
   .md-tab.md-active {
@@ -5112,7 +5120,7 @@ md-tab {
     -webkit-transition: none;
     transition: none; }
 
-md-toolbar + md-tabs {
+md-toolbar + md-tabs, md-toolbar + md-dialog-content md-tabs {
   border-top-left-radius: 0;
   border-top-right-radius: 0; }
 
