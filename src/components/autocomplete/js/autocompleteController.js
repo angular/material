@@ -19,6 +19,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       noBlur               = false,
       selectedItemWatchers = [],
       hasFocus             = false,
+      hasUpdated           = false,
       fetchesInProgress    = 0,
       enableWrapScroll     = null,
       inputModelCtrl       = null,
@@ -520,6 +521,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    */
   function focus($event) {
     hasFocus = true;
+    if(!hasUpdated) {
+        return;
+    } else {
+        hasUpdated = false;
+    }
 
     if (isSearchable() && isMinLengthMet()) {
       handleQuery();
@@ -587,6 +593,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         break;
       default:
     }
+    hasUpdated = true;
   }
 
   //-- getters
