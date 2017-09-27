@@ -229,7 +229,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
     }
 
     if (attr.name) {
-      var autofillClone = angular.element('<select class="md-visually-hidden">');
+      var autofillClone = angular.element('<select class="md-visually-hidden"></select>');
       autofillClone.attr({
         'name': attr.name,
         'aria-hidden': 'true',
