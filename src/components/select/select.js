@@ -88,6 +88,7 @@ angular.module('material.components.select', [
  * explicit label is present.
  * @param {string=} md-container-class Class list to get applied to the `.md-select-menu-container`
  * element (for custom styling).
+ * @param {expression=} ng-change Expression evaluated when the model value changes.
  *
  * @usage
  * With a placeholder (label and aria-label are added dynamically)
