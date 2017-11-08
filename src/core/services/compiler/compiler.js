@@ -379,7 +379,7 @@ function MdCompilerProvider($compileProvider) {
     var ctrl = invokeCtrl();
 
     if (!getPreAssignBindingsEnabled() && options.bindToController) {
-      angular.extend(invokeCtrl.instance, locals);
+      angular.extend(ctrl, locals);
     }
 
     // Call the $onInit hook if it's present on the controller.
