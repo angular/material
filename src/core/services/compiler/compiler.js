@@ -369,6 +369,13 @@ function MdCompilerProvider($compileProvider) {
    * @returns {!Object} Created controller instance.
    */
   MdCompilerService.prototype._createController = function(options, injectLocals, locals) {
+    // The third and fourth arguments to $controller are considered private and are undocumented:
+    // https://github.com/angular/angular.js/blob/master/src/ng/controller.js#L86
+    // Passing `true` as the third argument causes `$controller` to return a function that
+    // gets the controller instance instead returning of the instance directly. When the
+    // controller is defined as a function, `invokeCtrl.instance` is the *same instance* as
+    // `invokeCtrl()`. However, then the controller is an ES6 class, `invokeCtrl.instance` is a
+    // *different instance* from `invokeCtrl()`.
     var invokeCtrl = this.$controller(options.controller, injectLocals, true, options.controllerAs);
 
     if (getPreAssignBindingsEnabled() && options.bindToController) {
@@ -379,7 +386,7 @@ function MdCompilerProvider($compileProvider) {
     var ctrl = invokeCtrl();
 
     if (!getPreAssignBindingsEnabled() && options.bindToController) {
-      angular.extend(invokeCtrl.instance, locals);
+      angular.extend(ctrl, locals);
     }
 
     // Call the $onInit hook if it's present on the controller.
