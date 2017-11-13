@@ -218,14 +218,14 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
         .find('md-content')
         .prepend(angular.element(
           '<div>' +
-          ' <md-progress-circular md-mode="indeterminate" ng-if="$$loadingAsyncDone === false" md-diameter="25px"></md-progress-circular>' +
+          ' <md-progress-circular md-mode="indeterminate" ng-if="false" md-diameter="25px"></md-progress-circular>' +
           '</div>'
         ));
 
       // Hide list [of item options] while loading async
       element
         .find('md-option')
-        .attr('ng-show', '$$loadingAsyncDone');
+        .attr('ng-show', true);
     }
 
     if (attr.name) {
