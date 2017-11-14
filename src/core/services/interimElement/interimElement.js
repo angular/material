@@ -526,20 +526,19 @@ function InterimElementProvider() {
 
           if ( options.$destroy === true ) {
 
-            return hideElement(options.element, options).then(function(){
-              (isCancelled && rejectAll(response)) || resolveAll(response);
-            });
+            return hideElement(options.element, options).then(hideSuccessful);
 
           } else {
             $q.when(showAction).finally(function() {
-              hideElement(options.element, options).then(function() {
-                isCancelled ? rejectAll(response) : resolveAll(response);
-              }, rejectAll);
+              hideElement(hideSuccessful, rejectAll);
             });
 
             return self.deferred.promise;
           }
 
+          function hideSuccessful(hideResult){
+              (isCancelled && rejectAll(hideResult)) || resolveAll(hideResult);            
+          }
 
           /**
            * The `show()` returns a promise that will be resolved when the interim
