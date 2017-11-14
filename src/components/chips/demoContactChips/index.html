@@ -1,6 +1,6 @@
 <div ng-controller="ContactChipDemoCtrl as ctrl" layout="column" ng-cloak>
 
-  <md-content class="md-padding autocomplete" layout="column">
+  <md-content class="md-padding autocomplete" layout="column" ng-if="ctrl.allCotacts">
     <md-contact-chips
         ng-model="ctrl.contacts"
         md-contacts="ctrl.querySearch($query)"

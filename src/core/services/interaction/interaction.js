@@ -33,11 +33,16 @@ angular
  * </hljs>
  *
  */
-function MdInteractionService($timeout, $mdUtil) {
+/**
+ * @ngInject
+ */
+function MdInteractionService($timeout, $mdUtil, $document, $window) {
   this.$timeout = $timeout;
   this.$mdUtil = $mdUtil;
+  this.$window = $window;
+  this.$document = $document;
 
-  this.bodyElement = angular.element(document.body);
+  this.bodyElement = angular.element($document[0].body);
   this.isBuffering = false;
   this.bufferTimeout = null;
   this.lastInteractionType = null;
@@ -72,6 +77,8 @@ function MdInteractionService($timeout, $mdUtil) {
  * body element.
  */
 MdInteractionService.prototype.initializeEvents = function() {
+  var window = this.$window;
+  var document = this.$document[0];
   // IE browsers can also trigger pointer events, which also leads to an interaction.
   var pointerEvent = 'MSPointerEvent' in window ? 'MSPointerDown' : 'PointerEvent' in window ? 'pointerdown' : null;
 

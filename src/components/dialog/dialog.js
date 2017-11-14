@@ -813,7 +813,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       // For navigation $destroy events, do a quick, non-animated removal,
       // but for normal closes (from clicks, etc) animate the removal
-      return !!options.$destroy ? detachAndClean() : animateRemoval().then( detachAndClean );
+      return options.$destroy ? detachAndClean() : animateRemoval().then( detachAndClean );
 
       /**
        * For normal closes, animate the removal.
@@ -1048,7 +1048,7 @@ function MdDialogProvider($$interimElementProvider) {
        */
       options.hideBackdrop = function hideBackdrop($destroy) {
         if (options.backdrop) {
-          if ( !!$destroy ) options.backdrop.remove();
+          if ( $destroy ) options.backdrop.remove();
           else              $animate.leave(options.backdrop);
         }
 
@@ -1107,7 +1107,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       // Set up elements before and after the dialog content to capture focus and
       // redirect back into the dialog.
-      topFocusTrap = document.createElement('div');
+      topFocusTrap = $document[0].createElement('div');
       topFocusTrap.classList.add('md-dialog-focus-trap');
       topFocusTrap.tabIndex = 0;
 
@@ -1151,7 +1151,7 @@ function MdDialogProvider($$interimElementProvider) {
        */
       function walkDOM(element) {
         while (element.parentNode) {
-          if (element === document.body) {
+          if (element === $document[0].body) {
             return;
           }
           var children = element.parentNode.children;

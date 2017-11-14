@@ -1,7 +1,7 @@
 
 angular
   .module('radioDemo1', ['ngMaterial'])
-  .controller('AppCtrl', function($scope) {
+  .controller('AppCtrl', function($scope, $mdDialog) {
 
     $scope.data = {
       group1 : 'Banana',
@@ -31,8 +31,14 @@ angular
     ];
 
 
-    $scope.submit = function() {
-      alert('submit');
+    $scope.submit = function($event) {
+      $mdDialog.show(
+        $mdDialog
+          .alert()
+          .title('Action')
+          .textContent('submit')
+          .event($event)
+      );
     };
 
     $scope.addItem = function() {

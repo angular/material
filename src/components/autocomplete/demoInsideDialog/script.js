@@ -4,7 +4,7 @@
       .module('autocompleteDemoInsideDialog', ['ngMaterial'])
       .controller('DemoCtrl', DemoCtrl);
 
-  function DemoCtrl($mdDialog) {
+  function DemoCtrl($mdDialog, $document) {
     var self = this;
 
     self.openDialog = function($event) {
@@ -12,7 +12,7 @@
         controller: DialogCtrl,
         controllerAs: 'ctrl',
         templateUrl: 'dialog.tmpl.html',
-        parent: angular.element(document.body),
+        parent: $document.find('body'),
         targetEvent: $event,
         clickOutsideToClose:true
       })

@@ -159,7 +159,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       // for it in the form of viable host(parent[0]).
       if (parent[0] && 'MutationObserver' in $window) {
         // Use a mutationObserver to tackle #2602.
-        var attributeObserver = new MutationObserver(function(mutations) {
+        var attributeObserver = new $window.MutationObserver(function(mutations) {
           if (isDisabledMutation(mutations)) {
             $mdUtil.nextTick(function() {
               setVisible(false);
@@ -197,7 +197,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       }
 
       function windowBlurEventHandler() {
-        elementFocusedOnWindowBlur = document.activeElement === parent[0];
+        elementFocusedOnWindowBlur = $document[0].activeElement === parent[0];
       }
 
       function enterEventHandler($event) {
@@ -268,7 +268,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
 
     function configureWatchers() {
       if (element[0] && 'MutationObserver' in $window) {
-        var attributeObserver = new MutationObserver(function(mutations) {
+        var attributeObserver = new $window.MutationObserver(function(mutations) {
           mutations.forEach(function(mutation) {
             if (mutation.attributeName === 'md-visible' &&
                 !scope.visibleWatcher ) {
@@ -373,7 +373,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
       }
 
       if (!panelRef) {
-        var attachTo = angular.element(document.body);
+        var attachTo = angular.element($document[0].body);
         var panelAnimation = $mdPanel.newPanelAnimation()
             .openFrom(parent)
             .closeTo(parent)
@@ -417,9 +417,9 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
  *
  * @ngInject
  */
-function MdTooltipRegistry() {
+function MdTooltipRegistry($window) {
   var listeners = {};
-  var ngWindow = angular.element(window);
+  var ngWindow = angular.element($window);
 
   return {
     register: register,
@@ -449,7 +449,7 @@ function MdTooltipRegistry() {
     var handlers = listeners[type] = listeners[type] || [];
 
     if (!handlers.length) {
-      useCapture ? window.addEventListener(type, globalEventHandler, true) :
+      useCapture ? $window.addEventListener(type, globalEventHandler, true) :
           ngWindow.on(type, globalEventHandler);
     }
 
@@ -472,7 +472,7 @@ function MdTooltipRegistry() {
       handlers.splice(index, 1);
 
       if (handlers.length === 0) {
-        useCapture ? window.removeEventListener(type, globalEventHandler, true) :
+        useCapture ? $window.removeEventListener(type, globalEventHandler, true) :
             ngWindow.off(type, globalEventHandler);
       }
     }

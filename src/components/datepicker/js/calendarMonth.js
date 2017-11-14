@@ -59,7 +59,7 @@
    * @ngInject @constructor
    */
   function CalendarMonthCtrl($element, $scope, $animate, $q,
-    $$mdDateUtil, $mdDateLocale) {
+    $$mdDateUtil, $mdDateLocale, $document) {
 
     /** @final {!angular.JQLite} */
     this.$element = $element;
@@ -78,6 +78,9 @@
 
     /** @final */
     this.dateLocale = $mdDateLocale;
+
+    /** @final */
+    this.$document = $document;
 
     /** @final {HTMLElement} */
     this.calendarScroller = $element[0].querySelector('.md-virtual-repeat-scroller');
@@ -162,6 +165,7 @@
    */
   CalendarMonthCtrl.prototype.changeSelectedDate = function(date) {
     var self = this;
+    var $document = this.$document;
     var calendarCtrl = self.calendarCtrl;
     var previousSelectedDate = calendarCtrl.selectedDate;
     calendarCtrl.selectedDate = date;
@@ -172,7 +176,7 @@
 
       // Remove the selected class from the previously selected date, if any.
       if (previousSelectedDate) {
-        var prevDateCell = document.getElementById(calendarCtrl.getDateId(previousSelectedDate, namespace));
+        var prevDateCell = $document[0].getElementById(calendarCtrl.getDateId(previousSelectedDate, namespace));
         if (prevDateCell) {
           prevDateCell.classList.remove(selectedDateClass);
           prevDateCell.setAttribute('aria-selected', 'false');
@@ -181,7 +185,7 @@
 
       // Apply the select class to the new selected date if it is set.
       if (date) {
-        var dateCell = document.getElementById(calendarCtrl.getDateId(date, namespace));
+        var dateCell = $document[0].getElementById(calendarCtrl.getDateId(date, namespace));
         if (dateCell) {
           dateCell.classList.add(selectedDateClass);
           dateCell.setAttribute('aria-selected', 'true');
@@ -244,6 +248,7 @@
   CalendarMonthCtrl.prototype.buildWeekHeader = function() {
     var firstDayOfWeek = this.dateLocale.firstDayOfWeek;
     var shortDays = this.dateLocale.shortDays;
+    var document = this.$document[0];
 
     var row = document.createElement('tr');
     for (var i = 0; i < 7; i++) {

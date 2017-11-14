@@ -5,6 +5,7 @@ describe('$mdThemingProvider', function() {
   var testTheme;
   var testPalette;
   var startAngular = inject;
+  var postRun;
 
   beforeEach(function() {
 
@@ -20,7 +21,21 @@ describe('$mdThemingProvider', function() {
   });
 
   function setup() {
-    module('material.core', function($mdThemingProvider) {
+    var testM = 'material.theming.test';
+    var coreM = 'material.core';
+    var didRun;
+    // eslint-disable-next-line no-undef
+    postRun = new Promise(function (resolve) {
+      didRun = resolve;
+    });
+
+    angular
+      .module(testM, [coreM])
+      .run(function ($mdTheming) {
+        didRun();
+      });
+
+    module(coreM, testM, function($mdThemingProvider) {
       themingProvider = $mdThemingProvider;
 
       testPalette = themingProvider._PALETTES.testPalette = themingProvider._PALETTES.otherTestPalette = {
@@ -357,8 +372,10 @@ describe('$mdThemingProvider', function() {
 
       themingProvider.enableBrowserColor();
 
-      expect(document.getElementsByName(name).length).toBe(1);
-      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+      return postRun.then(function() {
+        expect(document.getElementsByName(name).length).toBe(1);
+        expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+      });
     });
 
     it('should use default primary color with hue `200`', function () {
@@ -372,8 +389,10 @@ describe('$mdThemingProvider', function() {
 
       themingProvider.enableBrowserColor({ hue: hue });
 
-      expect(document.getElementsByName(name).length).toBe(1);
-      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+      return postRun.then(function() {
+        expect(document.getElementsByName(name).length).toBe(1);
+        expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+      });
     });
 
     it('should use red palette', function () {
@@ -385,8 +404,10 @@ describe('$mdThemingProvider', function() {
 
       themingProvider.enableBrowserColor({ palette: 'red' });
 
-      expect(document.getElementsByName(name).length).toBe(1);
-      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+      return postRun.then(function() {
+        expect(document.getElementsByName(name).length).toBe(1);
+        expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+      });
     });
 
     it('should use test theme', function () {
@@ -398,10 +419,12 @@ describe('$mdThemingProvider', function() {
 
       themingProvider.enableBrowserColor({ theme: 'test' });
 
-      expect(document.getElementsByName(name).length).toBe(1);
-      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+      return postRun.then(function() {
+        expect(document.getElementsByName(name).length).toBe(1);
+        expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+      });
     });
-  })
+  });
 
   describe('configuration', function () {
     beforeEach(function () {
@@ -593,7 +616,7 @@ describe('$mdThemeProvider with disabled themes', function() {
 
     it('should not set any classnames', function() {
       inject(function($rootScope, $compile, $mdTheming) {
-        el = $compile('<h1>Test</h1>')($rootScope);
+        var el = $compile('<h1>Test</h1>')($rootScope);
         $mdTheming(el);
         expect(el.hasClass('md-default-theme')).toBe(false);
       });
@@ -601,7 +624,7 @@ describe('$mdThemeProvider with disabled themes', function() {
 
     it('should not inject any styles', function() {
       inject(function($rootScope, $compile, $mdTheming) {
-        el = $compile('<h1>Test</h1>')($rootScope);
+        var el = $compile('<h1>Test</h1>')($rootScope);
         $mdTheming(el);
 
         var styles = getThemeStyleElements();

@@ -1,7 +1,7 @@
 
 angular.module('toastDemo1', ['ngMaterial'])
 
-.controller('AppCtrl', function($scope, $mdToast) {
+.controller('AppCtrl', function($scope, $mdToast, $mdDialog) {
   var last = {
       bottom: false,
       top: true,
@@ -52,7 +52,12 @@ angular.module('toastDemo1', ['ngMaterial'])
 
     $mdToast.show(toast).then(function(response) {
       if ( response == 'ok' ) {
-        alert('You clicked the \'UNDO\' action.');
+        $mdDialog.show(
+          $mdDialog
+            .alert()
+            .title('Action clicked')
+            .textContent("You clicked the 'UNDO' action.")
+        );
       }
     });
   };

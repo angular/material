@@ -1,6 +1,6 @@
 angular.module('dialogDemo1', ['ngMaterial'])
 
-.controller('AppCtrl', function($scope, $mdDialog) {
+.controller('AppCtrl', function($scope, $mdDialog, $document) {
   $scope.status = '  ';
   $scope.customFullscreen = false;
 
@@ -10,7 +10,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
     // to prevent interaction outside of dialog
     $mdDialog.show(
       $mdDialog.alert()
-        .parent(angular.element(document.querySelector('#popupContainer')))
+        .parent(angular.element($document[0].querySelector('#popupContainer')))
         .clickOutsideToClose(true)
         .title('This is an alert title')
         .textContent('You can specify some description text in here.')
@@ -61,7 +61,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
     $mdDialog.show({
       controller: DialogController,
       templateUrl: 'dialog1.tmpl.html',
-      parent: angular.element(document.body),
+      parent: angular.element($document[0].body),
       targetEvent: ev,
       clickOutsideToClose:true,
       fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
@@ -77,7 +77,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
     $mdDialog.show({
       controller: DialogController,
       templateUrl: 'tabDialog.tmpl.html',
-      parent: angular.element(document.body),
+      parent: angular.element($document[0].body),
       targetEvent: ev,
       clickOutsideToClose:true
     })
@@ -91,7 +91,7 @@ angular.module('dialogDemo1', ['ngMaterial'])
   $scope.showPrerenderedDialog = function(ev) {
     $mdDialog.show({
       contentElement: '#myDialog',
-      parent: angular.element(document.body),
+      parent: angular.element($document[0].body),
       targetEvent: ev,
       clickOutsideToClose: true
     });

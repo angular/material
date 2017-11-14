@@ -1,6 +1,6 @@
 describe('MdTabsPaginationService', function() {
 
-  const TAB_WIDTH = 100;
+  var TAB_WIDTH = 100;
 
   var MdTabsPaginationService;
 

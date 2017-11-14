@@ -6,7 +6,7 @@
     .controller('PanelGroupsCtrl', PanelGroupsCtrl)
     .controller('PanelMenuCtrl', PanelMenuCtrl);
 
-  function PanelGroupsCtrl($mdPanel) {
+  function PanelGroupsCtrl($mdPanel, $document) {
     this.settings = {
       name: 'settings',
       items: [
@@ -80,7 +80,7 @@
 
       var config = {
         id: 'toolbar_' + menu.name,
-        attachTo: angular.element(document.body),
+        attachTo: angular.element($document[0].body),
         controller: PanelMenuCtrl,
         controllerAs: 'ctrl',
         template: template,
@@ -111,7 +111,7 @@
 
       var config = {
         id: 'content_' + menu.name,
-        attachTo: angular.element(document.body),
+        attachTo: angular.element($document[0].body),
         controller: PanelMenuCtrl,
         controllerAs: 'ctrl',
         template: template,

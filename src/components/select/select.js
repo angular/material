@@ -672,7 +672,15 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
     }
   }
 
-  function SelectMenuController($scope, $attrs, $element) {
+  function SelectMenuController($scope, $attrs, $element, $timeout) {
+    function setTimeout(fn, delay) {
+      return $timeout(fn, delay, false);
+    }
+
+    function clearTimeout(obj) {
+      $timeout.cancel(obj);
+    }
+
     var self = this;
     self.isMultiple = angular.isDefined($attrs.multiple);
     // selected is an object with keys matching all of the selected options' hashed values
@@ -1631,7 +1639,7 @@ function SelectProvider($$interimElementProvider) {
 
         minWidth = Math.min(targetRect.width + centeredRect.paddingLeft + centeredRect.paddingRight, maxWidth);
 
-        fontSize = window.getComputedStyle(targetNode)['font-size'];
+        fontSize = $window.getComputedStyle(targetNode)['font-size'];
       }
 
       // Keep left and top within the window

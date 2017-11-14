@@ -46,7 +46,7 @@
    * Controller for a single calendar month.
    * @ngInject @constructor
    */
-  function CalendarMonthBodyCtrl($element, $$mdDateUtil, $mdDateLocale) {
+  function CalendarMonthBodyCtrl($element, $$mdDateUtil, $mdDateLocale, $document) {
     /** @final {!angular.JQLite} */
     this.$element = $element;
 
@@ -55,6 +55,9 @@
 
     /** @final */
     this.dateLocale = $mdDateLocale;
+
+    /** @final */
+    this.$document = $document;
 
     /** @type {Object} Reference to the month view. */
     this.monthCtrl = null;
@@ -103,7 +106,7 @@
     var calendarCtrl = this.calendarCtrl;
 
     // TODO(jelbourn): cloneNode is likely a faster way of doing this.
-    var cell = document.createElement('td');
+    var cell = this.$document[0].createElement('td');
     cell.tabIndex = -1;
     cell.classList.add('md-calendar-date');
     cell.setAttribute('role', 'gridcell');
@@ -132,7 +135,7 @@
 
       if (this.isDateEnabled(opt_date)) {
         // Add a indicator for select, hover, and focus states.
-        var selectionIndicator = document.createElement('span');
+        var selectionIndicator = this.$document[0].createElement('span');
         selectionIndicator.classList.add('md-calendar-date-selection-indicator');
         selectionIndicator.textContent = cellText;
         cell.appendChild(selectionIndicator);
@@ -168,7 +171,7 @@
    * @returns {HTMLElement}
    */
   CalendarMonthBodyCtrl.prototype.buildDateRow = function(rowNumber) {
-    var row = document.createElement('tr');
+    var row = this.$document[0].createElement('tr');
     row.setAttribute('role', 'row');
 
     // Because of an NVDA bug (with Firefox), the row needs an aria-label in order
@@ -186,6 +189,7 @@
    */
   CalendarMonthBodyCtrl.prototype.buildCalendarForMonth = function(opt_dateInMonth) {
     var date = this.dateUtil.isValidDate(opt_dateInMonth) ? opt_dateInMonth : new Date();
+    var document = this.$document[0];
 
     var firstDayOfMonth = this.dateUtil.getFirstDateOfMonth(date);
     var firstDayOfTheWeek = this.getLocaleDay_(firstDayOfMonth);

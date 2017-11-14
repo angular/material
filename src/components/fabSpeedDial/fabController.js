@@ -4,7 +4,7 @@
   angular.module('material.components.fabShared', ['material.core'])
     .controller('MdFabController', MdFabController);
 
-  function MdFabController($scope, $element, $animate, $mdUtil, $mdConstant, $timeout) {
+  function MdFabController($scope, $element, $animate, $mdUtil, $mdConstant, $timeout, $document) {
     var vm = this;
     var initialAnimationAttempts = 0;
 
@@ -175,7 +175,7 @@
       // On the next tick, setup a check for outside clicks; we do this on the next tick to avoid
       // clicks/touches that result in the isOpen attribute changing (e.g. a bound radio button)
       $mdUtil.nextTick(function() {
-        angular.element(document).on('click touchend', checkForOutsideClick);
+        $document.on('click touchend', checkForOutsideClick);
       });
 
       // TODO: On desktop, we should be able to reset the indexes so you cannot tab through, but
@@ -185,7 +185,7 @@
 
     function disableKeyboard() {
       $element.off('keydown', keyPressed);
-      angular.element(document).off('click touchend', checkForOutsideClick);
+      $document.off('click touchend', checkForOutsideClick);
     }
 
     function checkForOutsideClick(event) {

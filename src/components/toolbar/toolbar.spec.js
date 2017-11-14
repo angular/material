@@ -35,6 +35,7 @@ describe('<md-toolbar>', function() {
     });
     var contentCss = {};
     spyOn(contentEl, 'css').and.callFake(function(properties, value) {
+      var k;
       if (angular.isObject(properties)) {
         for (k in properties) {
           if (properties.hasOwnProperty(k)) {

@@ -385,7 +385,7 @@ describe('MdIcon directive', function() {
     return style
         .replace(/ng-scope|ng-isolate-scope|md-default-theme/gi,'')
         .replace(/\s\s+/g,' ')
-        .replace(/\s+\"/g,'"')
+        .replace(/\s+"/g,'"')
         .trim();
   }
 

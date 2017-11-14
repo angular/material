@@ -11,20 +11,7 @@ angular.module('material.core.theming', ['material.core.theming.palette', 'mater
   .directive('mdThemable', ThemableDirective)
   .directive('mdThemesDisabled', disableThemesDirective )
   .provider('$mdTheming', ThemingProvider)
-  .config( detectDisabledThemes )
   .run(generateAllThemes);
-
-/**
- * Detect if the HTML or the BODY tags has a [md-themes-disabled] attribute
- * If yes, then immediately disable all theme stylesheet generation and DOM injection
- */
-/**
- * @ngInject
- */
-function detectDisabledThemes($mdThemingProvider) {
-  var isDisabled = !!document.querySelector('[md-themes-disabled]');
-  $mdThemingProvider.disableTheming(isDisabled);
-}
 
 /**
  * @ngdoc service
@@ -252,17 +239,20 @@ var VALID_HUE_VALUES = [
   '700', '800', '900', 'A100', 'A200', 'A400', 'A700'
 ];
 
-var themeConfig = {
-  disableTheming : false,   // Generate our themes at run time; also disable stylesheet DOM injection
-  generateOnDemand : false, // Whether or not themes are to be generated on-demand (vs. eagerly).
-  registeredStyles : [],    // Custom styles registered to be used in the theming of custom components.
-  nonce : null              // Nonce to be added as an attribute to the generated themes style tags.
-};
+function browserColorSetter() {
+  var browserColor = {};
+  return {
+    setBrowserColor: function setBrowserColor(color) {
+      browserColor.color = color;
+    },
+    browserColor: browserColor,
+  }
+}
 
 /**
- *
+ * @ngInject
  */
-function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
+function ThemingProvider($mdColorPalette, $injector) {
   PALETTES = { };
   var THEMES = { };
 
@@ -270,6 +260,9 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
 
   var alwaysWatchTheme = false;
   var defaultTheme = 'default';
+  var bcs = browserColorSetter();
+  var doBrowserColor = bcs.setBrowserColor;
+  var browserColor = bcs.browserColor;
 
   // Load JS Defined Palettes
   angular.extend(PALETTES, $mdColorPalette);
@@ -281,11 +274,11 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    * @param {string} color Hex value of the wanted browser color
    * @returns {Function} Remove function of the meta tags
    */
-  var setBrowserColor = function (color) {
+  var setBrowserColor = function ($$mdMeta, color) {
     // Chrome, Firefox OS and Opera
-    var removeChrome = $$mdMetaProvider.setMeta('theme-color', color);
+    var removeChrome = $$mdMeta.setMeta('theme-color', color);
     // Windows Phone
-    var removeWindows = $$mdMetaProvider.setMeta('msapplication-navbutton-color', color);
+    var removeWindows = $$mdMeta.setMeta('msapplication-navbutton-color', color);
 
     return function () {
       removeChrome();
@@ -309,7 +302,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    * @param {Object=} options Options object for the browser color
    * @returns {Function} remove function of the browser color
    */
-  var enableBrowserColor = function (options) {
+  var enableBrowserColor = function ($$mdMeta, options) {
     options = angular.isObject(options) ? options : {};
 
     var theme = options.theme || 'default';
@@ -320,7 +313,14 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
 
     var color = angular.isObject(palette[hue]) ? palette[hue].hex : palette[hue];
 
-    return setBrowserColor(color);
+    return setBrowserColor($$mdMeta, color);
+  };
+
+  var themeConfig = {
+    disableTheming : false,   // Generate our themes at run time; also disable stylesheet DOM injection
+    generateOnDemand : false, // Whether or not themes are to be generated on-demand (vs. eagerly).
+    registeredStyles : [],    // Custom styles registered to be used in the theming of custom components.
+    nonce : null              // Nonce to be added as an attribute to the generated themes style tags.
   };
 
   return themingProvider = {
@@ -368,9 +368,13 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
       alwaysWatchTheme = alwaysWatch;
     },
 
-    enableBrowserColor: enableBrowserColor,
+    enableBrowserColor: function(color) {
+      doBrowserColor(color);
+    },
 
-    $get: ThemingService,
+    $get: ['$injector', function($injector) {
+      return $injector.invoke(themingService, undefined, { browserColor: browserColor });
+    }],
     _LIGHT_DEFAULT_HUES: LIGHT_DEFAULT_HUES,
     _DARK_DEFAULT_HUES: DARK_DEFAULT_HUES,
     _PALETTES: PALETTES,
@@ -510,7 +514,8 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
 
       self[colorType + 'Color'] = function() {
         var args = Array.prototype.slice.call(arguments);
-        console.warn('$mdThemingProviderTheme.' + colorType + 'Color() has been deprecated. ' +
+        var $log = $injector.get('$log');
+        $log.warn('$mdThemingProviderTheme.' + colorType + 'Color() has been deprecated. ' +
                      'Use $mdThemingProviderTheme.' + colorType + 'Palette() instead.');
         return self[colorType + 'Palette'].apply(self, args);
       };
@@ -630,7 +635,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    */
 
   /* @ngInject */
-  function ThemingService($rootScope, $mdUtil, $q, $log) {
+  function themingService($rootScope, $mdUtil, $q, $log, $document, $$mdMeta, browserColor) {
         // Allow us to be invoked via a linking function signature.
     var applyTheme = function (scope, el) {
           if (el === undefined) { el = scope; scope = undefined; }
@@ -656,7 +661,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
     applyTheme.inherit = inheritTheme;
     applyTheme.registered = registered;
     applyTheme.defaultTheme = function() { return defaultTheme; };
-    applyTheme.generateTheme = function(name) { generateTheme(THEMES[name], name, themeConfig.nonce); };
+    applyTheme.generateTheme = function(name) { generateTheme($document[0], THEMES[name], name, themeConfig.nonce); };
     applyTheme.defineTheme = function(name, options) {
       options = options || {};
 
@@ -682,7 +687,36 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
 
       return $q.resolve(name);
     };
-    applyTheme.setBrowserColor = enableBrowserColor;
+
+    applyTheme.setBrowserColor = function (color) {
+      return enableBrowserColor($$mdMeta, color);
+    };
+
+    doBrowserColor = function (color) {
+      $log.warn("$mdThemingProvider.enableBrowserColor() is deprecated, use $mdTheming.setBrowserColor(); in run.");
+      applyTheme.setBrowserColor(color);
+    };
+
+    if ('color' in browserColor) {
+      doBrowserColor(browserColor.color);
+      delete browserColor.color;
+    }
+
+    applyTheme.isDisabled = function() {
+      return themeConfig.disableTheming;
+    };
+
+    applyTheme.registeredStyles = function() {
+      return themeConfig.registeredStyles.join('');
+    };
+
+    applyTheme.generateOnDemand = function() {
+      return themeConfig.generateOnDemand;
+    };
+
+    applyTheme.nonce = function() {
+      return themeConfig.nonce;
+    };
 
     return applyTheme;
 
@@ -863,8 +897,6 @@ function ThemingDirective($mdTheming, $interpolate, $parse, $mdUtil, $q, $log) {
  *
  */
 function disableThemesDirective() {
-  themeConfig.disableTheming = true;
-
   // Return a 1x-only, first-match attribute directive
   return {
     restrict : 'A',
@@ -885,8 +917,8 @@ function parseRules(theme, colorType, rules) {
 
   var themeNameRegex = new RegExp('\\.md-' + theme.name + '-theme', 'g');
   // Matches '{{ primary-color }}', etc
-  var hueRegex = new RegExp('(\'|")?{{\\s*(' + colorType + ')-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}(\"|\')?','g');
-  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow|default)-?(\d\.?\d*)?(contrast)?\s*\}\}'?"?/g;
+  var hueRegex = new RegExp('(\'|")?{{\\s*(' + colorType + ')-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}("|\')?','g');
+  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue-[0-3]|shadow|default)-?(\d\.?\d*)?(contrast)?\s*\}\}'?"?/g;
   var palette = PALETTES[color.name];
 
   // find and replace simple variables where we use a specific hue, not an entire palette
@@ -938,13 +970,25 @@ function parseRules(theme, colorType, rules) {
 var rulesByType = {};
 
 // Generate our themes at run time given the state of THEMES and PALETTES
-function generateAllThemes($injector, $mdTheming) {
-  var head = document.head;
+/**
+ * @ngInject
+ */
+function generateAllThemes($injector, $mdTheming, $document) {
+  /**
+   * Detect if the HTML or the BODY tags has a [md-themes-disabled] attribute
+   * If yes, then immediately disable all theme stylesheet generation and DOM injection
+   */
+  var isDisabled = (
+    !$mdTheming.isDisabled ||  // tests tinker with $mdTheming
+    $mdTheming.isDisabled() ||
+    $document[0].querySelector('[md-themes-disabled]')
+  );
+  var head = $document[0].head;
   var firstChild = head ? head.firstElementChild : null;
-  var themeCss = !themeConfig.disableTheming && $injector.has('$MD_THEME_CSS') ? $injector.get('$MD_THEME_CSS') : '';
+  var themeCss = !isDisabled && $injector.has('$MD_THEME_CSS') ? $injector.get('$MD_THEME_CSS') : '';
 
   // Append our custom registered styles to the theme stylesheet.
-  themeCss += themeConfig.registeredStyles.join('');
+  themeCss += $mdTheming.registeredStyles ? $mdTheming.registeredStyles() : '';
 
   if ( !firstChild ) return;
   if (themeCss.length === 0) return; // no rules, so no point in running this expensive task
@@ -993,11 +1037,11 @@ function generateAllThemes($injector, $mdTheming) {
 
   // If themes are being generated on-demand, quit here. The user will later manually
   // call generateTheme to do this on a theme-by-theme basis.
-  if (themeConfig.generateOnDemand) return;
+  if ($mdTheming.generateOnDemand()) return;
 
   angular.forEach($mdTheming.THEMES, function(theme) {
     if (!GENERATED[theme.name] && !($mdTheming.defaultTheme() !== 'default' && theme.name === 'default')) {
-      generateTheme(theme, theme.name, themeConfig.nonce);
+      generateTheme($document[0], theme, theme.name, $mdTheming.nonce());
     }
   });
 
@@ -1063,7 +1107,7 @@ function generateAllThemes($injector, $mdTheming) {
   }
 }
 
-function generateTheme(theme, name, nonce) {
+function generateTheme(document, theme, name, nonce) {
   var head = document.head;
   var firstChild = head ? head.firstElementChild : null;
 
@@ -1139,4 +1183,4 @@ function rgba(rgbArray, opacity) {
 }
 
 
-})(window.angular);
+})(angular);

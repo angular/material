@@ -2,10 +2,11 @@ angular
     .module('material.components.autocomplete')
     .controller('MdHighlightCtrl', MdHighlightCtrl);
 
-function MdHighlightCtrl ($scope, $element, $attrs) {
+function MdHighlightCtrl ($scope, $element, $attrs, $document) {
   this.$scope = $scope;
   this.$element = $element;
   this.$attrs = $attrs;
+  this.$document = $document;
 
   // Cache the Regex to avoid rebuilding each time.
   this.regex = null;
@@ -64,7 +65,7 @@ MdHighlightCtrl.prototype.applyRegex = function(text) {
 
       this.$element.append(tokenEl);
     } else {
-      this.$element.append(document.createTextNode(token));
+      this.$element.append(this.$document[0].createTextNode(token));
     }
 
   }.bind(this));
@@ -109,10 +110,10 @@ MdHighlightCtrl.prototype.createRegex = function(term, flags) {
   if (flags.indexOf('^') >= 0) startFlag = '^';
   if (flags.indexOf('$') >= 0) endFlag = '$';
 
-  return new RegExp(startFlag + regexTerm + endFlag, flags.replace(/[$\^]/g, ''));
+  return new RegExp(startFlag + regexTerm + endFlag, flags.replace(/[$^]/g, ''));
 };
 
 /** Sanitizes a regex by removing all common RegExp identifiers */
 MdHighlightCtrl.prototype.sanitizeRegex = function(term) {
-  return term && term.toString().replace(/[\\\^\$\*\+\?\.\(\)\|\{}\[\]]/g, '\\$&');
+  return term && term.toString().replace(/[\\^$*+?.()|{}[\]]/g, '\\$&');
 };

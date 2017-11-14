@@ -28,6 +28,7 @@ jobs:
     - env: "NG_VERSION=1.5"
     - env: "NG_VERSION=1.6"
     - env: "NG_VERSION=snapshot"
+    - env: "RUN_LINT=true"
     - stage: Deploy
       script: ./scripts/travis-build-init.sh --sha=$TRAVIS_COMMIT
       env: "MODE=release"

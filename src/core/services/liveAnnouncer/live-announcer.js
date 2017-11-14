@@ -30,12 +30,12 @@ angular
  * </hljs>
  *
  */
-function MdLiveAnnouncer($timeout) {
+function MdLiveAnnouncer($timeout, $document) {
   /** @private @const @type {!angular.$timeout} */
   this._$timeout = $timeout;
 
   /** @private @const @type {!HTMLElement} */
-  this._liveElement = this._createLiveElement();
+  this._liveElement = createLiveElement($document[0]);
 
   /** @private @const @type {!number} */
   this._announceTimeout = 100;
@@ -72,9 +72,8 @@ MdLiveAnnouncer.prototype.announce = function(message, politeness) {
  * Creates a live announcer element, which listens for DOM changes and announces them
  * to the screenreaders.
  * @returns {!HTMLElement}
- * @private
  */
-MdLiveAnnouncer.prototype._createLiveElement = function() {
+function createLiveElement(document) {
   var liveEl = document.createElement('div');
 
   liveEl.classList.add('md-visually-hidden');
@@ -85,4 +84,4 @@ MdLiveAnnouncer.prototype._createLiveElement = function() {
   document.body.appendChild(liveEl);
 
   return liveEl;
-};
+}

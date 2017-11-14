@@ -13,7 +13,7 @@ angular
  * @param $mdUtil
  * @constructor
  */
-function MdChipCtrl ($scope, $element, $mdConstant, $timeout, $mdUtil) {
+function MdChipCtrl ($scope, $element, $mdConstant, $timeout, $mdUtil, $document) {
   /**
    * @type {$scope}
    */
@@ -38,6 +38,11 @@ function MdChipCtrl ($scope, $element, $mdConstant, $timeout, $mdUtil) {
    * @type {$mdUtil}
    */
   this.$mdUtil = $mdUtil;
+
+  /**
+   * @type {$document}
+   */
+  this.$document = $document;
 
   /**
    * @type {boolean}
@@ -130,6 +135,8 @@ MdChipCtrl.prototype.goOutOfEditMode = function() {
  * @param node
  */
 MdChipCtrl.prototype.selectNodeContents = function(node) {
+  var document = this.$document[0];
+  var window = this.$window;
   var range, selection;
   if (document.body.createTextRange) {
     range = document.body.createTextRange();
