@@ -427,5 +427,50 @@ describe('$mdCompiler service', function() {
 
   });
 
+  describe('with respectPreAssignBindingsEnabled and not preAssignBindingsEnabled', function() {
+    var $mdCompiler, pageScope, $rootScope;
+
+    beforeEach(module('material.core'));
+
+    beforeEach(module(function($mdCompilerProvider, $compileProvider) {
+      $mdCompilerProvider.respectPreAssignBindingsEnabled(true);
+
+      // preAssignBindingsEnabled is removed in Angular 1.7, so we only explicitly turn it
+      // on if the option exists.
+      if ($compileProvider.hasOwnProperty('preAssignBindingsEnabled')) {
+        $compileProvider.preAssignBindingsEnabled(false);
+      }
+    }));
+
+    beforeEach(inject(function($injector) {
+      $mdCompiler = $injector.get('$mdCompiler');
+      $rootScope = $injector.get('$rootScope');
+      pageScope = $rootScope.$new();
+    }));
+
+    it('should assign bindings by $onInit for ES6 classes', function(done) {
+      // This will not work in IE11, but the AngularJS Material CI is only running Chrome.
+      class PizzaController {
+        $onInit() { this.isInitialized = true; }
+      }
+
+      var compileResult = $mdCompiler.compile({
+        template: '<span>Pizza</span>',
+        controller: PizzaController,
+        controllerAs: 'pizzaCtrl',
+        bindToController: true,
+        locals: {topping: 'Cheese'},
+      });
+
+      compileResult.then(function(compileOutput) {
+        var ctrl = compileOutput.link(pageScope).scope().pizzaCtrl;
+        expect(ctrl.isInitialized).toBe(true);
+        expect(ctrl.topping).toBe('Cheese');
+        done();
+      });
+
+      $rootScope.$apply();
+    });
+  });
 
 });
