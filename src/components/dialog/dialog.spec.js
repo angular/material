@@ -781,6 +781,34 @@ describe('$mdDialog', function() {
 
       expect(response).toBe('responsetext');
     }));
+
+    it('should not submit after ENTER key when input is empty and prompt is required', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
+      spyOn($mdDialog, 'hide');
+
+      jasmine.mockElementFocus(this);
+      var parent = angular.element('<div>');
+      var response;
+      var prompt = $mdDialog.prompt().parent(parent).required(true);
+      $mdDialog.show(prompt).then(function(answer) {
+        response = answer;
+      });
+      runAnimation();
+
+      var inputElement = angular
+        .element(parent[0].querySelector('.md-dialog-container'))
+        .find('md-dialog')
+        .find('md-dialog-content')
+        .find('input');
+
+      inputElement.eq(0).triggerHandler({
+        type: 'keypress',
+        keyCode: $mdConstant.KEY_CODE.ENTER
+      });
+      runAnimation();
+      runAnimation();
+
+      expect($mdDialog.hide).not.toHaveBeenCalled();
+    }));
   });
 
   describe('#build()', function() {
