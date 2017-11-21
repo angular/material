@@ -471,7 +471,7 @@ function MdNavItem($mdAria, $$rAF) {
         });
 
         attrs.$observe('disabled', function (value) {
-          mdNavItem.disabled = !!value;
+          mdNavItem.disabled = value.length === 0 ? true : !!value;
         });
 
         $mdAria.expectWithText(element, 'aria-label');

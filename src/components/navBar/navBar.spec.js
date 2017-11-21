@@ -181,7 +181,7 @@ describe('mdNavBar', function() {
               '  <md-nav-item md-nav-href="#1" name="tab1">' +
               '    tab1' +
               '  </md-nav-item>' +
-              '  <md-nav-item md-nav-href="#2" name="tab2" disabled="1">' +
+              '  <md-nav-item md-nav-href="#2" name="tab2" disabled>' +
               '    tab2' +
               '  </md-nav-item>' +
               '</md-nav-bar>');
