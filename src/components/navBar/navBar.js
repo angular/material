@@ -429,6 +429,7 @@ function MdNavItem($mdAria, $$rAF) {
           '<md-button class="_md-nav-button md-accent" ' +
             'ng-class="ctrl.getNgClassMap()" ' +
             'ng-blur="ctrl.setFocused(false)" ' +
+            'ng-disabled="ctrl.disabled"' +
             'tabindex="-1" ' +
             navigationOptions +
             navigationAttribute + '>' +
@@ -467,6 +468,10 @@ function MdNavItem($mdAria, $$rAF) {
         navButton.on('click', function() {
           mdNavBar.mdSelectedNavItem = mdNavItem.name;
           scope.$apply();
+        });
+
+        attrs.$observe('disabled', function (value) {
+          mdNavItem.disabled = !!value;
         });
 
         $mdAria.expectWithText(element, 'aria-label');

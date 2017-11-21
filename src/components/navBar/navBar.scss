@@ -38,6 +38,11 @@ $md-nav-bar-height: 48px;
   &:hover {
     background-color: inherit;
   }
+
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 }
 
 md-nav-ink-bar {
