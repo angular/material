@@ -152,6 +152,20 @@ describe('<md-tabs>', function () {
       expect(tabItems.eq(1).attr('tabindex')).toBe('-1');
     }));
 
+    it('should not select tab on space or enter if md-no-keypress is true', inject(function ($document, $mdConstant) {
+      var tabs     = setup('<md-tabs md-no-keypress="true">' +
+                           '<md-tab></md-tab>' +
+                           '<md-tab></md-tab>' +
+                           '</md-tabs>');
+      var tabItems = tabs.find('md-tab-item');
+      tabs.find('md-tab-item').eq(0).triggerHandler('click');
+      // All keypress events will not have any affect.
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
+      expect(tabItems.eq(1)).not.toBeActiveTab();
+      expect(tabItems.eq(1).attr('tabindex')).not.toBe('0');
+    }));
+
     it('should bind to selected', function () {
       var tabs      = setup('<md-tabs md-selected="current">' +
                             '<md-tab></md-tab>' +
