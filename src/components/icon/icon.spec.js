@@ -457,7 +457,7 @@ describe('MdIcon service', function() {
       });
 
       it('should append configured SVG icon from named group', function() {
-        var expected = updateDefaults('<svg xmlns="http://www.w3.org/2000/svg"><g id="s1"></g></g></svg>');
+        var expected = updateDefaults('<svg xmlns="http://www.w3.org/2000/svg"><g id="s1"></g></svg>');
         $mdIcon('social:s1').then(function(el) {
           expect(el.outerHTML).toEqual(expected);
         });
@@ -465,7 +465,7 @@ describe('MdIcon service', function() {
       });
 
       it('should append configured SVG icon from default group', function() {
-        var expected = updateDefaults('<svg xmlns="http://www.w3.org/2000/svg"><g id="c1"></g></g></svg>');
+        var expected = updateDefaults('<svg xmlns="http://www.w3.org/2000/svg"><g id="c1"></g></svg>');
         $mdIcon('c1').then(function(el) {
           expect(el.outerHTML).toEqual(expected);
         });
