@@ -704,7 +704,6 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
         // reference. This allowed the developer to also push and pop from their array.
         $scope.$watchCollection(self.modelBinding, function(value) {
           if (validateArray(value)) renderMultiple(value);
-          self.ngModel.$setPristine();
         });
 
         ngModel.$isEmpty = function(value) {
