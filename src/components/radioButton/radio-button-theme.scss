@@ -87,9 +87,6 @@ md-radio-group.md-THEME_NAME-theme {
   &.md-primary .md-checked:not([disabled]) .md-ink-ripple, .md-checked:not([disabled]).md-primary .md-ink-ripple {
     color: '{{primary-color-0.26}}';
   }
-  .md-checked.md-primary .md-ink-ripple {
-    color: '{{warn-color-0.26}}';
-  }
 }
 
 md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty) {
