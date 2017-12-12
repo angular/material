@@ -380,7 +380,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * be property names, property chains, or array indices.
      */
     supplant: function(template, values, pattern) {
-      pattern = pattern || /\{([^\{\}]*)\}/g;
+      pattern = pattern || /\{([^{}]*)\}/g;
       return template.replace(pattern, function(a, b) {
         var p = b.split('.'),
           r = values;
@@ -600,7 +600,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
        * Breadth-First tree scan for element with matching `nodeName`
        */
       function scanTree(element) {
-        return scanLevel(element) || (!!scanDeep ? scanChildren(element) : null);
+        return scanLevel(element) || (scanDeep ? scanChildren(element) : null);
       }
 
       /**

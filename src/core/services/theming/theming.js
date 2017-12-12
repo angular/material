@@ -510,6 +510,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
 
       self[colorType + 'Color'] = function() {
         var args = Array.prototype.slice.call(arguments);
+        // eslint-disable-next-line no-console
         console.warn('$mdThemingProviderTheme.' + colorType + 'Color() has been deprecated. ' +
                      'Use $mdThemingProviderTheme.' + colorType + 'Palette() instead.');
         return self[colorType + 'Palette'].apply(self, args);
@@ -881,7 +882,7 @@ function parseRules(theme, colorType, rules) {
 
   rules = rules.replace(/THEME_NAME/g, theme.name);
   var themeNameRegex = new RegExp('\\.md-' + theme.name + '-theme', 'g');
-  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow|default)-?(\d\.?\d*)?(contrast)?\s*\}\}'?"?/g;
+  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue-[0-3]|shadow|default)-?(\d\.?\d*)?(contrast)?\s*\}\}'?"?/g;
 
   // find and replace simple variables where we use a specific hue, not an entire palette
   // eg. "{{primary-100}}"
@@ -905,7 +906,7 @@ function parseRules(theme, colorType, rules) {
   });
 
   // Matches '{{ primary-color }}', etc
-  var hueRegex = new RegExp('(\'|")?{{\\s*([a-zA-Z]+)-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}(\"|\')?','g');
+  var hueRegex = new RegExp('(\'|")?{{\\s*([a-zA-Z]+)-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}("|\')?','g');
   var generatedRules = [];
 
   // For each type, generate rules for each hue (ie. default, md-hue-1, md-hue-2, md-hue-3)

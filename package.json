@@ -37,6 +37,7 @@
     "dgeni": "^0.4.1",
     "dgeni-packages": "^0.13.0",
     "github": "^12.0.5",
+    "eslint": "^4.3.0",
     "github-contributors-list": "^1.2.1",
     "glob": "~7.0.5",
     "gulp": "^3.9.1",
@@ -84,6 +85,7 @@
     "docs:build": "gulp docs",
     "docs:watch": "gulp watch site --dev",
     "test:fast": "gulp karma-fast",
-    "test:full": "gulp karma"
+    "test:full": "gulp karma",
+    "lint": "eslint src"
   }
 }

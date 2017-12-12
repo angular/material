@@ -73,8 +73,8 @@
    *  ```
    */
   function registerLayoutAPI(module){
-    var PREFIX_REGEXP = /^((?:x|data)[\:\-_])/i;
-    var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
+    var PREFIX_REGEXP = /^((?:x|data)[:\-_])/i;
+    var SPECIAL_CHARS_REGEXP = /([:\-_]+(.))/g;
 
     // NOTE: these are also defined in constants::MEDIA_PRIORITY and constants::MEDIA
     var BREAKPOINTS     = [ "", "xs", "gt-xs", "sm", "gt-sm", "md", "gt-md", "lg", "gt-lg", "xl", "print" ];
@@ -441,7 +441,6 @@
         case 'layout-margin'  :
         case 'layout-fill'    :
         case 'layout-wrap'    :
-        case 'layout-nowrap'  :
         case 'layout-nowrap' :
           value = '';
           break;

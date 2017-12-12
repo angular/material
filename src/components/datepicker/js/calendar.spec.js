@@ -756,6 +756,7 @@ describe('md-calendar', function() {
     expect(nextMonth.querySelectorAll('tr').length).toBe(1);
 
     var dates = nextMonth.querySelectorAll('.md-calendar-date');
+    var date;
     for (var i = 0; i < dates.length; i++) {
       date = dates[i];
       if (date.textContent) {
