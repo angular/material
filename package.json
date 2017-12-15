@@ -38,7 +38,7 @@
     "dgeni-packages": "^0.22.1",
     "github": "^12.0.5",
     "eslint": "^4.3.0",
-    "github-contributors-list": "^1.2.1",
+    "github-contributors-list": "^1.2.2",
     "glob": "~7.0.5",
     "gulp": "^3.9.1",
     "gulp-add-src": "^0.2.0",
@@ -81,7 +81,6 @@
   },
   "scripts": {
     "build": "gulp build",
-    "build:contributors": "rm -f ./docs/app/contributors.json; githubcontrib --owner=angular --repository=material --cols=6 --format=json --showlogin=true --sortBy=login --sha=master > ./docs/app/contributors.json",
     "docs:build": "gulp docs",
     "docs:watch": "gulp watch site --dev",
     "test:fast": "gulp karma-fast",
