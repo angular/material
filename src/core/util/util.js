@@ -146,7 +146,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
       var results = [];
       for (var i = 0; i < nodes.length; ++i) {
-        results.push(nodes.item(i));
+        results.push(nodes[i]);
       }
       return results;
     },
