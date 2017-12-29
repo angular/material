@@ -9,12 +9,6 @@ angular
   .provider('$mdCompiler', MdCompilerProvider);
 
 /**
- * @ngdoc provider
- * @name $mdCompilerProvider
- *
- * @description
- */
-/**
  * @ngdoc service
  * @name $mdCompiler
  * @module material.core.compiler
