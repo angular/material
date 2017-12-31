@@ -104,6 +104,24 @@ function MdNavBar($mdAria, $mdTheming) {
         '<md-nav-ink-bar ng-hide="ctrl.mdNoInkBar"></md-nav-ink-bar>' +
       '</div>',
     link: function(scope, element, attrs, ctrl) {
+
+      ctrl.width = $window.innerWidth;
+
+      function onResize() {
+        if (ctrl.width !== $window.innerWidth) {
+          ctrl.updateSelectedTabInkBar();
+          ctrl.width = $window.innerWidth;
+          scope.$digest();
+        }
+      }
+
+      function cleanUp() {
+        angular.element($window).off('resize', onResize);
+      }
+
+      angular.element($window).on('resize', $mdUtil.debounce(onResize, 300));
+      scope.$on('$destroy', cleanUp);
+
       $mdTheming(element);
       if (!ctrl.navBarAriaLabel) {
         $mdAria.expectAsync(element, 'aria-label', angular.noop);
@@ -229,19 +247,27 @@ MdNavBarController.prototype._updateTabs = function(newValue, oldValue) {
  * Repositions the ink bar to the selected tab.
  * @private
  */
-MdNavBarController.prototype._updateInkBarStyles = function(tab, newIndex, oldIndex) {
-  this._inkbar.toggleClass('_md-left', newIndex < oldIndex)
-      .toggleClass('_md-right', newIndex > oldIndex);
-
+MdNavBarController.prototype._updateInkBarStyles = function(tab, newIndex) {
   this._inkbar.css({display: newIndex < 0 ? 'none' : ''});
 
   if (tab) {
     var tabEl = tab.getButtonEl();
     var left = tabEl.offsetLeft;
+    var tabWidth = tabEl.offsetWidth;
+    var navBarWidth = this._navBarEl.getBoundingClientRect().width;
+    var scale = tabWidth / navBarWidth;
+    var translate = left / navBarWidth * 100;
 
-    this._inkbar.css({left: left + 'px', width: tabEl.offsetWidth + 'px'});
+    this._inkbar.css({ transform: 'translateX(' + translate + '%) scaleX(' + scale + ')' });
   }
 };
+
+/**
+ * Updates inkbar to match current tab.
+ */
+MdNavBarController.prototype.updateSelectedTabInkBar = function() {
+  this._updateInkBarStyles(this._getSelectedTab());
+}
 
 /**
  * Returns an array of the current tabs.

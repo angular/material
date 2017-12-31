@@ -39,21 +39,15 @@ $md-nav-bar-height: 48px;
 md-nav-ink-bar {
   $duration: $swift-ease-in-out-duration * 0.5;
   $multiplier: 0.5;
-  bottom: 0;
-  height: 2px;
-  left: auto;
-  position: absolute;
-  right: auto;
   background-color: black;
-
-  &._md-left {
-    transition: left ($duration * $multiplier) $swift-ease-in-out-timing-function,
-        right $duration $swift-ease-in-out-timing-function;
-  }
-  &._md-right {
-    transition: left $duration $swift-ease-in-out-timing-function,
-        right ($duration * $multiplier) $swift-ease-in-out-timing-function;
-  }
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  transform-origin: left top;
+  will-change: transform;
+  transition: transform ($duration * $multiplier) $swift-ease-in-out-timing-function;
 
   // By default $ngAnimate looks for transition durations on the element, when using ng-hide, ng-if, ng-show.
   // The ink bar has a transition duration applied, which means, that $ngAnimate delays the hide process.
