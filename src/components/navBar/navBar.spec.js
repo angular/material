@@ -261,15 +261,25 @@ describe('mdNavBar', function() {
       $scope.selectedTabRoute = 'tab1';
       createTabs();
 
+      var tabLeft = getTab('tab1')[0].offsetLeft;
+      var inkbarTranslate = parseFloat(getInkbarEl().style.transform.match(/\d+\.\d+/g)[0]);
+      var elWidth = el[0].getBoundingClientRect().width;
+
+      var translate = tabLeft / elWidth * 100;
       // b/c there is no css in the karma test, we have to interrogate the
       //   inkbar style property directly
-      expect(parseInt(getInkbarEl().style.left))
-          .toBeCloseTo(getTab('tab1')[0].offsetLeft, 0.1);
+      expect(inkbarTranslate)
+          .toBeCloseTo(translate, 1);
 
       updateSelectedTabRoute('tab3');
 
-      expect(parseInt(getInkbarEl().style.left))
-          .toBeCloseTo(getTab('tab3')[0].offsetLeft, 0.1);
+      tabLeft = getTab('tab3')[0].offsetLeft
+      inkbarTranslate = parseFloat(getInkbarEl().style.transform.match(/\d+\.\d+/g)[0]);
+      elWidth = el[0].getBoundingClientRect().width;
+      translate = tabLeft / elWidth * 100;
+
+      expect(inkbarTranslate)
+          .toBeCloseTo(translate, 1);
     });
 
     it('should hide if md-no-ink-bar is enabled', function() {
