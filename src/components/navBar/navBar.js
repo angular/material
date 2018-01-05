@@ -31,7 +31,7 @@ angular.module('material.components.navBar', ['material.core'])
  * Alternatively, the user could simply watch currentNavItem for changes.
  *
  * Accessibility functionality is implemented as a site navigator with a
- * listbox, according to
+ * navigation, according to
  * https://www.w3.org/TR/wai-aria-practices/#Site_Navigator_Tabbed_Style
  *
  * @param {string=} mdSelectedNavItem The name of the current tab; this must
@@ -120,7 +120,7 @@ function MdNavBar($mdAria, $mdTheming) {
     template:
       '<div class="md-nav-bar">' +
         '<nav role="navigation">' +
-          '<ul class="_md-nav-bar-list" ng-transclude role="listbox"' +
+          '<ul class="_md-nav-bar-list" ng-transclude ' +
             'tabindex="0"' +
             'ng-focus="ctrl.onFocus()"' +
             'ng-keydown="ctrl.onKeydown($event)"' +
@@ -142,7 +142,7 @@ function MdNavBar($mdAria, $mdTheming) {
  * Controller for the nav-bar component.
  *
  * Accessibility functionality is implemented as a site navigator with a
- * listbox, according to
+ * navigation, according to
  * https://www.w3.org/TR/wai-aria-practices/#Site_Navigator_Tabbed_Style
  * @param {!angular.JQLite} $element
  * @param {!angular.Scope} $scope
@@ -438,7 +438,6 @@ function MdNavItem($mdAria, $$rAF) {
 
       return '' +
         '<li class="md-nav-item" ' +
-          'role="option" ' +
           'aria-selected="{{ctrl.isSelected()}}">' +
           (buttonTemplate || '') +
         '</li>';
