@@ -1,5 +1,7 @@
+{% import "./macros.html" as macros %}
+
 {% if doc.returns -%}
 <div class="api-param-table">
-  {$ returnTable(doc.returns) $}
+  {$ macros.returnTable(doc.returns) $}
 </div>
 {%- endif %}
