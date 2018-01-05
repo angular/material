@@ -135,7 +135,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
 }])
 
 .config(['AngularyticsProvider', function(AngularyticsProvider) {
-   AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
+   AngularyticsProvider.setEventHandlers(['GoogleUniversal']);
 }])
 
 .run(['Angularytics', function(Angularytics) {
