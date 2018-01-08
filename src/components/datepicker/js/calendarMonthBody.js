@@ -86,7 +86,7 @@
 
     if (this.focusAfterAppend) {
       this.focusAfterAppend.classList.add(this.calendarCtrl.FOCUSED_DATE_CLASS);
-      this.focusAfterAppend.focus();
+      //this.focusAfterAppend.focus();
       this.focusAfterAppend = null;
     }
   };
