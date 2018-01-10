@@ -3,18 +3,29 @@
 
   var colors         = require('colors');
   var child_process  = require('child_process');
-
+  var os = require('os');
 
   /**
-   * Note 'githubcontrib' may require a application-scoped access token: GITHUB_API_TOKEN
+   * Note 'githubcontrib' may require an application-scoped access token defined as
+   * GITHUB_API_TOKEN in your ENV.
    */
   exports.task = function () {
     var appPath = 'dist/docs';
 
-    exec([
-      'rm -f '+ appPath + '/contributors.json',
-      'githubcontrib --owner=angular --repository=material --cols=6 --format=json --showlogin=true --sortBy=login --sha=master > ' + appPath + '/contributors.json'
+    child_process.execSync('rm -f ' + appPath + '/contributors.json');
+
+    if (os.platform() === 'win32') {
+      process.chdir('./node_modules/.bin');
+      child_process.execSync('githubcontrib.cmd --owner angular --repo material --cols 6' +
+        ' --format json --showlogin true --sha master --sortOrder desc > '
+        + '../../' + appPath + '/contributors.json');
+      process.chdir('../..');
+    } else {
+      exec([
+        './node_modules/.bin/githubcontrib --owner angular --repo material --cols 6 --format json' +
+        ' --showlogin true --sha master --sortOrder desc > ' + appPath + '/contributors.json'
       ]);
+    }
   };
   exports.dependencies = ['docs-js'];
 
