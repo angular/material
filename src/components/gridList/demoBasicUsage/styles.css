@@ -5,9 +5,3 @@ md-grid-list { margin: 8px; }
 .blue { background: #84ffff; }
 .purple { background: #b388ff; }
 .red { background: #ff8a80; }
-
-
-
-md-grid-tile {
-  transition: all 400ms ease-out 50ms;
-}
