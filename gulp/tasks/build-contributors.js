@@ -22,8 +22,8 @@
       process.chdir('../..');
     } else {
       exec([
-        'githubcontrib --owner angular --repo material --cols 6 --format json --showlogin true' +
-        ' --sha master --sortOrder desc > ' + appPath + '/contributors.json'
+        './node_modules/.bin/githubcontrib --owner angular --repo material --cols 6 --format json' +
+        ' --showlogin true --sha master --sortOrder desc > ' + appPath + '/contributors.json'
       ]);
     }
   };
