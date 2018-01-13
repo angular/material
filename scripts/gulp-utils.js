@@ -1,14 +1,11 @@
-var gulp = require('gulp');
-var filter = require('gulp-filter');
-var through2 = require('through2');
-var lazypipe = require('lazypipe');
-var gutil = require('gulp-util');
-var autoprefixer = require('gulp-autoprefixer');
-var Buffer = require('buffer').Buffer;
-var fs = require('fs');
-
-var path = require('path');
-var findModule = require('../config/ngModuleData.js');
+const gulp = require('gulp');
+const through2 = require('through2');
+const gutil = require('gulp-util');
+const autoprefixer = require('gulp-autoprefixer');
+const Buffer = require('buffer').Buffer;
+const fs = require('fs');
+const path = require('path');
+const findModule = require('../config/ngModuleData.js');
 
 exports.humanizeCamelCase = function(str) {
   switch (str) {
@@ -32,12 +29,12 @@ exports.copyDemoAssets = function(component, srcDir, distDir) {
       .pipe(through2.obj( copyAssetsFor ));
 
   function copyAssetsFor( demo, enc, next){
-    var demoID = component + "/" + path.basename(demo.path);
-    var demoDir = demo.path + "/**/*";
+    const demoID = component + "/" + path.basename(demo.path);
+    const demoDir = demo.path + "/**/*";
 
-    var notJS  = '!' + demoDir + '.js';
-    var notCSS = '!' + demoDir + '.css';
-    var notHTML= '!' + demoDir + '.html';
+    const notJS  = '!' + demoDir + '.js';
+    const notCSS = '!' + demoDir + '.css';
+    const notHTML= '!' + demoDir + '.html';
 
     gulp.src([demoDir, notJS, notCSS, notHTML])
         .pipe(gulp.dest(distDir + demoID));
@@ -47,18 +44,16 @@ exports.copyDemoAssets = function(component, srcDir, distDir) {
 };
 
 // Gives back a pipe with an array of the parsed data from all of the module's demos
-// @param moduleName modulename to parse
+// @param moduleName module name to parse
 // @param fileTasks: tasks to run on the files found in the demo's folder
 // Emits demo objects
 exports.readModuleDemos = function(moduleName, fileTasks) {
-  var name = moduleName.split('.').pop();
+  const name = moduleName.split('.').pop();
   return gulp.src('src/{components,services}/' + name + '/demo*/')
     .pipe(through2.obj(function(demoFolder, enc, next) {
-      var demoId = name + path.basename(demoFolder.path);
-      var srcPath = demoFolder.path.substring(demoFolder.path.indexOf('src/') + 4);
-      var split = srcPath.split('/');
+      const demoId = name + path.basename(demoFolder.path);
 
-      var demo = {
+      const demo = {
         ngModule: '',
         id: demoId,
         css:[], html:[], js:[]
@@ -75,14 +70,14 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
             demo.index = toDemoObject(file);
 
           } else {
-            var fileType = path.extname(file.path).substring(1);
-            if (fileType == 'js') {
+            const fileType = path.extname(file.path).substring(1);
+            if (fileType === 'js') {
               demo.ngModule = demo.ngModule || findModule.any(file.contents.toString());
             }
             demo[fileType] && demo[fileType].push(toDemoObject(file));
           }
           cb();
-        }, function(done) {
+        }, function() {
           next(null, demo);
         }));
 
@@ -98,7 +93,7 @@ exports.readModuleDemos = function(moduleName, fileTasks) {
     }));
 };
 
-var pathsForModules = {};
+const pathsForModules = {};
 
 exports.pathsForModule = function(name) {
   return pathsForModules[name] || lookupPath();
@@ -106,16 +101,16 @@ exports.pathsForModule = function(name) {
   function lookupPath() {
     gulp.src('src/{services,components,core}/**/*')
           .pipe(through2.obj(function(file, enc, next) {
-            var module = findModule.any(file.contents);
-            if (module && module.name == name) {
-              var modulePath = file.path.split(path.sep).slice(0, -1).join(path.sep);
+            const module = findModule.any(file.contents);
+            if (module && module.name === name) {
+              const modulePath = file.path.split(path.sep).slice(0, -1).join(path.sep);
               pathsForModules[name] = modulePath + '/**';
             }
             next();
           }));
     return pathsForModules[name];
   }
-}
+};
 
 exports.filesForModule = function(name) {
   if (pathsForModules[name]) {
@@ -123,11 +118,11 @@ exports.filesForModule = function(name) {
   } else {
     return gulp.src('src/{services,components,core}/**/*')
       .pipe(through2.obj(function(file, enc, next) {
-        var module = findModule.any(file.contents);
-        if (module && (module.name == name)) {
-          var modulePath = file.path.split(path.sep).slice(0, -1).join(path.sep);
+        const module = findModule.any(file.contents);
+        if (module && (module.name === name)) {
+          const modulePath = file.path.split(path.sep).slice(0, -1).join(path.sep);
           pathsForModules[name] = modulePath + '/**';
-          var self = this;
+          const self = this;
           srcFiles(pathsForModules[name]).on('data', function(data) {
             self.push(data);
           });
@@ -146,18 +141,18 @@ exports.filesForModule = function(name) {
 };
 
 exports.appendToFile = function(filePath) {
-  var bufferedContents;
+  let bufferedContents;
   return through2.obj(function(file, enc, next) {
     bufferedContents = file.contents.toString('utf8') + '\n';
     next();
   }, function(done) {
-    var existing = fs.readFileSync(filePath, 'utf8');
+    const existing = fs.readFileSync(filePath, 'utf8');
     bufferedContents = existing + '\n' + bufferedContents;
-    var outputFile = new gutil.File({
+    const outputFile = new gutil.File({
       cwd: process.cwd(),
       base: path.dirname(filePath),
       path: filePath,
-      contents: new Buffer(bufferedContents)
+      contents: Buffer.from(bufferedContents)
     });
     this.push(outputFile);
     done();
@@ -165,23 +160,22 @@ exports.appendToFile = function(filePath) {
 };
 
 exports.buildNgMaterialDefinition = function() {
-  var srcBuffer = [];
-  var modulesSeen = [];
-  var count = 0;
+  let srcBuffer = [];
+  const modulesSeen = [];
   return through2.obj(function(file, enc, next) {
-    var module = findModule.material(file.contents);
+    const module = findModule.material(file.contents);
     if (module) modulesSeen.push(module.name);
     srcBuffer.push(file);
     next();
   }, function(done) {
-    var self = this;
-    var requiredLibs = ['ng', 'ngAnimate', 'ngAria'];
-    var dependencies = JSON.stringify(requiredLibs.concat(modulesSeen));
-    var ngMaterialModule = "angular.module('ngMaterial', " + dependencies + ');';
-    var angularFile = new gutil.File({
+    const self = this;
+    const requiredLibs = ['ng', 'ngAnimate', 'ngAria'];
+    const dependencies = JSON.stringify(requiredLibs.concat(modulesSeen));
+    const ngMaterialModule = "angular.module('ngMaterial', " + dependencies + ');';
+    const angularFile = new gutil.File({
       base: process.cwd(),
       path: process.cwd() + '/ngMaterial.js',
-      contents: new Buffer(ngMaterialModule)
+      contents: Buffer.from(ngMaterialModule)
     });
 
     // Elevate ngMaterial module registration to first in queue
@@ -203,13 +197,13 @@ function moduleNameToClosureName(name) {
 }
 exports.addJsWrapper = function(enforce) {
   return through2.obj(function(file, enc, next) {
-    var module = findModule.any(file.contents);
+    const module = findModule.any(file.contents);
     if (!!enforce || module) {
-      file.contents = new Buffer([
-          !!enforce ? '(function(){' : '(function( window, angular, undefined ){',
+      file.contents = Buffer.from([
+          enforce ? '(function(){' : '(function( window, angular, undefined ){',
           '"use strict";\n',
           file.contents.toString(),
-          !!enforce ? '})();' : '})(window, window.angular);'
+          enforce ? '})();' : '})(window, window.angular);'
       ].join('\n'));
     }
     this.push(file);
@@ -218,15 +212,15 @@ exports.addJsWrapper = function(enforce) {
 };
 exports.addClosurePrefixes = function() {
   return through2.obj(function(file, enc, next) {
-    var module = findModule.any(file.contents);
+    const module = findModule.any(file.contents);
     if (module) {
-      var closureModuleName = moduleNameToClosureName(module.name);
-      var requires = (module.dependencies || []).sort().map(function(dep) {
-        if (dep.indexOf(module.name) === 0 || /material\..+/g.test(dep) == false) return '';
+      const closureModuleName = moduleNameToClosureName(module.name);
+      const requires = (module.dependencies || []).sort().map(function(dep) {
+        if (dep.indexOf(module.name) === 0 || /material\..+/g.test(dep) === false) return '';
         return 'goog.require(\'' + moduleNameToClosureName(dep) + '\');';
       }).join('\n');
 
-      file.contents = new Buffer([
+      file.contents = Buffer.from([
           'goog.provide(\'' + closureModuleName + '\');',
           requires,
           file.contents.toString(),
@@ -241,22 +235,22 @@ exports.addClosurePrefixes = function() {
 exports.buildModuleBower = function(name, version) {
   return through2.obj(function(file, enc, next) {
     this.push(file);
-    var module = findModule.any(file.contents);
+    const module = findModule.any(file.contents);
     if (module) {
-      var bowerDeps = {};
+      const bowerDeps = {};
       (module.dependencies || []).forEach(function(dep) {
-        var convertedName = 'angular-material-' + dep.split('.').pop();
+        const convertedName = 'angular-material-' + dep.split('.').pop();
         bowerDeps[convertedName] = version;
       });
-      var bowerContents = JSON.stringify({
+      const bowerContents = JSON.stringify({
         name: 'angular-material-' + name,
         version: version,
         dependencies: bowerDeps
       }, null, 2);
-      var bowerFile = new gutil.File({
+      const bowerFile = new gutil.File({
         base: file.base,
         path: file.base + '/bower.json',
-        contents: new Buffer(bowerContents)
+        contents: Buffer.from(bowerContents)
       });
       this.push(bowerFile);
     }
@@ -266,25 +260,25 @@ exports.buildModuleBower = function(name, version) {
 
 exports.hoistScssVariables = function() {
   return through2.obj(function(file, enc, next) {
-    var contents = file.contents.toString().split('\n');
-    var lastVariableLine = -1;
+    const contents = file.contents.toString().split('\n');
+    let lastVariableLine = -1;
 
-    var openCount = 0;
-    var closeCount = 0;
-    var openBlock = false;
+    let openCount = 0;
+    let closeCount = 0;
+    let openBlock = false;
 
-    for( var currentLine = 0; currentLine < contents.length; ++currentLine) {
-      var line = contents[currentLine];
+    for(let currentLine = 0; currentLine < contents.length; ++currentLine) {
+      const line = contents[currentLine];
 
       if (openBlock || /^\s*\$/.test(line) && !/^\s+/.test(line)) {
         openCount += (line.match(/\(/g) || []).length;
         closeCount += (line.match(/\)/g) || []).length;
-        openBlock = openCount != closeCount;
-        var variable = contents.splice(currentLine, 1)[0];
+        openBlock = openCount !== closeCount;
+        const variable = contents.splice(currentLine, 1)[0];
         contents.splice(++lastVariableLine, 0, variable);
       }
     }
-    file.contents = new Buffer(contents.join('\n'));
+    file.contents = Buffer.from(contents.join('\n'));
     this.push(file);
     next();
   });
@@ -293,13 +287,13 @@ exports.hoistScssVariables = function() {
 exports.cssToNgConstant = function(ngModule, factoryName) {
   return through2.obj(function(file, enc, next) {
 
-    var template = '(function(){ \nangular.module("%1").constant("%2", "%3"); \n})();\n\n';
-    var output = file.contents.toString().replace(/\n/g, '').replace(/\"/g,'\\"');
+    const template = '(function(){ \nangular.module("%1").constant("%2", "%3"); \n})();\n\n';
+    const output = file.contents.toString().replace(/\n/g, '').replace(/"/g,'\\"');
 
-    var jsFile = new gutil.File({
+    const jsFile = new gutil.File({
       base: file.base,
       path: file.path.replace('css', 'js'),
-      contents: new Buffer(
+      contents: Buffer.from(
         template.replace('%1', ngModule)
           .replace('%2', factoryName)
           .replace('%3', output)

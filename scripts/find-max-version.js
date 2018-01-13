@@ -8,16 +8,16 @@
 // command which is required to parse the
 // collection of tags so that we can figure out
 // the max version for the provided branch value
-var exec = require('child_process').exec;
+const exec = require('child_process').exec;
 
 // this is the provided input value which could
 // be a general branch like `1.3` or a specific
 // version like `1.4.6`.
-var version = process.argv[2];
+const version = process.argv[2];
 if (!version) return;
 
 exec("git --git-dir ./tmp/angular.js/.git tag", function(error, output) {
-  var v = findMaxVersion(version, output);
+  const v = findMaxVersion(version, output);
   if (v) {
     // drop the `v` prefix from the version
     // `v1.3.5` => `1.3.5`
@@ -29,14 +29,14 @@ exec("git --git-dir ./tmp/angular.js/.git tag", function(error, output) {
 });
 
 function findMaxVersion(branch, output) {
-  var lines;
-  var highestVersion;
-  var majorBranch;
+  let lines;
+  let highestVersion;
+  let majorBranch;
 
   // these weights are used to figure out which
   // releases are more important than others
   // (e.g. 1.3.0 > 1.3.0.beta.2)
-  var WEIGHTS = {
+  const WEIGHTS = {
     'beta': 10,
     'rc': 1000,
     'stable': 1000000
@@ -53,15 +53,15 @@ function findMaxVersion(branch, output) {
     lines = output.split("\n");
   }
 
-  var versionRegex = new RegExp('^v' + majorBranch + '.(\\d+)(?:-(beta|rc).(\\d+))?');
+  const versionRegex = new RegExp('^v' + majorBranch + '.(\\d+)(?:-(beta|rc).(\\d+))?');
 
-  for (var i = lines.length - 1; i >= 0; i--) {
-    var line = lines[i];
-    var result = line.match(versionRegex);
+  for (let i = lines.length - 1; i >= 0; i--) {
+    const line = lines[i];
+    const result = line.match(versionRegex);
     if (result && result.length > 0) {
       // stable releases have a higher weight than beta/RC versions
       // so we want to include 
-      var weight = result[1] * WEIGHTS.stable;
+      let weight = result[1] * WEIGHTS.stable;
 
       if (result[2]) {
         // something like "1.3.0-beta.2" will have a weight
@@ -72,7 +72,7 @@ function findMaxVersion(branch, output) {
         // like "beta.0"
         //
         // so 1.3.0-beta.0 => 10 and 1.3.0-rc.0 => 1000
-        var multiplier = WEIGHTS[result[2]];
+        const multiplier = WEIGHTS[result[2]];
         weight += multiplier * (result[3] + 1);
       } else {
         // this adds an extra 1 as well so that

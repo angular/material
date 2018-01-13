@@ -1,16 +1,16 @@
-var _ = require('lodash');
-var buildConfig = require('../../../config/build.config.js');
+const _ = require('lodash');
+const buildConfig = require('../../../config/build.config.js');
 
 // We don't need to publish all of a doc's data to the app, that will
 // add many kilobytes of loading overhead.
 function publicDocData(doc, extraData) {
-  var options = _.assign(extraData || {}, { hasDemo: (doc.docType === 'directive') });
+  const options = _.assign(extraData || {}, { hasDemo: (doc.docType === 'directive') });
 
   // This RegEx always retrieves the last source descriptor.
   // For example it retrieves from `/opt/material/src/core/services/ripple/ripple.js` the following
   // source descriptor: `src/core/`.
   // This is needed because components are not only located in `src/components`.
-  var descriptor = doc.fileInfo.filePath.toString().match(/src\/.*?\//g).pop();
+  let descriptor = doc.fileInfo.filePath.toString().match(/src\/.*?\//g).pop();
   if (descriptor) {
     descriptor = descriptor.substring(descriptor.indexOf('/') + 1, descriptor.lastIndexOf('/'));
   }
@@ -19,20 +19,19 @@ function publicDocData(doc, extraData) {
 }
 
 function coreServiceData(doc, extraData) {
-  var options = _.assign(extraData || {}, { hasDemo: false });
+  const options = _.assign(extraData || {}, { hasDemo: false });
   return buildDocData(doc, options, 'core');
 }
 
 function buildDocData(doc, extraData, descriptor) {
 
-  var module = 'material.' + descriptor;
-  var githubBaseUrl = buildConfig.repository + '/blob/master/src/' + descriptor + '/';
-  var jsName = doc.module.split(module + '.').pop();
+  const module = 'material.' + descriptor;
+  const githubBaseUrl = buildConfig.repository + '/blob/master/src/' + descriptor + '/';
 
-  var basePathFromProjectRoot = 'src/' + descriptor + '/';
-  var filePath = doc.fileInfo.filePath;
-  var indexOfBasePath = filePath.indexOf(basePathFromProjectRoot);
-  var path = filePath.substr(indexOfBasePath + basePathFromProjectRoot.length, filePath.length);
+  const basePathFromProjectRoot = 'src/' + descriptor + '/';
+  const filePath = doc.fileInfo.filePath;
+  const indexOfBasePath = filePath.indexOf(basePathFromProjectRoot);
+  const path = filePath.substr(indexOfBasePath + basePathFromProjectRoot.length, filePath.length);
   
   return _.assign({
     name: doc.name,
@@ -46,7 +45,7 @@ function buildDocData(doc, extraData, descriptor) {
   }, extraData);
 }
 
-module.exports = function componentsGenerateProcessor(log, moduleMap) {
+module.exports = function componentsGenerateProcessor() {
   return {
     $runAfter: ['paths-computed'],
     $runBefore: ['rendering-docs'],
@@ -55,7 +54,7 @@ module.exports = function componentsGenerateProcessor(log, moduleMap) {
 
   function process(docs) {
 
-    var components = _(docs)
+    const components = _(docs)
       .filter(function(doc) {
         // We are not interested in docs that are not in a module
         // We are only interested in pages that are not landing pages
@@ -65,11 +64,11 @@ module.exports = function componentsGenerateProcessor(log, moduleMap) {
       .groupBy('module')
       .map(function(moduleDocs, moduleName) {
 
-        var moduleDoc = _.find(docs, {
+        const moduleDoc = _.find(docs, {
           docType: 'module',
           name: moduleName
         });
-        if (!moduleDoc) return;
+        if (!moduleDoc) return undefined;
 
         return publicDocData(moduleDoc, {
           docs: moduleDocs
@@ -84,12 +83,12 @@ module.exports = function componentsGenerateProcessor(log, moduleMap) {
       .filter() //remove null items
       .value();
 
-    var EXPOSED_CORE_SERVICES = '$mdMedia';
+    const EXPOSED_CORE_SERVICES = '$mdMedia';
 
-    var services = _(docs).filter(function(doc) {
-      return doc.docType == 'service' &&
-        doc.module == 'material.core' &&
-        EXPOSED_CORE_SERVICES.indexOf(doc.name) != -1;
+    const services = _(docs).filter(function(doc) {
+      return doc.docType === 'service' &&
+        doc.module === 'material.core' &&
+        EXPOSED_CORE_SERVICES.indexOf(doc.name) !== -1;
     }).map(coreServiceData).value();
 
     docs.push({

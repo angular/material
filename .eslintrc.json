@@ -1,7 +1,7 @@
 {
     "extends": "eslint:recommended",
     "parserOptions": {
-      "ecmaVersion": 8
+        "ecmaVersion": 8
     },
     "rules": {
         "accessor-pairs": "error",
@@ -10,7 +10,10 @@
         "array-callback-return": "error",
         "array-element-newline": "off",
         "arrow-body-style": "error",
-        "arrow-parens": "error",
+        "arrow-parens": [
+            "error",
+            "as-needed"
+        ],
         "arrow-spacing": "error",
         "block-scoped-var": "off",
         "block-spacing": "off",
@@ -42,7 +45,7 @@
         "func-style": "off",
         "generator-star-spacing": "error",
         "getter-return": "error",
-        "global-require": "error",
+        "global-require": "off",
         "guard-for-in": "off",
         "handle-callback-err": "error",
         "id-blacklist": "error",
@@ -78,6 +81,9 @@
         "no-caller": "error",
         "no-catch-shadow": "error",
         "no-confusing-arrow": "error",
+        "no-console": [
+            "off"
+        ],
         "no-constant-condition": [
             "error",
             {
@@ -85,7 +91,7 @@
             }
         ],
         "no-continue": "off",
-        "no-div-regex": "error",
+        "no-div-regex": "off",
         "no-duplicate-imports": "error",
         "no-else-return": "off",
         "no-empty-function": "off",
@@ -138,7 +144,7 @@
         "no-param-reassign": "off",
         "no-path-concat": "error",
         "no-plusplus": "off",
-        "no-process-env": "error",
+        "no-process-env": "off",
         "no-process-exit": "error",
         "no-proto": "error",
         "no-prototype-builtins": "off",
@@ -155,7 +161,7 @@
         "no-shadow": "off",
         "no-shadow-restricted-names": "error",
         "no-spaced-func": "off",
-        "no-sync": "error",
+        "no-sync": "off",
         "no-tabs": "off",
         "no-template-curly-in-string": "error",
         "no-ternary": "off",
@@ -240,15 +246,50 @@
         "no-unexpected-multiline": "off"
     },
     "env": {
-        "browser": true
+        "node": true
     },
     "globals": {
-        "angular": true,
-        "CryptoJS": true
+        "angular": true
     },
     "overrides": [
         {
-            "files": ["**/*.spec.js"],
+            "files": [
+                "docs/app/js/**/*",
+                "src/**/*"
+            ],
+            "parserOptions": {
+                "ecmaVersion": 5
+            },
+            "env": {
+                "browser": true
+            },
+            "rules": {
+                "arrow-parens": "error",
+                "global-require": "error",
+                "no-console": [
+                    "error"
+                ],
+                "no-process-env": "error",
+                "no-sync": "error"
+            },
+            "globals": {
+                "angular": true,
+                "CryptoJS": true,
+                "hljs": true
+            }
+        },
+        {
+            "files": [
+                "scripts/**/*"
+            ],
+            "rules": {
+                "no-process-env": "off"
+            }
+        },
+        {
+            "files": [
+                "**/*.spec.js"
+            ],
             "env": {
                 "jasmine": true
             },

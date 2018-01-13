@@ -1,8 +1,8 @@
-var baseKarma = require('./karma.conf.js');
+const baseKarma = require('./karma.conf.js');
+const sauceBrowsers = require('./sauce-browsers.json');
 
 if (!process.env.SAUCE_USERNAME || !process.env.SAUCE_ACCESS_KEY) {
-  console.log('Environment variables SAUCE_USERNAME and SAUCE_ACCESS_KEY must be set to run saucelabs with Karma.');
-  process.exit(1);
+  throw new Error('Environment variables SAUCE_USERNAME and SAUCE_ACCESS_KEY must be set to run saucelabs with Karma.');
 }
 
 process.env.SAUCE_ACCESS_KEY = process.env.SAUCE_ACCESS_KEY.split('').reverse().join('');
@@ -17,7 +17,7 @@ module.exports = function(config) {
     // Those pre-configured browsers will always run in the CI Release Mode to confirm, that all
     // previous jobs have passed.
     browsers: ['SL_CHROME'],   //, 'SL_FIREFOX', 'SL_IE11'],
-    customLaunchers: require('./sauce-browsers.json'),
+    customLaunchers: sauceBrowsers,
 
     captureTimeout: 180 * 1000,
     browserDisconnectTimeout: 180 * 1000,

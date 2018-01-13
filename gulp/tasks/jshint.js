@@ -1,6 +1,6 @@
-var config = require('../config');
-var gulp = require('gulp');
-var jshint = require('gulp-jshint');
+const config = require('../config');
+const gulp = require('gulp');
+const jshint = require('gulp-jshint');
 
 exports.task = function() {
   return gulp.src(config.jsFiles)

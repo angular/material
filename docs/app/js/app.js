@@ -272,28 +272,28 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         name: 'Introduction',
         id: 'layoutIntro',
         url: 'layout/introduction'
-      }
-        ,{
+      },
+      {
         name: 'Layout Containers',
         id: 'layoutContainers',
         url: 'layout/container'
-        }
-      ,{
+      },
+      {
         name: 'Layout Children',
         id: 'layoutGrid',
         url: 'layout/children'
-      }
-      ,{
+      },
+      {
         name: 'Child Alignment',
         id: 'layoutAlign',
         url: 'layout/alignment'
-      }
-      ,{
+      },
+      {
         name: 'Extra Options',
         id: 'layoutOptions',
         url: 'layout/options'
-      }
-      ,{
+      },
+      {
         name: 'Troubleshooting',
         id: 'layoutTips',
         url: 'layout/tips'
@@ -398,7 +398,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         function getVersionIdFromPath () {
           var path = $window.location.pathname;
           if (path.length < 2) path = 'HEAD';
-          return path.match(/[^\/]+/)[0].toLowerCase();
+          return path.match(/[^/]+/)[0].toLowerCase();
         }
       });
 

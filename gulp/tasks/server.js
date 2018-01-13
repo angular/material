@@ -1,10 +1,10 @@
-var gulp = require('gulp');
-var webserver = require('gulp-webserver');
-var LR_PORT = require('../const').LR_PORT;
-var util = require('../util');
+const gulp = require('gulp');
+const webserver = require('gulp-webserver');
+const LR_PORT = require('../const').LR_PORT;
+const util = require('../util');
 
 exports.task = function() {
-  var openUrl = false;
+  let openUrl = false;
 
   if (typeof util.args.o === 'string' ||
     typeof util.args.o === 'boolean') {

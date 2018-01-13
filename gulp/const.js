@@ -1,17 +1,18 @@
-var config = require('./config');
-var path = require('path');
-var args = require('minimist')(process.argv.slice(2));
-var utils = require('../scripts/gulp-utils.js');
+const config = require('./config');
+const path = require('path');
+const args = require('minimist')(process.argv.slice(2));
+const utils = require('../scripts/gulp-utils.js');
+const version = require('../package.json').version;
 
-exports.ROOT       = path.normalize(__dirname + '/..');
-exports.VERSION    = args.version || require('../package.json').version;
+exports.ROOT       = path.normalize(path.join(__dirname, '/..'));
+exports.VERSION    = args.version || version;
 exports.LR_PORT    = args.port || args.p || 8080;
 exports.IS_DEV     = args.dev;
 exports.SHA        = args.sha;
 exports.BUILD_MODE = getBuildMode();
 
 function getBuildMode () {
-  var mode = (args.module || args.m || args.c) ? 'demos' : args.mode;
+  const mode = (args.module || args.m || args.c) ? 'demos' : args.mode;
   switch (mode) {
     case 'closure': return {
       name: 'closure',
