@@ -26,23 +26,27 @@ AngularJS Material uses a "Pull Request" process to allow team leaders opportuni
 The development team has defined three (3) Github levels of **commit authorization** within [Angular/Material](https://github.com/angular/material/):
 
 * General: 
-  * Developers in this group includes any team members not listed under Core or Team Leads below
-  * For any and all changes, developers must use a fork of the AngularJS Material repository 
-    * Please do not make or submit any changes from the master branch. 
+  * Developers in this group includes any team members not listed under Team Leads or Caretakers below
+  * For any and all changes, developers must use a feature branch from a fork of the AngularJS Material repository 
+    * Please do not make or submit any changes from the master branch of your fork
   * Are not authorized to merge PRs
   * Should not reassign issue or change issue milestones
   * Should ensure their issue labels are correct
   * Should ensure their issues are tested with latest HEAD versions of AngularJS Material
-  * Should ensure their issues are tested with latest releases of AngularJS (1.3.x, 1.4.x, 1.5.x)
-* Core: 
-  * Includes: [Topher Fangio](https://github.com/topherfangio), [Elad Bezalel](https://github.com/eladbezalel)
-  * Should not merge PRs (unless explicitly requested)
-  * Should use AngularJS Material branches for major, non-trivial changes. 
-  * For minor changes, developers in this group may elect to commit direct to master.
-* Team Leads:
-  * Includes: [Naomi Black](https://github.com/naomiblack), [Thomas Burleson](https://github.com/ThomasBurleson), [Jeremy Elbourn](https://github.com/jelbourn)
-  * May review PRs
-    * ThomasBurleson is the primary PR reviewer 
+  * Should ensure their issues are tested with latest releases of AngularJS (1.5.x, 1.6.x)
+* Team Leads: 
+  * Includes: [Michael Prentice](https://github.com/splaktar)
+  * Are not authorized to merge PRs
+  * Should assign issues and change issue milestones
+  * Should ensure issue labels are correct
+  * Should review PRs
+    * Michael Prentice is the primary PR reviewer 
     * Should confirm Karma tests pass
-    * Should squash as need
-    * Should ensure the PR is closed when the merge finishes.
+* Google Caretakers:
+  * Includes: [Jeremy Elbourn](https://github.com/jelbourn), [Andrew Seguin](https://github.com/andrewseguin), [Joey Perrott](https://github.com/josephperrott), [Tina Yuangao](https://github.com/tinayuangao), [Miles Malerba](https://github.com/mmalerba)
+  * Should review PRs
+    * Should confirm Karma tests pass
+    * Should squash as needed
+    * Should ensure the PR is closed when the merge finishes
+  * Should create releases
+  * Should add release assets to the Google CDN
