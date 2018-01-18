@@ -50,13 +50,13 @@ The patch builds (1.0.4, 1.0.5, 1.0.6) are prepared based on commits in the `pat
 
 The minor build (1.1.0, 1.2.0, 1.3.0,...) are prepared based on commits in the `master` branch; which will remain the daily development branch AND will be the source for the `minor` releases.
 
-Our formal release of `minor` builds is much less frequent; probably 1x / Quarter. Developers can easily obtain the latest, full change-set from bower or npm using references to `@master`.
+Our formal release of `minor` builds is much less frequent. Developers can easily obtain the latest, full change-set from bower or npm using references to `@master`.
 
 ##### Changelog
 
 The Changelog may contain releases for `patch` or `minor`. If you do not see a fix listed in the Changelog but the issue has been resolved or the PR merged, then those changes will be `master` available in the next *minor* release.
 
-> for the purposes of AngularJS Material, you *could* think of the patch releases as being *minor* changes and the 'minor' releases as being *major* changes.
+> For the purposes of AngularJS Material, you *could* think of the patch releases as being *minor* changes and the 'minor' releases as being *major* changes.
 
 
 ## <a name="contributing"></a> Contributing
