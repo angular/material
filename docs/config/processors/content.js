@@ -1,11 +1,11 @@
-var _ = require('lodash');
+const _ = require('lodash');
 
-module.exports = function contentProcessor(templateFinder) {
+module.exports = function contentProcessor() {
   return {
     $runAfter: ['paths-computed'],
     $runBefore: ['rendering-docs'],
     $process: function(docs) {
-      var contentDocs = _(docs)
+      const contentDocs = _(docs)
       .filter(function(doc) {
         return doc.docType === 'content';
       })

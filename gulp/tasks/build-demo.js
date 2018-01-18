@@ -1,4 +1,4 @@
-var util = require('../util');
+const util = require('../util');
 
 exports.dependencies = ['build', 'build-module-demo'];
 

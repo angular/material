@@ -1,4 +1,4 @@
-var baseKarma = require('./karma.conf.js');
+const baseKarma = require('./karma.conf.js');
 
 module.exports = function(config) {
   baseKarma(config);
@@ -6,7 +6,7 @@ module.exports = function(config) {
   // Override defaults with custom CI settings
   config.set({
     colors: false,
-    singleRun:true,
+    singleRun: true,
     autoWatch: false,
     logLevel: config.LOG_DEBUG,
 
@@ -17,7 +17,7 @@ module.exports = function(config) {
 
     client: {
       // Do not clear the context as this can cause reload failures with Jasmine
-      clearContext:false
+      clearContext: false
     },
 
     // This is the new content for your travis-ci configuration test
@@ -30,7 +30,7 @@ module.exports = function(config) {
     }
   });
 
-  var browsers = process.env.TRAVIS ? ['Chrome_travis_ci'] : [];
+  const browsers = process.env.TRAVIS ? ['Chrome_travis_ci'] : [];
   config.browsers = browsers.concat(config.browsers);
 
 };

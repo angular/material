@@ -1,5 +1,5 @@
-var gulp = require('gulp');
-var fs = require('fs');
+const gulp = require('gulp');
+const fs = require('fs');
 
 //-- include docs gulpfile (should eventually be factored out)
 require('./docs/gulpfile');

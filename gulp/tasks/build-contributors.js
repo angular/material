@@ -1,16 +1,15 @@
+const child_process = require('child_process');
+const os = require('os');
+
 (function () {
   'use strict';
-
-  var colors         = require('colors');
-  var child_process  = require('child_process');
-  var os = require('os');
 
   /**
    * Note 'githubcontrib' may require an application-scoped access token defined as
    * GITHUB_API_TOKEN in your ENV.
    */
   exports.task = function () {
-    var appPath = 'dist/docs';
+    const appPath = 'dist/docs';
 
     child_process.execSync('rm -f ' + appPath + '/contributors.json');
 
@@ -35,22 +34,11 @@
       return cmd.map(function (cmd) { return exec(cmd, userOptions); });
     }
     try {
-      var options = { } ;
-      for (var key in userOptions) options[ key ] = userOptions[ key ];
+      const options = { } ;
+      for (const key in userOptions) options[ key ] = userOptions[ key ];
       return child_process.execSync(cmd + ' 2> /dev/null', options).toString().trim();
     } catch (err) {
       return err;
     }
   }
-
-  /** outputs done text when a task is completed */
-  function done () {
-    log('done'.green);
-  }
-
-  /** outputs to the terminal with string variable replacement */
-  function log (msg) {
-    console.log(msg || '');
-  }
-
 })();

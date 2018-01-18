@@ -85,6 +85,6 @@
     "docs:watch": "gulp watch site --dev",
     "test:fast": "gulp karma-fast",
     "test:full": "gulp karma",
-    "lint": "eslint src"
+    "lint": "eslint ."
   }
 }

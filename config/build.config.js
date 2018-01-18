@@ -1,6 +1,4 @@
-var pkg = require('../package.json');
-var fs = require('fs');
-var versionFile = __dirname + '/../dist/commit';
+const pkg = require('../package.json');
 
 module.exports = {
   ngVersion: '1.5.5',

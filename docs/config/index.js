@@ -1,11 +1,8 @@
-var _ = require('lodash');
-var path = require('canonical-path');
-var buildConfig = require('../../config/build.config');
+const path = require('canonical-path');
+const Package = require('dgeni').Package;
 
-var projectPath = path.resolve(__dirname, '../..');
-var packagePath = __dirname;
-
-var Package = require('dgeni').Package;
+const projectPath = path.resolve(__dirname, '../..');
+const packagePath = __dirname;
 
 module.exports = new Package('angular-md', [
   require('dgeni-packages/ngdoc'),
@@ -42,7 +39,7 @@ module.exports = new Package('angular-md', [
 
   computeIdsProcessor.idTemplates.push({
     docTypes: ['content'],
-    idTemplate: 'content-${fileInfo.relativePath.replace("/","-")}',
+    idTemplate: { getId: ({ fileInfo }) => `content-${fileInfo.relativePath.replace("/","-")}` },
     getAliases: function(doc) { return [doc.id]; }
   });
 
@@ -50,7 +47,7 @@ module.exports = new Package('angular-md', [
   computePathsProcessor.pathTemplates.push({
     docTypes: ['content'],
     getPath: function(doc) {
-      var docPath = path.dirname(doc.fileInfo.relativePath);
+      let docPath = path.dirname(doc.fileInfo.relativePath);
       if ( doc.fileInfo.baseName !== 'index' ) {
         docPath = path.join(docPath, doc.fileInfo.baseName);
       }
