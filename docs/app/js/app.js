@@ -512,7 +512,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   };
 })
 
-.directive('menuToggle', ['$mdUtil', '$animateCss', '$$rAF', function($mdUtil, $animateCss, $$rAF) {
+.directive('menuToggle', ['$mdUtil', '$animateCss', '$$rAF', '$document', function($mdUtil, $animateCss, $$rAF, $document) {
   return {
     scope: {
       section: '='
@@ -567,7 +567,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
                 var negativeOffset = activeHeight * 2;
                 var newScrollTop = activeOffset + parentScrollPosition - negativeOffset;
 
-                $mdUtil.animateScrollTo(document.querySelector('.docs-menu').parentNode, newScrollTop);
+                $mdUtil.animateScrollTo($document[0].querySelector('.docs-menu').parentNode, newScrollTop);
               }
             });
           });
@@ -594,7 +594,8 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   '$location',
   '$rootScope',
   '$mdUtil',
-function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $mdUtil) {
+  '$document',
+function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $mdUtil, $document) {
   var self = this;
 
   $scope.COMPONENTS = COMPONENTS;
@@ -634,7 +635,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   this.autoFocusContent = false;
 
 
-  var mainContentArea = document.querySelector("[role='main']");
+  var mainContentArea = $document[0].querySelector("[role='main']");
   var scrollContentEl = mainContentArea.querySelector('md-content[md-scroll-y]');
 
 
@@ -752,8 +753,8 @@ function($scope, $attrs, $location, $rootScope) {
   };
 }])
 
-.controller('LayoutTipsCtrl', [
-function() {
+.controller('LayoutTipsCtrl', ['$document',
+function($document) {
   var self = this;
 
   /*
@@ -762,7 +763,7 @@ function() {
   self.toggleButtonText = "Hide";
 
   self.toggleContentSize = function() {
-    var contentEl = angular.element(document.getElementById('toHide'));
+    var contentEl = angular.element($document[0].getElementById('toHide'));
 
     contentEl.toggleClass("ng-hide");
 

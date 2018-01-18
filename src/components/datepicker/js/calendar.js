@@ -375,7 +375,7 @@
 
     // Apply the select class to the new selected date if it is set.
     if (date) {
-      var dateCell = document.getElementById(this.getDateId(date, this.currentView));
+      var dateCell = this.$document[0].getElementById(this.getDateId(date, this.currentView));
       if (dateCell) {
         dateCell.classList.add(selectedDateClass);
         dateCell.setAttribute('aria-selected', 'true');

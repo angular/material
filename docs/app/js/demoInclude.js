@@ -2,7 +2,8 @@ angular.module('docsApp').directive('demoInclude', [
   '$q',
   '$compile',
   '$timeout',
-function($q, $compile, $timeout) {
+  '$document',
+function($q, $compile, $timeout, $document) {
   return {
     restrict: 'E',
     link: postLink
@@ -71,7 +72,7 @@ function($q, $compile, $timeout) {
         styles = styles.join('\n'); //join styles as one string
 
         var styleElement = angular.element('<style>' + styles + '</style>');
-        document.body.appendChild(styleElement[0]);
+        $document[0].body.appendChild(styleElement[0]);
 
         scope.$on('$destroy', function() {
           styleElement.remove();
