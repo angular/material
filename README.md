@@ -1,13 +1,14 @@
 # Material Design for AngularJS Apps [![Build Status](https://travis-ci.org/angular/material.svg)](https://travis-ci.org/angular/material)
 
-[Material Design](https://www.google.com/design/spec/material-design/) is a specification for a
+[Material Design](https://material.io/) is a specification for a
 unified system of visual, motion, and interaction design that adapts across different devices. Our
 goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the
 material design specification for use in AngularJS single-page applications (SPAs).
 
 ![venn diagram](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
 
-AngularJS Material is the reference implementation of Google's Material Design Specification. AngularJS Material includes a rich set of reusable, well-tested, and accessible UI components.
+AngularJS Material is an implementation of Google's [Material Design Specification](https://material.io/guidelines/material-design/).
+AngularJS Material includes a rich set of reusable, well-tested, and accessible UI components.
 
 Quick Links:
 
@@ -17,47 +18,48 @@ Quick Links:
 *  [Installing](#installing)
 
 
-Please note that using AngularJS Material requires the use of **AngularJS 1.3.x** or higher. AngularJS
-Material is targeted for all browsers with browser versions shown below with green boxes:
+Please note that using AngularJS Material requires the use of **[AngularJS](https://angularjs.org/) 1.3.x** or higher.
+AngularJS Material is targeted for the browser versions shown below in the green boxes:
 
-![ngm1_browser_support](https://cloud.githubusercontent.com/assets/210413/18553899/f3fbfbca-7b27-11e6-81c9-2937950c808e.png)
+![ngm1_browser_support](https://user-images.githubusercontent.com/3506071/35176284-1419c42c-fd46-11e7-9381-d93e5c5db39a.png)
 
-## <a name="demos"></a> Online Documentation (and Demos)
+## <a name="demos"></a> Online Documentation and Demos
 
 <div style="border: 1px solid #ccc">
-  <img src="https://cloud.githubusercontent.com/assets/11819543/10056006/4aee3b68-6207-11e5-8497-a0656f85902a.PNG" alt="AngularJS Material docs website" style="display:block;">
-</div>
+  <img src="https://user-images.githubusercontent.com/3506071/35176652-81464d34-fd48-11e7-81d3-ac58d7d10a32.png" alt="AngularJS Material docs website" style="display:block;">
+</div><br>
 
-- Visit [Material.AngularJS.org](https://material.angularjs.org/) online to review the API, see the
-  components in action with live Demos, and study the Layout system.
+- Visit [material.angularjs.org](https://material.angularjs.org/) online to review the API, see the
+  components in action via live demos, and to read our detailed guides which include the layout system,
+  theming system, typography, and more.
 - Or you can build the documentation and demos locally; see
   [Build Docs & Demos](https://github.com/angular/material/tree/master/docs/README.md) for details.
 
 
 ## <a name="releasing"></a> Our Release Processes
 
-AngularJS Material has revised/improved its build processes. To preserve stability with applications currently using AngularJS Material, we will have three (3) types of releases:
+To preserve stability with applications currently using AngularJS Material, we do not follow semver.
+We have three types of releases:
 
-*  `major` :  major releases will be done as part of the latest iteration of AngularJS Material on a [separate repo](https://github.com/angular/material2). This type of release will not be used within AngularJS Material.
-*  `minor`:  aka `master` contains patch release changes AND breaking changes and new features
-*  `patch`:  non-breaking changes (no API, CSS, UX changes that will cause breaks in existing AngularJS Material applications)
+*  `major` :  major releases will be done in the separate [Angular Material](https://github.com/angular/material2) repo.
+ This type of release will not be used within AngularJS Material.
+*  `minor`:  contain breaking changes in addition to patch release changes.
+*  `patch`:  non-breaking changes (no API, CSS, UX changes that will cause breaks in existing AngularJS Material applications).
 
 ##### Patch Releases
 
-The patch builds (1.0.4, 1.0.5, 1.0.6) are prepared based on commits in the `patch` branch; which contains only non-breaking changes (eg bug fix, some API additions, minimal non-breaking CSS changes ).  We will be building `patch` releases every week.
+The patch builds (1.1.4, 1.1.5, 1.1.6) are prepared based on commits in the `master` branch; which contains only
+non-breaking changes (I.e. bug fixes, new features, API additions, and minimal non-breaking CSS changes). 
+We are targeting `patch` releases every 2 weeks.
 
 ##### Minor Releases
 
-The minor build (1.1.0, 1.2.0, 1.3.0,...) are prepared based on commits in the `master` branch; which will remain the daily development branch AND will be the source for the `minor` releases.
+The minor builds (1.1.0, 1.2.0, 1.3.0) can contain breaking changes to CSS, APIs, and UX.
+Our formal release of `minor` builds is much less frequent. The release process for `minor` builds is currently
+being re-evaluated.
 
-Our formal release of `minor` builds is much less frequent. Developers can easily obtain the latest, full change-set from bower or npm using references to `@master`.
-
-##### Changelog
-
-The Changelog may contain releases for `patch` or `minor`. If you do not see a fix listed in the Changelog but the issue has been resolved or the PR merged, then those changes will be `master` available in the next *minor* release.
-
-> For the purposes of AngularJS Material, you *could* think of the patch releases as being *minor* changes and the 'minor' releases as being *major* changes.
-
+> For the purposes of AngularJS Material, you *could* think of the patch releases as being *minor* changes
+and the 'minor' releases as being *major* changes according to semver.
 
 ## <a name="contributing"></a> Contributing
 
@@ -66,7 +68,9 @@ Developers interested in contributing should read the following guidelines:
 - [Issue Guidelines](.github/CONTRIBUTING.md#submit)
 - [Contributing Guidelines](.github/CONTRIBUTING.md)
 - [Coding Guidelines](docs/guides/CODING.md)
-- [ChangeLog](CHANGELOG.md)
+- [Pull Request Guide](docs/guides/PULL_REQUESTS.md)
+- [Software Process](docs/guides/COMMIT_LEVELS.md)
+- [Change Log](CHANGELOG.md)
 
 > Please do **not** ask general questions in an issue. Issues are only to report bugs, request
   enhancements, or request new features. For general questions and discussions, use the
@@ -81,18 +85,12 @@ itemize all:
 
 ## <a name="building"></a> Building
 
-Developers can easily build AngularJS Material using NPM and gulp.
+Developers can build AngularJS Material using NPM and gulp.
 
-* [Builds - Under the Hood](docs/guides/BUILD.md)
-
-First install or update your local project's **npm** tools:
+First install or update your local project's **npm** dependencies:
 
 ```bash
-# First install all the NPM tools:
 npm install
-
-# Or update
-npm update
 ```
 
 Then run the **gulp** tasks:
@@ -105,34 +103,45 @@ gulp build
 gulp docs
 ```
 
+For development, use the `docs:watch` **NPM** script to run in dev mode:
+
+```bash
+# To build the AngularJS Material Source, Docs, and Demos in watch mode
+npm run docs:watch
+```
+
 For more details on how the build process works and additional commands (available for testing and
-debugging) developers should read the [Build Instructions](docs/guides/BUILD.md).
+debugging) developers should read the [Build Guide](docs/guides/BUILD.md).
 
 ## <a name="installing"></a> Installing Build (Distribution Files)
 
-#### Bower
+#### NPM
 
-For developers not interested in building the AngularJS Material library... use **bower** to install
+For developers not interested in building the AngularJS Material library... use **NPM** to install
 and use the AngularJS Material distribution files.
 
 Change to your project's root directory.
 
 ```bash
 # To get the latest stable version, use Bower from the command line.
-bower install angular-material
+npm install angular-material --save
 
 # To get the most recent, latest committed-to-master version use:
-bower install angular-material#master
+npm install http://github.com/angular/bower-material#master --save
 ```
+
+#### Other Dependency Managers
 
 Visit [Bower-Material](https://github.com/angular/bower-material/blob/master/README.md) for more
 details on how to install and use the AngularJS Material distribution files within your own local
 project.
 
+This includes instructions for [Bower](https://github.com/angular/bower-material#bower)
+and [JSPM](https://github.com/angular/bower-material#jspm).
+
 #### CDN
 
-CDN versions of AngularJS Material are now available at
-[Google Hosted Libraries](https://developers.google.com/speed/libraries/#angular-material).
+CDN versions of AngularJS Material are now available.
 
 With the Google CDN, you will not need to download local copies of the distribution files. Instead
 simply reference the CDN urls to easily use those remote library files. This is especially useful
@@ -142,20 +151,20 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
 ```html
   <head>
 
-    <!-- AngularJS Material CSS now available via Google CDN; version 1.1.4 used here -->
-   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.css">
+    <!-- AngularJS Material CSS now available via Google CDN; version 1.1.6 used here -->
+   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.6/angular-material.min.css">
 
   </head>
   <body>
 
     <!-- AngularJS Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular-aria.min.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-messages.min.js"></script>
 
     <!-- AngularJS Material Javascript now available via Google CDN; version 1.1.4 used here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.4/angular-material.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.6/angular-material.min.js"></script>
   </body>
 ```
 
@@ -173,9 +182,10 @@ pull directly from the distribution GitHub
   <body>
 
     <!-- AngularJS Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular-animate.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular-aria.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-aria.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-messages.min.js"></script>
 
     <!-- AngularJS Material Javascript using GitCDN to load directly from `bower-material/master` -->
     <script src="https://gitcdn.link/repo/angular/bower-material/master/angular-material.js"></script>
@@ -183,9 +193,9 @@ pull directly from the distribution GitHub
   </body>
 ```
 
-Once you have all the necessary assets installed, add `ngMaterial` as a dependency for your app:
+Once you have all the necessary assets installed, add `ngMaterial` and `ngMessages` as dependencies for your app:
 
 ```javascript
-angular.module('myApp', ['ngMaterial']);
+angular.module('myApp', ['ngMaterial', 'ngMessages']);
 ```
 
