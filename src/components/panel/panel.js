@@ -3102,8 +3102,8 @@ MdPanelPosition.prototype._bidi = function(position) {
 MdPanelPosition.prototype._calculatePanelPosition = function(panelEl, position) {
 
   var panelBounds = panelEl[0].getBoundingClientRect();
-  var panelWidth = panelBounds.width;
-  var panelHeight = panelBounds.height;
+  var panelWidth = Math.max(panelBounds.width, panelEl[0].clientWidth);
+  var panelHeight = Math.max(panelBounds.height, panelEl[0].clientHeight);
 
   var targetBounds = this._relativeToEl[0].getBoundingClientRect();
 
