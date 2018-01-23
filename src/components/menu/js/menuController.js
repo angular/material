@@ -14,13 +14,12 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
   var self = this;
   var triggerElement;
 
-  this.nestLevel = parseInt($attrs.mdNestLevel, 10) || 0;
-
   /**
    * Called by our linking fn to provide access to the menu-content
    * element removed during link
    */
   this.init = function init(setMenuContainer, opts) {
+    self.nestLevel = parseInt($attrs.mdNestLevel, 10) || 0;
     opts = opts || {};
     menuContainer = setMenuContainer;
 
