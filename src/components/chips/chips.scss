@@ -54,7 +54,9 @@ $contact-chip-name-width: rem(12) !default;
 .md-chips {
   @include pie-clearfix();
 
-  display: block;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   font-family: $font-family;
   font-size: $chip-font-size;
   @include rtl(padding, $chip-wrap-padding, rtl-value($chip-wrap-padding));
@@ -148,6 +150,7 @@ $contact-chip-name-width: rem(12) !default;
         height: $chip-height;
         line-height: $chip-height;
         padding: 0;
+        width: 100%;
         &:focus {
           outline: none;
         }
