@@ -15,6 +15,7 @@ Please read and follow our
 [Code of Conduct](https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md).
 
 <br/>
+
 ## <a name="question"></a> Have a Question, Problem, or Idea?
 
 If you have questions or ideas regarding AngularJS Material, please direct these to the
@@ -116,6 +117,7 @@ working on a related PR.
   [Pull Request Guidelines](../docs/guides/PULL_REQUESTS.md)
 
 <br/>
+
 ## <a name="commit"></a> Git Commit Guidelines
 
 We have very precise rules over how our git commit messages can be formatted. This leads to **more
@@ -177,6 +179,7 @@ reference GitHub issues that this commit **Closes**.
   users to modify their code with this commit.
 
 <br/>
+
 ##### Sample Commit message:
 
 ```text
@@ -198,6 +201,7 @@ refactor(content): prefix mdContent scroll- attributes
 ```
 
 <br/>
+
 ## <a name="pr_forks"></a> Guidelines for Developer Commit Authorizations
 
 Please review the [Commit Level and Authorization Guidelines](../docs/guides/COMMIT_LEVELS.md) for
@@ -209,6 +213,7 @@ and how to submit Pull Requests.
 
 
 <br/>
+
 ## <a name="cla"></a> Signing the CLA
 
 Please sign our Contributor License Agreement (CLA) before sending pull requests. For any code
