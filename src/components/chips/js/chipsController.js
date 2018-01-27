@@ -834,7 +834,7 @@ MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
   // Find the NgModelCtrl for the input element
   var ngModelCtrl = inputElement.controller('ngModel');
   // `.controller` will look in the parent as well.
-  if (ngModelCtrl != this.ngModelCtrl) {
+  if (ngModelCtrl !== this.ngModelCtrl) {
     this.userInputNgModelCtrl = ngModelCtrl;
   }
 

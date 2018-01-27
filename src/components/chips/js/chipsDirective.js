@@ -206,7 +206,7 @@
               tabindex="{{$mdChipsCtrl.ariaTabIndex == $index ? 0 : -1}}"\
               id="{{$mdChipsCtrl.contentIdFor($index)}}"\
               role="option"\
-              aria-selected="{{$mdChipsCtrl.selectedChip == $index}}" \
+              aria-selected="{{$mdChipsCtrl.selectedChip === $index}}"\
               aria-posinset="{{$index}}"\
               ng-click="!$mdChipsCtrl.readonly && $mdChipsCtrl.focusChip($index)"\
               ng-focus="!$mdChipsCtrl.readonly && $mdChipsCtrl.selectChip($index)"\
@@ -376,7 +376,12 @@
 
         element
             .attr({ tabindex: -1 })
-            .on('focus', function () { mdChipsCtrl.onFocus(); });
+            .on('focus', function () { mdChipsCtrl.onFocus(); })
+            .on('click', function () {
+              if (!mdChipsCtrl.readonly && mdChipsCtrl.selectedChip === -1) {
+                mdChipsCtrl.onFocus();
+              }
+            });
 
         if (attr.ngModel) {
           mdChipsCtrl.configureNgModel(element.controller('ngModel'));
