@@ -351,6 +351,27 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('forwards the `md-input-class` attribute to the input', function() {
+      var scope = createScope(null, {inputClass: 'custom-input-class'});
+      var template = '\
+          <md-autocomplete\
+              md-floating-label="Some Label"\
+              md-input-class="{{inputClass}}"\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      expect(input).toHaveClass(scope.inputClass);
+      
+      element.remove();
+    });
+
     it('forwards the `md-select-on-focus` attribute to the input', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
       var template =
