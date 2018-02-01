@@ -450,18 +450,22 @@
 
     // Responds to external changes to the model value.
     self.ngModelCtrl.$formatters.push(function(value) {
-      var parsedValue = angular.isDefined(value) ? Date.parse(value) : null;
+      var parsedValue = angular.isDefined(value) ? value : null;
 
-      // `parsedValue` is the time since epoch if valid or `NaN` if invalid.
-      if (!isNaN(parsedValue) && angular.isNumber(parsedValue)) {
-        value = new Date(parsedValue);
-      }
+      if (!(value instanceof Date)) {
+        parsedValue = Date.parse(value);
 
-      if (value && !(value instanceof Date)) {
-        throw Error(
-          'The ng-model for md-datepicker must be a Date instance or a value ' +
-          'that can be parsed into a date. Currently the model is of type: ' + typeof value
-        );
+        // `parsedValue` is the time since epoch if valid or `NaN` if invalid.
+        if (!isNaN(parsedValue) && angular.isNumber(parsedValue)) {
+          value = new Date(parsedValue);
+        }
+
+        if (value && !(value instanceof Date)) {
+          throw Error(
+            'The ng-model for md-datepicker must be a Date instance or a value ' +
+              'that can be parsed into a date. Currently the model is of type: ' + typeof value
+          );
+        }
       }
 
       self.onExternalChange(value);
