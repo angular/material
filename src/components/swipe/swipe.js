@@ -14,9 +14,15 @@
  * The md-swipe-left directive allows you to specify custom behavior when an element is swiped
  * left.
  *
+ * ### Notes
+ * - The `$event.currentTarget` of the swiped element will be `null`, but you can get a
+ * reference to the element that actually holds the `md-swipe-left` directive by using `$target.current`
+ *
+ * > You can see this in action on the <a ng-href="demo/swipe">demo page</a> (Look at the Developer Tools console while swiping).
+ *
  * @usage
  * <hljs lang="html">
- * <div md-swipe-left="onSwipeLeft()">Swipe me left!</div>
+ * <div md-swipe-left="onSwipeLeft($event, $target)">Swipe me left!</div>
  * </hljs>
  */
 /**
@@ -30,9 +36,15 @@
  * The md-swipe-right directive allows you to specify custom behavior when an element is swiped
  * right.
  *
+ * ### Notes
+ * - The `$event.currentTarget` of the swiped element will be `null`, but you can get a
+ * reference to the element that actually holds the `md-swipe-right` directive by using `$target.current`
+ *
+ * > You can see this in action on the <a ng-href="demo/swipe">demo page</a> (Look at the Developer Tools console while swiping).
+ *
  * @usage
  * <hljs lang="html">
- * <div md-swipe-right="onSwipeRight()">Swipe me right!</div>
+ * <div md-swipe-right="onSwipeRight($event, $target)">Swipe me right!</div>
  * </hljs>
  */
 /**
@@ -46,9 +58,15 @@
  * The md-swipe-up directive allows you to specify custom behavior when an element is swiped
  * up.
  *
+ * ### Notes
+ * - The `$event.currentTarget` of the swiped element will be `null`, but you can get a
+ * reference to the element that actually holds the `md-swipe-up` directive by using `$target.current`
+ *
+ * > You can see this in action on the <a ng-href="demo/swipe">demo page</a> (Look at the Developer Tools console while swiping).
+ *
  * @usage
  * <hljs lang="html">
- * <div md-swipe-up="onSwipeUp()">Swipe me up!</div>
+ * <div md-swipe-up="onSwipeUp($event, $target)">Swipe me up!</div>
  * </hljs>
  */
 /**
@@ -62,9 +80,15 @@
  * The md-swipe-down directive allows you to specify custom behavior when an element is swiped
  * down.
  *
+ * ### Notes
+ * - The `$event.currentTarget` of the swiped element will be `null`, but you can get a
+ * reference to the element that actually holds the `md-swipe-down` directive by using `$target.current`
+ *
+ * > You can see this in action on the <a ng-href="demo/swipe">demo page</a> (Look at the Developer Tools console while swiping).
+ *
  * @usage
  * <hljs lang="html">
- * <div md-swipe-down="onSwipDown()">Swipe me down!</div>
+ * <div md-swipe-down="onSwipDown($event, $target)">Swipe me down!</div>
  * </hljs>
  */
 
@@ -86,7 +110,8 @@ function getDirective(name) {
       function postLink(scope, element, attr) {
         var fn = $parse(attr[directiveName]);
         element.on(eventName, function(ev) {
-          scope.$applyAsync(function() { fn(scope, { $event: ev }); });
+          var currentTarget = ev.currentTarget;
+          scope.$applyAsync(function() { fn(scope, { $event: ev, $target: { current: currentTarget } }); });
         });
       }
     }
