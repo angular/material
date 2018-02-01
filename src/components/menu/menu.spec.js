@@ -51,6 +51,21 @@ describe('material.components.menu', function() {
       expect(createInvalidMenu).toThrow();
     }));
 
+    it('nested md-menu-content should be allowed', inject(function($compile, $rootScope) {
+        function createValidMenu() {
+            $compile(
+                '<md-menu>' +
+                '  <button ng-click="null">Trigger Element</button>' +
+                '  <some-custom-element>' +
+                '    <md-menu-content>Menu Content</md-menu-content>' +
+                '  </some-custom-element>' +
+                '</md-menu>'
+            )($rootScope);
+        }
+
+        expect(createValidMenu).not.toThrow();
+    }));
+
     it('specifies button type', inject(function($compile, $rootScope) {
       var menu = setup()[0];
       expect(menu.firstElementChild.getAttribute('type')).toBe('button');
