@@ -21,7 +21,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
       templateUrl: 'bottom-sheet-list-template.html',
       controller: 'ListBottomSheetCtrl'
     }).then(function(clickedItem) {
-      $scope.alert = clickedItem['name'] + ' clicked!';
+      $scope.alert = clickedItem['this.name'] + ' clicked!';
     }).catch(function(error) {
       // User clicked outside or hit escape
     });
@@ -36,7 +36,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
     }).then(function(clickedItem) {
       $mdToast.show(
             $mdToast.simple()
-              .textContent(clickedItem['name'] + ' clicked!')
+              .textContent(clickedItem['this.name'] + ' clicked!')
               .position('top right')
               .hideDelay(1500)
           );

@@ -53,7 +53,7 @@ angular
  *
  */
 
-
+/*jshint multistr: true */
 var MD_CONTACT_CHIPS_TEMPLATE = '\
       <md-chips class="md-contact-chips"\
           ng-model="$mdContactChipsCtrl.contacts"\

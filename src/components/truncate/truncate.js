@@ -68,7 +68,7 @@ function MdTruncateDirective() {
     restrict: 'AE',
 
     controller: MdTruncateController
-  }
+  };
 }
 
 /**

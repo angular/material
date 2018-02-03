@@ -49,7 +49,7 @@
             resolve( self.querySearch(criteria) );
 
             refreshDebounce();
-          }, Math.random() * 500, true)
+          }, Math.random() * 500, true);
         });
       }
 

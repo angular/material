@@ -29,7 +29,7 @@
       }
 
       // Otherwise, create a new one
-      return { name: chip, type: 'new' }
+      return { name: chip, type: 'new' };
     }
 
     /**

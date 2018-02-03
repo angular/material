@@ -276,7 +276,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
         if (!angular.isDefined(attrs.mdClearButton) && !scope.floatingLabel) {
           scope.clearButton = true;
         }
-      }
+      };
     },
     template:     function (element, attr) {
       var noItemsTemplate = getNoItemsTemplate(),
@@ -292,7 +292,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
       // Always set our tabindex of the autocomplete directive to -1, because our input
       // will hold the actual tabindex.
       element.attr('tabindex', '-1');
-
+        /*jshint multistr: true */
       return '\
         <md-autocomplete-wrap\
             ng-class="{ \'md-whiteframe-z1\': !floatingLabel, \
