@@ -387,11 +387,14 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
           attachTo: attachTo,
           contentElement: element,
           propagateContainerEvents: true,
-          panelClass: 'md-tooltip ' + origin,
+          panelClass: 'md-tooltip',
           animation: panelAnimation,
           position: panelPosition,
           zIndex: scope.mdZIndex,
-          focusOnOpen: false
+          focusOnOpen: false,
+          onDomAdded: function() {
+            panelRef.panelEl.addClass(origin);
+          }
         };
 
         panelRef = $mdPanel.create(panelConfig);
