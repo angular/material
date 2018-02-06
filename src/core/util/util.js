@@ -80,7 +80,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
       // The newer versions of AngularJS introduced a `getOption function and made the option values no longer
       // visible on the $options object.
-      return $options.getOption ? $options.getOption(optionName) : $options[optionName]
+      return $options.getOption ? $options.getOption(optionName) : $options[optionName];
     },
 
     /**
@@ -573,7 +573,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       var hasContains = (window.Node && window.Node.prototype && Node.prototype.contains);
       var findFn = hasContains ? angular.bind(node, node.contains) : angular.bind(node, function(arg) {
         // compares the positions of two nodes and returns a bitmask
-        return (node === child) || !!(this.compareDocumentPosition(arg) & 16)
+        return (node === child) || !!(this.compareDocumentPosition(arg) & 16);
       });
 
       return findFn(child);

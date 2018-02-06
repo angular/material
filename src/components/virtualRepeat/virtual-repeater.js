@@ -1016,6 +1016,6 @@ function ForceHeightDirective($mdUtil) {
         element[0].style.height = height;
       }
     }
-  }
+  };
 }
 ForceHeightDirective.$inject = ['$mdUtil'];

@@ -134,6 +134,6 @@
   function PanelMenuCtrl(mdPanelRef) {
     this.closeMenu = function() {
       mdPanelRef && mdPanelRef.close();
-    }
+    };
   }
 })();

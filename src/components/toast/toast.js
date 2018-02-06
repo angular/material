@@ -17,7 +17,7 @@ function MdToastDirective($mdToast) {
     restrict: 'E',
     link: function postLink(scope, element) {
       element.addClass('_md');     // private md component indicator for styling
-      
+
       // When navigation force destroys an interimElement, then
       // listen and $destroy() that interim instance...
       scope.$on('$destroy', function() {
@@ -118,7 +118,7 @@ function MdToastDirective($mdToast) {
 /**
  * @ngdoc method
  * @name $mdToast#showSimple
- * 
+ *
  * @param {string} message The message to display inside the toast
  * @description
  * Convenience method which builds and shows a simple toast.
@@ -351,7 +351,7 @@ function MdToastProvider($$interimElementProvider) {
         $scope.highlightClasses = [
           'md-highlight',
           self.highlightClass
-        ]
+        ];
       }
 
       $scope.$watch(function() { return activeToastContent; }, function() {
@@ -361,7 +361,7 @@ function MdToastProvider($$interimElementProvider) {
       this.resolve = function() {
         $mdToast.hide( ACTION_RESOLVE );
       };
-    }
+    };
   }
 
   /* @ngInject */

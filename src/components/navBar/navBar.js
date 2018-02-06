@@ -275,7 +275,7 @@ MdNavBarController.prototype._getTabs = function() {
   var controllers = Array.prototype.slice.call(
     this._navBarEl.querySelectorAll('.md-nav-item'))
     .map(function(el) {
-      return angular.element(el).controller('mdNavItem')
+      return angular.element(el).controller('mdNavItem');
     });
   return controllers.indexOf(undefined) ? controllers : null;
 };

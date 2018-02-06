@@ -276,7 +276,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
         if (!angular.isDefined(attrs.mdClearButton) && !scope.floatingLabel) {
           scope.clearButton = true;
         }
-      }
+      };
     },
     template:     function (element, attr) {
       var noItemsTemplate = getNoItemsTemplate(),
