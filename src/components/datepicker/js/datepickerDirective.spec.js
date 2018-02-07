@@ -348,6 +348,16 @@ describe('md-datepicker', function() {
       expect(controller.ngModelCtrl.$error['mindate']).toBe(true);
     });
 
+    it('should apply ngMessages errors when the date becomes invalid from keyboard input', function() {
+      populateInputElement('5/30/2012');
+      pageScope.$apply();
+      expect(controller.ngModelCtrl.$error['valid']).toBeFalsy();
+
+      populateInputElement('5/30/2012z');
+      pageScope.$apply();
+      expect(controller.ngModelCtrl.$error['valid']).toBeTruthy();
+    });
+
     it('should evaluate ngChange expression when date changes from keyboard input', function() {
       populateInputElement('2/14/1976');
 
