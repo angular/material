@@ -27,7 +27,7 @@ angular.module('material.components.navBar', ['material.core'])
  * body and no bar pagination.
  *
  * Because it deals with page navigation, certain routing concepts are built-in.
- * Route changes via via ng-href, ui-sref, or ng-click events are supported.
+ * Route changes via ng-href, ui-sref, or ng-click events are supported.
  * Alternatively, the user could simply watch currentNavItem for changes.
  *
  * Accessibility functionality is implemented as a site navigator with a

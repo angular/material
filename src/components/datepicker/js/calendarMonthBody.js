@@ -209,17 +209,21 @@
     var blankCellOffset = 0;
     var monthLabelCell = document.createElement('td');
     var monthLabelCellContent = document.createElement('span');
+    var calendarCtrl = this.calendarCtrl;
 
     monthLabelCellContent.textContent = this.dateLocale.monthHeaderFormatter(date);
     monthLabelCell.appendChild(monthLabelCellContent);
     monthLabelCell.classList.add('md-calendar-month-label');
     // If the entire month is after the max date, render the label as a disabled state.
-    if (this.calendarCtrl.maxDate && firstDayOfMonth > this.calendarCtrl.maxDate) {
+    if (calendarCtrl.maxDate && firstDayOfMonth > calendarCtrl.maxDate) {
       monthLabelCell.classList.add('md-calendar-month-label-disabled');
-    } else {
+    // If the user isn't supposed to be able to change views, render the
+    // label as usual, but disable the clicking functionality.
+    } else if (!calendarCtrl.mode) {
       monthLabelCell.addEventListener('click', this.monthCtrl.headerClickHandler);
       monthLabelCell.setAttribute('data-timestamp', firstDayOfMonth.getTime());
       monthLabelCell.setAttribute('aria-label', this.dateLocale.monthFormatter(date));
+      monthLabelCell.classList.add('md-calendar-label-clickable');
       monthLabelCell.appendChild(this.arrowIcon.cloneNode(true));
     }
 

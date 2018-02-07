@@ -510,6 +510,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
 
       self[colorType + 'Color'] = function() {
         var args = Array.prototype.slice.call(arguments);
+        // eslint-disable-next-line no-console
         console.warn('$mdThemingProviderTheme.' + colorType + 'Color() has been deprecated. ' +
                      'Use $mdThemingProviderTheme.' + colorType + 'Palette() instead.');
         return self[colorType + 'Palette'].apply(self, args);
@@ -880,14 +881,8 @@ function parseRules(theme, colorType, rules) {
   checkValidPalette(theme, colorType);
 
   rules = rules.replace(/THEME_NAME/g, theme.name);
-  var generatedRules = [];
-  var color = theme.colors[colorType];
-
   var themeNameRegex = new RegExp('\\.md-' + theme.name + '-theme', 'g');
-  // Matches '{{ primary-color }}', etc
-  var hueRegex = new RegExp('(\'|")?{{\\s*(' + colorType + ')-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}(\"|\')?','g');
-  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue\-[0-3]|shadow|default)-?(\d\.?\d*)?(contrast)?\s*\}\}'?"?/g;
-  var palette = PALETTES[color.name];
+  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue-[0-3]|shadow|default)-?(\d\.?\d*)?(contrast)?\s*\}\}'?"?/g;
 
   // find and replace simple variables where we use a specific hue, not an entire palette
   // eg. "{{primary-100}}"
@@ -910,10 +905,17 @@ function parseRules(theme, colorType, rules) {
     return rgba( (PALETTES[ theme.colors[colorType].name ][hue] || '')[contrast ? 'contrast' : 'value'], opacity );
   });
 
+  // Matches '{{ primary-color }}', etc
+  var hueRegex = new RegExp('(\'|")?{{\\s*([a-zA-Z]+)-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}("|\')?','g');
+  var generatedRules = [];
+
   // For each type, generate rules for each hue (ie. default, md-hue-1, md-hue-2, md-hue-3)
-  angular.forEach(color.hues, function(hueValue, hueName) {
+  angular.forEach(['default', 'hue-1', 'hue-2', 'hue-3'], function(hueName) {
     var newRule = rules
-      .replace(hueRegex, function(match, _, colorType, hueType, opacity) {
+      .replace(hueRegex, function(match, _, matchedColorType, hueType, opacity) {
+        var color = theme.colors[matchedColorType];
+        var palette = PALETTES[color.name];
+        var hueValue = color.hues[hueName];
         return rgba(palette[hueValue][hueType === 'color' ? 'value' : 'contrast'], opacity);
       });
     if (hueName !== 'default') {
@@ -961,17 +963,12 @@ function generateAllThemes($injector, $mdTheming) {
                   .filter(function(rule) { return rule && rule.trim().length; })
                   .map(function(rule) { return rule.trim() + '}'; });
 
-
-  var ruleMatchRegex = new RegExp('md-(' + THEME_COLOR_TYPES.join('|') + ')', 'g');
-
   THEME_COLOR_TYPES.forEach(function(type) {
     rulesByType[type] = '';
   });
 
-
   // Sort the rules based on type, allowing us to do color substitution on a per-type basis
   rules.forEach(function(rule) {
-    var match = rule.match(ruleMatchRegex);
     // First: test that if the rule has '.md-accent', it goes into the accent set of rules
     for (var i = 0, type; type = THEME_COLOR_TYPES[i]; i++) {
       if (rule.indexOf('.md-' + type) > -1) {

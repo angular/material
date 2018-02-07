@@ -10,6 +10,10 @@
    * @param {Date=} md-min-date Expression representing the minimum date.
    * @param {Date=} md-max-date Expression representing the maximum date.
    * @param {(function(Date): boolean)=} md-date-filter Function expecting a date and returning a boolean whether it can be selected or not.
+   * @param {String=} md-current-view Current view of the calendar. Can be either "month" or "year".
+   * @param {String=} md-mode Restricts the user to only selecting a value from a particular view. This option can
+   * be used if the user is only supposed to choose from a certain date type (e.g. only selecting the month).
+   * Can be either "month" or "day". **Note** that this will ovewrite the `md-current-view` value.
    *
    * @description
    * `<md-calendar>` is a component that renders a calendar that can be used to select a date.
@@ -58,6 +62,10 @@
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
         dateFilter: '=mdDateFilter',
+
+        // These need to be prefixed, because Angular resets
+        // any changes to the value due to bindToController.
+        _mode: '@mdMode',
         _currentView: '@mdCurrentView'
       },
       require: ['ngModel', 'mdCalendar'],
@@ -83,6 +91,12 @@
 
   /** Next identifier for calendar instance. */
   var nextUniqueId = 0;
+
+  /** Maps the `md-mode` values to their corresponding calendar views. */
+  var MODE_MAP = {
+    day: 'month',
+    month: 'year'
+  };
 
   /**
    * Controller for the mdCalendar component.
@@ -192,8 +206,6 @@
 
     var boundKeyHandler = angular.bind(this, this.handleKeyEvent);
 
-
-
     // If use the md-calendar directly in the body without datepicker,
     // handleKeyEvent will disable other inputs on the page.
     // So only apply the handleKeyEvent on the body when the md-calendar inside datepicker,
@@ -227,14 +239,19 @@
    * Bindings are not guaranteed to have been assigned in the controller, but they are in the $onInit hook.
    */
   CalendarCtrl.prototype.$onInit = function() {
-
     /**
      * The currently visible calendar view. Note the prefix on the scope value,
      * which is necessary, because the datepicker seems to reset the real one value if the
-     * calendar is open, but the value on the datepicker's scope is empty.
+     * calendar is open, but the `currentView` on the datepicker's scope is empty.
      * @type {String}
      */
-    this.currentView = this._currentView || 'month';
+    if (this._mode && MODE_MAP.hasOwnProperty(this._mode)) {
+      this.currentView = MODE_MAP[this._mode];
+      this.mode = this._mode;
+    } else {
+      this.currentView = this._currentView || 'month';
+      this.mode = null;
+    }
 
     var dateLocale = this.$mdDateLocale;
 
@@ -318,7 +335,7 @@
    */
   CalendarCtrl.prototype.focus = function(date) {
     if (this.dateUtil.isValidDate(date)) {
-      var previousFocus = this.$element[0].querySelector('.md-focus');
+      var previousFocus = this.$element[0].querySelector('.' + this.FOCUSED_DATE_CLASS);
       if (previousFocus) {
         previousFocus.classList.remove(this.FOCUSED_DATE_CLASS);
       }
@@ -340,6 +357,32 @@
   };
 
   /**
+   * Highlights a date cell on the calendar and changes the selected date.
+   * @param {Date=} date Date to be marked as selected.
+   */
+  CalendarCtrl.prototype.changeSelectedDate = function(date) {
+    var selectedDateClass = this.SELECTED_DATE_CLASS;
+    var prevDateCell = this.$element[0].querySelector('.' + selectedDateClass);
+
+    // Remove the selected class from the previously selected date, if any.
+    if (prevDateCell) {
+      prevDateCell.classList.remove(selectedDateClass);
+      prevDateCell.setAttribute('aria-selected', 'false');
+    }
+
+    // Apply the select class to the new selected date if it is set.
+    if (date) {
+      var dateCell = document.getElementById(this.getDateId(date, this.currentView));
+      if (dateCell) {
+        dateCell.classList.add(selectedDateClass);
+        dateCell.setAttribute('aria-selected', 'true');
+      }
+    }
+
+    this.selectedDate = date;
+  };
+
+  /**
    * Normalizes the key event into an action name. The action will be broadcast
    * to the child controllers.
    * @param {KeyboardEvent} event
@@ -355,8 +398,6 @@
       case keyCode.RIGHT_ARROW: return 'move-right';
       case keyCode.LEFT_ARROW: return 'move-left';
 
-      // TODO(crisbeto): Might want to reconsider using metaKey, because it maps
-      // to the "Windows" key on PC, which opens the start menu or resizes the browser.
       case keyCode.DOWN_ARROW: return event.metaKey ? 'move-page-down' : 'move-row-down';
       case keyCode.UP_ARROW: return event.metaKey ? 'move-page-up' : 'move-row-up';
 

@@ -33,6 +33,10 @@
    * @param {String=} md-open-on-focus When present, the calendar will be opened when the input is focused.
    * @param {Boolean=} md-is-open Expression that can be used to open the datepicker's calendar on-demand.
    * @param {String=} md-current-view Default open view of the calendar pane. Can be either "month" or "year".
+   * @param {String=} md-mode Restricts the user to only selecting a value from a particular view. This option can
+   * be used if the user is only supposed to choose from a certain date type (e.g. only selecting the month).
+   * Can be either "month" or "day". **Note** that this will ovewrite the `md-current-view` value.
+   *
    * @param {String=} md-hide-icons Determines which datepicker icons should be hidden. Note that this may cause the
    * datepicker to not align properly with other components. **Use at your own risk.** Possible values are:
    * * `"all"` - Hides all icons.
@@ -112,6 +116,7 @@
           '<div class="md-datepicker-calendar">' +
             '<md-calendar role="dialog" aria-label="{{::ctrl.locale.msgCalendar}}" ' +
                 'md-current-view="{{::ctrl.currentView}}"' +
+                'md-mode="{{::ctrl.mode}}"' +
                 'md-min-date="ctrl.minDate"' +
                 'md-max-date="ctrl.maxDate"' +
                 'md-date-filter="ctrl.dateFilter"' +
@@ -126,6 +131,7 @@
         maxDate: '=mdMaxDate',
         placeholder: '@mdPlaceholder',
         currentView: '@mdCurrentView',
+        mode: '@mdMode',
         dateFilter: '=mdDateFilter',
         isOpen: '=?mdIsOpen',
         debounceInterval: '=mdDebounceInterval',
@@ -444,18 +450,22 @@
 
     // Responds to external changes to the model value.
     self.ngModelCtrl.$formatters.push(function(value) {
-      var parsedValue = angular.isDefined(value) ? Date.parse(value) : null;
+      var parsedValue = angular.isDefined(value) ? value : null;
 
-      // `parsedValue` is the time since epoch if valid or `NaN` if invalid.
-      if (!isNaN(parsedValue) && angular.isNumber(parsedValue)) {
-        value = new Date(parsedValue);
-      }
+      if (!(value instanceof Date)) {
+        parsedValue = Date.parse(value);
 
-      if (value && !(value instanceof Date)) {
-        throw Error(
-          'The ng-model for md-datepicker must be a Date instance or a value ' +
-          'that can be parsed into a date. Currently the model is of type: ' + typeof value
-        );
+        // `parsedValue` is the time since epoch if valid or `NaN` if invalid.
+        if (!isNaN(parsedValue) && angular.isNumber(parsedValue)) {
+          value = new Date(parsedValue);
+        }
+
+        if (value && !(value instanceof Date)) {
+          throw Error(
+            'The ng-model for md-datepicker must be a Date instance or a value ' +
+              'that can be parsed into a date. Currently the model is of type: ' + typeof value
+          );
+        }
       }
 
       self.onExternalChange(value);

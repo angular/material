@@ -1,5 +1,5 @@
-var gulp = require('gulp');
-var connect = require('gulp-connect');
+const gulp = require('gulp');
+const connect = require('gulp-connect');
 
 exports.dependencies = ['docs-js', 'docs-css', 'docs-demo-scripts', 'build-contributors'];
 

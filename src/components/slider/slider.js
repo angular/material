@@ -172,7 +172,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
 
     if (tAttrs.disabled || tAttrs.ngDisabled) wrapper.attr('tabindex', -1);
 
-    wrapper.attr('role', 'slider');
+    tElement.attr('role', 'slider');
 
     $mdAria.expect(tElement, 'aria-label');
 

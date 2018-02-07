@@ -801,7 +801,7 @@ describe('$mdDialog', function() {
 
       function onShowing(scope, element, options) {
         showing = true;
-        container = angular.element(parent[0].querySelector('.md-dialog-container'));
+        var container = angular.element(parent[0].querySelector('.md-dialog-container'));
         expect(container.length).toBe(0);
       }
 
@@ -1709,6 +1709,23 @@ describe('$mdDialog', function() {
 
       var sibling = angular.element(parent[0].querySelector('.sibling'));
       expect(sibling.attr('aria-hidden')).toBe('true');
+    }));
+
+    it('should not apply aria-hidden to live region siblings', inject(function($mdDialog, $rootScope, $timeout) {
+
+      var template = '<md-dialog aria-label="Some Other Thing">Hello</md-dialog>';
+      var parent = angular.element('<div>');
+      parent.append('<div aria-live="polite"></div>')
+
+      $mdDialog.show({
+        template: template,
+        parent: parent
+      });
+
+      runAnimation();
+
+      var liveRegion = angular.element(parent[0].querySelector('[aria-live]'));
+      expect(liveRegion.attr('aria-hidden')).toBe(undefined);
     }));
 
     it('should trap focus inside of the dialog', function() {

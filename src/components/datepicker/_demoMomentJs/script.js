@@ -1,6 +1,5 @@
 angular.module('datepickerMomentJs', ['ngMaterial'])
     .config(function($mdDateLocaleProvider) {
-      console.log(window.moment ? 'moment loaded' : 'not loaded');
       //moment.locale('fr');
       //$mdDateLocaleProvider.months = moment.months();
       //$mdDateLocaleProvider.months = moment.monthsShort();

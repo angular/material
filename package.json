@@ -1,6 +1,6 @@
 {
   "name": "angular-material-source",
-  "version": "1.1.4",
+  "version": "1.1.6",
   "description": "The AngularJS Material project is an implementation of Material Design in AngularJS. This project provides a set of reusable, well-tested, and accessible Material Design UI components. AngularJS Material is supported internally at Google by the AngularJS, Material Design UX and other product teams.",
   "keywords": "client-side, browser, material, material-design, design, angularjs, angular.js, css, components, google",
   "homepage": "https://material.angularjs.org",
@@ -34,9 +34,11 @@
     "cli-color": "^1.0.0",
     "colors": "^1.1.0",
     "conventional-changelog": "^1.1.0",
-    "dgeni": "^0.4.1",
-    "dgeni-packages": "^0.13.0",
-    "github-contributors-list": "^1.2.1",
+    "dgeni": "^0.4.9",
+    "dgeni-packages": "^0.22.1",
+    "github": "^12.0.5",
+    "eslint": "^4.3.0",
+    "github-contributors-list": "^1.2.3",
     "glob": "~7.0.5",
     "gulp": "^3.9.1",
     "gulp-add-src": "^0.2.0",
@@ -53,7 +55,7 @@
     "gulp-ng-html2js": "^0.2.2",
     "gulp-plumber": "^1.0.0",
     "gulp-rename": "^1.2.0",
-    "gulp-sass": "^2.3.2",
+    "gulp-sass": "^3.1.0",
     "gulp-uglify": "^1.2.0",
     "gulp-util": "^3.0.1",
     "gulp-webserver": "^0.9.1",
@@ -61,7 +63,8 @@
     "jquery": "^3.0.0",
     "jshint": "^2.9.2",
     "jshint-summary": "^0.4.0",
-    "karma": "^1.0.0",
+    "karma": "^1.7.0",
+    "karma-browserstack-launcher": "^1.2.0",
     "karma-chrome-launcher": "^2.0.0",
     "karma-firefox-launcher": "^1.0.0",
     "karma-jasmine": "^1.0.2",
@@ -77,11 +80,12 @@
     "through2": "^2.0.1"
   },
   "scripts": {
-    "contributors": "rm -f ./docs/app/contributors.json; githubcontrib --owner=angular --repository=material --cols=6 --format=json --showlogin=true --sortBy=login --sha=master > ./docs/app/contributors.json",
-    "watch": "gulp watch site --dev",
-    "prom": "git pull --rebase origin master",
-    "current-branch": "git rev-parse --abbrev-ref HEAD",
-    "merge-base": "git merge-base $(npm run -s current-branch) origin/master",
-    "squash": "git rebase -i $(npm run -s merge-base)"
+    "build": "gulp build",
+    "contributors:release": "githubcontrib --owner angular --repo material --cols 6 --format md --showlogin true --sha master --sortOrder desc --fromDate ",
+    "docs:build": "gulp docs",
+    "docs:watch": "gulp watch site --dev",
+    "test:fast": "gulp karma-fast",
+    "test:full": "gulp karma",
+    "lint": "eslint ."
   }
 }

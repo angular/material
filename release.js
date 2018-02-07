@@ -1,26 +1,27 @@
+/* eslint-disable no-fallthrough */
 (function () {
   'use strict';
 
-  var colors         = require('colors');
-  var strip          = require('cli-color/strip');
-  var fs             = require('fs');
-  var prompt         = require('prompt-sync');
-  var child_process  = require('child_process');
-  var pkg            = require('./package.json');
-  var oldVersion     = pkg.version;
-  var abortCmds      = [ 'git reset --hard', 'git checkout staging', 'rm abort push' ];
-  var pushCmds       = [ 'rm abort push' ];
-  var cleanupCmds    = [];
-  var defaultOptions = { encoding: 'utf-8' };
-  var origin         = 'git@github.com:angular/material.git';
-  var lineWidth      = 80;
-  var lastMajorVer   = JSON.parse(exec('curl https://material.angularjs.org/docs.json')).latest;
-  var newVersion;
-  var dryRun;
+  const colors         = require('colors');
+  const strip          = require('cli-color/strip');
+  const fs             = require('fs');
+  const path           = require('path');
+  const prompt         = require('prompt-sync');
+  const child_process  = require('child_process');
+  const pkg            = require('./package.json');
+  let oldVersion       = pkg.version;
+  const abortCmds      = [ 'git reset --hard', 'git checkout staging', 'rm abort push' ];
+  const pushCmds       = [ 'rm abort push' ];
+  const cleanupCmds    = [];
+  const defaultOptions = { encoding: 'utf-8' };
+  const origin         = 'git@github.com:angular/material.git';
+  const lineWidth      = 80;
+  const lastMajorVer   = JSON.parse(exec('curl https://material.angularjs.org/docs.json')).latest;
+  let newVersion;
 
   header();
   write(`Is this a dry-run? ${"[yes/no]".cyan} `);
-  dryRun = prompt() !== 'no';
+  const dryRun = prompt() !== 'no';
 
   if (dryRun) {
     write(`What would you like the old version to be? (default: ${oldVersion.cyan}) `);
@@ -67,7 +68,7 @@
       return true;
     }
     function err (msg) {
-      var str = 'Error: ' + msg;
+      const str = 'Error: ' + msg;
       log(str.red);
     }
   }
@@ -76,7 +77,7 @@
   function checkoutVersionBranch () {
     exec(`git branch -q -D release/${newVersion}`);
     exec(`git checkout -q -b release/${newVersion}`);
-    abortCmds.push('git co master');
+    abortCmds.push('git checkout master');
     abortCmds.push(`git branch -D release/${newVersion}`);
   }
 
@@ -112,14 +113,15 @@
   /** prompts the user for the new version */
   function getNewVersion () {
     header();
-    var options = getVersionOptions(oldVersion), key, type, version;
+    const options = getVersionOptions(oldVersion);
+    let key, version;
     log(`The current version is ${oldVersion.cyan}.`);
     log('');
     log('What should the next version be?');
     for (key in options) { log((+key + 1) + ') ' + options[ key ].cyan); }
     log('');
     write('Please select a new version: ');
-    type = prompt();
+    const type = prompt();
 
     if (options[ type - 1 ]) version = options[ type - 1 ];
     else if (type.match(/^\d+\.\d+\.\d+(-rc\.?\d+)?$/)) version = type;
@@ -136,7 +138,7 @@
           : [ increment(version, 'patch'), addRC(increment(version, 'minor')) ];
 
       function increment (versionString, type) {
-        var version = parseVersion(versionString);
+        const version = parseVersion(versionString);
         if (version.rc) {
           switch (type) {
             case 'minor': version.rc = 0; break;
@@ -153,7 +155,7 @@
         return getVersionString(version);
 
         function parseVersion (version) {
-          var parts = version.split(/\-rc\.|\./g);
+          const parts = version.split(/-rc\.|\./g);
           return {
             string: version,
             major:  parts[ 0 ],
@@ -164,7 +166,7 @@
         }
 
         function getVersionString (version) {
-          var str = version.major + '.' + version.minor + '.' + version.patch;
+          let str = version.major + '.' + version.minor + '.' + version.patch;
           if (version.rc) str += '-rc.' + version.rc;
           return str;
         }
@@ -211,9 +213,9 @@
   /** updates the version for bower-material in package.json and bower.json */
   function updateBowerVersion () {
     start('Updating bower version...');
-    var options = { cwd: './bower-material' },
-        bower   = require(options.cwd + '/bower.json'),
-        pkg     = require(options.cwd + '/package.json');
+    const options = { cwd: './bower-material' };
+    const bower   = require(options.cwd + '/bower.json'),
+          pkg     = require(options.cwd + '/package.json');
     //-- update versions in config files
     bower.version = pkg.version = newVersion;
     fs.writeFileSync(options.cwd + '/package.json', JSON.stringify(pkg, null, 2));
@@ -257,7 +259,7 @@
   /** builds the website for the new version */
   function updateSite () {
     start('Adding new version of the docs site...');
-    var options = { cwd: './code.material.angularjs.org' };
+    const options = { cwd: './code.material.angularjs.org' };
     writeDocsJson();
 
     //-- build files for bower
@@ -295,9 +297,9 @@
     function updateFirebaseJson () {
       fs.writeFileSync(options.cwd + '/firebase.json', getFirebaseJson());
       function getFirebaseJson () {
-        var json = require(options.cwd + '/firebase.json');
+        const json = require(options.cwd + '/firebase.json');
         json.hosting.rewrites = json.hosting.rewrites || [];
-        var rewrites = json.hosting.rewrites;
+        const rewrites = json.hosting.rewrites;
 
         switch (rewrites.length) {
           case 0:
@@ -318,7 +320,7 @@
     }
 
     function writeDocsJson () {
-      var config      = require(options.cwd + '/docs.json');
+      const config = require(options.cwd + '/docs.json');
       config.versions.unshift(newVersion);
 
       //-- only set to default if not a release candidate
@@ -330,22 +332,21 @@
   /** replaces localhost file paths with public URLs */
   function replaceFilePaths () {
     //-- handle docs.js
-    var path = __dirname + '/dist/docs/docs.js';
-    var file = fs.readFileSync(path);
-    var contents = file.toString()
+    const filePath = path.join(__dirname, '/dist/docs/docs.js');
+    const file = fs.readFileSync(filePath);
+    const contents = file.toString()
         .replace(/http:\/\/localhost:8080\/angular-material/g, 'https://cdn.gitcdn.link/cdn/angular/bower-material/v' + newVersion + '/angular-material')
         .replace(/http:\/\/localhost:8080\/docs.css/g, 'https://material.angularjs.org/' + newVersion + '/docs.css');
-    fs.writeFileSync(path, contents);
-
+    fs.writeFileSync(filePath, contents);
   }
 
   /** replaces base href in index.html for new version as well as latest */
   function replaceBaseHref (folder) {
     //-- handle index.html
-    var path = __dirname + '/code.material.angularjs.org/' + folder + '/index.html';
-    var file = fs.readFileSync(path);
-    var contents = file.toString().replace(/base href="\//g, 'base href="/' + folder + '/');
-    fs.writeFileSync(path, contents);
+    const filePath = path.join(__dirname, '/code.material.angularjs.org/', folder, '/index.html');
+    const file = fs.readFileSync(filePath);
+    const contents = file.toString().replace(/base href="\//g, 'base href="/' + folder + '/');
+    fs.writeFileSync(filePath, contents);
   }
 
   /** copies the changelog back over to master branch */
@@ -355,7 +356,7 @@
         'git checkout master',
         `git pull --rebase ${origin} master --strategy=theirs`,
         `git checkout release/${newVersion} -- CHANGELOG.md`,
-        `node -e "var newVersion = '${newVersion}'; ${stringifyFunction(buildCommand)}"`,
+        `node -e "const newVersion = '${newVersion}'; ${stringifyFunction(buildCommand)}"`,
         'git add CHANGELOG.md',
         'git add package.json',
         `git commit -m "update version number in package.json to ${newVersion}"`,
@@ -365,7 +366,7 @@
     function buildCommand () {
       require('fs').writeFileSync('package.json', JSON.stringify(getUpdatedJson(), null, 2));
       function getUpdatedJson () {
-        var json = require('./package.json');
+        const json = require('./package.json');
         json.version = newVersion;
         return json;
       }
@@ -393,8 +394,8 @@
   /** outputs a centered message in the terminal */
   function center (msg) {
     msg        = ' ' + msg.trim() + ' ';
-    var length = msg.length;
-    var spaces = Math.floor((lineWidth - length) / 2);
+    const length = msg.length;
+    const spaces = Math.floor((lineWidth - length) / 2);
     return Array(spaces + 1).join('-') + msg.green + Array(lineWidth - msg.length - spaces + 1).join('-');
   }
 
@@ -409,8 +410,8 @@
       return cmd.map(function (cmd) { return exec(cmd, userOptions); });
     }
     try {
-      var options = Object.create(defaultOptions);
-      for (var key in userOptions) options[ key ] = userOptions[ key ];
+      const options = Object.create(defaultOptions);
+      for (const key in userOptions) options[ key ] = userOptions[ key ];
       return child_process.execSync(cmd + ' 2> /dev/null', options).toString().trim();
     } catch (err) {
       return err;
@@ -422,10 +423,12 @@
     return '\n# ' + msg + '\n';
   }
 
-  /** prints the left side of a task while it is being performed */
+  /**
+   * prints the left side of a task while it is being performed
+   */
   function start (msg) {
-    var msgLength = strip(msg).length,
-        diff      = lineWidth - 4 - msgLength;
+    const msgLength = strip(msg).length,
+          diff      = lineWidth - 4 - msgLength;
     write(msg + Array(diff + 1).join(' '));
   }
 

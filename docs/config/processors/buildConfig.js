@@ -1,8 +1,8 @@
-var buildConfig = require('../../../config/build.config');
-var q = require('q');
-var exec = require('child_process').exec;
+const buildConfig = require('../../../config/build.config');
+const q = require('q');
+const exec = require('child_process').exec;
 
-module.exports = function buildConfigProcessor(log) {
+module.exports = function buildConfigProcessor() {
   return {
     $runBefore: ['rendering-docs'],
     $runAfter: ['indexPageProcessor'],
@@ -25,13 +25,12 @@ module.exports = function buildConfigProcessor(log) {
 
   /**
    * Git the SHA associated with the most recent commit on origin/master
-   * @param deferred
    * @returns {*}
    */
   function getSHA() {
-    var deferred = q.defer();
+    const deferred = q.defer();
 
-    exec('git rev-parse HEAD', function(error, stdout, stderr) {
+    exec('git rev-parse HEAD', function(error, stdout) {
       buildConfig.commit = stdout && stdout.toString().trim();
       deferred.resolve(buildConfig.commit);
     });
@@ -41,13 +40,12 @@ module.exports = function buildConfigProcessor(log) {
 
   /**
    * Get the commit date for the most recent commit on origin/master
-   * @param deferred
    * @returns {*}
    */
   function getCommitDate() {
-    var deferred = q.defer();
+    const deferred = q.defer();
 
-    exec('git show -s --format=%ci HEAD', function(error, stdout, stderr) {
+    exec('git show -s --format=%ci HEAD', function(error, stdout) {
       buildConfig.date = stdout && stdout.toString().trim();
       deferred.resolve(buildConfig.date);
     });

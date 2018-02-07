@@ -229,7 +229,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
     }
 
     if (attr.name) {
-      var autofillClone = angular.element('<select class="md-visually-hidden">');
+      var autofillClone = angular.element('<select class="md-visually-hidden"></select>');
       autofillClone.attr({
         'name': attr.name,
         'aria-hidden': 'true',
@@ -704,7 +704,6 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
         // reference. This allowed the developer to also push and pop from their array.
         $scope.$watchCollection(self.modelBinding, function(value) {
           if (validateArray(value)) renderMultiple(value);
-          self.ngModel.$setPristine();
         });
 
         ngModel.$isEmpty = function(value) {

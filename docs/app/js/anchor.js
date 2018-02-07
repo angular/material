@@ -9,7 +9,7 @@
   function MdAnchorDirective($mdUtil, $compile) {
 
     /** @const @type {RegExp} */
-    var unsafeCharRegex = /[&\s+$,:;=?@"#{}|^~[`%!'\].\/()*\\]/g;
+    var unsafeCharRegex = /[&\s+$,:;=?@"#{}|^~[`%!'\]./()*\\]/g;
 
     return {
       restrict: 'E',

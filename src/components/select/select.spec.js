@@ -1203,6 +1203,27 @@ describe('<md-select>', function() {
         expect(selectMenu.hasAttribute('multiple')).toBe(false);
       });
 
+      it('should set the element dirty when selected options changes', function () {
+        $rootScope.model = 2;
+        $rootScope.opts = [1, 2, 3, 4];
+        var form = $compile('<form name="testForm">' +
+          '<md-select multiple="multiple" ng-model="model" name="multiSelect">' +
+            '<md-option ng-repeat="opt in opts" ng-value="opt">{{opt}}</md-option>' +
+          '</md-select></form>')($rootScope);
+        var el = form.find('md-select');
+        
+        $rootScope.$digest();
+        $timeout.flush();
+
+        expect($rootScope.testForm.multiSelect.$pristine).toBe(true);
+        expect($rootScope.testForm.multiSelect.$dirty).toBe(false);
+
+        openSelect(el);
+        clickOption(el, 0);
+
+        expect($rootScope.testForm.multiSelect.$pristine).toBe(false);
+        expect($rootScope.testForm.multiSelect.$dirty).toBe(true);
+      });
     });
   });
 
@@ -1459,7 +1480,9 @@ describe('<md-select>', function() {
       el.triggerHandler('click');
       $material.flushInterimElement();
       el.triggerHandler('blur');
-    } catch (e) { }
+    } catch (e) {
+      // ignore error
+    }
   }
 
   function closeSelect() {

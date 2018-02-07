@@ -250,6 +250,7 @@ describe('$mdThemingProvider', function() {
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
           .toEqual('color: ;');
       });
+
       it('for a dark theme', function() {
         testTheme.dark();
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-1}}"; }')[0].content)
@@ -264,6 +265,7 @@ describe('$mdThemingProvider', function() {
           .toEqual('color: 1px 1px 0px rgba(0,0,0,0.4), -1px -1px 0px rgba(0,0,0,0.4);');
       });
     });
+
     it('parses contrast colors', function() {
       testTheme.primaryPalette('testPalette', {
         'default': '50'
@@ -283,6 +285,7 @@ describe('$mdThemingProvider', function() {
       expect(parse('{ color: "{{primary-contrast}}"; }')[0].content)
         .toEqual('color: rgb(255,255,255);');
     });
+
     it('generates base, non-colorType-specific, rules', function() {
       var accent100 = themingProvider._rgba(themingProvider._PALETTES.testPalette['100'].value);
       var result = parse('.md-THEME_NAME-theme { color: "{{accent-100}}"; }');
@@ -296,6 +299,7 @@ describe('$mdThemingProvider', function() {
       expect(result[3].hue).toBe('hue-3');
       expect(result.length).toBe(4);
     });
+
     it('generates colorType-specific rules for each hue', function() {
       var primary = themingProvider._rgba(themingProvider._PALETTES.testPalette['500'].value);
       var hue1 = themingProvider._rgba(themingProvider._PALETTES.testPalette['300'].value);
@@ -307,6 +311,14 @@ describe('$mdThemingProvider', function() {
       expect(result[2]).toEqual({content: 'color: ' + hue2 + ';', hue: 'hue-2', type: 'primary'});
       expect(result[3]).toEqual({content: 'color: ' + hue3 + ';', hue: 'hue-3', type: 'primary'});
       expect(result.length).toEqual(4);
+    });
+
+    it('should generate styles when a md-something selector has an expression for a different palette', function() {
+      // The selector has `md-primary` in the name, but the expression is for md-warn.
+      var result = parse('.md-THEME_NAME-theme.md-primary { color: "{{warn-color}}"; }');
+
+      // This should not leave an unevaluated expression in the output.
+      expect(result.join(' ')).not.toContain('{{');
     });
 
     it('generates colorType-specific rules for each hue with opacity', function() {
@@ -593,7 +605,7 @@ describe('$mdThemeProvider with disabled themes', function() {
 
     it('should not set any classnames', function() {
       inject(function($rootScope, $compile, $mdTheming) {
-        el = $compile('<h1>Test</h1>')($rootScope);
+        var el = $compile('<h1>Test</h1>')($rootScope);
         $mdTheming(el);
         expect(el.hasClass('md-default-theme')).toBe(false);
       });
@@ -601,7 +613,7 @@ describe('$mdThemeProvider with disabled themes', function() {
 
     it('should not inject any styles', function() {
       inject(function($rootScope, $compile, $mdTheming) {
-        el = $compile('<h1>Test</h1>')($rootScope);
+        var el = $compile('<h1>Test</h1>')($rootScope);
         $mdTheming(el);
 
         var styles = getThemeStyleElements();

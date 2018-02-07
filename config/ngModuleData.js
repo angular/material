@@ -12,8 +12,8 @@
 
 // Define patterns for AngularJS Module definitions
 
-var MATERIAL_ONLY = /\.module\(['|"](material\.[a-zA-Z\-\.]*)['|"]\s*,(\s*\[([^\]]*)\])/;
-var ANY = /\.module\(('[^']*'|"[^"]*")\s*,(?:\s*\[([^\]]+)\])?/;
+const MATERIAL_ONLY = /\.module\(['|"](material\.[a-zA-Z\-.]*)['|"]\s*,(\s*\[([^\]]*)])/;
+const ANY = /\.module\(('[^']*'|"[^"]*")\s*,(?:\s*\[([^\]]+)])?/;
 
 /**
  * Find module definition s that match the module definition pattern
@@ -21,10 +21,10 @@ var ANY = /\.module\(('[^']*'|"[^"]*")\s*,(?:\s*\[([^\]]+)\])?/;
 function buildScanner(pattern) {
 
   return function findPatternIn(content) {
-    var dependencies;
-    var match = pattern.exec(content || '');
-    var moduleName = match ? match[1].replace(/\'/gi,'') : null;
-    var depsMatch = match && match[2] && match[2].trim();
+    let dependencies;
+    const match = pattern.exec(content || '');
+    const moduleName = match ? match[1].replace(/'/gi,'') : null;
+    const depsMatch = match && match[2] && match[2].trim();
 
     if (depsMatch) {
       dependencies = depsMatch.split(/\s*,\s*/).map(function(dep) {
@@ -38,11 +38,10 @@ function buildScanner(pattern) {
       module       : moduleName || '',
       dependencies : dependencies || [ ]
     } : null;
-  }
+  };
 }
 
 module.exports = {
   material : buildScanner( MATERIAL_ONLY ),
   any      : buildScanner( ANY )
 };
-

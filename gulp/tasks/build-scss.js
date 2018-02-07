@@ -1,37 +1,31 @@
-var config = require('../config');
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var fs = require('fs');
-var path = require('path');
-var rename = require('gulp-rename');
-var filter = require('gulp-filter');
-var concat = require('gulp-concat');
-var series = require('stream-series');
-var util = require('../util');
-var sassUtils = require('../../scripts/gulp-utils');
-var sass = require('gulp-sass');
-var insert = require('gulp-insert');
-var addsrc = require('gulp-add-src');
-var gulpif = require('gulp-if');
-var minifyCss = util.minifyCss;
-var args = util.args;
-var IS_DEV = require('../const').IS_DEV;
+const config = require('../config');
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const rename = require('gulp-rename');
+const filter = require('gulp-filter');
+const concat = require('gulp-concat');
+const series = require('stream-series');
+const util = require('../util');
+const sassUtils = require('../../scripts/gulp-utils');
+const sass = require('gulp-sass');
+const insert = require('gulp-insert');
+const gulpif = require('gulp-if');
+const minifyCss = util.minifyCss;
+const args = util.args;
+const IS_DEV = require('../const').IS_DEV;
 
 exports.task = function() {
-  var streams = [];
-  var modules   = args['modules'],
-      overrides = args['override'],
+  const streams = [];
+  const modules   = args.modules,
+      overrides = args.override,
       dest      = args['output-dir'] || config.outputDir,
-      filename  = args['filename'] || 'angular-material',
-      baseFiles = config.scssBaseFiles,
-      layoutDest= dest + 'layouts/',
-      scssPipe  = null;
+      layoutDest= dest + 'layouts/';
 
   gutil.log("Building css files...");
 
   // create SCSS file for distribution
   streams.push(
-    scssPipe = gulp.src(getPaths())
+    gulp.src(getPaths())
       .pipe(util.filterNonCodeFiles())
       .pipe(filter(['**', '!**/*.css']))
       .pipe(filter(['**', '!**/*-theme.scss']))
@@ -106,7 +100,7 @@ exports.task = function() {
 
 
   function getPaths () {
-    var paths = config.scssBaseFiles.slice();
+    const paths = config.scssBaseFiles.slice();
     if ( modules ) {
       paths.push.apply(paths, modules.split(',').map(function (module) {
         return 'src/components/' + module + '/*.scss';

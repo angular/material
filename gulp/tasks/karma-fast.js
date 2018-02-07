@@ -1,22 +1,21 @@
-var gutil = require('gulp-util');
-var karma = require('karma').server;
-var util = require('../util');
-var ROOT = require('../const').ROOT;
-var Server = require('karma').Server;
-var karmaConfig = {
+const gutil = require('gulp-util');
+const util = require('../util');
+const ROOT = require('../const').ROOT;
+const Server = require('karma').Server;
+const karmaConfig = {
   logLevel: 'warn',
   singleRun: true,
   autoWatch: false,
   configFile: ROOT + '/config/karma.conf.js'
 };
 
-var args = util.args;
+const args = util.args;
 
 // NOTE: `karma-fast` does NOT pre-make a full build of JS and CSS
 // exports.dependencies = ['build'];
 
 exports.task = function (done) {
-  var errorCount = 0;
+  let errorCount = 0;
 
   if ( args.browsers ) {
     karmaConfig.browsers = args.browsers.trim().split(',');
@@ -30,7 +29,7 @@ exports.task = function (done) {
 
   gutil.log('Running unit tests on unminified source.');
 
-  karma = new Server(karmaConfig, captureError(clearEnv,clearEnv));
+  const karma = new Server(karmaConfig, captureError(clearEnv,clearEnv));
   karma.start();
 
 
@@ -38,6 +37,7 @@ exports.task = function (done) {
     process.env.KARMA_TEST_COMPRESSED = undefined;
     process.env.KARMA_TEST_JQUERY = undefined;
 
+    // eslint-disable-next-line no-process-exit
     if (errorCount > 0) { process.exit(errorCount); }
     done();
   }
@@ -53,7 +53,7 @@ exports.task = function (done) {
    */
   function captureError(next,done) {
     return function(exitCode) {
-      if (exitCode != 0) {
+      if (exitCode !== 0) {
         gutil.log(gutil.colors.red("Karma exited with the following exit code: " + exitCode));
         errorCount++;
       }

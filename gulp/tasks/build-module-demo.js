@@ -1,23 +1,23 @@
-var BUILD_MODE = require('../const').BUILD_MODE;
-var ROOT = require('../const').ROOT;
+const BUILD_MODE = require('../const').BUILD_MODE;
+const ROOT = require('../const').ROOT;
 
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var fs = require('fs');
-var path = require('path');
-var through2 = require('through2');
-var lazypipe = require('lazypipe');
-var sass = require('gulp-sass');
-var gulpif = require('gulp-if');
-var _ = require('lodash');
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const fs = require('fs');
+const path = require('path');
+const through2 = require('through2');
+const lazypipe = require('lazypipe');
+const sass = require('gulp-sass');
+const gulpif = require('gulp-if');
+const _ = require('lodash');
 
-var util = require('../util');
-var utils = require('../../scripts/gulp-utils.js');
+const util = require('../util');
+const utils = require('../../scripts/gulp-utils.js');
 
 exports.task = function() {
-  var mod = util.readModuleArg();
-  var name = mod.split('.').pop();
-  var demoIndexTemplate = fs.readFileSync(
+  const mod = util.readModuleArg();
+  const name = mod.split('.').pop();
+  const demoIndexTemplate = fs.readFileSync(
       ROOT + '/docs/config/template/demo-index.template.html', 'utf8'
   ).toString();
 

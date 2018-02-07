@@ -206,7 +206,7 @@
 
       // See scripts.js for list of external AngularJS libraries used for the demos
 
-      return file.replace(matchAngularModule, ".module('MyApp',"+ modules + ")");
+      return file.replace(matchAngularModule, ".module('MyApp', "+ modules + ")");
     }
   }
 })();

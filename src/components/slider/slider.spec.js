@@ -190,7 +190,7 @@ describe('md-slider', function() {
 
     pageScope.$apply('model = 102');
 
-    expect(wrapper.attr('role')).toEqual('slider');
+    expect(slider.attr('role')).toEqual('slider');
     expect(slider.attr('aria-valuemin')).toEqual('100');
     expect(slider.attr('aria-valuemax')).toEqual('104');
     expect(slider.attr('aria-valuenow')).toEqual('102');
