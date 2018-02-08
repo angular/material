@@ -1,3 +1,20 @@
+<a name="1.1.7"></a>
+## [1.1.7](https://github.com/angular/material/compare/v1.1.6...v1.1.7) (2018-02-08)
+
+
+### Bug Fixes
+
+* **datepicker:** keep reference of Date object ([#10606](https://github.com/angular/material/issues/10606)) ([b4b9369](https://github.com/angular/material/commit/b4b9369))
+* **panel:** loosen up bounds assessment ([#10651](https://github.com/angular/material/issues/10651)) ([27d0f7c](https://github.com/angular/material/commit/27d0f7c))
+* **tooltip:** changing direction causes invalid position ([#11087](https://github.com/angular/material/issues/11087)) ([89bd69b](https://github.com/angular/material/commit/89bd69b)), closes [#10405](https://github.com/angular/material/issues/10405)
+
+
+### Features
+
+* **swipe:** allow accessing the original currentTarget ([#10997](https://github.com/angular/material/issues/10997)) ([827990e](https://github.com/angular/material/commit/827990e))
+
+
+
 <a name="1.1.6"></a>
 ## [1.1.6](https://github.com/angular/material/compare/v1.1.5...v1.1.6) (2018-01-16)
 
@@ -17,21 +34,6 @@
 
 * **datepicker:** add the ability to restrict users to a calendar view ([#9736](https://github.com/angular/material/issues/9736)) ([eecc976](https://github.com/angular/material/commit/eecc976)), closes [#9260](https://github.com/angular/material/issues/9260)
 
-#### Contributors
-
-Thank you to the excellent contributors who helped with the v1.1.6 release:
-
-[<img alt="crisbeto" src="https://avatars0.githubusercontent.com/u/4450522?v=4&s=117" width="117">](https://github.com/crisbeto) |[<img alt="jelbourn" src="https://avatars3.githubusercontent.com/u/838736?v=4&s=117" width="117">](https://github.com/jelbourn) |[<img alt="EladBezalel" src="https://avatars3.githubusercontent.com/u/6004537?v=4&s=117" width="117">](https://github.com/EladBezalel) |[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="alopezsanchez" src="https://avatars3.githubusercontent.com/u/15221596?v=4&s=117" width="117">](https://github.com/alopezsanchez) |[<img alt="Phoqe" src="https://avatars3.githubusercontent.com/u/7033377?v=4&s=117" width="117">](https://github.com/Phoqe) |
-:---: |:---: |:---: |:---: |:---: |:---: |
-[crisbeto](https://github.com/crisbeto) |[jelbourn](https://github.com/jelbourn) |[EladBezalel](https://github.com/EladBezalel) |[Splaktar](https://github.com/Splaktar) |[alopezsanchez](https://github.com/alopezsanchez) |[Phoqe](https://github.com/Phoqe) |
-
-[<img alt="oliversalzburg" src="https://avatars2.githubusercontent.com/u/1658949?v=4&s=117" width="117">](https://github.com/oliversalzburg) |[<img alt="graingert" src="https://avatars3.githubusercontent.com/u/413772?v=4&s=117" width="117">](https://github.com/graingert) |[<img alt="dulynoded" src="https://avatars0.githubusercontent.com/u/11513504?v=4&s=117" width="117">](https://github.com/dulynoded) |[<img alt="Ardeshir81" src="https://avatars3.githubusercontent.com/u/5755214?v=4&s=117" width="117">](https://github.com/Ardeshir81) |[<img alt="beetlerom" src="https://avatars3.githubusercontent.com/u/1420091?v=4&s=117" width="117">](https://github.com/beetlerom) |[<img alt="davestacey" src="https://avatars3.githubusercontent.com/u/754281?v=4&s=117" width="117">](https://github.com/davestacey) |
-:---: |:---: |:---: |:---: |:---: |:---: |
-[oliversalzburg](https://github.com/oliversalzburg) |[graingert](https://github.com/graingert) |[dulynoded](https://github.com/dulynoded) |[Ardeshir81](https://github.com/Ardeshir81) |[beetlerom](https://github.com/beetlerom) |[davestacey](https://github.com/davestacey) |
-
-[<img alt="phistuck" src="https://avatars0.githubusercontent.com/u/184400?v=4&s=117" width="117">](https://github.com/phistuck) |[<img alt="wangsha" src="https://avatars0.githubusercontent.com/u/221029?v=4&s=117" width="117">](https://github.com/wangsha) |[<img alt="alphatwit" src="https://avatars1.githubusercontent.com/u/3231066?v=4&s=117" width="117">](https://github.com/alphatwit) |[<img alt="andrewseguin" src="https://avatars3.githubusercontent.com/u/22898577?v=4&s=117" width="117">](https://github.com/andrewseguin) |
-:---: |:---: |:---: |:---: |
-[phistuck](https://github.com/phistuck) |[wangsha](https://github.com/wangsha) |[alphatwit](https://github.com/alphatwit) |[andrewseguin](https://github.com/andrewseguin) |
 
 
 <a name="1.1.5"></a>
