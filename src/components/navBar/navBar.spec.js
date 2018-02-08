@@ -176,6 +176,40 @@ describe('mdNavBar', function() {
               .toBe('{"reload":true,"notify":true}');
         });
 
+      it('should set the disabled attribute', function () {
+          create('<md-nav-bar>' +
+              '  <md-nav-item md-nav-href="#1" name="tab1">' +
+              '    tab1' +
+              '  </md-nav-item>' +
+              '  <md-nav-item md-nav-href="#2" name="tab2" disabled>' +
+              '    tab2' +
+              '  </md-nav-item>' +
+              '</md-nav-bar>');
+          $timeout(function(){
+            var tabCtrl = getTabCtrl('tab2');
+            expect(tabCtrl.disabled).toBe(true);
+          });
+      });
+
+      it('should observe the disabled attribute', function () {
+          $scope.tabDisabled = false;
+          create('<md-nav-bar>' +
+              '  <md-nav-item md-nav-href="#1" name="tab1">' +
+              '    tab1' +
+              '  </md-nav-item>' +
+              '  <md-nav-item md-nav-href="#2" name="tab2" ng-disabled="tabDisabled">' +
+              '    tab2' +
+              '  </md-nav-item>' +
+              '</md-nav-bar>');
+          $timeout(function(){
+            var tabCtrl = getTabCtrl('tab2');
+            expect(tabCtrl.disabled).toBe(false);
+            $scope.tabDisabled = true;
+            $scope.$apply();
+            expect(tabCtrl.disabled).toBe(true);
+          });
+      });
+
     it('does not update tabs if tab controller is undefined', function() {
       $scope.selectedTabRoute = 'tab1';
 
