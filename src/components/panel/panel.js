@@ -814,7 +814,7 @@ angular
  * @description
  * Sets the value of the offset in the x-direction.
  *
- * @param {string} offsetX
+ * @param {string|number} offsetX
  * @returns {!MdPanelPosition}
  */
 
@@ -824,7 +824,7 @@ angular
  * @description
  * Sets the value of the offset in the y-direction.
  *
- * @param {string} offsetY
+ * @param {string|number} offsetY
  * @returns {!MdPanelPosition}
  */
 
@@ -2844,11 +2844,11 @@ MdPanelPosition.prototype._validateXPosition = function(xPosition) {
 /**
  * Sets the value of the offset in the x-direction. This will add to any
  * previously set offsets.
- * @param {string|function(MdPanelPosition): string} offsetX
+ * @param {string|number|function(MdPanelPosition): string} offsetX
  * @returns {!MdPanelPosition}
  */
 MdPanelPosition.prototype.withOffsetX = function(offsetX) {
-  this._translateX.push(offsetX);
+  this._translateX.push(addUnits(offsetX));
   return this;
 };
 
@@ -2856,11 +2856,11 @@ MdPanelPosition.prototype.withOffsetX = function(offsetX) {
 /**
  * Sets the value of the offset in the y-direction. This will add to any
  * previously set offsets.
- * @param {string|function(MdPanelPosition): string} offsetY
+ * @param {string|number|function(MdPanelPosition): string} offsetY
  * @returns {!MdPanelPosition}
  */
 MdPanelPosition.prototype.withOffsetY = function(offsetY) {
-  this._translateY.push(offsetY);
+  this._translateY.push(addUnits(offsetY));
   return this;
 };
 
@@ -2976,9 +2976,8 @@ MdPanelPosition.prototype.getActualPosition = function() {
 MdPanelPosition.prototype._reduceTranslateValues =
     function(translateFn, values) {
       return values.map(function(translation) {
-        // TODO(crisbeto): this should add the units after #9609 is merged.
         var translationValue = angular.isFunction(translation) ?
-            translation(this) : translation;
+            addUnits(translation(this)) : translation;
         return translateFn + '(' + translationValue + ')';
       }, this).join(' ');
     };
@@ -3508,7 +3507,6 @@ function getElement(el) {
   return angular.element(queryResult);
 }
 
-
 /**
  * Gets the computed values for an element's translateX and translateY in px.
  * @param {!angular.JQLite|!Element} el
@@ -3535,4 +3533,13 @@ function getComputedTranslations(el, property) {
   }
 
   return output;
+}
+
+/**
+ * Adds units to a number value.
+ * @param {string|number} value
+ * @return {string}
+ */
+function addUnits(value) {
+  return angular.isNumber(value) ? value + 'px' : value;
 }

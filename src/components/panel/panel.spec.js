@@ -1940,6 +1940,26 @@ describe('$mdPanel', function() {
             .toBeApproximately(middleOfPage + parseInt(offset));
       });
 
+      it('horizontally with an integer value', function() {
+        var left = '50px';
+        var offset = -15;
+
+        var position = mdPanelPosition
+            .absolute()
+            .left(left)
+            .withOffsetX(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.left)
+            .toBeApproximately(parseInt(left) + offset);
+      });
+
       it('vertically', function() {
         var top = '50px';
         var offset = '-15px';
@@ -2008,6 +2028,50 @@ describe('$mdPanel', function() {
 
         expect(middleOfPanel)
             .toBeApproximately(middleOfPage + parseInt(offset));
+      });
+
+      it('vertically with an integer value', function() {
+        var top = '50px';
+        var offset = -15;
+
+        var position = mdPanelPosition
+            .absolute()
+            .top(top)
+            .withOffsetY(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.top)
+            .toBeApproximately(parseInt(top) + offset);
+      });
+
+      it('with a function that does not return units', function() {
+        var left = '50px';
+        var offset = -15;
+        var obj = {
+          getOffsetX: function() {
+            return offset;
+          }
+        };
+
+        var position = mdPanelPosition
+            .absolute()
+            .left(left)
+            .withOffsetX(obj.getOffsetX);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.left).toBeApproximately(parseInt(left) + offset);
       });
     });
 
