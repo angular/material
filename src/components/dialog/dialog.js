@@ -659,7 +659,7 @@ function MdDialogProvider($$interimElementProvider) {
         $mdDialog.cancel();
       };
       this.keypress = function($event) {
-        var invalidPrompt = isPrompt && this.required && !this.result;
+        var invalidPrompt = isPrompt && this.required && !angular.isDefined(this.result);
 
         if ($event.keyCode === $mdConstant.KEY_CODE.ENTER && !invalidPrompt) {
           $mdDialog.hide(this.result);
