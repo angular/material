@@ -1044,6 +1044,59 @@ describe('<md-chips>', function() {
 
       });
 
+      describe('ng-required', function() {
+        beforeEach(function() {
+            // Clear default items to test the required chips functionality
+            scope.items = [];
+        });
+
+        it('should set the required error when chips is compiled with an empty array', function() {
+          var template =
+              '<form name="form">' +
+              '<md-chips name="chips" ng-required="true" ng-model="items"></md-chips>' +
+              '</form>';
+
+          var element = buildChips(template);
+          element.scope().$apply();
+
+          expect(scope.form.chips.$error['required']).toBe(true);
+        });
+
+        it('should unset the required error when the first chip is added', function() {
+          var template =
+              '<form name="form">' +
+              '<md-chips name="chips" ng-required="true" ng-model="items"></md-chips>' +
+              '</form>';
+
+          var element = buildChips(template);
+          var ctrl = element.find('md-chips').controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.form.chips.$error['required']).toBeUndefined();
+        });
+
+        it('should set the required when the last chip is removed', function() {
+          scope.items = ['test'];
+          var template =
+              '<form name="form">' +
+              '<md-chips name="chips" required ng-model="items"></md-chips>' +
+              '</form>';
+
+          var element = buildChips(template);
+          var ctrl = element.find('md-chips').controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.removeChip(0);
+          });
+
+          expect(scope.form.chips.$error['required']).toBe(true);
+        });
+      });
+
       describe('focus functionality', function() {
         var element, ctrl;
 
