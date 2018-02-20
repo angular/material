@@ -166,6 +166,19 @@ describe('material.components.menu', function() {
       expect(getOpenMenuContainer(menu).length).toBe(0);
     }));
 
+    it('closes on tab', inject(function($document, $mdConstant) {
+      var menu = setup();
+      openMenu(menu);
+      expect(getOpenMenuContainer(menu).length).toBe(1);
+
+      var openMenuEl = $document[0].querySelector('md-menu-content');
+
+      pressKey(openMenuEl, $mdConstant.KEY_CODE.TAB);
+      waitForMenuClose();
+
+      expect(getOpenMenuContainer(menu).length).toBe(0);
+    }));
+
     describe('default focus', function() {
       it('should focus on first item automatically', inject(function($compile, $rootScope, $document) {
         var menu = $compile(
