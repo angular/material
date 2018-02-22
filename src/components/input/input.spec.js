@@ -659,6 +659,23 @@ describe('md-input-container directive', function() {
       }
     }));
 
+    it('should not refocus the input after focus is lost', inject(function($document, $timeout) {
+      var wrapper = $compile('<div><input md-select-on-focus value="Text"><input></div>')($rootScope),
+          input1 = angular.element(wrapper[0].childNodes[0]),
+          input2 = angular.element(wrapper[0].childNodes[1]);
+      $document[0].body.appendChild(wrapper[0]);
+
+      input1.focus();
+      input1.triggerHandler('focus');
+      input2.focus();
+      input2.triggerHandler('focus');
+
+      $timeout.flush();
+      expect(input2).toBeFocused();
+
+      wrapper.remove();
+    }));
+
     describe('Textarea auto-sizing', function() {
       var ngElement, element, ngTextarea, textarea, scope, parentElement;
 

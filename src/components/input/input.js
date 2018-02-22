@@ -776,7 +776,7 @@ function placeholderDirective($compile) {
  *
  * </hljs>
  */
-function mdSelectOnFocusDirective($timeout) {
+function mdSelectOnFocusDirective($document, $timeout) {
 
   return {
     restrict: 'A',
@@ -802,9 +802,14 @@ function mdSelectOnFocusDirective($timeout) {
       preventMouseUp = true;
 
       $timeout(function() {
+
         // Use HTMLInputElement#select to fix firefox select issues.
         // The debounce is here for Edge's sake, otherwise the selection doesn't work.
-        element[0].select();
+        // Since focus may already have been lost on the input (and because `select()`
+        // will re-focus), make sure the element is still active before applying.
+        if($document[0].activeElement === element[0]) {
+          element[0].select();
+        }
 
         // This should be reset from inside the `focus`, because the event might
         // have originated from something different than a click, e.g. a keyboard event.
