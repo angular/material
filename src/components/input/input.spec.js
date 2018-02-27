@@ -393,6 +393,80 @@ describe('md-input-container directive', function() {
       expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
       expect(getCharCounter(el).length).toBe(0);
     });
+
+    it('should not accept spaces for required inputs by default', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="max" ng-model="foo" name="foo" required>' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+      var input = el.find('input');
+
+      pageScope.$apply('foo = ""');
+      pageScope.$apply('max = 1');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(input.hasClass('ng-invalid')).toBe(true);
+      expect(input.hasClass('ng-invalid-required')).toBe(true);
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+
+      pageScope.$apply('foo = "  "');
+      expect(input.hasClass('ng-invalid')).toBe(true);
+      expect(input.hasClass('ng-invalid-required')).toBe(true);
+      expect(pageScope.form.foo.$error['required']).toBeTruthy();
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+    });
+
+    it('should not trim spaces for required password inputs', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="max" ng-model="foo" name="foo" type="password" required>' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+      var input = el.find('input');
+
+      pageScope.$apply('foo = ""');
+      pageScope.$apply('max = 1');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(input.hasClass('ng-invalid')).toBe(true);
+      expect(input.hasClass('ng-invalid-required')).toBe(true);
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+
+      pageScope.$apply('foo = "  "');
+      expect(input.hasClass('ng-invalid')).toBe(true);
+      expect(input.hasClass('ng-invalid-required')).toBe(false);
+      expect(pageScope.form.foo.$error['required']).toBeFalsy();
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeTruthy();
+    });
+
+    it('should respect ng-trim="false"', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="max" ng-model="foo" name="foo" ng-trim="false" required>' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+
+      pageScope.$apply('foo = ""');
+      pageScope.$apply('max = 1');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['required']).toBeTruthy();
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+
+      pageScope.$apply('foo = "  "');
+      expect(pageScope.form.foo.$error['required']).toBeFalsy();
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeTruthy();
+    });
   });
 
   it('should not add the md-input-has-placeholder class when the placeholder is transformed into a label', inject(function($rootScope, $compile) {
