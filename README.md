@@ -168,7 +168,7 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
   </body>
 ```
 
-Developers seeking the latest, most-current build versions can use [GitCDN.link](//gitcdn.link) to
+Developers seeking the latest, most-current build versions can use [GitCDN.link](https://cdn.gitcdn.link/) to
 pull directly from the distribution GitHub
 [Bower-Material](https://github.com/angular/bower-material) repository:
 
@@ -176,7 +176,7 @@ pull directly from the distribution GitHub
   <head>
 
     <!-- AngularJS Material CSS using GitCDN to load directly from `bower-material/master` -->
-    <link rel="stylesheet" href="https://gitcdn.link/repo/angular/bower-material/master/angular-material.css">
+    <link rel="stylesheet" href="https://cdn.gitcdn.link/cdn/angular/bower-material/master/angular-material.css">
 
   </head>
   <body>
@@ -188,7 +188,7 @@ pull directly from the distribution GitHub
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-messages.min.js"></script>
 
     <!-- AngularJS Material Javascript using GitCDN to load directly from `bower-material/master` -->
-    <script src="https://gitcdn.link/repo/angular/bower-material/master/angular-material.js"></script>
+    <script src="https://cdn.gitcdn.link/cdn/angular/bower-material/master/angular-material.js"></script>
 
   </body>
 ```
