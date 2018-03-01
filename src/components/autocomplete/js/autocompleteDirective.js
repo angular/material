@@ -78,56 +78,57 @@ angular
  * @param {expression} md-items An expression in the format of `item in results` to iterate over
  *     matches for your search.<br/><br/>
  *     The `results` expression can be also a function, which returns the results synchronously
- *     or asynchronously (per Promise)
+ *     or asynchronously (per Promise).
  * @param {expression=} md-selected-item-change An expression to be run each time a new item is
- *     selected
+ *     selected.
  * @param {expression=} md-search-text-change An expression to be run each time the search text
- *     updates
- * @param {expression=} md-search-text A model to bind the search query text to
- * @param {object=} md-selected-item A model to bind the selected item to
+ *     updates.
+ * @param {expression=} md-search-text A model to bind the search query text to.
+ * @param {object=} md-selected-item A model to bind the selected item to.
  * @param {expression=} md-item-text An expression that will convert your object to a single string.
  * @param {string=} placeholder Placeholder text that will be forwarded to the input.
- * @param {boolean=} md-no-cache Disables the internal caching that happens in autocomplete
- * @param {boolean=} ng-disabled Determines whether or not to disable the input field
+ * @param {boolean=} md-no-cache Disables the internal caching that happens in autocomplete.
+ * @param {boolean=} ng-disabled Determines whether or not to disable the input field.
  * @param {boolean=} md-require-match When set to true, the autocomplete will add a validator,
  *     which will evaluate to false, when no item is currently selected.
  * @param {number=} md-min-length Specifies the minimum length of text before autocomplete will
- *     make suggestions
+ *     make suggestions.
  * @param {number=} md-delay Specifies the amount of time (in milliseconds) to wait before looking
- *     for results
+ *     for results.
  * @param {boolean=} md-clear-button Whether the clear button for the autocomplete input should show up or not.
  * @param {boolean=} md-autofocus If true, the autocomplete will be automatically focused when a `$mdDialog`,
  *     `$mdBottomsheet` or `$mdSidenav`, which contains the autocomplete, is opening. <br/><br/>
  *     Also the autocomplete will immediately focus the input element.
- * @param {boolean=} md-no-asterisk When present, asterisk will not be appended to the floating label
+ * @param {boolean=} md-no-asterisk When present, asterisk will not be appended to the floating label.
  * @param {boolean=} md-autoselect If set to true, the first item will be automatically selected
  *     in the dropdown upon open.
- * @param {string=} md-menu-class This will be applied to the dropdown menu for styling
+ * @param {string=} md-menu-class This will be applied to the dropdown menu for styling.
  * @param {string=} md-floating-label This will add a floating label to autocomplete and wrap it in
- *     `md-input-container`
+ *     `md-input-container`.
  * @param {string=} md-input-name The name attribute given to the input element to be used with
- *     FormController
+ *     FormController.
  * @param {string=} md-select-on-focus When present the inputs text will be automatically selected
  *     on focus.
- * @param {string=} md-input-id An ID to be added to the input element
- * @param {number=} md-input-minlength The minimum length for the input's value for validation
- * @param {number=} md-input-maxlength The maximum length for the input's value for validation
- * @param {boolean=} md-select-on-match When set, autocomplete will automatically select exact
+ * @param {string=} md-input-id An ID to be added to the input element.
+ * @param {number=} md-input-minlength The minimum length for the input's value for validation.
+ * @param {number=} md-input-maxlength The maximum length for the input's value for validation.
+ * @param {boolean=} md-select-on-match When set, autocomplete will automatically select
  *     the item if the search text is an exact match. <br/><br/>
- *     Exact match means that there is only one match showing up.
+ *     An exact match is when only one match is displayed.
  * @param {boolean=} md-match-case-insensitive When set and using `md-select-on-match`, autocomplete
- *     will select on case-insensitive match
+ *     will select on case-insensitive match.
  * @param {string=} md-escape-options Override escape key logic. Default is `blur clear`.<br/>
- *     Options: `blur | clear`, `none`
+ *     Options: `blur`, `clear`, `none`.
  * @param {string=} md-dropdown-items Specifies the maximum amount of items to be shown in
  *     the dropdown.<br/><br/>
  *     When the dropdown doesn't fit into the viewport, the dropdown will shrink
- *     as less as possible.
+ *     as much as possible.
  * @param {string=} md-dropdown-position Overrides the default dropdown position. Options: `top`, `bottom`.
  * @param {string=} ng-trim If set to false, the search text will be not trimmed automatically.
  *     Defaults to true.
  * @param {string=} ng-pattern Adds the pattern validator to the ngModel of the search text.
- *     [ngPattern Directive](https://docs.angularjs.org/api/ng/directive/ngPattern)
+ *     See the [ngPattern Directive](https://docs.angularjs.org/api/ng/directive/ngPattern)
+ *     for more details.
  *
  * @usage
  * ### Basic Example
