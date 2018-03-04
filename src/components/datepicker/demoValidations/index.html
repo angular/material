@@ -30,10 +30,9 @@
           md-max-date="ctrl.maxDate"></md-datepicker>
 
         <div ng-messages="myForm.dateField.$error">
-          <div ng-message="valid">The entered value is not a date!</div>
-          <div ng-message="required">This date is required!</div>
-          <div ng-message="mindate">Date is too early!</div>
-          <div ng-message="maxdate">Date is too late!</div>
+          <div ng-message="valid">Use a valid date format</div>
+          <div ng-message="mindate">Choose a date on or after {{ctrl.minDate | date:"shortDate"}}</div>
+          <div ng-message="maxdate">Choose a date on or before {{ctrl.maxDate | date:"shortDate"}}</div>
         </div>
       </md-input-container>
     </form>
