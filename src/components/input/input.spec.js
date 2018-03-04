@@ -257,6 +257,40 @@ describe('md-input-container directive', function() {
       return angular.element(el[0].querySelector('.md-char-counter'));
     }
 
+    it('should error with a constant and incorrect initial value', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="2" ng-model="foo" name="foo">' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+
+      pageScope.$apply('foo = "ABCDEFGHIJ"');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['md-maxlength']).toBe(true);
+      expect(getCharCounter(el).text()).toBe('10 / 2');
+    });
+
+    it('should work with a constant and correct initial value', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="5" ng-model="foo" name="foo">' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+
+      pageScope.$apply('foo = "abcde"');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('5 / 5');
+    });
+
     it('should work with a constant', function() {
       var el = $compile(
         '<form name="form">' +
@@ -341,11 +375,10 @@ describe('md-input-container directive', function() {
         '  </md-input-container>' +
         '</form>')(pageScope);
 
-      pageScope.$apply();
+      pageScope.$apply('max = -1');
 
       // Flush any pending $mdUtil.nextTick calls
       $timeout.flush();
-
       expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
       expect(getCharCounter(el).length).toBe(0);
 
