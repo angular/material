@@ -21,11 +21,11 @@ angular.module('material.components.switch', [
  * the switch is in the accent color by default. The primary color palette may be used with
  * the `md-primary` class.
  *
- * @param {string} ng-model Assignable angular expression to data-bind to.
+ * @param {expression} ng-model Assignable angular expression to data-bind to.
  * @param {string=} name Property name of the form under which the control is published.
  * @param {expression=} ng-true-value The value to which the expression should be set when selected.
  * @param {expression=} ng-false-value The value to which the expression should be set when not selected.
- * @param {string=} ng-change AngularJS expression to be executed when input changes due to user interaction with the input element.
+ * @param {expression=} ng-change Expression to be executed when the model value changes.
  * @param {expression=} ng-disabled En/Disable based on the expression.
  * @param {boolean=} md-no-ink Use of attribute indicates use of ripple ink effects.
  * @param {string=} aria-label Publish the button label used by screen-readers for accessibility. Defaults to the switch's text.

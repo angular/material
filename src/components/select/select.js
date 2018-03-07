@@ -69,7 +69,8 @@ angular.module('material.components.select', [
  * **Note:** Using the `value` attribute (as opposed to `ng-value`) always evaluates to a string, so
  * `value="null"` will require the test `ng-if="myValue != 'null'"` rather than `ng-if="!myValue"`.
  *
- * @param {expression} ng-model The model!
+ * @param {expression} ng-model Assignable angular expression to data-bind to.
+ * @param {expression=} ng-change Expression to be executed when the model value changes.
  * @param {boolean=} multiple When set to true, allows for more than one option to be selected. The model is an array with the selected choices.
  * @param {expression=} md-on-close Expression to be evaluated when the select is closed.
  * @param {expression=} md-on-open Expression to be evaluated when opening the select.
