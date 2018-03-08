@@ -100,6 +100,26 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
       var containerCtrl = ctrls[0];
       var ngModelCtrl = ctrls[1] || $mdUtil.fakeNgModel();
       var formCtrl = ctrls[2];
+      var labelHasLink = element.find('a').length > 0;
+
+      // The original component structure is not accessible when the checkbox's label contains a link.
+      // In order to keep backwards compatibility, we're only changing the structure of the component
+      // when we detect a link within the label. Using a span after the md-checkbox and attaching it
+      // via aria-labelledby allows screen readers to find and work with the link within the label.
+      if (labelHasLink) {
+        var labelId = 'label-' + $mdUtil.nextUid();
+        attr.$set('aria-labelledby', labelId);
+
+        var label = element.children()[1];
+        label.remove();
+        label.removeAttribute('ng-transclude');
+        label.className = 'md-checkbox-link-label';
+        label.setAttribute('id', labelId);
+        element.after(label);
+        // Make sure that clicking on the label still causes the checkbox to be toggled, when appropriate.
+        var externalLabel = element.next();
+        externalLabel.on('click', listener);
+      }
 
       if (containerCtrl) {
         var isErrorGetter = containerCtrl.isErrorGetter || function() {
@@ -136,7 +156,11 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
         false: attr.tabindex
       });
 
-      $mdAria.expectWithText(element, 'aria-label');
+      // Don't emit a warning when the label has a link within it. In that case we'll use
+      // aria-labelledby to point to another span that should be read as the label.
+      if (!labelHasLink) {
+        $mdAria.expectWithText(element, 'aria-label');
+      }
 
       // Reuse the original input[type=checkbox] directive from AngularJS core.
       // This is a bit hacky as we need our own event listener and own render
@@ -201,8 +225,10 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
 
       function listener(ev) {
         // skipToggle boolean is used by the switch directive to prevent the click event
-        // when releasing the drag. There will be always a click if releasing the drag over the checkbox
-        if (element[0].hasAttribute('disabled') || scope.skipToggle) {
+        // when releasing the drag. There will be always a click if releasing the drag over the checkbox.
+        // If the click came from a link in the checkbox, don't toggle the value.
+        // We want the link to be opened without changing the value in this case.
+        if (element[0].hasAttribute('disabled') || scope.skipToggle || ev.target.tagName === 'A') {
           return;
         }
 

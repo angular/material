@@ -41,6 +41,21 @@ describe('mdCheckbox', function() {
     expect(checkboxElement.attr('aria-label')).toBe('Some text');
   });
 
+  it('should handle text content that contains a link', function() {
+    var element = compileAndLink(
+        '<md-input-container>' +
+          '<md-checkbox ng-model="blue">I agree to the <a href="/license">license</a>.</md-checkbox>' +
+        '</md-input-container>');
+
+    var checkboxElement = element.find('md-checkbox').eq(0);
+    expect(checkboxElement.attr('aria-labelledby')).toContain('label-');
+    var labelElement = element.children()[1];
+    expect(labelElement.getAttribute('id')).toContain('label-');
+    expect(labelElement.innerHTML).toContain('I agree to the ');
+    var linkElement = element.find('A').eq(0);
+    expect(linkElement[0].innerHTML).toBe('license');
+  });
+
   it('should set checked css class and aria-checked attributes', function() {
     var element = compileAndLink(
         '<div>' +

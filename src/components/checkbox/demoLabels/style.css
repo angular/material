@@ -1,0 +1,12 @@
+fieldset.standard {
+  border: 1px solid;
+}
+legend {
+  color: #3F51B5;
+}
+label {
+  cursor: pointer;
+  margin-right: 10px;
+  user-select: none;
+  height: 16px;
+}
