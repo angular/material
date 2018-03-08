@@ -1,0 +1,38 @@
+<div ng-controller="AppCtrl" class="md-padding" ng-cloak>
+  <div>
+    <fieldset class="standard">
+      <legend>Using Different Layouts and Labels</legend>
+      <div layout="column">
+        <div class="md-dense" layout="column">
+          <md-checkbox ng-model="data.cb1">
+            Default Checkbox and Label
+          </md-checkbox>
+          <md-checkbox ng-model="data.cb2">
+            Dynamic Label: {{data.cb2 ? 'Checked' : 'Unchecked'}}
+          </md-checkbox>
+        </div>
+        <div layout="row" layout-align="start center" class="md-dense">
+          <!-- Extra work is needed by the developer to make this work, including a11y. -->
+          <label for="label-in-front" ng-click="data.cb3 = !data.cb3"
+                 aria-hidden="true" tabindex="-1">
+            Label in Front
+          </label>
+          <md-checkbox ng-model="data.cb3" id="label-in-front"
+                       aria-label="Label in Front">
+          </md-checkbox>
+        </div>
+        <md-input-container>
+          <md-checkbox ng-model="data.cb4">
+            Checkbox in an md-input-container
+          </md-checkbox>
+        </md-input-container>
+        <md-subheader>Checkbox with an accessible link in the label</md-subheader>
+        <md-input-container>
+          <md-checkbox ng-model="data.cb5">
+            I agree to the <a href="/license">license</a>.
+          </md-checkbox>
+        </md-input-container>
+      </div>
+    </fieldset>
+  </div>
+</div>
