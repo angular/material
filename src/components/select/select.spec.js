@@ -172,10 +172,46 @@ describe('<md-select>', function() {
     it('should not trigger ng-change without a change when using trackBy', function() {
       var changed = false;
       $rootScope.onChange = function() { changed = true; };
-      $rootScope.val = { id: 1, name: 'Bob' };
+
+      // Since we're tracking by id, ng-change shouldn't be triggered
+      // when we have two objects that are not strictly equivalent (one has a 'randomAddedProperty')
+      // but that have the same tracked field
+      $rootScope.val = { id: 1, name: 'Bob', randomAddedProperty: 'random' };
 
       var opts = [{ id: 1, name: 'Bob' }, { id: 2, name: 'Alice' }];
       var select = setupSelect('ng-model="$root.val" ng-change="onChange()" ng-model-options="{trackBy: \'$value.id\'}"', opts);
+      expect(changed).toBe(false);
+
+      openSelect(select);
+      clickOption(select, 1);
+      $material.flushInterimElement();
+      expect($rootScope.val.id).toBe(2);
+      expect(changed).toBe(true);
+    });
+
+    it('should support trackBy to be updated', function() {
+      var changed = false;
+      $rootScope.onChange = function() { changed = true; };
+      $rootScope.useTrackBy = false;
+      $rootScope.trackByOption = '$value.id';
+
+      var opts = [ { id: 1, name: 'Bob' }, { id: 2, name: 'Alice' } ];
+      $rootScope.val = opts[0];
+      var select = setupSelect('ng-model="$root.val"' +
+        'ng-change="onChange()"' +
+        'ng-model-options="{ trackBy: $root.useTrackBy ? $root.trackByOption : undefined }"', opts);
+      expect(changed).toBe(false);
+
+      $rootScope.$apply(function() {
+        $rootScope.useTrackBy = true;
+        // Since we're tracking by id, ng-change shouldn't be triggered
+        // when we have two objects that are not strictly equivalent (one has a 'randomAddedProperty')
+        // but that have the same tracked field
+        $rootScope.val = { id: 1, name: 'Bob', randomAddedProperty: 'random' };
+      });
+      openSelect(select);
+      clickOption(select, 0);
+      $material.flushInterimElement();
       expect(changed).toBe(false);
 
       openSelect(select);

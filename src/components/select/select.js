@@ -235,12 +235,13 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
 
     // Use everything that's left inside element.contents() as the contents of the menu
     var multipleContent = isMultiple ? 'multiple' : '';
+    var ngModelOptions = attr.ngModelOptions ? $mdUtil.supplant('ng-model-options="{0}"', [attr.ngModelOptions]) : '';
     var selectTemplate = '' +
       '<div class="md-select-menu-container" aria-hidden="true" role="presentation">' +
-      '<md-select-menu role="presentation" {0}>{1}</md-select-menu>' +
+      '<md-select-menu role="presentation" {0} {1}>{2}</md-select-menu>' +
       '</div>';
 
-    selectTemplate = $mdUtil.supplant(selectTemplate, [multipleContent, element.html()]);
+    selectTemplate = $mdUtil.supplant(selectTemplate, [multipleContent, ngModelOptions,  element.html()]);
     element.empty().append(valueEl);
     element.append(selectTemplate);
 
@@ -742,28 +743,40 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
         return !self.options[self.hashGetter($viewValue)];
       };
 
-      // Allow users to provide `ng-model="foo" ng-model-options="{trackBy: 'foo.id'}"` so
+      // Allow users to provide `ng-model="foo" ng-model-options="{trackBy: '$value.id'}"` so
       // that we can properly compare objects set on the model to the available options
-      var trackByOption = $mdUtil.getModelOption(ngModel, 'trackBy');
+      //
+      // If the user doesn't provide a trackBy, we automatically generate an id for every
+      // value passed in with the getId function
+      if ($attrs.ngModelOptions) {
+        self.hashGetter = function(value) {
+          var ngModelOptions = $parse($attrs.ngModelOptions)($scope);
+          var trackByOption = ngModelOptions && ngModelOptions.trackBy;
 
-      if (trackByOption) {
-        var trackByLocals = {};
-        var trackByParsed = $parse(trackByOption);
-        self.hashGetter = function(value, valueScope) {
-          trackByLocals.$value = value;
-          return trackByParsed(valueScope || $scope, trackByLocals);
-        };
-        // If the user doesn't provide a trackBy, we automatically generate an id for every
-        // value passed in
-      } else {
-        self.hashGetter = function getHashValue(value) {
-          if (angular.isObject(value)) {
-            return 'object_' + (value.$$mdSelectId || (value.$$mdSelectId = ++selectNextId));
+          if (trackByOption) {
+            return $parse(trackByOption)($scope, { $value: value });
+          } else if (angular.isObject(value)) {
+            return getId(value);
           }
           return value;
         };
+      } else {
+        self.hashGetter = getId;
       }
       self.setMultiple(self.isMultiple);
+
+      /**
+       * If the value is an object, get the unique, incremental id of the value.
+       * If it's not an object, the value will be converted to a string and then returned.
+       * @param value
+       * @returns {string}
+       */
+      function getId(value) {
+        if (angular.isObject(value) && !angular.isArray(value)) {
+          return 'object_' + (value.$$mdSelectId || (value.$$mdSelectId = ++selectNextId));
+        }
+        return value + '';
+      }
     };
 
     self.selectedLabels = function(opts) {
@@ -867,14 +880,40 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
           values.push(self.selected[hashKey]);
         }
       }
-      var usingTrackBy = $mdUtil.getModelOption(self.ngModel, 'trackBy');
 
       var newVal = self.isMultiple ? values : values[0];
       var prevVal = self.ngModel.$modelValue;
 
-      if (usingTrackBy ? !angular.equals(prevVal, newVal) : (prevVal + '') !== newVal) {
+      if (!equals(prevVal, newVal)) {
         self.ngModel.$setViewValue(newVal);
         self.ngModel.$render();
+      }
+
+      function equals(prevVal, newVal) {
+        if (self.isMultiple) {
+          if (!angular.isArray(prevVal)) {
+            // newVal is always an array when self.isMultiple is true
+            // thus, if prevVal is not an array they are different
+            return false;
+          } else if (prevVal.length !== newVal.length) {
+            // they are different if they have different length
+            return false;
+          } else {
+            // if they have the same length, then they are different
+            // if an item in the newVal array can't be found in the prevVal
+            var prevValHashes = prevVal.map(function(prevValItem) {
+              return self.hashGetter(prevValItem);
+            });
+            return newVal.every(function(newValItem) {
+              var newValItemHash = self.hashGetter(newValItem);
+              return prevValHashes.some(function(prevValHash) {
+                return prevValHash === newValItemHash;
+              });
+            });
+          }
+        } else {
+          return self.hashGetter(prevVal) === self.hashGetter(newVal);
+        }
       }
     };
 
