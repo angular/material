@@ -634,10 +634,24 @@ function mdMaxlengthDirective($animate, $mdUtil) {
   };
 
   function postLink(scope, element, attr, ctrls) {
-    var maxlength;
+    var maxlength = parseInt(attr.mdMaxlength);
+    if (isNaN(maxlength)) maxlength = -1;
     var ngModelCtrl = ctrls[0];
     var containerCtrl = ctrls[1];
     var charCountEl, errorsSpacer;
+
+
+    ngModelCtrl.$validators['md-maxlength'] = function(modelValue, viewValue) {
+      if (!angular.isNumber(maxlength) || maxlength < 0) {
+        return true;
+      }
+
+      // We always update the char count, when the modelValue has changed.
+      // Using the $validators for triggering the update works very well.
+      renderCharCount();
+
+      return ( modelValue || element.val() || viewValue || '' ).length <= maxlength;
+    };
 
     // Wait until the next tick to ensure that the input has setup the errors spacer where we will
     // append our counter
@@ -663,23 +677,11 @@ function mdMaxlengthDirective($animate, $mdUtil) {
           $animate.leave(charCountEl);
         }
       });
-
-      ngModelCtrl.$validators['md-maxlength'] = function(modelValue, viewValue) {
-        if (!angular.isNumber(maxlength) || maxlength < 0) {
-          return true;
-        }
-
-        // We always update the char count, when the modelValue has changed.
-        // Using the $validators for triggering the update works very well.
-        renderCharCount();
-
-        return ( modelValue || element.val() || viewValue || '' ).length <= maxlength;
-      };
     });
 
     function renderCharCount(value) {
-      // If we have not been appended to the body yet; do not render
-      if (!charCountEl.parent) {
+      // If we have not been initialized or appended to the body yet; do not render
+      if (!charCountEl || !charCountEl.parent) {
         return value;
       }
 
