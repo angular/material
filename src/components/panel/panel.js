@@ -1616,6 +1616,10 @@ MdPanelRef.prototype.destroy = function() {
   }
   this.config.scope.$destroy();
   this.config.locals = null;
+  this.config.onDomAdded = null;
+  this.config.onDomRemoved = null;
+  this.config.onRemoving = null;
+  this.config.onOpenComplete = null;
   this._interceptors = null;
 };
 
