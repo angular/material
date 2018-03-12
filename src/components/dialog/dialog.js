@@ -545,7 +545,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  *     finished.
  *   - `onRemoving` - `function(element, removePromise)`: Callback function used to announce the
  *      close/hide() action is starting. This allows developers to run custom animations
- *      in parallel the close animations.
+ *      in parallel with the close animations.
  *   - `fullscreen` `{boolean=}`: An option to toggle whether the dialog should show in fullscreen
  *      or not. Defaults to `false`.
  *   - `multiple` `{boolean=}`: An option to allow this dialog to display over one that's currently open.
