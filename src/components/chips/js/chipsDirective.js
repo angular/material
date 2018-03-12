@@ -109,6 +109,7 @@
    * @param {string=} md-enable-chip-edit Set this to "true" to enable editing of chip contents. The user can 
    *    go into edit mode with pressing "space", "enter", or double clicking on the chip. Chip edit is only
    *    supported for chips with basic template.
+   * @param {boolean=} ng-required Whether ng-model is allowed to be empty or not.
    * @param {number=} md-max-chips The maximum number of chips allowed to add through user input.
    *    <br/><br/>The validation property `md-max-chips` can be used when the max chips
    *    amount is reached.
@@ -421,7 +422,10 @@
           $mdUtil.nextTick(function() {
             var input = element.find('input');
 
-            input && input.toggleClass('md-input', true);
+            if (input) {
+              mdChipsCtrl.configureInput(input);
+              input.toggleClass('md-input', true);
+            }
           });
         }
 
