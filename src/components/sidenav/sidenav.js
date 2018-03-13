@@ -231,6 +231,7 @@ function SidenavFocusDirective() {
  *
  * @param {expression=} md-is-open A model bound to whether the sidenav is opened.
  * @param {boolean=} md-disable-backdrop When present in the markup, the sidenav will not show a backdrop.
+ * @param {boolean=} md-disable-close-events When present in the markup, clicking the backdrop or pressing the 'Escape' key will not close the sidenav.
  * @param {string=} md-component-id componentId to use with $mdSidenav service.
  * @param {expression=} md-is-locked-open When this expression evaluates to true,
  * the sidenav 'locks open': it falls into the content's flow instead
@@ -302,6 +303,12 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInterac
     if (!attr.hasOwnProperty('mdDisableBackdrop')) {
       backdrop = $mdUtil.createBackdrop(scope, "md-sidenav-backdrop md-opaque ng-enter");
     }
+    
+    // If md-disable-close-events is set on the sidenav we will disable
+    // backdrop click and Escape key events
+    if (attr.hasOwnProperty('mdDisableCloseEvents')) {
+      var disableCloseEvents = true;
+    }
 
     element.addClass('_md');     // private md component indicator for styling
     $mdTheming(element);
@@ -351,8 +358,12 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInterac
       var focusEl = $mdUtil.findFocusTarget(element) || $mdUtil.findFocusTarget(element,'[md-sidenav-focus]') || element;
       var parent = element.parent();
 
-      parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
-      if (backdrop) backdrop[isOpen ? 'on' : 'off']('click', close);
+      // If the user hasn't set the disable close events property we are adding
+      // click and escape events to close the sidenav
+      if ( !disableCloseEvents ) {
+        parent[isOpen ? 'on' : 'off']('keydown', onKeyDown);
+        if (backdrop) backdrop[isOpen ? 'on' : 'off']('click', close);
+      }
 
       var restorePositioning = updateContainerPositions(parent, isOpen);
 

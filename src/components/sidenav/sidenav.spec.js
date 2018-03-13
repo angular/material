@@ -59,6 +59,40 @@ describe('mdSidenav', function() {
       expect($rootScope.show).toBe(false);
     }));
 
+    describe('disable click and Escape key events if md-disable-close-events is set to true',
+      function() {
+        it('should not close on escape and still show the backdrop', 
+          inject(function($rootScope, $material, $mdConstant, $timeout) {
+            var el = setup('md-is-open="show" md-disable-close-events');
+            $rootScope.$apply('show = true');
+      
+            $material.flushOutstandingAnimations();
+            el.parent().triggerHandler({
+              type: 'keydown',
+              keyCode: $mdConstant.KEY_CODE.ESCAPE
+            });
+            $timeout.flush();
+            var backdrop = el.parent().find('md-backdrop');
+
+            expect($rootScope.show).toBe(true);
+            expect(backdrop.length).toBe(1);
+        }));
+
+        it('should not close on backdrop click and still show the backdrop',
+          inject(function($rootScope, $material, $timeout) {
+            var el = setup('md-is-open="show" md-disable-close-events');
+            $rootScope.$apply('show = true');
+      
+            $material.flushOutstandingAnimations();
+            el.parent().find('md-backdrop').triggerHandler('click');
+            $timeout.flush();
+            var backdrop = el.parent().find('md-backdrop');        
+
+            expect($rootScope.show).toBe(true);
+            expect(backdrop.length).toBe(1);        
+        }));
+    });
+
     it('should show a backdrop by default', inject(function($rootScope, $material) {
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
