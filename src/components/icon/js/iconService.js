@@ -575,7 +575,14 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
    *  Define the Icon class
    */
   function Icon(el, config) {
-    if (el && el.tagName != 'svg') {
+    // If the node is a <symbol>, it won't be rendered so we have to convert it into <svg>.
+    if (el && el.tagName.toLowerCase() === 'symbol') {
+      var viewbox = el.getAttribute('viewBox');
+      el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">').html(el.innerHTML)[0];
+      if (viewbox) el.setAttribute('viewBox', viewbox);
+    }
+
+    if (el && el.tagName.toLowerCase() !== 'svg') {
       el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">').append(el.cloneNode(true))[0];
     }
 
