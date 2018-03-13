@@ -97,6 +97,7 @@
    * Please refer to the documentation of this option (below) for more information.
    *
    * @param {string=|object=} ng-model A model to which the list of items will be bound.
+   * @param {expression=} ng-change AngularJS expression to be executed on chip addition/removal
    * @param {string=} placeholder Placeholder text that will be forwarded to the input.
    * @param {string=} secondary-placeholder Placeholder text that will be forwarded to the input,
    *    displayed when there is at least one item in the list

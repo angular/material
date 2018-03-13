@@ -22,6 +22,11 @@
 
     <md-chips ng-model="ctrl.fruitNames" readonly="ctrl.readonly" md-removable="ctrl.removable"></md-chips>
 
+    <br/>
+    <h2 class="md-title">Use ng-change</h2>
+
+    <md-chips ng-model="ctrl.ngChangeFruitNames" ng-change="ctrl.onModelChange(ctrl.ngChangeFruitNames)" 
+      md-removable="ctrl.removable"></md-chips>
 
     <br/>
     <h2 class="md-title">Make chips editable.</h2>
