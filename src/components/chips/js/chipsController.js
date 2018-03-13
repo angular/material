@@ -190,7 +190,8 @@ MdChipsCtrl.prototype.init = function() {
 
   this.deRegister.push(
     this.$attrs.$observe('mdChipAppendDelay', function(newValue) {
-      ctrl.chipAppendDelay = parseInt(newValue) || DEFAULT_CHIP_APPEND_DELAY;
+      var numberValue = parseInt(newValue);
+      ctrl.chipAppendDelay = isNaN(numberValue) ? DEFAULT_CHIP_APPEND_DELAY : numberValue;
     })
   );
 };
