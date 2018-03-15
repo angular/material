@@ -9,7 +9,7 @@
    *
    * @description
    * `<md-chips>` is an input component for building lists of strings or objects. The list items are
-   * displayed as 'chips'. This component can make use of an `<input>` element or an 
+   * displayed as 'chips'. This component can make use of an `<input>` element or an
    * `<md-autocomplete>` element.
    *
    * ### Custom templates
@@ -106,7 +106,7 @@
    *    the input and delete buttons. If no `ng-model` is provided, the chips will automatically be
    *    marked as readonly.<br/><br/>
    *    When `md-removable` is not defined, the `md-remove` behavior will be overwritten and disabled.
-   * @param {string=} md-enable-chip-edit Set this to "true" to enable editing of chip contents. The user can 
+   * @param {string=} md-enable-chip-edit Set this to "true" to enable editing of chip contents. The user can
    *    go into edit mode with pressing "space", "enter", or double clicking on the chip. Chip edit is only
    *    supported for chips with basic template.
    * @param {boolean=} ng-required Whether ng-model is allowed to be empty or not.

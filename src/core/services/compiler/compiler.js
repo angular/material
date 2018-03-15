@@ -415,7 +415,7 @@ function MdCompilerProvider($compileProvider) {
           if (contentEl.parentNode) {
             contentEl.parentNode.removeChild(contentEl);
           }
-        }
+        };
       }
     }
 
@@ -439,7 +439,7 @@ function MdCompilerProvider($compileProvider) {
           // before.
           parent.insertBefore(element, nextSibling);
         }
-      }
+      };
     }
   };
 }

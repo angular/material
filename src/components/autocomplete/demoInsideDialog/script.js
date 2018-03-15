@@ -15,8 +15,8 @@
         parent: angular.element(document.body),
         targetEvent: $event,
         clickOutsideToClose:true
-      })
-    }
+      });
+    };
   }
 
   function DialogCtrl ($timeout, $q, $scope, $mdDialog) {

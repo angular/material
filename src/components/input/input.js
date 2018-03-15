@@ -30,7 +30,7 @@ if (window._mdMocksIncluded) {
         hide        : hideInputMessages,
         getElement  : getMessagesElement
       }
-    }
+    };
   })
 
   // Register a service for each animation so that we can easily inject them into unit tests
