@@ -1838,6 +1838,59 @@ describe('$mdDialog', function() {
     });
 
     describe('theming', function () {
+
+      it('should inherit md-theme if the child has a md-theme to inherit',
+        inject(function ($mdDialog, $mdTheming, $rootScope, $compile) {
+
+          var template = '<div id="rawContent">Hello</div>';
+          var parent = angular.element('<div>');
+
+          var button = $compile(
+            '<button ng-click="showDialog($event)" md-theme="coolTheme">test</button>'
+          )($rootScope);
+
+          $mdTheming(button);
+
+          $rootScope.showDialog = function (ev) {
+            $mdDialog.show({
+              template: template,
+              parent: parent,
+              targetEvent: ev
+            });
+          };
+
+          button[0].click();
+
+          var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+
+          expect(container.attr('md-theme')).toEqual('coolTheme');
+        }));
+
+      it('should not set md-theme if the child does not have md-theme to inherit',
+        inject(function ($mdDialog, $mdTheming, $rootScope, $compile) {
+
+          var template = '<div id="rawContent">Hello</div>';
+          var parent = angular.element('<div>');
+
+          var button = $compile('<button ng-click="showDialog($event)">test</button>')($rootScope);
+
+          $mdTheming(button);
+
+          $rootScope.showDialog = function (ev) {
+            $mdDialog.show({
+              template: template,
+              parent: parent,
+              targetEvent: ev
+            });
+          };
+
+          button[0].click();
+
+          var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+
+          expect(container.attr('md-theme')).toBeUndefined();
+        }));
+
       it('should inherit targetElement theme', inject(function($mdDialog, $mdTheming, $rootScope, $compile) {
         var template = '<div id="rawContent">Hello</div>';
         var parent = angular.element('<div>');
