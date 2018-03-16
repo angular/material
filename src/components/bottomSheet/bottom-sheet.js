@@ -116,6 +116,9 @@ function MdBottomSheetDirective($mdBottomSheet) {
  *   - `disableBackdrop` - `{boolean=}`: When set to true, the bottomsheet will not show a backdrop.
  *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to close the bottom sheet.
  *     Default true.
+ *   - `isLockedOpen` - `{boolean=}`: Disables all default ways of closing the bottom sheet. **Note:** this will override
+ *     the `clickOutsideToClose` and `escapeToClose` options, leaving only the `hide` and `cancel`
+ *     methods as ways of closing the bottom sheet. Defaults to false.
  *   - `resolve` - `{object=}`: Similar to locals, except it takes promises as values
  *   and the bottom sheet will not open until the promises resolve.
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
@@ -181,7 +184,8 @@ function MdBottomSheetProvider($$interimElementProvider) {
       disableBackdrop: false,
       escapeToClose: true,
       clickOutsideToClose: true,
-      disableParentScroll: true
+      disableParentScroll: true,
+      isLockedOpen: false
     };
 
 
@@ -190,13 +194,20 @@ function MdBottomSheetProvider($$interimElementProvider) {
       element = $mdUtil.extractElementByName(element, 'md-bottom-sheet');
 
       // prevent tab focus or click focus on the bottom-sheet container
-      element.attr('tabindex',"-1");
+      element.attr('tabindex', '-1');
 
       // Once the md-bottom-sheet has `ng-cloak` applied on his template the opening animation will not work properly.
       // This is a very common problem, so we have to notify the developer about this.
       if (element.hasClass('ng-cloak')) {
-        var message = '$mdBottomSheet: using `<md-bottom-sheet ng-cloak >` will affect the bottom-sheet opening animations.';
+        var message = '$mdBottomSheet: using `<md-bottom-sheet ng-cloak>` will affect the bottom-sheet opening animations.';
         $log.warn( message, element[0] );
+      }
+
+      if (options.isLockedOpen) {
+        options.clickOutsideToClose = false;
+        options.escapeToClose = false;
+      } else {
+        options.cleanupGestures = registerGestures(element, options.parent);
       }
 
       if (!options.disableBackdrop) {
@@ -206,7 +217,6 @@ function MdBottomSheetProvider($$interimElementProvider) {
         // Prevent mouse focus on backdrop; ONLY programatic focus allowed.
         // This allows clicks on backdrop to propogate to the $rootElement and
         // ESC key events to be detected properly.
-        
         backdrop[0].tabIndex = -1;
 
         if (options.clickOutsideToClose) {
@@ -220,16 +230,13 @@ function MdBottomSheetProvider($$interimElementProvider) {
         $animate.enter(backdrop, options.parent, null);
       }
 
-      var bottomSheet = new BottomSheet(element, options.parent);
-      options.bottomSheet = bottomSheet;
-
-      $mdTheming.inherit(bottomSheet.element, options.parent);
+      $mdTheming.inherit(element, options.parent);
 
       if (options.disableParentScroll) {
-        options.restoreScroll = $mdUtil.disableScrollAround(bottomSheet.element, options.parent);
+        options.restoreScroll = $mdUtil.disableScrollAround(element, options.parent);
       }
 
-      return $animate.enter(bottomSheet.element, options.parent, backdrop)
+      return $animate.enter(element, options.parent, backdrop)
         .then(function() {
           var focusable = $mdUtil.findFocusTarget(element) || angular.element(
             element[0].querySelector('button') ||
@@ -252,40 +259,35 @@ function MdBottomSheetProvider($$interimElementProvider) {
     }
 
     function onRemove(scope, element, options) {
-
-      var bottomSheet = options.bottomSheet;
-
       if (!options.disableBackdrop) $animate.leave(backdrop);
-      return $animate.leave(bottomSheet.element).then(function() {
+
+      return $animate.leave(element).then(function() {
         if (options.disableParentScroll) {
           options.restoreScroll();
           delete options.restoreScroll;
         }
 
-        bottomSheet.cleanup();
+        options.cleanupGestures && options.cleanupGestures();
       });
     }
 
     /**
-     * BottomSheet class to apply bottom-sheet behavior to an element
+     * Adds the drag gestures to the bottom sheet.
      */
-    function BottomSheet(element, parent) {
+    function registerGestures(element, parent) {
       var deregister = $mdGesture.register(parent, 'drag', { horizontal: false });
       parent.on('$md.dragstart', onDragStart)
         .on('$md.drag', onDrag)
         .on('$md.dragend', onDragEnd);
 
-      return {
-        element: element,
-        cleanup: function cleanup() {
-          deregister();
-          parent.off('$md.dragstart', onDragStart);
-          parent.off('$md.drag', onDrag);
-          parent.off('$md.dragend', onDragEnd);
-        }
+      return function cleanupGestures() {
+        deregister();
+        parent.off('$md.dragstart', onDragStart);
+        parent.off('$md.drag', onDrag);
+        parent.off('$md.dragend', onDragEnd);
       };
 
-      function onDragStart(ev) {
+      function onDragStart() {
         // Disable transitions on transform so that it feels fast
         element.css($mdConstant.CSS.TRANSITION_DURATION, '0ms');
       }
