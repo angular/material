@@ -329,7 +329,7 @@ MdChipsCtrl.prototype.getCursorPosition = function(element) {
 MdChipsCtrl.prototype.updateChipContents = function(chipIndex, chipContents){
   if(chipIndex >= 0 && chipIndex < this.items.length) {
     this.items[chipIndex] = chipContents;
-    this.ngModelCtrl.$setDirty();
+    this.updateNgModel();
   }
 };
 
@@ -484,9 +484,7 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
   var length = this.items.push(newChip);
   var index = length - 1;
 
-  // Update model validation
-  this.ngModelCtrl.$setDirty();
-  this.validateModel();
+  this.updateNgModel();
 
   // If they provide the md-on-add attribute, notify them of the chip addition
   if (this.useOnAdd && this.onAdd) {
@@ -585,6 +583,13 @@ MdChipsCtrl.prototype.validateModel = function() {
   this.ngModelCtrl.$validate(); // rerun any registered validators
 };
 
+MdChipsCtrl.prototype.updateNgModel = function() {
+  this.ngModelCtrl.$setViewValue(this.items.slice());
+  // TODO add the md-max-chips validator to this.ngModelCtrl.validators so that
+  // the validation will be performed automatically on $viewValue change
+  this.validateModel();
+};
+
 /**
  * Removes the chip at the given index.
  * @param index
@@ -592,9 +597,7 @@ MdChipsCtrl.prototype.validateModel = function() {
 MdChipsCtrl.prototype.removeChip = function(index) {
   var removed = this.items.splice(index, 1);
 
-  // Update model validation
-  this.ngModelCtrl.$setDirty();
-  this.validateModel();
+  this.updateNgModel();
 
   if (removed && removed.length && this.useOnRemove && this.onRemove) {
     this.onRemove({ '$chip': removed[0], '$index': index });
