@@ -26,7 +26,7 @@ md-toast {
 
   .md-toast-content {
     display: flex;
-    direction: row;
+    flex-direction: row;
     align-items: center;
 
     max-height: 7 * $toast-height;
