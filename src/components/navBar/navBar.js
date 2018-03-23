@@ -27,17 +27,24 @@ angular.module('material.components.navBar', ['material.core'])
  * body and no bar pagination.
  *
  * Because it deals with page navigation, certain routing concepts are built-in.
- * Route changes via ng-href, ui-sref, or ng-click events are supported.
- * Alternatively, the user could simply watch currentNavItem for changes.
+ * Route changes via `ng-href`, `ui-sref`, or `ng-click` events are supported.
+ * Alternatively, the user could simply watch the value of `md-selected-nav-item`
+ * (`currentNavItem` in the below example) for changes.
  *
  * Accessibility functionality is implemented as a site navigator with a
- * listbox, according to
- * https://www.w3.org/TR/wai-aria-practices/#Site_Navigator_Tabbed_Style
+ * listbox, according to the
+ * <a href="https://www.w3.org/TR/2016/WD-wai-aria-practices-1.1-20160317/#Site_Navigator_Tabbed_Style">
+ *   WAI-ARIA Authoring Practices 1.1 Working Draft from March 2016</a>.
+ * We've kept the `role="navigation"` on the `<nav>`, for backwards compatibility, even though
+ *  it is not required in the
+ * <a href="https://www.w3.org/TR/wai-aria-practices/#aria_lh_navigation">
+ *   latest Working Group Note from December 2017</a>.
  *
- * @param {string=} mdSelectedNavItem The name of the current tab; this must
- *     match the name attribute of `<md-nav-item>`
- * @param {boolean=} mdNoInkBar If set to true, the ink bar will be hidden.
- * @param {string=} navBarAriaLabel An aria-label for the nav-bar
+ * @param {string=} md-selected-nav-item The name of the current tab; this must
+ *     match the `name` attribute of `<md-nav-item>`.
+ * @param {boolean=} md-no-ink-bar If set to true, the ink bar will be hidden.
+ * @param {string=} nav-bar-aria-label An `aria-label` applied to the `md-nav-bar`'s listbox
+ * for accessibility.
  *
  * @usage
  * <hljs lang="html">
@@ -77,24 +84,24 @@ angular.module('material.components.navBar', ['material.core'])
  * @restrict E
  *
  * @description
- * `<md-nav-item>` describes a page navigation link within the `<md-nav-bar>`
- * component. It renders an md-button as the actual link.
+ * `<md-nav-item>` describes a page navigation link within the `<md-nav-bar>` component.
+ * It renders an `<md-button>` as the actual link.
  *
- * Exactly one of the mdNavClick, mdNavHref, mdNavSref attributes are required
+ * Exactly one of the `md-nav-click`, `md-nav-href`, or `md-nav-sref` attributes are required
  * to be specified.
  *
- * @param {Function=} mdNavClick Function which will be called when the
+ * @param {string=} aria-label Adds alternative text for accessibility.
+ * @param {expression=} md-nav-click Expression which will be evaluated when the
  *     link is clicked to change the page. Renders as an `ng-click`.
- * @param {string=} mdNavHref url to transition to when this link is clicked.
+ * @param {string=} md-nav-href url to transition to when this link is clicked.
  *     Renders as an `ng-href`.
- * @param {string=} mdNavSref Ui-router state to transition to when this link is
+ * @param {string=} md-nav-sref UI-Router state to transition to when this link is
  *     clicked. Renders as a `ui-sref`.
- * @param {!Object=} srefOpts Ui-router options that are passed to the
- *     `$state.go()` function. See the [Ui-router documentation for details]
- *     (https://ui-router.github.io/docs/latest/interfaces/transition.transitionoptions.html).
  * @param {string=} name The name of this link. Used by the nav bar to know
  *     which link is currently selected.
- * @param {string=} aria-label Adds alternative text for accessibility
+ * @param {!object=} sref-opts UI-Router options that are passed to the
+ *     `$state.go()` function. See the [UI-Router documentation for details]
+ *     (https://ui-router.github.io/docs/latest/interfaces/transition.transitionoptions.html).
  *
  * @usage
  * See `<md-nav-bar>` for usage.
@@ -120,10 +127,10 @@ function MdNavBar($mdAria, $mdTheming) {
     template:
       '<div class="md-nav-bar">' +
         '<nav role="navigation">' +
-          '<ul class="_md-nav-bar-list" ng-transclude role="listbox"' +
-            'tabindex="0"' +
-            'ng-focus="ctrl.onFocus()"' +
-            'ng-keydown="ctrl.onKeydown($event)"' +
+          '<ul class="_md-nav-bar-list" ng-transclude role="listbox" ' +
+            'tabindex="0" ' +
+            'ng-focus="ctrl.onFocus()" ' +
+            'ng-keydown="ctrl.onKeydown($event)" ' +
             'aria-label="{{ctrl.navBarAriaLabel}}">' +
           '</ul>' +
         '</nav>' +
@@ -429,7 +436,7 @@ function MdNavItem($mdAria, $$rAF, $mdUtil, $window) {
           '<md-button class="_md-nav-button md-accent" ' +
             'ng-class="ctrl.getNgClassMap()" ' +
             'ng-blur="ctrl.setFocused(false)" ' +
-            'ng-disabled="ctrl.disabled"' +
+            'ng-disabled="ctrl.disabled" ' +
             'tabindex="-1" ' +
             navigationOptions +
             navigationAttribute + '>' +
@@ -452,14 +459,16 @@ function MdNavItem($mdAria, $$rAF, $mdUtil, $window) {
       'name': '@',
     },
     link: function(scope, element, attrs, controllers) {
+      var disconnect;
+
       // When accessing the element's contents synchronously, they
       // may not be defined yet because of transclusion. There is a higher
       // chance that it will be accessible if we wait one frame.
-      var disconnect;
       $$rAF(function() {
         var mdNavItem = controllers[0];
         var mdNavBar = controllers[1];
         var navButton = angular.element(element[0].querySelector('._md-nav-button'));
+
         if (!mdNavItem.name) {
           mdNavItem.name = angular.element(element[0]
               .querySelector('._md-nav-button-text')).text().trim();
@@ -470,7 +479,9 @@ function MdNavItem($mdAria, $$rAF, $mdUtil, $window) {
           scope.$apply();
         });
 
-        if('MutationObserver' in $window) {
+        // Get the disabled attribute value first, then setup observing of value changes
+        mdNavItem.disabled = $mdUtil.parseAttributeBoolean(attrs['disabled'], false);
+        if ('MutationObserver' in $window) {
           var config = {attributes: true, attributeFilter: ['disabled']};
           var targetNode = element[0];
           var mutationCallback = function(mutationList) {
@@ -486,7 +497,6 @@ function MdNavItem($mdAria, $$rAF, $mdUtil, $window) {
             mdNavItem.disabled = $mdUtil.parseAttributeBoolean(value, false);
           });
         }
-
 
         $mdAria.expectWithText(element, 'aria-label');
       });

@@ -185,14 +185,13 @@ describe('mdNavBar', function() {
               '    tab2' +
               '  </md-nav-item>' +
               '</md-nav-bar>');
-          $timeout(function(){
-            var tabCtrl = getTabCtrl('tab2');
-            expect(tabCtrl.disabled).toBe(true);
-          });
+
+          var tabCtrl = getTabCtrl('tab2');
+          expect(tabCtrl.disabled).toBe(true);
       });
 
       it('should observe the disabled attribute', function () {
-          $scope.tabDisabled = false;
+          $scope.$apply('tabDisabled = false');
           create('<md-nav-bar>' +
               '  <md-nav-item md-nav-href="#1" name="tab1">' +
               '    tab1' +
@@ -201,11 +200,11 @@ describe('mdNavBar', function() {
               '    tab2' +
               '  </md-nav-item>' +
               '</md-nav-bar>');
-          $timeout(function(){
-            var tabCtrl = getTabCtrl('tab2');
-            expect(tabCtrl.disabled).toBe(false);
-            $scope.tabDisabled = true;
-            $scope.$apply();
+
+          var tabCtrl = getTabCtrl('tab2');
+          expect(tabCtrl.disabled).toBe(false);
+          $scope.$apply('tabDisabled = true');
+          $timeout(function() {
             expect(tabCtrl.disabled).toBe(true);
           });
       });
