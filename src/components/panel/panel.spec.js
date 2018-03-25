@@ -2307,7 +2307,7 @@ describe('$mdPanel', function() {
         myButton = '<button>myButton</button>';
         attachToBody(myButton);
         myButton = angular.element(document.querySelector('button'));
-        myButton.css('margin', '100px');
+        myButton.css('margin', '120px');
         myButtonRect = myButton[0].getBoundingClientRect();
 
         xPosition = $mdPanel.xPosition;
@@ -2865,7 +2865,7 @@ describe('$mdPanel', function() {
             expect(panelRect.right).toBeApproximately(myButtonRect.right);
           });
 
-          it('offset to the right of an element', function() {
+          it('offset to the left of an element', function() {
             var position = mdPanelPosition
               .relativeTo(myButton)
               .addPanelPosition(xPosition.OFFSET_END, null);
