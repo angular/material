@@ -1,63 +1,82 @@
 var HANDLERS = {};
 
-/* The state of the current 'pointer'
- * The pointer represents the state of the current touch.
+/**
+ * The state of the current 'pointer'. The pointer represents the state of the current touch.
  * It contains normalized x and y coordinates from DOM events,
  * as well as other information abstracted from the DOM.
  */
-
 var pointer, lastPointer, forceSkipClickHijack = false, maxClickDistance = 6;
 
 /**
  * The position of the most recent click if that click was on a label element.
- * @type {{x: number, y: number}?}
+ * @type {{x: number, y: number}|null}
  */
 var lastLabelClickPos = null;
 
 // Used to attach event listeners once when multiple ng-apps are running.
 var isInitialized = false;
 
+/**
+ * @ngdoc module
+ * @name material.core.gestures
+ * @description
+ * AngularJS Material Gesture handling for touch devices. This module replaced the usage of the hammerjs library.
+ */
 angular
   .module('material.core.gestures', [ ])
   .provider('$mdGesture', MdGestureProvider)
   .factory('$$MdGestureHandler', MdGestureHandler)
-  .run(attachToDocument );
+  .run(attachToDocument);
 
 /**
-   * @ngdoc service
-   * @name $mdGestureProvider
-   * @module material.core.gestures
-   *
-   * @description
-   * In some scenarios on Mobile devices (without jQuery), the click events should NOT be hijacked.
-   * `$mdGestureProvider` is used to configure the Gesture module to ignore or skip click hijacking on mobile
-   * devices.
-   * You can also change max click distance (6px by default) if you have issues on some touch screens.
-   *
-   * <hljs lang="js">
-   *   app.config(function($mdGestureProvider) {
-   *
-   *     // For mobile devices without jQuery loaded, do not
-   *     // intercept click events during the capture phase.
-   *     $mdGestureProvider.skipClickHijack();
-   *
-   *     // If hijcacking clicks, change default 6px click distance
-   *     $mdGestureProvider.setMaxClickDistance(12);
-   *
-   *   });
-   * </hljs>
-   *
-   */
+ * @ngdoc service
+ * @name $mdGestureProvider
+ * @module material.core.gestures
+ *
+ * @description
+ * In some scenarios on mobile devices (without jQuery), the click events should NOT be hijacked.
+ * `$mdGestureProvider` is used to configure the Gesture module to ignore or skip click hijacking on mobile
+ * devices.
+ *
+ * You can also change the max click distance, `6px` by default, if you have issues on some touch screens.
+ *
+ * <hljs lang="js">
+ *   app.config(function($mdGestureProvider) {
+ *
+ *     // For mobile devices without jQuery loaded, do not
+ *     // intercept click events during the capture phase.
+ *     $mdGestureProvider.skipClickHijack();
+ *
+ *     // If hijacking clicks, you may want to change the default click distance
+ *     $mdGestureProvider.setMaxClickDistance(12);
+ *   });
+ * </hljs>
+ *
+ */
 function MdGestureProvider() { }
 
 MdGestureProvider.prototype = {
 
-  // Publish access to setter to configure a variable  BEFORE the
+  // Publish access to setter to configure a variable BEFORE the
   // $mdGesture service is instantiated...
+  /**
+   * @ngdoc method
+   * @name $mdGestureProvider#skipClickHijack
+   *
+   * @description
+   * Tell the AngularJS Material Gesture module to skip (or ignore) click hijacking on mobile devices.
+   */
   skipClickHijack: function() {
     return forceSkipClickHijack = true;
   },
 
+  /**
+   * @ngdoc method
+   * @name $mdGestureProvider#setMaxClickDistance
+   * @param clickDistance {string} Distance in pixels. I.e. `12px`.
+   * @description
+   * Set the max distance from the origin of the touch event to trigger touch handlers.
+   */
   setMaxClickDistance: function(clickDistance) {
     maxClickDistance = parseInt(clickDistance);
   },
@@ -135,14 +154,14 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
     };
   }
 
-  /*
+  /**
    * Register an element to listen for a handler.
    * This allows an element to override the default options for a handler.
    * Additionally, some handlers like drag and hold only dispatch events if
    * the domEvent happens inside an element that's registered to listen for these events.
    *
    * @see GestureHandler for how overriding of default options works.
-   * @example $mdGesture.register(myElement, 'drag', { minDistance: 20, horziontal: false })
+   * @example $mdGesture.register(myElement, 'drag', { minDistance: 20, horizontal: false })
    */
   function register(element, handlerName, options) {
     var handler = HANDLERS[handlerName.replace(/^\$md./, '')];
@@ -164,7 +183,7 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
     return self;
   }
 
-  /*
+  /**
    * Register handlers. These listen to touch/start/move events, interpret them,
    * and dispatch gesture events depending on options & conditions. These are all
    * instances of GestureHandler.
@@ -476,7 +495,7 @@ function MdGestureHandler() {
     angular.element(eventPointer.target).trigger(eventObj);
   }
 
-  /*
+  /**
    * NOTE: nativeDispatchEvent is very performance sensitive.
    * @param srcEvent the original DOM touch event that started this.
    * @param eventType the name of the custom event to send (eg 'click' or '$md.drag')
@@ -486,7 +505,7 @@ function MdGestureHandler() {
     eventPointer = eventPointer || pointer;
     var eventObj;
 
-    if (eventType === 'click' || eventType == 'mouseup' || eventType == 'mousedown' ) {
+    if (eventType === 'click' || eventType === 'mouseup' || eventType === 'mousedown' ) {
       eventObj = document.createEvent('MouseEvents');
       eventObj.initMouseEvent(
         eventType, true, true, window, srcEvent.detail,
@@ -732,7 +751,7 @@ function updatePointerState(ev, pointer) {
   pointer.velocityY = pointer.distanceY / pointer.duration;
 }
 
-/*
+/**
  * Normalize the point where the DOM event happened whether it's touch or mouse.
  * @returns point event obj with pageX and pageY on it.
  */
@@ -747,13 +766,13 @@ function getEventPoint(ev) {
 function canFocus(element) {
   return (
     !!element &&
-    element.getAttribute('tabindex') != '-1' &&
+    element.getAttribute('tabindex') !== '-1' &&
     !element.hasAttribute('disabled') &&
     (
       element.hasAttribute('tabindex') ||
       element.hasAttribute('href') ||
       element.isContentEditable ||
-      ['INPUT', 'SELECT', 'BUTTON', 'TEXTAREA', 'VIDEO', 'AUDIO'].indexOf(element.nodeName) != -1
+      ['INPUT', 'SELECT', 'BUTTON', 'TEXTAREA', 'VIDEO', 'AUDIO'].indexOf(element.nodeName) !== -1
     )
   );
 }
