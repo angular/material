@@ -78,6 +78,35 @@ function MdBottomSheetDirective($mdBottomSheet) {
  *
  * });
  * </hljs>
+ *
+ * ### Custom Presets
+ * Developers are also able to create their own preset, which can be easily used without repeating
+ * their options each time.
+ *
+ * <hljs lang="js">
+ *   $mdBottomSheetProvider.addPreset('testPreset', {
+ *     options: function() {
+ *       return {
+ *         template:
+ *           '<md-bottom-sheet>' +
+ *             'This is a custom preset' +
+ *           '</md-bottom-sheet>',
+ *         controllerAs: 'bottomSheet',
+ *         bindToController: true,
+ *         clickOutsideToClose: true,
+ *         escapeToClose: true
+ *       };
+ *     }
+ *   });
+ * </hljs>
+ *
+ * After you create your preset during the config phase, you can easily access it.
+ *
+ * <hljs lang="js">
+ *   $mdBottomSheet.show(
+ *     $mdBottomSheet.testPreset()
+ *   );
+ * </hljs>
  */
 
  /**
@@ -95,7 +124,8 @@ function MdBottomSheetDirective($mdBottomSheet) {
  * Newer versions of Angular will throw a `Possibly unhandled rejection` exception if you forget
  * this.</em>
  *
- * @param {object} options An options object, with the following properties:
+ * @param {object} optionsOrPreset Either provide an `$mdBottomSheetPreset` defined during the config phase or
+ * an options object, with the following properties:
  *
  *   - `templateUrl` - `{string=}`: The url of an html template file that will
  *   be used as the content of the bottom sheet. Restrictions: the template must
