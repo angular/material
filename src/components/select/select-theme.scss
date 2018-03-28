@@ -116,25 +116,25 @@ md-select.md-THEME_NAME-theme {
 
 md-select-menu.md-THEME_NAME-theme {
   md-content {
-    background: '{{background-A100}}';
+    background-color: '{{background-hue-1}}';
 
     md-optgroup {
-      color: '{{background-600-0.87}}';
+      color: '{{foreground-2}}';
     }
 
     md-option {
-      color: '{{background-900-0.87}}';
+      color: '{{foreground-1}}';
 
       &[disabled] {
         .md-text {
-          color: '{{background-400-0.87}}';
+          color: '{{foreground-3}}';
         }
       }
 
       &:not([disabled]) {
         &:focus,
         &:hover {
-          background: '{{background-200}}'
+          background-color: '{{background-500-0.18}}'
         }
       }
 
@@ -158,6 +158,6 @@ md-select-menu.md-THEME_NAME-theme {
   @include checkbox-primary('[selected]');
 
   md-option .md-text {
-    color: '{{background-900-0.87}}';
+    color: '{{foreground-1}}';
   }
 }
