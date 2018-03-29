@@ -1,7 +1,7 @@
 angular
-  .module('customSidenavDemo', ['ngMaterial'])
+  .module('disableCloseEventsSidenavDemo', ['ngMaterial'])
   .controller('AppCtrl', function ($scope, $mdSidenav) {
-    $scope.toggleLeft = buildToggler('left');
+    $scope.toggleSidenav = buildToggler('closeEventsDisabled');
 
     function buildToggler(componentId) {
       return function() {
