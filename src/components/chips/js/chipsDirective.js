@@ -96,7 +96,7 @@
    *
    * Please refer to the documentation of this option (below) for more information.
    *
-   * @param {string=|object=} ng-model A model to which the list of items will be bound.
+   * @param {string|object=} ng-model A model to which the list of items will be bound.
    * @param {expression=} ng-change AngularJS expression to be executed on chip addition/removal
    * @param {string=} placeholder Placeholder text that will be forwarded to the input.
    * @param {string=} secondary-placeholder Placeholder text that will be forwarded to the input,
@@ -122,9 +122,9 @@
    *    - `undefined` to simply add the `$chip` input string, or
    *    - `null` to prevent the chip from being appended
    * @param {expression=} md-on-add An expression which will be called when a chip has been
-   *    added.
+   *    added with `$chip` and `$index` available as parameters.
    * @param {expression=} md-on-remove An expression which will be called when a chip has been
-   *    removed.
+   *    removed with `$chip`, `$index`, and `$event` available as parameters.
    * @param {expression=} md-on-select An expression which will be called when a chip is selected.
    * @param {boolean} md-require-match If true, and the chips template contains an autocomplete,
    *    only allow selection of pre-defined chips (i.e. you cannot add new ones).
@@ -232,7 +232,7 @@
       <button\
           class="md-chip-remove"\
           ng-if="$mdChipsCtrl.isRemovable()"\
-          ng-click="$mdChipsCtrl.removeChipAndFocusInput($$replacedScope.$index)"\
+          ng-click="$mdChipsCtrl.removeChipAndFocusInput($$replacedScope.$index, $event)"\
           type="button"\
           tabindex="-1">\
         <md-icon md-svg-src="{{ $mdChipsCtrl.mdCloseIcon }}"></md-icon>\
