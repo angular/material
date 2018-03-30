@@ -3,6 +3,7 @@
     <form ng-submit="$event.preventDefault()">
       <p>Use <code>&lt;md-autocomplete&gt;</code> with custom templates to show styled autocomplete results.</p>
       <md-autocomplete
+          id="custom-template"
           ng-disabled="ctrl.isDisabled"
           md-no-cache="ctrl.noCache"
           md-selected-item="ctrl.selectedItem"
@@ -13,7 +14,8 @@
           md-item-text="item.name"
           md-min-length="0"
           placeholder="Pick an Angular repository"
-          md-menu-class="autocomplete-custom-template">
+          md-menu-class="autocomplete-custom-template"
+          md-menu-container-class="custom-container">
         <md-item-template>
           <span class="item-title">
             <md-icon md-svg-icon="img/icons/octicon-repo.svg"></md-icon>
@@ -32,4 +34,3 @@
     </form>
   </md-content>
 </div>
-

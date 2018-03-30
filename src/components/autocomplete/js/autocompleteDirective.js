@@ -74,7 +74,6 @@ angular
  * </hljs>
  *
  *
- *
  * @param {expression} md-items An expression in the format of `item in results` to iterate over
  *     matches for your search.<br/><br/>
  *     The `results` expression can be also a function, which returns the results synchronously
@@ -102,12 +101,11 @@ angular
  * @param {boolean=} md-no-asterisk When present, asterisk will not be appended to the floating label.
  * @param {boolean=} md-autoselect If set to true, the first item will be automatically selected
  *     in the dropdown upon open.
- * @param {string=} md-menu-class This will be applied to the dropdown menu for styling.
- * @param {string=} md-floating-label This will add a floating label to autocomplete and wrap it in
- *     `md-input-container`.
  * @param {string=} md-input-name The name attribute given to the input element to be used with
  *     FormController.
- * @param {string=} md-menu-class This will be applied to the dropdown menu for styling
+ * @param {string=} md-menu-class This class will be applied to the dropdown menu for styling.
+ * @param {string=} md-menu-container-class This class will be applied to the parent container
+ *     of the dropdown panel.
  * @param {string=} md-input-class This will be applied to the input for styling. This attribute is only valid when a `md-floating-label` is defined
  * @param {string=} md-floating-label This will add a floating label to autocomplete and wrap it in
  *     `md-input-container`
@@ -229,39 +227,39 @@ angular
  * </hljs>
  *
  */
-
 function MdAutocomplete ($$mdSvgRegistry) {
 
   return {
     controller:   'MdAutocompleteCtrl',
     controllerAs: '$mdAutocompleteCtrl',
     scope:        {
-      inputName:        '@mdInputName',
-      inputMinlength:   '@mdInputMinlength',
-      inputMaxlength:   '@mdInputMaxlength',
-      searchText:       '=?mdSearchText',
-      selectedItem:     '=?mdSelectedItem',
-      itemsExpr:        '@mdItems',
-      itemText:         '&mdItemText',
-      placeholder:      '@placeholder',
-      noCache:          '=?mdNoCache',
-      requireMatch:     '=?mdRequireMatch',
-      selectOnMatch:    '=?mdSelectOnMatch',
-      matchInsensitive: '=?mdMatchCaseInsensitive',
-      itemChange:       '&?mdSelectedItemChange',
-      textChange:       '&?mdSearchTextChange',
-      minLength:        '=?mdMinLength',
-      delay:            '=?mdDelay',
-      autofocus:        '=?mdAutofocus',
-      floatingLabel:    '@?mdFloatingLabel',
-      autoselect:       '=?mdAutoselect',
-      menuClass:        '@?mdMenuClass',
-      inputClass:       '@?mdInputClass',
-      inputId:          '@?mdInputId',
-      escapeOptions:    '@?mdEscapeOptions',
-      dropdownItems:    '=?mdDropdownItems',
-      dropdownPosition: '@?mdDropdownPosition',
-      clearButton:      '=?mdClearButton'
+      inputName:          '@mdInputName',
+      inputMinlength:     '@mdInputMinlength',
+      inputMaxlength:     '@mdInputMaxlength',
+      searchText:         '=?mdSearchText',
+      selectedItem:       '=?mdSelectedItem',
+      itemsExpr:          '@mdItems',
+      itemText:           '&mdItemText',
+      placeholder:        '@placeholder',
+      noCache:            '=?mdNoCache',
+      requireMatch:       '=?mdRequireMatch',
+      selectOnMatch:      '=?mdSelectOnMatch',
+      matchInsensitive:   '=?mdMatchCaseInsensitive',
+      itemChange:         '&?mdSelectedItemChange',
+      textChange:         '&?mdSearchTextChange',
+      minLength:          '=?mdMinLength',
+      delay:              '=?mdDelay',
+      autofocus:          '=?mdAutofocus',
+      floatingLabel:      '@?mdFloatingLabel',
+      autoselect:         '=?mdAutoselect',
+      menuClass:          '@?mdMenuClass',
+      menuContainerClass: '@?mdMenuContainerClass',
+      inputClass:         '@?mdInputClass',
+      inputId:            '@?mdInputId',
+      escapeOptions:      '@?mdEscapeOptions',
+      dropdownItems:      '=?mdDropdownItems',
+      dropdownPosition:   '@?mdDropdownPosition',
+      clearButton:        '=?mdClearButton'
     },
     compile: function(tElement, tAttrs) {
       var attributes = ['md-select-on-focus', 'md-no-asterisk', 'ng-trim', 'ng-pattern'];
@@ -291,6 +289,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
           itemTemplate    = getItemTemplate(),
           leftover        = element.html(),
           tabindex        = attr.tabindex;
+      var menuContainerClass = attr.mdMenuContainerClass ? ' ' + attr.mdMenuContainerClass : '';
 
       // Set our attribute for the link function above which runs later.
       // We will set an attribute, because otherwise the stored variables will be trashed when
@@ -319,7 +318,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
               ng-mouseleave="$mdAutocompleteCtrl.listLeave()"\
               ng-mouseup="$mdAutocompleteCtrl.mouseUp()"\
               ng-hide="$mdAutocompleteCtrl.hidden"\
-              class="md-autocomplete-suggestions-container md-whiteframe-z1"\
+              class="md-autocomplete-suggestions-container md-whiteframe-z1' + menuContainerClass + '"\
               ng-class="{ \'md-not-found\': $mdAutocompleteCtrl.notFoundVisible() }"\
               role="presentation">\
             <ul class="md-autocomplete-suggestions"\
