@@ -201,9 +201,9 @@ angular
  *     }
  *   }
  *
- *   function DialogController(MdPanelRef) {
+ *   function DialogController(mdPanelRef) {
  *     function closeDialog() {
- *       if (MdPanelRef) MdPanelRef.close();
+ *       if (mdPanelRef) mdPanelRef.close();
  *     }
  *   }
  * })(angular);
