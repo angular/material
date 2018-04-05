@@ -1,12 +1,12 @@
-  /**
-   * @ngdoc module
-   * @name material.components.slider
-   */
-  angular.module('material.components.slider', [
-    'material.core'
-  ])
-  .directive('mdSlider', SliderDirective)
-  .directive('mdSliderContainer', SliderContainerDirective);
+/**
+ * @ngdoc module
+ * @name material.components.slider
+ */
+angular.module('material.components.slider', [
+  'material.core'
+])
+.directive('mdSlider', SliderDirective)
+.directive('mdSliderContainer', SliderContainerDirective);
 
 /**
  * @ngdoc directive
@@ -14,12 +14,20 @@
  * @module material.components.slider
  * @restrict E
  * @description
- * The `<md-slider-container>` contains slider with two other elements.
- *
+ * The `<md-slider-container>` can hold the slider with two other elements.
+ * In this case, the other elements are a `span` for the label and an `input` for displaying
+ * the model value.
  *
  * @usage
- * <h4>Normal Mode</h4>
  * <hljs lang="html">
+ *  <md-slider-container>
+ *    <span>Red</span>
+ *    <md-slider min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider">
+ *    </md-slider>
+ *    <md-input-container>
+ *      <input type="number" ng-model="color.red" aria-label="Red" aria-controls="red-slider">
+ *    </md-input-container>
+ *  </md-slider-container>
  * </hljs>
  */
 function SliderContainerDirective() {
@@ -76,7 +84,7 @@ function SliderContainerDirective() {
           if (input) {
             var computedStyle = getComputedStyle(input);
             var minWidth = parseInt(computedStyle.minWidth);
-            var padding = parseInt(computedStyle.padding) * 2;
+            var padding = parseInt(computedStyle.paddingLeft) + parseInt(computedStyle.paddingRight);
 
             initialMaxWidth = initialMaxWidth || parseInt(computedStyle.maxWidth);
             var newMaxWidth = Math.max(initialMaxWidth, minWidth + padding + (minWidth / 2 * length));
@@ -95,20 +103,22 @@ function SliderContainerDirective() {
  * @module material.components.slider
  * @restrict E
  * @description
- * The `<md-slider>` component allows the user to choose from a range of
- * values.
+ * The `<md-slider>` component allows the user to choose from a range of values.
  *
- * As per the [material design spec](http://www.google.com/design/spec/style/color.html#color-ui-color-application)
+ * As per the [material design spec](https://material.io/guidelines/style/color.html#color-color-system)
  * the slider is in the accent color by default. The primary color palette may be used with
  * the `md-primary` class.
  *
- * It has two modes: 'normal' mode, where the user slides between a wide range
- * of values, and 'discrete' mode, where the user slides between only a few
- * select values.
+ * It has two modes:
+ * - "normal" mode where the user slides between a wide range of values
+ * - "discrete" mode where the user slides between only a few select values
  *
- * To enable discrete mode, add the `md-discrete` attribute to a slider,
+ * To enable discrete mode, add the `md-discrete` attribute to a slider
  * and use the `step` attribute to change the distance between
  * values the user is allowed to pick.
+ *
+ * When using the keyboard, holding the Meta, Control, or Alt key while pressing the left
+ * and right arrow buttons will cause the slider to move 4 steps.
  *
  * @usage
  * <h4>Normal Mode</h4>
@@ -127,14 +137,18 @@ function SliderContainerDirective() {
  * </md-slider>
  * </hljs>
  *
+ * @param {expression} ng-model Assignable angular expression to be data-bound.
+ *  The expression should evaluate to a `number`.
  * @param {boolean=} md-discrete Whether to enable discrete mode.
  * @param {boolean=} md-invert Whether to enable invert mode.
- * @param {number=} step The distance between values the user is allowed to pick. Default 1.
- * @param {number=} min The minimum value the user is allowed to pick. Default 0.
- * @param {number=} max The maximum value the user is allowed to pick. Default 100.
- * @param {number=} round The amount of numbers after the decimal point, maximum is 6 to prevent scientific notation. Default 3.
+ * @param {number=} step The distance between values the user is allowed to pick. Default `1`.
+ * @param {number=} min The minimum value the user is allowed to pick. Default `0`.
+ * @param {number=} max The maximum value the user is allowed to pick. Default `100`.
+ * @param {number=} round The amount of numbers after the decimal point. The maximum is 6 to
+ *  prevent scientific notation. Default `3`.
  */
-function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdTheming, $mdGesture, $parse, $log, $timeout) {
+function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdTheming, $mdGesture,
+                         $parse, $log, $timeout) {
   return {
     scope: {},
     require: ['?ngModel', '?^mdSliderContainer'],
