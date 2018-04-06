@@ -160,13 +160,6 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
    */
   this.chipAppendDelay = DEFAULT_CHIP_APPEND_DELAY;
 
-  /**
-   * Collection of functions to call to un-register watchers
-   *
-   * @type {Array}
-   */
-  this.deRegister = [];
-
   this.init();
 }
 
@@ -177,33 +170,18 @@ MdChipsCtrl.prototype.init = function() {
   var ctrl = this;
 
   // Set the wrapper ID
-  this.wrapperId = '_md-chips-wrapper-' + this.$mdUtil.nextUid();
+  ctrl.wrapperId = '_md-chips-wrapper-' + ctrl.$mdUtil.nextUid();
 
   // Setup a watcher which manages the role and aria-owns attributes
-  this.deRegister.push(
-    this.$scope.$watchCollection('$mdChipsCtrl.items', function() {
-      // Make sure our input and wrapper have the correct ARIA attributes
-      ctrl.setupInputAria();
-      ctrl.setupWrapperAria();
-    })
-  );
+  ctrl.$scope.$watchCollection('$mdChipsCtrl.items', function() {
+    // Make sure our input and wrapper have the correct ARIA attributes
+    ctrl.setupInputAria();
+    ctrl.setupWrapperAria();
+  });
 
-  this.deRegister.push(
-    this.$attrs.$observe('mdChipAppendDelay', function(newValue) {
-      var numberValue = parseInt(newValue);
-      ctrl.chipAppendDelay = isNaN(numberValue) ? DEFAULT_CHIP_APPEND_DELAY : numberValue;
-    })
-  );
-};
-
-/**
- * Destructor for cleanup
- */
-MdChipsCtrl.prototype.$onDestroy = function $onDestroy() {
-  var $destroyFn;
-  while (($destroyFn = this.deRegister.pop())) {
-    $destroyFn.call(this);
-  }
+  ctrl.$attrs.$observe('mdChipAppendDelay', function(newValue) {
+    ctrl.chipAppendDelay = parseInt(newValue) || DEFAULT_CHIP_APPEND_DELAY;
+  });
 };
 
 /**
@@ -583,7 +561,6 @@ MdChipsCtrl.prototype.hasMaxChipsReached = function() {
  */
 MdChipsCtrl.prototype.validateModel = function() {
   this.ngModelCtrl.$setValidity('md-max-chips', !this.hasMaxChipsReached());
-  this.ngModelCtrl.$validate(); // rerun any registered validators
 };
 
 /**
@@ -710,12 +687,6 @@ MdChipsCtrl.prototype.configureNgModel = function(ngModelCtrl) {
   this.ngModelCtrl = ngModelCtrl;
 
   var self = this;
-
-  // in chips the meaning of $isEmpty changes
-  ngModelCtrl.$isEmpty = function(value) {
-    return !value || value.length === 0;
-  };
-
   ngModelCtrl.$render = function() {
     // model is updated. do something.
     self.items = self.ngModelCtrl.$viewValue;
@@ -748,43 +719,6 @@ MdChipsCtrl.prototype.onInputBlur = function () {
 };
 
 /**
- * Configure event bindings on input element.
- * @param inputElement
- */
-MdChipsCtrl.prototype.configureInput = function configureInput(inputElement) {
-  // Find the NgModelCtrl for the input element
-  var ngModelCtrl = inputElement.controller('ngModel');
-  var ctrl = this;
-
-  if (ngModelCtrl) {
-
-    // sync touched-state from inner input to chips-element
-    this.deRegister.push(
-      this.$scope.$watch(
-        function() {
-          return ngModelCtrl.$touched;
-        },
-        function(isTouched) {
-          isTouched && ctrl.ngModelCtrl.$setTouched();
-        }
-      )
-    );
-
-    // sync dirty-state from inner input to chips-element
-    this.deRegister.push(
-      this.$scope.$watch(
-        function() {
-          return ngModelCtrl.$dirty;
-        },
-        function(isDirty) {
-          isDirty && ctrl.ngModelCtrl.$setDirty();
-        }
-      )
-    );
-  }
-};
-
-/**
  * Configure event bindings on a user-provided input element.
  * @param inputElement
  */
@@ -811,7 +745,7 @@ MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
       .attr({ tabindex: 0 })
       .on('keydown', function(event) { scopeApplyFn(event, ctrl.inputKeydown) })
       .on('focus', function(event) { scopeApplyFn(event, ctrl.onInputFocus) })
-      .on('blur', function(event) { scopeApplyFn(event, ctrl.onInputBlur) });
+      .on('blur', function(event) { scopeApplyFn(event, ctrl.onInputBlur) })
 };
 
 MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
