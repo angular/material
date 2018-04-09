@@ -25,7 +25,6 @@
 
     self.querySearch = querySearch;
     self.delayedQuerySearch = delayedQuerySearch;
-    self.onModelChange = onModelChange;
 
     /**
      * Search for contacts; use a random delay to simulate a remote call
@@ -83,10 +82,6 @@
         return (contact._lowername.indexOf(lowercaseQuery) != -1);
       };
 
-    }
-
-    function onModelChange(model) {
-      alert('The model has changed');
     }
 
     function loadContacts() {
