@@ -1,7 +1,7 @@
 md-autocomplete.md-THEME_NAME-theme {
-  background: '{{background-A100}}';
+  background: '{{background-hue-1}}';
   &[disabled]:not([md-floating-label]) {
-    background: '{{background-100}}';
+    background: '{{background-hue-2}}';
   }
   button {
     md-icon {
@@ -13,17 +13,20 @@ md-autocomplete.md-THEME_NAME-theme {
       background: '{{background-600-0.3}}';
     }
   }
+  input {
+    color: '{{foreground-1}}';
+  }
 }
 .md-autocomplete-suggestions-container.md-THEME_NAME-theme {
-  background: '{{background-A100}}';
+  background: '{{background-hue-1}}';
   li {
-    color: '{{background-900}}';
+    color: '{{foreground-1}}';
     .highlight {
       color: '{{background-600}}';
     }
     &:hover,
     &.selected {
-      background: '{{background-200}}';
+      background: '{{background-500-0.18}}';
     }
   }
 }
