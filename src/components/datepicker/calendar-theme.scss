@@ -1,17 +1,17 @@
 /** Theme styles for mdCalendar. */
 
 .md-calendar.md-THEME_NAME-theme {
-  background: '{{background-A100}}';
-  color: '{{background-A200-0.87}}';
+  background: '{{background-hue-1}}';
+  color: '{{foreground-1-0.87}}';
 
   tr:last-child td {
-    border-bottom-color: '{{background-200}}';
+    border-bottom-color: '{{background-hue-2}}';
   }
 }
 .md-THEME_NAME-theme {
   .md-calendar-day-header {
-    background: '{{background-300}}';
-    color: '{{background-A200-0.87}}';
+    background: '{{background-500-0.32}}';
+    color: '{{foreground-1-0.87}}';
   }
 
   .md-calendar-date.md-calendar-date-today {
@@ -28,7 +28,7 @@
   .md-calendar-date-selection-indicator {
     .md-calendar-date.md-focus &,
     &:hover {
-      background: '{{background-300}}';
+      background: '{{background-500-0.32}}';
     }
   }
 
@@ -44,10 +44,6 @@
 
   .md-calendar-date-disabled,
   .md-calendar-month-label-disabled {
-    // Note that this uses half the opacity of the default text color,
-    // because the calendar is white, even on the dark theme, otherwise
-    // the default disabled color `foreground-3` blends in with the
-    // background.
-    color: '{{background-A200-0.435}}';
+    color: '{{foreground-3}}';
   }
 }
