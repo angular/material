@@ -270,11 +270,13 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     var round;
     function updateMin(value) {
       min = parseFloat(value);
+      ngModelCtrl.$viewValue = minMaxValidator(ngModelCtrl.$modelValue, min, max);
       element.attr('aria-valuemin', value);
       updateAll();
     }
     function updateMax(value) {
       max = parseFloat(value);
+      ngModelCtrl.$viewValue = minMaxValidator(ngModelCtrl.$modelValue, min, max);
       element.attr('aria-valuemax', value);
       updateAll();
     }
