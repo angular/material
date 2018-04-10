@@ -1,41 +1,45 @@
-
 <div ng-controller="AppCtrl" ng-cloak>
   <md-content style="margin: 16px; padding:16px">
 
     <h3>
-      RGB <span ng-attr-style="border: 1px solid #333; background: rgb({{color.red}},{{color.green}},{{color.blue}})">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      RGB <span ng-attr-style="border: 1px solid #333; background: rgb({{color.red}},{{color.green}},{{color.blue}})">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      </span>
     </h3>
 
     <md-slider-container>
       <span>R</span>
-      <md-slider flex min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider">
+      <md-slider min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider"
+                 class="md-warn">
       </md-slider>
       <md-input-container>
-        <input flex type="number" ng-model="color.red" aria-label="red" aria-controls="red-slider">
+        <input type="number" ng-model="color.red" aria-label="red" aria-controls="red-slider">
       </md-input-container>
     </md-slider-container>
 
     <md-slider-container>
       <span>G</span>
-      <md-slider flex ng-model="color.green" min="0" max="255" aria-label="green" id="green-slider" class="md-accent">
+      <md-slider ng-model="color.green" min="0" max="255" aria-label="green" id="green-slider"
+                 class="md-accent">
       </md-slider>
       <md-input-container>
-        <input flex type="number" ng-model="color.green" aria-label="green" aria-controls="green-slider">
+        <input type="number" ng-model="color.green" aria-label="green" aria-controls="green-slider">
       </md-input-container>
     </md-slider-container>
 
     <md-slider-container>
       <span class="md-body-1">B</span>
-      <md-slider flex ng-model="color.blue" min="0" max="255" aria-label="blue" id="blue-slider" class="md-primary">
+      <md-slider ng-model="color.blue" min="0" max="255" aria-label="blue" id="blue-slider"
+                 class="md-primary">
       </md-slider>
       <md-input-container>
-        <input flex type="number" ng-model="color.blue" aria-label="blue" aria-controls="blue-slider">
+        <input type="number" ng-model="color.blue" aria-label="blue" aria-controls="blue-slider">
       </md-input-container>
     </md-slider-container>
 
     <div style="margin-top: 50px;"></div>
 
-    <h3>Rating: {{rating}}/5 - demo of theming classes</h3>
+    <h3>Rating: {{rating1}}/5 - demo of theming classes</h3>
     <div layout>
       <div flex="10" layout layout-align="center center">
         <span class="md-body-1">default</span>
@@ -47,14 +51,16 @@
       <div flex="10" layout layout-align="center center">
         <span class="md-body-1">md-warn</span>
       </div>
-      <md-slider flex class="md-warn" md-discrete ng-model="rating2" step="1" min="1" max="5" aria-label="rating">
+      <md-slider flex class="md-warn" md-discrete ng-model="rating2" step="1" min="1" max="5"
+                 aria-label="rating">
       </md-slider>
     </div>
     <div layout>
       <div flex="10" layout layout-align="center center">
         <span class="md-body-1">md-primary</span>
       </div>
-      <md-slider flex class="md-primary" md-discrete ng-model="rating3" step="1" min="1" max="5" aria-label="rating">
+      <md-slider flex class="md-primary" md-discrete ng-model="rating3" step="1" min="1" max="5"
+                 aria-label="rating">
       </md-slider>
     </div>
 
@@ -63,10 +69,10 @@
     <h3>Disabled</h3>
     <md-slider-container ng-disabled="isDisabled">
       <md-icon md-svg-icon="device:brightness-low"></md-icon>
-      <md-slider ng-model="disabled1" aria-label="Disabled 1" flex md-discrete ng-readonly="readonly"></md-slider>
-
+      <md-slider ng-model="disabled1" aria-label="Disabled 1" md-discrete ng-readonly="readonly">
+      </md-slider>
       <md-input-container>
-        <input flex type="number" ng-model="disabled1" aria-label="green" aria-controls="green-slider">
+        <input type="number" ng-model="disabled1" aria-label="green" aria-controls="green-slider">
       </md-input-container>
     </md-slider-container>
     <md-checkbox ng-model="isDisabled">Is disabled</md-checkbox>
@@ -75,8 +81,10 @@
     <div style="margin-top: 50px;"></div>
 
     <h3>Disabled, Discrete, Read Only</h3>
-    <md-slider ng-model="disabled2" ng-disabled="true" step="3" md-discrete min="0" max="10" aria-label="Disabled discrete 2"></md-slider>
-    <md-slider ng-model="disabled3" ng-disabled="true" step="10" md-discrete aria-label="Disabled discrete 3" ng-readonly="readonly"></md-slider>
+    <md-slider ng-model="disabled2" ng-disabled="true" step="3" md-discrete min="0" max="10"
+               aria-label="Disabled discrete 2"></md-slider>
+    <md-slider ng-model="disabled3" ng-disabled="true" step="10" md-discrete
+               aria-label="Disabled discrete 3" ng-readonly="readonly"></md-slider>
     <md-checkbox ng-model="readonly">Read only</md-checkbox>
 
     <div style="margin-top: 50px;"></div>
@@ -88,7 +96,7 @@
       <md-slider ng-model="invert" min="0" max="100" aria-label="regular slider"></md-slider>
 
       <md-input-container>
-        <input flex type="number" ng-model="invert" aria-label="regular-slider">
+        <input type="number" ng-model="invert" aria-label="regular-slider">
       </md-input-container>
     </md-slider-container>
     <md-slider-container>
@@ -98,7 +106,7 @@
       <md-slider md-invert ng-model="invert" min="0" max="100" aria-label="invertd slider"></md-slider>
 
       <md-input-container>
-        <input flex type="number" ng-model="invert" aria-label="invert-slider">
+        <input type="number" ng-model="invert" aria-label="invert-slider">
       </md-input-container>
     </md-slider-container>
 
