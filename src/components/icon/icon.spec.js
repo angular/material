@@ -460,8 +460,7 @@ describe('MdIcon service', function() {
       it('should append configured SVG icon from named group', function() {
         var expected = updateDefaults('<svg xmlns="http://www.w3.org/2000/svg"><g id="s1"></g></svg>');
         $mdIcon('social:s1').then(function(el) {
-          //expect(el.outerHTML).toEqual(expected);
-          expect(el.firstChild.id).toMatch(/.+_cache[0-9]+/g);
+          expect(el.outerHTML).toEqual(expected);          
         });
         $scope.$digest();
       });
