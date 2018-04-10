@@ -451,7 +451,8 @@ describe('MdIcon service', function() {
       it('should append configured SVG single icon', function() {
         var expected = updateDefaults('<svg><g id="android"></g></svg>');
         $mdIcon('android').then(function(el) {
-          expect(el.outerHTML).toEqual(expected);
+          //expect(el.outerHTML).toEqual(expected);
+          expect(el.firstChild.id).toMatch(/.+_cache[0-9]+/g);
         });
         $scope.$digest();
       });
