@@ -240,6 +240,25 @@ describe('<md-chips>', function() {
           expect(scope.items.length).toBe(4);
         });
 
+        it('should allow adding the first chip on blur when required exists', function() {
+          scope.items = [];
+          var template =
+              '<form name="form">' +
+              ' <md-chips name="chips" ng-required="true" ng-model="items" md-add-on-blur="true"></md-chips>' +
+              '</form>';
+
+          var element = buildChips(template);
+          var ctrl = element.find('md-chips').controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+          });
+          element.find('input').triggerHandler('blur');
+
+          expect(scope.form.chips.$error['required']).toBeUndefined();
+          expect(scope.items).toEqual(['Test']);
+        });
+
         it('should not append a new chip if the limit has reached', function() {
           var element = buildChips(
             '<md-chips ng-model="items" md-add-on-blur="true" md-max-chips="3">' +
@@ -1057,8 +1076,8 @@ describe('<md-chips>', function() {
 
       describe('ng-required', function() {
         beforeEach(function() {
-            // Clear default items to test the required chips functionality
-            scope.items = [];
+          // Clear default items to test the required chips functionality
+          scope.items = [];
         });
 
         it('should set the required error when chips is compiled with an empty array', function() {

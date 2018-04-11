@@ -843,7 +843,10 @@ MdChipsCtrl.prototype.shouldAddOnBlur = function() {
   this.validateModel();
 
   var chipBuffer = this.getChipBuffer().trim();
-  var isModelValid = this.ngModelCtrl.$valid;
+  // If the model value is empty and required is set on the element, then the model will be invalid.
+  // In that case, we still want to allow adding the chip. The main (but not only) case we want
+  // to disallow is adding a chip on blur when md-max-chips validation fails.
+  var isModelValid = this.ngModelCtrl.$isEmpty(this.ngModelCtrl.$modelValue) || this.ngModelCtrl.$valid;
   var isAutocompleteShowing = this.autocompleteCtrl && !this.autocompleteCtrl.hidden;
 
   if (this.userInputNgModelCtrl) {
