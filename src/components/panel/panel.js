@@ -97,7 +97,7 @@ angular
  *       $mdPanel.open('demoPreset', {
  *         id: 'menu_' + menu.name,
  *         position: $mdPanel.newPanelPosition()
- *             .relativeTo($event.srcElement)
+ *             .relativeTo($event.target)
  *             .addPanelPosition(
  *               $mdPanel.xPosition.ALIGN_START,
  *               $mdPanel.yPosition.BELOW
