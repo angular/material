@@ -72,7 +72,7 @@
       var template = this.menuTemplate;
 
       var position = $mdPanel.newPanelPosition()
-          .relativeTo($event.srcElement)
+          .relativeTo($event.target)
           .addPanelPosition(
             $mdPanel.xPosition.ALIGN_START,
             $mdPanel.yPosition.BELOW
@@ -103,7 +103,7 @@
       var template = this.menuTemplate;
 
       var position = $mdPanel.newPanelPosition()
-          .relativeTo($event.srcElement)
+          .relativeTo($event.target)
           .addPanelPosition(
             $mdPanel.xPosition.ALIGN_START,
             $mdPanel.yPosition.BELOW
