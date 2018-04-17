@@ -14,6 +14,7 @@
 
     // Lists of fruit names and Vegetable objects
     self.fruitNames = ['Apple', 'Banana', 'Orange'];
+    self.ngChangeFruitNames = angular.copy(self.fruitNames);
     self.roFruitNames = angular.copy(self.fruitNames);
     self.editableFruitNames = angular.copy(self.fruitNames);
 
@@ -38,6 +39,10 @@
         name: chip,
         type: 'unknown'
       };
+    };
+
+    self.onModelChange = function(newModel) {
+      alert('The model has changed');
     };
   }
 })();

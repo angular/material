@@ -12,6 +12,8 @@ describe('<md-chips>', function() {
     '<md-chips ng-model="items" md-on-remove="removeChip($chip, $index, $event)"></md-chips>';
   var CHIP_SELECT_TEMPLATE =
     '<md-chips ng-model="items" md-on-select="selectChip($chip)"></md-chips>';
+  var CHIP_NG_CHANGE_TEMPLATE =
+    '<md-chips ng-model="items" ng-change="onModelChange(items)"></md-chips>';
   var CHIP_READONLY_TEMPLATE =
     '<md-chips ng-model="items" readonly="isReadonly"></md-chips>';
   var CHIP_READONLY_AUTOCOMPLETE_TEMPLATE =
@@ -203,6 +205,27 @@ describe('<md-chips>', function() {
         expect(scope.removeChip).toHaveBeenCalled();
         expect(scope.removeChip.calls.mostRecent().args[2].type).toBe('click');
       });
+
+      it('should trigger ng-change on chip addition/removal', function() {
+        var element = buildChips(CHIP_NG_CHANGE_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        scope.onModelChange = jasmine.createSpy('onModelChange');
+
+        element.scope().$apply(function() {
+          ctrl.chipBuffer = 'Melon';
+          simulateInputEnterKey(ctrl);
+        });
+        expect(scope.onModelChange).toHaveBeenCalled();
+        expect(scope.onModelChange.calls.mostRecent().args[0].length).toBe(4);
+
+        element.scope().$apply(function() {
+          ctrl.removeChip(0);
+        });
+        expect(scope.onModelChange).toHaveBeenCalled();
+        expect(scope.onModelChange.calls.mostRecent().args[0].length).toBe(3);
+      });
+
 
       it('should call the select method when selecting a chip', function() {
         var element = buildChips(CHIP_SELECT_TEMPLATE);
@@ -1686,7 +1709,7 @@ describe('<md-chips>', function() {
       return scope.fruits.filter(function(item) {
         return item.toLowerCase().indexOf(searchText.toLowerCase()) === 0;
       });
-    }
+    };
   }
 
   function simulateInputEnterKey(ctrl) {
