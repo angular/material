@@ -660,21 +660,28 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
   /**
    * Determines if the menu should be hidden.
-   * @returns {boolean}
+   * @returns {boolean} true if the menu should be hidden
    */
   function shouldHide () {
-    if (!isSearchable()) return true;    // Hide when not able to query
-    else return !shouldShow();            // Hide when the dropdown is not able to show.
+    return !shouldShow();
   }
 
   /**
    * Determines whether the autocomplete is able to query within the current state.
-   * @returns {boolean}
+   * @returns {boolean} true if the query can be run
    */
   function isSearchable() {
-    if (ctrl.loading && !hasMatches()) return false; // No query when query is in progress.
-    else if (hasSelection()) return false;           // No query if there is already a selection
-    else if (!hasFocus) return false;                // No query if the input does not have focus
+    if (ctrl.loading && !hasMatches()) {
+      // No query when query is in progress.
+      return false;
+    } else if (hasSelection()) {
+      // No query if there is already a selection
+      return false;
+    }
+    else if (!hasFocus) {
+      // No query if the input does not have focus
+      return false;
+    }
     return true;
   }
 
@@ -696,9 +703,17 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
   /**
    * Determines if the menu should be shown.
-   * @returns {boolean}
+   * @returns {boolean} true if the menu should be shown
    */
   function shouldShow() {
+    if (ctrl.isReadonly) {
+      // Don't show if read only is set
+      return false;
+    } else if (!isSearchable()) {
+      // Don't show if a query is in progress, there is already a selection,
+      // or the input is not focused.
+      return false;
+    }
     return (isMinLengthMet() && hasMatches()) || notFoundVisible();
   }
 
