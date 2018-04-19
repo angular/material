@@ -21,9 +21,6 @@ md-autocomplete.md-THEME_NAME-theme {
   background: '{{background-hue-1}}';
   li {
     color: '{{foreground-1}}';
-    .highlight {
-      color: '{{background-600}}';
-    }
     &:hover,
     &.selected {
       background: '{{background-500-0.18}}';

@@ -188,6 +188,10 @@ md-autocomplete {
   // Expand the virtualRepeatContainer as much as the max-height from the JavaScript allows.
   // This is necessary for the virtualRepeatContainer to be able to grow back.
   height: 100%;
+
+  .highlight {
+    font-weight: bold;
+  }
 }
 
 .md-virtual-repeat-container.md-not-found {
