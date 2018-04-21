@@ -299,6 +299,45 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('does not open panel when ng-readonly is true', inject(function() {
+      var scope = createScope(null, {inputId: 'custom-input-id'});
+      var template = '\
+          <md-autocomplete\
+              md-input-id="{{inputId}}"\
+              md-selected-item="selectedItem"\
+              md-search-text="searchText"\
+              md-items="item in match(searchText)"\
+              md-item-text="item.display"\
+              placeholder="placeholder"\
+              md-min-length="0"\
+              ng-readonly="readonly">\
+            <span md-highlight-text="searchText">{{item.display}}</span>\
+          </md-autocomplete>';
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var input = element.find('input');
+
+      scope.readonly = false;
+      scope.$digest();
+      ctrl.focus();
+      waitForVirtualRepeat();
+
+      expect(input.attr('readonly')).toBeUndefined();
+      expect(ctrl.hidden).toBe(false);
+
+      ctrl.blur();
+      scope.readonly = true;
+      scope.$digest();
+      expect(ctrl.hidden).toBe(true);
+      ctrl.focus();
+      waitForVirtualRepeat();
+
+      expect(input.attr('readonly')).toBe('readonly');
+      expect(ctrl.hidden).toBe(true);
+
+      element.remove();
+    }));
+
     it('should forward focus to the input element with md-autofocus', inject(function($timeout) {
 
       var scope = createScope();
