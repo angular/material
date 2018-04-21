@@ -1,5 +1,4 @@
 /*
-*
 *  Responsive attributes
 *
 *  References:
@@ -8,10 +7,7 @@
 *  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 *  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
 *  5) http://godban.com.ua/projects/flexgrid
-*
-*
 */
-
 @mixin flex-order-for-name($sizes:null) {
   @if $sizes == null {
     $sizes : '';
@@ -142,7 +138,7 @@
       max-height: 100%;
       box-sizing: border-box;
 
-      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+      // Required by Chrome M48+ due to http://crbug.com/546034
       @if $i == 0 {  min-width: 0;  }
     }
 
@@ -159,7 +155,7 @@
       max-height: 100%;
       box-sizing: border-box;
 
-      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+      // Required by Chrome M48+ due to http://crbug.com/546034
       @if $i == 0 {  min-width: 0;  }
     }
 
@@ -169,8 +165,30 @@
       max-height: #{$value};
       box-sizing: border-box;
 
-      // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+      // Required by Chrome M48+ due to http://crbug.com/546034
       @if $i == 0 {  min-height: 0;  }
+    }
+
+    @if ($name != '') {
+      .layout#{$name}-row > .flex-#{$i * 5} {
+        flex: 1 1 100%;
+        max-width: #{$value};
+        max-height: 100%;
+        box-sizing: border-box;
+
+        // Required by Chrome M48+ due to http://crbug.com/546034
+        @if $i == 0 {  min-width: 0;  }
+      }
+
+      .layout#{$name}-column > .flex-#{$i * 5} {
+        flex: 1 1 100%;
+        max-width: 100%;
+        max-height: #{$value};
+        box-sizing: border-box;
+
+        // Required by Chrome M48+ due to http://crbug.com/546034
+        @if $i == 0 {  min-height: 0;  }
+      }
     }
   }
 
@@ -188,19 +206,35 @@
     > .#{$flexName}-33 { flex: 1 1 100%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
     > .#{$flexName}-66 { flex: 1 1 100%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
 
-    // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+    // Required by Chrome M48+ due to http://crbug.com/546034
     > .flex { min-width: 0;  }
-
   }
 
   .layout#{$name}-column {
     > .#{$flexName}-33 { flex: 1 1 100%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
     > .#{$flexName}-66 { flex: 1 1 100%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
 
-    // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
+    // Required by Chrome M48+ due to http://crbug.com/546034
     > .flex { min-height: 0; }
   }
 
+  @if ($name != '') {
+    .layout#{$name}-row {
+      > .flex-33 { flex: 1 1 100%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
+      > .flex-66 { flex: 1 1 100%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
+
+      // Required by Chrome M48+ due to http://crbug.com/546034
+      > .flex { min-width: 0;  }
+    }
+
+    .layout#{$name}-column {
+      > .flex-33 { flex: 1 1 100%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
+      > .flex-66 { flex: 1 1 100%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
+
+      // Required by Chrome M48+ due to http://crbug.com/546034
+      > .flex { min-height: 0; }
+    }
+  }
 }
 
 @mixin layout-align-for-name($suffix: null) {
