@@ -13,21 +13,23 @@ angular
  * @name $mdCompilerProvider
  * @module material.core.compiler
  * @description
- * The `$mdCompiler` is able to respect the AngularJS `$compileProvider.preAssignBindingsEnabled` state when using
- * AngularJS versions between 1.5.10 and 1.7.0.
- * See the [AngularJS documentation for `$compile.preAssignBindingsEnabled`
+ * The `$mdCompiler` is able to respect the AngularJS `$compileProvider.preAssignBindingsEnabled`
+ * state when using AngularJS versions greater than or equal to 1.5.10 and less than 1.7.0.
+ * See the [AngularJS documentation for `$compileProvider.preAssignBindingsEnabled`
  * ](https://code.angularjs.org/1.6.10/docs/api/ng/provider/$compileProvider#preAssignBindingsEnabled)
  * for more information.
  *
  * To enable/disable whether the controllers of dynamic AngularJS Material components
- * (i.e. dialog, panel, toast, bottomsheet) respect the AngularJS `$compile.preAssignBindingsEnabled` flag,
- * call the AngularJS Material method: `$mdCompilerProvider.respectPreAssignBindingsEnabled(boolean)`.
+ * (i.e. dialog, panel, toast, bottomsheet) respect the AngularJS
+ * `$compileProvider.preAssignBindingsEnabled` flag, call the AngularJS Material method:
+ * `$mdCompilerProvider.respectPreAssignBindingsEnabled(boolean)`.
  *
- * This AngularJS Material *flag* doesn't affect directives/components created via regular AngularJS methods.
- * These constitute the majority of AngularJS Material and user-created components.
- * Only dynamic construction of elements such as Dialogs, Panels, Toasts, BottomSheets, etc. may be affected.
- * Invoking `$mdCompilerProvider.respectPreAssignBindingsEnabled(true)` will effect **bindings** in
- * AngularJS Material custom components like `$mdDialog`, `$mdPanel`, `$mdToast`, or `$mdBottomSheet`.
+ * This AngularJS Material *flag* doesn't affect directives/components created via regular
+ * AngularJS methods. These constitute the majority of AngularJS Material and user-created
+ * components. Only dynamic construction of elements such as Dialogs, Panels, Toasts, BottomSheets,
+ * etc. may be affected. Invoking `$mdCompilerProvider.respectPreAssignBindingsEnabled(true)`
+ * will effect **bindings** in controllers created by AngularJS Material's services like
+ * `$mdDialog`, `$mdPanel`, `$mdToast`, or `$mdBottomSheet`.
  *
  * See [$mdCompilerProvider.respectPreAssignBindingsEnabled](#mdcompilerprovider-respectpreassignbindingsenabled-respected)
  * for the details of how the different versions and settings of AngularJS affect this behavior.
@@ -39,14 +41,6 @@ angular
  * <hljs lang="js">
  *   app.config(function($mdCompilerProvider) {
  *     $mdCompilerProvider.respectPreAssignBindingsEnabled(true);
- *   });
- * </hljs>
- *
- * Assign Bindings Before the Constructor
- *
- * <hljs lang="js">
- *   app.config(function($mdCompilerProvider) {
- *     $mdCompilerProvider.respectPreAssignBindingsEnabled(false);
  *   });
  * </hljs>
  *
@@ -107,14 +101,16 @@ function MdCompilerProvider($compileProvider) {
    * @ngdoc method
    * @name $mdCompilerProvider#respectPreAssignBindingsEnabled
    *
-   * @param {boolean=} respected update the `respectPreAssignBindingsEnabled` state if provided, otherwise just return
-   * the current Material `respectPreAssignBindingsEnabled` state.
-   * @returns {boolean|MdCompilerProvider} current value if used as getter or itself (chaining) if used as setter
+   * @param {boolean=} respected update the `respectPreAssignBindingsEnabled` state if provided,
+   * otherwise just return the current Material `respectPreAssignBindingsEnabled` state.
+   * @returns {boolean|MdCompilerProvider} current value if used as getter or itself (chaining)
+   *  if used as setter
    *
    * @description
-   * Call this method to enable/disable whether Material-specific (dialog/panel/toast/bottomsheet) controllers respect the
-   * AngularJS `$compile.preAssignBindingsEnabled` flag. Note that this doesn't affect directives/components created
-   * via regular AngularJS methods which constitute most Material and user-created components.
+   * Call this method to enable/disable whether Material-specific (dialog/panel/toast/bottomsheet)
+   * controllers respect the AngularJS `$compileProvider.preAssignBindingsEnabled` flag. Note that
+   * this doesn't affect directives/components created via regular AngularJS methods which
+   * constitute most Material and user-created components.
    *
    * If disabled (`false`), the compiler assigns the value of each of the bindings to the
    * properties of the controller object before the constructor of this object is called.
@@ -130,10 +126,11 @@ function MdCompilerProvider($compileProvider) {
    *
    * The default value is `false` but will change to `true` in AngularJS Material 1.2.
    *
-   * It is recommended to set this flag to `true` in AngularJS Material 1.1.x. The only reason it's not set that way
-   * by default is backwards compatibility. Not setting the flag to `true` when AngularJS'
-   * `$compileProvider.preAssignBindingsEnabled()` is set to `false` (i.e. default behavior in AngularJS 1.6 or newer)
-   * makes it hard to unit test Material Dialog/Panel/Toast/BottomSheet controllers using the `$controller` helper
+   * It is recommended to set this flag to `true` in AngularJS Material 1.1.x. The only reason
+   * it's not set that way by default is backwards compatibility. Not setting the flag to `true`
+   * when AngularJS' `$compileProvider.preAssignBindingsEnabled()` is set to `false`
+   * (i.e. default behavior in AngularJS 1.6 or newer) makes it hard to unit test
+   * Material Dialog/Panel/Toast/BottomSheet controllers using the `$controller` helper
    * as it always follows the `$compileProvider.preAssignBindingsEnabled()` value.
    */
   // TODO change it to `true` in Material 1.2.
@@ -320,7 +317,6 @@ function MdCompilerProvider($compileProvider) {
    *     the element and instantiate the provided controller (if given).
    *   - `locals` - `{Object}`: The locals which will be passed into the controller once `link` is
    *     called. If `bindToController` is true, they will be copied to the ctrl instead
-   *
    */
   MdCompilerService.prototype.compile = function(options) {
 
