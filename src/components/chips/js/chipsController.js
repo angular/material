@@ -540,7 +540,7 @@ MdChipsCtrl.prototype.useOnSelectExpression = function() {
  * Gets the input buffer. The input buffer can be the model bound to the
  * default input item {@code this.chipBuffer}, the {@code selectedItem}
  * model of an {@code md-autocomplete}, or, through some magic, the model
- * bound to any inpput or text area element found within a
+ * bound to any input or text area element found within a
  * {@code md-input-container} element.
  * @return {string}
  */

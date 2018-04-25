@@ -96,7 +96,9 @@
    *
    * Please refer to the documentation of this option (below) for more information.
    *
-   * @param {string=|object=} ng-model A model to which the list of items will be bound.
+   * @param {expression} ng-model Assignable angular expression to be data-bound to the list of chips.
+   *  The expression should evaluate to a `string` or `Object` Array. The type of this array should align
+   *  with the return value of `md-transform-chip`.
    * @param {expression=} ng-change AngularJS expression to be executed on chip addition/removal.
    * @param {string=} placeholder Placeholder text that will be forwarded to the input.
    * @param {string=} secondary-placeholder Placeholder text that will be forwarded to the input,
