@@ -3,7 +3,7 @@
 
   // If we do not have CryptoJS defined; import it
   if (typeof CryptoJS == 'undefined') {
-    var cryptoSrc = '//cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js';
+    var cryptoSrc = 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js';
     var scriptTag = document.createElement('script');
     scriptTag.setAttribute('src', cryptoSrc);
     document.body.appendChild(scriptTag);
