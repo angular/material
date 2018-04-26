@@ -63,13 +63,18 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     .dark();
 
   $mdIconProvider.icon('md-toggle-arrow', 'img/icons/toggle-arrow.svg', 48);
+  $mdIconProvider
+    .iconSet('communication', 'img/icons/sets/communication-icons.svg', 24)
+    .iconSet('device', 'img/icons/sets/device-icons.svg', 24)
+    .iconSet('social', 'img/icons/sets/social-icons.svg', 24)
+    .iconSet('symbol', 'img/icons/sets/symbol-icons.svg', 24)
+    .defaultIconSet('img/icons/sets/core-icons.svg', 24);
 
   $mdThemingProvider.theme('default')
       .primaryPalette('docs-blue')
       .accentPalette('docs-red');
 
-  $mdThemingProvider
-      .enableBrowserColor();
+  $mdThemingProvider.enableBrowserColor();
 
   angular.forEach(PAGES, function(pages, area) {
     angular.forEach(pages, function(page) {
