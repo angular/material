@@ -1,8 +1,11 @@
 <div ng-controller="DemoDynamicNestedMenusCtrl as ctrl" ng-cloak>
   <md-toolbar class="md-menu-toolbar">
     <div layout="row">
+      <md-toolbar-filler layout layout-align="center center">
+        <md-icon md-svg-icon="communication:business"></md-icon>
+      </md-toolbar-filler>
       <div>
-        <h2 class="md-toolbar-tools">Untitled document</h2>
+        <h2 class="md-toolbar-tools">Mission Statement</h2>
         <md-menu-bar>
           <md-menu>
             <button aria-label="Open menu" ng-click="$mdMenu.open($event)">
@@ -35,7 +38,7 @@
 
   <md-content class="page-container">
     <md-card class="page">
-      <h1>Untitled document</h1>
+      <h1>Mission Statement</h1>
       <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam quis risus eget urna mollis ornare vel eu
         leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras mattis
         consectetur purus sit amet fermentum. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh
