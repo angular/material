@@ -18,7 +18,7 @@ Quick Links:
 *  [Installing](#installing)
 
 
-Please note that using AngularJS Material requires the use of **[AngularJS](https://angularjs.org/) 1.3.x** or higher.
+Please note that using AngularJS Material requires the use of **[AngularJS](https://angularjs.org/) 1.4.x** or higher.
 AngularJS Material is targeted for the browser versions shown below in the green boxes:
 
 ![ngm1_browser_support](https://user-images.githubusercontent.com/3506071/35176284-1419c42c-fd46-11e7-9381-d93e5c5db39a.png)
@@ -26,7 +26,7 @@ AngularJS Material is targeted for the browser versions shown below in the green
 ## <a name="demos"></a> Online Documentation and Demos
 
 <div style="border: 1px solid #ccc">
-  <img src="https://user-images.githubusercontent.com/3506071/35176652-81464d34-fd48-11e7-81d3-ac58d7d10a32.png" alt="AngularJS Material docs website" style="display:block;">
+  <img src="https://user-images.githubusercontent.com/3506071/39335179-ef92562e-497f-11e8-9f27-e23dc3a868f9.png" alt="AngularJS Material docs website" style="display:block;">
 </div><br>
 
 - Visit [material.angularjs.org](https://material.angularjs.org/) online to review the API, see the
@@ -151,8 +151,8 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
 ```html
   <head>
 
-    <!-- AngularJS Material CSS now available via Google CDN; version 1.1.6 used here -->
-   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.6/angular-material.min.css">
+    <!-- AngularJS Material CSS now available via Google CDN; version 1.1.9 used here -->
+   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.9/angular-material.min.css">
 
   </head>
   <body>
@@ -164,7 +164,7 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://p
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-messages.min.js"></script>
 
     <!-- AngularJS Material Javascript now available via Google CDN; version 1.1.4 used here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.6/angular-material.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.9/angular-material.min.js"></script>
   </body>
 ```
 
@@ -182,10 +182,10 @@ pull directly from the distribution GitHub
   <body>
 
     <!-- AngularJS Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-animate.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-aria.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-aria.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-messages.min.js"></script>
 
     <!-- AngularJS Material Javascript using GitCDN to load directly from `bower-material/master` -->
     <script src="https://cdn.gitcdn.link/cdn/angular/bower-material/master/angular-material.js"></script>

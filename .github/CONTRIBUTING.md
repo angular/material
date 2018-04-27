@@ -9,12 +9,13 @@
  - [Submission Guidelines](#submit)
 
 ## <a name="coc"></a> Code of Conduct
-Help us keep AngularJS open and inclusive.
-
-Please read and follow our
+Please help us keep AngularJS Material open and inclusive by reading and following our
 [Code of Conduct](https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md).
 
-<br/>
+We are care deeply about our inclusive community and diverse group of members. As part of this,
+we do take time away from development to enforce this policy through interventions in heated
+discussions, one on one discussions to explain the policy to violators, and bans for repeat
+violators.
 
 ## <a name="question"></a> Have a Question, Problem, or Idea?
 
@@ -23,26 +24,28 @@ If you have questions or ideas regarding AngularJS Material, please direct these
 
 Otherwise, do you:
 
-- [Found a Bug ?](#bug)
-- [Want a Feature ?](#feature)
+- [Want to report a Bug?](#bug)
+- [Want to request an Enhancement?](#feature)
 
-#### <a name="bug"></a> 1. Found a Bug or Issue?
+#### <a name="bug"></a> 1. Want to report a Bug or Issue?
 If you find a bug in the source code or a mistake in the documentation, we recommend that you first
-review the [Online Documentation](http://material.angularjs.org/).
+review the latest `master` version of the [Online Documentation](https://material.angularjs.org/HEAD/)
+and use one of the Demos to create a CodePen that reproduces the issue.
 
-Otherwise you can help us improve by submitting an issue to our
-[GitHub Repository](https://github.com/angular/material/issues/new). Even better you can submit a
-**Pull Request** with a fix. Your custom changes can be crafted in a repository fork and submitted
+If the issue can be reproduced in the latest `master` version, you can help us by submitting an issue
+to our [GitHub Repository](https://github.com/angular/material/issues/new). After the issue is triaged
+(labels are applied to it), we invite you to submit a **Pull Request** with a proposed fix.
+Your custom changes can be crafted in a repository fork and submitted
 to the [GitHub Repository](https://github.com/angular/material/compare) as a Pull Request.
 
 
-> **Important: Please review the [Submission Guidelines](#submit) below, before contributing to the
-  project**.
+**Important**: Please review the [Submission Guidelines](#submit) below, before contributing to the
+  project.
 
-#### <a name="feature"></a> 2. Want a Feature?
-You can request a new feature by
-[submitting an issue](https://github.com/angular/material/issues/new). If you would like to
-implement a new feature then consider what kind of change it is:
+#### <a name="feature"></a> 2. Want to request an Enhancement?
+You can request an enhancement by
+[submitting an issue](https://github.com/angular/material/issues/new). After an issue is submitted,
+if you would like to implement an enhancement then consider what kind of change it is:
 
 * **Major Changes** that you wish to contribute to the project should be discussed first on our
   [AngularJS Material Forum](https://groups.google.com/forum/#!forum/ngmaterial), so that we can better
@@ -52,81 +55,64 @@ implement a new feature then consider what kind of change it is:
   [GitHub Repository](https://github.com/angular/material/compare) as a Pull Request.
 
 ## <a name="submit"></a> Issue Guidelines
+Please note, this project is mature and stable with thousands of projects depending upon it.
 
-Please note, this project is still in an early beta.
-
-We're not actively reviewing unsolicited PRs from the community, although we welcome your feature
-requests, doc corrections, and issue reports. If you're thinking of contributing code or docs to the
+We welcome your enhancement requests, doc improvements, and issue reports.
+However, we are not accepting major feature requests at this time.
+ 
+If you're thinking of contributing code or documentation to the
 project, please review [Submitting Pull Requests](#submitpr) before beginning any work.
 
 #### Submitting an Issue
-Before you submit your issue,
+Before you submit an issue,
 **[search](https://github.com/angular/material/issues?q=is%3Aissue+is%3Aopen)** the issues archive;
-maybe your question was already answered. If your issue appears to be a bug, and hasn't been
-reported, open a new issue.
+maybe the issue has already been submitted or considered. If the issue appears to be a bug,
+and hasn't been reported, open a [new issue](https://github.com/angular/material/issues/new).
 
-> Do not report duplicate issues; help us maximize the effort we can spend fixing issues and
-adding new features.
+> Please **do not report duplicate issues**; help us maximize the effort we can spend fixing
+issues and adding enhancements.
 
 Providing the following information will increase the chances of your issue being dealt with
 quickly:
 
-* **Issue Title** - provide a concise issue title prefixed with a lower camelCase name of the
-                    associated target or component (if any): `<component>: <issue title>`.
+* **Issue Title** - provide a concise issue title prefixed with a snake-case name of the
+                    associated service or component (if any): `<component>: <issue title>`.
+                    Adding the `md-` prefix should be avoided.
 
   > e.g.
-  > *  mdSideNav: Adding swipe functionality [#35](https://github.com/angular/material/issues/35)
-  > *  mdTextFloat: does not set required/ng-required
-       [#847](https://github.com/angular/material/issues/847)
+  > *  menu-bar: does not support dark mode themes [#11238](https://github.com/angular/material/issues/11238)
+  > *  tooltip: memory leak on destroy [#11133](https://github.com/angular/material/issues/11133)
 
-* **Overview of the Issue** - if an error is being thrown, a non-minified stack trace helps.
+* **Complete the full Issue Template** - GitHub now supports issue templates and AngularJS Material
+    provides one to make submitting an issue with all of the required information more straightforward.
 
-* **AngularJS Material Version** - check the header of your `angular-material.js` file to determine
-                                 your specific version #.
-
-```js
-/*!
- * AngularJS Material Design
- * https://github.com/angular/material
- * @license MIT
- * v0.6.0-rc1-master-57f10f7
- */
- ```
-* **Browsers and Operating System** - is this a problem with all browsers or only IE?
-* **Reproduce the Error** - provide a live example (using [CodePen](http://codepen.io/),
-  [Plunker](http://plnkr.co/), [JSFiddle](http://jsfiddle.net/)).
-* **Related Issues** - has a similar issue been reported before?
 * **Suggest a Fix** - if you can't fix the bug yourself, perhaps you can point to what might be
-  causing the problem (line of code or commit).<br/><br/>
-Here are two examples of well-defined issues:
-  - https://github.com/angular/material/issues/629
-  - https://github.com/angular/material/issues/277
+  causing the problem (line of code or commit).
 
 #### <a name="submitpr"></a>Submitting Pull Requests
 
-**Important**: With the exception of minor bugs and doc fixes, we are not actively reviewing
-unsolicited PRs to AngularJS Material.
+**Important**: We are not accepting major feature requests or PRs that contain major new features
+ or breaking changes at this time.
 
 Please check with us via [the discussion forum](https://groups.google.com/forum/#!forum/ngmaterial)
-before investing significant effort in a planned Pull Request submission; it's likely that we are already
-working on a related PR.
+before investing significant effort in a planned Pull Request submission; it's possible that we are
+already working on a related PR or have decided that the enhancement does not belong in the core
+AngularJS Material project.
 
-* All contributions must be consistent with the AngularJS Material coding conventions. See the
-  [Coding Guidelines](../docs/guides/CODING.md)
-* Submit proposed changes or additions as GitHub pull requests. See the
-  [Pull Request Guidelines](../docs/guides/PULL_REQUESTS.md)
+* All contributions must be consistent with the AngularJS Material [Coding Conventions](../docs/guides/CODING.md).
+* Submit proposed changes or additions as GitHub pull requests that follow the
+  [Pull Request Guidelines](../docs/guides/PULL_REQUESTS.md).
 
 <br/>
 
 ## <a name="commit"></a> Git Commit Guidelines
 
 We have very precise rules over how our git commit messages can be formatted. This leads to **more
-readable messages** that are easy to follow when looking through the **project history**. It is
-important to note that we use the git commit messages to **generate** the AngularJS Material
-[Changelog](../../CHANGELOG.md) document.
+readable messages** that are easy to follow when looking through the **project history**. 
 
-> A detailed explanation of guidelines and conventions can be found in this
-  [document](https://docs.google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#).
+It is important to note that we use the git commit messages to **generate** the AngularJS Material
+[CHANGELOG](../../CHANGELOG.md) document. Improperly formatted commit messages may result in your
+change not appearing in the CHANGELOG of the next release.
 
 ### <a name="commit-message-format"></a> Commit Message Format
 Each commit message consists of a **header**, a **body** and a **footer**. The header has a special
@@ -141,7 +127,7 @@ format that includes a **type**, a **scope** and a **subject**:
 ```
 
 > Any line of the commit message cannot be longer 100 characters!<br/>
-  This allows the message to be easier to read on github as well as in various git tools.
+  This allows the message to be easier to read on GitHub as well as in various Git tools.
 
 ##### Type
 Must be one of the following:
@@ -158,10 +144,14 @@ Must be one of the following:
   generation
 
 ##### Scope
-The scope could be anything specifying the place of the commit change.
+The scope could be anything that helps specifying the scope (or feature) that is changing.
+
+Examples
+- select(multiple): 
+- dialog(alert): 
 
 ##### Subject
-The subject contains succinct description of the change:
+The subject contains a succinct description of the change:
 
 * use the imperative, present tense: "change" not "changed" nor "changes"
 * don't capitalize first letter
@@ -173,14 +163,29 @@ The body should include the motivation for the change and contrast this with pre
 
 ##### Footer
 The footer should contain any information about **Breaking Changes** and is also the place to
-reference GitHub issues that this commit **Closes**.
+reference GitHub issues that this commit **Closes**, **Fixes**, or **Relates to**.
 
-> Breaking Changes are intended to highlight (in the ChangeLog) changes that will require community
-  users to modify their code with this commit.
+> Breaking Changes are intended to be highlighted in the ChangeLog as changes that will require
+  community users to modify their code after updating to a version that contains this commit.
 
-<br/>
+##### Sample Commit messages:
+```text
+fix(autocomplete): don't show the menu panel when readonly
 
-##### Sample Commit message:
+this could sometimes happen when no value was selected
+
+Fixes #11231
+```
+```text
+feat(chips): trigger ng-change on chip addition/removal
+
+* add test of `ng-change` for `md-chips`
+* add docs regarding `ng-change` for `md-chips` and `md-contact-chips`
+* add demo for ng-change on `md-chips`
+* add demo for ng-change on `md-contact-chips`
+
+Fixes #11161 Fixes #3857
+```
 
 ```text
 refactor(content): prefix mdContent scroll- attributes
@@ -209,8 +214,6 @@ details on how to implement and submit your fixes, changes, or enhancements to A
 
 This guideline provides details on creating a repository Fork of the AngularJS Material repository
 and how to submit Pull Requests.
-
-
 
 <br/>
 
