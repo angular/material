@@ -96,7 +96,7 @@
     start(`Generating changelog from ${oldVersion.cyan} to ${newVersion.cyan}...`);
 
     exec(`git fetch --tags ${origin}`);
-    exec(`git checkout v${lastMajorVer} -- CHANGELOG.md`);
+    exec(`git checkout CHANGELOG.md`);
     exec(`gulp changelog --sha=$(git merge-base v${lastMajorVer} HEAD)`);
 
     done();
