@@ -34,7 +34,7 @@ Before you submit your pull request consider the following guidelines:
 * Build your changes locally to ensure all the tests pass:
 
     ```shell
-    gulp karma
+    npm run test:full
     ```
 
 * Push your branch to GitHub:
@@ -50,11 +50,12 @@ Before you submit your pull request consider the following guidelines:
 
   * Re-run the AngularJS Material test suite to ensure tests are still passing.
 
-  * Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
+  * Rebase your branch to **squash your commits** and **force push** to your GitHub repository 
+    (this will update your Pull Request):
 
     ```shell
     git rebase master -i
-    git push -f
+    git push -force
     ```
 
 <br/>
@@ -69,7 +70,7 @@ That's it... thank you for your contribution!
 After your pull request is merged, you can safely delete your branch and pull the changes
 from the main (upstream) repository:
 
-* Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:
+* Delete the remote branch on GitHub either through a Git UI/IDE or your local shell as follows:
 
     ```shell
     git push origin --delete wip/my-fix-branch

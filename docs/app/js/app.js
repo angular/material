@@ -240,6 +240,15 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
             type: 'link'
           }
         ]
+      },
+      {
+        name: 'Performance',
+        type: 'toggle',
+        pages: [{
+            name: 'Internet Explorer',
+            url: 'performance/internet-explorer',
+            type: 'link'
+          }]
       }
     ]
   });
