@@ -1,14 +1,14 @@
 /** Theme styles for mdCalendar. */
-
-.md-calendar.md-THEME_NAME-theme {
-  background: '{{background-hue-1}}';
-  color: '{{foreground-1-0.87}}';
-
-  tr:last-child td {
-    border-bottom-color: '{{background-hue-2}}';
-  }
-}
 .md-THEME_NAME-theme {
+  .md-calendar {
+    background: '{{background-hue-1}}';
+    color: '{{foreground-1-0.87}}';
+
+    tr:last-child td {
+      border-bottom-color: '{{background-hue-2}}';
+    }
+  }
+
   .md-calendar-day-header {
     background: '{{background-500-0.32}}';
     color: '{{foreground-1-0.87}}';
@@ -45,5 +45,9 @@
   .md-calendar-date-disabled,
   .md-calendar-month-label-disabled {
     color: '{{foreground-3}}';
+  }
+
+  .md-calendar-month-label md-icon {
+    color: '{{foreground-1}}';
   }
 }
