@@ -190,8 +190,8 @@ function labelDirective() {
  *   The purpose of **`md-maxlength`** is exactly to show the max length counter text. If you don't
  *   want the counter text and only need "plain" validation, you can use the "simple" `ng-maxlength`
  *   or maxlength attributes.<br/><br/>
- *   **Note:** Only valid for text/string inputs (not numeric).
- *
+ * @param {boolean=} ng-trim If set to false, the input text will be not trimmed automatically.
+ *     Defaults to true.
  * @param {string=} aria-label Aria-label is required when no label is present.  A warning message
  *   will be logged in the console if not present.
  * @param {string=} placeholder An alternative approach to using aria-label when the label is not
@@ -639,7 +639,8 @@ function mdMaxlengthDirective($animate, $mdUtil) {
     var ngModelCtrl = ctrls[0];
     var containerCtrl = ctrls[1];
     var charCountEl, errorsSpacer;
-
+    var ngTrim = angular.isDefined(attr.ngTrim) ? $mdUtil.parseAttributeBoolean(attr.ngTrim) : true;
+    var isPasswordInput = attr.type === 'password';
 
     ngModelCtrl.$validators['md-maxlength'] = function(modelValue, viewValue) {
       if (!angular.isNumber(maxlength) || maxlength < 0) {
@@ -650,7 +651,24 @@ function mdMaxlengthDirective($animate, $mdUtil) {
       // Using the $validators for triggering the update works very well.
       renderCharCount();
 
-      return ( modelValue || element.val() || viewValue || '' ).length <= maxlength;
+      var elementVal = element.val() || viewValue;
+      if (elementVal === undefined || elementVal === null) {
+        elementVal = '';
+      }
+      elementVal = ngTrim && !isPasswordInput && angular.isString(elementVal) ? elementVal.trim() : elementVal;
+      // Force the value into a string since it may be a number,
+      // which does not have a length property.
+      return String(elementVal).length <= maxlength;
+    };
+
+    /**
+     * Override the default NgModelController $isEmpty check to take ng-trim, password inputs,
+     * etc. into account.
+     * @param value {*} the input's value
+     * @returns {boolean} true if the input's value should be considered empty, false otherwise
+     */
+    ngModelCtrl.$isEmpty = function(value) {
+      return calculateInputValueLength(value) === 0;
     };
 
     // Wait until the next tick to ensure that the input has setup the errors spacer where we will
@@ -662,10 +680,10 @@ function mdMaxlengthDirective($animate, $mdUtil) {
       // Append our character counter inside the errors spacer
       errorsSpacer.append(charCountEl);
 
-      // Stop model from trimming. This makes it so whitespace
-      // over the maxlength still counts as invalid.
-      attr.$set('ngTrim', 'false');
-
+      attr.$observe('ngTrim', function (value) {
+        ngTrim = angular.isDefined(value) ? $mdUtil.parseAttributeBoolean(value) : true;
+      });
+ 
       scope.$watch(attr.mdMaxlength, function(value) {
         maxlength = value;
         if (angular.isNumber(value) && value > 0) {
@@ -679,16 +697,28 @@ function mdMaxlengthDirective($animate, $mdUtil) {
       });
     });
 
-    function renderCharCount(value) {
-      // If we have not been initialized or appended to the body yet; do not render
-      if (!charCountEl || !charCountEl.parent) {
-        return value;
+    /**
+     * Calculate the input value's length after coercing it to a string
+     * and trimming it if appropriate.
+     * @param value {*} the input's value
+     * @returns {number} calculated length of the input's value
+     */
+    function calculateInputValueLength(value) {
+      value = ngTrim && !isPasswordInput && angular.isString(value) ? value.trim() : value;
+      if (value === undefined || value === null) {
+        value = '';
       }
+      return String(value).length;
+    }
 
+    function renderCharCount() {
+      // If we have not been initialized or appended to the body yet; do not render.
+      if (!charCountEl || !charCountEl.parent()) {
+        return;
+      }
       // Force the value into a string since it may be a number,
       // which does not have a length property.
-      charCountEl.text(String(element.val() || value || '').length + ' / ' + maxlength);
-      return value;
+      charCountEl.text(calculateInputValueLength(element.val()) + ' / ' + maxlength);
     }
   }
 }
