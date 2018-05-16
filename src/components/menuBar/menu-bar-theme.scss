@@ -1,16 +1,20 @@
 md-menu-bar.md-THEME_NAME-theme {
   & > button.md-button {
-    color: '{{foreground-2}}';
+    color: '{{foreground-1}}';
     border-radius: 2px;
+  }
+
+  md-menu > button {
+    color: '{{foreground-1}}';
   }
 
   md-menu.md-open > button, md-menu > button:focus {
     outline: none;
-    background: '{{background-200}}';
+    background-color: '{{ background-500-0.18}}';
   }
 
   &.md-open:not(.md-keyboard-mode) md-menu:hover > button {
-    background-color: '{{ background-500-0.2}}';
+    background-color: '{{ background-500-0.18}}';
   }
 
   &:not(.md-keyboard-mode):not(.md-open) {
@@ -23,22 +27,22 @@ md-menu-bar.md-THEME_NAME-theme {
 
 md-menu-content.md-THEME_NAME-theme {
   .md-menu > .md-button:after {
-    color: '{{background-A200-0.54}}';
+    color: '{{foreground-2}}';
   }
 
   .md-menu.md-open > .md-button {
-    background-color: '{{ background-500-0.2}}';
+    background-color: '{{ background-500-0.18}}';
   }
 }
 
 md-toolbar.md-THEME_NAME-theme.md-menu-toolbar {
-  background-color: '{{background-A100}}';
-  color: '{{background-A200}}';
+  background-color: '{{background-hue-1}}';
+  color: '{{foreground-1}}';
   md-toolbar-filler {
     background-color: '{{primary-color}}';
-    color: '{{background-A100-0.87}}';
+    color: '{{primary-contrast}}';
     md-icon {
-      color: '{{background-A100-0.87}}';
+      color: '{{primary-contrast}}';
     }
   }
 
