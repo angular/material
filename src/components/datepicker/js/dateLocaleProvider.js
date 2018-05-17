@@ -10,32 +10,35 @@
    * The `$mdDateLocaleProvider` is the provider that creates the `$mdDateLocale` service.
    * This provider that allows the user to specify messages, formatters, and parsers for date
    * internationalization. The `$mdDateLocale` service itself is consumed by AngularJS Material
-   * components that deal with dates.
+   * components that deal with dates (i.e. {@link api/directive/mdDatepicker mdDatepicker}).
    *
-   * @property {(Array<string>)=} months Array of month names (in order).
-   * @property {(Array<string>)=} shortMonths Array of abbreviated month names.
-   * @property {(Array<string>)=} days Array of the days of the week (in order).
-   * @property {(Array<string>)=} shortDays Array of abbreviated days of the week.
-   * @property {(Array<string>)=} dates Array of dates of the month. Only necessary for locales
-   *     using a numeral system other than [1, 2, 3...].
-   * @property {(Array<string>)=} firstDayOfWeek The first day of the week. Sunday = 0, Monday = 1,
-   *    etc.
-   * @property {(function(string): Date)=} parseDate Function to parse a date object from a string.
-   * @property {(function(Date, string): string)=} formatDate Function to format a date object to a
-   *     string. The datepicker directive also provides the time zone, if it was specified.
-   * @property {(function(Date): string)=} monthHeaderFormatter Function that returns the label for
-   *     a month given a date.
-   * @property {(function(Date): string)=} monthFormatter Function that returns the full name of a month
-   *     for a given date.
-   * @property {(function(number): string)=} weekNumberFormatter Function that returns a label for
-   *     a week given the week number.
-   * @property {(string)=} msgCalendar Translation of the label "Calendar" for the current locale.
-   * @property {(string)=} msgOpenCalendar Translation of the button label "Open calendar" for the
-   *     current locale.
-   * @property {Date=} firstRenderableDate The date from which the datepicker calendar will begin
-   * rendering. Note that this will be ignored if a minimum date is set. Defaults to January 1st 1880.
-   * @property {Date=} lastRenderableDate The last date that will be rendered by the datepicker
-   * calendar. Note that this will be ignored if a maximum date is set. Defaults to January 1st 2130.
+   * @property {Array<string>} months Array of month names (in order).
+   * @property {Array<string>} shortMonths Array of abbreviated month names.
+   * @property {Array<string>} days Array of the days of the week (in order).
+   * @property {Array<string>} shortDays Array of abbreviated days of the week.
+   * @property {Array<string>} dates Array of dates of the month. Only necessary for locales
+   *  using a numeral system other than [1, 2, 3...].
+   * @property {Array<string>} firstDayOfWeek The first day of the week. Sunday = 0, Monday = 1,
+   *  etc.
+   * @property {function(string): Date} parseDate Function that converts a date string to a Date
+   *  object (the date portion).
+   * @property {function(Date, string): string} formatDate Function to format a date object to a
+   *  string. The datepicker directive also provides the time zone, if it was specified.
+   * @property {function(Date): string} monthHeaderFormatter Function that returns the label for
+   *  a month given a date.
+   * @property {function(Date): string} monthFormatter Function that returns the full name of a month
+   *  for a given date.
+   * @property {function(number): string} weekNumberFormatter Function that returns a label for
+   *  a week given the week number.
+   * @property {string} msgCalendar Translation of the label "Calendar" for the current locale.
+   * @property {string} msgOpenCalendar Translation of the button label "Open calendar" for the
+   *  current locale.
+   * @property {Date} firstRenderableDate The date from which the datepicker calendar will begin
+   *  rendering. Note that this will be ignored if a minimum date is set.
+   *  Defaults to January 1st 1880.
+   * @property {Date} lastRenderableDate The last date that will be rendered by the datepicker
+   *  calendar. Note that this will be ignored if a maximum date is set.
+   *  Defaults to January 1st 2130.
    *
    * @usage
    * <hljs lang="js">
@@ -90,7 +93,7 @@
 
     /** @constructor */
     function DateLocaleProvider() {
-      /** Array of full month names. E.g., ['January', 'Febuary', ...] */
+      /** Array of full month names. E.g., ['January', 'February', ...] */
       this.months = null;
 
       /** Array of abbreviated month names. E.g., ['Jan', 'Feb', ...] */
