@@ -45,8 +45,8 @@ angular
  *
  * **Autocomplete Dropdown Items Rendering**
  *
- * The `md-autocomplete` uses the the <a ng-href="api/directive/mdVirtualRepeatContainer">VirtualRepeat</a>
- * directive for displaying the results inside of the dropdown.<br/>
+ * The `md-autocomplete` uses the the <a ng-href="api/directive/mdVirtualRepeat">
+ *   mdVirtualRepeat</a> directive for displaying the results inside of the dropdown.<br/>
  *
  * > When encountering issues regarding the item template please take a look at the
  *   <a ng-href="api/directive/mdVirtualRepeatContainer">VirtualRepeatContainer</a> documentation.
@@ -54,13 +54,15 @@ angular
  * **Autocomplete inside of a Virtual Repeat**
  *
  * When using the `md-autocomplete` directive inside of a
- * <a ng-href="api/directive/mdVirtualRepeatContainer">VirtualRepeatContainer</a> the dropdown items might
- * not update properly, because caching of the results is enabled by default.
+ * <a ng-href="api/directive/mdVirtualRepeatContainer">VirtualRepeatContainer</a> the dropdown items
+ * might not update properly, because caching of the results is enabled by default.
  *
- * The autocomplete will then show invalid dropdown items, because the VirtualRepeat only updates the
- * scope bindings, rather than re-creating the `md-autocomplete` and the previous cached results will be used.
+ * The autocomplete will then show invalid dropdown items, because the Virtual Repeat only updates
+ * the scope bindings rather than re-creating the `md-autocomplete`. This means that the previous
+ * cached results will be used.
  *
- * > To avoid such problems ensure that the autocomplete does not cache any results.
+ * > To avoid such problems, ensure that the autocomplete does not cache any results via
+ * `md-no-cache="true"`:
  *
  * <hljs lang="html">
  *   <md-autocomplete
@@ -106,11 +108,10 @@ angular
  * @param {string=} md-menu-class This class will be applied to the dropdown menu for styling.
  * @param {string=} md-menu-container-class This class will be applied to the parent container
  *     of the dropdown panel.
- * @param {string=} md-input-class This will be applied to the input for styling. This attribute is only valid when a `md-floating-label` is defined
+ * @param {string=} md-input-class This will be applied to the input for styling. This attribute
+ *     is only valid when a `md-floating-label` is defined.
  * @param {string=} md-floating-label This will add a floating label to autocomplete and wrap it in
  *     `md-input-container`
- * @param {string=} md-input-name The name attribute given to the input element to be used with
- *     FormController
  * @param {string=} md-select-on-focus When present the inputs text will be automatically selected
  *     on focus.
  * @param {string=} md-input-id An ID to be added to the input element.
