@@ -6,10 +6,11 @@
  * @restrict E
  *
  * @description
- * The `<md-tabs>` directive serves as the container for 1..n `<md-tab>` child directives to
- * produces a Tabs components. In turn, the nested `<md-tab>` directive is used to specify a tab
- * label for the **header button** and a [optional] tab view content that will be associated with
- * each tab button.
+ * The `<md-tabs>` directive serves as the container for 1..n
+ * <a ng-href="api/directive/mdTab">`<md-tab>`</a> child directives.
+ * In turn, the nested `<md-tab>` directive is used to specify a tab label for the
+ * **header button** and <i>optional</i> tab view content that will be associated with each tab
+ * button.
  *
  * Below is the markup for its simplest usage:
  *
@@ -21,20 +22,20 @@
  *  </md-tabs>
  *  </hljs>
  *
- * Tabs supports three (3) usage scenarios:
+ * Tabs support three (3) usage scenarios:
  *
  *  1. Tabs (buttons only)
  *  2. Tabs with internal view content
  *  3. Tabs with external view content
  *
- * **Tab-only** support is useful when tab buttons are used for custom navigation regardless of any
+ * **Tabs-only** support is useful when tab buttons are used for custom navigation regardless of any
  * other components, content, or views.
  *
- * <i><b>Note:</b> If you are using the Tabs component for page-level navigation, please take a look
- * at the <a ng-href="./api/directive/mdNavBar">NavBar component</a> instead as it can handle this
- * case a bit more natively.</i>
+ * <i><b>Note:</b> If you are using the Tabs component for page-level navigation, please use
+ * the <a ng-href="./api/directive/mdNavBar">NavBar component</a> instead. It handles this
+ * case a more natively and more performantly.</i>
  *
- * **Tabs with internal views** are the traditional usages where each tab has associated view
+ * **Tabs with internal views** are the traditional usage where each tab has associated view
  * content and the view switching is managed internally by the Tabs component.
  *
  * **Tabs with external view content** is often useful when content associated with each tab is
@@ -47,13 +48,17 @@
  *
  * ### Explanation of tab stretching
  *
- * Initially, tabs will have an inherent size.  This size will either be defined by how much space is needed to accommodate their text or set by the user through CSS.  Calculations will be based on this size.
+ * Initially, tabs will have an inherent size.  This size will either be defined by how much space
+ * is needed to accommodate their text or set by the user through CSS.
+ * Calculations will be based on this size.
  *
- * On mobile devices, tabs will be expanded to fill the available horizontal space.  When this happens, all tabs will become the same size.
+ * On mobile devices, tabs will be expanded to fill the available horizontal space.
+ * When this happens, all tabs will become the same size.
  *
  * On desktops, by default, stretching will never occur.
  *
- * This default behavior can be overridden through the `md-stretch-tabs` attribute.  Here is a table showing when stretching will occur:
+ * This default behavior can be overridden through the `md-stretch-tabs` attribute.
+ * Here is a table showing when stretching will occur:
  *
  * `md-stretch-tabs` | mobile    | desktop
  * ------------------|-----------|--------
@@ -61,19 +66,30 @@
  * `always`          | stretched | stretched
  * `never`           | ---       | ---
  *
- * @param {integer=} md-selected Index of the active/selected tab
+ * @param {integer=} md-selected Index of the active/selected tab.
  * @param {boolean=} md-no-ink If present, disables ink ripple effects.
  * @param {boolean=} md-no-ink-bar If present, disables the selection ink bar.
- * @param {string=}  md-align-tabs Attribute to indicate position of tab buttons: `bottom` or `top`; default is `top`
- * @param {string=} md-stretch-tabs Attribute to indicate whether or not to stretch tabs: `auto`, `always`, or `never`; default is `auto`
- * @param {boolean=} md-dynamic-height When enabled, the tab wrapper will resize based on the contents of the selected tab
- * @param {boolean=} md-border-bottom If present, shows a solid `1px` border between the tabs and their content
- * @param {boolean=} md-center-tabs When enabled, tabs will be centered provided there is no need for pagination
- * @param {boolean=} md-no-pagination When enabled, pagination will remain off
- * @param {boolean=} md-swipe-content When enabled, swipe gestures will be enabled for the content area to jump between tabs
- * @param {boolean=} md-enable-disconnect When enabled, scopes will be disconnected for tabs that are not being displayed.  This provides a performance boost, but may also cause unexpected issues and is not recommended for most users.
- * @param {boolean=} md-autoselect When present, any tabs added after the initial load will be automatically selected
- * @param {boolean=} md-no-select-click When enabled, click events will not be fired when selecting tabs
+ * @param {string=}  md-align-tabs Attribute to indicate position of tab buttons: `bottom` or `top`;
+ *  Default is `top`.
+ * @param {string=} md-stretch-tabs Attribute to indicate whether or not to stretch tabs: `auto`,
+ *  `always`, or `never`; Default is `auto`.
+ * @param {boolean=} md-dynamic-height When enabled, the tab wrapper will resize based on the
+ *  contents of the selected tab.
+ * @param {boolean=} md-border-bottom If present, shows a solid `1px` border between the tabs and
+ *  their content.
+ * @param {boolean=} md-center-tabs When enabled, tabs will be centered provided there is no need
+ *  for pagination.
+ * @param {boolean=} md-no-pagination When enabled, pagination will remain off.
+ * @param {boolean=} md-swipe-content When enabled, swipe gestures will be enabled for the content
+ *  area to allow swiping between tabs.
+ * @param {boolean=} md-enable-disconnect When enabled, scopes will be disconnected for tabs that
+ *  are not being displayed. This provides a performance boost, but may also cause unexpected
+ *  issues. It is not recommended for most users.
+ * @param {boolean=} md-autoselect When present, any tabs added after the initial load will be
+ *  automatically selected.
+ * @param {boolean=} md-no-select-click When true, click events will not be fired when the value of
+ *  `md-active` on an `md-tab` changes. This is useful when using tabs with UI-Router's child
+ *  states, as triggering a click event in that case can cause an extra tab change to occur.
  *
  * @usage
  * <hljs lang="html">
@@ -147,7 +163,7 @@ function MdTabs ($$mdSvgRegistry) {
                   'ng-repeat="tab in $mdTabsCtrl.tabs" ' +
                   'role="tab" ' +
                   'id="tab-item-{{::tab.id}}" ' +
-                  'md-tab-id="{{::tab.id}}"' +
+                  'md-tab-id="{{::tab.id}}" ' +
                   'aria-selected="{{tab.isActive()}}" ' +
                   'aria-disabled="{{tab.scope.disabled || \'false\'}}" ' +
                   'ng-click="$mdTabsCtrl.select(tab.getIndex())" ' +
