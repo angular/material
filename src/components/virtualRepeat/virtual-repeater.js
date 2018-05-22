@@ -17,31 +17,33 @@ angular.module('material.components.virtualRepeat', [
  * @module material.components.virtualRepeat
  * @restrict E
  * @description
- * `md-virtual-repeat-container` provides the scroll container for md-virtual-repeat.
+ * `md-virtual-repeat-container` provides the scroll container for
+ * <a ng-href="api/directive/mdVirtualRepeat">md-virtual-repeat</a>.
  *
- * VirtualRepeat is a limited substitute for ng-repeat that renders only
- * enough DOM nodes to fill the container and recycling them as the user scrolls.
+ * VirtualRepeat is a limited substitute for `ng-repeat` that renders only
+ * enough DOM nodes to fill the container, recycling them as the user scrolls.
  *
- * Once an element is not visible anymore, the VirtualRepeat recycles it and will reuse it for
- * another visible item by replacing the previous dataset with the new one.
+ * Once an element is not visible anymore, the Virtual Repeat recycles the element and reuses it
+ * for another visible item by replacing the previous data set with the set of currently visible
+ * elements.
  *
  * ### Common Issues
  *
- * - When having one-time bindings inside of the view template, the VirtualRepeat will not properly
+ * - When having one-time bindings inside of the view template, the Virtual Repeat will not properly
  *   update the bindings for new items, since the view will be recycled.
- * - Directives inside of a VirtualRepeat will be only compiled (linked) once, because those
+ * - Directives inside of a Virtual Repeat will be only compiled (linked) once, because those
  *   items will be recycled and used for other items.
- *   The VirtualRepeat just updates the scope bindings.
+ *   The Virtual Repeat just updates the scope bindings.
  *
  *
  * ### Notes
  *
  * > The VirtualRepeat is a similar implementation to the Android
- * [RecyclerView](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html)
+ * [RecyclerView](https://developer.android.com/reference/android/support/v7/widget/RecyclerView.html).
  *
  * <!-- This comment forces a break between blockquotes //-->
  *
- * > Please also review the <a ng-href="api/directive/mdVirtualRepeat">VirtualRepeat</a>
+ * > Please also review the <a ng-href="api/directive/mdVirtualRepeat">mdVirtualRepeat</a>
  * documentation for more information.
  *
  *
@@ -53,14 +55,14 @@ angular.module('material.components.virtualRepeat', [
  * </md-virtual-repeat-container>
  * </hljs>
  *
+ * @param {boolean=} md-auto-shrink When present and the container will shrink to fit
+ *     the number of items in the `md-virtual-repeat`.
+ * @param {number=} md-auto-shrink-min Minimum number of items that md-auto-shrink
+ *     will shrink to. Default: `0`.
+ * @param {boolean=} md-orient-horizontal Whether the container should scroll horizontally.
+ *     The default is `false` which indicates vertical orientation and scrolling.
  * @param {number=} md-top-index Binds the index of the item that is at the top of the scroll
  *     container to `$scope`. It can both read and set the scroll position.
- * @param {boolean=} md-orient-horizontal Whether the container should scroll horizontally
- *     (defaults to orientation and scrolling vertically).
- * @param {boolean=} md-auto-shrink When present, the container will shrink to fit
- *     the number of items when that number is less than its original size.
- * @param {number=} md-auto-shrink-min Minimum number of items that md-auto-shrink
- *     will shrink to (default: 0).
  */
 function VirtualRepeatContainerDirective() {
   return {
@@ -148,7 +150,7 @@ function VirtualRepeatContainerController($$rAF, $mdUtil, $mdConstant, $parse, $
   this.sizer = this.scroller.querySelector('.md-virtual-repeat-sizer');
   this.offsetter = this.scroller.querySelector('.md-virtual-repeat-offsetter');
 
-  // After the dom stablizes, measure the initial size of the container and
+  // After the DOM stabilizes, measure the initial size of the container and
   // make a best effort at re-measuring as it changes.
   var boundUpdateSize = angular.bind(this, this.updateSize);
 
@@ -418,18 +420,23 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  * @restrict A
  * @priority 1000
  * @description
- * `md-virtual-repeat` specifies an element to repeat using virtual scrolling.
+ * The `md-virtual-repeat` attribute is applied to a template that is repeated using virtual
+ * scrolling. This provides smooth and performant scrolling through very large lists of elements.
  *
- * Virtual repeat is a limited substitute for ng-repeat that renders only
- * enough DOM nodes to fill the container and recycling them as the user scrolls.
+ * Virtual repeat is a limited substitute for `ng-repeat` that renders only
+ * enough DOM nodes to fill the container, recycling them as the user scrolls.
  *
- * Arrays, but not objects are supported for iteration.
- * Track by, as alias, and (key, value) syntax are not supported.
+ * ### Notes
+ *
+ * - Arrays are supported for iteration by default.
+ * - An object can used use if `md-on-demand` is specified and the object implements the interface
+ *   described in the `md-on-demand` <a ng-href="#attributes">documentation</a>.
+ * - `trackBy`, `as` alias, and `(key, value)` syntax from `ng-repeat` are not supported.
  *
  * ### On-Demand Async Item Loading
  *
- * When using the `md-on-demand` attribute and loading some asynchronous data, the `getItemAtIndex` function will
- * mostly return nothing.
+ * When using the `md-on-demand` attribute and loading some asynchronous data,
+ * the `getItemAtIndex` function will mostly return nothing.
  *
  * <hljs lang="js">
  *   DynamicItems.prototype.getItemAtIndex = function(index) {
@@ -442,10 +449,10 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  *   };
  * </hljs>
  *
- * This means that the VirtualRepeat will not have any value for the given index.<br/>
- * After the data loading completed, the user expects the VirtualRepeat to recognize the change.
+ * This means that the Virtual Repeat will not have any value for the given index.<br/>
+ * After the data loading completes, the user expects the Virtual Repeat to recognize the change.
  *
- * To make sure that the VirtualRepeat properly detects any change, you need to run the operation
+ * To make sure that the Virtual Repeat properly detects any change, you need to run the operation
  * in another digest.
  *
  * <hljs lang="js">
@@ -474,19 +481,20 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  * </md-virtual-repeat-container>
  * </hljs>
  *
- * @param {number=} md-item-size The height or width of the repeated elements (which must be
- *   identical for each element). Optional. Will attempt to read the size from the dom if missing,
- *   but still assumes that all repeated nodes have same height or width.
- * @param {string=} md-extra-name Evaluates to an additional name to which the current iterated item
+ * @param {expression=} md-extra-name Evaluates to an additional name to which the current iterated item
  *   can be assigned on the repeated scope (needed for use in `md-autocomplete`).
- * @param {boolean=} md-on-demand When present, treats the md-virtual-repeat argument as an object
+ * @param {number=} md-item-size Optional height or width of the repeated elements (which **must be
+ *   identical for each element**). Virtual repeat will attempt to read the size from the DOM,
+ *   if missing, but it still assumes that all repeated nodes have the **same height**
+ *   (when scrolling vertically) or **same width** (when scrolling horizontally).
+ * @param {boolean=} md-on-demand When present, treats the `md-virtual-repeat` argument as an object
  *   that can fetch rows rather than an array.
  *
- *   **NOTE:** This object must implement the following interface with two (2) methods:
+ *   **NOTE:** This object **must** implement the following interface with two methods:
  *
- *   - `getItemAtIndex: function(index) [object]` The item at that index or null if it is not yet
- *     loaded (it should start downloading the item in that case).
- *   - `getLength: function() [number]` The data length to which the repeater container
+ *   - `getItemAtIndex` - `{function(index): Object}`: The item at that `index` or `null` if it is not
+ *     yet loaded (it should start downloading the item in that case).
+ *   - `getLength` - `{function(): number}`: The data length to which the repeater container
  *     should be sized. Ideally, when the count is known, this method should return it.
  *     Otherwise, return a higher number than the currently loaded items to produce an
  *     infinite-scroll behavior.
@@ -540,8 +548,6 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
   this.startIndex = 0;
   /** @type {number} Previous ending repeat index (based on scroll offset) */
   this.endIndex = 0;
-  // TODO: measure width/height of first element from dom if not provided.
-  // getComputedStyle?
   /** @type {?number} Height/width of repeated elements. */
   this.itemSize = $scope.$eval($attrs.mdItemSize) || null;
 
@@ -565,7 +571,7 @@ function VirtualRepeatController($scope, $element, $attrs, $browser, $document, 
 
   /**
    * Presently rendered blocks by repeat index.
-   * @type {Object<number, !VirtualRepeatController.Block}
+   * @type {Object<number, !VirtualRepeatController.Block>}
    */
   this.blocks = {};
   /** @type {Array<!VirtualRepeatController.Block>} A pool of presently unused blocks. */
@@ -661,7 +667,7 @@ VirtualRepeatController.prototype.repeatListExpression_ = function(scope) {
 
 
 /**
- * Called by the container. Informs us that the containers scroll or size has
+ * Called by the container. Informs us that the container's scroll or size has
  * changed.
  */
 VirtualRepeatController.prototype.containerUpdated = function() {
@@ -711,7 +717,7 @@ VirtualRepeatController.prototype.containerUpdated = function() {
 
 /**
  * Called by the container. Returns the size of a single repeated item.
- * @return {?number} Size of a repeated item.
+ * @return {?number} size of a repeated item.
  */
 VirtualRepeatController.prototype.getItemSize = function() {
   return this.itemSize;
@@ -719,8 +725,8 @@ VirtualRepeatController.prototype.getItemSize = function() {
 
 
 /**
- * Called by the container. Returns the size of a single repeated item.
- * @return {?number} Size of a repeated item.
+ * Called by the container.
+ * @return {?number} the most recently seen length of items.
  */
 VirtualRepeatController.prototype.getItemCount = function() {
   return this.itemsLength;
@@ -729,7 +735,9 @@ VirtualRepeatController.prototype.getItemCount = function() {
 
 /**
  * Updates the order and visible offset of repeated blocks in response to scrolling
- * or items updates.
+ * or updates to `items`.
+ * @param items {Array} visible elements
+ * @param oldItems {Array} previously visible elements
  * @private
  */
 VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItems) {
@@ -882,8 +890,8 @@ VirtualRepeatController.prototype.updateBlock_ = function(block, index) {
   this.updateScope_(block.scope, index);
 
   // Perform digest before reattaching the block.
-  // Any resulting synchronous dom mutations should be much faster as a result.
-  // This might break some directives, but I'm going to try it for now.
+  // Any resulting synchronous DOM mutations should be much faster as a result.
+  // This might break some directives.
   if (!this.$rootScope.$$phase) {
     block.scope.$digest();
   }
@@ -997,8 +1005,12 @@ VirtualRepeatModelArrayLike.prototype.$$includeIndexes = function(start, end) {
  * @restrict A
  * @description
  *
- * Force an element to have a certain px height. This is used in place of a style tag in order to
- * conform to the Content Security Policy regarding unsafe-inline style tags.
+ * Force an element to have a certain `px` height. This is used in place of a style tag in order to
+ * conform to the
+ * <a href="https://developer.mozilla.org/docs/Web/HTTP/Headers/Content-Security-Policy/script-src">
+ *   Content Security Policy</a> regarding `unsafe-inline` `<style>` tags.
+ *
+ * This directive is related to <a ng-href="api/directive/mdVirtualRepeat">mdVirtualRepeat</a>.
  *
  * @usage
  * <hljs lang="html">
