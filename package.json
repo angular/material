@@ -35,7 +35,7 @@
     "colors": "^1.1.0",
     "conventional-changelog": "^1.1.0",
     "dgeni": "^0.4.9",
-    "dgeni-packages": "^0.22.1",
+    "dgeni-packages": "^0.26.2",
     "github": "^12.0.5",
     "eslint": "^4.3.0",
     "github-contributors-list": "^1.2.3",

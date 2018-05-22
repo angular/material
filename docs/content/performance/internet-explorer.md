@@ -22,7 +22,7 @@ present a performance burden for Internet Explorer. When switching or modifying 
 is not a requirement, the theming CSS can be exported to an external file which can be loaded statically.
 The following steps should be performed:
 
-* Configure your theme as explained [here](Theming/03_configuring_a_theme)
+* Configure your theme as explained [here](../Theming/03_configuring_a_theme)
  - This step is only required when a custom theme is used
 * Run the application in Chrome 
 * Open the Chrome DevTools
