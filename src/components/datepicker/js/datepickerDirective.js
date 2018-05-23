@@ -1,7 +1,6 @@
 (function() {
   'use strict';
 
-  // TODO(jelbourn): Demo that uses moment.js
   // TODO(jelbourn): forward more attributes to the internal input (required, autofocus, etc.)
   // TODO(jelbourn): something better for mobile (calendar panel takes up entire screen?)
   // TODO(jelbourn): input behavior (masking? auto-complete?)

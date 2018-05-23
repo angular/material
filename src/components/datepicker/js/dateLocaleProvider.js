@@ -30,6 +30,8 @@
    *  for a given date.
    * @property {function(number): string} weekNumberFormatter Function that returns a label for
    *  a week given the week number.
+   * @property {function(Date): string} longDateFormatter Function that formats a date into a long
+   *  `aria-label` that is read by the screen reader when the focused date changes.
    * @property {string} msgCalendar Translation of the label "Calendar" for the current locale.
    * @property {string} msgOpenCalendar Translation of the button label "Open calendar" for the
    *  current locale.
@@ -39,6 +41,11 @@
    * @property {Date} lastRenderableDate The last date that will be rendered by the datepicker
    *  calendar. Note that this will be ignored if a maximum date is set.
    *  Defaults to January 1st 2130.
+   * @property {function(string): boolean} isDateComplete Function to determine whether a string
+   *  makes sense to be parsed to a `Date` object. Returns `true` if the date appears to be complete
+   *  and parsing should occur. By default, this checks for 3 groups of text or numbers separated
+   *  by delimiters. This means that by default, date strings must include a month, day, and year
+   *  to be parsed and for the model to be updated.
    *
    * @usage
    * <hljs lang="js">
@@ -65,6 +72,16 @@
    *     $mdDateLocaleProvider.formatDate = function(date) {
    *       var m = moment(date);
    *       return m.isValid() ? m.format('L') : '';
+   *     };
+   *
+   *     // Allow only a day and month to be specified.
+   *     // This is required if using the 'M/D' format with moment.js.
+   *     $mdDateLocaleProvider.isDateComplete = function(dateString) {
+   *       dateString = dateString.trim();
+   *
+   *       // Look for two chunks of content (either numbers or text) separated by delimiters.
+   *       var re = /^(([a-zA-Z]{3,}|[0-9]{1,4})([ .,]+|[/-]))([a-zA-Z]{3,}|[0-9]{1,4})/;
+   *       return re.test(dateString);
    *     };
    *
    *     $mdDateLocaleProvider.monthHeaderFormatter = function(date) {
@@ -141,6 +158,13 @@
        * @type {function(Date): string}
        */
       this.longDateFormatter = null;
+
+      /**
+       * Function to determine whether a string makes sense to be
+       * parsed to a Date object.
+       * @type {function(string): boolean}
+       */
+      this.isDateComplete = null;
 
       /**
        * ARIA label for the calendar "dialog" used in the datepicker.
