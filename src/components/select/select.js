@@ -1369,11 +1369,13 @@ function SelectProvider($$interimElementProvider) {
         // Escape to close
         // Cycling of options, and closing on enter
         dropDown.on('keydown', onMenuKeyDown);
+        dropDown.on('keypress', onMenuKeypress);
         dropDown.on('click', checkCloseMenu);
 
         return function cleanupInteraction() {
           opts.backdrop && opts.backdrop.off('click', onBackdropClick);
           dropDown.off('keydown', onMenuKeyDown);
+          dropDown.off('keypress', onMenuKeypress);
           dropDown.off('click', checkCloseMenu);
 
           element.removeClass('md-clickable');
@@ -1391,6 +1393,10 @@ function SelectProvider($$interimElementProvider) {
           $mdUtil.nextTick($mdSelect.hide, true);
         }
 
+        /**
+         * Handle keydown Events on the menu
+         * @param ev keydown Event
+         */
         function onMenuKeyDown(ev) {
           ev.preventDefault();
           ev.stopPropagation();
@@ -1420,11 +1426,28 @@ function SelectProvider($$interimElementProvider) {
               $mdUtil.nextTick($mdSelect.hide, true);
               break;
             default:
-              if (shouldHandleKey(ev, $mdConstant)) {
-                var optNode = dropDown.controller('mdSelectMenu').optNodeForKeyboardSearch(ev);
-                opts.focusedNode = optNode || opts.focusedNode;
-                optNode && optNode.focus();
-              }
+          }
+
+          /**
+           * Handle keypress Events on the menu
+           * @param ev keypress Event
+           */
+          function onMenuKeypress(ev) {
+            switch (ev.keyCode) {
+              case keyCodes.UP_ARROW:
+              case keyCodes.DOWN_ARROW:
+              case keyCodes.SPACE:
+              case keyCodes.ENTER:
+              case keyCodes.TAB:
+              case keyCodes.ESCAPE:
+                break;
+              default:
+                if (shouldHandleKey(ev, $mdConstant)) {
+                  var optNode = dropDown.controller('mdSelectMenu').optNodeForKeyboardSearch(ev);
+                  opts.focusedNode = optNode || opts.focusedNode;
+                  optNode && optNode.focus();
+                }
+            }
           }
         }
 
@@ -1700,6 +1723,11 @@ function SelectProvider($$interimElementProvider) {
 
 }
 
+/**
+ * @param ev key event
+ * @param $mdConstant service
+ * @returns {boolean} whether or not the key should be used in keyboard search
+ */
 function shouldHandleKey(ev, $mdConstant) {
   var char = String.fromCharCode(ev.keyCode);
   var isNonUsefulKey = (ev.keyCode <= 31);
