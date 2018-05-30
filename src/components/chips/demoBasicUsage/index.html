@@ -20,22 +20,23 @@
     <br/>
     <h2 class="md-title">Use the default chip template.</h2>
 
-    <md-chips ng-model="ctrl.fruitNames" readonly="ctrl.readonly" md-removable="ctrl.removable"></md-chips>
+    <md-chips ng-model="ctrl.fruitNames" readonly="ctrl.readonly" md-removable="ctrl.removable">
+    </md-chips>
 
     <br/>
-    <h2 class="md-title">Use ng-change</h2>
+    <h2 class="md-title">Use ng-change and add-on-blur</h2>
 
-    <md-chips ng-model="ctrl.ngChangeFruitNames" ng-change="ctrl.onModelChange(ctrl.ngChangeFruitNames)" 
-      md-removable="ctrl.removable"></md-chips>
+    <md-chips ng-model="ctrl.ngChangeFruitNames" md-add-on-blur="true"
+              ng-change="ctrl.onModelChange(ctrl.ngChangeFruitNames)"
+              md-removable="ctrl.removable"></md-chips>
 
     <br/>
     <h2 class="md-title">Make chips editable.</h2>
 
-    <md-chips ng-model="ctrl.editableFruitNames" readonly="ctrl.readonly" md-removable="ctrl.removable"
-              md-enable-chip-edit="true"></md-chips>
+    <md-chips ng-model="ctrl.editableFruitNames" readonly="ctrl.readonly"
+              md-removable="ctrl.removable" md-enable-chip-edit="true"></md-chips>
 
     <br/>
-
     <h2 class="md-title">Use Placeholders and override hint texts.</h2>
 
     <md-chips
