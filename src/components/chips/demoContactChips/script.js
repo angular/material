@@ -2,7 +2,7 @@
   'use strict';
 
   // If we do not have CryptoJS defined; import it
-  if (typeof CryptoJS == 'undefined') {
+  if (typeof CryptoJS === 'undefined') {
     var cryptoSrc = 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js';
     var scriptTag = document.createElement('script');
     scriptTag.setAttribute('src', cryptoSrc);
@@ -13,7 +13,7 @@
       .module('contactChipsDemo', ['ngMaterial'])
       .controller('ContactChipDemoCtrl', DemoCtrl);
 
-  function DemoCtrl ($q, $timeout) {
+  function DemoCtrl ($q, $timeout, $log) {
     var self = this;
     var pendingSearch, cancelSearch = angular.noop;
     var lastSearch;
@@ -21,7 +21,6 @@
     self.allContacts = loadContacts();
     self.contacts = [self.allContacts[0]];
     self.asyncContacts = [];
-    self.filterSelected = true;
 
     self.querySearch = querySearch;
     self.delayedQuerySearch = delayedQuerySearch;
@@ -39,7 +38,7 @@
      * Also debounce the queries; since the md-contact-chips does not support this
      */
     function delayedQuerySearch(criteria) {
-      if ( !pendingSearch || !debounceSearch() )  {
+      if (!pendingSearch || !debounceSearch())  {
         cancelSearch();
 
         return pendingSearch = $q(function(resolve, reject) {
@@ -77,16 +76,16 @@
      * Create filter function for a query string
      */
     function createFilterFor(query) {
-      var lowercaseQuery = angular.lowercase(query);
+      var lowercaseQuery = query.toLowerCase();
 
       return function filterFn(contact) {
-        return (contact._lowername.indexOf(lowercaseQuery) != -1);
+        return (contact._lowername.indexOf(lowercaseQuery) !== -1);
       };
 
     }
 
-    function onModelChange(model) {
-      alert('The model has changed');
+    function onModelChange(newModel) {
+      $log.log('The model has changed to ' + JSON.stringify(newModel) + '.');
     }
 
     function loadContacts() {
@@ -117,6 +116,4 @@
       });
     }
   }
-
-
 })();

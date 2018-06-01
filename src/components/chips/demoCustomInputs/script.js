@@ -44,7 +44,7 @@
      * Create filter function for a query string
      */
     function createFilterFor(query) {
-      var lowercaseQuery = angular.lowercase(query);
+      var lowercaseQuery = query.toLowerCase();
 
       return function filterFn(vegetable) {
         return (vegetable._lowername.indexOf(lowercaseQuery) === 0) ||

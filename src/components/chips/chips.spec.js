@@ -39,7 +39,7 @@ describe('<md-chips>', function() {
   describe('with no overrides', function() {
     beforeEach(module('material.components.chips', 'material.components.autocomplete'));
     beforeEach(inject(function($rootScope, _$exceptionHandler_, _$timeout_) {
-      scope = $rootScope.$new();
+      scope = $rootScope.$new(false);
       scope.items = ['Apple', 'Banana', 'Orange'];
       $exceptionHandler = _$exceptionHandler_;
       $timeout = _$timeout_;
@@ -177,6 +177,30 @@ describe('<md-chips>', function() {
         expect(scope.addChip.calls.mostRecent().args[1]).toBe(3);       // Index
       });
 
+      it('should update the view if the add method changes or removes the chip', function() {
+        var element = buildChips(CHIP_ADD_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        scope.addChip = function ($chip, $index) {
+          if ($chip === 'Grape') {
+            var grape = scope.items.pop();
+            grape += '[' + $index + ']';
+            scope.items.push(grape);
+          }
+          if ($chip === 'Broccoli') {
+            scope.items.pop();
+          }
+        };
+
+        element.scope().$apply(function() {
+          ctrl.chipBuffer = 'Broccoli';
+          simulateInputEnterKey(ctrl);
+          ctrl.chipBuffer = 'Grape';
+          simulateInputEnterKey(ctrl);
+        });
+
+        expect(scope.items[3]).toBe('Grape[3]');
+      });
 
       it('should call the remove method when removing a chip', function() {
         var element = buildChips(CHIP_REMOVE_TEMPLATE);
@@ -217,15 +241,16 @@ describe('<md-chips>', function() {
           simulateInputEnterKey(ctrl);
         });
         expect(scope.onModelChange).toHaveBeenCalled();
+        expect(scope.onModelChange.calls.count()).toBe(1);
         expect(scope.onModelChange.calls.mostRecent().args[0].length).toBe(4);
 
         element.scope().$apply(function() {
           ctrl.removeChip(0);
         });
         expect(scope.onModelChange).toHaveBeenCalled();
+        expect(scope.onModelChange.calls.count()).toBe(2);
         expect(scope.onModelChange.calls.mostRecent().args[0].length).toBe(3);
       });
-
 
       it('should call the select method when selecting a chip', function() {
         var element = buildChips(CHIP_SELECT_TEMPLATE);
@@ -694,7 +719,8 @@ describe('<md-chips>', function() {
           input.val('    Test    ');
 
           // We have to trigger the `change` event, because IE11 does not support
-          // the `input` event to update the ngModel. An alternative for `input` is to use the `change` event.
+          // the `input` event to update the ngModel. An alternative for `input` is to use the
+          // `change` event.
           input.triggerHandler('change');
 
           expect(ctrl.chipBuffer).toBeTruthy();
