@@ -466,11 +466,14 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
     var clone = cacheElement.clone();
     var cacheSuffix = '_cache' + $mdUtil.nextUid();
 
-    // We need to modify for each cached icon the id attributes.
+    // We need to modify for each cached icon the id attributes and references.
     // This is needed because SVG id's are treated as normal DOM ids
     // and should not have a duplicated id.
     if (clone.id) clone.id += cacheSuffix;
     angular.forEach(clone.querySelectorAll('[id]'), function(item) {
+      angular.forEach(clone.querySelectorAll('[a="url(#'+ item.id +')"], [altGlyph="url(#'+ item.id +')"], [animate="url(#'+ item.id +')"], [animateColor="url(#'+ item.id +')"], [animateMotion="url(#'+ item.id +')"], [animateTransform="url(#'+ item.id +')"], [clip-path="url(#'+ item.id +')"], [color-profile="url(#'+ item.id +')"], [src="url(#'+ item.id +')"], [cursor="url(#'+ item.id +')"], [feImage="url(#'+ item.id +')"], [fill="url(#'+ item.id +')"], [filter="url(#'+ item.id +')"], [image="url(#'+ item.id +')"], [linearGradient="url(#'+ item.id +')"], [marker="url(#'+ item.id +')"], [marker-smart="url(#'+ item.id +')"], [marker-mid="url(#'+ item.id +')"], [marker-end="url(#'+ item.id +')"], [mask="url(#'+ item.id +')"], [pattern="url(#'+ item.id +')"], [radialGradient="url(#'+ item.id +')"], [script="url(#'+ item.id +')"], [stroke="url(#'+ item.id +')"], [textPath="url(#'+ item.id +')"], [tref="url(#'+ item.id +')"], [set="url(#'+ item.id +')"], [use="url(#'+ item.id +')"]'), function(refItem) {
+        refItem.outerHTML = refItem.outerHTML.replace("url(#" + item.id + ")", "url(#" + item.id + cacheSuffix + ")");
+      });
       item.id += cacheSuffix;
     });
 
