@@ -8,20 +8,21 @@ angular
  * @module material.components.chips
  *
  * @description
- * `<md-chip>` is a component used within `<md-chips>` and is responsible for rendering individual
- * chips.
+ * `<md-chip>` is a component used within `<md-chips>`. It is responsible for rendering an
+ * individual chip.
  *
  *
  * @usage
  * <hljs lang="html">
- *   <md-chip>{{$chip}}</md-chip>
+ *   <md-chips>
+ *     <md-chip>{{$chip}}</md-chip>
+ *   </md-chips>
  * </hljs>
  *
  */
 
-// This hint text is hidden within a chip but used by screen readers to
+// This hint text is visually hidden within a chip but used by screen readers to
 // inform the user how they can interact with a chip.
-
 var DELETE_HINT_TEMPLATE = '\
     <span ng-if="!$mdChipsCtrl.readonly" class="md-visually-hidden">\
       {{$mdChipsCtrl.deleteHint}}\
@@ -32,6 +33,8 @@ var DELETE_HINT_TEMPLATE = '\
  *
  * @param $mdTheming
  * @param $mdUtil
+ * @param $compile
+ * @param $timeout
  * @ngInject
  */
 function MdChip($mdTheming, $mdUtil, $compile, $timeout) {
