@@ -10,13 +10,14 @@ describe('<md-contact-chips>', function() {
           md-highlight-flags="i"\
           md-min-length="1"\
           md-chip-append-delay="2000"\
+          ng-change="onModelChange(contacts)"\
           placeholder="To">\
       </md-contact-chips>';
 
   beforeEach(module('material.components.chips'));
 
   beforeEach(inject(function($rootScope) {
-    scope = $rootScope.$new();
+    scope = $rootScope.$new(false);
     var img = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
     scope.allContacts = [
       {
@@ -35,7 +36,7 @@ describe('<md-contact-chips>', function() {
     ];
     scope.contacts = [];
 
-    scope.highlightFlags = "i";
+    scope.highlightFlags = 'i';
   }));
 
   var attachedElements = [];
@@ -63,6 +64,31 @@ describe('<md-contact-chips>', function() {
       var ctrl = element.controller('mdContactChips');
 
       expect(ctrl.highlightFlags).toEqual('i');
+    });
+
+    it('should trigger ng-change on chip addition/removal', function() {
+      var element = buildChips(CONTACT_CHIPS_TEMPLATE);
+      var ctrl = element.controller('mdContactChips');
+      var chipsElement = element.find('md-chips');
+      var chipsCtrl = chipsElement.controller('mdChips');
+
+      scope.onModelChange = jasmine.createSpy('onModelChange');
+
+      element.scope().$apply(function() {
+        chipsCtrl.appendChip(scope.allContacts[0]);
+      });
+      expect(scope.onModelChange).toHaveBeenCalled();
+      expect(scope.onModelChange.calls.count()).toBe(1);
+      expect(scope.onModelChange.calls.mostRecent().args[0].length).toBe(1);
+      expect(scope.contacts.length).toBe(1);
+
+      element.scope().$apply(function() {
+        chipsCtrl.removeChip(0);
+      });
+      expect(scope.onModelChange).toHaveBeenCalled();
+      expect(scope.onModelChange.calls.count()).toBe(2);
+      expect(scope.onModelChange.calls.mostRecent().args[0].length).toBe(0);
+      expect(scope.contacts.length).toBe(0);
     });
 
     it('forwards the md-chips-append-delay attribute to the md-chips', function() {
@@ -167,4 +193,12 @@ describe('<md-contact-chips>', function() {
     return container;
   }
 
+  function simulateInputEnterKey(ctrl) {
+    var event = {};
+    event.preventDefault = jasmine.createSpy('preventDefault');
+    inject(function($mdConstant) {
+      event.keyCode = $mdConstant.KEY_CODE.ENTER;
+    });
+    ctrl.inputKeydown(event);
+  }
 });
