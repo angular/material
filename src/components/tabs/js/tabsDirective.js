@@ -165,7 +165,7 @@ function MdTabs ($$mdSvgRegistry) {
                 'aria-label="{{::$mdTabsCtrl.navigationHint}}">' +
               '<md-tab-item ' +
                   'tabindex="{{ tab.isActive() ? 0 : -1 }}" ' +
-                  'class="md-tab" ' +
+                  'class="md-tab {{::tab.scope.tabClass}}" ' +
                   'ng-repeat="tab in $mdTabsCtrl.tabs" ' +
                   'role="tab" ' +
                   'id="tab-item-{{::tab.id}}" ' +
