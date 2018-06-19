@@ -869,10 +869,10 @@ table.md-css-table td p {
 
 .layout_note {
   font-size: 0.9em;
-    margin: -5px 40px 0px 20px;
-    color: rgb(1, 57, 114);
-    background-color: rgba(156, 204, 101,0.4);
-    padding: 20px;
+  margin: -5px 40px 0 20px;
+  color: rgb(1, 57, 114);
+  background-color: rgba(156, 204, 101,0.4);
+  padding: 20px;
 }
 
 .contributor_tables {
