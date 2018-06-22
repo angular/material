@@ -102,9 +102,9 @@ function MdCompilerProvider($compileProvider) {
    * @name $mdCompilerProvider#respectPreAssignBindingsEnabled
    *
    * @param {boolean=} respected update the `respectPreAssignBindingsEnabled` state if provided,
-   * otherwise just return the current Material `respectPreAssignBindingsEnabled` state.
-   * @returns {boolean|MdCompilerProvider} current value if used as getter or itself (chaining)
-   *  if used as setter
+   *  otherwise just return the current Material `respectPreAssignBindingsEnabled` state.
+   * @returns {boolean|MdCompilerProvider} current value, if used as a getter, or itself (chaining)
+   *  if used as a setter.
    *
    * @description
    * Call this method to enable/disable whether Material-specific (dialog/panel/toast/bottomsheet)
@@ -114,26 +114,36 @@ function MdCompilerProvider($compileProvider) {
    *
    * If disabled (`false`), the compiler assigns the value of each of the bindings to the
    * properties of the controller object before the constructor of this object is called.
+   * The ability to disable this settings is **deprecated** and will be removed in
+   * AngularJS Material 1.2.0.
    *
    * If enabled (`true`) the behavior depends on the AngularJS version used:
    *
-   * - `<1.5.10` - bindings are pre-assigned.
-   * - `>=1.5.10 <1.7` - behaves like set to whatever `$compileProvider.preAssignBindingsEnabled()` reports.
-   *    If the `preAssignBindingsEnabled` flag wasn't set manually, it defaults to pre-assigning bindings
-   *    with AngularJS `1.5.x` and to calling the constructor first with AngularJS `1.6.x`.
-   * - `>=1.7` - the compiler calls the constructor first before assigning bindings and
+   * - `<1.5.10`
+   *  - Bindings are pre-assigned.
+   * - `>=1.5.10 <1.7`
+   *  - Respects whatever `$compileProvider.preAssignBindingsEnabled()` reports. If the
+   *    `preAssignBindingsEnabled` flag wasn't set manually, it defaults to pre-assigning bindings
+   *    with AngularJS `1.5` and to calling the constructor first with AngularJS `1.6`.
+   * - `>=1.7`
+   *  - The compiler calls the constructor first before assigning bindings and
    *    `$compileProvider.preAssignBindingsEnabled()` no longer exists.
    *
-   * The default value is `false` but will change to `true` in AngularJS Material 1.2.
+   * Defaults
+   * - The default value is `false` in AngularJS 1.6 and earlier.
+   *  - It is planned to fix this value to `true` and not allow the `false` value in
+   *    AngularJS Material 1.2.0.
    *
-   * It is recommended to set this flag to `true` in AngularJS Material 1.1.x. The only reason
-   * it's not set that way by default is backwards compatibility. Not setting the flag to `true`
-   * when AngularJS' `$compileProvider.preAssignBindingsEnabled()` is set to `false`
-   * (i.e. default behavior in AngularJS 1.6 or newer) makes it hard to unit test
+   * It is recommended to set this flag to `true` when using AngularJS Material 1.1.x with
+   * AngularJS versions >= 1.5.10. The only reason it's not set that way by default is backwards
+   * compatibility.
+   *
+   * By not setting the flag to `true` when AngularJS' `$compileProvider.preAssignBindingsEnabled()`
+   * is set to `false` (i.e. default behavior in AngularJS 1.6 or newer), unit testing of
    * Material Dialog/Panel/Toast/BottomSheet controllers using the `$controller` helper
-   * as it always follows the `$compileProvider.preAssignBindingsEnabled()` value.
+   * is problematic as it always follows AngularJS' `$compileProvider.preAssignBindingsEnabled()`
+   * value.
    */
-  // TODO change it to `true` in Material 1.2.
   var respectPreAssignBindingsEnabled = false;
   this.respectPreAssignBindingsEnabled = function(respected) {
     if (angular.isDefined(respected)) {
@@ -147,11 +157,11 @@ function MdCompilerProvider($compileProvider) {
   /**
    * @private
    * @description
-   * This function returns `true` if AngularJS Material-specific (dialog/panel/toast/bottomsheet) controllers have
-   * bindings pre-assigned in controller constructors and `false` otherwise.
+   * This function returns `true` if AngularJS Material-specific (dialog/panel/toast/bottomsheet)
+   * controllers have bindings pre-assigned in controller constructors and `false` otherwise.
    *
-   * Note that this doesn't affect directives/components created via regular AngularJS methods which constitute most
-   * Material and user-created components; their behavior can be checked via
+   * Note that this doesn't affect directives/components created via regular AngularJS methods
+   * which constitute most Material and user-created components; their behavior can be checked via
    * `$compileProvider.preAssignBindingsEnabled()` in AngularJS `>=1.5.10 <1.7.0`.
    *
    * @returns {*} current preAssignBindingsEnabled state
@@ -444,30 +454,43 @@ function MdCompilerProvider($compileProvider) {
 
   /**
    * Creates and instantiates a new controller with the specified options.
-   * @param {!Object} options Options that include the controller
+   * @param {!Object} options Options that include the controller function or string.
    * @param {!Object} injectLocals Locals to to be provided in the controller DI.
    * @param {!Object} locals Locals to be injected to the controller.
    * @returns {!Object} Created controller instance.
    */
   MdCompilerService.prototype._createController = function(options, injectLocals, locals) {
-    // The third and fourth arguments to $controller are considered private and are undocumented:
-    // https://github.com/angular/angular.js/blob/master/src/ng/controller.js#L86
+    var ctrl;
+    var preAssignBindingsEnabled = getPreAssignBindingsEnabled();
+    // The third argument to $controller is considered private and undocumented:
+    // https://github.com/angular/angular.js/blob/v1.6.10/src/ng/controller.js#L102-L109.
+    // TODO remove the use of this third argument in AngularJS Material 1.2.0.
     // Passing `true` as the third argument causes `$controller` to return a function that
-    // gets the controller instance instead returning of the instance directly. When the
+    // gets the controller instance instead of returning the instance directly. When the
     // controller is defined as a function, `invokeCtrl.instance` is the *same instance* as
-    // `invokeCtrl()`. However, then the controller is an ES6 class, `invokeCtrl.instance` is a
+    // `invokeCtrl()`. However, when the controller is an ES6 class, `invokeCtrl.instance` is a
     // *different instance* from `invokeCtrl()`.
-    var invokeCtrl = this.$controller(options.controller, injectLocals, true, options.controllerAs);
+    if (preAssignBindingsEnabled) {
+      var invokeCtrl = this.$controller(options.controller, injectLocals, true);
 
-    if (getPreAssignBindingsEnabled() && options.bindToController) {
-      angular.extend(invokeCtrl.instance, locals);
+      if (options.bindToController) {
+        angular.extend(invokeCtrl.instance, locals);
+      }
+
+      // Use the private API callback to instantiate and initialize the specified controller.
+      ctrl = invokeCtrl();
+    } else {
+      // If we don't need to pre-assign bindings, avoid using the private API third argument and
+      // related callback.
+      ctrl = this.$controller(options.controller, injectLocals);
+
+      if (options.bindToController) {
+        angular.extend(ctrl, locals);
+      }
     }
 
-    // Instantiate and initialize the specified controller.
-    var ctrl = invokeCtrl();
-
-    if (!getPreAssignBindingsEnabled() && options.bindToController) {
-      angular.extend(ctrl, locals);
+    if (options.controllerAs) {
+      injectLocals.$scope[options.controllerAs] = ctrl;
     }
 
     // Call the $onInit hook if it's present on the controller.

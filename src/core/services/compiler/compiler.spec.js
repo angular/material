@@ -112,7 +112,7 @@ describe('$mdCompiler service', function() {
         var data = compile({
           template: '<span>hello</span>'
         });
-        var scope = $rootScope.$new();
+        var scope = $rootScope.$new(false);
         data.link(scope);
         expect(data.element.scope()).toBe(scope);
       }));
@@ -127,7 +127,7 @@ describe('$mdCompiler service', function() {
             this.injectedOne = one;
           }
         });
-        var scope = $rootScope.$new();
+        var scope = $rootScope.$new(false);
         data.link(scope);
         expect(data.element.controller()).toBeTruthy();
         expect(data.element.controller().injectedOne).toBe(1);
@@ -143,7 +143,7 @@ describe('$mdCompiler service', function() {
           }
         });
 
-        var scope = $rootScope.$new();
+        var scope = $rootScope.$new(false);
         data.link(scope);
 
         expect(ctrlElement).toBe(data.element);
@@ -155,7 +155,7 @@ describe('$mdCompiler service', function() {
           controller: function Ctrl() {},
           controllerAs: 'myControllerAs'
         });
-        var scope = $rootScope.$new();
+        var scope = $rootScope.$new(false);
         data.link(scope);
         expect(scope.myControllerAs).toBe(data.element.controller());
       }));
@@ -164,12 +164,21 @@ describe('$mdCompiler service', function() {
 
   });
 
-  [
+  var bindingStatesToTest;
+  if (angular.version.major === 1 && angular.version.minor >= 6) {
+    bindingStatesToTest = [
       {respectPreAssignBindingsEnabled: true},
       {respectPreAssignBindingsEnabled: false},
-      // TODO change `equivalentTo` to `true` in Material 1.2.
+      // TODO change `equivalentTo` to `true` in Material 1.2.0.
       {respectPreAssignBindingsEnabled: '"default"', equivalentTo: false}
-  ].forEach(function(options) {
+    ];
+  } else if (angular.version.major === 1 && angular.version.minor < 6) {
+    bindingStatesToTest = [
+      {respectPreAssignBindingsEnabled: false}
+    ];
+  }
+
+  bindingStatesToTest.forEach(function(options) {
     var realRespectPreAssignBindingsEnabled = options.respectPreAssignBindingsEnabled;
     var respectPreAssignBindingsEnabled = angular.isDefined(options.equivalentTo) ?
       options.equivalentTo :
@@ -224,8 +233,8 @@ describe('$mdCompiler service', function() {
         expect(isInstantiated).toBe(true);
       });
 
-      // Bindings are not preassigned only if we respect the AngularJS config and they're
-      // disabled there. This logic will change in Material 1.2.0.
+      // Bindings are not pre-assigned if we respect the AngularJS config and pre-assigning
+      // them is disabled there. This logic will change in AngularJS Material 1.2.0.
       if (respectPreAssignBindingsEnabled && !preAssignBindingsEnabledInAngularJS) {
         it('disabled should assign bindings after constructor', function() {
           var isInstantiated = false;
@@ -400,7 +409,7 @@ describe('$mdCompiler service', function() {
 
     it('should preserve a previous linked scope', function() {
 
-      var scope = $rootScope.$new();
+      var scope = $rootScope.$new(false);
 
       var data = compile({
         contentElement: $compile('<div>With Scope</div>')(scope)
@@ -445,7 +454,7 @@ describe('$mdCompiler service', function() {
     beforeEach(inject(function($injector) {
       $mdCompiler = $injector.get('$mdCompiler');
       $rootScope = $injector.get('$rootScope');
-      pageScope = $rootScope.$new();
+      pageScope = $rootScope.$new(false);
     }));
 
     it('should assign bindings by $onInit for ES6 classes', function(done) {
