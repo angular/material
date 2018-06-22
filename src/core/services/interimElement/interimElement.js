@@ -8,7 +8,7 @@ angular.module('material.core')
  *
  * @description
  *
- * Factory that contructs `$$interimElement.$service` services.
+ * Factory that constructs `$$interimElement.$service` services.
  * Used internally in material design for elements that appear on screen temporarily.
  * The service provides a promise-like API for interacting with the temporary
  * elements.
