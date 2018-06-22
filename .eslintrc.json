@@ -249,7 +249,8 @@
         "node": true
     },
     "globals": {
-        "angular": true
+        "angular": true,
+        "moment": true
     },
     "overrides": [
         {
