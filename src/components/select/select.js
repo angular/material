@@ -71,7 +71,9 @@ angular.module('material.components.select', [
  *
  * @param {expression} ng-model Assignable angular expression to data-bind to.
  * @param {expression=} ng-change Expression to be executed when the model value changes.
- * @param {boolean=} multiple When set to true, allows for more than one option to be selected. The model is an array with the selected choices.
+ * @param {boolean=} multiple When present, allows for more than one option to be selected.
+ *  The model is an array with the selected choices. **Note:** This attribute is only evaluated
+ *  once; it is not watched.
  * @param {expression=} md-on-close Expression to be evaluated when the select is closed.
  * @param {expression=} md-on-open Expression to be evaluated when opening the select.
  * Will hide the select options and show a spinner until the evaluated promise resolves.
@@ -83,7 +85,7 @@ angular.module('material.components.select', [
  * will be treated as *html*. The value must either be explicitly marked as trustedHtml or
  * the ngSanitize module must be loaded.
  * @param {string=} placeholder Placeholder hint text.
- * @param md-no-asterisk {boolean=} When set to true, an asterisk will not be appended to the
+ * @param {boolean=} md-no-asterisk When set to true, an asterisk will not be appended to the
  * floating label. **Note:** This attribute is only evaluated once; it is not watched.
  * @param {string=} aria-label Optional label for accessibility. Only necessary if no placeholder or
  * explicit label is present.

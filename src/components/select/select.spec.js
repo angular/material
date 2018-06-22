@@ -1014,7 +1014,7 @@ describe('<md-select>', function() {
           $rootScope.model = [];
           $rootScope.opts = [1, 2, 3, 4];
           $compile('<form name="testForm">' +
-            '<md-select ng-model="model" name="multiSelect" required="required" multiple="multiple">' +
+            '<md-select ng-model="model" name="multiSelect" required="required" multiple>' +
               '<md-option ng-repeat="opt in opts" ng-value="opt"></md-option>' +
             '</md-select></form>')($rootScope);
           $rootScope.$digest();
@@ -1078,7 +1078,7 @@ describe('<md-select>', function() {
         $rootScope.model = [1, 2];
         $rootScope.opts = [1, 2, 3, 4];
         $compile('<form name="testForm">' +
-          '<md-select ng-model="model" name="multiSelect" multiple="multiple">' +
+          '<md-select ng-model="model" name="multiSelect" multiple>' +
             '<md-option ng-repeat="opt in opts" ng-value="opt"></md-option>' +
           '</md-select></form>')($rootScope);
         $rootScope.$digest();
@@ -1193,8 +1193,18 @@ describe('<md-select>', function() {
         expect($rootScope.model).toEqual([1,3]);
       });
 
-      it('should not be multiple if attr.multiple == `false`', function() {
-        var el = setupSelect('multiple="false" ng-model="$root.model"').find('md-select');
+      it('should be multiple if attr.multiple exists', function() {
+        var el = setupSelect('multiple ng-model="$root.model"').find('md-select');
+        openSelect(el);
+        expectSelectOpen(el);
+
+        var selectMenu = $document.find('md-select-menu')[0];
+
+        expect(selectMenu.hasAttribute('multiple')).toBe(true);
+      });
+
+      it('should not be multiple if attr.multiple does not exist', function() {
+        var el = setupSelect('ng-model="$root.model"').find('md-select');
         openSelect(el);
         expectSelectOpen(el);
 
@@ -1207,7 +1217,7 @@ describe('<md-select>', function() {
         $rootScope.model = 2;
         $rootScope.opts = [1, 2, 3, 4];
         var form = $compile('<form name="testForm">' +
-          '<md-select multiple="multiple" ng-model="model" name="multiSelect">' +
+          '<md-select multiple ng-model="model" name="multiSelect">' +
             '<md-option ng-repeat="opt in opts" ng-value="opt">{{opt}}</md-option>' +
           '</md-select></form>')($rootScope);
         var el = form.find('md-select');
