@@ -213,7 +213,7 @@ describe('<md-select>', function() {
       $document[0].body.appendChild(select[0]);
 
       var selectMenu = $document.find('md-select-menu');
-      pressKey(selectMenu, 27);
+      pressKeyByCode(selectMenu, 27);
       $material.flushInterimElement();
 
       // FIXME- does not work with minified, jquery
@@ -1322,35 +1322,35 @@ describe('<md-select>', function() {
     describe('md-select', function() {
       it('can be opened with a space key', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
-        pressKey(el, 32);
+        pressKeyByCode(el, 32);
         $material.flushInterimElement();
         expectSelectOpen(el);
       });
 
       it('can be opened with an enter key', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
-        pressKey(el, 13);
+        pressKeyByCode(el, 13);
         $material.flushInterimElement();
         expectSelectOpen(el);
       });
 
       it('can be opened with the up key', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
-        pressKey(el, 38);
+        pressKeyByCode(el, 38);
         $material.flushInterimElement();
         expectSelectOpen(el);
       });
 
       it('can be opened with the down key', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
-        pressKey(el, 40);
+        pressKeyByCode(el, 40);
         $material.flushInterimElement();
         expectSelectOpen(el);
       });
 
       it('supports typing an option name', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
-        pressKey(el, 50);
+        pressKey(el, '2');
         expect($rootScope.someModel).toBe(2);
       });
 
@@ -1358,7 +1358,7 @@ describe('<md-select>', function() {
         var words = ['algebra', 'álgebra'];
         var el = setupSelect('ng-model="someModel"', words).find('md-select');
 
-        pressKey(el, words[1].charCodeAt(0));
+        pressKey(el, words[1][0]);
         expect($rootScope.someModel).toBe(words[1]);
       }));
 
@@ -1366,8 +1366,20 @@ describe('<md-select>', function() {
         var words = ['algebra', '太阳'];
         var el = setupSelect('ng-model="someModel"', words).find('md-select');
 
-        pressKey(el, words[1].charCodeAt(0));
+        pressKey(el, words[1][0]);
         expect($rootScope.someModel).toBe(words[1]);
+      }));
+
+      it('supports typing dots and commas', inject(function($document, $rootScope) {
+        var words = ['a.b.c', 'a.b,d', 'a.b,c'];
+        var el = setupSelect('ng-model="someModel"', words).find('md-select');
+
+        pressKey(el, 'a');
+        pressKey(el, '.');
+        pressKey(el, 'b');
+        pressKey(el, ',');
+        pressKey(el, 'c');
+        expect($rootScope.someModel).toBe(words[2]);
       }));
 
       // Note, this test is designed to check the shouldHandleKey() method which is the default
@@ -1384,7 +1396,7 @@ describe('<md-select>', function() {
 
         keyCodes.forEach(function(code) {
           customEvent.keyCode = code;
-          pressKey(el, null, customEvent);
+          pressKeyByCode(el, null, customEvent);
           expect(customEvent.preventDefault).not.toHaveBeenCalled();
         });
       });
@@ -1400,13 +1412,13 @@ describe('<md-select>', function() {
 
         customEvent.keyCode = 70;
         customEvent.ctrlKey = true;
-        pressKey(el, null, customEvent);
+        pressKeyByCode(el, null, customEvent);
         expect(customEvent.preventDefault).not.toHaveBeenCalled();
 
         customEvent.keyCode = 82;
         customEvent.ctrlKey = false;
         customEvent.metaKey = true;
-        pressKey(el, null, customEvent);
+        pressKeyByCode(el, null, customEvent);
         expect(customEvent.preventDefault).not.toHaveBeenCalled();
       });
 
@@ -1416,7 +1428,7 @@ describe('<md-select>', function() {
           '<md-option value="2" ng-disabled="true">2</md-option>';
         var el = setupSelect('ng-model="someModel"', optsTemplate).find('md-select');
 
-        pressKey(el, 50);
+        pressKeyByCode(el, 50);
         expect($rootScope.someModel).toBe(undefined);
       });
     });
@@ -1428,7 +1440,7 @@ describe('<md-select>', function() {
         expectSelectOpen(el);
         var selectMenu = $document.find('md-select-menu');
         expect(selectMenu.length).toBe(1);
-        pressKey(selectMenu, 27);
+        pressKeyByCode(selectMenu, 27);
         $material.flushInterimElement();
         expectSelectClosed(el);
       });
@@ -1503,10 +1515,19 @@ describe('<md-select>', function() {
   }
 
 
-  function pressKey(el, code, customEvent) {
+  function pressKeyByCode(el, code, customEvent) {
     var event = customEvent || {
       type: 'keydown',
       keyCode: code
+    };
+
+    el.triggerHandler(event);
+  }
+
+  function pressKey(el, key, customEvent) {
+    var event = customEvent || {
+      type: 'keydown',
+      key: key
     };
 
     el.triggerHandler(event);
