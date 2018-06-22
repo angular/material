@@ -4,7 +4,7 @@ angular
 
 /**
  * Controller for the MdChip component. Responsible for handling keyboard
- * events and editting the chip if needed.
+ * events and editing the chip if needed.
  *
  * @param $scope
  * @param $element
@@ -42,7 +42,7 @@ function MdChipCtrl ($scope, $element, $mdConstant, $timeout, $mdUtil) {
   /**
    * @type {boolean}
    */
-  this.isEditting = false;
+  this.isEditing = false;
 
   /**
    * @type {MdChipsCtrl}
@@ -65,14 +65,14 @@ MdChipCtrl.prototype.init = function(controller) {
 
   if (this.enableChipEdit) {
     this.$element.on('keydown', this.chipKeyDown.bind(this));
-    this.$element.on('mousedown', this.chipMouseDown.bind(this));
+    this.$element.on('dblclick', this.chipMouseDoubleClick.bind(this));
     this.getChipContent().addClass('_md-chip-content-edit-is-enabled');
   }
 };
 
 
 /**
- * @return {Object}
+ * @return {Object} first element with the md-chip-content class
  */
 MdChipCtrl.prototype.getChipContent = function() {
   var chipContents = this.$element[0].getElementsByClassName('md-chip-content');
@@ -81,15 +81,15 @@ MdChipCtrl.prototype.getChipContent = function() {
 
 
 /**
- * @return {Object}
+ * @return {Object} first content element of the chips content element
  */
 MdChipCtrl.prototype.getContentElement = function() {
-  return angular.element(this.getChipContent().children()[0]);
+  return angular.element(this.getChipContent().contents()[0]);
 };
 
 
 /**
- * @return {number}
+ * @return {number} index of this chip
  */
 MdChipCtrl.prototype.getChipIndex = function() {
   return parseInt(this.$element.attr('index'));
@@ -97,12 +97,13 @@ MdChipCtrl.prototype.getChipIndex = function() {
 
 
 /**
- * Presents an input element to edit the contents of the chip.
+ * Update the chip's contents, focus the chip if it's selected, and exit edit mode.
+ * If the contents were updated to be empty, remove the chip and re-focus the input element.
  */
 MdChipCtrl.prototype.goOutOfEditMode = function() {
-  if (!this.isEditting) return;
+  if (!this.isEditing) return;
 
-  this.isEditting = false;
+  this.isEditing = false;
   this.$element.removeClass('_md-chip-editing');
   this.getChipContent()[0].contentEditable = 'false';
   var chipIndex = this.getChipIndex();
@@ -127,7 +128,7 @@ MdChipCtrl.prototype.goOutOfEditMode = function() {
 
 /**
  * Given an HTML element. Selects contents of it.
- * @param node
+ * @param {Element} node
  */
 MdChipCtrl.prototype.selectNodeContents = function(node) {
   var range, selection;
@@ -149,7 +150,7 @@ MdChipCtrl.prototype.selectNodeContents = function(node) {
  * Presents an input element to edit the contents of the chip.
  */
 MdChipCtrl.prototype.goInEditMode = function() {
-  this.isEditting = true;
+  this.isEditing = true;
   this.$element.addClass('_md-chip-editing');
   this.getChipContent()[0].contentEditable = 'true';
   this.getChipContent().on('blur', function() {
@@ -164,15 +165,15 @@ MdChipCtrl.prototype.goInEditMode = function() {
  * Handles the keydown event on the chip element. If enable-chip-edit attribute is
  * set to true, space or enter keys can trigger going into edit mode. Enter can also
  * trigger submitting if the chip is already being edited.
- * @param event
+ * @param {KeyboardEvent} event
  */
 MdChipCtrl.prototype.chipKeyDown = function(event) {
-  if (!this.isEditting &&
+  if (!this.isEditing &&
     (event.keyCode === this.$mdConstant.KEY_CODE.ENTER ||
     event.keyCode === this.$mdConstant.KEY_CODE.SPACE)) {
     event.preventDefault();
     this.goInEditMode();
-  } else if (this.isEditting &&
+  } else if (this.isEditing &&
     event.keyCode === this.$mdConstant.KEY_CODE.ENTER) {
     event.preventDefault();
     this.goOutOfEditMode();
@@ -181,12 +182,10 @@ MdChipCtrl.prototype.chipKeyDown = function(event) {
 
 
 /**
- * Handles the double click event
+ * Enter edit mode if we're not already editing and the enable-chip-edit attribute is enabled.
  */
-MdChipCtrl.prototype.chipMouseDown = function() {
-  if(this.getChipIndex() == this.parentController.selectedChip &&
-    this.enableChipEdit &&
-    !this.isEditting) {
+MdChipCtrl.prototype.chipMouseDoubleClick = function() {
+  if (this.enableChipEdit && !this.isEditing) {
     this.goInEditMode();
   }
 };
