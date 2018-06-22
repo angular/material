@@ -446,8 +446,7 @@ MdChipsCtrl.prototype.resetSelectedChip = function() {
  * determined as the next chip in the list, unless the target chip is the
  * last in the list, then it is the chip immediately preceding the target. If
  * there is only one item in the list, -1 is returned (select none).
- * The number returned is the index to select AFTER the target has been
- * removed.
+ * The number returned is the index to select AFTER the target has been removed.
  * If the current chip is not selected, then -1 is returned to select none.
  * @param {number} index
  * @returns {number}
@@ -464,7 +463,7 @@ MdChipsCtrl.prototype.getAdjacentChipIndex = function(index) {
  * @param {string} newChip chip buffer contents that will be used to create the new chip
  */
 MdChipsCtrl.prototype.appendChip = function(newChip) {
-  this.shouldFocusLastChip = true;
+  this.shouldFocusLastChip = !this.addOnBlur;
   if (this.useTransformChip && this.transformChip) {
     var transformedChip = this.transformChip({'$chip': newChip});
 
@@ -733,7 +732,9 @@ MdChipsCtrl.prototype.selectAndFocusChip = function(index) {
  * @param {number} index location of chip to focus
  */
 MdChipsCtrl.prototype.focusChip = function(index) {
-  var chipContent = this.$element[0].querySelector('md-chip[index="' + index + '"] .md-chip-content');
+  var chipContent = this.$element[0].querySelector(
+    'md-chip[index="' + index + '"] .md-chip-content'
+  );
 
   this.ariaTabIndex = index;
 
@@ -888,14 +889,16 @@ MdChipsCtrl.prototype.shouldAddOnBlur = function() {
   // If the model value is empty and required is set on the element, then the model will be invalid.
   // In that case, we still want to allow adding the chip. The main (but not only) case we want
   // to disallow is adding a chip on blur when md-max-chips validation fails.
-  var isModelValid = this.ngModelCtrl.$isEmpty(this.ngModelCtrl.$modelValue) || this.ngModelCtrl.$valid;
+  var isModelValid = this.ngModelCtrl.$isEmpty(this.ngModelCtrl.$modelValue) ||
+    this.ngModelCtrl.$valid;
   var isAutocompleteShowing = this.autocompleteCtrl && !this.autocompleteCtrl.hidden;
 
   if (this.userInputNgModelCtrl) {
     isModelValid = isModelValid && this.userInputNgModelCtrl.$valid;
   }
 
-  return this.addOnBlur && !this.requireMatch && chipBuffer && isModelValid && !isAutocompleteShowing;
+  return this.addOnBlur && !this.requireMatch && chipBuffer && isModelValid &&
+    !isAutocompleteShowing;
 };
 
 /**
