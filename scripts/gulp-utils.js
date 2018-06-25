@@ -305,13 +305,11 @@ exports.cssToNgConstant = function(ngModule, factoryName) {
   });
 };
 
+/**
+ * Use the configuration in the "browserslist" field of the package.json as recommended
+ * by the autoprefixer docs.
+ * @returns {NodeJS.ReadWriteStream | *}
+ */
 exports.autoprefix = function() {
-
-  return autoprefixer({browsers: [
-    'last 2 versions',
-    'not ie <= 10',
-    'not ie_mob <= 10',
-    'last 4 Android versions',
-    'Safari >= 8'
-  ]});
+  return autoprefixer();
 };
