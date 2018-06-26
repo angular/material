@@ -437,7 +437,7 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
       return loadByURL(id).then(cacheIcon(id));
     }
 
-    if (id.indexOf(':') == -1) {
+    if (id.indexOf(':') === -1) {
       id = '$default:' + id;
     }
 
@@ -447,41 +447,68 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   }
 
   /**
-   * Lookup registered fontSet style using its alias...
-   * If not found,
+   * Lookup a registered fontSet style using its alias.
+   * @param {string} alias used to lookup the alias in the array of fontSets
+   * @returns {*} matching fontSet or the defaultFontSet if that alias does not match
    */
   function findRegisteredFontSet(alias) {
     var useDefault = angular.isUndefined(alias) || !(alias && alias.length);
-    if (useDefault) return config.defaultFontSet;
+    if (useDefault) {
+      return config.defaultFontSet;
+    }
 
     var result = alias;
-    angular.forEach(config.fontSets, function(it) {
-      if (it.alias == alias) result = it.fontSet || result;
+    angular.forEach(config.fontSets, function(fontSet) {
+      if (fontSet.alias === alias) {
+        result = fontSet.fontSet || result;
+      }
     });
 
     return result;
   }
 
+  /**
+   * @param {Icon} cacheElement cached icon from the iconCache
+   * @returns {Icon} cloned Icon element with unique ids
+   */
   function transformClone(cacheElement) {
     var clone = cacheElement.clone();
-    var cacheSuffix = '_cache' + $mdUtil.nextUid();
+    var newUid = $mdUtil.nextUid();
+    var cacheSuffix;
 
-    // We need to modify for each cached icon the id attributes and references.
-    // This is needed because SVG id's are treated as normal DOM ids
-    // and should not have a duplicated id.
-    if (clone.id) clone.id += cacheSuffix;
-    angular.forEach(clone.querySelectorAll('[id]'), function(item) {
-      angular.forEach(clone.querySelectorAll('[a="url(#'+ item.id +')"], [altGlyph="url(#'+ item.id +')"], [animate="url(#'+ item.id +')"], [animateColor="url(#'+ item.id +')"], [animateMotion="url(#'+ item.id +')"], [animateTransform="url(#'+ item.id +')"], [clip-path="url(#'+ item.id +')"], [color-profile="url(#'+ item.id +')"], [src="url(#'+ item.id +')"], [cursor="url(#'+ item.id +')"], [feImage="url(#'+ item.id +')"], [fill="url(#'+ item.id +')"], [filter="url(#'+ item.id +')"], [image="url(#'+ item.id +')"], [linearGradient="url(#'+ item.id +')"], [marker="url(#'+ item.id +')"], [marker-smart="url(#'+ item.id +')"], [marker-mid="url(#'+ item.id +')"], [marker-end="url(#'+ item.id +')"], [mask="url(#'+ item.id +')"], [pattern="url(#'+ item.id +')"], [radialGradient="url(#'+ item.id +')"], [script="url(#'+ item.id +')"], [stroke="url(#'+ item.id +')"], [textPath="url(#'+ item.id +')"], [tref="url(#'+ item.id +')"], [set="url(#'+ item.id +')"], [use="url(#'+ item.id +')"]'), function(refItem) {
-        refItem.outerHTML = refItem.outerHTML.replace("url(#" + item.id + ")", "url(#" + item.id + cacheSuffix + ")");
-      });
-      item.id += cacheSuffix;
+    // Verify that the newUid only contains a number and not some XSS content.
+    if (!isFinite(Number(newUid))) {
+      throw new Error('Unsafe and unexpected non-number result from $mdUtil.nextUid().');
+    }
+
+    cacheSuffix = '_cache' + newUid;
+
+    // For each cached icon, we need to modify the id attributes and references.
+    // This is needed because SVG ids are treated as normal DOM ids and should not be duplicated on
+    // the page.
+    if (clone.id) {
+      clone.id += cacheSuffix;
+    }
+
+    var addCacheSuffixToId = function(match, p1, p2, p3) {
+      return [p1, p2, cacheSuffix, p3].join('');
+    };
+    angular.forEach(clone.querySelectorAll('[id]'), function(descendantElem) {
+      descendantElem.id += cacheSuffix;
     });
+    // Inject the cacheSuffix into all instances of url(id) and xlink:href="#id".
+    // This use of innerHTML should be safe from XSS attack since we are only injecting the
+    // cacheSuffix with content from $mdUtil.nextUid which we verify is a finite number above.
+    clone.innerHTML = clone.innerHTML.replace(/(.*url\(#)(\w*)(\).*)/g, addCacheSuffixToId);
+    clone.innerHTML = clone.innerHTML.replace(/(.*xlink:href="#)(\w*)(".*)/g, addCacheSuffixToId);
 
     return clone;
   }
 
   /**
-   * Prepare and cache the loaded icon for the specified `id`
+   * Prepare and cache the loaded icon for the specified `id`.
+   * @param {string} id icon cache id
+   * @returns {function(*=): *}
    */
   function cacheIcon(id) {
 
