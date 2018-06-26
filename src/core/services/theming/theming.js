@@ -744,6 +744,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
      */
     function inheritTheme (el, parent) {
       var ctrl = parent.controller('mdTheme') || el.data('$mdThemeController');
+      var scope = el.scope();
 
       updateThemeClass(lookupThemeName());
 
@@ -752,16 +753,28 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
                          ctrl.$shouldWatch ||
                          $mdUtil.parseAttributeBoolean(el.attr('md-theme-watch'));
 
-        var unwatch = ctrl.registerChanges(function (name) {
-          updateThemeClass(name);
+        if (watchTheme || ctrl.isAsyncTheme) {
+          var clearNameWatcher = function () {
+            if (unwatch) {
+              unwatch();
+              unwatch = undefined;
+            }
+          };
 
-          if (!watchTheme) {
-            unwatch();
+          var unwatch = ctrl.registerChanges(function(name) {
+            updateThemeClass(name);
+
+            if (!watchTheme) {
+              clearNameWatcher();
+            }
+          });
+
+          if (scope) {
+            scope.$on('$destroy', clearNameWatcher);
+          } else {
+            el.on('$destroy', clearNameWatcher);
           }
-          else {
-            el.on('$destroy', unwatch);
-          }
-        });
+        }
       }
 
       /**
@@ -769,7 +782,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
        */
       function lookupThemeName() {
         // As a few components (dialog) add their controllers later, we should also watch for a controller init.
-        return ctrl && ctrl.$mdTheme || (defaultTheme == 'default' ? '' : defaultTheme);
+        return ctrl && ctrl.$mdTheme || (defaultTheme === 'default' ? '' : defaultTheme);
       }
 
       /**
@@ -819,7 +832,13 @@ function ThemingDirective($mdTheming, $interpolate, $parse, $mdUtil, $q, $log) {
             .trim()
             .substr(0, oneTimeOperator.length) === oneTimeOperator;
 
+        var getTheme = function () {
+          var interpolation = $interpolate(attrs.mdTheme)(scope);
+          return $parse(interpolation)(scope) || interpolation;
+        };
+
         var ctrl = {
+          isAsyncTheme: angular.isFunction(getTheme()) || angular.isFunction(getTheme().then),
           registerChanges: function (cb, context) {
             if (context) {
               cb = angular.bind(context, cb);
@@ -844,7 +863,8 @@ function ThemingDirective($mdTheming, $interpolate, $parse, $mdUtil, $q, $log) {
 
             // Iterating backwards to support unregistering during iteration
             // http://stackoverflow.com/a/9882349/890293
-            // we don't use `reverse()` of array because it mutates the array and we don't want it to get re-indexed
+            // we don't use `reverse()` of array because it mutates the array and we don't want it
+            // to get re-indexed
             for (var i = registeredCallbacks.length; i--;) {
               registeredCallbacks[i](theme);
             }
@@ -856,18 +876,13 @@ function ThemingDirective($mdTheming, $interpolate, $parse, $mdUtil, $q, $log) {
 
         el.data('$mdThemeController', ctrl);
 
-        var getTheme = function () {
-          var interpolation = $interpolate(attrs.mdTheme)(scope);
-          return $parse(interpolation)(scope) || interpolation;
-        };
-
         var setParsedTheme = function (theme) {
           if (typeof theme === 'string') {
             return ctrl.$setTheme(theme);
           }
 
           $q.when( angular.isFunction(theme) ?  theme() : theme )
-            .then(function(name){
+            .then(function(name) {
               ctrl.$setTheme(name);
             });
         };
