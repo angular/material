@@ -1,3 +1,37 @@
+<a name="1.1.10"></a>
+## [1.1.10](https://github.com/angular/material/compare/v1.1.9...v1.1.10) (2018-06-28)
+
+
+### Bug Fixes
+
+* **chips:** editable chip gets removed after editing ([#11323](https://github.com/angular/material/issues/11323)) ([9cc165f](https://github.com/angular/material/commit/9cc165f)), closes [#11298](https://github.com/angular/material/issues/11298) [#10392](https://github.com/angular/material/issues/10392) [#10532](https://github.com/angular/material/issues/10532) [#10664](https://github.com/angular/material/issues/10664) [#10879](https://github.com/angular/material/issues/10879)
+* **chips:** improve ability to receive focus on click ([#11098](https://github.com/angular/material/issues/11098)) ([869bc21](https://github.com/angular/material/commit/869bc21)), closes [#10344](https://github.com/angular/material/issues/10344)
+* **chips:** regression where chips model gets out of sync with view ([#11310](https://github.com/angular/material/issues/11310)) ([74d2445](https://github.com/angular/material/commit/74d2445)), closes [#11304](https://github.com/angular/material/issues/11304) [#11301](https://github.com/angular/material/issues/11301)
+* **chips:** unwanted re-focus of last chip after blur ([#11305](https://github.com/angular/material/issues/11305)) ([ae17515](https://github.com/angular/material/commit/ae17515)), closes [#9650](https://github.com/angular/material/issues/9650) [#10758](https://github.com/angular/material/issues/10758)
+* **compiler:** remove dependency on AngularJS private API ([#11320](https://github.com/angular/material/issues/11320)) ([f6534d6](https://github.com/angular/material/commit/f6534d6)), closes [#11319](https://github.com/angular/material/issues/11319)
+* **datepicker:** calendar panel theme supports dark mode in multi theme scenario ([#11267](https://github.com/angular/material/issues/11267)) ([9e6553d](https://github.com/angular/material/commit/9e6553d)), closes [#11265](https://github.com/angular/material/issues/11265)
+* **layout:** allow flex-offset to be a child of layout-margin ([#11330](https://github.com/angular/material/issues/11330)) ([81eb46f](https://github.com/angular/material/commit/81eb46f)), closes [#11328](https://github.com/angular/material/issues/11328)
+* **layout:** reduce layout CSS size by reverting some of [#11247](https://github.com/angular/material/issues/11247) ([#11331](https://github.com/angular/material/issues/11331)) ([5e37b63](https://github.com/angular/material/commit/5e37b63)), closes [#11000](https://github.com/angular/material/issues/11000) [#9546](https://github.com/angular/material/issues/9546)
+* **menu-bar:** md-menu-bar panel theme supports dark mode themes ([#11258](https://github.com/angular/material/issues/11258)) ([3a21b89](https://github.com/angular/material/commit/3a21b89)), closes [#11238](https://github.com/angular/material/issues/11238)
+* **nav-bar:** missing [disabled] scss selector ([#11269](https://github.com/angular/material/issues/11269)) ([d607e17](https://github.com/angular/material/commit/d607e17)), closes [#11268](https://github.com/angular/material/issues/11268)
+* **ripple:** fix iOS Safari stuck ripple issue ([#11302](https://github.com/angular/material/issues/11302)) ([5284145](https://github.com/angular/material/commit/5284145)), closes [#11069](https://github.com/angular/material/issues/11069)
+* **select:** doesn't search correctly when pressing period character ([#11313](https://github.com/angular/material/issues/11313)) ([daf67a8](https://github.com/angular/material/commit/daf67a8)), closes [#11294](https://github.com/angular/material/issues/11294)
+* **theming:** md-theme leaks when child elements are removed ([#11326](https://github.com/angular/material/issues/11326)) ([41c9d00](https://github.com/angular/material/commit/41c9d00)), closes [#11325](https://github.com/angular/material/issues/11325)
+
+
+### Features
+
+* **mdMaxlength:** support use with required and ng-trim ([#11136](https://github.com/angular/material/issues/11136)) ([db1a85d](https://github.com/angular/material/commit/db1a85d)), closes [#10082](https://github.com/angular/material/issues/10082) [#10216](https://github.com/angular/material/issues/10216)
+
+#### Contributors
+
+Thank you to the contributors, especially the first timers, who helped with the v1.1.10 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="rudzikdawid" src="https://avatars3.githubusercontent.com/u/7476577?v=4&s=117" width="117">](https://github.com/rudzikdawid) |[<img alt="feloy" src="https://avatars0.githubusercontent.com/u/9973512?v=4&s=117" width="117">](https://github.com/feloy) |[<img alt="jpike88" src="https://avatars1.githubusercontent.com/u/9585787?v=4&s=117" width="117">](https://github.com/jpike88) |[<img alt="bersLucas" src="https://avatars2.githubusercontent.com/u/3892772?v=4&s=117" width="117">](https://github.com/bersLucas) |
+:---: |:---: |:---: |:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[rudzikdawid](https://github.com/rudzikdawid) |[feloy](https://github.com/feloy) |[jpike88](https://github.com/jpike88) |[bersLucas](https://github.com/bersLucas) |
+
+
 <a name="1.1.9"></a>
 ## [1.1.9](https://github.com/angular/material/compare/v1.1.8...v1.1.9) (2018-04-27)
 
