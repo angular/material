@@ -503,7 +503,7 @@ function MdNavItem($mdAria, $$rAF, $mdUtil, $window) {
 
       scope.$on('destroy', function() {
         disconnect();
-      })
+      });
     }
   };
 }

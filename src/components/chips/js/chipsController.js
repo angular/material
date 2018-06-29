@@ -849,9 +849,9 @@ MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
   // Bind to keydown and focus events of input
   inputElement
       .attr({ tabindex: 0 })
-      .on('keydown', function(event) { scopeApplyFn(event, ctrl.inputKeydown) })
-      .on('focus', function(event) { scopeApplyFn(event, ctrl.onInputFocus) })
-      .on('blur', function(event) { scopeApplyFn(event, ctrl.onInputBlur) });
+      .on('keydown', function(event) { scopeApplyFn(event, ctrl.inputKeydown); })
+      .on('focus', function(event) { scopeApplyFn(event, ctrl.onInputFocus); })
+      .on('blur', function(event) { scopeApplyFn(event, ctrl.onInputBlur); });
 };
 
 /**
