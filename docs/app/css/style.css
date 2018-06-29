@@ -884,6 +884,66 @@ table.md-css-table td p {
   padding-bottom: 10px;
 }
 
+table.custom-table {
+  margin: 24px 2px;
+  box-shadow: 0 1px 2px rgba(10, 16, 20, 0.24), 0 0 2px rgba(10, 16, 20, 0.12);
+  border-radius: 2px;
+  background: #fafafa;
+  border-spacing: 0;
+}
+table.custom-table thead > {
+  vertical-align: middle;
+  border-color: inherit;
+}
+table.custom-table thead > tr {
+  vertical-align: inherit;
+  border-color: inherit;
+}
+table.custom-table thead > tr > th {
+  background: rgba(219, 219, 219, 0.2);
+  border-bottom: 1px solid #dbdbdb;
+  color: #333;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 24px;
+  text-align: left;
+  text-transform: uppercase;
+  line-height: 28px;
+}
+table.custom-table tbody > tr > th,
+table.custom-table tbody > tr > td {
+  border-bottom: 1px solid #dbdbdb;
+  padding: 16px;
+  text-align: left;
+  line-height: 24px;
+  vertical-align: top;
+}
+@media (max-width: 480px) {
+  table.custom-table tbody > tr > th:before,
+  table.custom-table tbody > tr > td:before {
+    display: inline-block;
+  }
+}
+table.custom-table tbody > tr > td {
+  letter-spacing: 0.3px;
+}
+@media (max-width: 480px) {
+  table.custom-table tbody > tr > td tr td:first-child {
+    background-color: #dbdbdb;
+  }
+}
+table.custom-table tbody > tr > th:first-child {
+  border-right: 1px solid #dbdbdb;
+}
+table.custom-table tbody > tr > th {
+  background: rgba(219, 219, 219, 0.2);
+  font-weight: 600;
+  max-width: 100px;
+}
+table.custom-table tbody > tr >:last-child td {
+  border: none;
+}
+
 /* Provide some layout/padding enhancements for mobile/small devices */
 @media(max-width: 500px) {
   /* Reduce the size of the nav logo/header */
