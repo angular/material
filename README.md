@@ -22,7 +22,7 @@ Please note that using AngularJS Material requires the use of **[AngularJS](http
 1.4.x** or higher.
 
 AngularJS Material is targeted for the browser versions defined in the `broswerslist` field
-of our [package.json](package.json). Below is an screenshot from 
+of our [package.json](package.json). Below is a screenshot from 
 [browserl.ist](http://browserl.ist/?q=%3E+0.5%25%2C+last+2+versions%2C+Firefox+ESR%2C+not+ie+%3C%3D+10%2C+not+ie_mob+%3C%3D+10%2C+not+bb+%3C%3D+10%2C+not+op_mob+%3C%3D+12.1)
 that provides a visual representation of this configuration:
 
