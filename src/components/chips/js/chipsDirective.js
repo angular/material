@@ -133,7 +133,7 @@
    * @param {expression=} md-on-remove An expression which will be called when a chip has been
    *    removed with `$chip`, `$index`, and `$event` available as parameters.
    * @param {expression=} md-on-select An expression which will be called when a chip is selected.
-   * @param {boolean} md-require-match If true, and the chips template contains an autocomplete,
+   * @param {boolean=} md-require-match If true, and the chips template contains an autocomplete,
    *    only allow selection of pre-defined chips (i.e. you cannot add new ones).
    * @param {string=} input-aria-label A string read by screen readers to identify the input.
    * @param {string=} container-hint A string read by screen readers informing users of how to
@@ -200,7 +200,7 @@
           {{$mdChipsCtrl.containerHint}}\
         </span>\
         <md-chip ng-repeat="$chip in $mdChipsCtrl.items"\
-            index="{{$index}}"\
+            index="{{$index}}" aria-label="{{$mdChipsCtrl.deleteHint}}"\
             ng-class="{\'md-focused\': $mdChipsCtrl.selectedChip == $index, \'md-readonly\': !$mdChipsCtrl.ngModelCtrl || $mdChipsCtrl.readonly}">\
           <div class="md-chip-content"\
               tabindex="{{$mdChipsCtrl.ariaTabIndex == $index ? 0 : -1}}"\
@@ -271,24 +271,24 @@
       bindToController: true,
       compile: compile,
       scope: {
-        readonly: '=readonly',
-        removable: '=mdRemovable',
-        placeholder: '@',
-        secondaryPlaceholder: '@',
-        maxChips: '@mdMaxChips',
+        readonly: '=?readonly',
+        removable: '=?mdRemovable',
+        placeholder: '@?',
+        secondaryPlaceholder: '@?',
+        maxChips: '@?mdMaxChips',
         transformChip: '&mdTransformChip',
-        onAppend: '&mdOnAppend',
-        onAdd: '&mdOnAdd',
-        onRemove: '&mdOnRemove',
-        onSelect: '&mdOnSelect',
-        inputAriaLabel: '@',
-        containerHint: '@',
-        deleteHint: '@',
-        deleteButtonLabel: '@',
+        onAppend: '&?mdOnAppend',
+        onAdd: '&?mdOnAdd',
+        onRemove: '&?mdOnRemove',
+        onSelect: '&?mdOnSelect',
+        inputAriaLabel: '@?',
+        containerHint: '@?',
+        deleteHint: '@?',
+        deleteButtonLabel: '@?',
         separatorKeys: '=?mdSeparatorKeys',
         requireMatch: '=?mdRequireMatch',
         chipAppendDelayString: '@?mdChipAppendDelay',
-        ngChange: '&'
+        ngChange: '&?'
       }
     };
 

@@ -81,10 +81,20 @@ MdChipCtrl.prototype.getChipContent = function() {
 
 
 /**
- * @return {Object} first content element of the chips content element
+ * When editing the chip, if the user modifies the existing contents, we'll get a span back and
+ * need to ignore text elements as they only contain blank space.
+ * `children()` ignores text elements.
+ *
+ * When editing the chip, if the user deletes the contents and then enters some new content
+ * we'll only get a text element back.
+ * @return {Object} jQuery object representing the content element of the chip
  */
 MdChipCtrl.prototype.getContentElement = function() {
-  return angular.element(this.getChipContent().contents()[0]);
+  var contentElement = angular.element(this.getChipContent().children()[0]);
+  if (!contentElement || contentElement.length === 0) {
+    contentElement = angular.element(this.getChipContent().contents()[0]);
+  }
+  return contentElement;
 };
 
 
@@ -101,7 +111,9 @@ MdChipCtrl.prototype.getChipIndex = function() {
  * If the contents were updated to be empty, remove the chip and re-focus the input element.
  */
 MdChipCtrl.prototype.goOutOfEditMode = function() {
-  if (!this.isEditing) return;
+  if (!this.isEditing) {
+    return;
+  }
 
   this.isEditing = false;
   this.$element.removeClass('_md-chip-editing');
@@ -110,10 +122,7 @@ MdChipCtrl.prototype.goOutOfEditMode = function() {
 
   var content = this.getContentElement().text();
   if (content) {
-    this.parentController.updateChipContents(
-        chipIndex,
-        this.getContentElement().text()
-    );
+    this.parentController.updateChipContents(chipIndex, content);
 
     this.$mdUtil.nextTick(function() {
       if (this.parentController.selectedChip === chipIndex) {
@@ -170,11 +179,10 @@ MdChipCtrl.prototype.goInEditMode = function() {
 MdChipCtrl.prototype.chipKeyDown = function(event) {
   if (!this.isEditing &&
     (event.keyCode === this.$mdConstant.KEY_CODE.ENTER ||
-    event.keyCode === this.$mdConstant.KEY_CODE.SPACE)) {
+      event.keyCode === this.$mdConstant.KEY_CODE.SPACE)) {
     event.preventDefault();
     this.goInEditMode();
-  } else if (this.isEditing &&
-    event.keyCode === this.$mdConstant.KEY_CODE.ENTER) {
+  } else if (this.isEditing && event.keyCode === this.$mdConstant.KEY_CODE.ENTER) {
     event.preventDefault();
     this.goOutOfEditMode();
   }
