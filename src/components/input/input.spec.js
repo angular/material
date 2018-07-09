@@ -291,6 +291,42 @@ describe('md-input-container directive', function() {
       expect(getCharCounter(el).text()).toBe('5 / 5');
     });
 
+    it('should error with an interpolated value and incorrect initial value', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="mymax" ng-model="foo" name="foo">' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+
+        pageScope.$apply('mymax = 8');
+        pageScope.$apply('foo = "ABCDEFGHIJ"');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['md-maxlength']).toBe(true);
+      expect(getCharCounter(el).text()).toBe('10 / 8');
+    });
+
+    it('should work with an interpolated value and correct initial value', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="mymax" ng-model="foo" name="foo">' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+
+      pageScope.$apply('mymax = 5');
+      pageScope.$apply('foo = "abcde"');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('5 / 5');
+    });
+
     it('should work with a constant', function() {
       var el = $compile(
         '<form name="form">' +
