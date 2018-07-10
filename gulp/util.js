@@ -58,7 +58,7 @@ function buildJs () {
       .pipe(insert.prepend(config.banner))
       .pipe(insert.append(';window.ngMaterial={version:{full: "' + VERSION +'"}};'))
       .pipe(gulp.dest(config.outputDir))
-      .pipe(gulpif(!IS_DEV, uglify({ preserveComments: 'some' })))
+      .pipe(gulpif(!IS_DEV, uglify({ output: { comments: 'some' }})))
       .pipe(rename({ extname: '.min.js' }))
       .pipe(gulp.dest(config.outputDir));
 
@@ -127,7 +127,7 @@ function buildModule(module, opts) {
   function buildMin() {
     return lazypipe()
         .pipe(gulpif, /.css$/, minifyCss(),
-        uglify({ preserveComments: 'some' })
+        uglify({ output: { comments: 'some' }})
             .on('error', function(e) {
               console.log('\x07',e.message);
               return this.end();
