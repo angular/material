@@ -13,8 +13,9 @@ angular
  * returns  a list of possible contacts. The user can select one of these and add it to the list of
  * chips.
  *
- * You may also use the `md-highlight-text` directive along with its parameters to control the
- * appearance of the matched text inside of the contacts' autocomplete popup.
+ * You may also use the <a ng-href="api/directive/mdHighlightText">md-highlight-flags</a> attribute
+ * along with its parameters to control the appearance of the matched text inside of the contacts'
+ * autocomplete popup.
  *
  * @param {expression} ng-model Assignable AngularJS expression to be data-bound to the list of
  *    contact chips. The expression should evaluate to an `Object` Array.
