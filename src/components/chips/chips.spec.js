@@ -288,6 +288,42 @@ describe('<md-chips>', function() {
           expect(scope.items.length).toBe(4);
         });
 
+        it('should update form state when a chip is added', inject(function($mdConstant) {
+          scope.items = [];
+          var template =
+              '<form name="form">' +
+              '  <md-chips name="chips" ng-model="items"></md-chips>' +
+              '</form>';
+
+          var element = buildChips(template);
+          var ctrl = element.controller('mdChips');
+          var chips = getChipElements(element);
+          var input = element.find('input');
+
+          expect(scope.form.$pristine).toBeTruthy();
+          expect(scope.form.$dirty).toBeFalsy();
+
+          // Add 'Banana'
+          input.val('Banana');
+
+          // IE11 does not support the `input` event to update the ngModel. An alternative for
+          // `input` is to use the `change` event.
+          input.triggerHandler('change');
+
+          var enterEvent = {
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.ENTER,
+            which: $mdConstant.KEY_CODE.ENTER
+          };
+
+          input.triggerHandler(enterEvent);
+          scope.$digest();
+
+          expect(scope.form.$pristine).toBeFalsy();
+          expect(scope.form.$dirty).toBeTruthy();
+          expect(scope.items).toEqual(['Banana']);
+        }));
+
         it('should allow adding the first chip on blur when required exists', function() {
           scope.items = [];
           var template =
@@ -1591,7 +1627,30 @@ describe('<md-chips>', function() {
         scope.$digest();
         chips = getChipElements(element);
         expect(chips.length).toBe(1);
+      });
 
+      it('should update form state when a chip is removed', function() {
+        var template =
+            '<form name="form">' +
+            '  <md-chips name="chips" ng-model="items"></md-chips>' +
+            '</form>';
+
+        var element = buildChips(template);
+        var ctrl = element.controller('mdChips');
+        var chips = getChipElements(element);
+
+        expect(scope.form.$pristine).toBeTruthy();
+        expect(scope.form.$dirty).toBeFalsy();
+
+        // Remove 'Banana'
+        var chipButton = angular.element(chips[1]).find('button');
+        chipButton[0].click();
+
+        scope.$digest();
+
+        expect(scope.form.$pristine).toBeFalsy();
+        expect(scope.form.$dirty).toBeTruthy();
+        expect(scope.items).toEqual(['Apple', 'Orange']);
       });
     });
 

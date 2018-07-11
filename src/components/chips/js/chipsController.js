@@ -623,6 +623,7 @@ MdChipsCtrl.prototype.removeChip = function(index, event) {
   var removed = this.items.splice(index, 1);
 
   this.updateNgModel();
+  this.ngModelCtrl.$setDirty();
 
   if (removed && removed.length && this.useOnRemove && this.onRemove) {
     this.onRemove({ '$chip': removed[0], '$index': index, '$event': event });
