@@ -637,9 +637,10 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    * You can disable this in the configuration section using the
    * `$mdThemingProvider.generateThemesOnDemand(true);`
    *
-   * The theme name that is passed in must match the name of the theme that was defined as part of the configuration block.
+   * The theme name that is passed in must match the name of the theme that was defined as part of
+   * the configuration block.
    *
-   * @param name {string} theme name to generate
+   * @param {string} name theme name to generate
    */
 
   /**
@@ -650,9 +651,11 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    * <a href="https://developers.google.com/web/fundamentals/design-and-ui/browser-customization/theme-color">
    *   Web Fundamentals</a>.
    * @param {object=} options Options for the browser color, which include:<br/>
-   * - `theme` - `{string}`: A defined theme via `$mdThemeProvider` to use the palettes from. Default is `default` theme. <br/>
-   * - `palette` - `{string}`:  Can be any one of the basic material design palettes, extended defined palettes, or `primary`,
-   *  `accent`, `background`, and `warn`. Default is `primary`.<br/>
+   * - `theme` - `{string}`: A defined theme via `$mdThemeProvider` to use the palettes from.
+   *    Default is `default` theme. <br/>
+   * - `palette` - `{string}`:  Can be any one of the basic material design palettes, extended
+   *    defined palettes, or `primary`, `accent`, `background`, and `warn`. Default is `primary`.
+   * <br/>
    * - `hue` -  `{string}`: The hue from the selected palette. Default is `800`.<br/>
    * @returns {function} Function that removes the browser coloring when called.
    */
