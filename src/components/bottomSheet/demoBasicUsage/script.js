@@ -1,7 +1,7 @@
 angular.module('bottomSheetDemo1', ['ngMaterial'])
 .config(function($mdIconProvider) {
     $mdIconProvider
-      .icon('share-arrow', 'img/icons/share-arrow.svg', 24)
+      .icon('share', 'img/icons/baseline-share-24px.svg', 24)
       .icon('upload', 'img/icons/upload.svg', 24)
       .icon('copy', 'img/icons/copy.svg', 24)
       .icon('print', 'img/icons/print.svg', 24)
@@ -49,7 +49,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
 .controller('ListBottomSheetCtrl', function($scope, $mdBottomSheet) {
 
   $scope.items = [
-    { name: 'Share', icon: 'share-arrow' },
+    { name: 'Share', icon: 'share' },
     { name: 'Upload', icon: 'upload' },
     { name: 'Copy', icon: 'copy' },
     { name: 'Print this page', icon: 'print' },
@@ -78,7 +78,7 @@ angular.module('bottomSheetDemo1', ['ngMaterial'])
 .run(function($templateRequest) {
 
     var urls = [
-      'img/icons/share-arrow.svg',
+      'img/icons/baseline-share-24px.svg',
       'img/icons/upload.svg',
       'img/icons/copy.svg',
       'img/icons/print.svg',
