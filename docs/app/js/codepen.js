@@ -132,7 +132,7 @@
 
         return content + '\n\n'+
           commentStart + '\n'+
-          'Copyright 2018 Google Inc. All Rights Reserved. \n'+
+          'Copyright 2018 Google LLC. All Rights Reserved. \n'+
           'Use of this source code is governed by an MIT-style license that can be found\n'+
           'in the LICENSE file at http://material.angularjs.org/HEAD/license.\n'+
           commentEnd;
