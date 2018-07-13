@@ -1234,6 +1234,7 @@ function SelectProvider($$interimElementProvider) {
           $$rAF(function() {
             element.addClass('md-active');
             info.dropDown.element.css(animator.toCss({transform: ''}));
+            autoFocus(opts.focusedNode);
 
             resolve();
           });
