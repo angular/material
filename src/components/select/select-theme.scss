@@ -37,6 +37,27 @@ md-input-container {
     }
   }
 
+  &:not(.md-input-invalid) {
+    &.md-input-focused {
+      &.md-accent {
+        .md-select-value {
+          border-color: '{{accent-color}}';
+          span {
+            color: '{{accent-color}}';
+          }
+        }
+      }
+      &.md-warn {
+        .md-select-value {
+          border-color: '{{warn-A700}}';
+          span {
+            color: '{{warn-A700}}';
+          }
+        }
+      }
+    }
+  }
+
 }
 
 md-select.md-THEME_NAME-theme {
