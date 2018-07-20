@@ -134,9 +134,26 @@ function detectDisabledThemes($mdThemingProvider) {
  * {{primary-contrast}} - Generates .md-hue-1, .md-hue-2, .md-hue-3 with configured contrast (ie. text) color shades set for each hue
  * {{primary-contrast-0.7}} - Apply 0.7 opacity to each of the above rules
  * {{primary-contrast-divider}} - Apply divider opacity to contrast color
- * {{background-default-contrast}} - Apply primary text color for contrasting with default background
- * {{background-50-contrast-icon}} - Apply contrast color for icon on background's shade 50 hue
  *
+ * Foreground expansion: Applies rgba to black/white foreground text
+ *
+ * Old Foreground Expressions:
+ * {{foreground-1}} - used for primary text
+ * {{foreground-2}} - used for secondary text/divider
+ * {{foreground-3}} - used for disabled text
+ * {{foreground-4}} - used for dividers
+ *
+ * New Foreground Expressions:
+ *
+ * Apply primary text color for contrasting with default background
+ *  {{background-default-contrast}} - default opacity
+ *  {{background-default-contrast-secondary}} - opacity for secondary text
+ *  {{background-default-contrast-hint}} - opacity for hints and placeholders
+ *  {{background-default-contrast-disabled}} - opacity for disabled text
+ *  {{background-default-contrast-divider}} - opacity for dividers
+ *
+ * Apply contrast color for specific shades
+ *  {{background-50-contrast-icon}} - Apply contrast color for icon on background's shade 50 hue
  */
 
 // In memory generated CSS rules; registered by theme.name
@@ -190,10 +207,8 @@ var DARK_DEFAULT_HUES = {
   }
 };
 
-// TODO these references no longer exist with the MD spec update of 2018.
-// use inactive icon opacity from https://material.google.com/style/color.html#color-text-background-colors
-// not inactive icon opacity from https://material.google.com/style/icons.html#icons-system-icons
-
+// Icon opacity values (active/inactive) from
+// https://material.io/archive/guidelines/style/icons.html#icons-system-icons
 var DARK_CONTRAST_OPACITY = {
   'icon': 0.54,
   'secondary': 0.54,
@@ -210,6 +225,8 @@ var LIGHT_CONTRAST_OPACITY = {
   'divider': 0.12
 };
 
+// Icon opacity values (active/inactive) from
+// https://material.io/archive/guidelines/style/icons.html#icons-system-icons
 var STRONG_LIGHT_CONTRAST_OPACITY = {
   'icon': 1.0,
   'secondary': 0.7,
@@ -1009,16 +1026,16 @@ function parseRules(theme, colorType, rules) {
         return theme.foregroundShadow;
       } else if (theme.foregroundPalette[hue]) {
         // Use user defined palette number (ie: foreground-2)
-        return rgba( colorToRgbaArray( theme.foregroundPalette[hue] ) );
+        return rgba(colorToRgbaArray(theme.foregroundPalette[hue]));
       } else if (theme.foregroundPalette['1']){
-        return rgba( colorToRgbaArray( theme.foregroundPalette['1'] ) );
+        return rgba(colorToRgbaArray(theme.foregroundPalette['1']));
       }
       // Default to background-default-contrast-{opacity}
       colorType = 'background';
       contrast = 'contrast';
       if (!opacity && hue) {
         // Convert references to legacy hues to opacities (i.e. foreground-4 to *-divider)
-        switch(hue) {
+        switch (hue) {
           // hue-1 uses default opacity
           case '2':
             opacity = 'secondary';
@@ -1206,7 +1223,7 @@ function generateAllThemes($injector, $mdTheming) {
       return 'light';
     }
     function getContrastColor(contrastType) {
-      switch(contrastType) {
+      switch (contrastType) {
         default:
         case 'strongLight':
           return STRONG_LIGHT_CONTRAST_COLOR;
@@ -1217,7 +1234,7 @@ function generateAllThemes($injector, $mdTheming) {
       }
     }
     function getOpacityValues(contrastType) {
-      switch(contrastType) {
+      switch (contrastType) {
         default:
         case 'strongLight':
           return STRONG_LIGHT_CONTRAST_OPACITY;
