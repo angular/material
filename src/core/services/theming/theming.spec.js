@@ -171,12 +171,12 @@ describe('$mdThemingProvider', function() {
     function parse(str) {
       return themingProvider._parseRules(testTheme, 'primary', str)
         .join('')
-        .split(/\}(?!(\}|'|"|;))/)
+        .split(/}(?!(}|'|"|;))/)
         .filter(function(val) { return !!val; })
         .map(function(rule) {
           rule += '}';
           return {
-            content: (rule.match(/\{\s*(.*?)\s*\}/) || [])[1] || null,
+            content: (rule.match(/{\s*(.*?)\s*}/) || [])[1] || null,
             hue: (rule.match(/md-(hue-\d)/) || [])[1] || null,
             type: (rule.match(/(primary)/) || [])[1] || null
           };

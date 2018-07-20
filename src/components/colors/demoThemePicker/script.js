@@ -3,7 +3,7 @@ angular
   .controller('ThemeDemoCtrl', function ($scope, $mdColorPalette) {
     $scope.colors = Object.keys($mdColorPalette);
 
-    $scope.mdURL = 'https://material.google.com/style/color.html#color-color-palette';
+    $scope.mdURL = 'https://material.io/archive/guidelines/style/color.html#color-color-palette';
     $scope.primary = 'purple';
     $scope.accent = 'green';
 
