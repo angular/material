@@ -190,6 +190,7 @@ var DARK_DEFAULT_HUES = {
   }
 };
 
+// TODO these references no longer exist with the MD spec update of 2018.
 // use inactive icon opacity from https://material.google.com/style/color.html#color-text-background-colors
 // not inactive icon opacity from https://material.google.com/style/icons.html#icons-system-icons
 
@@ -989,10 +990,11 @@ function parseRules(theme, colorType, rules) {
   checkValidPalette(theme, colorType);
 
   rules = rules.replace(/THEME_NAME/g, theme.name);
+  var color = theme.colors[colorType];
   var themeNameRegex = new RegExp('\\.md-' + theme.name + '-theme', 'g');
   // Matches '{{ primary-color }}', etc
-  var hueRegex = new RegExp('(?:\'|")?{{\\s*(' + colorType + ')-?(color|default)?-?(contrast)?-?((?:\\d\\.?\\d*)|(?:[a-zA-Z]+))?\\s*}}(\"|\')?','g');
-  var simpleVariableRegex = /'?"?\{\{\s*([a-zA-Z]+)-(A?\d+|hue-[0-3]|shadow|default)-?(contrast)?-?((?:\d\.?\d*)|(?:[a-zA-Z]+))?\s*\}\}'?"?/g;
+  var hueRegex = new RegExp('(\'|")?{{\\s*([a-zA-Z]+)-?(color|default)?-?(contrast)?-?((?:\\d\\.?\\d*)|(?:[a-zA-Z]+))?\\s*}}(\"|\')?','g');
+  var simpleVariableRegex = /'?"?{{\s*([a-zA-Z]+)-(A?\d+|hue-[0-3]|shadow|default)-?(contrast)?-?((?:\d\.?\d*)|(?:[a-zA-Z]+))?\s*}}'?"?/g;
   var palette = PALETTES[color.name];
   var defaultBgHue = theme.colors['background'].hues['default'];
   var defaultBgContrastType = PALETTES[theme.colors['background'].name][defaultBgHue].contrastType;
@@ -1003,7 +1005,7 @@ function parseRules(theme, colorType, rules) {
   rules = rules.replace(simpleVariableRegex, function(match, colorType, hue, contrast, opacity) {
     var regexColorType = colorType;
     if (colorType === 'foreground') {
-      if (hue == 'shadow') {
+      if (hue === 'shadow') {
         return theme.foregroundShadow;
       } else if (theme.foregroundPalette[hue]) {
         // Use user defined palette number (ie: foreground-2)
@@ -1015,7 +1017,7 @@ function parseRules(theme, colorType, rules) {
       colorType = 'background';
       contrast = 'contrast';
       if (!opacity && hue) {
-        // Convert references to legacy hues to opacities (ie: foreground-4 to *-divider)
+        // Convert references to legacy hues to opacities (i.e. foreground-4 to *-divider)
         switch(hue) {
           // hue-1 uses default opacity
           case '2':
@@ -1040,7 +1042,8 @@ function parseRules(theme, colorType, rules) {
     var colorDetails = (PALETTES[ theme.colors[colorType].name ][hue] || '');
 
     // If user has specified a foreground color, use those
-    if (colorType === 'background' && contrast && regexColorType !== 'foreground' && colorDetails.contrastType == defaultBgContrastType) {
+    if (colorType === 'background' && contrast && regexColorType !== 'foreground' &&
+        colorDetails.contrastType === defaultBgContrastType) {
       // Don't process if colorType was changed
       switch (opacity) {
         case 'secondary':
@@ -1075,8 +1078,6 @@ function parseRules(theme, colorType, rules) {
     return rgba(colorDetails[contrast ? 'contrast' : 'value'], opacity);
   });
 
-  // Matches '{{ primary-color }}', etc
-  var hueRegex = new RegExp('(\'|")?{{\\s*([a-zA-Z]+)-(color|contrast)-?(\\d\\.?\\d*)?\\s*}}("|\')?','g');
   var generatedRules = [];
 
   // For each type, generate rules for each hue (ie. default, md-hue-1, md-hue-2, md-hue-3)
@@ -1097,8 +1098,8 @@ function parseRules(theme, colorType, rules) {
 
     // Don't apply a selector rule to the default theme, making it easier to override
     // styles of the base-component
-    if (theme.name == 'default') {
-      var themeRuleRegex = /((?:\s|>|\.|\w|-|:|\(|\)|\[|\]|"|'|=)*)\.md-default-theme((?:\s|>|\.|\w|-|:|\(|\)|\[|\]|"|'|=)*)/g;
+    if (theme.name === 'default') {
+      var themeRuleRegex = /((?:\s|>|\.|\w|-|:|\(|\)|\[|]|"|'|=)*)\.md-default-theme((?:\s|>|\.|\w|-|:|\(|\)|\[|]|"|'|=)*)/g;
 
       newRule = newRule.replace(themeRuleRegex, function(match, start, end) {
         return match + ', ' + start + end;
@@ -1132,7 +1133,7 @@ function generateAllThemes($injector, $mdTheming) {
 
   // Break the CSS into individual rules
   var rules = themeCss
-                  .split(/\}(?!(\}|'|"|;))/)
+                  .split(/}(?!(}|'|"|;))/)
                   .filter(function(rule) { return rule && rule.trim().length; })
                   .map(function(rule) { return rule.trim() + '}'; });
 
