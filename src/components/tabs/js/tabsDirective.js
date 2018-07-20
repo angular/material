@@ -67,7 +67,6 @@
  * `never`           | ---       | ---
  *
  * @param {integer=} md-selected Index of the active/selected tab.
- * @param {boolean=} md-no-ink If present, disables ink ripple effects.
  * @param {boolean=} md-no-ink-bar If present, disables the selection ink bar.
  * @param {string=}  md-align-tabs Attribute to indicate position of tab buttons: `bottom` or `top`;
  *  Default is `top`.
