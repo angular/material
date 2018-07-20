@@ -12,6 +12,42 @@ md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) {
     fill: '{{primary-contrast-0.26}}';
   }
 
+  md-input-container[md-no-float] {
+    .md-input {
+      @include input-placeholder-color('\'{{primary-default-contrast-hint}}\'');
+      color: '{{primary-default-contrast}}';
+      border-color: '{{primary-default-contrast-divider}}';
+    }
+
+    &.md-input-focused {
+      .md-input {
+        @include input-placeholder-color('\'{{primary-default-contrast-secondary}}\'');
+      }
+    }
+
+    &:not(.md-input-invalid) {
+      &.md-input-focused,
+      &.md-input-resized {
+        .md-input {
+          border-color: '{{primary-contrast}}';
+        }
+      }
+
+      &.md-input-focused {
+        &.md-accent {
+          .md-input {
+            border-color: '{{accent-color}}';
+          }
+        }
+        &.md-warn {
+          .md-input {
+            border-color: '{{warn-A700}}';
+          }
+        }
+      }
+    }
+  }
+
   &.md-accent {
     background-color: '{{accent-color}}';
     color: '{{accent-contrast}}';
@@ -29,10 +65,82 @@ md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) {
       color: '{{accent-contrast-0.26}}';
       fill: '{{accent-contrast-0.26}}';
     }
+
+    md-input-container[md-no-float] {
+      .md-input {
+        @include input-placeholder-color('\'{{accent-default-contrast-hint}}\'');
+        color: '{{accent-default-contrast}}';
+        border-color: '{{accent-default-contrast-divider}}';
+      }
+
+      &.md-input-focused {
+        .md-input {
+          @include input-placeholder-color('\'{{accent-default-contrast-secondary}}\'');
+        }
+      }
+
+      &:not(.md-input-invalid) {
+        &.md-input-focused,
+        &.md-input-resized {
+          .md-input {
+            border-color: '{{primary-color}}';
+          }
+        }
+
+        &.md-input-focused {
+          &.md-accent {
+            .md-input {
+              border-color: '{{accent-contrast}}';
+            }
+          }
+          &.md-warn {
+            .md-input {
+              border-color: '{{warn-A700}}';
+            }
+          }
+        }
+      }
+    }
   }
 
   &.md-warn {
     background-color: '{{warn-color}}';
     color: '{{warn-contrast}}';
+
+    md-input-container[md-no-float] {
+      .md-input {
+        @include input-placeholder-color('\'{{warn-default-contrast-hint}}\'');
+        color: '{{warn-default-contrast}}';
+        border-color: '{{warn-default-contrast-divider}}';
+      }
+
+      &.md-input-focused {
+        .md-input {
+          @include input-placeholder-color('\'{{warn-default-contrast-secondary}}\'');
+        }
+      }
+
+      &:not(.md-input-invalid) {
+        &.md-input-focused,
+        &.md-input-resized {
+          .md-input {
+            border-color: '{{primary-color}}';
+          }
+        }
+
+        &.md-input-focused {
+          &.md-accent {
+            .md-input {
+              border-color: '{{accent-color}}';
+            }
+          }
+          &.md-warn {
+            .md-input {
+              border-color: '{{warn-contrast}}';
+            }
+          }
+        }
+      }
+    }
   }
 }
