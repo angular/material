@@ -62,6 +62,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     .primaryPalette('yellow')
     .dark();
 
+  $mdThemingProvider.theme('site-toolbar')
+    .primaryPalette('grey', {
+      'default': '100'
+    });
+
   $mdIconProvider.icon('md-toggle-arrow', 'img/icons/toggle-arrow.svg', 48);
   $mdIconProvider
     .iconSet('communication', 'img/icons/sets/communication-icons.svg', 24)
