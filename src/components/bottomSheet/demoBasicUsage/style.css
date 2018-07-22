@@ -1,47 +1,35 @@
 .md-inline-list-icon-label {
   display: inline-block;
   padding-left: 10px;
-  padding-right:10px;
+  padding-right: 10px;
   margin-top: -10px;
   height: 24px;
   vertical-align: middle;
-
 }
-
 .md-grid-item-content {
-  height:90px;
-  padding-top:10px;
+  height: 90px;
+  padding-top: 10px;
 }
 .md-grid-item-content md-icon {
   height: 48px;
   width: 48px;
 }
-
 .md-grid-text {
   padding-bottom: 5px;
-  }
-
-
+}
 md-list-item, md-list-item .md-list-item-inner {
   min-height: 48px;
-
 }
-
 h2 {
   line-height: 36px;
-    padding-top: 10px;
+  padding-top: 10px;
 }
-
-
 .md-subheader .md-subheader-inner {
   padding: 0;
 }
-
-
 md-toast .md-toast-content {
   background-color: #B14141;
 }
-
 md-toast > * {
   font-weight: bolder;
 }

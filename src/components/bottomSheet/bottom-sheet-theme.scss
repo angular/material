@@ -1,7 +1,6 @@
-
 md-bottom-sheet.md-THEME_NAME-theme {
-  background-color: '{{background-50}}';
-  border-top-color: '{{background-300}}';
+  background-color: '{{background-color}}';
+  border-top-color: '{{background-hue-3}}';
 
   &.md-list {
     md-list-item {
@@ -10,7 +9,7 @@ md-bottom-sheet.md-THEME_NAME-theme {
   }
 
   .md-subheader {
-    background-color: '{{background-50}}';
+    background-color: '{{background-color}}';
   }
 
   .md-subheader {
