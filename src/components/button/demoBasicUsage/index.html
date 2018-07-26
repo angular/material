@@ -1,4 +1,3 @@
-
 <div ng-controller="AppCtrl" ng-cloak>
   <md-content>
 
@@ -9,6 +8,7 @@
       <md-button class="md-warn">{{title4}}</md-button>
       <div class="label">Flat</div>
     </section>
+    <md-divider></md-divider>
 
     <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
       <md-button class="md-raised">Button</md-button>
@@ -17,6 +17,7 @@
       <md-button class="md-raised md-warn">Warn</md-button>
       <div class="label">Raised</div>
     </section>
+    <md-divider></md-divider>
 
     <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
         <md-button class="md-fab" aria-label="Eat cake">
@@ -44,14 +45,17 @@
         </md-button>
       <div class="label">FAB</div>
     </section>
+    <md-divider></md-divider>
 
     <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
         <md-button ng-href="{{googleUrl}}" target="_blank">Default Link</md-button>
-        <md-button class="md-primary" ng-href="{{googleUrl}}" target="_blank">Primary Link</md-button>
-
+        <md-button class="md-primary" ng-href="{{googleUrl}}" target="_blank">
+          Primary Link
+        </md-button>
         <md-button>Default Button</md-button>
       <div class="label">Link vs. Button</div>
     </section>
+    <md-divider></md-divider>
 
     <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
       <md-button class="md-primary md-hue-1">Primary Hue 1</md-button>
@@ -60,6 +64,7 @@
       <md-button class="md-accent md-raised md-hue-1">Accent Hue 1</md-button>
       <div class="label">Themed</div>
     </section>
+    <md-divider></md-divider>
 
     <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
       <md-button class="md-icon-button md-primary" aria-label="Settings">

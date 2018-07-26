@@ -75,6 +75,10 @@ a {
   text-decoration: none;
   font-weight: 400;
   transition: border-bottom 0.35s;
+  color: #1e88e5;
+}
+a:visited {
+  color: #7e57c2;
 }
 h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
@@ -431,10 +435,6 @@ a.docs-logo {
 .md-breadcrumb {
   font-size: 24px !important;
   font-weight: 400 !important;
-}
-.md-breadcrumb md-icon {
-  color: #666 !important;
-  fill: #666 !important;
 }
 .md-breadcrumb-page {
   display: inline-block;
@@ -799,13 +799,6 @@ docs-demo .doc-demo-content {
   margin: 16px;
 }
 .site-content-toolbar {
-  background: #f6f6f6 !important;
-  color: #666 !important;
-  z-index: 3;
-}
-.site-content-toolbar {
-  background: #f6f6f6 !important;
-  color: #202020 !important;
   z-index: 3;
 }
 .service-desc {
@@ -889,6 +882,7 @@ table.custom-table {
   box-shadow: 0 1px 2px rgba(10, 16, 20, 0.24), 0 0 2px rgba(10, 16, 20, 0.12);
   border-radius: 2px;
   background: #fafafa;
+  color: rgba(0,0,0,0.87);
   border-spacing: 0;
 }
 table.custom-table thead > {
