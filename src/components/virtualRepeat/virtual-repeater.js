@@ -96,8 +96,8 @@ function virtualRepeatContainerTemplate($element) {
 var NUM_EXTRA = 3;
 
 /** @ngInject */
-function VirtualRepeatContainerController($$rAF, $mdUtil, $mdConstant, $parse, $rootScope, $window, $scope,
-                                          $element, $attrs) {
+function VirtualRepeatContainerController($$rAF, $mdUtil, $mdConstant, $parse, $rootScope, $window,
+                                          $scope, $element, $attrs) {
   this.$rootScope = $rootScope;
   this.$scope = $scope;
   this.$element = $element;
@@ -241,7 +241,10 @@ VirtualRepeatContainerController.prototype.getScrollSize = function() {
   return this.scrollSize;
 };
 
-
+/**
+ * @returns {string} either width or height dimension
+ * @private
+ */
 VirtualRepeatContainerController.prototype.getDimensionName_ = function() {
   return this.isHorizontal() ? 'width' : 'height';
 };
@@ -378,7 +381,7 @@ VirtualRepeatContainerController.prototype.resetScroll = function() {
 
 
 VirtualRepeatContainerController.prototype.handleScroll_ = function() {
-  var ltr = document.dir != 'rtl' && document.body.dir != 'rtl';
+  var ltr = document.dir !== 'rtl' && document.body.dir !== 'rtl';
   if(!ltr && !this.maxSize) {
     this.scroller.scrollLeft = this.scrollSize;
     this.maxSize = this.scroller.scrollLeft;
@@ -481,8 +484,8 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  * </md-virtual-repeat-container>
  * </hljs>
  *
- * @param {expression=} md-extra-name Evaluates to an additional name to which the current iterated item
- *   can be assigned on the repeated scope (needed for use in `md-autocomplete`).
+ * @param {expression=} md-extra-name Evaluates to an additional name to which the current iterated
+ *   item can be assigned on the repeated scope (needed for use in `md-autocomplete`).
  * @param {number=} md-item-size Optional height or width of the repeated elements (which **must be
  *   identical for each element**). Virtual repeat will attempt to read the size from the DOM,
  *   if missing, but it still assumes that all repeated nodes have the **same height**
@@ -492,8 +495,8 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
  *
  *   **NOTE:** This object **must** implement the following interface with two methods:
  *
- *   - `getItemAtIndex` - `{function(index): Object}`: The item at that `index` or `null` if it is not
- *     yet loaded (it should start downloading the item in that case).
+ *   - `getItemAtIndex` - `{function(index): Object}`: The item at that `index` or `null` if it is
+ *     not yet loaded (it should start downloading the item in that case).
  *   - `getLength` - `{function(): number}`: The data length to which the repeater container
  *     should be sized. Ideally, when the count is known, this method should return it.
  *     Otherwise, return a higher number than the currently loaded items to produce an
@@ -650,7 +653,7 @@ VirtualRepeatController.prototype.readItemSize_ = function() {
 /**
  * Returns the user-specified repeat list, transforming it into an array-like
  * object in the case of infinite scroll/dynamic load mode.
- * @param {!angular.Scope} The scope.
+ * @param {!angular.Scope} scope The scope.
  * @return {!Array|!Object} An array or array-like object for iteration.
  */
 VirtualRepeatController.prototype.repeatListExpression_ = function(scope) {
@@ -736,8 +739,8 @@ VirtualRepeatController.prototype.getItemCount = function() {
 /**
  * Updates the order and visible offset of repeated blocks in response to scrolling
  * or updates to `items`.
- * @param items {Array} visible elements
- * @param oldItems {Array} previously visible elements
+ * @param {Array} items visible elements
+ * @param {Array} oldItems previously visible elements
  * @private
  */
 VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItems) {
@@ -957,13 +960,15 @@ VirtualRepeatController.prototype.updateIndexes_ = function() {
 
 /**
  * This VirtualRepeatModelArrayLike class enforces the interface requirements
- * for infinite scrolling within a mdVirtualRepeatContainer. An object with this
- * interface must implement the following interface with two (2) methods:
+ * for infinite scrolling within a mdVirtualRepeatContainer.
+ *
+ * @param {Object} model An object with this interface must implement the following interface with
+ * two (2) methods:
  *
  * getItemAtIndex: function(index) -> item at that index or null if it is not yet
  *     loaded (It should start downloading the item in that case).
  *
- * getLength: function() -> number The data legnth to which the repeater container
+ * getLength: function() -> number The data length to which the repeater container
  *     should be sized. Ideally, when the count is known, this method should return it.
  *     Otherwise, return a higher number than the currently loaded items to produce an
  *     infinite-scroll behavior.
@@ -981,14 +986,17 @@ VirtualRepeatController.prototype.updateIndexes_ = function() {
 function VirtualRepeatModelArrayLike(model) {
   if (!angular.isFunction(model.getItemAtIndex) ||
       !angular.isFunction(model.getLength)) {
-    throw Error('When md-on-demand is enabled, the Object passed to md-virtual-repeat must implement ' +
-        'functions getItemAtIndex() and getLength() ');
+    throw Error('When md-on-demand is enabled, the Object passed to md-virtual-repeat must ' +
+        'implement functions getItemAtIndex() and getLength().');
   }
 
   this.model = model;
 }
 
-
+/**
+ * @param {number} start
+ * @param {number} end
+ */
 VirtualRepeatModelArrayLike.prototype.$$includeIndexes = function(start, end) {
   for (var i = start; i < end; i++) {
     if (!this.hasOwnProperty(i)) {
