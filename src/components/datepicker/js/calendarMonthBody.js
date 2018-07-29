@@ -16,7 +16,11 @@
 
     return {
       require: ['^^mdCalendar', '^^mdCalendarMonth', 'mdCalendarMonthBody'],
-      scope: { offset: '=mdMonthOffset' },
+      scope: {
+         offset: '=mdMonthOffset',
+         minDate: '=mdMinDate',
+         maxDate: '=mdMaxDate'
+      },
       controller: CalendarMonthBodyCtrl,
       controllerAs: 'mdMonthBodyCtrl',
       bindToController: true,
@@ -37,6 +41,12 @@
           if (angular.isNumber(offset)) {
             monthBodyCtrl.generateContent();
           }
+        });
+        
+        scope.$watch(function () { return calendarCtrl.minDate + calendarCtrl.maxDate; }, function (range, oldRange) {
+           if (range !== oldRange) {
+              monthBodyCtrl.generateContent();
+           }
         });
       }
     };
