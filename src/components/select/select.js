@@ -74,6 +74,7 @@ angular.module('material.components.select', [
  * @param {boolean=} multiple When present, allows for more than one option to be selected.
  *  The model is an array with the selected choices. **Note:** This attribute is only evaluated
  *  once; it is not watched.
+ * @param {string=} multiple-separator Determines how multiple values will be seperated, defaults to ', '.
  * @param {expression=} md-on-close Expression to be evaluated when the select is closed.
  * @param {expression=} md-on-open Expression to be evaluated when opening the select.
  * Will hide the select options and show a spinner until the evaluated promise resolves.
@@ -259,7 +260,9 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
     }
 
     var isMultiple = $mdUtil.parseAttributeBoolean(attr.multiple);
-
+    //Defaults ','
+    var multipleSeparator = attr.multipleSeparator || ', ';
+   
     // Use everything that's left inside element.contents() as the contents of the menu
     var multipleContent = isMultiple ? 'multiple' : '';
     var selectTemplate = '' +
@@ -678,6 +681,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
   function SelectMenuController($scope, $attrs, $element) {
     var self = this;
     self.isMultiple = angular.isDefined($attrs.multiple);
+    self.multipleSeparator = $attrs.multipleSeparator || ', ';
     // selected is an object with keys matching all of the selected options' hashed values
     self.selected = {};
     // options is an object with keys matching every option's hash value,
@@ -826,7 +830,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
         }
 
         // Ensure there are no duplicates; see https://github.com/angular/material/issues/9442
-        return $mdUtil.uniq(selectedOptionEls.map(mapFn)).join(', ');
+        return $mdUtil.uniq(selectedOptionEls.map(mapFn)).join(self.multipleSeparator);
       } else {
         return '';
       }
