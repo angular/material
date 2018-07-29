@@ -478,14 +478,15 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   }
 
   /**
-   * Prepare and cache the loaded icon for the specified `id`
-   */
+   * Prepare and cache the loaded icon for the specified `id`.
+   * Make sure the id is always altered by calling transformClone
+   */  
   function cacheIcon(id) {
 
     return function updateCache(icon) {
       iconCache[id] = isIcon(icon) ? icon : new Icon(icon, config[id]);
 
-      return iconCache[id].clone();
+      return transformClone(iconCache[id]);
     };
   }
 
