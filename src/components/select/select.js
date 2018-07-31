@@ -74,7 +74,8 @@ angular.module('material.components.select', [
  * @param {boolean=} multiple When present, allows for more than one option to be selected.
  *  The model is an array with the selected choices. **Note:** This attribute is only evaluated
  *  once; it is not watched.
- * @param {string=} multiple-separator Determines how multiple values will be seperated, defaults to ', '.
+ * @param {string=} selection-separator-char Options available is limited to `comma`(Default),`semi-colon`, `pipe`.
+ * @param {string=} selection-separator-spacing Options available is limited to `after`(Default), `before`, `none`, `break`.
  * @param {expression=} md-on-close Expression to be evaluated when the select is closed.
  * @param {expression=} md-on-open Expression to be evaluated when opening the select.
  * Will hide the select options and show a spinner until the evaluated promise resolves.
@@ -132,6 +133,18 @@ angular.module('material.components.select', [
  *       <md-select-header>
  *         <span> Neighborhoods - </span>
  *       </md-select-header>
+ *       <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
+ *     </md-select>
+ *   </md-input-container>
+ * </hljs>
+ * Multiselect with a custom separator
+ *
+ * When a developer needs to add a seperator with multi select, adding to the attribute `selection-separator-char` or
+ `selection-separator-spacing` with options. The example below demonstrate a new line for after each selected item.
+ *
+ * <hljs lang="html">
+ *   <md-input-container>
+ *     <md-select ng-model="someModel" selection-separator-char="none" selection-separator-spacing="break">
  *       <md-option ng-value="opt" ng-repeat="opt in neighborhoods2">{{ opt }}</md-option>
  *     </md-select>
  *   </md-input-container>
@@ -260,17 +273,39 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
     }
 
     var isMultiple = $mdUtil.parseAttributeBoolean(attr.multiple);
-    //Defaults ','
-    var multipleSeparator = attr.multipleSeparator || ', ';
+       
+    //Set the separation options in a list
+    var selectionSeparatorCharOptions = { 
+      'comma' : ',',
+      'semicolon' : ';',
+      'pipe' : '|',
+      'none' : ''
+    };
+    var selectionSeparatorChar = selectionSeparatorCharOptions[attr.selectionSeparatorChar || 'comma'];
+    //Set the different spacing options with the selectionSeparatorChar
+    var selectionSeparator = ''; 
+    switch(attr.selectionSeparatorSpacing) {
+        case 'before':
+            selectionSeparator = ' '+selectionSeparatorChar;
+            break;
+        case 'none':
+            selectionSeparator = selectionSeparatorChar;
+            break;
+        case 'break':
+            selectionSeparator = selectionSeparatorChar+'<br>';
+            break;
+        default:
+            selectionSeparator = selectionSeparatorChar+' ';
+    }
    
     // Use everything that's left inside element.contents() as the contents of the menu
     var multipleContent = isMultiple ? 'multiple' : '';
     var selectTemplate = '' +
       '<div class="md-select-menu-container" aria-hidden="true" role="presentation">' +
-      '<md-select-menu role="presentation" {0}>{1}</md-select-menu>' +
+      '<md-select-menu role="presentation" {0} selection-separator="{1}">{2}</md-select-menu>' +
       '</div>';
 
-    selectTemplate = $mdUtil.supplant(selectTemplate, [multipleContent, element.html()]);
+    selectTemplate = $mdUtil.supplant(selectTemplate, [multipleContent,selectionSeparator, element.html()]);
     element.empty().append(valueEl);
     element.append(selectTemplate);
 
@@ -681,7 +716,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
   function SelectMenuController($scope, $attrs, $element) {
     var self = this;
     self.isMultiple = angular.isDefined($attrs.multiple);
-    self.multipleSeparator = $attrs.multipleSeparator || ', ';
+    self.selectionSeparator = $attrs.selectionSeparator;
     // selected is an object with keys matching all of the selected options' hashed values
     self.selected = {};
     // options is an object with keys matching every option's hash value,
@@ -830,7 +865,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
         }
 
         // Ensure there are no duplicates; see https://github.com/angular/material/issues/9442
-        return $mdUtil.uniq(selectedOptionEls.map(mapFn)).join(self.multipleSeparator);
+        return $mdUtil.uniq(selectedOptionEls.map(mapFn)).join(self.selectionSeparator);
       } else {
         return '';
       }
