@@ -518,7 +518,7 @@ function MdCompilerProvider($compileProvider) {
 
       // When the element is visible in the DOM, then we restore it at close of the dialog.
       // Otherwise it will be removed from the DOM after close.
-      if (document.contains(contentEl)) {
+      if (document.body.contains(contentEl)) {
         restoreFn = createRestoreFn(contentEl);
       } else {
         restoreFn = function() {
