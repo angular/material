@@ -1116,6 +1116,7 @@ function MdDialogProvider($$interimElementProvider) {
       // Set up elements before and after the dialog content to capture focus and
       // redirect back into the dialog.
       topFocusTrap = document.createElement('div');
+      topFocusTrap.setAttribute('aria-hidden', 'true');
       topFocusTrap.classList.add('md-dialog-focus-trap');
       topFocusTrap.tabIndex = 0;
 
