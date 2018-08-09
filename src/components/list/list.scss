@@ -163,7 +163,7 @@ md-list-item {
       .md-list-item-inner {
         // The list item content should fill the complete width.
         width: 100%;
-        min-height: inherit;
+        @include ie11-min-height-flexbug(inherit);
       }
 
     }
