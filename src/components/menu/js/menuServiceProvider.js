@@ -494,7 +494,7 @@ function MenuProvider($$interimElementProvider) {
           throw new Error('Invalid target mode "' + positionMode.top + '" specified for md-menu on Y axis.');
       }
 
-      var rtl = ($mdUtil.bidi() === 'rtl');
+      var rtl = $mdUtil.isRtl(el);
 
       switch (positionMode.left) {
         case 'target':

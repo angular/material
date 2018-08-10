@@ -2541,7 +2541,7 @@ function MdPanelPosition($injector) {
   this._$window = $injector.get('$window');
 
   /** @private {boolean} */
-  this._isRTL = $injector.get('$mdUtil').bidi() === 'rtl';
+  this._isRTL = $injector.get('$mdUtil').isRtl();
 
   /** @private @const {!angular.$mdConstant} */
   this._$mdConstant = $injector.get('$mdConstant');

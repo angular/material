@@ -93,7 +93,7 @@ angular.module('material.components.gridList', ['material.core'])
  * </md-grid-list>
  * </hljs>
  */
-function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
+function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia, $mdUtil) {
   return {
     restrict: 'E',
     controller: GridListController,
@@ -270,8 +270,7 @@ function GridListDirective($interpolate, $mdConstant, $mdGridLayout, $mdMedia) {
 
       // The width and horizontal position of each tile is always calculated the same way, but the
       // height and vertical position depends on the rowMode.
-      var ltr = document.dir != 'rtl' && document.body.dir != 'rtl';
-      var style = ltr ? {
+      var style = (!$mdUtil.isRtl(attrs)) ? {
           left: POSITION({ unit: hUnit, offset: position.col, gutter: gutter }),
           width: DIMENSION({ unit: hUnit, span: spans.col, gutter: gutter }),
           // resets
