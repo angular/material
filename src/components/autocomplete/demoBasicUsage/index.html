@@ -4,6 +4,7 @@
       <p id="autocompleteDescription">
         Use <code>md-autocomplete</code> to search for matches from local or remote data sources.
       </p>
+      <label id="favoriteStateLabel">Favorite State</label>
       <md-autocomplete
           ng-disabled="ctrl.isDisabled"
           md-no-cache="ctrl.noCache"
@@ -14,8 +15,9 @@
           md-items="item in ctrl.querySearch(ctrl.searchText)"
           md-item-text="item.display"
           md-min-length="0"
-          placeholder="What is your favorite US state?"
-          aria-describedby="autocompleteDescription autocompleteDetailedDescription">
+          placeholder="Ex. Alaska"
+          input-aria-labelledby="favoriteStateLabel"
+          input-aria-describedby="autocompleteDetailedDescription">
         <md-item-template>
           <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
         </md-item-template>

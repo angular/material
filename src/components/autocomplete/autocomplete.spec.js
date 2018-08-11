@@ -1660,8 +1660,170 @@ describe('<md-autocomplete>', function() {
 
   });
 
-  describe('accessibility', function() {
+  describe('Accessibility', function() {
+    var $timeout = null;
 
+    beforeEach(inject(function ($injector) {
+      $timeout = $injector.get('$timeout');
+    }));
+
+    it('should add the placeholder as the input\'s aria-label', function() {
+      var template =
+      '<md-autocomplete' +
+      '   md-selected-item="selectedItem"' +
+      '   md-search-text="searchText"' +
+      '   md-items="item in match(searchText)"' +
+      '   md-item-text="item.display"' +
+      '   placeholder="placeholder">' +
+      '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+      '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      // Flush the initial autocomplete timeout to gather the elements.
+      $timeout.flush();
+
+      expect(input.attr('aria-label')).toBe('placeholder');
+    });
+
+    it('should add the input-aria-label as the input\'s aria-label', function() {
+      var template =
+      '<md-autocomplete' +
+      '   md-selected-item="selectedItem"' +
+      '   md-search-text="searchText"' +
+      '   md-items="item in match(searchText)"' +
+      '   md-item-text="item.display"' +
+      '   placeholder="placeholder"' +
+      '   input-aria-label="TestLabel">' +
+      '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      // Flush the initial autocomplete timeout to gather the elements.
+      $timeout.flush();
+
+      expect(input.attr('aria-label')).toBe('TestLabel');
+    });
+
+    it('should add the input-aria-labelledby to the input', function() {
+      var template =
+      '<label id="test-label">Test Label</label>' +
+      '<md-autocomplete' +
+      '   md-selected-item="selectedItem"' +
+      '   md-search-text="searchText"' +
+      '   md-items="item in match(searchText)"' +
+      '   md-item-text="item.display"' +
+      '   placeholder="placeholder"' +
+      '   input-aria-labelledby="test-label">' +
+      '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      // Flush the initial autocomplete timeout to gather the elements.
+      $timeout.flush();
+
+      expect(input.attr('aria-label')).not.toExist();
+      expect(input.attr('aria-labelledby')).toBe('test-label');
+    });
+
+    it('should add the input-aria-describedby to the input', function() {
+      var template =
+      '<md-autocomplete' +
+      '   md-selected-item="selectedItem"' +
+      '   md-search-text="searchText"' +
+      '   md-items="item in match(searchText)"' +
+      '   md-item-text="item.display"' +
+      '   placeholder="placeholder"' +
+      '   input-aria-describedby="test-desc">' +
+      '</md-autocomplete>' +
+      '<div id="test-desc">Test Description</div>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      // Flush the initial autocomplete timeout to gather the elements.
+      $timeout.flush();
+
+      expect(input.attr('aria-describedby')).toBe('test-desc');
+    });
+
+    it('should not break an aria-label on the autocomplete when using input-aria-label or aria-describedby', function() {
+      var template =
+      '<md-autocomplete' +
+      '   md-selected-item="selectedItem"' +
+      '   md-search-text="searchText"' +
+      '   md-items="item in match(searchText)"' +
+      '   md-item-text="item.display"' +
+      '   placeholder="placeholder"' +
+      '   aria-label="TestAriaLabel"' +
+      '   input-aria-label="TestLabel"' +
+      '   input-aria-describedby="test-desc">' +
+      '</md-autocomplete>' +
+      '<div id="test-desc">Test Description</div>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var autocomplete = element[0];
+      var input = element.find('input');
+
+      // Flush the initial autocomplete timeout to gather the elements.
+      $timeout.flush();
+
+      expect(input.attr('aria-label')).toBe('TestLabel');
+      expect(input.attr('aria-describedby')).toBe('test-desc');
+      expect(autocomplete.getAttribute('aria-label')).toBe('TestAriaLabel');
+    });
+
+    it('should not break an aria-label on the autocomplete', function() {
+      var template =
+      '<md-autocomplete' +
+      '   md-selected-item="selectedItem"' +
+      '   md-search-text="searchText"' +
+      '   md-items="item in match(searchText)"' +
+      '   md-item-text="item.display"' +
+      '   placeholder="placeholder"' +
+      '   aria-label="TestAriaLabel">' +
+      '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      // Flush the initial autocomplete timeout to gather the elements.
+      $timeout.flush();
+
+      expect(input.attr('aria-label')).toBe('placeholder');
+      expect(element.attr('aria-label')).toBe('TestAriaLabel');
+    });
+
+    it('should not break an aria-label on the autocomplete when using input-aria-labelledby', function() {
+      var template =
+      '<label id="test-label">Test Label</label>' +
+      '<md-autocomplete' +
+      '   md-selected-item="selectedItem"' +
+      '   md-search-text="searchText"' +
+      '   md-items="item in match(searchText)"' +
+      '   md-item-text="item.display"' +
+      '   placeholder="placeholder"' +
+      '   aria-label="TestAriaLabel"' +
+      '   input-aria-labelledby="test-label">' +
+      '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var autocomplete = element[1];
+      var input = element.find('input');
+
+      // Flush the initial autocomplete timeout to gather the elements.
+      $timeout.flush();
+
+      expect(input.attr('aria-label')).not.toExist();
+      expect(input.attr('aria-labelledby')).toBe('test-label');
+      expect(autocomplete.getAttribute('aria-label')).toBe('TestAriaLabel');
+    });
+  });
+
+  describe('Accessibility Announcements', function() {
     var $mdLiveAnnouncer, $timeout, $mdConstant = null;
     var liveEl, scope, element, ctrl = null;
 
@@ -1691,7 +1853,6 @@ describe('<md-autocomplete>', function() {
     }));
 
     it('should announce count on dropdown open', function() {
-
       ctrl.focus();
       waitForVirtualRepeat();
 
@@ -1701,7 +1862,6 @@ describe('<md-autocomplete>', function() {
     });
 
     it('should announce count and selection on dropdown open', function() {
-
       // Manually enable md-autoselect for the autocomplete.
       ctrl.index = 0;
 
@@ -1715,7 +1875,6 @@ describe('<md-autocomplete>', function() {
     });
 
     it('should announce the selection when using the arrow keys', function() {
-
       ctrl.focus();
       waitForVirtualRepeat();
 
@@ -1769,7 +1928,6 @@ describe('<md-autocomplete>', function() {
     });
 
     it('should announce the count when matches change', function() {
-
       ctrl.focus();
       waitForVirtualRepeat();
 
