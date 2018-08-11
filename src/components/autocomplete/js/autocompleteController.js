@@ -93,6 +93,9 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       if ($scope.autofocus) {
         $element.on('focus', focusInputElement);
       }
+      if ($scope.ariaDescribedBy) {
+        elements.input.setAttribute('aria-describedby', $scope.ariaDescribedBy);
+      }
     });
   }
 
