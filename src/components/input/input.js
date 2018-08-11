@@ -754,9 +754,11 @@ function placeholderDirective($compile) {
     }
 
     // md-select handles placeholders on it's own
-    if (element[0].nodeName != 'MD-SELECT') {
+    if (element[0].nodeName !== 'MD-SELECT') {
       // Move the placeholder expression to the label
-      var newLabel = angular.element('<label ng-click="delegateClick()" tabindex="-1">' + attr.placeholder + '</label>');
+      var newLabel = angular.element(
+        '<label ng-click="delegateClick()" tabindex="-1" aria-hidden="true">' + attr.placeholder +
+        '</label>');
 
       // Note that we unset it via `attr`, in order to get AngularJS
       // to remove any observers that it might have set up. Otherwise
