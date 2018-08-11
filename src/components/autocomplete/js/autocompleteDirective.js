@@ -19,7 +19,8 @@ angular
  *     no matches were found.  You can do this by wrapping your template in `md-item-template` and
  *     adding a tag for `md-not-found`.  An example of this is shown below.
  *
- * To reset the displayed value you must clear both values for `md-search-text` and `md-selected-item`.
+ * To reset the displayed value you must clear both values for `md-search-text` and
+ * `md-selected-item`.
  *
  * ### Validation
  *
@@ -96,11 +97,14 @@ angular
  *     make suggestions.
  * @param {number=} md-delay Specifies the amount of time (in milliseconds) to wait before looking
  *     for results.
- * @param {boolean=} md-clear-button Whether the clear button for the autocomplete input should show up or not.
- * @param {boolean=} md-autofocus If true, the autocomplete will be automatically focused when a `$mdDialog`,
- *     `$mdBottomsheet` or `$mdSidenav`, which contains the autocomplete, is opening. <br/><br/>
+ * @param {boolean=} md-clear-button Whether the clear button for the autocomplete input should show
+ *     up or not.
+ * @param {boolean=} md-autofocus If true, the autocomplete will be automatically focused when a
+ *     `$mdDialog`, `$mdBottomsheet` or `$mdSidenav`, which contains the autocomplete, is opening.
+ *     <br/><br/>
  *     Also the autocomplete will immediately focus the input element.
- * @param {boolean=} md-no-asterisk When present, asterisk will not be appended to the floating label.
+ * @param {boolean=} md-no-asterisk When present, asterisk will not be appended to the floating
+ *     label.
  * @param {boolean=} md-autoselect If set to true, the first item will be automatically selected
  *     in the dropdown upon open.
  * @param {string=} md-input-name The name attribute given to the input element to be used with
@@ -111,7 +115,7 @@ angular
  * @param {string=} md-input-class This will be applied to the input for styling. This attribute
  *     is only valid when a `md-floating-label` is defined.
  * @param {string=} md-floating-label This will add a floating label to autocomplete and wrap it in
- *     `md-input-container`
+ *     `md-input-container`.
  * @param {string=} md-select-on-focus When present the inputs text will be automatically selected
  *     on focus.
  * @param {string=} md-input-id An ID to be added to the input element.
@@ -135,6 +139,15 @@ angular
  *     content of these elements at the end of announcing that the autocomplete has been selected
  *     and describing its current state. The descriptive elements do not need to be visible on the
  *     page.
+ * @param {string=} input-aria-labelledby A space-separated list of element IDs. The ideal use case
+ *     is that this would contain the ID of a `<label>` element that is associated with this
+ *     autocomplete. This will only have affect when `md-floating-label` is not defined.<br><br>
+ *     For `<label id="state">US State</label>`, you would set this to
+ *     `input-aria-labelledby="state"`.
+ * @param {string=} input-aria-label A label that will be applied to the autocomplete's input.
+ *    This will be announced by screen readers before the placeholder.
+ *    This will only have affect when `md-floating-label` is not defined. If you define both
+ *    `input-aria-label` and `input-aria-labelledby`, then `input-aria-label` will take precedence.
  * @param {string=} md-selected-message Attribute to specify the text that the screen reader will
  *    announce after a value is selected. Default is: "selected". If `Alaska` is selected in the
  *    options panel, it will read "Alaska selected". You will want to override this when your app
@@ -179,12 +192,12 @@ angular
  * ### Clear button for the input
  * By default, the clear button is displayed when there is input. This aligns with the spec's
  * [Search Pattern](https://material.io/archive/guidelines/patterns/search.html#search-in-app-search).
- * In floating label mode, when `md-floating-label="My Label"` is applied, the clear button is not displayed
- * by default (see the spec's
+ * In floating label mode, when `md-floating-label="My Label"` is applied, the clear button is not
+ * displayed by default (see the spec's
  * [Autocomplete Text Field](https://material.io/archive/guidelines/components/text-fields.html#text-fields-layout)).
  *
- * Nevertheless, developers are able to explicitly toggle the clear button for all autocomplete components
- * with `md-clear-button`.
+ * Nevertheless, developers are able to explicitly toggle the clear button for all autocomplete
+ * components with `md-clear-button`.
  *
  * <hljs lang="html">
  *   <md-autocomplete ... md-clear-button="true"></md-autocomplete>
@@ -223,7 +236,8 @@ angular
  *     input validation for the field.
  *
  * ### Asynchronous Results
- * The autocomplete items expression also supports promises, which will resolve with the query results.
+ * The autocomplete items expression also supports promises, which will resolve with the query
+ * results.
  *
  * <hljs lang="js">
  *   function AppController($scope, $http) {
@@ -265,6 +279,8 @@ function MdAutocomplete ($$mdSvgRegistry) {
       itemText:           '&mdItemText',
       placeholder:        '@placeholder',
       inputAriaDescribedBy: '@?inputAriaDescribedby',
+      inputAriaLabelledBy: '@?inputAriaLabelledby',
+      inputAriaLabel:     '@?inputAriaLabel',
       noCache:            '=?mdNoCache',
       requireMatch:       '=?mdRequireMatch',
       selectOnMatch:      '=?mdSelectOnMatch',
@@ -303,8 +319,8 @@ function MdAutocomplete ($$mdSvgRegistry) {
         // be added to the element in the template function.
         ctrl.hasNotFound = !!element.attr('md-has-not-found');
 
-        // By default the inset autocomplete should show the clear button when not explicitly overwritten
-        // or in floating label mode.
+        // By default the inset autocomplete should show the clear button when not explicitly
+        // overwritten or in floating label mode.
         if (!angular.isDefined(attrs.mdClearButton) && !scope.floatingLabel) {
           scope.clearButton = true;
         }
@@ -370,7 +386,8 @@ function MdAutocomplete ($$mdSvgRegistry) {
         var templateTag = element.find('md-item-template').detach(),
             html = templateTag.length ? templateTag.html() : element.html();
         if (!templateTag.length) element.empty();
-        return '<md-autocomplete-parent-scope md-autocomplete-replace>' + html + '</md-autocomplete-parent-scope>';
+        return '<md-autocomplete-parent-scope md-autocomplete-replace>' + html +
+               '</md-autocomplete-parent-scope>';
       }
 
       function getNoItemsTemplate() {
