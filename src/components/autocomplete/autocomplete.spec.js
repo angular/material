@@ -1733,13 +1733,39 @@ describe('<md-autocomplete>', function() {
 
       ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
 
-      // Flush twice, because the display value will be resolved asynchronously and then the live-announcer will
-      // be triggered.
+      // Flush twice, because the display value will be resolved asynchronously and then the
+      // live-announcer will be triggered.
       $timeout.flush();
       $timeout.flush();
 
       expect(ctrl.index).toBe(1);
       expect(liveEl.textContent).toBe(scope.items[1].display);
+    });
+
+    it('should announce when an option is selected', function() {
+      ctrl.focus();
+      waitForVirtualRepeat();
+
+      expect(ctrl.hidden).toBe(false);
+
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+
+      // Flush twice, because the display value will be resolved asynchronously and then the
+      // live-announcer will be triggered.
+      $timeout.flush();
+      $timeout.flush();
+
+      expect(ctrl.index).toBe(0);
+      expect(liveEl.textContent).toBe(scope.items[0].display);
+
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ENTER));
+
+      // Flush twice, because the display value will be resolved asynchronously and then the
+      // live-announcer will be triggered.
+      $timeout.flush();
+      $timeout.flush();
+
+      expect(liveEl.textContent).toBe(scope.items[0].display + ' ' + ctrl.selectedMessage);
     });
 
     it('should announce the count when matches change', function() {

@@ -128,7 +128,12 @@ angular
  *     the dropdown.<br/><br/>
  *     When the dropdown doesn't fit into the viewport, the dropdown will shrink
  *     as much as possible.
- * @param {string=} md-dropdown-position Overrides the default dropdown position. Options: `top`, `bottom`.
+ * @param {string=} md-dropdown-position Overrides the default dropdown position. Options: `top`,
+ *    `bottom`.
+ * @param {string=} md-selected-message Attribute to specify the text that the screen reader will
+ *    announce after a value is selected. Default is: "selected". If `Alaska` is selected in the
+ *    options panel, it will read "Alaska selected". You will want to override this when your app
+ *    is running in a non-English locale.
  * @param {boolean=} ng-trim If set to false, the search text will be not trimmed automatically.
  *     Defaults to true.
  * @param {string=} ng-pattern Adds the pattern validator to the ngModel of the search text.
@@ -272,7 +277,8 @@ function MdAutocomplete ($$mdSvgRegistry) {
       escapeOptions:      '@?mdEscapeOptions',
       dropdownItems:      '=?mdDropdownItems',
       dropdownPosition:   '@?mdDropdownPosition',
-      clearButton:        '=?mdClearButton'
+      clearButton:        '=?mdClearButton',
+      selectedMessage:    '@?mdSelectedMessage'
     },
     compile: function(tElement, tAttrs) {
       var attributes = ['md-select-on-focus', 'md-no-asterisk', 'ng-trim', 'ng-pattern'];
