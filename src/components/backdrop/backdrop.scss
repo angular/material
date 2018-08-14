@@ -14,10 +14,10 @@ md-backdrop {
 
   &.md-menu-backdrop {
     position: fixed !important;
-    z-index: $z-index-menu - 1;
+    z-index: $z-index-menu - 2;
   }
   &.md-select-backdrop {
-    z-index: $z-index-dialog + 1;
+    z-index: $z-index-menu - 1;
     transition-duration: 0;
   }
   &.md-dialog-backdrop {
