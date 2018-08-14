@@ -78,6 +78,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     ctrl.styleTabItemFocus = false;
     ctrl.shouldCenterTabs  = shouldCenterTabs();
     ctrl.tabContentPrefix  = 'tab-content-';
+    ctrl.navigationHint = 'Use the left and right arrow keys to navigate between tabs';
 
     // Setup the tabs controller after all bindings are available.
     setupTabsController();
@@ -956,8 +957,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   }
 
   /**
-   * Sets the `aria-controls` attribute to the elements that
-   * correspond to the passed-in tab.
+   * Sets the `aria-controls` attribute to the elements that correspond to the passed-in tab.
    * @param tab
    */
   function setAriaControls (tab) {
