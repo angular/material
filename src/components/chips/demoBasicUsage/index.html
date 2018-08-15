@@ -5,7 +5,8 @@
 
     <form name="fruitForm">
       <md-chips ng-model="ctrl.roFruitNames" name="fruitName" readonly="ctrl.readonly"
-                md-removable="ctrl.removable" md-max-chips="5" placeholder="Enter a fruit...">
+                md-removable="ctrl.removable" md-max-chips="5" placeholder="Enter a fruit..."
+                input-aria-label="Fruit names">
         <md-chip-template>
           <strong>{{$chip}}</strong>
           <em>(fruit)</em>
@@ -26,15 +27,16 @@
     <br/>
     <h2 class="md-title">Use ng-change and add-on-blur</h2>
 
-    <md-chips ng-model="ctrl.ngChangeFruitNames" md-add-on-blur="true"
-              ng-change="ctrl.onModelChange(ctrl.ngChangeFruitNames)"
+    <md-chips ng-model="ctrl.ngChangeFruitNames" md-add-on-blur="true" readonly="ctrl.readonly"
+              ng-change="ctrl.onModelChange(ctrl.ngChangeFruitNames)" input-aria-label="Fruit names"
               md-removable="ctrl.removable"></md-chips>
 
     <br/>
     <h2 class="md-title">Make chips editable.</h2>
 
     <md-chips ng-model="ctrl.editableFruitNames" readonly="ctrl.readonly"
-              md-removable="ctrl.removable" md-enable-chip-edit="true"></md-chips>
+              md-removable="ctrl.removable" md-enable-chip-edit="true"
+              input-aria-label="Fruit names"></md-chips>
 
     <br/>
     <h2 class="md-title">Use Placeholders and override hint texts.</h2>
@@ -46,14 +48,21 @@
         placeholder="Enter a tag"
         delete-button-label="Remove Tag"
         delete-hint="Press delete to remove tag"
-        secondary-placeholder="+Tag"></md-chips>
+        md-added-message="was created"
+        md-removed-message="was deleted"
+        secondary-placeholder="+Tag"
+        input-aria-label="Tags"
+        container-hint="Chips container. Press the right and left arrow keys to change tag selection."
+        container-empty-hint="Chips container. Enter the text area, start typing, and then press enter when done to add a tag.">
+    </md-chips>
 
     <br/>
     <h2 class="md-title">Display an ordered set of objects as chips (with custom template).</h2>
     <p>Note: the variables <code>$chip</code> and <code>$index</code> are available in custom chip templates.</p>
 
     <md-chips class="custom-chips" ng-model="ctrl.vegObjs" readonly="ctrl.readonly"
-        md-transform-chip="ctrl.newVeg($chip)" md-removable="ctrl.removable">
+        md-transform-chip="ctrl.newVeg($chip)" md-removable="ctrl.removable"
+        input-aria-label="Vegetables">
       <md-chip-template>
         <span>
           <strong>[{{$index}}] {{$chip.name}}</strong>

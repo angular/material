@@ -21,12 +21,13 @@ angular
  * @param $element
  * @param $timeout
  * @param $mdUtil
+ * @param $mdLiveAnnouncer
  * @param $exceptionHandler
  * @constructor
  */
 function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $mdUtil,
-                      $exceptionHandler) {
-  /** @type {$timeout} **/
+                      $mdLiveAnnouncer, $exceptionHandler) {
+  /** @type {Function} **/
   this.$timeout = $timeout;
 
   /** @type {Object} */
@@ -43,6 +44,9 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
 
   /** @type {$log} */
   this.$log = $log;
+
+  /** @type {$mdLiveAnnouncer} */
+  this.$mdLiveAnnouncer = $mdLiveAnnouncer;
 
   /** @type {$exceptionHandler} */
   this.$exceptionHandler = $exceptionHandler;
@@ -84,12 +88,20 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
   this.inputAriaLabel = 'Chips input.';
 
   /**
-   * Hidden hint text to describe the chips container. Used to give context to screen readers when
-   * the chips are readonly and the input cannot be selected.
-   *
+   * Label text to describe the chips container. Used to give context and instructions to screen
+   * reader users when the chips container is selected.
    * @type {string}
    */
   this.containerHint = 'Chips container. Use arrow keys to select chips.';
+
+  /**
+   * Label text to describe the chips container when it is empty. Used to give context and
+   * instructions to screen reader users when the chips container is selected and it contains
+   * no chips.
+   * @type {string}
+   */
+  this.containerEmptyHint =
+    'Chips container. Enter the text area, then type text, and press enter to add a chip.';
 
   /**
    * Hidden hint text for how to delete a chip. Used to give context to screen readers.
@@ -150,7 +162,7 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
    * The index of the chip that should have it's `tabindex` property set to `0` so it is selectable
    * via the keyboard.
    *
-   * @type {number}
+   * @type {number|null}
    */
   this.ariaTabIndex = null;
 
@@ -172,6 +184,19 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
    */
   this.deRegister = [];
 
+  /**
+   * The screen reader will announce the chip content followed by this message when a chip is added.
+   * @type {string}
+   */
+  this.addedMessage = 'added';
+
+  /**
+   * The screen reader will announce the chip content followed by this message when a chip is
+   * removed.
+   * @type {string}
+   */
+  this.removedMessage = 'removed';
+
   this.init();
 }
 
@@ -184,7 +209,13 @@ MdChipsCtrl.prototype.init = function() {
   // Set the wrapper ID
   this.wrapperId = '_md-chips-wrapper-' + this.$mdUtil.nextUid();
 
-  // Setup a watcher which manages the role and aria-owns attributes
+  // If we're using static chips, then we need to initialize a few things.
+  if (!this.$element.attr('ng-model')) {
+    this.setupStaticChips();
+  }
+
+  // Setup a watcher which manages the role and aria-owns attributes.
+  // This is never called for static chips since items is not defined.
   this.deRegister.push(
     this.$scope.$watchCollection('$mdChipsCtrl.items', function() {
       // Make sure our input and wrapper have the correct ARIA attributes
@@ -223,6 +254,15 @@ MdChipsCtrl.prototype.setupInputAria = function() {
 
   input.attr('role', 'textbox');
   input.attr('aria-multiline', true);
+  if (this.inputAriaDescribedBy) {
+    input.attr('aria-describedby', this.inputAriaDescribedBy);
+  }
+  if (this.inputAriaLabelledBy) {
+    input.attr('aria-labelledby', this.inputAriaLabelledBy);
+    input.removeAttr('aria-label');
+  } else {
+    input.attr('aria-label', this.inputAriaLabel);
+  }
 };
 
 /**
@@ -244,11 +284,39 @@ MdChipsCtrl.prototype.setupWrapperAria = function() {
 
     // Use the contentIDs above to generate the aria-owns attribute
     wrapper.attr('aria-owns', this.contentIds.join(' '));
+    wrapper.attr('aria-label', this.containerHint);
   } else {
     // If we have no items, then the role and aria-owns attributes MUST be removed
     wrapper.removeAttr('role');
     wrapper.removeAttr('aria-owns');
+    wrapper.attr('aria-label', this.containerEmptyHint);
   }
+};
+
+/**
+ * Apply specific roles and aria attributes for static chips
+ */
+MdChipsCtrl.prototype.setupStaticChips = function() {
+  var ctrl = this, i, staticChips;
+  var wrapper = this.$element.find('md-chips-wrap');
+
+  this.$timeout(function() {
+    wrapper.attr('role', 'list');
+    staticChips = wrapper[0].children;
+    for (i = 0; i < staticChips.length; i++) {
+      staticChips[i].setAttribute('role', 'listitem');
+      staticChips[i].setAttribute('aria-setsize', staticChips.length);
+    }
+    if (ctrl.inputAriaDescribedBy) {
+      wrapper.attr('aria-describedby', ctrl.inputAriaDescribedBy);
+    }
+    if (ctrl.inputAriaLabelledBy) {
+      wrapper.attr('aria-labelledby', ctrl.inputAriaLabelledBy);
+      wrapper.removeAttr('aria-label');
+    } else {
+      wrapper.attr('aria-label', ctrl.inputAriaLabel);
+    }
+  }, 10);
 };
 
 /**
@@ -454,7 +522,7 @@ MdChipsCtrl.prototype.resetSelectedChip = function() {
 MdChipsCtrl.prototype.getAdjacentChipIndex = function(index) {
   var len = this.items.length - 1;
   return (len === 0) ? -1 :
-      (index === len) ? index -1 : index;
+      (index === len) ? index - 1 : index;
 };
 
 /**
@@ -490,6 +558,10 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
   var index = length - 1;
 
   this.updateNgModel();
+
+  // Tell screen reader users that the chip was successfully added.
+  var chipContent = typeof newChip === 'object' ? JSON.stringify(newChip) : newChip;
+  this.$mdLiveAnnouncer.announce(chipContent + ' ' + this.addedMessage, 'assertive');
 
   // If the md-on-add attribute is specified, send a chip addition event
   if (this.useOnAdd && this.onAdd) {
@@ -624,6 +696,10 @@ MdChipsCtrl.prototype.removeChip = function(index, event) {
 
   this.updateNgModel();
   this.ngModelCtrl.$setDirty();
+
+  // Tell screen reader users that the chip was successfully removed.
+  var chipContent = typeof removed[0] === 'object' ? JSON.stringify(removed[0]) : removed[0];
+  this.$mdLiveAnnouncer.announce(chipContent + ' ' + this.removedMessage, 'assertive');
 
   if (removed && removed.length && this.useOnRemove && this.onRemove) {
     this.onRemove({ '$chip': removed[0], '$index': index, '$event': event });
@@ -861,6 +937,13 @@ MdChipsCtrl.prototype.configureUserInput = function(inputElement) {
 MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
   if (ctrl) {
     this.autocompleteCtrl = ctrl;
+    // Update the default container empty hint when we're inside of an autocomplete.
+    if (!this.$element.attr('container-empty-hint')) {
+      this.containerEmptyHint = 'Chips container with autocompletion. Enter the text area, ' +
+        'type text to search, and then use the up and down arrow keys to select an option. ' +
+        'Press enter to add the selected option as a chip.';
+      this.setupWrapperAria();
+    }
 
     ctrl.registerSelectedItemWatcher(angular.bind(this, function (item) {
       if (item) {

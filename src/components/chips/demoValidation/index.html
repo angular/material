@@ -1,37 +1,43 @@
 <div ng-controller="ChipsValidationCtrl as ctrl" layout="column" ng-cloak>
   <md-content class="md-padding" layout="column">
 
-    <h2 class="md-title">Required</h2>
-    <form name="fruitForm">
-      <md-chips name="fruits"
+    <h2 class="md-title">Example: Required</h2>
+    <form name="form">
+      <label id="fruitLabel">Favorite Fruits</label>
+      <md-chips name="fruits" input-aria-labelledby="fruitLabel"
                 ng-model="ctrl.selectedFruit"
                 ng-required="true"
-                placeholder="Add a fruit">
+                placeholder="Ex. Apple"
+                secondary-placeholder="Add another fruit">
       </md-chips>
       <div class="md-chips-messages"
-           ng-show="fruitForm.fruits.$dirty || fruitForm.$submitted"
-           ng-messages="fruitForm.fruits.$error">
+           ng-show="form.fruits.$touched || form.$submitted"
+           ng-messages="form.fruits.$error">
         <div ng-message="required">At least one fruit is required</div>
       </div>
-    </form>
 
-
-    <h2 class="md-title">Max Chips</h2>
-    <form name="vegetableForm">
-      <md-chips name="vegetables"
+      <h2 class="md-title">Example: Max Chips</h2>
+      <label id="vegetableLabel">Favorite Vegetables</label>
+      <md-chips name="vegetables" input-aria-labelledby="vegetableLabel"
                 ng-model="ctrl.selectedVegetables"
-                placeholder="Add a vegetable"
-                md-max-chips="5">
+                md-max-chips="5"
+                placeholder="Ex. Carrot"
+                secondary-placeholder="Add another vegetable">
       </md-chips>
       <div class="md-chips-messages"
-           ng-show="vegetableForm.vegetables.$dirty || vegetableForm.$submitted"
-           ng-messages="vegetableForm.vegetables.$error">
+           ng-show="form.vegetables.$touched || form.$submitted"
+           ng-messages="form.vegetables.$error">
         <div ng-message="md-max-chips">You reached the maximum number of vegetables</div>
       </div>
+      <br>
+      <md-button class="md-primary" type="submit" ng-click="ctrl.onSubmit(form)">
+        Submit Form
+      </md-button>
     </form>
 
     <p class="note">
-      Be aware that error messages for chips are not styled by default since they are not part of <code>md-input-container</code>.
+      Be aware that error messages for chips are not styled by default since they are not part of
+      <code>md-input-container</code>.
     </p>
 
   </md-content>
