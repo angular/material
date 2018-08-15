@@ -96,14 +96,6 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       if ($scope.ariaDescribedBy) {
         elements.input.setAttribute('aria-describedby', $scope.ariaDescribedBy);
       }
-      if (!$scope.floatingLabel) {
-        if ($scope.ariaLabelledBy) {
-          elements.input.setAttribute('aria-labelledby', $scope.ariaLabelledBy);
-        } else {
-          // If no aria-labelledby references are defined, then just label using the placeholder.
-          elements.input.setAttribute('aria-label', $scope.placeholder);
-        }
-      }
     });
   }
 
