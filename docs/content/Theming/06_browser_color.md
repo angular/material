@@ -8,7 +8,7 @@
 
 ![browser color](https://cloud.githubusercontent.com/assets/6004537/18006666/50519c7e-6ba9-11e6-905b-c3751c20549c.png)
 
-Enables browser header coloring with [Material Design Colors](https://material.google.com/style/color.html) and the theming system.
+Enables browser header coloring with [Material Design Colors](https://material.io/archive/guidelines/style/color.html#) and the theming system.
 
 For more information, please visit:<br/> 
 https://developers.google.com/web/fundamentals/design-and-ui/browser-customization/theme-color.

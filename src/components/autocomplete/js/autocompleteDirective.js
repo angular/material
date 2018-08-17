@@ -177,10 +177,10 @@ angular
  *
  * ### Clear button for the input
  * By default, the clear button is displayed when there is input. This aligns with the spec's
- * [Search Pattern](https://material.io/guidelines/patterns/search.html#search-in-app-search).
+ * [Search Pattern](https://material.io/archive/guidelines/patterns/search.html#search-in-app-search).
  * In floating label mode, when `md-floating-label="My Label"` is applied, the clear button is not displayed
  * by default (see the spec's
- * [Autocomplete Text Field](https://material.io/guidelines/components/text-fields.html#text-fields-layout)).
+ * [Autocomplete Text Field](https://material.io/archive/guidelines/components/text-fields.html#text-fields-layout)).
  *
  * Nevertheless, developers are able to explicitly toggle the clear button for all autocomplete components
  * with `md-clear-button`.

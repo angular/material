@@ -11,7 +11,7 @@
  *
  *  Upon scrolling, subheaders remain pinned to the top of the screen and remain
  *  pinned until pushed on or off screen by the next subheader. @see [Material
- *  Design Specifications](https://www.google.com/design/spec/components/subheaders.html)
+ *  Design Specifications](https://material.io/archive/guidelines/components/subheaders.html)
  *
  *  > To improve the visual grouping of content, use the system color for your subheaders.
  *
