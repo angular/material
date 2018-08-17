@@ -9,6 +9,14 @@ md-switch.md-THEME_NAME-theme {
     background-color: '{{background-500}}';
   }
 
+  &.md-focused:not([disabled]) {
+    &:not(.md-checked) {
+      .md-thumb:before {
+        background-color: '{{foreground-4}}';
+      }
+    }
+  }
+
   &.md-checked {
     .md-ink-ripple {
       color: '{{accent-color}}';
