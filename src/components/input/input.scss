@@ -104,7 +104,7 @@ md-input-container {
     @include rtl(right, auto, 0);
 
     &.md-required:after {
-      content: ' *';
+      content: '*';
       font-size: 13px;
       vertical-align: top;
     }
