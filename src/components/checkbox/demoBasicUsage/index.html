@@ -29,6 +29,16 @@
           </div>
         </div>
         <div flex-gt-sm="50">
+          <md-checkbox ng-readonly="true" aria-label="read only checkbox" ng-model="data.cb6">
+            Checkbox: readonly, Checked
+          </md-checkbox>
+        </div>
+        <div flex-gt-sm="50">
+          <md-checkbox ng-readonly="true" aria-label="read only checked checkbox" ng-model="data.cb7" ng-init="data.cb7=true">
+            Checkbox: readonly
+          </md-checkbox>
+        </div>
+        <div flex-gt-sm="50">
           <md-checkbox ng-disabled="true" aria-label="Disabled checkbox" ng-model="data.cb3">
             Checkbox: Disabled
           </md-checkbox>
@@ -39,8 +49,9 @@
           </md-checkbox>
         </div>
         <div flex-gt-sm="50">
-          <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
-            Checkbox (md-primary): No Ink
+          <md-checkbox md-indeterminate aria-label="Checkbox Disabled Indeterminate"
+                       ng-disabled="true" class="md-primary">
+            Checkbox: Disabled, Indeterminate
           </md-checkbox>
         </div>
         <div flex-gt-sm="50">
@@ -50,9 +61,8 @@
           </md-checkbox>
         </div>
         <div flex-gt-sm="50">
-          <md-checkbox md-indeterminate aria-label="Checkbox Disabled Indeterminate"
-              ng-disabled="true" class="md-primary">
-            Checkbox: Disabled, Indeterminate
+          <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="data.cb5" class="md-primary">
+            Checkbox (md-primary): No Ink
           </md-checkbox>
         </div>
       </div>

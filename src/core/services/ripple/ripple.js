@@ -335,7 +335,7 @@ InkRippleCtrl.prototype.isRippleAllowed = function () {
     if (!element.tagName || element.tagName === 'BODY') break;
 
     if (element && angular.isFunction(element.hasAttribute)) {
-      if (element.hasAttribute('disabled')) return false;
+      if (element.hasAttribute('disabled') || element.hasAttribute('readonly')) return false;
       if (this.inkRipple() === 'false' || this.inkRipple() === '0') return false;
     }
 

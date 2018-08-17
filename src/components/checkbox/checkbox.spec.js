@@ -87,6 +87,28 @@ describe('mdCheckbox', function() {
     expect(pageScope.blue).toBe(true);
   });
 
+  it('should be disabled with readonly attr', function() {
+    var element = compileAndLink(
+      '<div>' +
+      '<md-checkbox ng-readonly="isReadOnly" ng-model="blue"></md-checkbox>' +
+      '</div>');
+
+    var checkbox = element.find('md-checkbox');
+
+    pageScope.isReadOnly = true;
+    pageScope.blue = false;
+    pageScope.$apply();
+
+    checkbox.triggerHandler('click');
+    expect(pageScope.blue).toBe(false);
+
+    pageScope.isReadOnly = false;
+    pageScope.$apply();
+
+    checkbox.triggerHandler('click');
+    expect(pageScope.blue).toBe(true);
+  });
+
   it('should prevent click handlers from firing when disabled', function() {
     pageScope.toggle = jasmine.createSpy('toggle');
 
@@ -96,6 +118,32 @@ describe('mdCheckbox', function() {
     checkbox.click();
 
     expect(pageScope.toggle).not.toHaveBeenCalled();
+  });
+
+  it('should prevent click handlers from firing when readonly', function () {
+
+    pageScope.toggle = jasmine.createSpy('toggle');
+
+    var checkbox = compileAndLink(
+      '<md-checkbox ng-readonly="true" ng-click="toggle()">On</md-checkbox>')[0];
+
+    checkbox.click();
+
+    expect(pageScope.toggle).not.toHaveBeenCalled();
+
+  });
+
+  it('should not prevent click handlers from firing when not readonly', function () {
+
+    pageScope.toggle = jasmine.createSpy('toggle');
+
+    var checkbox = compileAndLink(
+      '<md-checkbox ng-readonly="false" ng-click="toggle()">On</md-checkbox>')[0];
+
+    checkbox.click();
+
+    expect(pageScope.toggle).toHaveBeenCalled();
+
   });
 
   it('should preserve existing tabindex', function() {

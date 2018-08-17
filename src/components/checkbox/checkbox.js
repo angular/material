@@ -84,7 +84,7 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
         // Attach a click handler during preLink, in order to immediately stop propagation
         // (especially for ng-click) when the checkbox is disabled.
         element.on('click', function(e) {
-          if (this.hasAttribute('disabled')) {
+          if (this.hasAttribute('disabled') || this.hasAttribute('readonly')) {
             e.stopImmediatePropagation();
           }
         });
@@ -178,7 +178,7 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
       function listener(ev) {
         // skipToggle boolean is used by the switch directive to prevent the click event
         // when releasing the drag. There will be always a click if releasing the drag over the checkbox
-        if (element[0].hasAttribute('disabled') || scope.skipToggle) {
+        if (element[0].hasAttribute('disabled') || scope.skipToggle || element[0].hasAttribute('readonly')) {
           return;
         }
 
