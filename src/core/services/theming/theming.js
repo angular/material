@@ -361,7 +361,7 @@ function ThemingProvider($mdColorPalette, $injector) {
     },
 
     $get: ['$injector', function($injector) {
-      return $injector.invoke(themingService, undefined, { browserColor: browserColor });
+      return $injector.invoke(ThemingService, undefined, { browserColor: browserColor });
     }],
     _LIGHT_DEFAULT_HUES: LIGHT_DEFAULT_HUES,
     _DARK_DEFAULT_HUES: DARK_DEFAULT_HUES,
