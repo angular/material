@@ -489,7 +489,7 @@ function MdNavItem($mdAria, $$rAF, $mdUtil, $window) {
               mdNavItem.disabled = $mdUtil.parseAttributeBoolean(attrs[mutationList[0].attributeName], false);
             });
           };
-          var observer = new MutationObserver(mutationCallback);
+          var observer = new $window.MutationObserver(mutationCallback);
           observer.observe(targetNode, config);
           disconnect = observer.disconnect.bind(observer);
         } else {
