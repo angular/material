@@ -1,13 +1,6 @@
-<div ng-controller="AppCtrl" class="inset" ng-cloak style="height:300px; padding: 25px;">
-  <div layout="row">
-
-    <p>
-      Toast can have multiple actions:
-    </p>
-
-    <md-button ng-click="showCustomToast()" class="md-raised" style="padding-left: 10px;padding-right: 10px;">
-      Show Custom Toast
-    </md-button>
-
-  </div>
+<div ng-controller="AppCtrl as ctrl" id="custom-toast-container" class="inset" ng-cloak>
+  <span>Toast can have multiple actions:</span>
+  <md-button ng-click="ctrl.showCustomToast()" class="md-raised">
+    Show Custom Toast
+  </md-button>
 </div>

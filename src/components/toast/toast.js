@@ -156,9 +156,30 @@ function MdToastDirective($mdToast) {
   *        <td>`.action(string)`</td>
   *        <td>
   *          Adds an action button. <br/>
-  *          If clicked, the promise (returned from `show()`)
-  *          will resolve with the value `'ok'`; otherwise, it is resolved with `true` after a `hideDelay`
-  *          timeout
+  *          If clicked, the promise (returned from `show()`) will resolve with the value `'ok'`;
+  *          otherwise, it is resolved with `true` after a `hideDelay` timeout.
+  *        </td>
+  *      </tr>
+  *      <tr>
+  *        <td>`.actionKey(string)`</td>
+  *        <td>
+  *          Adds a hotkey for the action button. <br/>
+  *          If the `actionKey` and Control are pressed, the toast's action will be triggered.<br>
+  *          Defaults to the first character of the action if not defined.
+  *        </td>
+  *      </tr>
+  *      <tr>
+  *        <td>`.actionHint(string)`</td>
+  *        <td>
+  *          Text that a screen reader will announce to let the user know how to activate the
+  *          action. <br>Defaults to: "Press Control-"`actionKey`" to " followed by the action.
+  *        </td>
+  *      </tr>
+  *      <tr>
+  *        <td>`.dismissHint(string)`</td>
+  *        <td>
+  *          Text that a screen reader will announce to let the user know how to dismiss the toast.
+  *          <br>Defaults to: "Press Escape to dismiss."
   *        </td>
   *      </tr>
   *      <tr>
@@ -232,9 +253,11 @@ function MdToastDirective($mdToast) {
   *   - `scope` - `{object=}`: the scope to link the template / controller to. If none is specified, it will create a new child scope.
   *     This scope will be destroyed when the toast is removed unless `preserveScope` is set to true.
   *   - `preserveScope` - `{boolean=}`: whether to preserve the scope when the element is removed. Default is false
-  *   - `hideDelay` - `{number=}`: How many milliseconds the toast should stay
-  *     active before automatically closing.  Set to 0 or false to have the toast stay open until
-  *     closed manually. Default: 3000.
+  *   - `hideDelay` - `{number=}`: The number of milliseconds the toast should stay active before
+  *     automatically closing. Set to `0` or `false` to have the toast stay open until closed
+  *     manually via an action in the toast, a hotkey, or a swipe gesture. For accessibility, toasts
+  *     should not automatically close when they contain an action.<br>
+  *     Defaults to: `3000`.
   *   - `position` - `{string=}`: Sets the position of the toast. <br/>
   *     Available: any combination of `'bottom'`, `'left'`, `'top'`, `'right'`, `'end'` and `'start'`.
   *     The properties `'end'` and `'start'` are dynamic and can be used for RTL support.<br/>
@@ -247,7 +270,7 @@ function MdToastDirective($mdToast) {
   *     be used as names of values to inject into the controller. For example,
   *     `locals: {three: 3}` would inject `three` into the controller with the value
   *     of 3.
-  *   - `bindToController` - `bool`: bind the locals to the controller, instead of passing them in.
+  *   - `bindToController` - `{boolean=}`: bind the locals to the controller, instead of passing them in.
   *   - `resolve` - `{object=}`: Similar to locals, except it takes promises as values
   *     and the toast will not open until the promises resolve.
   *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
@@ -295,7 +318,8 @@ function MdToastDirective($mdToast) {
   */
 
 function MdToastProvider($$interimElementProvider) {
-  // Differentiate promise resolves: hide timeout (value == true) and hide action clicks (value == ok).
+  // Differentiate promise resolves: hide timeout (value == true) and hide action clicks
+  // (value == ok).
   var ACTION_RESOLVE = 'ok';
 
   var activeToastContent;
@@ -306,17 +330,22 @@ function MdToastProvider($$interimElementProvider) {
     })
     .addPreset('simple', {
       argOption: 'textContent',
-      methods: ['textContent', 'content', 'action', 'highlightAction', 'highlightClass', 'theme', 'parent' ],
+      methods: ['textContent', 'content', 'action', 'actionKey', 'actionHint', 'highlightAction',
+                'highlightClass', 'theme', 'parent', 'dismissHint' ],
       options: /* @ngInject */ function($mdToast, $mdTheming) {
         return {
           template:
             '<md-toast md-theme="{{ toast.theme }}" ng-class="{\'md-capsule\': toast.capsule}">' +
-            '  <div class="md-toast-content">' +
-            '    <span class="md-toast-text" role="alert" aria-relevant="all" aria-atomic="true">' +
+            '  <div class="md-toast-content" aria-live="polite" aria-relevant="all">' +
+            '    <span class="md-toast-text">' +
             '      {{ toast.content }}' +
             '    </span>' +
+            '    <span class="md-visually-hidden">{{ toast.dismissHint }}</span>' +
+            '    <span class="md-visually-hidden" ng-if="toast.action">' +
+            '      {{ toast.actionHint }}' +
+            '    </span>' +
             '    <md-button class="md-action" ng-if="toast.action" ng-click="toast.resolve()" ' +
-            '        ng-class="highlightClasses">' +
+            '               ng-class="highlightClasses">' +
             '      {{ toast.action }}' +
             '    </md-button>' +
             '  </div>' +
@@ -329,6 +358,8 @@ function MdToastProvider($$interimElementProvider) {
       }
     })
     .addMethod('updateTextContent', updateTextContent)
+    // updateContent is deprecated. Use updateTextContent instead.
+    // TODO remove this in 1.2.
     .addMethod('updateContent', updateTextContent);
 
     function updateTextContent(newContent) {
@@ -354,18 +385,31 @@ function MdToastProvider($$interimElementProvider) {
         ];
       }
 
+      // If no actionKey is defined, use the first char of the action name.
+      if (self.action && !self.actionKey) {
+        self.actionKey = self.action.charAt(0).toLocaleLowerCase();
+      }
+
+      if (self.actionKey && !self.actionHint) {
+        self.actionHint = 'Press Control-"' + self.actionKey + '" to ';
+      }
+
+      if (!self.dismissHint) {
+        self.dismissHint = 'Press Escape to dismiss.';
+      }
+
       $scope.$watch(function() { return activeToastContent; }, function() {
         self.content = activeToastContent;
       });
 
       this.resolve = function() {
-        $mdToast.hide( ACTION_RESOLVE );
+        $mdToast.hide(ACTION_RESOLVE);
       };
     };
   }
 
   /* @ngInject */
-  function toastDefaultOptions($animate, $mdToast, $mdUtil, $mdMedia) {
+  function toastDefaultOptions($animate, $mdToast, $mdUtil, $mdMedia, $document) {
     var SWIPE_EVENTS = '$md.swipeleft $md.swiperight $md.swipeup $md.swipedown';
     return {
       onShow: onShow,
@@ -409,7 +453,9 @@ function MdToastProvider($$interimElementProvider) {
     };
 
     function onShow(scope, element, options) {
-      activeToastContent = options.textContent || options.content; // support deprecated #content method
+      // support deprecated #content method
+      // TODO remove support for content in 1.2.
+      activeToastContent = options.textContent || options.content;
 
       var isSmScreen = !$mdMedia('gt-sm');
 
@@ -423,8 +469,8 @@ function MdToastProvider($$interimElementProvider) {
 
         // If the swipe direction is down/up but the toast came from top/bottom don't fade away
         // Unless the screen is small, then the toast always on bottom
-        if ((direction === 'down' && options.position.indexOf('top') != -1 && !isSmScreen) ||
-            (direction === 'up' && (options.position.indexOf('bottom') != -1 || isSmScreen))) {
+        if ((direction === 'down' && options.position.indexOf('top') !== -1 && !isSmScreen) ||
+            (direction === 'up' && (options.position.indexOf('bottom') !== -1 || isSmScreen))) {
           return;
         }
 
@@ -447,23 +493,31 @@ function MdToastProvider($$interimElementProvider) {
         options.parent.css('position', 'relative');
       }
 
+      setupActionKeyListener(scope.toast ? scope.toast.actionKey : undefined);
       element.on(SWIPE_EVENTS, options.onSwipe);
       element.addClass(isSmScreen ? 'md-bottom' : options.position.split(' ').map(function(pos) {
         return 'md-' + pos;
       }).join(' '));
 
-      if (options.parent) options.parent.addClass('md-toast-animating');
+      if (options.parent) {
+        options.parent.addClass('md-toast-animating');
+      }
       return $animate.enter(element, options.parent).then(function() {
-        if (options.parent) options.parent.removeClass('md-toast-animating');
+        if (options.parent) {
+          options.parent.removeClass('md-toast-animating');
+        }
       });
     }
 
     function onRemove(scope, element, options) {
+      if (scope.toast && scope.toast.actionKey) {
+        removeActionKeyListener();
+      }
       element.off(SWIPE_EVENTS, options.onSwipe);
       if (options.parent) options.parent.addClass('md-toast-animating');
       if (options.openClass) options.parent.removeClass(options.openClass);
 
-      return ((options.$destroy == true) ? element.remove() : $animate.leave(element))
+      return ((options.$destroy === true) ? element.remove() : $animate.leave(element))
         .then(function () {
           if (options.parent) options.parent.removeClass('md-toast-animating');
           if ($mdUtil.hasComputedStyle(options.parent, 'position', 'static')) {
@@ -478,9 +532,26 @@ function MdToastProvider($$interimElementProvider) {
         return 'md-toast-open-bottom';
       }
 
-      return 'md-toast-open-' +
-        (position.indexOf('top') > -1 ? 'top' : 'bottom');
+      return 'md-toast-open-' + (position.indexOf('top') > -1 ? 'top' : 'bottom');
+    }
+
+    function setupActionKeyListener(actionKey) {
+      /**
+       * @param {KeyboardEvent} event
+       */
+      var handleKeyDown = function(event) {
+        if (event.key === 'Escape') {
+          $mdToast.hide(false);
+        }
+        if (actionKey && event.key === actionKey && event.ctrlKey) {
+          $mdToast.hide(ACTION_RESOLVE);
+        }
+      };
+      $document.on('keydown', handleKeyDown);
+    }
+
+    function removeActionKeyListener() {
+      $document.off('keydown');
     }
   }
-
 }
