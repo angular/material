@@ -760,6 +760,35 @@ describe('$mdTheming service', function() {
     expect($mdTheming.THEMES.hasOwnProperty('test')).toBeTruthy();
   }));
 
+  it('supports setting palette options when registering theme on the fly', inject(function ($mdTheming) {
+    expect($mdTheming.THEMES.hasOwnProperty('testHues')).toBeFalsy();
+
+    $mdTheming.defineTheme('testHues', {
+      primary: 'red',
+      primaryHues: {
+        default: '300'
+      },
+      accent: 'blue',
+      accentHues: {
+        default: '600'
+      },
+      warn: 'yellow',
+      warnHues: {
+        default: '200'
+      },
+      background: 'amber',
+      backgroundHues: {
+        default: '800'
+      },
+    });
+
+    expect($mdTheming.THEMES.hasOwnProperty('testHues')).toBeTruthy();
+    expect($mdTheming.THEMES.testHues.colors.primary.hues.default).toBe('300');
+    expect($mdTheming.THEMES.testHues.colors.accent.hues.default).toBe('600');
+    expect($mdTheming.THEMES.testHues.colors.warn.hues.default).toBe('200');
+    expect($mdTheming.THEMES.testHues.colors.background.hues.default).toBe('800');
+  }));
+
   it('supports changing browser color on the fly', function() {
     var name = 'theme-color';
     var primaryPalette = $mdThemingProvider._THEMES.default.colors.primary.name;
