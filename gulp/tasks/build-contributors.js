@@ -1,5 +1,6 @@
 const child_process = require('child_process');
 const os = require('os');
+const path = require('path');
 
 (function () {
   'use strict';
@@ -11,15 +12,16 @@ const os = require('os');
   exports.task = function () {
     const appPath = 'dist/docs';
 
-    child_process.execSync('rm -f ' + appPath + '/contributors.json');
-
     if (os.platform() === 'win32') {
+      const contributorsPath = path.join(process.cwd(), appPath, 'contributors.json');
+      child_process.execSync('del /f /q ' + contributorsPath);
       process.chdir('./node_modules/.bin');
       child_process.execSync('githubcontrib.cmd --owner angular --repo material --cols 6' +
         ' --format json --showlogin true --sha master --sortOrder desc > '
-        + '../../' + appPath + '/contributors.json');
+        + contributorsPath);
       process.chdir('../..');
     } else {
+      child_process.execSync('rm -f ' + appPath + '/contributors.json');
       exec([
         './node_modules/.bin/githubcontrib --owner angular --repo material --cols 6 --format json' +
         ' --showlogin true --sha master --sortOrder desc > ' + appPath + '/contributors.json'
