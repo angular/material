@@ -46,7 +46,7 @@ function SliderContainerDirective() {
         elem.attr('md-vertical', '');
       }
 
-      if(!slider.attr('flex')) {
+      if (!slider.attr('flex')) {
         slider.attr('flex', '');
       }
 
@@ -139,13 +139,21 @@ function SliderContainerDirective() {
  *
  * @param {expression} ng-model Assignable angular expression to be data-bound.
  *  The expression should evaluate to a `number`.
- * @param {boolean=} md-discrete Whether to enable discrete mode.
- * @param {boolean=} md-invert Whether to enable invert mode.
- * @param {number=} step The distance between values the user is allowed to pick. Default `1`.
- * @param {number=} min The minimum value the user is allowed to pick. Default `0`.
- * @param {number=} max The maximum value the user is allowed to pick. Default `100`.
+ * @param {expression=} ng-disabled If this expression evaluates as truthy, the slider will be
+ *  disabled.
+ * @param {expression=} ng-readonly If this expression evaluates as truthy, the slider will be in
+ *  read only mode.
+ * @param {boolean=} md-discrete If this attribute exists during initialization, enable discrete
+ *  mode. Defaults to `false`.
+ * @param {boolean=} md-vertical If this attribute exists during initialization, enable vertical
+ *  orientation mode. Defaults to `false`.
+ * @param {boolean=} md-invert If this attribute exists during initialization, enable inverted mode.
+ *  Defaults to `false`.
+ * @param {number=} step The distance between values the user is allowed to pick. Defaults to `1`.
+ * @param {number=} min The minimum value the user is allowed to pick. Defaults to `0`.
+ * @param {number=} max The maximum value the user is allowed to pick. Defaults to `100`.
  * @param {number=} round The amount of numbers after the decimal point. The maximum is 6 to
- *  prevent scientific notation. Default `3`.
+ *  prevent scientific notation. Defaults to `3`.
  */
 function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdTheming, $mdGesture,
                          $parse, $log, $timeout) {
@@ -353,7 +361,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     }
 
     function clearTicks() {
-      if(tickCanvas && tickCtx) {
+      if (tickCanvas && tickCtx) {
         var dimensions = getSliderDimensions();
         tickCtx.clearRect(0, 0, dimensions.width, dimensions.height);
       }

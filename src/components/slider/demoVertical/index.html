@@ -1,11 +1,11 @@
 <div ng-controller="AppCtrl" ng-cloak>
-  <md-content layout="row" layout-padding>
+  <div layout="row" layout-padding>
     <md-slider-container flex>
       <md-input-container>
         <input flex type="number" ng-model="vol" aria-label="volume" aria-controls="volume-slider">
       </md-input-container>
-      <md-slider ng-model="vol" min="0" max="100" aria-label="volume" id="volume-slider" class="md-accent" md-vertical
-                 md-range></md-slider>
+      <md-slider ng-model="vol" min="0" max="100" aria-label="volume" id="volume-slider" class="md-accent"
+                 md-vertical></md-slider>
       </md-slider>
       <h5>Volume</h5>
     </md-slider-container>
@@ -29,5 +29,5 @@
       </md-slider-container>
       <md-checkbox ng-model="readonly">Read only</md-checkbox>
     </div>
-  </md-content>
+  </div>
 </div>
