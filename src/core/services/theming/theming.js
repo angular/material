@@ -574,6 +574,8 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    * @description
    * Service that makes an element apply theming related <b>classes</b> to itself.
    *
+   * For more information on the hue objects, their default values, as well as valid hue values, please visit <a ng-href="Theming/03_configuring_a_theme#specifying-custom-hues-for-color-intentions">the custom hues section of Configuring a Theme</a>.
+   *
    * <hljs lang="js">
    * // Example component directive that we want to apply theming classes to.
    * app.directive('myFancyDirective', function($mdTheming) {
@@ -585,7 +587,27 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    *
    *       $mdTheming.defineTheme('myTheme', {
    *         primary: 'blue',
+   *         primaryHues: {
+   *           default: '500',
+   *           hue-1: '300',
+   *           hue-2: '900',
+   *           hue-3: 'A100'
+   *         },
    *         accent: 'pink',
+   *         accentHues: {
+   *           default: '600',
+   *           hue-1: '300',
+   *           hue-2: '200',
+   *           hue-3: 'A500'
+   *         },
+   *         warn: 'red',
+   *         // It's not necessary to specify all hues in the object.
+   *         warnHues: {
+   *           default: '200',
+   *           hue-3: 'A100'
+   *         },
+   *         // It's not necessary to specify custom hues at all.
+   *         background: 'grey',
    *         dark: true
    *       });
    *       // Your directive's custom code here.
@@ -670,9 +692,13 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    * @param {object} options Theme definition options
    * Options are:<br/>
    * - `primary` - `{string}`: The name of the primary palette to use in the theme.<br/>
+   * - `primaryHues` - `{object=}`: Override hues for primary palette.<br/>
    * - `accent` - `{string}`: The name of the accent palette to use in the theme.<br/>
+   * - `accentHues` - `{object=}`: Override hues for accent palette.<br/>
    * - `warn` - `{string}`: The name of the warn palette to use in the theme.<br/>
+   * - `warnHues` - `{object=}`: Override hues for warn palette.<br/>
    * - `background` - `{string}`: The name of the background palette to use in the theme.<br/>
+   * - `backgroundHues` - `{object=}`: Override hues for background palette.<br/>
    * - `dark` - `{boolean}`: Indicates if it's a dark theme.<br/>
    * @returns {Promise<string>} A resolved promise with the new theme name.
    */
@@ -711,16 +737,16 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
       var theme = registerTheme(name);
 
       if (options.primary) {
-        theme.primaryPalette(options.primary);
+        theme.primaryPalette(options.primary, options.primaryHues);
       }
       if (options.accent) {
-        theme.accentPalette(options.accent);
+        theme.accentPalette(options.accent, options.accentHues);
       }
       if (options.warn) {
-        theme.warnPalette(options.warn);
+        theme.warnPalette(options.warn, options.warnHues);
       }
       if (options.background) {
-        theme.backgroundPalette(options.background);
+        theme.backgroundPalette(options.background, options.backgroundHues);
       }
       if (options.dark){
         theme.dark();
