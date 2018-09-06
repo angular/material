@@ -5,7 +5,7 @@
 
 /***************************************************
 
- ### TODO - POST RC1 ###
+ ### TODO ###
  - [ ] Abstract placement logic in $mdSelect service to $mdMenu service
 
  ***************************************************/
@@ -32,42 +32,15 @@ angular.module('material.components.select', [
  * @restrict E
  * @module material.components.select
  *
- * @description Displays a select box, bound to an ng-model.
+ * @description Displays a select box, bound to an `ng-model`. Selectable options are defined using
+ * the <a ng-href="/api/directive/mdOption">md-option</a> element directive. Options can be grouped
+ * using the <a ng-href="/api/directive/mdOptgroup">md-optgroup</a> element directive.
  *
  * When the select is required and uses a floating label, then the label will automatically contain
  * an asterisk (`*`). This behavior can be disabled by using the `md-no-asterisk` attribute.
  *
  * By default, the select will display with an underline to match other form elements. This can be
  * disabled by applying the `md-no-underline` CSS class.
- *
- * ### Option Params
- *
- * When applied, `md-option-empty` will mark the option as "empty" allowing the option to  clear the
- * select and put it back in it's default state. You may supply this attribute on any option you
- * wish, however, it is automatically applied to an option whose `value` or `ng-value` are not
- * defined.
- *
- * **Automatically Applied**
- *
- *  - `<md-option>`
- *  - `<md-option value>`
- *  - `<md-option value="">`
- *  - `<md-option ng-value>`
- *  - `<md-option ng-value="">`
- *
- * **NOT Automatically Applied**
- *
- *  - `<md-option ng-value="1">`
- *  - `<md-option ng-value="''">`
- *  - `<md-option ng-value="undefined">`
- *  - `<md-option value="undefined">` (this evaluates to the string `"undefined"`)
- *  - <code ng-non-bindable>&lt;md-option ng-value="{{someValueThatMightBeUndefined}}"&gt;</code>
- *
- * **Note:** A value of `undefined` ***is considered a valid value*** (and does not auto-apply this
- * attribute) since you may wish this to be your "Not Available" or "None" option.
- *
- * **Note:** Using the `value` attribute (as opposed to `ng-value`) always evaluates to a string, so
- * `value="null"` will require the test `ng-if="myValue != 'null'"` rather than `ng-if="!myValue"`.
  *
  * @param {expression} ng-model Assignable angular expression to data-bind to.
  * @param {expression=} ng-change Expression to be executed when the model value changes.
@@ -115,15 +88,12 @@ angular.module('material.components.select', [
  *   </md-input-container>
  * </hljs>
  *
- * With a select-header
+ * Using the `md-select-header` element directive
  *
- * When a developer needs to put more than just a text label in the
- * md-select-menu, they should use the md-select-header.
- * The user can put custom HTML inside of the header and style it to their liking.
- * One common use case of this would be a sticky search bar.
- *
- * When using the md-select-header the labels that would previously be added to the
- * OptGroupDirective are ignored.
+ * When a developer needs to put more than just a text label in the `md-select-menu`, they should
+ * use one or more `md-select-header`s. These elements can contain custom HTML which can be styled
+ * as desired. Use cases for this element include a sticky search bar and custom option group
+ * labels.
  *
  * <hljs lang="html">
  *   <md-input-container>
@@ -157,8 +127,8 @@ angular.module('material.components.select', [
  * </div>
  * </hljs>
  *
- * At first one might expect that the select should be populated with "Bob" as the selected user. However,
- * this is not true. To determine whether something is selected,
+ * At first one might expect that the select should be populated with "Bob" as the selected user.
+ * However, this is not true. To determine whether something is selected,
  * `ngModelController` is looking at whether `$scope.selectedUser == (any user in $scope.users);`;
  *
  * Javascript's `==` operator does not check for deep equality (ie. that all properties
@@ -166,12 +136,15 @@ angular.module('material.components.select', [
  * In this case, we have two instances of identical objects, but they exist in memory as unique
  * entities. Because of this, the select will have no value populated for a selected user.
  *
- * To get around this, `ngModelController` provides a `track by` option that allows us to specify a different
- * expression which will be used for the equality operator. As such, we can update our `html` to
- * make use of this by specifying the `ng-model-options="{trackBy: '$value.id'}"` on the `md-select`
- * element. This converts our equality expression to be
+ * To get around this, `ngModelController` provides a `track by` option that allows us to specify a
+ * different expression which will be used for the equality operator. As such, we can update our
+ * `html` to make use of this by specifying the `ng-model-options="{trackBy: '$value.id'}"` on the
+ * `md-select` element. This converts our equality expression to be
  * `$scope.selectedUser.id == (any id in $scope.users.map(function(u) { return u.id; }));`
  * which results in Bob being selected as desired.
+ *
+ * **Note:** We do not support AngularJS's `track by` syntax. For instance
+ *  `ng-options="user in users track by user.id"` will not work with `md-select`.
  *
  * Working HTML:
  * <hljs lang="html">
@@ -925,6 +898,82 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
 
 }
 
+/**
+ * @ngdoc directive
+ * @name mdOption
+ * @restrict E
+ * @module material.components.select
+ *
+ * @description Displays an option in a <a ng-href="/api/directive/mdSelect">md-select</a> box's
+ * dropdown menu. Options can be grouped using
+ * <a ng-href="/api/directive/mdOptgroup">md-optgroup</a> element directives.
+ *
+ * ### Option Params
+ *
+ * When applied, `md-option-empty` will mark the option as "empty" allowing the option to clear the
+ * select and put it back in it's default state. You may supply this attribute on any option you
+ * wish, however, it is automatically applied to an option whose `value` or `ng-value` are not
+ * defined.
+ *
+ * **Automatically Applied**
+ *
+ *  - `<md-option>`
+ *  - `<md-option value>`
+ *  - `<md-option value="">`
+ *  - `<md-option ng-value>`
+ *  - `<md-option ng-value="">`
+ *
+ * **NOT Automatically Applied**
+ *
+ *  - `<md-option ng-value="1">`
+ *  - `<md-option ng-value="''">`
+ *  - `<md-option ng-value="undefined">`
+ *  - `<md-option value="undefined">` (this evaluates to the string `"undefined"`)
+ *  - <code ng-non-bindable>&lt;md-option ng-value="{{someValueThatMightBeUndefined}}"&gt;</code>
+ *
+ * **Note:** A value of `undefined` ***is considered a valid value*** (and does not auto-apply this
+ * attribute) since you may wish this to be your "Not Available" or "None" option.
+ *
+ * **Note:** Using the
+ * <a ng-href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/option#Attributes">value</a>
+ * attribute from the `<option>` element (as opposed to the `<md-option>` element's
+ * <a ng-href="https://docs.angularjs.org/api/ng/directive/ngValue">ng-value</a>) always evaluates
+ * to a `string`. This means that `value="null"` will cause a check against `myValue != "null"`
+ * rather than `!myValue` or `myValue != null`.
+ * Importantly, this also applies to `number` values. `value="1"` will not match up with an
+ * `ng-model` like `$scope.selectedValue = 1`. Use `ng-value="1"` in this case and other cases where
+ * you have values that are not strings.
+ *
+ * **Note:** Please see our <a ng-href="/api/directive/mdSelect#selects-and-object-equality">docs on
+ * using objects with `md-select`</a> for additional guidance on using the `trackBy` option with
+ * `ng-model-options`.
+ *
+ * @param {expression=} ng-value Binds the given expression to the value of the option.
+ * @param {string=} value Attribute to set the value of the option.
+ * @param {expression=} ng-repeat <a ng-href="https://docs.angularjs.org/api/ng/directive/ngRepeat">
+ *  AngularJS directive</a> that instantiates a template once per item from a collection.
+ * @param {boolean=} md-option-empty If the attribute exists, mark the option as "empty" allowing
+ * the option to clear the select and put it back in it's default state. You may supply this
+ * attribute on any option you wish, however, it is automatically applied to an option whose `value`
+ * or `ng-value` are not defined.
+ * @param {number=} tabindex The `tabindex` of the option. Defaults to `0`.
+ *
+ * @usage
+ * <hljs lang="html">
+ * <md-select ng-model="currentState" placeholder="Select a state">
+ *   <md-option ng-value="AL">Alabama</md-option>
+ *   <md-option ng-value="AK">Alaska</md-option>
+ *   <md-option ng-value="FL">Florida</md-option>
+ * </md-select>
+ * </hljs>
+ *
+ * With `ng-repeat`:
+ * <hljs lang="html">
+ * <md-select ng-model="currentState" placeholder="Select a state">
+ *   <md-option ng-value="state" ng-repeat="state in states">{{ state }}</md-option>
+ * </md-select>
+ * </hljs>
+ */
 function OptionDirective($mdButtonInkRipple, $mdUtil, $mdTheming) {
 
   return {
@@ -1056,6 +1105,54 @@ function OptionDirective($mdButtonInkRipple, $mdUtil, $mdTheming) {
 
 }
 
+/**
+ * @ngdoc directive
+ * @name mdOptgroup
+ * @restrict E
+ * @module material.components.select
+ *
+ * @description Displays a label separating groups of
+ * <a ng-href="/api/directive/mdOption">md-option</a> element directives in a
+ * <a ng-href="/api/directive/mdSelect">md-select</a> box's dropdown menu.
+ *
+ * **Note:** When using `md-select-header` element directives within a `md-select`, the labels that
+ * would normally be added to the <a ng-href="/api/directive/mdOptgroup">md-optgroup</a> directives
+ * are omitted, allowing the `md-select-header` to represent the option group label
+ * (and possibly more).
+ *
+ * @usage
+ * With label attributes
+ * <hljs lang="html">
+ * <md-select ng-model="currentState" placeholder="Select a state">
+ *   <md-optgroup label="Southern">
+ *     <md-option ng-value="AL">Alabama</md-option>
+ *     <md-option ng-value="FL">Florida</md-option>
+ *   </md-optgroup>
+ *   <md-optgroup label="Northern">
+ *     <md-option ng-value="AK">Alaska</md-option>
+ *     <md-option ng-value="MA">Massachusetts</md-option>
+ *   </md-optgroup>
+ * </md-select>
+ * </hljs>
+ *
+ * With label elements
+ * <hljs lang="html">
+ * <md-select ng-model="currentState" placeholder="Select a state">
+ *   <md-optgroup>
+ *     <label>Southern</label>
+ *     <md-option ng-value="AL">Alabama</md-option>
+ *     <md-option ng-value="FL">Florida</md-option>
+ *   </md-optgroup>
+ *   <md-optgroup>
+ *     <label>Northern</label>
+ *     <md-option ng-value="AK">Alaska</md-option>
+ *     <md-option ng-value="MA">Massachusetts</md-option>
+ *   </md-optgroup>
+ * </md-select>
+ * </hljs>
+ *
+ * @param {string=} label The option group's label.
+ */
 function OptgroupDirective() {
   return {
     restrict: 'E',
