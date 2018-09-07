@@ -1,5 +1,5 @@
 describe('md-input-container directive', function() {
-  var $rootScope, $compile, $timeout, pageScope;
+  var $rootScope, $compile, $timeout, pageScope, $material;
 
   var invalidAnimation, messagesAnimation, messageAnimation;
   var $animProvider;
@@ -10,6 +10,7 @@ describe('md-input-container directive', function() {
   beforeEach(inject(function($injector) {
     $compile = $injector.get('$compile');
     $timeout = $injector.get('$timeout');
+    $material = $injector.get('$material');
 
     $rootScope = $injector.get('$rootScope');
     pageScope = $rootScope.$new();
@@ -981,9 +982,8 @@ describe('md-input-container directive', function() {
           '  <input ng-model="foo">' +
           '</md-input-container>'
         );
-
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-left')).toBeTruthy();
-
       });
 
       it('should add md-icon-left class when .md-icon is before the input', function() {
@@ -993,6 +993,7 @@ describe('md-input-container directive', function() {
           '  <input ng-model="foo">' +
           '</md-input-container>'
         );
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-left')).toBeTruthy();
       });
 
@@ -1003,7 +1004,7 @@ describe('md-input-container directive', function() {
           '  <md-icon></md-icon>' +
           '</md-input-container>'
         );
-
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-right')).toBeTruthy();
 
       });
@@ -1015,7 +1016,52 @@ describe('md-input-container directive', function() {
           '  <i class="md-icon"></i>' +
           '</md-input-container>'
         );
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-right')).toBeTruthy();
+      });
+      it('should not add md-icon-left class when md-icon is before the input and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <md-icon ng-if="false"></md-icon>' +
+          '  <input ng-model="foo">' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-left')).toBeFalsy();
+      });
+
+      it('should not add md-icon-left class when .md-icon is before the input and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <i class="md-icon" ng-if="false"></i>' +
+          '  <input ng-model="foo">' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-left')).toBeFalsy();
+      });
+
+      it('should not add md-icon-right class when md-icon is after the input and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <input ng-model="foo">' +
+          '  <md-icon ng-if="false"></md-icon>' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-right')).toBeFalsy();
+
+      });
+
+      it('should not add md-icon-right class when .md-icon is after the input and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <input ng-model="foo">' +
+          '  <i class="md-icon" ng-if="false"></i>' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-right')).toBeFalsy();
       });
 
       it('should add md-icon-left and md-icon-right classes when md-icons are before and after the input', function() {
@@ -1026,6 +1072,7 @@ describe('md-input-container directive', function() {
           '  <md-icon></md-icon>' +
           '</md-input-container>'
         );
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-left md-icon-right')).toBeTruthy();
       });
 
@@ -1037,7 +1084,32 @@ describe('md-input-container directive', function() {
           '  <i class="md-icon"></i>' +
           '</md-input-container>'
         );
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-left md-icon-right')).toBeTruthy();
+      });
+
+      it('should not add md-icon-left and md-icon-right classes when md-icons are before and after the input and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <md-icon ng-if="false"></md-icon>' +
+          '  <input ng-model="foo">' +
+          '  <md-icon ng-if="false"></md-icon>' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-left md-icon-right')).toBeFalsy();
+      });
+
+      it('should not add md-icon-left and md-icon-right classes when .md-icons are before and after the input and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <i class="md-icon" ng-if="false"></i>' +
+          '  <input ng-model="foo">' +
+          '  <i class="md-icon" ng-if="false"></i>' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-left md-icon-right')).toBeFalsy();
       });
 
       it('should add md-icon-left class when md-icon is before select', function() {
@@ -1047,7 +1119,7 @@ describe('md-input-container directive', function() {
           '  <md-select ng-model="foo"></md-select>' +
           '</md-input-container>'
         );
-
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-left')).toBeTruthy();
       });
 
@@ -1058,7 +1130,7 @@ describe('md-input-container directive', function() {
           '  <md-icon></md-icon>' +
           '</md-input-container>'
         );
-
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-right')).toBeTruthy();
       });
 
@@ -1069,7 +1141,7 @@ describe('md-input-container directive', function() {
           '  <textarea ng-model="foo"></textarea>' +
           '</md-input-container>'
         );
-
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-left')).toBeTruthy();
       });
 
@@ -1080,8 +1152,30 @@ describe('md-input-container directive', function() {
           '  <md-icon></md-icon>' +
           '</md-input-container>'
         );
-
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-right')).toBeTruthy();
+      });
+
+      it('should not add md-icon-left class when md-icon is before textarea and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <md-icon ng-if="false"></md-icon>' +
+          '  <textarea ng-model="foo"></textarea>' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-left')).toBeFalsy();
+      });
+
+      it('should not add md-icon-right class when md-icon is before textarea and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <textarea ng-model="foo"></textarea>' +
+          '  <md-icon ng-if="false"></md-icon>' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-right')).toBeFalsy();
       });
     });
   });
