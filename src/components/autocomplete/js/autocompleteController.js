@@ -547,7 +547,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   function keydown (event) {
     switch (event.keyCode) {
       case $mdConstant.KEY_CODE.DOWN_ARROW:
-        if (ctrl.loading) return;
+        if (ctrl.loading || hasSelection()) return;
         event.stopPropagation();
         event.preventDefault();
         ctrl.index   = Math.min(ctrl.index + 1, ctrl.matches.length - 1);
@@ -555,7 +555,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         reportMessages(false, ReportType.Selected);
         break;
       case $mdConstant.KEY_CODE.UP_ARROW:
-        if (ctrl.loading) return;
+        if (ctrl.loading || hasSelection()) return;
         event.stopPropagation();
         event.preventDefault();
         ctrl.index   = ctrl.index < 0 ? ctrl.matches.length - 1 : Math.max(0, ctrl.index - 1);
@@ -702,16 +702,16 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   }
 
   /**
-   * Determines if the escape keydown should be processed
-   * @returns {boolean}
+   * @returns {boolean} if the escape keydown should be processed, return true.
+   *  Otherwise return false.
    */
   function shouldProcessEscape() {
     return hasEscapeOption('blur') || !ctrl.hidden || ctrl.loading || hasEscapeOption('clear') && $scope.searchText;
   }
 
   /**
-   * Determines if an escape option is set
-   * @returns {boolean}
+   * @param {string} option check if this option is set
+   * @returns {boolean} if the specified escape option is set, return true. Return false otherwise.
    */
   function hasEscapeOption(option) {
     return !$scope.escapeOptions || $scope.escapeOptions.toLowerCase().indexOf(option) !== -1;

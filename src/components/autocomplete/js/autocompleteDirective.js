@@ -348,10 +348,16 @@ function MdAutocomplete ($$mdSvgRegistry) {
               role="presentation">\
             <ul class="md-autocomplete-suggestions"\
                 ng-class="::menuClass"\
-                id="ul-{{$mdAutocompleteCtrl.id}}">\
+                id="ul-{{$mdAutocompleteCtrl.id}}"\
+                role="listbox">\
               <li md-virtual-repeat="item in $mdAutocompleteCtrl.matches"\
                   ng-class="{ selected: $index === $mdAutocompleteCtrl.index }"\
+                  ng-attr-id="{{$index === $mdAutocompleteCtrl.index ? \'selected_option\' : undefined}}"\
                   ng-click="$mdAutocompleteCtrl.select($index)"\
+                  role="option"\
+                  aria-setsize="{{$mdAutocompleteCtrl.matches.length}}"\
+                  aria-posinset="{{$index+1}}"\
+                  aria-selected="{{$index === $mdAutocompleteCtrl.index ? true : false}}" \
                   md-extra-name="$mdAutocompleteCtrl.itemName">\
                   ' + itemTemplate + '\
                   </li>' + noItemsTemplate + '\
@@ -382,56 +388,56 @@ function MdAutocomplete ($$mdSvgRegistry) {
             <md-input-container ng-if="floatingLabel">\
               <label>{{floatingLabel}}</label>\
               <input type="search"\
-                  ' + (tabindex != null ? 'tabindex="' + tabindex + '"' : '') + '\
-                  id="{{ inputId || \'fl-input-\' + $mdAutocompleteCtrl.id }}"\
-                  name="{{inputName}}"\
-                  ng-class="::inputClass"\
-                  autocomplete="off"\
-                  ng-required="$mdAutocompleteCtrl.isRequired"\
-                  ng-readonly="$mdAutocompleteCtrl.isReadonly"\
-                  ng-minlength="inputMinlength"\
-                  ng-maxlength="inputMaxlength"\
-                  ng-disabled="$mdAutocompleteCtrl.isDisabled"\
-                  ng-model="$mdAutocompleteCtrl.scope.searchText"\
-                  ng-model-options="{ allowInvalid: true }"\
-                  ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
-                  ng-blur="$mdAutocompleteCtrl.blur($event)"\
-                  ng-focus="$mdAutocompleteCtrl.focus($event)"\
-                  aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
-                  aria-label="{{floatingLabel}}"\
-                  aria-autocomplete="list"\
-                  role="combobox"\
-                  aria-haspopup="true"\
-                  aria-activedescendant=""\
-                  aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>\
+                ' + (tabindex != null ? 'tabindex="' + tabindex + '"' : '') + '\
+                id="{{ inputId || \'fl-input-\' + $mdAutocompleteCtrl.id }}"\
+                name="{{inputName}}"\
+                ng-class="::inputClass"\
+                autocomplete="off"\
+                ng-required="$mdAutocompleteCtrl.isRequired"\
+                ng-readonly="$mdAutocompleteCtrl.isReadonly"\
+                ng-minlength="inputMinlength"\
+                ng-maxlength="inputMaxlength"\
+                ng-disabled="$mdAutocompleteCtrl.isDisabled"\
+                ng-model="$mdAutocompleteCtrl.scope.searchText"\
+                ng-model-options="{ allowInvalid: true }"\
+                ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
+                ng-blur="$mdAutocompleteCtrl.blur($event)"\
+                ng-focus="$mdAutocompleteCtrl.focus($event)"\
+                aria-label="{{floatingLabel}}"\
+                aria-autocomplete="list"\
+                role="combobox"\
+                aria-haspopup="true"\
+                aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"\
+                aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
+                ng-attr-aria-activedescendant="{{$mdAutocompleteCtrl.index >= 0 ? \'selected_option\' : undefined}}">\
               <div md-autocomplete-parent-scope md-autocomplete-replace>' + leftover + '</div>\
             </md-input-container>';
         } else {
           return '\
             <input type="search"\
-                ' + (tabindex != null ? 'tabindex="' + tabindex + '"' : '') + '\
-                id="{{ inputId || \'input-\' + $mdAutocompleteCtrl.id }}"\
-                name="{{inputName}}"\
-                ng-class="::inputClass"\
-                ng-if="!floatingLabel"\
-                autocomplete="off"\
-                ng-required="$mdAutocompleteCtrl.isRequired"\
-                ng-disabled="$mdAutocompleteCtrl.isDisabled"\
-                ng-readonly="$mdAutocompleteCtrl.isReadonly"\
-                ng-minlength="inputMinlength"\
-                ng-maxlength="inputMaxlength"\
-                ng-model="$mdAutocompleteCtrl.scope.searchText"\
-                ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
-                ng-blur="$mdAutocompleteCtrl.blur($event)"\
-                ng-focus="$mdAutocompleteCtrl.focus($event)"\
-                placeholder="{{placeholder}}"\
-                aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
-                aria-label="{{placeholder}}"\
-                aria-autocomplete="list"\
-                role="combobox"\
-                aria-haspopup="true"\
-                aria-activedescendant=""\
-                aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"/>';
+              ' + (tabindex != null ? 'tabindex="' + tabindex + '"' : '') + '\
+              id="{{ inputId || \'input-\' + $mdAutocompleteCtrl.id }}"\
+              name="{{inputName}}"\
+              ng-class="::inputClass"\
+              ng-if="!floatingLabel"\
+              autocomplete="off"\
+              ng-required="$mdAutocompleteCtrl.isRequired"\
+              ng-disabled="$mdAutocompleteCtrl.isDisabled"\
+              ng-readonly="$mdAutocompleteCtrl.isReadonly"\
+              ng-minlength="inputMinlength"\
+              ng-maxlength="inputMaxlength"\
+              ng-model="$mdAutocompleteCtrl.scope.searchText"\
+              ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
+              ng-blur="$mdAutocompleteCtrl.blur($event)"\
+              ng-focus="$mdAutocompleteCtrl.focus($event)"\
+              placeholder="{{placeholder}}"\
+              aria-label="{{placeholder}}"\
+              aria-autocomplete="list"\
+              role="combobox"\
+              aria-haspopup="true"\
+              aria-expanded="{{!$mdAutocompleteCtrl.hidden}}"\
+              aria-owns="ul-{{$mdAutocompleteCtrl.id}}"\
+              ng-attr-aria-activedescendant="{{$mdAutocompleteCtrl.index >= 0 ? \'selected_option\' : undefined}}">';
         }
       }
 
