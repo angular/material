@@ -252,8 +252,8 @@
    *
    * @ngInject @constructor
    */
-  function DatePickerCtrl($scope, $element, $attrs, $window, $mdConstant,
-    $mdTheming, $mdUtil, $mdDateLocale, $$mdDateUtil, $$rAF, $filter) {
+  function DatePickerCtrl($scope, $element, $attrs, $window, $mdConstant, $mdTheming, $mdUtil,
+                          $mdDateLocale, $$mdDateUtil, $$rAF, $filter, $timeout) {
 
     /** @final */
     this.$window = $window;
@@ -264,7 +264,7 @@
     /** @final */
     this.$mdConstant = $mdConstant;
 
-    /* @final */
+    /** @final */
     this.$mdUtil = $mdUtil;
 
     /** @final */
@@ -272,6 +272,9 @@
 
     /** @final */
     this.$mdDateLocale = $mdDateLocale;
+
+    /** @final */
+    this.$timeout = $timeout;
 
     /**
      * The root document element. This is used for attaching a top-level click handler to
@@ -833,7 +836,7 @@
         // in IE when md-open-on-focus is set. Also it needs to trigger
         // a digest, in order to prevent issues where the calendar wasn't
         // showing up on the next open.
-        self.$mdUtil.nextTick(reset);
+        self.$timeout(reset);
       } else {
         reset();
       }
