@@ -111,9 +111,11 @@ angular
  *   }
  *
  *   function PanelMenuCtrl(mdPanelRef) {
- *     // The controller is provided with an import named 'mdPanelRef'
+ *     // 'mdPanelRef' is injected in the controller.
  *     this.closeMenu = function() {
- *       mdPanelRef && mdPanelRef.close();
+ *       if (mdPanelRef) {
+ *         mdPanelRef.close();
+ *       }
  *     };
  *   }
  * })(angular);
