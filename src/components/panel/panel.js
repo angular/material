@@ -3354,27 +3354,28 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl) {
       panelEl.css('opacity', '1');
 
       animationOptions = {
-        transitionInClass: '_md-panel-animate-enter'
+        transitionInClass: '_md-panel-animate-enter',
+        transitionOutClass: '_md-panel-animate-leave'
       };
 
-      var openSlide = animator.calculateSlideToOrigin(
-              panelEl, this._openFrom) || '';
+      var openSlide = animator.calculateSlideToOrigin(panelEl, this._openFrom) || '';
       openFrom = animator.toTransformCss(openSlide + ' ' + panelTransform);
       break;
 
     case MdPanelAnimation.animation.SCALE:
       animationOptions = {
-        transitionInClass: '_md-panel-animate-enter'
+        transitionInClass: '_md-panel-animate-enter',
+        transitionOutClass: '_md-panel-animate-scale-out _md-panel-animate-leave'
       };
 
-      var openScale = animator.calculateZoomToOrigin(
-              panelEl, this._openFrom) || '';
+      var openScale = animator.calculateZoomToOrigin(panelEl, this._openFrom) || '';
       openFrom = animator.toTransformCss(openScale + ' ' + panelTransform);
       break;
 
     case MdPanelAnimation.animation.FADE:
       animationOptions = {
-        transitionInClass: '_md-panel-animate-enter'
+        transitionInClass: '_md-panel-animate-enter',
+        transitionOutClass: '_md-panel-animate-fade-out _md-panel-animate-leave'
       };
       break;
 
@@ -3419,7 +3420,8 @@ MdPanelAnimation.prototype.animateClose = function(panelEl) {
       // Slide should start with opacity: 1.
       panelEl.css('opacity', '1');
       reverseAnimationOptions = {
-        transitionInClass: '_md-panel-animate-leave'
+        transitionInClass: '_md-panel-animate-leave',
+        transitionOutClass: '_md-panel-animate-enter'
       };
 
       var closeSlide = animator.calculateSlideToOrigin(
@@ -3429,7 +3431,8 @@ MdPanelAnimation.prototype.animateClose = function(panelEl) {
 
     case MdPanelAnimation.animation.SCALE:
       reverseAnimationOptions = {
-        transitionInClass: '_md-panel-animate-scale-out _md-panel-animate-leave'
+        transitionInClass: '_md-panel-animate-scale-out _md-panel-animate-leave',
+        transitionOutClass: '_md-panel-animate-enter'
       };
 
       var closeScale = animator.calculateZoomToOrigin(
@@ -3439,7 +3442,8 @@ MdPanelAnimation.prototype.animateClose = function(panelEl) {
 
     case MdPanelAnimation.animation.FADE:
       reverseAnimationOptions = {
-        transitionInClass: '_md-panel-animate-fade-out _md-panel-animate-leave'
+        transitionInClass: '_md-panel-animate-fade-out _md-panel-animate-leave',
+        transitionOutClass: '_md-panel-animate-enter'
       };
       break;
 
