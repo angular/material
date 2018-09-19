@@ -442,8 +442,54 @@ MyController.prototype.$onInit = function() {
 
 ### BREAKING CHANGES
 
-* autocomplete: The autocomplete validator `md-require-match` no longer matches if the search text is empty
+* **autocomplete:** The autocomplete validator `md-require-match` no longer matches if the search text is empty.
+* **select:** `md-selected-text` now only accepts text. It used to accept and render html but this was an XSS vulnerability.
+  It was fixed in: block xss on md-select-label ([#10023](https://github.com/angular/material/issues/10023)) ([f7ecb4f](https://github.com/angular/material/commit/f7ecb4f)).
 
+We have added a new `md-selected-html` API for `md-select`. It accepts an expression to be evaluated
+that will return a string to be displayed as a placeholder in the select input box when it is
+closed. The value will be treated as html. The value **must** either be explicitly marked as
+**trustedHtml** or the **ngSanitize** module must be loaded.
+
+Given the following code:
+```html
+<md-select ng-model="selectedItem" md-selected-text="getSelectedText()">
+```
+```js
+angular
+    .module('selectDemoSelectedText', ['ngMaterial'])
+    .controller('SelectedTextController', function($scope) {
+      $scope.items = [1, 2, 3, 4, 5, 6, 7];
+      $scope.selectedItem = undefined;
+      $scope.getSelectedText = function() {
+        if ($scope.selectedItem !== undefined) {
+          return "You have selected: Item <strong>" + $scope.selectedItem + "</strong>";
+        } else {
+          return "Please select an item";
+        }
+      };
+    });
+```
+
+Change it to this:
+```html
+<md-select ng-model="selectedItem" md-selected-html="getSelectedText()">
+```
+```js
+angular
+    .module('selectDemoSelectedText', ['ngMaterial', 'ngSanitize'])
+    .controller('SelectedTextController', function($scope) {
+      $scope.items = [1, 2, 3, 4, 5, 6, 7];
+      $scope.selectedItem = undefined;
+      $scope.getSelectedText = function() {
+        if ($scope.selectedItem !== undefined) {
+          return "You have selected: Item <strong>" + $scope.selectedItem + "</strong>";
+        } else {
+          return "Please select an item";
+        }
+      };
+    });
+```
 
 <a name="1.1.1"></a>
 ## [Angular Material 1.1.1](https://github.com/angular/material/compare/v1.1.0...v1.1.1) (2016-09-01)
