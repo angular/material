@@ -1250,7 +1250,15 @@ function SelectProvider($$interimElementProvider) {
         element
           .removeClass('md-active')
           .attr('aria-hidden', 'true')
-          .css('display', 'none');
+          .css({
+            'display': 'none',
+            'top': '',
+            'right': '',
+            'bottom': '',
+            'left': '',
+            'font-size': '',
+            'min-width': ''
+          });
         element.parent().find('md-select-value').removeAttr('aria-hidden');
 
         announceClosed(opts);
