@@ -21,7 +21,7 @@ Quick Links:
 Please note that using AngularJS Material requires the use of **[AngularJS](https://angularjs.org/)
 1.4.x** or higher.
 
-AngularJS Material is targeted for the browser versions defined in the `broswerslist` field
+AngularJS Material is targeted for the browser versions defined in the `browserslist` field
 of our [package.json](package.json). Below is a screenshot from 
 [browserl.ist](http://browserl.ist/?q=%3E+0.5%25%2C+last+2+versions%2C+Firefox+ESR%2C+not+ie+%3C%3D+10%2C+not+ie_mob+%3C%3D+10%2C+not+bb+%3C%3D+10%2C+not+op_mob+%3C%3D+12.1)
 that provides a visual representation of this configuration:
@@ -150,7 +150,7 @@ CDN versions of AngularJS Material are now available.
 
 With the Google CDN, you will not need to download local copies of the distribution files. Instead
 simply reference the CDN urls to easily use those remote library files. This is especially useful
-when using online tools such as [CodePen](http://codepen.io/), [Plunkr](http://plnkr.co/), or
+when using online tools such as [CodePen](http://codepen.io/), [Plunker](http://plnkr.co/), or
 [JSFiddle](http://jsfiddle.net/).
 
 ```html
