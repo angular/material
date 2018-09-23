@@ -68,12 +68,6 @@ md-switch {
       right: -8px;
       bottom: -8px;
     }
-
-    &:not(.md-checked) {
-      .md-thumb:before {
-        background-color: rgba(0, 0, 0, 0.12);
-      }
-    }
   }
 
   .md-label {
