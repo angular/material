@@ -1,13 +1,11 @@
-const sauceBrowsers = require('./sauce-browsers.json');
 const path = require('path');
 
 module.exports = function(config) {
 
   const UNCOMPILED_SRC = [
 
-    // To enabled use of `gulp karma-watch`,
-    // don't use the dist/angular-material.js
-    //
+    // To enable use of `gulp karma-watch`,
+    // don't use the dist/angular-material.js.
     //'dist/angular-material.js',   // Un-minified source
 
 
@@ -47,13 +45,16 @@ module.exports = function(config) {
   const testSrc = process.env.KARMA_TEST_COMPRESSED ? COMPILED_SRC : UNCOMPILED_SRC;
 
   config.set({
-
     basePath: path.join(__dirname, '/..'),
+    plugins: [
+      require("karma-jasmine"),
+      require("karma-chrome-launcher"),
+      require('karma-firefox-launcher')
+    ],
     frameworks: ['jasmine'],
     files: dependencies.concat(testSrc),
-    customLaunchers: sauceBrowsers,
 
-    browserDisconnectTimeout:500,
+    browserDisconnectTimeout: 500,
 
     logLevel: config.LOG_DEBUG,
     port: 9876,
@@ -80,5 +81,4 @@ module.exports = function(config) {
       clearContext:false
     }
   });
-
 };

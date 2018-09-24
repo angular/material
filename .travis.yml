@@ -1,8 +1,12 @@
 language: node_js
+dist: trusty
+addons:
+  chrome: stable
+  firefox: latest
 sudo: false
 
 node_js:
-  - '8'
+  - '10'
 
 env:
   global:
@@ -13,10 +17,12 @@ env:
   - BROWSER_STACK_USERNAME=angularteam1
   - BROWSER_STACK_ACCESS_KEY=BWCd4SynLzdDcv8xtzsB
   - secure: X7CNmOMemAJ9Jqrsmv6MXyeh8n8TIL5CKzE9LYsZUbsyKo0l5CyyysJq0y/AbpQS6awsSv2qP/cZ/kand6r6z0wMFbUcxa4HjMZEfRwv3sGtwj1OKJko/GvjcZQzD54FtHy1NU7wR0mYhAlE5IwH7f8bMa/nUiijgD/TOCTtKH8=
+  - MOZ_HEADLESS=1
 
 cache:
   directories:
   - node_modules/
+  - "$HOME/.npm"
   - tmp/angular.js
 
 branches:
@@ -35,7 +41,7 @@ jobs:
       env: "MODE=release"
 
 install:
-- npm install
+- npm ci
 - npm rebuild node-sass
 
 before_script:
