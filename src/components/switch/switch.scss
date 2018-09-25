@@ -61,7 +61,7 @@ md-switch {
     }
   }
 
-  &.md-focused:not([disabled]) {
+  &.md-focused {
     .md-thumb:before {
       left: -8px;
       top: -8px;
