@@ -35,7 +35,7 @@
  *
  * The width of the menu when it is open may be specified by specifying a `width`
  * attribute on the `md-menu-content` element.
- * See the [Material Design Spec](https://material.io/guidelines/components/menus.html#menus-simple-menus)
+ * See the [Material Design Spec](https://material.io/archive/guidelines/components/menus.html#menus-simple-menus)
  * for more information.
  *
  *

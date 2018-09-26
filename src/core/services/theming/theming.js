@@ -149,7 +149,7 @@ var GENERATED = { };
 var PALETTES;
 
 // Text Colors on light and dark backgrounds
-// @see https://www.google.com/design/spec/style/color.html#color-text-background-colors
+// @see https://material.io/archive/guidelines/style/color.html#color-usability
 var DARK_FOREGROUND = {
   name: 'dark',
   '1': 'rgba(0,0,0,0.87)',

@@ -6,7 +6,7 @@ AngularJS Material provides typography CSS classes you can use to create visual
 consistency across your application.
 
 <p style="text-align: center;">
-  [Material Design Typography Specification](https://material.google.com/style/typography.html)
+  [Material Design Typography Specification](https://material.io/archive/guidelines/style/typography.html)
 </p>
 
 <section class="demo-container">

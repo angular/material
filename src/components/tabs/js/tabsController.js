@@ -655,7 +655,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     var elements = getElements(),
       containerWidth = elements.canvas.clientWidth,
 
-      // See https://material.io/design/components/tabs.html#spec which has been updated to 360px.
+      // See https://material.io/archive/guidelines/components/tabs.html#tabs-specs
       specMax = 264;
 
     // Do the spec maximum, or the canvas width; whichever is *smaller* (tabs larger than the canvas
@@ -673,7 +673,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
       containerWidth = elements.canvas.clientWidth,
       xsBreakpoint = 600,
 
-      // See https://material.io/design/components/tabs.html#spec which has been updated to 90px.
+      // See https://material.io/archive/guidelines/components/tabs.html#tabs-specs
       specMin = containerWidth > xsBreakpoint ? 160 : 72;
 
     // Do the spec minimum, or the canvas width; whichever is *smaller* (tabs larger than the canvas

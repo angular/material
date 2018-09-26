@@ -4,7 +4,7 @@
 
 Material Design is a visual language with specifications for innovative user experiences (UX) and user interface (UI) elements. Themes convey meaning through color, tones, and contrasts, similar to how Layouts convey meaning through keylines and alignments.
 
-Theme [**color palettes**](http://www.google.com/design/spec/style/color.html#color-ui-color-palette), alphas, and shadows deliver a consistent tone to your application and a unified feel for all AngularJS Material UI components.
+Theme [**color palettes**](https://material.io/archive/guidelines/style/color.html#color-color-palette), alphas, and shadows deliver a consistent tone to your application and a unified feel for all AngularJS Material UI components.
 
 Theming allows changing the color of your AngularJS Material application. If you
 need more custom styling (such as layout changes including padding, margins,

@@ -3642,7 +3642,7 @@ Bugs fixed:
 #### Breaking Changes
 
 * As per the
-[spec](http://www.google.com/design/spec/style/color.html#color-ui-color-application)
+[spec](https://material.io/archive/guidelines/style/color.html#color-color-system)
 this commit changes the default color palette of FABs, checkboxes, radio
 buttons, sliders and switches to the accent palette.
 

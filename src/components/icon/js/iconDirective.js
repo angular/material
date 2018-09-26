@@ -96,7 +96,7 @@ angular
  * determine its textual name and character reference code. Click on any icon to see the slide-up information
  * panel with details regarding a SVG download or information on the font-icon usage.
  *
- * <a href="https://www.google.com/design/icons/#ic_accessibility" target="_blank" style="border-bottom:none;">
+ * <a href="https://material.io/tools/icons/?icon=accessibility&style=baseline" target="_blank" style="border-bottom:none;">
  * <img src="https://cloud.githubusercontent.com/assets/210413/7902490/fe8dd14c-0780-11e5-98fb-c821cc6475e6.png"
  *      aria-label="Material Design Icon-Selector" style="max-width:75%;padding-left:10%">
  * </a>

@@ -105,7 +105,7 @@ function SliderContainerDirective() {
  * @description
  * The `<md-slider>` component allows the user to choose from a range of values.
  *
- * As per the [material design spec](https://material.io/guidelines/style/color.html#color-color-system)
+ * As per the [Material Design spec](https://material.io/archive/guidelines/style/color.html#color-color-system)
  * the slider is in the accent color by default. The primary color palette may be used with
  * the `md-primary` class.
  *

@@ -142,7 +142,7 @@ describe('md-colors', function () {
 
     /**
      * md-colors applies smart foreground colors (in case 'background' property is used) according the palettes from
-     * https://www.google.com/design/spec/style/color.html#color-color-palette
+     * https://material.io/archive/guidelines/style/color.html#color-color-palette
      */
     describe('foreground color', function () {
       /**
