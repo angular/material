@@ -2,9 +2,11 @@
   <md-content>
     <h2 class="md-headline" style="margin-top: 0;">What is AngularJS Material?</h2>
     <p>
-      AngularJS Material is both a UI Component framework and a reference implementation of Google's
-      <a href="https://material.io/archive/guidelines/" target="_blank" rel="noopener">Material Design Specification</a>.
-      This project provides a set of reusable, well-tested, and accessible UI components based on Material Design.
+      AngularJS Material is an implementation of Google's
+      <a href="https://material.io/archive/guidelines/" target="_blank" rel="noopener">
+        Material Design Specification (2014-2017)</a>.
+      This project provides a set of reusable, well-tested, and accessible UI components for
+      <a href="https://angularjs.org" target="_blank" rel="noopener">AngularJS</a> developers.
     </p>
     <ul class="buckets" layout layout-align="center center" layout-wrap>
       <li flex="50" flex-gt-md="25" ng-repeat="(index, link) in [
@@ -24,7 +26,6 @@
       </li>
     </ul>
 
-    <br/>
     <h2 class="md-headline">AngularJS versus Angular?</h2>
     <p>
       The AngularJS Material library is a mature and stable product that is ready for production use.
@@ -32,11 +33,32 @@
       <a href="https://angularjs.org/" target="_blank" rel="noopener">AngularJS 1.x</a>.
     </p>
     <ul>
-      <li>Current AngularJS Material development efforts are focused on bug fixes, accessibility, and minor improvements.</li>
-      <li>The Angular Material library (for Angular v2+) can be found in the
-        <a href="https://github.com/angular/material2">angular/material2</a> GitHub repository.
+      <li>
+        Current AngularJS Material development efforts are focused on bug fixes, accessibility, and
+        minor improvements.
+      </li>
+      <li>
+        The Angular Material library (for Angular v2+) can be found in the
+        <a href="https://github.com/angular/material2" target="_blank" rel="noopener">angular/material2</a>
+        GitHub repository.
       </li>
     </ul>
+
+    <br/>
+    <h2 class="md-headline">The Latest Material Design</h2>
+    <p>
+      The latest update to Material Design
+      (<a href="https://www.youtube.com/playlist?list=PLJ21zHI2TNh-rX-Xr_xi9KIEcbdee_1Ah" target="_blank" rel="noopener">video playlist</a>)
+      was announced at Google I/O in May, 2018
+      (<a href="https://design.google/library/io-2018-our-definitive-guide-design/" target="_blank" rel="noopener">recap blog post</a>).
+      For an implementation of this new
+      <a href="https://material.io/design" target="_blank" rel="noopener">Material Design Specification</a>,
+      please see the <a href="https://github.com/angular/material2" target="_blank" rel="noopener">Angular Material</a>
+      project which is built for <a href="https://angular.io" target="_blank" rel="noopener">Angular</a>
+      developers.
+    </p>
+
+    <h2 class="md-headline">Change Log</h2>
     <p>
       Please refer to our changelog for up-to-date listings of all v1.x improvements and breaking changes.
     </p>
@@ -227,8 +249,8 @@
     <br/>
     <p class="md-caption" style="text-align: center; margin-bottom: 0;">
       These docs were generated from
-      (<a ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}" target="_blank" class="md-accent" >
-      v{{BUILDCONFIG.version}} - SHA {{BUILDCONFIG.commit.substring(0,7)}}</a>)
+      (<a ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}" target="_blank"
+          rel="noopener" class="md-accent">v{{BUILDCONFIG.version}} - SHA {{BUILDCONFIG.commit.substring(0,7)}}</a>)
       on (<strong>{{BUILDCONFIG.date}}</strong>) GMT.
     </p>
   </md-content>

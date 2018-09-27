@@ -1,13 +1,23 @@
-# Material Design for AngularJS Apps [![Build Status](https://travis-ci.org/angular/material.svg)](https://travis-ci.org/angular/material)
+# Material Design for AngularJS Apps
+[![npm version](https://badge.fury.io/js/angular-material.svg)](https://www.npmjs.com/package/angular-material)
+[![Build Status](https://travis-ci.org/angular/material.svg)](https://travis-ci.org/angular/material)
+[![Gitter](https://badges.gitter.im/angular/material2.svg)](https://gitter.im/angular/material?utm_source=badge&utm_medium=badge)
 
 [Material Design](https://material.io/archive/guidelines/) is a specification for a
 unified system of visual, motion, and interaction design that adapts across different devices. Our
 goal is to deliver a lean, lightweight set of AngularJS-native UI elements that implement the
 material design specification for use in AngularJS single-page applications (SPAs).
 
+**AngularJS Material** is an implementation of Google's 
+[Material Design Specification (2014-2017)](https://material.io/archive/guidelines/material-design/)
+for [AngularJS](https://angularjs.org) developers.
+
+For an implementation of the [Material Design Specification (2018+)](https://material.io/design/),
+please see the [Angular Material](https://github.com/angular/material2) project which is built for
+[Angular](https://angular.io) developers.
+
 ![venn diagram](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
 
-AngularJS Material is an implementation of Google's [Material Design Specification](https://material.io/archive/guidelines/material-design/).
 AngularJS Material includes a rich set of reusable, well-tested, and accessible UI components.
 
 Quick Links:
@@ -203,4 +213,3 @@ Once you have all the necessary assets installed, add `ngMaterial` and `ngMessag
 ```javascript
 angular.module('myApp', ['ngMaterial', 'ngMessages']);
 ```
-
