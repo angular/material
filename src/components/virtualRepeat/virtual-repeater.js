@@ -527,13 +527,14 @@ function VirtualRepeatDirective($parse) {
 
 /** @ngInject */
 function VirtualRepeatController($scope, $element, $attrs, $browser, $document, $rootScope,
-    $$rAF, $mdUtil) {
+    $$rAF, $mdUtil, $timeout) {
   this.$scope = $scope;
   this.$element = $element;
   this.$attrs = $attrs;
   this.$browser = $browser;
   this.$document = $document;
   this.$mdUtil = $mdUtil;
+  this.$timeout = $timeout;
   this.$rootScope = $rootScope;
   this.$$rAF = $$rAF;
 
@@ -838,9 +839,9 @@ VirtualRepeatController.prototype.virtualRepeatUpdate_ = function(items, oldItem
 
     // The first call to virtualRepeatUpdate_ may not be when the virtual repeater is ready.
     // Introduce a slight delay so that the update happens when it is actually ready.
-    this.$mdUtil.nextTick(function() {
+    this.$timeout(function() {
       this.container.scrollToIndex(firstRenderStartIndex);
-    }.bind(this));
+    }.bind(this), 100);
   }
 
   this.isVirtualRepeatUpdating_ = false;
