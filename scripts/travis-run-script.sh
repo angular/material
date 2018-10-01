@@ -18,19 +18,5 @@ fi
 
 # Run our check to make sure all tests will actually run
 gulp ddescribe-iit
-gulp build
 
-# Initialize our Sauce Connector
-./scripts/sauce/setup-tunnel.sh;
-
-# Wait for the tunnel to be ready
-./scripts/sauce/wait-tunnel.sh
-
-if [[ -n "$BROWSERS" ]]; then
-    gulp karma --config=config/karma-sauce.conf.js --browsers=$BROWSERS --reporters='dots'
-else
-    gulp karma --config=config/karma-sauce.conf.js --reporters='dots'
-fi
-
-# Shutdown the tunnel
-./scripts/sauce/stop-tunnel.sh
+gulp karma --config=config/karma-travis.conf.js --reporters='dots'

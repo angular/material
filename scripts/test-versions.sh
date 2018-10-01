@@ -2,11 +2,11 @@
 
 # The purpose of this file is to download
 # assigned AngularJS source files and test
-# them against this build of AngularJS Material.
+# them against this build of AngularJS Material using Jenkins.
 
 # This works by pulling in all of the tags
 # from AngularJS, finding the highest version
-# numbers for each branch (e.g. 1.3 => 1.3.X where
+# numbers for each branch (e.g. 1.5 => 1.5.X where
 # X is the highest patch release). For each
 # detected version it will then copy over each
 # of the source files to the node_modules/angular-X
@@ -23,7 +23,7 @@
 # [CONFIG VALUES]
 
 # Available Options are: 1.X, 1.X.X, 1.X.X-(beta|rc).X or snapshot
-VERSIONS=(1.5 1.6 snapshot)
+VERSIONS=(1.5 1.6 1.7 snapshot)
 BROWSERS="Chrome"
 
 #
@@ -49,7 +49,7 @@ for VERSION in "${VERSIONS[@]}"; do
 
   echo "\n"
   pwd
-  node ./node_modules/gulp/bin/gulp.js karma --config=config/karma-ci.conf.js --reporters='dots' --browsers=$BROWSERS
+  node ./node_modules/gulp/bin/gulp.js karma --config=config/karma-jenkins.conf.js --reporters='dots' --browsers=$BROWSERS
   LAST_EXIT_CODE=$?
 
   echo "\n"

@@ -63,9 +63,9 @@ We have three types of releases:
 
 ##### Patch Releases
 
-The patch builds (1.1.4, 1.1.5, 1.1.6) are prepared based on commits in the `master` branch; which contains only
-non-breaking changes (I.e. bug fixes, new features, API additions, and minimal non-breaking CSS changes). 
-We are targeting `patch` releases every 2 weeks.
+The patch builds (1.1.8, 1.1.9, 1.1.10, etc.) are prepared based on commits in the `master` branch;
+which contains only non-breaking changes (I.e. bug fixes, new features, API additions, and minimal
+non-breaking CSS changes). We are targeting `patch` releases every 2 weeks.
 
 ##### Minor Releases
 
@@ -173,13 +173,13 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunker](http://
   <body>
 
     <!-- AngularJS Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-aria.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular-messages.min.js"></script>
 
-    <!-- AngularJS Material Javascript now available via Google CDN; version 1.1.4 used here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.9/angular-material.min.js"></script>
+    <!-- AngularJS Material Javascript now available via Google CDN; version 1.1.10 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.10/angular-material.min.js"></script>
   </body>
 ```
 
@@ -197,10 +197,10 @@ pull directly from the distribution GitHub
   <body>
 
     <!-- AngularJS Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-aria.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular-aria.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.4/angular-messages.min.js"></script>
 
     <!-- AngularJS Material Javascript using GitCDN to load directly from `bower-material/master` -->
     <script src="https://cdn.gitcdn.link/cdn/angular/bower-material/master/angular-material.js"></script>

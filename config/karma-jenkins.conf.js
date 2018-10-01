@@ -18,19 +18,6 @@ module.exports = function(config) {
     client: {
       // Do not clear the context as this can cause reload failures with Jasmine
       clearContext: false
-    },
-
-    // This is the new content for your travis-ci configuration test
-    //  Custom launcher for Travis-CI
-    customLaunchers: {
-        Chrome_travis_ci: {
-            base: 'Chrome',
-            flags: ['--no-sandbox']
-        }
     }
   });
-
-  const browsers = process.env.TRAVIS ? ['Chrome_travis_ci'] : [];
-  config.browsers = browsers.concat(config.browsers);
-
 };
