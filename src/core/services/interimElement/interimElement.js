@@ -310,10 +310,14 @@ function InterimElementProvider() {
 
           return interimElement
             .show()
-            .catch(function(reason) { return reason; })
+            .then(function () {
+              showingInterims.push(interimElement);
+            })
+            .catch(function (reason) {
+              return reason;
+            })
             .finally(function() {
               showPromises.splice(showPromises.indexOf(showAction), 1);
-              showingInterims.push(interimElement);
             });
 
         });
