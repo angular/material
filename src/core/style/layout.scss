@@ -121,6 +121,20 @@
   .#{$flexName}-noshrink    { flex: 1 0 auto;  box-sizing: border-box; }
   .#{$flexName}-nogrow      { flex: 0 1 auto;  box-sizing: border-box; }
 
+  .layout-row > .#{$flexName}-grow        { flex: 1 1 100%;  box-sizing: border-box; }
+  .layout-row > .#{$flexName}-initial     { flex: 0 1 auto;  box-sizing: border-box; }
+  .layout-row > .#{$flexName}-auto        { flex: 1 1 auto;  box-sizing: border-box; }
+  .layout-row > .#{$flexName}-none        { flex: 0 0 auto;  box-sizing: border-box; }
+  .layout-row > .#{$flexName}-noshrink    { flex: 1 0 auto;  box-sizing: border-box; }
+  .layout-row > .#{$flexName}-nogrow      { flex: 0 1 auto; box-sizing: border-box; }
+
+  .layout-column > .#{$flexName}-grow        { flex: 1 1 100%;  box-sizing: border-box; }
+  .layout-column > .#{$flexName}-initial     { flex: 0 1 auto;  box-sizing: border-box; }
+  .layout-column > .#{$flexName}-auto        { flex: 1 1 auto;  box-sizing: border-box; }
+  .layout-column > .#{$flexName}-none        { flex: 0 0 auto;  box-sizing: border-box; }
+  .layout-column > .#{$flexName}-noshrink    { flex: 1 0 auto;  box-sizing: border-box; }
+  .layout-column > .#{$flexName}-nogrow      { flex: 0 1 auto; box-sizing: border-box; }
+
   // (1-20) * 5 = 0-100%
   @for $i from 0 through 20 {
     $value : #{$i * 5 + '%'};
