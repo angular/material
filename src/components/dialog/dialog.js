@@ -964,7 +964,7 @@ function MdDialogProvider($$interimElementProvider) {
         var parentTarget = options.parent;
         var keyHandlerFn = function(ev) {
           if (ev.keyCode === $mdConstant.KEY_CODE.ESCAPE) {
-            ev.stopPropagation();
+            ev.stopImmediatePropagation();
             ev.preventDefault();
 
             smartClose();
