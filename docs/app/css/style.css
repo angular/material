@@ -56,7 +56,7 @@ body.docs-body {
 
 
 .training_link {
-  color: rgb(255,82,82);
+  color: #D32F2F;
   text-transform: none;
 }
 
@@ -65,7 +65,6 @@ body.docs-body {
 }
 
 .training_info {
-  opacity: 0.4;
   text-transform: none;
 }
 /***************
@@ -75,7 +74,7 @@ a {
   text-decoration: none;
   font-weight: 400;
   transition: border-bottom 0.35s;
-  color: #1e88e5;
+  color: #1565C0;
 }
 a:visited {
   color: #7e57c2;
@@ -138,8 +137,12 @@ strong {
   background-color: #D1DEEC;
 }
 .md-api-table th {
-  background-color: #4C9EF0;
+  background-color: #1976D2;
   color: white;
+}
+.md-api-table code,
+.md-api-table a {
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 blockquote {
@@ -216,7 +219,7 @@ pre > code.highlight {
 
 code {
   font-size: 1.4rem;
-  background: rgba(0, 0, 0, 0.065);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 code.highlight {
@@ -225,10 +228,9 @@ code.highlight {
 }
 
 code:not(.highlight) {
-  color: #106CC8;
+  color: #1565C0;
   margin-left: 1px;
   margin-right: 1px;
-  -webkit-font-smoothing: auto;
   padding: 0.125em 0.35em;
   border-radius: 2px;
 }
@@ -303,7 +305,7 @@ body[dir=rtl] .docs-menu .md-button {
 
 .docs-menu .md-button:hover,
 .docs-menu .md-button:focus {
-  background: #267ED5 !important;
+  background: #1D77D5 !important;
 }
 .docs-menu .md-button md-icon {
   color: white;
@@ -336,7 +338,7 @@ body[dir=rtl] .docs-menu .md-button {
   padding: 0;
 }
 .docs-menu .md-button.active {
-  background: #267ED5;
+  background: #1D77D5;
 }
 .menu-heading {
   display: block;
@@ -345,9 +347,12 @@ body[dir=rtl] .docs-menu .md-button {
   padding: 8px 16px 0;
   text-align: left;
   width: 100%;
-  color: rgba(255, 255, 255, 0.54)
 }
-
+.menu-heading>a {
+  color: white;
+  font-weight: 700;
+  font-size: 12px;
+}
 
 html[dir=rtl] .menu-heading,
 body[dir=rtl] .menu-heading {
@@ -411,7 +416,7 @@ body[dir=rtl] .menu-heading {
 .nav-header {
   background-color: #106CC8;
   background: linear-gradient(#185694, #106cc8);
-  border-bottom: 1px solid #267ED5;
+  border-bottom: 1px solid #1D77D5;
   flex-shrink: 0;
   z-index: 2;
 }
@@ -559,9 +564,10 @@ md-tabs.demo-source-tabs .active md-tab-label {
 md-toolbar.demo-toolbar {
   border-radius: 3px 3px 0 0;
   box-shadow: 0 1px rgba(255, 255, 255, 0.1);
+  color: white;
 }
 md-toolbar.demo-toolbar md-tab-label {
-  color: #99E4EE
+  color: #99E4EE;
 }
 md-toolbar.demo-toolbar .md-button:hover {
   background: rgba(0,0,0,0.1);
@@ -779,7 +785,7 @@ ul.methods > li:first-child > *:first-child {
 }
 
 .version-picker {
-  background: #267ED5 !important;
+  background: #1D77D5 !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   margin-bottom: 1px !important;
 }
@@ -812,6 +818,9 @@ docs-demo .doc-demo-content {
 }
 .service-desc > p:last-child {
   margin-bottom: 0;
+}
+.service-desc code {
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 /* Styles for Windows High Contrast mode */

@@ -188,7 +188,7 @@
     <ul class="buckets" layout layout-align="center center" layout-wrap>
       <li flex="100" flex-gt-xs="50" ng-repeat="(index, link) in [
         { href: 'https://egghead.io/series/angular-material-introduction', icon: 'ondemand_video', text: 'Introduction to AngularJS Material', site : 'EggHead', access : 'free'},
-        { href: 'https://app.pluralsight.com/player?author=ajden-towfeek&name=angular-material-fundamentals-m0&mode=live&clip=0&course=angular-material-fundamentals', icon: 'ondemand_video', text: 'AngularJS Material Fundamentals', site : 'Pluralsight', access: 'member'},
+        { href: 'https://app.pluralsight.com/player?author=ajden-towfeek&name=angular-material-fundamentals-m0&mode=live&clip=0&course=angular-material-fundamentals', icon: 'ondemand_video', text: 'AngularJS Material Fundamentals', site : 'Pluralsight', access: 'member'}
       ]">
         <md-button
             class="md-primary md-raised"
@@ -196,7 +196,7 @@
             aria-label="{{link.text}}"
             ng-href="{{link.href}}">
           <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
-          {{link.site}} | <span style="color: rgb(255,82,82); text-transform: none;">{{link.text}}</span> | <span class="training_info">{{link.access}}</span>
+          {{link.site}} | <span class="training_link">{{link.text}}</span> | <span class="training_info">{{link.access}}</span>
         </md-button>
       </li>
     </ul>
@@ -210,7 +210,7 @@
     <ul class="buckets" layout layout-align="center center" layout-wrap>
       <li flex="100" flex-gt-xs="50" ng-repeat="(index, link) in [
         { href: 'https://www.youtube.com/watch?v=Qi31oO5u33U', icon: 'ondemand_video', text: 'Building with AngularJS Material', site : 'ng-conf',  date: '2015'},
-        { href: 'https://www.youtube.com/watch?v=363o4i0rdvU', icon: 'ondemand_video', text: 'AngularJS Material in Practice', site : 'AngularConnect', date:'2015'},
+        { href: 'https://www.youtube.com/watch?v=363o4i0rdvU', icon: 'ondemand_video', text: 'AngularJS Material in Practice', site : 'AngularConnect', date:'2015'}
       ]">
         <md-button
             class="md-primary md-raised"
@@ -250,7 +250,7 @@
     <p class="md-caption" style="text-align: center; margin-bottom: 0;">
       These docs were generated from
       (<a ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}" target="_blank"
-          rel="noopener" class="md-accent">v{{BUILDCONFIG.version}} - SHA {{BUILDCONFIG.commit.substring(0,7)}}</a>)
+          rel="noopener">v{{BUILDCONFIG.version}} - SHA {{BUILDCONFIG.commit.substring(0,7)}}</a>)
       on (<strong>{{BUILDCONFIG.date}}</strong>) GMT.
     </p>
   </md-content>

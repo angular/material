@@ -1,13 +1,14 @@
 <!doctype html>
 <html ng-app="docsApp" ng-controller="DocsCtrl" lang="en" ng-strict-di>
 <head>
+<meta charset="utf-8">
 <base href="/">
 <title ng-bind="'AngularJS Material - ' + menu.currentSection.name +
     (menu.currentSection === menu.currentPage ? '' : ' > ' + menu.currentPage.name)">
   AngularJS Material
 </title>
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
 <link rel="stylesheet" href="angular-material.min.css">
 <link rel="stylesheet" href="docs.css">
@@ -33,7 +34,7 @@
 
     <md-content flex role="navigation">
       <ul class="docs-menu">
-        <li ng-repeat="section in menu.sections" class="parent-list-item {{section.className || ''}}" ng-class="{'parentActive' : isSectionSelected(section)}">
+        <li ng-repeat="section in menu.sections" class="parent-list-item {{section.className || ''}}">
           <h2 class="menu-heading md-subhead" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}">
             {{section.name}}
           </h2>
@@ -42,7 +43,7 @@
           <menu-toggle section="section" ng-if="section.type === 'toggle' && !section.hidden"></menu-toggle>
 
           <ul ng-if="section.children" class="menu-nested-list">
-            <li ng-repeat="child in section.children" ng-class="{'childActive' : isSectionSelected(child)}">
+            <li ng-repeat="child in section.children">
               <menu-link section="child" ng-if="child.type === 'link'"></menu-link>
 
               <menu-toggle section="child" ng-if="child.type === 'toggle'"></menu-toggle>
@@ -159,9 +160,9 @@
       <div layout="row" flex="noshrink" layout-align="center center">
         <div id="license-footer" flex>
           Powered by Google &copy;2014&#8211;{{thisYear}}.
-          Code licensed under the <a ng-href="./license"  class="md-accent">MIT License</a>.
+          Code licensed under the <a ng-href="./license">MIT License</a>.
           Documentation licensed under
-          <a href="http://creativecommons.org/licenses/by/4.0/"  target="_blank" class="md-default-theme md-accent">CC BY 4.0</a>.
+          <a href="http://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a>.
         </div>
       </div>
 
