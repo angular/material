@@ -302,13 +302,6 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
           body.style.overflow = 'hidden';
         }
 
-        // This should be applied after the manipulation to the body, because
-        // adding a scrollbar can potentially resize it, causing the measurement
-        // to change.
-        if (hasVerticalScrollbar) {
-          documentElement.style.overflowY = 'scroll';
-        }
-
         return function restoreScroll() {
           // Reset the inline style CSS to the previous.
           body.style.cssText = prevBodyStyle;
