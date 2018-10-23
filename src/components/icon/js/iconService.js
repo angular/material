@@ -347,11 +347,14 @@ MdIconProvider.prototype = {
   }]
 };
 
-/**
- *  Configuration item stored in the Icon registry; used for lookups
- *  to load if not already cached in the `loaded` cache
- */
-function ConfigurationItem(url, viewBoxSize) {
+  /**
+   * Configuration item stored in the Icon registry; used for lookups
+   * to load if not already cached in the `loaded` cache
+   * @param url
+   * @param viewBoxSize
+   * @constructor
+   */
+  function ConfigurationItem(url, viewBoxSize) {
   this.url = url;
   this.viewBoxSize = viewBoxSize || config.defaultViewBoxSize;
 }
@@ -395,7 +398,7 @@ function ConfigurationItem(url, viewBoxSize) {
   * };
  * </hljs>
  *
- * > <b>Note:</b> The `<md-icon>` directive internally uses the `$mdIcon` service to query, loaded,
+ * > <b>Note:</b> The `<md-icon>` directive internally uses the `$mdIcon` service to query, load,
  *   and instantiate SVG DOM elements.
  */
 
@@ -414,6 +417,8 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
 
   /**
    * Actual $mdIcon service is essentially a lookup function
+   * @param {*} id $sce trust wrapper over a URL string, URL, icon registry id, or icon set id
+   * @returns {angular.$q.Promise}
    */
   function getIcon(id) {
     id = id || '';
@@ -437,7 +442,7 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
       return loadByURL(id).then(cacheIcon(id));
     }
 
-    if (id.indexOf(':') == -1) {
+    if (id.indexOf(':') === -1) {
       id = '$default:' + id;
     }
 
@@ -447,38 +452,68 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   }
 
   /**
-   * Lookup registered fontSet style using its alias...
-   * If not found,
+   * Lookup a registered fontSet style using its alias.
+   * @param {string} alias used to lookup the alias in the array of fontSets
+   * @returns {*} matching fontSet or the defaultFontSet if that alias does not match
    */
   function findRegisteredFontSet(alias) {
     var useDefault = angular.isUndefined(alias) || !(alias && alias.length);
-    if (useDefault) return config.defaultFontSet;
+    if (useDefault) {
+      return config.defaultFontSet;
+    }
 
     var result = alias;
-    angular.forEach(config.fontSets, function(it) {
-      if (it.alias == alias) result = it.fontSet || result;
+    angular.forEach(config.fontSets, function(fontSet) {
+      if (fontSet.alias === alias) {
+        result = fontSet.fontSet || result;
+      }
     });
 
     return result;
   }
 
+  /**
+   * @param {Icon} cacheElement cached icon from the iconCache
+   * @returns {Icon} cloned Icon element with unique ids
+   */
   function transformClone(cacheElement) {
     var clone = cacheElement.clone();
-    var cacheSuffix = '_cache' + $mdUtil.nextUid();
+    var newUid = $mdUtil.nextUid();
+    var cacheSuffix;
 
-    // We need to modify for each cached icon the id attributes.
-    // This is needed because SVG id's are treated as normal DOM ids
-    // and should not have a duplicated id.
-    if (clone.id) clone.id += cacheSuffix;
-    angular.forEach(clone.querySelectorAll('[id]'), function(item) {
-      item.id += cacheSuffix;
+    // Verify that the newUid only contains a number and not some XSS content.
+    if (!isFinite(Number(newUid))) {
+      throw new Error('Unsafe and unexpected non-number result from $mdUtil.nextUid().');
+    }
+
+    cacheSuffix = '_cache' + newUid;
+
+    // For each cached icon, we need to modify the id attributes and references.
+    // This is needed because SVG ids are treated as normal DOM ids and should not be duplicated on
+    // the page.
+    if (clone.id) {
+      clone.id += cacheSuffix;
+    }
+
+    var addCacheSuffixToId = function(match, p1, p2, p3) {
+      return [p1, p2, cacheSuffix, p3].join('');
+    };
+    angular.forEach(clone.querySelectorAll('[id]'), function(descendantElem) {
+      descendantElem.id += cacheSuffix;
     });
+    // Inject the cacheSuffix into all instances of url(id) and xlink:href="#id".
+    // This use of innerHTML should be safe from XSS attack since we are only injecting the
+    // cacheSuffix with content from $mdUtil.nextUid which we verify is a finite number above.
+    clone.innerHTML = clone.innerHTML.replace(/(.*url\(#)(\w*)(\).*)/g, addCacheSuffixToId);
+    clone.innerHTML = clone.innerHTML.replace(/(.*xlink:href="#)(\w*)(".*)/g, addCacheSuffixToId);
 
     return clone;
   }
 
   /**
-   * Prepare and cache the loaded icon for the specified `id`
+   * Prepare and cache the loaded icon for the specified `id`.
+   * @param {string} id icon cache id
+   * @returns {function(*=): *}
    */
   function cacheIcon(id) {
 
@@ -492,7 +527,8 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   /**
    * Lookup the configuration in the registry, if !registered throw an error
    * otherwise load the icon [on-demand] using the registered URL.
-   *
+   * @param {string} id icon registry id
+   * @returns {angular.$q.Promise}
    */
   function loadByID(id) {
     var iconConfig = config[id];
@@ -502,8 +538,9 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   }
 
   /**
-   *    Loads the file as XML and uses querySelector( <id> ) to find
-   *    the desired node...
+   * Loads the file as XML and uses querySelector( <id> ) to find the desired node...
+   * @param {string} id icon id in icon set
+   * @returns {angular.$q.Promise}
    */
   function loadFromIconSet(id) {
     var setName = id.substring(0, id.lastIndexOf(':')) || '$default';
@@ -528,6 +565,8 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   /**
    * Load the icon by URL (may use the $templateCache).
    * Extract the data for later conversion to Icon
+   * @param {string} url icon URL
+   * @returns {angular.$q.Promise}
    */
   function loadByURL(url) {
     /* Load the icon from embedded data URL. */

@@ -419,6 +419,11 @@ describe('MdIcon service', function() {
     $scope = $rootScope;
 
     $templateCache.put('android.svg'    , '<svg><g id="android"></g></svg>');
+    $templateCache.put('angular-logo.svg',
+      '<svg><g id="angular"></g><defs><filter id="shadow"></filter>' +
+      '<g id="bg" fill="#000000"><path d="M10 10"/></g></defs>' +
+      '<path filter="url(#shadow)"></path><use x="0" y="0" xlink:href="#bg"></use>' +
+      '</svg>');
     $templateCache.put('social.svg'     , '<svg><g id="s1"></g><g id="s2"></g></svg>');
     $templateCache.put('symbol.svg'     , '<svg><symbol id="s1"></symbol><symbol id="s2" viewBox="0 0 32 32"></symbol></svg>');
     $templateCache.put('core.svg'       , '<svg><g id="c1"></g><g id="c2" class="core"></g></svg>');
@@ -583,6 +588,25 @@ describe('MdIcon service', function() {
 
         $mdIcon('android.svg').then(function(el) {
           expect(el.firstChild.id).toMatch(/.+_cache[0-9]+/g);
+        });
+
+        $scope.$digest();
+      });
+
+      it('should suffix duplicated ids and refs', function() {
+        // Just request the icon to be stored in the cache.
+        $mdIcon('angular-logo.svg');
+
+        $scope.$digest();
+
+        $mdIcon('angular-logo.svg').then(function(el) {
+          expect(el.querySelector('defs').firstChild.id).toMatch(/.+_cache\d+/g);
+          expect(el.querySelectorAll('path')[1].attributes.filter.value.split(/url\(#(.*)\)$/g)[1])
+            .toMatch(/.+_cache[0-9]+/g);
+          expect(el.querySelectorAll('path')[1].attributes.filter.value.split(/url\(#(.*)\)$/g)[1])
+            .toEqual(el.querySelector('defs').firstChild.id);
+          expect(el.querySelector('use').attributes['xlink:href'].value.split(/#(.*)/)[1]).toEqual(
+            el.querySelector('defs').children[1].id);
         });
 
         $scope.$digest();
