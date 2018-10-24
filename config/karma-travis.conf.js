@@ -6,6 +6,8 @@ module.exports = function(config) {
   // Override defaults with custom CI settings
   config.set({
     colors: false,
+    singleRun: true,
+    autoWatch: false,
 
     browsers: ['ChromeHeadlessNoSandbox', 'FirefoxHeadless'],
     customLaunchers: {

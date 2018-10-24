@@ -275,7 +275,7 @@ MdNavBarController.prototype._updateInkBarStyles = function(tab, newIndex, oldIn
 
 /**
  * Returns an array of the current tabs.
- * @return {!Array<!NavItemController>}
+ * @return {Array<!MdNavItemController>}
  * @private
  */
 MdNavBarController.prototype._getTabs = function() {
@@ -290,18 +290,18 @@ MdNavBarController.prototype._getTabs = function() {
 /**
  * Returns the tab with the specified name.
  * @param {string} name The name of the tab, found in its name attribute.
- * @return {!NavItemController|undefined}
+ * @return {MdNavItemController}
  * @private
  */
 MdNavBarController.prototype._getTabByName = function(name) {
   return this._findTab(function(tab) {
-    return tab.getName() == name;
+    return tab.getName() === name;
   });
 };
 
 /**
  * Returns the selected tab.
- * @return {!NavItemController|undefined}
+ * @return {MdNavItemController}
  * @private
  */
 MdNavBarController.prototype._getSelectedTab = function() {
@@ -312,7 +312,7 @@ MdNavBarController.prototype._getSelectedTab = function() {
 
 /**
  * Returns the focused tab.
- * @return {!NavItemController|undefined}
+ * @return {MdNavItemController}
  */
 MdNavBarController.prototype.getFocusedTab = function() {
   return this._findTab(function(tab) {
@@ -322,6 +322,8 @@ MdNavBarController.prototype.getFocusedTab = function() {
 
 /**
  * Find a tab that matches the specified function.
+ * @param {Function} fn
+ * @returns {MdNavItemController}
  * @private
  */
 MdNavBarController.prototype._findTab = function(fn) {
@@ -347,8 +349,8 @@ MdNavBarController.prototype.onFocus = function() {
 
 /**
  * Move focus from oldTab to newTab.
- * @param {!NavItemController} oldTab
- * @param {!NavItemController} newTab
+ * @param {!MdNavItemController} oldTab
+ * @param {!MdNavItemController} newTab
  * @private
  */
 MdNavBarController.prototype._moveFocus = function(oldTab, newTab) {
@@ -414,19 +416,23 @@ function MdNavItem($mdAria, $$rAF, $mdUtil, $window) {
       var buttonTemplate;
 
       // Cannot specify more than one nav attribute
-      if ((hasNavClick ? 1:0) + (hasNavHref ? 1:0) + (hasNavSref ? 1:0) > 1) {
+      if ((hasNavClick ? 1 : 0) + (hasNavHref ? 1 : 0) + (hasNavSref ? 1 : 0) > 1) {
         throw Error(
-          'Must not specify more than one of the md-nav-click, md-nav-href, ' +
+          'Please do not specify more than one of the md-nav-click, md-nav-href, ' +
           'or md-nav-sref attributes per nav-item directive.'
         );
       }
 
-      if (hasNavClick) {
+      if (hasNavClick !== undefined && hasNavClick !== null) {
         navigationAttribute = 'ng-click="ctrl.mdNavClick()"';
-      } else if (hasNavHref) {
+      } else if (hasNavHref !== undefined && hasNavHref !== null) {
         navigationAttribute = 'ng-href="{{ctrl.mdNavHref}}"';
-      } else if (hasNavSref) {
+      } else if (hasNavSref !== undefined && hasNavSref !== null) {
         navigationAttribute = 'ui-sref="{{ctrl.mdNavSref}}"';
+      } else {
+        throw Error(
+          'Please specify at least one of the md-nav-click, md-nav-href, or md-nav-sref ' +
+          'attributes per nav-item directive.');
       }
 
       navigationOptions = hasSrefOpts ? 'ui-sref-opts="{{ctrl.srefOpts}}" ' : '';

@@ -121,12 +121,32 @@ describe('mdNavBar', function() {
       }).toThrow();
     });
 
-    it('allows empty navigation attribute', function() {
+    it('throws if no navigation attributes are specified on a md-nav-item', function() {
       // be permissive; this helps with test writing
       expect(function() {
         create(
           '<md-nav-bar>' +
-            '<md-nav-item md-nav-href="" name="fooo">' + 'footab</md-nav-item>' +
+            '<md-nav-item name="fooo">footab</md-nav-item>' +
+          '<md-nav-bar>');
+      }).toThrow();
+    });
+
+    it('allows empty md-nav-href navigation attribute', function() {
+      // be permissive; this helps with test writing
+      expect(function() {
+        create(
+          '<md-nav-bar>' +
+            '<md-nav-item md-nav-href="" name="fooo">footab</md-nav-item>' +
+          '<md-nav-bar>');
+      }).not.toThrow();
+    });
+
+    it('allows empty md-nav-sref navigation attribute', function() {
+      // be permissive; this helps with test writing
+      expect(function() {
+        create(
+          '<md-nav-bar>' +
+            '<md-nav-item md-nav-sref="" name="fooo">footab</md-nav-item>' +
           '<md-nav-bar>');
       }).not.toThrow();
     });
@@ -254,7 +274,7 @@ describe('mdNavBar', function() {
   });
 
   describe('a11y', function() {
-    it('sets aria-checked on the selected tab', function() {
+    it('sets aria-selected on the selected tab', function() {
       $scope.selectedTabRoute = 'tab1';
       createTabs();
 

@@ -42,7 +42,8 @@ module.exports = function(config) {
       }
     },
 
-    singleRun: true
+    singleRun: true,
+    autoWatch: false
   });
 
 };
