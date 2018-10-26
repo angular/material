@@ -45,6 +45,9 @@ describe('mdNavBar', function() {
         '  <md-nav-item md-nav-href="#3" name="tab3" aria-label="foo">' +
         '    tab3' +
         '  </md-nav-item>' +
+        '  <md-nav-item md-nav-href="#4" name="tab4" nav-item-aria-label="foo">' +
+        '    tab4' +
+        '  </md-nav-item>' +
         '</md-nav-bar>');
   }
 
@@ -278,15 +281,15 @@ describe('mdNavBar', function() {
       $scope.selectedTabRoute = 'tab1';
       createTabs();
 
-      expect(getTab('tab1').parent().attr('aria-selected')).toBe('true');
-      expect(getTab('tab2').parent().attr('aria-selected')).toBe('false');
-      expect(getTab('tab3').parent().attr('aria-selected')).toBe('false');
+      expect(getTab('tab1').attr('aria-selected')).toBe('true');
+      expect(getTab('tab2').attr('aria-selected')).toBe('false');
+      expect(getTab('tab3').attr('aria-selected')).toBe('false');
 
       updateSelectedTabRoute('tab3');
 
-      expect(getTab('tab1').parent().attr('aria-selected')).toBe('false');
-      expect(getTab('tab2').parent().attr('aria-selected')).toBe('false');
-      expect(getTab('tab3').parent().attr('aria-selected')).toBe('true');
+      expect(getTab('tab1').attr('aria-selected')).toBe('false');
+      expect(getTab('tab2').attr('aria-selected')).toBe('false');
+      expect(getTab('tab3').attr('aria-selected')).toBe('true');
     });
 
     it('sets aria-label on the listbox', function() {
@@ -384,13 +387,18 @@ describe('mdNavBar', function() {
 
     it('automatically adds label to nav items', function() {
       createTabs();
-      expect(getTab('tab1').parent().attr('aria-label')).toBe('tab1');
-      expect(getTab('tab2').parent().attr('aria-label')).toBe('tab2');
+      expect(getTab('tab1').attr('aria-label')).toBe('tab1');
+      expect(getTab('tab2').attr('aria-label')).toBe('tab2');
     });
 
     it('does not change aria-label on nav items', function() {
       createTabs();
       expect(getTab('tab3').parent().attr('aria-label')).toBe('foo');
+    });
+
+    it('does not change nav-item-aria-label on nav item buttons', function() {
+      createTabs();
+      expect(getTab('tab4').attr('aria-label')).toBe('foo');
     });
   });
 
