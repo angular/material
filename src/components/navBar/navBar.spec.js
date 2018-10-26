@@ -1,5 +1,5 @@
 describe('mdNavBar', function() {
-  var el, $compile, $scope, $timeout, ctrl, tabContainer, $material, $mdConstant;
+  var el, $compile, $scope, $timeout, ctrl, tabContainer, tabs, $material, $mdConstant;
 
   /** @ngInject */
   var injectLocals = function(
@@ -27,6 +27,7 @@ describe('mdNavBar', function() {
     $scope.$apply();
     ctrl = el.controller('mdNavBar');
     tabContainer = angular.element(el[0].querySelector('._md-nav-bar-list'));
+    tabs = angular.element(el[0].querySelectorAll('._md-nav-button'));
     $timeout.flush();
     $material.flushOutstandingAnimations();
   }
@@ -301,18 +302,17 @@ describe('mdNavBar', function() {
       expect(tabContainer[0].getAttribute('aria-label')).toBe(label);
     });
 
-    it('sets focus on the selected tab when the navbar receives focus',
-       function() {
-         $scope.selectedTabRoute = 'tab2';
-         createTabs();
+    it('sets focus on the selected tab when the navbar receives focus', function() {
+      $scope.selectedTabRoute = 'tab2';
+      createTabs();
 
-         expect(getTab('tab2')).not.toHaveClass('md-focused');
-         ctrl.onFocus();
-         $scope.$apply();
+      expect(getTab('tab2')).not.toHaveClass('md-focused');
+      tabContainer.triggerHandler('focus');
+      $scope.$apply();
 
-         expect(getTab('tab2')).toHaveClass('md-focused');
-         expect(document.activeElement).toBe(getTab('tab2')[0]);
-       });
+      expect(getTab('tab2')).toHaveClass('md-focused');
+      expect(document.activeElement).toBe(getTab('tab2')[0]);
+    });
 
     it('removes tab focus when the tab blurs', function() {
       $scope.selectedTabRoute = 'tab2';
@@ -330,13 +330,13 @@ describe('mdNavBar', function() {
       createTabs();
 
       tabContainer.triggerHandler('focus');
-      tabContainer.triggerHandler({
+      angular.element(tabs[2]).triggerHandler({
         type: 'keydown',
-        keyCode: $mdConstant.KEY_CODE.UP_ARROW,
+        keyCode: $mdConstant.KEY_CODE.UP_ARROW
       });
-      tabContainer.triggerHandler({
+      angular.element(tabs[1]).triggerHandler({
         type: 'keydown',
-        keyCode: $mdConstant.KEY_CODE.LEFT_ARROW,
+        keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
       });
       $scope.$apply();
 
@@ -351,13 +351,13 @@ describe('mdNavBar', function() {
       createTabs();
 
       tabContainer.triggerHandler('focus');
-      tabContainer.triggerHandler({
+      angular.element(tabs[0]).triggerHandler({
         type: 'keydown',
-        keyCode: $mdConstant.KEY_CODE.DOWN_ARROW,
+        keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
       });
-      tabContainer.triggerHandler({
+      angular.element(tabs[1]).triggerHandler({
         type: 'keydown',
-        keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW,
+        keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
       });
       $scope.$apply();
 
@@ -374,9 +374,9 @@ describe('mdNavBar', function() {
       spyOn(tab2Ctrl.getButtonEl(), 'click');
 
       tabContainer.triggerHandler('focus');
-      tabContainer.triggerHandler({
+      angular.element(tabs[1]).triggerHandler({
         type: 'keydown',
-        keyCode: $mdConstant.KEY_CODE.ENTER,
+        keyCode: $mdConstant.KEY_CODE.ENTER
       });
 
       $scope.$apply();
