@@ -50,12 +50,12 @@ Before you submit your pull request consider the following guidelines:
 
   * Re-run the AngularJS Material test suite to ensure tests are still passing.
 
-  * Rebase your branch to **squash your commits** and **force push** to your GitHub repository 
+  * Commit your new changes by [ammending your original commit](https://help.github.com/articles/changing-a-commit-message/#amending-older-or-multiple-commit-messages) to **squash your commits**, then **force push** to your GitHub repository
     (this will update your Pull Request):
 
     ```shell
-    git rebase master -i
-    git push -force
+    git commit -a --amend
+    git push --force origin wip/my-fix-branch
     ```
 
 <br/>
