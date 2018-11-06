@@ -363,7 +363,7 @@ describe('$mdThemingProvider', function() {
 
     it('should use default primary color at the meta tag', function () {
       var name = 'theme-color';
-      var content = themingProvider._PALETTES.testPalette['800'].hex;
+      var content = '#' + themingProvider._PALETTES.testPalette['800'].hex;
 
       expect(document.getElementsByName(name).length).toBe(0);
 
@@ -378,7 +378,7 @@ describe('$mdThemingProvider', function() {
 
       var hue = '200';
 
-      var content = themingProvider._PALETTES.testPalette[hue].hex;
+      var content = '#' + themingProvider._PALETTES.testPalette[hue].hex;
 
       expect(document.getElementsByName(name).length).toBe(0);
 
@@ -404,7 +404,7 @@ describe('$mdThemingProvider', function() {
     it('should use test theme', function () {
       var name = 'theme-color';
 
-      var content = themingProvider._PALETTES.testPalette['800'].hex;
+      var content = '#' + themingProvider._PALETTES.testPalette['800'].hex;
 
       expect(document.getElementsByName(name).length).toBe(0);
 
