@@ -507,7 +507,7 @@ describe('<md-select>', function() {
 
       $rootScope.$digest();
       $rootScope.$digest();
-
+      $timeout.flush();
       expect(label.text()).toBe('One, Three');
       expect(label.hasClass('md-select-placeholder')).toBe(false);
 
@@ -1087,6 +1087,36 @@ describe('<md-select>', function() {
         expect($rootScope.testForm.$pristine).toBe(true);
       });
 
+        it('should not change a dirty form to pristine', function() {
+            $rootScope.rows = [[2], [4,3]];
+            $rootScope.filterTerm;
+            $rootScope.opts = [1, 2, 3, 4];
+            var select = $compile('<form name="testForm">' +
+                '<div ng-repeat="item in rows | filter:filterTerm">' +
+                '<md-select ng-model="item" name="multiSelect" multiple id="{{$index}}">' +
+                '<md-option ng-repeat="opt in opts" ng-value="opt"></md-option>' +
+                '</md-select>' +
+                '</div></form>')($rootScope);
+            $rootScope.$apply();
+            $timeout.flush();
+            expect(select.find('md-select').length).toBe(2);
+            $rootScope.testForm.$setDirty();
+            $rootScope.$apply();
+            $timeout.flush();
+            expect($rootScope.testForm.$pristine).toBeFalsy();
+            $rootScope.filterTerm = "2";
+            $rootScope.$apply();
+            $timeout.flush();
+            expect(select.find('md-select').length).toBe(1);
+            expect($rootScope.testForm.$pristine).toBeFalsy();
+            $rootScope.filterTerm = "";
+            $rootScope.$apply();
+            $timeout.flush();
+            expect(select.find('md-select').length).toBe(2);
+            expect($rootScope.testForm.$dirty).toBeTruthy();
+            expect($rootScope.testForm.$pristine).toBeFalsy();
+        });
+
       it('should correctly update the input containers label', function() {
         var el = setupSelect('ng-required="isRequired" ng-model="someModel"');
         var label = el.find('label');
@@ -1466,7 +1496,9 @@ describe('<md-select>', function() {
 
   function setupSelectMultiple(attrs, options, skipLabel, scope) {
     attrs = (attrs || '') + ' multiple';
-    return setupSelect(attrs, options, skipLabel, scope);
+    var toReturn = setupSelect(attrs, options, skipLabel, scope);
+    $timeout.flush();
+    return toReturn;
   }
 
   function optTemplate(options, compileOpts) {
