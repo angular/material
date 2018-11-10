@@ -46,7 +46,8 @@ md-autocomplete.md-THEME_NAME-theme {
     @include md-autocomplete-progress('{{warn-100}}', '{{warn-color}}');
   }
 }
-.md-autocomplete-suggestions-container.md-THEME_NAME-theme {
+.md-autocomplete-suggestions-container.md-THEME_NAME-theme,
+.md-autocomplete-standard-list-container.md-THEME_NAME-theme {
   background: '{{background-hue-1}}';
   li {
     color: '{{foreground-1}}';

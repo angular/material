@@ -180,7 +180,8 @@ md-autocomplete {
   }
 }
 
-.md-virtual-repeat-container.md-autocomplete-suggestions-container {
+.md-virtual-repeat-container.md-autocomplete-suggestions-container,
+.md-standard-list-container.md-autocomplete-suggestions-container {
   position: absolute;
   box-shadow: 0 2px 5px rgba(black, 0.25);
   z-index: $z-index-tooltip;
@@ -194,7 +195,17 @@ md-autocomplete {
   }
 }
 
-.md-virtual-repeat-container.md-not-found {
+.md-standard-list-container {
+  box-sizing: border-box;
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.md-virtual-repeat-container.md-not-found,
+.md-standard-list-container.md-not-found {
   height: $md-autocomplete-item-height;
 }
 
