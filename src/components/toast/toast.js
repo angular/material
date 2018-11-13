@@ -273,7 +273,7 @@ function MdToastDirective($mdToast) {
  *   - `controller` - `{string=}`: The controller to associate with this toast.
  *     The controller will be injected the local `$mdToast.hide()`, which is a function
  *     used to hide the toast.
- *   - `locals` - `{string=}`: An object containing key/value pairs. The keys will
+ *   - `locals` - `{object=}`: An object containing key/value pairs. The keys will
  *     be used as names of values to inject into the controller. For example,
  *     `locals: {three: 3}` would inject `three` into the controller with the value
  *     of 3.
@@ -286,9 +286,9 @@ function MdToastDirective($mdToast) {
  *     to the root element of the application.
  *
  * @returns {promise} A promise that can be resolved with `$mdToast.hide()` or
- * rejected with `$mdToast.cancel()`. `$mdToast.hide()` will resolve either with a Boolean
- * value == 'true' or the value passed as an argument to `$mdToast.hide()`.
- * And `$mdToast.cancel()` will resolve the promise with a Boolean value == 'false'
+ * rejected with `$mdToast.cancel()`. `$mdToast.hide()` will resolve either with the Boolean
+ * value `true` or the value passed as an argument to `$mdToast.hide()`.
+ * `$mdToast.cancel()` will resolve the promise with the Boolean value `false`.
  */
 
 /**
@@ -300,9 +300,9 @@ function MdToastDirective($mdToast) {
  *
  * @param {*=} response An argument for the resolved promise.
  *
- * @returns {promise} a promise that is called when the existing element is removed from the DOM.
- * The promise is resolved with either a Boolean value == 'true' or the value passed as the
- * argument to `.hide()`.
+ * @returns {promise} A promise that is called when the existing element is removed from the DOM.
+ * The promise is resolved with either the Boolean value `true` or the value passed as the
+ * argument to `$mdToast.hide()`.
  */
 
 /**
@@ -319,8 +319,8 @@ function MdToastDirective($mdToast) {
  *
  * @param {*=} response An argument for the rejected promise.
  *
- * @returns {promise} a promise that is called when the existing element is removed from the DOM
- * The promise is resolved with a Boolean value == 'false'.
+ * @returns {promise} A promise that is called when the existing element is removed from the DOM
+ * The promise is resolved with the Boolean value `false`.
  */
 
 function MdToastProvider($$interimElementProvider) {
