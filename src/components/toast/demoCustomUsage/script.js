@@ -10,6 +10,7 @@
 
   function AppCtrl($mdToast, $log) {
     var ctrl = this;
+    var message = 'Custom toast';
 
     ctrl.showCustomToast = function() {
       $mdToast.show({
@@ -17,6 +18,8 @@
         position: 'top right',
         controller: 'ToastCtrl',
         controllerAs: 'ctrl',
+        bindToController: true,
+        locals: {toastMessage: message},
         templateUrl: 'toast-template.html'
       }).then(function(result) {
         if (result === ACTION_RESOLVE) {
