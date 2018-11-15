@@ -123,7 +123,7 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
     var content = getText(element);
     var hasBinding = content.indexOf($interpolate.startSymbol()) > -1;
 
-    if ( !hasBinding && !content) {
+    if (!hasBinding && !content) {
       expect(element, attrName, content);
     }
   }
