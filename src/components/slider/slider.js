@@ -9,6 +9,16 @@ angular.module('material.components.slider', [
 .directive('mdSliderContainer', SliderContainerDirective);
 
 /**
+ * @type {number} the page size used for stepping when page up/down keys are pressed.
+ */
+var stepPageSize = 10;
+/**
+ * @type {number} the multiplier applied to a step when the arrow key is pressed along with
+ *  alt, meta, or ctrl.
+ */
+var modifierMultiplier = 4;
+
+/**
  * @ngdoc directive
  * @name mdSliderContainer
  * @module material.components.slider
@@ -78,6 +88,9 @@ function SliderContainerDirective() {
 
         var initialMaxWidth;
 
+        /**
+         * @param {number} length of the input's string value
+         */
         ctrl.fitInputWidthToTextLength = function (length) {
           var input = element[0].querySelector('md-input-container');
 
@@ -109,7 +122,7 @@ function SliderContainerDirective() {
  * the slider is in the accent color by default. The primary color palette may be used with
  * the `md-primary` class.
  *
- * It has two modes:
+ * The slider has two modes:
  * - "normal" mode where the user slides between a wide range of values
  * - "discrete" mode where the user slides between only a few select values
  *
@@ -117,8 +130,14 @@ function SliderContainerDirective() {
  * and use the `step` attribute to change the distance between
  * values the user is allowed to pick.
  *
- * When using the keyboard, holding the Meta, Control, or Alt key while pressing the left
- * and right arrow buttons will cause the slider to move 4 steps.
+ * When using the keyboard:
+ * - pressing the arrow keys will increase or decrease the slider's value by one step
+ * - holding the Meta, Control, or Alt key while pressing the arrow keys will
+ *   move the slider four steps at a time
+ * - pressing the Home key will move the slider to the first allowed value
+ * - pressing the End key will move the slider to the last allowed value
+ * - pressing the Page Up key will increase the slider value by ten
+ * - pressing the Page Down key will decrease the slider value by ten
  *
  * @usage
  * <h4>Normal Mode</h4>
@@ -382,27 +401,61 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
 
     /**
      * left/right/up/down arrow listener
+     * @param {!KeyboardEvent} ev
      */
     function keydownListener(ev) {
       if (isDisabled()) return;
+      var keyCodes = $mdConstant.KEY_CODE;
 
       var changeAmount;
-      if (vertical ? ev.keyCode === $mdConstant.KEY_CODE.DOWN_ARROW : ev.keyCode === $mdConstant.KEY_CODE.LEFT_ARROW) {
-        changeAmount = -step;
-      } else if (vertical ? ev.keyCode === $mdConstant.KEY_CODE.UP_ARROW : ev.keyCode === $mdConstant.KEY_CODE.RIGHT_ARROW) {
-        changeAmount = step;
+      switch (ev.keyCode) {
+        case keyCodes.DOWN_ARROW:
+        case keyCodes.LEFT_ARROW:
+          ev.preventDefault();
+          changeAmount = -step;
+          break;
+        case keyCodes.UP_ARROW:
+        case keyCodes.RIGHT_ARROW:
+          ev.preventDefault();
+          changeAmount = step;
+          break;
+        case keyCodes.PAGE_DOWN:
+          ev.preventDefault();
+          changeAmount = -step * stepPageSize;
+          break;
+        case keyCodes.PAGE_UP:
+          ev.preventDefault();
+          changeAmount = step * stepPageSize;
+          break;
+        case keyCodes.HOME:
+          ev.preventDefault();
+          ev.stopPropagation();
+          updateValue(min);
+          break;
+        case keyCodes.END:
+          ev.preventDefault();
+          ev.stopPropagation();
+          updateValue(max);
+          break;
       }
-      changeAmount = invert ? -changeAmount : changeAmount;
       if (changeAmount) {
+        changeAmount = invert ? -changeAmount : changeAmount;
         if (ev.metaKey || ev.ctrlKey || ev.altKey) {
-          changeAmount *= 4;
+          changeAmount *= modifierMultiplier;
         }
         ev.preventDefault();
         ev.stopPropagation();
-        scope.$evalAsync(function() {
-          setModelValue(ngModelCtrl.$viewValue + changeAmount);
-        });
+        updateValue(ngModelCtrl.$viewValue + changeAmount);
       }
+    }
+
+    /**
+     * @param value new slider value used for setting the model value
+     */
+    function updateValue(value) {
+      scope.$evalAsync(function() {
+        setModelValue(value);
+      });
     }
 
     function mouseDownListener() {
@@ -462,7 +515,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
         var formattedValue = (Math.round((value - min) / step) * step + min);
         formattedValue = (Math.round(formattedValue * Math.pow(10, round)) / Math.pow(10, round));
 
-        if (containerCtrl && containerCtrl.fitInputWidthToTextLength){
+        if (containerCtrl && containerCtrl.fitInputWidthToTextLength) {
           $mdUtil.debounce(function () {
             containerCtrl.fitInputWidthToTextLength(formattedValue.toString().length);
           }, 100)();
@@ -473,7 +526,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     }
 
     /**
-     * @param percent 0-1
+     * @param {number} percent 0-1
      */
     function setSliderPercent(percent) {
 
