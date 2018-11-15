@@ -93,8 +93,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       if ($scope.autofocus) {
         $element.on('focus', focusInputElement);
       }
-      if ($scope.ariaDescribedBy) {
-        elements.input.setAttribute('aria-describedby', $scope.ariaDescribedBy);
+      if ($scope.inputAriaDescribedBy) {
+        elements.input.setAttribute('aria-describedby', $scope.inputAriaDescribedBy);
       }
     });
   }
@@ -491,7 +491,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
           ctrl.matches = [];
 
           setLoading(false);
-          reportMessages(false, ReportType.Count);
+          reportMessages(true, ReportType.Count);
 
         } else {
           handleQuery();
