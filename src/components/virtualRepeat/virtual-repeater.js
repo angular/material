@@ -228,7 +228,7 @@ VirtualRepeatContainerController.prototype.updateSize = function() {
       : this.$element[0].clientHeight;
 
   if (size) {
-    this.setSize_(size);
+    this.size = size;
   }
 
   // Recheck the scroll position after updating the size. This resolves
