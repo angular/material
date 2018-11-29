@@ -54,6 +54,7 @@ describe('<md-autocomplete>', function() {
   function keydownEvent(keyCode) {
     return {
       keyCode: keyCode,
+      stopImmediatePropagation: angular.noop,
       stopPropagation: angular.noop,
       preventDefault: angular.noop
     };
