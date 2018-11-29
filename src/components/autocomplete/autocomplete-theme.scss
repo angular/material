@@ -51,7 +51,7 @@ md-autocomplete.md-THEME_NAME-theme {
   li {
     color: '{{foreground-1}}';
     &:hover,
-    &.selected {
+    &#selected_option {
       background: '{{background-500-0.18}}';
     }
   }

@@ -368,7 +368,6 @@ function MdAutocomplete ($$mdSvgRegistry) {
                 id="ul-{{$mdAutocompleteCtrl.id}}"\
                 role="listbox">\
               <li md-virtual-repeat="item in $mdAutocompleteCtrl.matches"\
-                  ng-class="{ selected: $index === $mdAutocompleteCtrl.index }"\
                   ng-attr-id="{{$index === $mdAutocompleteCtrl.index ? \'selected_option\' : undefined}}"\
                   ng-click="$mdAutocompleteCtrl.select($index)"\
                   role="option"\
