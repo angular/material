@@ -413,7 +413,18 @@ MdChipsCtrl.prototype.isEditingChip = function() {
   return !!this.$element[0].querySelector('._md-chip-editing');
 };
 
+/**
+ * @param {string|Object} chip contents of a single chip
+ * @returns {boolean} true if the chip is an Object, false otherwise.
+ * @private
+ */
+MdChipsCtrl.prototype._isChipObject = function(chip) {
+  return angular.isObject(chip);
+};
 
+/**
+ * @returns {boolean} true if chips can be removed, false otherwise.
+ */
 MdChipsCtrl.prototype.isRemovable = function() {
   // Return false if we have static chips
   if (!this.ngModelCtrl) {
@@ -543,8 +554,8 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
   }
 
   // If items contains an identical object to newChip, do not append
-  if (angular.isObject(newChip)){
-    var identical = this.items.some(function(item){
+  if (angular.isObject(newChip)) {
+    var identical = this.items.some(function(item) {
       return angular.equals(newChip, item);
     });
     if (identical) return;
@@ -560,7 +571,8 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
   this.updateNgModel();
 
   // Tell screen reader users that the chip was successfully added.
-  var chipContent = typeof newChip === 'object' ? JSON.stringify(newChip) : newChip;
+  // TODO add a way for developers to specify which field of the object should be announced here.
+  var chipContent = angular.isObject(newChip) ? '' : newChip;
   this.$mdLiveAnnouncer.announce(chipContent + ' ' + this.addedMessage, 'assertive');
 
   // If the md-on-add attribute is specified, send a chip addition event
@@ -698,7 +710,8 @@ MdChipsCtrl.prototype.removeChip = function(index, event) {
   this.ngModelCtrl.$setDirty();
 
   // Tell screen reader users that the chip was successfully removed.
-  var chipContent = typeof removed[0] === 'object' ? JSON.stringify(removed[0]) : removed[0];
+  // TODO add a way for developers to specify which field of the object should be announced here.
+  var chipContent = angular.isObject(removed[0]) ? '' : removed[0];
   this.$mdLiveAnnouncer.announce(chipContent + ' ' + this.removedMessage, 'assertive');
 
   if (removed && removed.length && this.useOnRemove && this.onRemove) {
