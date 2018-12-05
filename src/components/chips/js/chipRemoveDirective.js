@@ -9,16 +9,31 @@ angular
  * @module material.components.chips
  *
  * @description
- * Designates an element to be used as the delete button for a chip. <br/>
- * This element is passed as a child of the `md-chips` element.
+ * Indicates that the associated element should be used as the delete button template for all chips.
+ * The associated element must be a child of `md-chips`.
  *
- * The designated button will be just appended to the chip and removes the given chip on click.<br/>
- * By default the button is not being styled by the `md-chips` component.
+ * The provided button template will be appended to each chip and will remove the associated chip
+ * on click.
+ *
+ * The button is not styled or themed based on the theme set on the `md-chips` component. A theme
+ * class and custom icon can be specified in your template.
+ *
+ * You can also specify the `type` of the button in your template.
  *
  * @usage
+ * ### With Standard Chips
  * <hljs lang="html">
- *   <md-chips>
- *     <button md-chip-remove="">
+ *   <md-chips ...>
+ *     <button md-chip-remove class="md-primary" type="button" aria-label="Remove {{$chip}}">
+ *       <md-icon md-svg-icon="md-close"></md-icon>
+ *     </button>
+ *   </md-chips>
+ * </hljs>
+ *
+ * ### With Object Chips
+ * <hljs lang="html">
+ *   <md-chips ...>
+ *     <button md-chip-remove class="md-primary" type="button" aria-label="Remove {{$chip.name}}">
  *       <md-icon md-svg-icon="md-close"></md-icon>
  *     </button>
  *   </md-chips>
@@ -51,7 +66,7 @@ function MdChipRemove ($timeout) {
     // Child elements aren't available until after a $timeout tick as they are hidden by an
     // `ng-if`. see http://goo.gl/zIWfuw
     $timeout(function() {
-      element.attr({ tabindex: -1, 'aria-hidden': true });
+      element.attr({ 'tabindex': '-1', 'aria-hidden': 'true' });
       element.find('button').attr('tabindex', '-1');
     });
   }

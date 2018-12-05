@@ -209,6 +209,8 @@
    *
    */
 
+  // TODO add a way for developers to specify which field of the object should used in the
+  // aria-label.
   var MD_CHIPS_TEMPLATE = '\
       <md-chips-wrap\
           id="{{$mdChipsCtrl.wrapperId}}"\
@@ -229,7 +231,7 @@
               aria-setsize="{{$mdChipsCtrl.items.length}}"\
               aria-posinset="{{$index+1}}"\
               ng-click="!$mdChipsCtrl.readonly && $mdChipsCtrl.focusChip($index)"\
-              aria-label="{{$chip}}.{{$mdChipsCtrl.isRemovable() ? \' \' + $mdChipsCtrl.deleteHint : \'\'}}" \
+              aria-label="{{$mdChipsCtrl._isChipObject($chip) ? \'\' : $chip + \'. \'}}{{$mdChipsCtrl.isRemovable() ? \'\' + $mdChipsCtrl.deleteHint : \'\'}}" \
               ng-focus="!$mdChipsCtrl.readonly && $mdChipsCtrl.selectChip($index)"\
               md-chip-transclude="$mdChipsCtrl.chipContentsTemplate"></div>\
           <div ng-if="$mdChipsCtrl.isRemovable()"\
@@ -263,7 +265,7 @@
           ng-click="$mdChipsCtrl.removeChipAndFocusInput($$replacedScope.$index, $event)"\
           type="button"\
           tabindex="-1"\
-          aria-label="{{$mdChipsCtrl.deleteButtonLabel}} {{$chip}}">\
+          aria-label="{{$mdChipsCtrl.deleteButtonLabel}}{{$mdChipsCtrl._isChipObject($chip) ? \'\' : \' \' + $chip}}">\
         <md-icon md-svg-src="{{$mdChipsCtrl.mdCloseIcon}}" aria-hidden="true"></md-icon>\
       </button>';
 
