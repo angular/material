@@ -284,6 +284,9 @@ md-list-item {
     .md-secondary-container {
       display: flex;
       align-items: center;
+      // Ensure the secondary button is not behind the primary button if its template is provided by
+      // a directive.
+      position: relative;
 
       // Per W3C: https://www.w3.org/TR/css-flexbox/#flex-common
       // By default, flex items won’t shrink below their minimum content size.
