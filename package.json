@@ -86,14 +86,12 @@
     "minimist": "^1.1.0",
     "mkdirp": "^0.5.0",
     "moment": "^2.22.1",
+    "natives": "^1.1.6",
     "postcss": "^6.0.2",
     "prompt-sync": "^1.0.0",
     "q": "^1.5.1",
     "stream-series": "^0.1.1",
     "through2": "^2.0.3"
-  },
-  "resolutions": {
-    "natives": "^1.1.5"
   },
   "scripts": {
     "build": "gulp build",
