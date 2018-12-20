@@ -593,6 +593,22 @@ describe('MdIcon service', function() {
         $scope.$digest();
       });
 
+      // This covers a case where we saw a g3 test using an empty <svg></svg> and it could
+      // throw an exception "Looking up elements via selectors is not supported by jqLite!"
+      // if proper checks weren't in place in the transformClone() code.
+      it('should handle empty SVGs', function() {
+        // Just request the icon to be stored in the cache.
+        $mdIcon('emptyGroup.svg');
+
+        $scope.$digest();
+
+        $mdIcon('emptyGroup.svg').then(function(el) {
+          expect(el).toBeTruthy();
+        });
+
+        $scope.$digest();
+      });
+
       it('should suffix duplicated ids and refs', function() {
         // Just request the icon to be stored in the cache.
         $mdIcon('angular-logo.svg');

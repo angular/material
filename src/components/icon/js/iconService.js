@@ -350,14 +350,14 @@ MdIconProvider.prototype = {
   /**
    * Configuration item stored in the Icon registry; used for lookups
    * to load if not already cached in the `loaded` cache
-   * @param url
-   * @param viewBoxSize
+   * @param {string} url
+   * @param {=number} viewBoxSize
    * @constructor
    */
   function ConfigurationItem(url, viewBoxSize) {
-  this.url = url;
-  this.viewBoxSize = viewBoxSize || config.defaultViewBoxSize;
-}
+    this.url = url;
+    this.viewBoxSize = viewBoxSize || config.defaultViewBoxSize;
+  }
 
 /**
  * @ngdoc service
@@ -473,13 +473,13 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   }
 
   /**
-   * @param {Icon} cacheElement cached icon from the iconCache
+   * @param {!Icon} cacheElement cached icon from the iconCache
    * @returns {Icon} cloned Icon element with unique ids
    */
   function transformClone(cacheElement) {
     var clone = cacheElement.clone();
     var newUid = $mdUtil.nextUid();
-    var cacheSuffix;
+    var cacheSuffix, svgElement;
 
     // Verify that the newUid only contains a number and not some XSS content.
     if (!isFinite(Number(newUid))) {
@@ -501,11 +501,19 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
     angular.forEach(clone.querySelectorAll('[id]'), function(descendantElem) {
       descendantElem.id += cacheSuffix;
     });
-    // Inject the cacheSuffix into all instances of url(id) and xlink:href="#id".
-    // This use of innerHTML should be safe from XSS attack since we are only injecting the
-    // cacheSuffix with content from $mdUtil.nextUid which we verify is a finite number above.
-    clone.innerHTML = clone.innerHTML.replace(/(.*url\(#)(\w*)(\).*)/g, addCacheSuffixToId);
-    clone.innerHTML = clone.innerHTML.replace(/(.*xlink:href="#)(\w*)(".*)/g, addCacheSuffixToId);
+    // innerHTML of SVG elements is not supported by IE11
+    if (clone.innerHTML === undefined) {
+      svgElement = $mdUtil.getInnerHTML(clone);
+      svgElement = svgElement.replace(/(.*url\(#)(\w*)(\).*)/g, addCacheSuffixToId);
+      svgElement = svgElement.replace(/(.*xlink:href="#)(\w*)(".*)/g, addCacheSuffixToId);
+      clone = angular.element(svgElement)[0];
+    } else {
+      // Inject the cacheSuffix into all instances of url(id) and xlink:href="#id".
+      // This use of innerHTML should be safe from XSS attack since we are only injecting the
+      // cacheSuffix with content from $mdUtil.nextUid which we verify is a finite number above.
+      clone.innerHTML = clone.innerHTML.replace(/(.*url\(#)(\w*)(\).*)/g, addCacheSuffixToId);
+      clone.innerHTML = clone.innerHTML.replace(/(.*xlink:href="#)(\w*)(".*)/g, addCacheSuffixToId);
+    }
 
     return clone;
   }
@@ -605,24 +613,37 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
 
   /**
    * Check target signature to see if it is an Icon instance.
+   * @param {Icon|Element} target
+   * @returns {boolean} true if the specified target is an Icon object, false otherwise.
    */
   function isIcon(target) {
     return angular.isDefined(target.element) && angular.isDefined(target.config);
   }
 
   /**
-   *  Define the Icon class
+   * Define the Icon class
+   * @param {Element} el
+   * @param {=ConfigurationItem} config
+   * @constructor
    */
   function Icon(el, config) {
+    var elementContents;
     // If the node is a <symbol>, it won't be rendered so we have to convert it into <svg>.
     if (el && el.tagName.toLowerCase() === 'symbol') {
       var viewbox = el.getAttribute('viewBox');
-      el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">').html(el.innerHTML)[0];
+      // Check if innerHTML is supported as IE11 does not support innerHTML on SVG elements.
+      if (el.innerHTML) {
+        elementContents = el.innerHTML;
+      } else {
+        elementContents = $mdUtil.getInnerHTML(el);
+      }
+      el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">').append(elementContents)[0];
       if (viewbox) el.setAttribute('viewBox', viewbox);
     }
 
     if (el && el.tagName.toLowerCase() !== 'svg') {
-      el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">').append(el.cloneNode(true))[0];
+      el = angular.element(
+        '<svg xmlns="http://www.w3.org/2000/svg">').append(el.cloneNode(true))[0];
     }
 
     // Inject the namespace if not available...
