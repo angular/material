@@ -60,8 +60,8 @@
 
   /** confirms that you will be able to perform the release before attempting */
   function validate () {
-    if (exec('npm whoami') !== 'angularcore') {
-      err('You must be authenticated with npm as "angularcore" to perform a release.');
+    if (exec('npm whoami') !== 'angular') {
+      err('You must be authenticated with npm as "angular" to perform a release.');
     } else if (exec('git rev-parse --abbrev-ref HEAD') !== 'staging') {
       err('Releases can only performed from "staging" at this time.');
     } else {
