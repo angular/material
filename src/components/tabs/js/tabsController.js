@@ -219,7 +219,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
 
   /**
    * Add/remove the `md-no-tab-content` class depending on `ctrl.hasContent`
-   * @param hasContent
+   * @param {boolean} hasContent
    */
   function handleHasContent (hasContent) {
     $element[ hasContent ? 'removeClass' : 'addClass' ]('md-no-tab-content');
@@ -227,7 +227,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
 
   /**
    * Apply ctrl.offsetLeft to the paging element when it changes
-   * @param left
+   * @param {string|number} left
    */
   function handleOffsetChange (left) {
     var elements = getElements();
@@ -242,8 +242,8 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
 
   /**
    * Update the UI whenever `ctrl.focusIndex` is updated
-   * @param newIndex
-   * @param oldIndex
+   * @param {number} newIndex
+   * @param {number} oldIndex
    */
   function handleFocusIndexChange (newIndex, oldIndex) {
     if (newIndex === oldIndex) return;
@@ -552,7 +552,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
 
   /**
    * Determines if the tabs should appear centered.
-   * @returns {string|boolean}
+   * @returns {boolean}
    */
   function shouldCenterTabs () {
     return ctrl.centerTabs && !ctrl.shouldPaginate;
@@ -560,9 +560,10 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
 
   /**
    * Determines if pagination is necessary to display the tabs within the available space.
-   * @returns {boolean}
+   * @returns {boolean} true if pagination is necessary, false otherwise
    */
   function shouldPaginate () {
+    var shouldPaginate;
     if (ctrl.noPagination || !loaded) return false;
     var canvasWidth = $element.prop('clientWidth');
 
@@ -570,7 +571,14 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
       canvasWidth -= tab.offsetWidth;
     });
 
-    return canvasWidth < 0;
+    shouldPaginate = canvasWidth < 0;
+    // Work around width calculation issues on IE11 when pagination is enabled
+    if (shouldPaginate) {
+      getElements().paging.style.width = '999999px';
+    } else {
+      getElements().paging.style.width = undefined;
+    }
+    return shouldPaginate;
   }
 
   /**

@@ -1,0 +1,12 @@
+/*
+ * Style tab width to align with the MD spec:
+ * https://material.io/archive/guidelines/components/tabs.html#tabs-specs
+ */
+md-tab-item {
+  min-width: 72px;
+}
+@media (min-width: 960px) {
+  md-tab-item {
+    min-width: 160px;
+  }
+}
