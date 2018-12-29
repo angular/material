@@ -17,10 +17,6 @@ const argv = require('minimist')(process.argv.slice(2));
 const gutil = require('gulp-util');
 const series = require('stream-series');
 
-const config = {
-  demoFolder: 'demo-partials'
-};
-
 gulp.task('demos', function() {
   const demos = [];
   return generateDemos()

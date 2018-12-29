@@ -3,7 +3,7 @@
 $font-family: Roboto, 'Helvetica Neue', sans-serif !default;
 $font-size:   10px !default;
 
-//-- Must be defined before $font-size.
+//-- Must be defined after $font-size and before variables that depend on the function.
 @function rem($multiplier) {
   @return $multiplier * $font-size;
 }

@@ -18,24 +18,23 @@ exports.task = function() {
   const mod = util.readModuleArg();
   const name = mod.split('.').pop();
   const demoIndexTemplate = fs.readFileSync(
-      ROOT + '/docs/config/template/demo-index.template.html', 'utf8'
+    ROOT + '/docs/config/template/demo-index.template.html', 'utf8'
   ).toString();
 
   gutil.log('Building demos for', mod, '...');
 
   return utils.readModuleDemos(mod, function() {
     return lazypipe()
-        .pipe(gulpif, /.css$/, sass())
-        .pipe(gulpif, /.css$/, util.autoprefix())
-        .pipe(gulp.dest, BUILD_MODE.outputDir + name)
+    .pipe(gulpif, /.css$/, sass())
+    .pipe(gulpif, /.css$/, util.autoprefix())
+    .pipe(gulp.dest, BUILD_MODE.outputDir + name)
     ();
   })
-      .pipe(through2.obj(function(demo, enc, next) {
-        fs.writeFileSync(
-            path.resolve(BUILD_MODE.outputDir, name, demo.name, 'index.html'),
-            _.template(demoIndexTemplate)(demo)
-        );
-        next();
-      }));
-
+  .pipe(through2.obj(function(demo, enc, next) {
+    fs.writeFileSync(
+      path.resolve(BUILD_MODE.outputDir, name, demo.name, 'index.html'),
+      _.template(demoIndexTemplate)(demo)
+    );
+    next();
+  }));
 };
