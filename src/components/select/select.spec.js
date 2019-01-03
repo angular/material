@@ -291,9 +291,11 @@ describe('<md-select>', function() {
 
         clickOption(select, 0);
         $rootScope.$apply('showSelect = false');
+        $timeout.flush();
         expectSelectClosed(select);
 
         $rootScope.$apply('showSelect = true');
+        $timeout.flush();
         select = container.find('md-select');
 
         openSelect(select);
@@ -336,6 +338,7 @@ describe('<md-select>', function() {
       expect(el).toHaveClass('md-input-has-value');
 
       $rootScope.$apply('value = null');
+      $timeout.flush();
       expect(el).not.toHaveClass('md-input-has-value');
     });
 
@@ -1010,6 +1013,12 @@ describe('<md-select>', function() {
         expect(ngModelCtrl.$valid).toBe(true);
       });
 
+      it('should have the proper md-has-input-class when the model has selected values', function() {
+        $rootScope.model = [2,4,5,6];
+        var el = setupSelectMultiple('ng-model="$root.model"', [1,2,3,4,5,6]);
+        expect(el).toHaveClass('md-input-has-value');
+      });
+
       it('does not let an empty array satisfy required', function() {
           $rootScope.model = [];
           $rootScope.opts = [1, 2, 3, 4];
@@ -1251,7 +1260,7 @@ describe('<md-select>', function() {
             '<md-option ng-repeat="opt in opts" ng-value="opt">{{opt}}</md-option>' +
           '</md-select></form>')($rootScope);
         var el = form.find('md-select');
-        
+
         $rootScope.$digest();
         $timeout.flush();
 
@@ -1489,6 +1498,7 @@ describe('<md-select>', function() {
 
     el = $compile(template)(scope || $rootScope);
     $rootScope.$digest();
+    $timeout.flush();
     attachedElements.push(el);
 
     return el;
