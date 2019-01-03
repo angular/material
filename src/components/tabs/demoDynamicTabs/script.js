@@ -35,7 +35,7 @@
     $scope.$watch('selectedIndex', function(current, old) {
       previous = selected;
       selected = tabs[current];
-      if (old + 1 && (old != current)) {
+      if (old + 1 && (old !== current)) {
         $log.debug('Goodbye ' + previous.title + '!');
       }
       if (current + 1) {

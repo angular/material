@@ -76,7 +76,7 @@
  *  contents of the selected tab.
  * @param {boolean=} md-border-bottom If present, shows a solid `1px` border between the tabs and
  *  their content.
- * @param {boolean=} md-center-tabs When enabled, tabs will be centered provided there is no need
+ * @param {boolean=} md-center-tabs If defined, tabs will be centered provided there is no need
  *  for pagination.
  * @param {boolean=} md-no-pagination When enabled, pagination will remain off.
  * @param {boolean=} md-swipe-content When enabled, swipe gestures will be enabled for the content
