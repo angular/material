@@ -411,7 +411,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
             scrollContainerElement.on('touchstart touchmove touchend', stopPropagation);
           }
         }
-        $mdUtil.nextTick(updateActiveOption);
+        ctrl.index = getDefaultIndex();
+        $mdUtil.nextTick(function() {
+          updateActiveOption();
+          updateScroll();
+        });
       }
     } else if (hidden && !oldHidden) {
       if ($mdUtil.isIos) {
