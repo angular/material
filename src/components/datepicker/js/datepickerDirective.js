@@ -628,7 +628,29 @@
       this.ngModelCtrl.$setValidity('valid', date == null);
     }
 
+    var input = this.inputElement.value;
+    var parsedDate = this.locale.parseDate(input);
+
+    if (!this.isInputValid(input, parsedDate) && this.ngModelCtrl.$valid) {
+      this.ngModelCtrl.$setValidity('valid', date == null);
+    }
+
     angular.element(this.inputContainer).toggleClass(INVALID_CLASS, !this.ngModelCtrl.$valid);
+  };
+
+  /**
+   * Check to see if the input is valid as the validation should fail if the model is invalid
+   *
+   * @param {String} inputString
+   * @param {Date} parsedDate
+   * @return {boolean} Whether the input is valid
+   */
+  DatePickerCtrl.prototype.isInputValid = function (inputString, parsedDate) {
+    return inputString === '' || (
+      this.dateUtil.isValidDate(parsedDate) &&
+      this.locale.isDateComplete(inputString) &&
+      this.isDateEnabled(parsedDate)
+    );
   };
 
   /** Clears any error flags set by `updateErrorState`. */
@@ -655,11 +677,7 @@
 
     // An input string is valid if it is either empty (representing no date)
     // or if it parses to a valid date that the user is allowed to select.
-    var isValidInput = inputString == '' || (
-      this.dateUtil.isValidDate(parsedDate) &&
-      this.locale.isDateComplete(inputString) &&
-      this.isDateEnabled(parsedDate)
-    );
+    var isValidInput = this.isInputValid(inputString, parsedDate);
 
     // The datepicker's model is only updated when there is a valid input.
     if (isValidInput) {
