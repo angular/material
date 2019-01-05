@@ -89,6 +89,12 @@ md-radio-group.md-THEME_NAME-theme {
   }
 }
 
+md-radio-group.md-THEME_NAME-theme.md-focused.ng-empty>md-radio-button:first-child {
+  .md-container:before {
+    background-color: '{{foreground-3-0.26}}';
+  }
+}
+
 md-radio-group.md-THEME_NAME-theme.md-focused:not(:empty) {
   .md-checked .md-container:before {
     background-color: '{{accent-color-0.26}}';
