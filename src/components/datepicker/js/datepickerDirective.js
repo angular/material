@@ -820,14 +820,14 @@
       this.evalAttr('ngFocus');
 
       // Attach click listener inside of a timeout because, if this open call was triggered by a
-      // click, we don't want it to be immediately propogated up to the body and handled.
+      // click, we don't want it to be immediately propagated up to the body and handled.
       var self = this;
-      this.$mdUtil.nextTick(function() {
+      this.$timeout(function() {
         // Use 'touchstart` in addition to click in order to work on iOS Safari, where click
         // events aren't propagated under most circumstances.
         // See http://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
         self.documentElement.on('click touchstart', self.bodyClickHandler);
-      }, false);
+      }, 100);
 
       window.addEventListener(this.windowEventName, this.windowEventHandler);
     }
