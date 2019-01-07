@@ -583,7 +583,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       case $mdConstant.KEY_CODE.ENTER:
         if (ctrl.hidden || ctrl.loading || ctrl.index < 0 || ctrl.matches.length < 1) return;
         if (hasSelection()) return;
-        event.stopPropagation();
+        event.stopImmediatePropagation();
         event.preventDefault();
         select(ctrl.index);
         break;
