@@ -37,4 +37,11 @@
       </md-input-container>
     </form>
   </div>
+  <div layout-gt-xs="row">
+    <div flex-gt-xs>
+      <h4>Date-picker that only allows for certain months to be selected</h4>
+      <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date" md-mode="month"
+                     md-date-filter="ctrl.filter"></md-datepicker>
+    </div>
+  </div>
 </md-content>
