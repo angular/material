@@ -280,6 +280,34 @@ describe('mdCheckbox', function() {
       expect(isChecked(checkbox)).toBe(true);
     });
 
+    it('should set the checkbox to checked when focused and SPACE keypress event fired', function () {
+      var checkbox = compileAndLink('<md-checkbox ng-checked="value"></md-checkbox>');
+      checkbox.triggerHandler({
+        type: 'keypress',
+        keyCode: $mdConstant.KEY_CODE.SPACE
+      });
+      expect(isChecked(checkbox)).toBe(true);
+    });
+
+    it('should NOT set the checkbox to checked when focused and ENTER keypress event fired', function () {
+      var checkbox = compileAndLink('<md-checkbox ng-checked="value"></md-checkbox>');
+      checkbox.triggerHandler({
+        type: 'keypress',
+        keyCode: $mdConstant.KEY_CODE.ENTER
+      });
+      expect(isChecked(checkbox)).toBe(false);
+    });
+
+    it('should submit a parent form when ENTER is pressed', function () {
+      var form = compileAndLink('<form><md-checkbox ng-checked="value"></md-checkbox></form>');
+      angular.element(form[0].getElementsByTagName('md-checkbox')[0]).triggerHandler({
+        type: 'keypress',
+        keyCode: $mdConstant.KEY_CODE.ENTER
+      });
+      pageScope.$apply();
+      expect(form[0].classList.contains('ng-submitted')).toBe(true);
+    });
+
     it('should mark the checkbox as selected on load with ng-checked', function() {
       pageScope.isChecked = function() { return true; };
 
