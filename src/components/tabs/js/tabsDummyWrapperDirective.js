@@ -26,7 +26,7 @@ function MdTabsDummyWrapper ($mdUtil, $window) {
         ctrl.updateInkBarStyles();
       };
 
-      if('MutationObserver' in $window) {
+      if ('MutationObserver' in $window) {
         var config = {
           childList: true,
           subtree: true,

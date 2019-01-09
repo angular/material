@@ -78,7 +78,7 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
         }, 100);
       })
       .on('focus', function() {
-        if(scope.mouseActive === false) {
+        if (scope.mouseActive === false) {
           rgCtrl.$element.addClass('md-focused');
         }
       })

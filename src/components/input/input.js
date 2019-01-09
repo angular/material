@@ -868,7 +868,7 @@ function mdSelectOnFocusDirective($document, $timeout) {
         // The debounce is here for Edge's sake, otherwise the selection doesn't work.
         // Since focus may already have been lost on the input (and because `select()`
         // will re-focus), make sure the element is still active before applying.
-        if($document[0].activeElement === element[0]) {
+        if ($document[0].activeElement === element[0]) {
           element[0].select();
         }
 

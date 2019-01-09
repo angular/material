@@ -267,7 +267,7 @@ exports.hoistScssVariables = function() {
     let closeCount = 0;
     let openBlock = false;
 
-    for(let currentLine = 0; currentLine < contents.length; ++currentLine) {
+    for (let currentLine = 0; currentLine < contents.length; ++currentLine) {
       const line = contents[currentLine];
 
       if (openBlock || /^\s*\$/.test(line) && !/^\s+/.test(line)) {

@@ -469,7 +469,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       if (section.children) {
         // matches nested section toggles, such as API or Customization
         section.children.forEach(function(childSection){
-          if(childSection.pages){
+          if (childSection.pages){
             childSection.pages.forEach(function(page){
               matchPage(childSection, page);
             });
@@ -575,7 +575,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       });
 
       var parentNode = $element[0].parentNode.parentNode.parentNode;
-      if(parentNode.classList.contains('parent-list-item')) {
+      if (parentNode.classList.contains('parent-list-item')) {
         var heading = parentNode.querySelector('h2');
         $element[0].firstChild.setAttribute('aria-describedby', heading.id);
       }
@@ -689,12 +689,12 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   function isSectionSelected(section) {
     var selected = false;
     var openedSection = menu.openedSection;
-    if(openedSection === section){
+    if (openedSection === section){
       selected = true;
     }
-    else if(section.children) {
+    else if (section.children) {
       section.children.forEach(function(childSection) {
-        if(childSection === openedSection){
+        if (childSection === openedSection){
           selected = true;
         }
       });

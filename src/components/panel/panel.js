@@ -2426,7 +2426,7 @@ MdPanelRef.prototype._callInterceptors = function(type) {
       if (!response) {
         try {
           response = interceptor(self);
-        } catch(e) {
+        } catch (e) {
           response = $q.reject(e);
         }
       }

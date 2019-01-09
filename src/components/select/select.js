@@ -244,7 +244,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
     element.empty().append(valueEl);
     element.append(selectTemplate);
 
-    if(!attr.tabindex){
+    if (!attr.tabindex){
       attr.$set('tabindex', 0);
     }
 
