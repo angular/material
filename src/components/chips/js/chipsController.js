@@ -969,8 +969,8 @@ MdChipsCtrl.prototype.configureAutocomplete = function(ctrl) {
     }));
 
     this.$element.find('input')
-        .on('focus',angular.bind(this, this.onInputFocus) )
-        .on('blur', angular.bind(this, this.onInputBlur) );
+        .on('focus',angular.bind(this, this.onInputFocus))
+        .on('blur', angular.bind(this, this.onInputBlur));
   }
 };
 

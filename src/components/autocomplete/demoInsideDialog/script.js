@@ -46,7 +46,7 @@
      * remote dataservice call.
      */
     function querySearch (query) {
-      return query ? self.states.filter( createFilterFor(query) ) : self.states;
+      return query ? self.states.filter(createFilterFor(query)) : self.states;
     }
 
     /**
@@ -61,7 +61,7 @@
               South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia,\
               Wisconsin, Wyoming';
 
-      return allStates.split(/, +/g).map( function (state) {
+      return allStates.split(/, +/g).map(function (state) {
         return {
           value: state.toLowerCase(),
           display: state

@@ -50,6 +50,6 @@ angular
       return results;
     }
   })
-  .config( function( $mdIconProvider ){
+  .config(function($mdIconProvider){
     $mdIconProvider.iconSet("avatar", 'icons/avatar-icons.svg', 128);
   });

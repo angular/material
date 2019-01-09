@@ -245,7 +245,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
     angular.element($window).off('resize', debouncedOnResize);
 
-    if ( elements ){
+    if (elements){
       var items = ['ul', 'scroller', 'scrollContainer', 'input'];
       angular.forEach(items, function(key){
         elements.$[key].remove();
@@ -876,7 +876,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     else if (isPromise) handleAsyncResults(items);
 
     function handleAsyncResults(items) {
-      if ( !items ) return;
+      if (!items) return;
 
       items = $q.when(items);
       fetchesInProgress++;

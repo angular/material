@@ -737,7 +737,7 @@ describe('$mdPanel', function() {
             return $q.when(this);
           };
 
-          var config = angular.extend( {'onCloseSuccess': onCloseSuccess,
+          var config = angular.extend({'onCloseSuccess': onCloseSuccess,
               clickOutsideToClose: true, }, DEFAULT_CONFIG);
 
           openPanel(config);
@@ -760,7 +760,7 @@ describe('$mdPanel', function() {
             return $q.when(this);
           };
 
-          var config = angular.extend( {'onCloseSuccess': onCloseSuccess,
+          var config = angular.extend({'onCloseSuccess': onCloseSuccess,
               escapeToClose: true }, DEFAULT_CONFIG);
 
           openPanel(config);

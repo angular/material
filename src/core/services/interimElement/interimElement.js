@@ -493,8 +493,8 @@ function InterimElementProvider() {
             options.onCompiling && options.onCompiling(options);
 
             compileElement(options)
-              .then(function( compiledData ) {
-                element = linkElement( compiledData, options );
+              .then(function(compiledData) {
+                element = linkElement(compiledData, options);
 
                 // Expose the cleanup function from the compiler.
                 options.cleanupElement = compiledData.cleanup;
@@ -522,13 +522,13 @@ function InterimElementProvider() {
         function transitionOutAndRemove(response, isCancelled, opts) {
 
           // abort if the show() and compile failed
-          if ( !element ) return $q.when(false);
+          if (!element) return $q.when(false);
 
           options = angular.extend(options || {}, opts || {});
           options.cancelAutoHide && options.cancelAutoHide();
           options.element.triggerHandler('$mdInterimElementRemove');
 
-          if ( options.$destroy === true ) {
+          if (options.$destroy === true) {
 
             return hideElement(options.element, options).then(function(){
               (isCancelled && rejectAll(response)) || resolveAll(response);
@@ -567,7 +567,7 @@ function InterimElementProvider() {
          */
         function configureScopeAndTransitions(options) {
           options = options || { };
-          if ( options.template ) {
+          if (options.template) {
             options.template = $mdUtil.processTemplate(options.template);
           }
 
@@ -591,7 +591,7 @@ function InterimElementProvider() {
               // the old one finishes compiling.
               return element && $animate.leave(element) || $q.when();
             }
-          }, options );
+          }, options);
 
         }
 
@@ -720,7 +720,7 @@ function InterimElementProvider() {
           return $q(function (resolve, reject) {
             try {
               // Start transitionIn
-              var action = $q.when( options.onRemove(options.scope, element, options) || true );
+              var action = $q.when(options.onRemove(options.scope, element, options) || true);
 
               // Trigger callback *before* the remove operation starts
               announceRemoving(element, action);
@@ -729,14 +729,14 @@ function InterimElementProvider() {
                 // For $destroy, onRemove should be synchronous
                 resolve(element);
 
-                if (!options.preserveScope && options.scope ) {
+                if (!options.preserveScope && options.scope) {
                   // scope destroy should still be be done after the current digest is done
-                  action.then( function() { options.scope.$destroy(); });
+                  action.then(function() { options.scope.$destroy(); });
                 }
               } else {
                 // Wait until transition-out is done
                 action.then(function () {
-                  if (!options.preserveScope && options.scope ) {
+                  if (!options.preserveScope && options.scope) {
                     options.scope.$destroy();
                   }
 

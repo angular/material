@@ -35,7 +35,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
   var hasComputedStyle = function (target, key, expectedVal) {
     var hasValue = false;
 
-    if ( target && target.length  ) {
+    if (target && target.length) {
       var computedStyles = $window.getComputedStyle(target[0]);
       hasValue = angular.isDefined(computedStyles[key]) && (expectedVal ? computedStyles[key] == expectedVal : true);
     }
@@ -91,16 +91,16 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       var ltr = !($document[0].dir == 'rtl' || $document[0].body.dir == 'rtl');
 
       // If accessor
-      if ( arguments.length == 0 ) return ltr ? 'ltr' : 'rtl';
+      if (arguments.length == 0) return ltr ? 'ltr' : 'rtl';
 
       // If mutator
       var elem = angular.element(element);
 
-      if ( ltr && angular.isDefined(lValue)) {
+      if (ltr && angular.isDefined(lValue)) {
         elem.css(property, validateCssValue(lValue));
       }
-      else if ( !ltr && angular.isDefined(rValue)) {
-        elem.css(property, validateCssValue(rValue) );
+      else if (!ltr && angular.isDefined(rValue)) {
+        elem.css(property, validateCssValue(rValue));
       }
     },
 
@@ -109,12 +109,12 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
       var elem = angular.element(element);
 
-      if ( ltr && angular.isDefined(lProperty)) {
+      if (ltr && angular.isDefined(lProperty)) {
         elem.css(lProperty, validateCssValue(value));
         elem.css(rProperty, '');
       }
-      else if ( !ltr && angular.isDefined(rProperty)) {
-        elem.css(rProperty, validateCssValue(value) );
+      else if (!ltr && angular.isDefined(rProperty)) {
+        elem.css(rProperty, validateCssValue(value));
         elem.css(lProperty, '');
       }
     },
@@ -173,11 +173,11 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
       elToFocus = scanForFocusable(containerEl, attributeVal || AUTO_FOCUS);
 
-      if ( !elToFocus && attributeVal != AUTO_FOCUS) {
+      if (!elToFocus && attributeVal != AUTO_FOCUS) {
         // Scan for deprecated attribute
         elToFocus = scanForFocusable(containerEl, this.prefixer('md-auto-focus', true));
 
-        if ( !elToFocus ) {
+        if (!elToFocus) {
           // Scan for fallback to 'universal' API
           elToFocus = scanForFocusable(containerEl, AUTO_FOCUS);
         }
@@ -193,7 +193,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         var elFound, items = target[0].querySelectorAll(selector);
 
         // Find the last child element with the focus attribute
-        if ( items && items.length ){
+        if (items && items.length){
           items.length && angular.forEach(items, function(it) {
             it = angular.element(it);
 
@@ -264,7 +264,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
           scrollMask.off('wheel');
           scrollMask.off('touchmove');
 
-          if (!options.disableScrollMask && scrollMask[0].parentNode ) {
+          if (!options.disableScrollMask && scrollMask[0].parentNode) {
             scrollMask[0].parentNode.removeChild(scrollMask[0]);
           }
         };
@@ -379,7 +379,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
           r = values;
         try {
           for (var s in p) {
-            if (p.hasOwnProperty(s) ) {
+            if (p.hasOwnProperty(s)) {
               r = r[p[s]];
             }
           }
@@ -539,7 +539,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * @param onlyParent Only start checking from the parent element, not `el`.
      */
     getClosest: function getClosest(el, validateWith, onlyParent) {
-      if ( angular.isString(validateWith) ) {
+      if (angular.isString(validateWith)) {
         var tagName = validateWith.toUpperCase();
         validateWith = function(el) {
           return el.nodeName.toUpperCase() === tagName;
@@ -584,7 +584,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     extractElementByName: function(element, nodeName, scanDeep, warnNotFound) {
       var found = scanTree(element);
       if (!found && !!warnNotFound) {
-        $log.warn( $mdUtil.supplant("Unable to find node '{0}' in element '{1}'.",[nodeName, element[0].outerHTML]) );
+        $log.warn($mdUtil.supplant("Unable to find node '{0}' in element '{1}'.",[nodeName, element[0].outerHTML]));
       }
 
       return angular.element(found || element);
@@ -600,7 +600,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
        * Case-insensitive scan of current elements only (do not descend).
        */
       function scanLevel(element) {
-        if ( element ) {
+        if (element) {
           for (var i = 0, len = element.length; i < len; i++) {
             if (element[i].nodeName.toLowerCase() === nodeName) {
               return element[i];
@@ -615,10 +615,10 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
        */
       function scanChildren(element) {
         var found;
-        if ( element ) {
+        if (element) {
           for (var i = 0, len = element.length; i < len; i++) {
             var target = element[i];
-            if ( !found ) {
+            if (!found) {
               for (var j = 0, numChild = target.childNodes.length; j < numChild; j++) {
                 found = found || scanTree([target.childNodes[j]]);
               }

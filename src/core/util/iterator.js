@@ -1,6 +1,6 @@
   angular
     .module('material.core')
-    .config( function($provide){
+    .config(function($provide){
        $provide.decorator('$mdUtil', ['$delegate', function ($delegate){
            /**
             * Inject the iterator facade to easily support iteration and accessors
@@ -76,7 +76,7 @@
      * @returns {Array.length|*|number|boolean}
      */
     function inRange(index) {
-      return _items.length && ( index > -1 ) && (index < _items.length );
+      return _items.length && (index > -1) && (index < _items.length);
     }
 
     /**
@@ -132,7 +132,7 @@
      * @returns {*}
      */
     function add(item, index) {
-      if ( !item ) return -1;
+      if (!item) return -1;
 
       if (!angular.isNumber(index)) {
         index = _items.length;
@@ -148,7 +148,7 @@
      * @param item
      */
     function remove(item) {
-      if ( contains(item) ){
+      if (contains(item)){
         _items.splice(indexOf(item), 1);
       }
     }

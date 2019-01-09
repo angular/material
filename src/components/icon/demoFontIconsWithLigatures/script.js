@@ -1,7 +1,7 @@
 
 angular
   .module('appDemoFontIconsWithLigatures', ['ngMaterial'])
-  .controller('DemoCtrl', function( $scope ) {
+  .controller('DemoCtrl', function($scope) {
       // Specify a list of font-icons with ligatures and color overrides
       var iconData = [
             {name: 'accessibility'  , color: "#777" },

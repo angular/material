@@ -58,7 +58,7 @@ describe('util', function() {
         var results = $mdUtil.supplant(template,[param1, param2]);
         var segment = '<md-select-menu >';  // After supplant() part of the result should be...
 
-        expect( results.indexOf(segment) > -1 ).toBe(true);
+        expect(results.indexOf(segment) > -1).toBe(true);
 
       }));
 
@@ -171,7 +171,7 @@ describe('util', function() {
         var target = $mdUtil.extractElementByName(widget, 'md-button');
 
         // Returns same element
-        expect( target[0] === widget[0] ).toBe(true);
+        expect(target[0] === widget[0]).toBe(true);
       }));
 
       it('should not find valid element for shallow scan', inject(function($rootScope, $compile, $mdUtil) {
@@ -179,7 +179,7 @@ describe('util', function() {
         $rootScope.$apply();
         var target = $mdUtil.extractElementByName(widget, 'md-button');
 
-        expect( target[0] !== widget[0] ).toBe(false);
+        expect(target[0] !== widget[0]).toBe(false);
       }));
 
       it('should find valid element for deep scan', inject(function($rootScope, $compile, $mdUtil) {
@@ -187,7 +187,7 @@ describe('util', function() {
         $rootScope.$apply();
         var target = $mdUtil.extractElementByName(widget, 'md-button', true);
 
-        expect( target !== widget ).toBe(true);
+        expect(target !== widget).toBe(true);
       }));
     });
 

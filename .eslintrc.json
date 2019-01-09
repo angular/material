@@ -222,7 +222,7 @@
         "sort-vars": "off",
         "space-before-blocks": "off",
         "space-before-function-paren": "off",
-        "space-in-parens": "off",
+        "space-in-parens": ["error", "never"],
         "space-infix-ops": "off",
         "space-unary-ops": "off",
         "spaced-comment": "off",

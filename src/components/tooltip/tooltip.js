@@ -271,7 +271,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
         var attributeObserver = new MutationObserver(function(mutations) {
           mutations.forEach(function(mutation) {
             if (mutation.attributeName === 'md-visible' &&
-                !scope.visibleWatcher ) {
+                !scope.visibleWatcher) {
               scope.visibleWatcher = scope.$watch('mdVisible',
                   onVisibleChanged);
             }

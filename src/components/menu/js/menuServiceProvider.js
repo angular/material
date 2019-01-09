@@ -87,7 +87,7 @@ function MenuProvider($$interimElementProvider) {
       // For navigation $destroy events, do a quick, non-animated removal,
       // but for normal closes (from clicks, etc) animate the removal
 
-      return (opts.$destroy === true) ? detachAndClean() : animateRemoval().then( detachAndClean );
+      return (opts.$destroy === true) ? detachAndClean() : animateRemoval().then(detachAndClean);
 
       /**
        * For normal closes, animate the removal.
@@ -259,7 +259,7 @@ function MenuProvider($$interimElementProvider) {
         var focusTarget = opts.menuContentEl[0]
           .querySelector(prefixer.buildSelector(['md-menu-focus-target', 'md-autofocus']));
 
-        if ( !focusTarget ) {
+        if (!focusTarget) {
           var childrenLen = opts.menuContentEl[0].children.length;
           for(var childIndex = 0; childIndex < childrenLen; childIndex++) {
             var child = opts.menuContentEl[0].children[childIndex];
@@ -464,7 +464,7 @@ function MenuProvider($$interimElementProvider) {
 
       if (positionMode.top === 'target' || positionMode.left === 'target' || positionMode.left === 'target-right') {
         alignTarget = firstVisibleChild();
-        if ( alignTarget ) {
+        if (alignTarget) {
           // TODO: Allow centering on an arbitrary node, for now center on first menu-item's child
           alignTarget = alignTarget.firstElementChild || alignTarget;
           alignTarget = alignTarget.querySelector(prefixer.buildSelector('md-menu-align-target')) || alignTarget;

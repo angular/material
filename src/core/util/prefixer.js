@@ -1,6 +1,6 @@
 angular
   .module('material.core')
-  .config( function($provide) {
+  .config(function($provide) {
     $provide.decorator('$mdUtil', ['$delegate', function ($delegate) {
 
       // Inject the prefixer into our original $mdUtil service.

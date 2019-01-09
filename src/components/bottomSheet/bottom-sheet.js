@@ -230,7 +230,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
       // This is a very common problem, so we have to notify the developer about this.
       if (element.hasClass('ng-cloak')) {
         var message = '$mdBottomSheet: using `<md-bottom-sheet ng-cloak>` will affect the bottom-sheet opening animations.';
-        $log.warn( message, element[0] );
+        $log.warn(message, element[0]);
       }
 
       if (options.isLockedOpen) {

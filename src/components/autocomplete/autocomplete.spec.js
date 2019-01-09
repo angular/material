@@ -850,7 +850,7 @@ describe('<md-autocomplete>', function() {
                   placeholder="placeholder">\
                 <span md-highlight-text="searchText">{{item.display}}</span>\
               </md-autocomplete>';
-      beforeEach( inject(function($timeout, $material) {
+      beforeEach(inject(function($timeout, $material) {
         scope = createScope();
         element = compile(template, scope);
         ctrl = element.controller('mdAutocomplete');

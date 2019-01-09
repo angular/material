@@ -168,7 +168,7 @@ describe('$mdGesture', function() {
     // Click tests should only be enabled when `$$hijackClicks == true` (for mobile)
 
     it('should click if distance < options.maxDistance', inject(function($document, $mdGesture) {
-      if ( $mdGesture.$$hijackClicks ) {
+      if ($mdGesture.$$hijackClicks) {
         var spy = jasmine.createSpy('click');
         var el = angular.element('<div>');
 
@@ -192,7 +192,7 @@ describe('$mdGesture', function() {
     }));
 
     it('should not click if distance > options.maxDistance', inject(function($mdGesture, $document) {
-      if ( $mdGesture.$$hijackClicks ) {
+      if ($mdGesture.$$hijackClicks) {
         var spy = jasmine.createSpy('click');
         var el = angular.element('<div>');
 

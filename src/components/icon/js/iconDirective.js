@@ -227,7 +227,7 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
     }
 
     /* Don't process ARIA if already valid */
-    if ( attr.role === "img" && !attr.ariaHidden && !$mdAria.hasAriaLabel(element) ) {
+    if (attr.role === "img" && !attr.ariaHidden && !$mdAria.hasAriaLabel(element)) {
       var iconName;
       if (attr.alt) {
         /* Use alt text by default if available */
