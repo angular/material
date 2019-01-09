@@ -935,7 +935,7 @@ describe('md-slider', function() {
 
   });
 
-  
+
   it('should set a default tabindex', function() {
     var slider = setup();
     var wrapper = getWrapper(slider);

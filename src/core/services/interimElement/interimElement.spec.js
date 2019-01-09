@@ -16,7 +16,7 @@ describe('$$interimElement service', function() {
         expect(interimTest.show).toBeOfType('function');
 
         var builder = interimTest.build();
-        [ 'controller', 'controllerAs', 'onRemove', 'onShow', 'resolve', 
+        [ 'controller', 'controllerAs', 'onRemove', 'onShow', 'resolve',
           'template', 'templateUrl', 'themable', 'transformTemplate', 'parent'
         ].forEach(function(methodName) {
           expect(builder[methodName]).toBeOfType('function');
@@ -234,7 +234,7 @@ describe('$$interimElement service', function() {
         flush();
         expect($compilerSpy.calls.mostRecent().args[0].key).toBe('newValue');
         expect($compilerSpy.calls.mostRecent().args[0].key2).toBe('newValue2');
-        
+
         $compilerSpy.calls.reset();
         flush();
         flush();

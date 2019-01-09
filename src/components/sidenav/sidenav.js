@@ -313,7 +313,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInterac
     if (!attr.hasOwnProperty('mdDisableBackdrop')) {
       backdrop = $mdUtil.createBackdrop(scope, "md-sidenav-backdrop md-opaque ng-enter");
     }
-    
+
     // If md-disable-close-events is set on the sidenav we will disable
     // backdrop click and Escape key events
     if (attr.hasOwnProperty('mdDisableCloseEvents')) {

@@ -61,11 +61,11 @@ describe('mdSidenav', function() {
 
     describe('disable click and Escape key events if md-disable-close-events is set to true',
       function() {
-        it('should not close on escape and still show the backdrop', 
+        it('should not close on escape and still show the backdrop',
           inject(function($rootScope, $material, $mdConstant, $timeout) {
             var el = setup('md-is-open="show" md-disable-close-events');
             $rootScope.$apply('show = true');
-      
+
             $material.flushOutstandingAnimations();
             el.parent().triggerHandler({
               type: 'keydown',
@@ -82,14 +82,14 @@ describe('mdSidenav', function() {
           inject(function($rootScope, $material, $timeout) {
             var el = setup('md-is-open="show" md-disable-close-events');
             $rootScope.$apply('show = true');
-      
+
             $material.flushOutstandingAnimations();
             el.parent().find('md-backdrop').triggerHandler('click');
             $timeout.flush();
-            var backdrop = el.parent().find('md-backdrop');        
+            var backdrop = el.parent().find('md-backdrop');
 
             expect($rootScope.show).toBe(true);
-            expect(backdrop.length).toBe(1);        
+            expect(backdrop.length).toBe(1);
         }));
     });
 

@@ -221,11 +221,11 @@ describe('<md-chips>', function() {
       it('should make the event available when removing a chip', function() {
         var element = buildChips(CHIP_REMOVE_TEMPLATE);
         var chips = getChipElements(element);
- 
+
         scope.removeChip = jasmine.createSpy('removeChip');
         var chipButton = angular.element(chips[1]).find('button');
         chipButton[0].click();
- 
+
         expect(scope.removeChip).toHaveBeenCalled();
         expect(scope.removeChip.calls.mostRecent().args[2].type).toBe('click');
       });
