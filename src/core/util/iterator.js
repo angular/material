@@ -27,7 +27,7 @@
     }
 
     reloop = !!reloop;
-    var _items = items || [ ];
+    var _items = items || [];
 
     // Published API
     return {

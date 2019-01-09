@@ -19,7 +19,7 @@
   function ComponentRegistry($log, $q) {
 
     var self;
-    var instances = [ ];
+    var instances = [];
     var pendings = { };
 
     return self = {

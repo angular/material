@@ -337,7 +337,7 @@ function MdToastProvider($$interimElementProvider) {
     .addPreset('simple', {
       argOption: 'textContent',
       methods: ['textContent', 'content', 'action', 'actionKey', 'actionHint', 'highlightAction',
-                'highlightClass', 'theme', 'parent', 'dismissHint' ],
+                'highlightClass', 'theme', 'parent', 'dismissHint'],
       options: /* @ngInject */ function($mdToast, $mdTheming) {
         return {
           template:

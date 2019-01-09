@@ -24,7 +24,7 @@ var isInitialized = false;
  * AngularJS Material Gesture handling for touch devices. This module replaced the usage of the hammerjs library.
  */
 angular
-  .module('material.core.gestures', [ ])
+  .module('material.core.gestures', [])
   .provider('$mdGesture', MdGestureProvider)
   .factory('$$MdGestureHandler', MdGestureHandler)
   .run(attachToDocument);

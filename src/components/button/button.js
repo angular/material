@@ -6,7 +6,7 @@
  * Button
  */
 angular
-    .module('material.components.button', [ 'material.core' ])
+    .module('material.components.button', ['material.core'])
     .directive('mdButton', MdButtonDirective)
     .directive('a', MdAnchorDirective);
 

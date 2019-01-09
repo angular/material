@@ -6,7 +6,7 @@ describe('iterator', function() {
     var list, iter;
 
     beforeEach(inject(function ($mdUtil) {
-      list = [ 13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99 ];
+      list = [13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99];
       iter = $mdUtil.iterator(list);
     }));
 
@@ -78,7 +78,7 @@ describe('iterator', function() {
     var list, iter;
 
     beforeEach(inject(function ($mdUtil) {
-      list = [ 13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99 ];
+      list = [13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99];
       iter = $mdUtil.iterator(list);
     }));
 
@@ -133,7 +133,7 @@ describe('iterator', function() {
     var list, iter;
 
     beforeEach(inject(function ($mdUtil) {
-      list = [ 13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99 ];
+      list = [13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99];
       iter = $mdUtil.iterator(list);
     }));
 
@@ -175,7 +175,7 @@ describe('iterator', function() {
       expect(iter.last()).toBe('Max');
       expect(iter.first()).toBe(13);
 
-      iter = $mdUtil.iterator([ 2, 5 ]);
+      iter = $mdUtil.iterator([2, 5]);
       iter.remove(2);
       expect(iter.last()).toBe(iter.first());
 
@@ -211,7 +211,7 @@ describe('iterator', function() {
       iter.remove(13);
       expect(iter.hasPrevious(iter.first())).toBe(false);
 
-      iter =  $mdUtil.iterator(list = [ 2, 3 ]);
+      iter =  $mdUtil.iterator(list = [2, 3]);
       expect(iter.hasPrevious(iter.last())).toBe(true);
       iter.remove(2);
       expect(iter.hasPrevious(iter.last())).toBe(false);
@@ -261,7 +261,7 @@ describe('iterator', function() {
     var validate = function(item) { return (item !== 14) && (item !== 'Andrew'); };
 
     beforeEach(inject(function ($mdUtil) {
-      list = [ 13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99 ];
+      list = [13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99];
       iter = $mdUtil.iterator(list);
     }));
 

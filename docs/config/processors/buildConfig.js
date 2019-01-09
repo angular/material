@@ -17,8 +17,8 @@ module.exports = function buildConfigProcessor() {
       buildConfig: buildConfig
     });
 
-    return q.all([ getSHA(), getCommitDate() ])
-            .then(function(){
+    return q.all([getSHA(), getCommitDate()])
+            .then(function() {
               return docs;
           });
   }
