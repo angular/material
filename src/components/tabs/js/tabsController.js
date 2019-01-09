@@ -636,10 +636,10 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     var width = 0;
 
     angular.forEach(tabs, function (tab) {
-      //-- Uses the larger value between `getBoundingClientRect().width` and `offsetWidth`.  This
-      //   prevents `offsetWidth` value from being rounded down and causing wrapping issues, but
-      //   also handles scenarios where `getBoundingClientRect()` is inaccurate (ie. tabs inside
-      //   of a dialog)
+      // Uses the larger value between `getBoundingClientRect().width` and `offsetWidth`.  This
+      // prevents `offsetWidth` value from being rounded down and causing wrapping issues, but
+      // also handles scenarios where `getBoundingClientRect()` is inaccurate (ie. tabs inside
+      // of a dialog).
       width += Math.max(tab.offsetWidth, tab.getBoundingClientRect().width);
     });
 

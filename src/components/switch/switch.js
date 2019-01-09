@@ -133,7 +133,7 @@ function MdSwitch(mdCheckboxDirective, $mdUtil, $mdConstant, $parse, $$rAF, $mdG
 
         var percent = ev.pointer.distanceX / drag.width;
 
-        //if checked, start from right. else, start from left
+        // if checked, start from right. else, start from left
         var translate = ngModel.$viewValue ?  1 + percent : percent;
         // Make sure the switch stays inside its bounds, 0-1%
         translate = Math.max(0, Math.min(1, translate));

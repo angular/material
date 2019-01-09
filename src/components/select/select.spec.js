@@ -217,7 +217,7 @@ describe('<md-select>', function() {
       $material.flushInterimElement();
 
       // FIXME- does not work with minified, jquery
-      //expect($document[0].activeElement).toBe(select[0]);
+      // expect($document[0].activeElement).toBe(select[0]);
 
       // Clean up the DOM after the test.
       $document[0].body.removeChild(select[0]);

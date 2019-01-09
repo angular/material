@@ -1406,7 +1406,7 @@ function SelectProvider($$interimElementProvider) {
 
         angular.extend(options, {
           isRemoved: false,
-          target: angular.element(options.target), //make sure it's not a naked dom node
+          target: angular.element(options.target), // make sure it's not a naked DOM node
           parent: angular.element(options.parent),
           selectEl: selectEl,
           contentEl: element.find('md-content'),

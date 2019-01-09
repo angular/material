@@ -68,7 +68,7 @@ function($q, $compile, $timeout) {
         return file.contentsPromise;
       }))
       .then(function(styles) {
-        styles = styles.join('\n'); //join styles as one string
+        styles = styles.join('\n'); // join styles as one string
 
         var styleElement = angular.element('<style>' + styles + '</style>');
         document.body.appendChild(styleElement[0]);

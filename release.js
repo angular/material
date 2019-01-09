@@ -56,7 +56,7 @@
     log('If you would like to cancel this release, please run "./abort"');
   }
 
-  //-- utility methods
+  // utility methods
 
   /** confirms that you will be able to perform the release before attempting */
   function validate () {
@@ -146,7 +146,7 @@
           }
         } else {
           version[ type ]++;
-          //-- reset any version numbers lower than the one changed
+          // reset any version numbers lower than the one changed
           switch (type) {
             case 'minor': version.patch = 0;
             case 'patch': version.rc = 0;
@@ -216,13 +216,13 @@
     const options = { cwd: './bower-material' };
     const bower   = require(options.cwd + '/bower.json'),
           pkg     = require(options.cwd + '/package.json');
-    //-- update versions in config files
+    // update versions in config files
     bower.version = pkg.version = newVersion;
     fs.writeFileSync(options.cwd + '/package.json', JSON.stringify(pkg, null, 2));
     fs.writeFileSync(options.cwd + '/bower.json', JSON.stringify(bower, null, 2));
     done();
     start('Building bower files...');
-    //-- build files for bower
+    // build files for bower
     exec([
       'rm -rf dist',
       'gulp build',
@@ -232,7 +232,7 @@
      ]);
     done();
     start('Copy files into bower repo...');
-    //-- copy files over to bower repo
+    // copy files over to bower repo
     exec([
            'cp -Rf ../dist/* ./',
            'git add -A',
@@ -240,7 +240,7 @@
            'rm -rf ../dist'
          ], options);
     done();
-    //-- add steps to push script
+    // add steps to push script
     pushCmds.push(
       comment('push to bower (master and tag) and publish to npm'),
       'cd ' + options.cwd,
@@ -262,14 +262,14 @@
     const options = { cwd: './code.material.angularjs.org' };
     writeDocsJson();
 
-    //-- build files for bower
+    // build files for bower
     exec([
         'rm -rf dist',
         'gulp docs'
     ]);
     replaceFilePaths();
 
-    //-- copy files over to site repo
+    // copy files over to site repo
     exec([
         `cp -Rf ../dist/docs ${newVersion}`,
         'rm -rf latest && cp -Rf ../dist/docs latest',
@@ -280,12 +280,12 @@
     replaceBaseHref(newVersion);
     replaceBaseHref('latest');
 
-    //-- update firebase.json file
+    // update firebase.json file
     updateFirebaseJson();
     exec([ 'git commit --amend --no-edit -a' ], options);
     done();
 
-    //-- add steps to push script
+    // add steps to push script
     pushCmds.push(
         comment('push the site'),
         'cd ' + options.cwd,
@@ -323,7 +323,7 @@
       const config = require(options.cwd + '/docs.json');
       config.versions.unshift(newVersion);
 
-      //-- only set to default if not a release candidate
+      // only set to default if not a release candidate
       config.latest = newVersion;
       fs.writeFileSync(options.cwd + '/docs.json', JSON.stringify(config, null, 2));
     }
@@ -331,7 +331,7 @@
 
   /** replaces localhost file paths with public URLs */
   function replaceFilePaths () {
-    //-- handle docs.js
+    // handle docs.js
     const filePath = path.join(__dirname, '/dist/docs/docs.js');
     const file = fs.readFileSync(filePath);
     const contents = file.toString()
@@ -342,7 +342,7 @@
 
   /** replaces base href in index.html for new version as well as latest */
   function replaceBaseHref (folder) {
-    //-- handle index.html
+    // handle index.html
     const filePath = path.join(__dirname, '/code.material.angularjs.org/', folder, '/index.html');
     const file = fs.readFileSync(filePath);
     const contents = file.toString().replace(/base href="\//g, 'base href="/' + folder + '/');

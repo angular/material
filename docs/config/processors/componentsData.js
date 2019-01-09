@@ -80,7 +80,7 @@ module.exports = function componentsGenerateProcessor() {
         });
 
       })
-      .filter() //remove null items
+      .filter() // remove null items
       .value();
 
     const EXPOSED_CORE_SERVICES = '$mdMedia';

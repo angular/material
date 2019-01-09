@@ -112,7 +112,7 @@
     };
   }
 
-  /*** Initialization ***/
+  /** Initialization **/
 
   /**
    * Initialize the controller by saving a reference to the calendar and

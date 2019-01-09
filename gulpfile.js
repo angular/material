@@ -1,10 +1,10 @@
 const gulp = require('gulp');
 const fs = require('fs');
 
-//-- include docs gulpfile (should eventually be factored out)
+// include docs gulpfile (should eventually be factored out)
 require('./docs/gulpfile');
 
-//-- read in all files from gulp/tasks and create tasks for them
+// read in all files from gulp/tasks and create tasks for them
 fs.readdirSync('./gulp/tasks')
     .filter(function (filename) {
       return filename.match(/\.js$/i);

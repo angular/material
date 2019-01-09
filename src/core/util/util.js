@@ -655,22 +655,22 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * @returns {*}
      */
     nextTick: function(callback, digest, scope) {
-      //-- grab function reference for storing state details
+      // grab function reference for storing state details
       var nextTick = $mdUtil.nextTick;
       var timeout = nextTick.timeout;
       var queue = nextTick.queue || [];
 
-      //-- add callback to the queue
+      // add callback to the queue
       queue.push({scope: scope, callback: callback});
 
-      //-- set default value for digest
+      // set default value for digest
       if (digest == null) digest = true;
 
-      //-- store updated digest/queue values
+      // store updated digest/queue values
       nextTick.digest = nextTick.digest || digest;
       nextTick.queue = queue;
 
-      //-- either return existing timeout or create a new one
+      // either return existing timeout or create a new one
       return timeout || (nextTick.timeout = $timeout(processQueue, 0, false));
 
       /**

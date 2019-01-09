@@ -180,7 +180,7 @@
 
       // TODO: On desktop, we should be able to reset the indexes so you cannot tab through, but
       // this breaks accessibility, especially on mobile, since you have no arrow keys to press
-      //resetActionTabIndexes();
+      // resetActionTabIndexes();
     }
 
     function disableKeyboard() {

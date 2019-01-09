@@ -133,7 +133,7 @@ function MdButtonDirective($mdButtonInkRipple, $mdTheming, $mdAria, $mdInteracti
     if (isAnchor(attr)) {
       return '<a class="md-button" ng-transclude></a>';
     } else {
-      //If buttons don't have type="button", they will submit forms automatically.
+      // If buttons don't have type="button", they will submit forms automatically.
       var btnType = (typeof attr.type === 'undefined') ? 'button' : attr.type;
       return '<button class="md-button" type="' + btnType + '" ng-transclude></button>';
     }
