@@ -1,7 +1,7 @@
 // INPUT = $1 = VERSION
 //  (something like 1.3 or 1.4.5)
 
-// OUTPUT = a specific version number 
+// OUTPUT = a specific version number
 //  (something like 1.3.19 or 1.5.0-beta.2)
 
 // this is used so that we can run a `git`
@@ -60,7 +60,7 @@ function findMaxVersion(branch, output) {
     const result = line.match(versionRegex);
     if (result && result.length > 0) {
       // stable releases have a higher weight than beta/RC versions
-      // so we want to include 
+      // so we want to include
       let weight = result[1] * WEIGHTS.stable;
 
       if (result[2]) {

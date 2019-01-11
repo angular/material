@@ -35,7 +35,7 @@ describe('md-input-container animations', function() {
     var container = el.find('md-input-container'),
       input = el.find('input'),
       errors;
-      
+
 
     // Mimic the real validations/animations that fire
 

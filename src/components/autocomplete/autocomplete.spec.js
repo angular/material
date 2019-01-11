@@ -428,7 +428,7 @@ describe('<md-autocomplete>', function() {
       var input = element.find('input');
 
       expect(input).toHaveClass(scope.inputClass);
-      
+
       element.remove();
     });
 
