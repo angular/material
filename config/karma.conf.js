@@ -6,7 +6,7 @@ module.exports = function(config) {
 
     // To enable use of `gulp karma-watch`,
     // don't use the dist/angular-material.js.
-    //'dist/angular-material.js',   // Un-minified source
+    // 'dist/angular-material.js',   // Un-minified source
 
 
     // Test utilities, source, and specifications.

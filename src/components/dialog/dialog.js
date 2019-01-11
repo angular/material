@@ -61,7 +61,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
         if (content) {
           images = content.getElementsByTagName('img');
           addOverflowClass();
-          //-- delayed image loading may impact scroll height, check after images are loaded
+          // delayed image loading may impact scroll height, check after images are loaded
           angular.element(images).on('load', addOverflowClass);
         }
 

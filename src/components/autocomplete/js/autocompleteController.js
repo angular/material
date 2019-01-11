@@ -69,7 +69,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
   return init();
 
-  //-- initialization methods
+  // initialization methods
 
   /**
    * Initialize the controller, setup watchers, gather elements
@@ -325,7 +325,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     return obj;
   }
 
-  //-- event/change handlers
+  // event/change handlers
 
   /**
    * Handles changes to the `hidden` property.
@@ -610,7 +610,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     }
   }
 
-  //-- getters
+  // getters
 
   /**
    * Returns the minimum length needed to display the dropdown.
@@ -780,7 +780,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     return ($scope.searchText || '').length >= getMinLength();
   }
 
-  //-- actions
+  // actions
 
   /**
    * Defines a public property with a handler and a default value.
@@ -804,7 +804,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * @param {number} index to select
    */
   function select (index) {
-    //-- force form to update state for validation
+    // force form to update state for validation
     $mdUtil.nextTick(function () {
       getDisplayValue(ctrl.matches[ index ]).then(function (val) {
         var ngModel = elements.$.input.controller('ngModel');

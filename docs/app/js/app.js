@@ -614,7 +614,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   $rootScope.$on('$locationChangeSuccess', openPage);
   $scope.focusMainContent = focusMainContent;
 
-  //-- Define a fake model for the related page selector
+  // Define a fake model for the related page selector
   Object.defineProperty($rootScope, "relatedPage", {
     get: function () { return null; },
     set: angular.noop,

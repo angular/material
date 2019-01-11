@@ -1428,9 +1428,9 @@ describe('$mdDialog', function() {
         template: '<md-dialog class="two">',
         parent: parent
       });
-      //First run is for the old dialog being hidden.
+      // First run is for the old dialog being hidden.
       runAnimation();
-      //Second run is for the new dialog being shown.
+      // Second run is for the new dialog being shown.
       runAnimation();
       $mdDialog.hide();
       runAnimation();

@@ -382,7 +382,7 @@ describe('<md-tabs>', function () {
       expect(tabContent.attr('role')).toBe('tabpanel');
       expect(tabContent.attr('aria-labelledby')).toBe(tabItem.attr('id'));
 
-      //Unique ids check
+      // Unique ids check
       expect(tabContent.attr('id')).not.toEqual(tabItem.attr('id'));
     });
 

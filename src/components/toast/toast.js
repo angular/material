@@ -470,7 +470,7 @@ function MdToastProvider($$interimElementProvider) {
       options.element = element;
 
       options.onSwipe = function(ev, gesture) {
-        //Add the relevant swipe class to the element so it can animate correctly
+        // Add the relevant swipe class to the element so it can animate correctly
         var swipe = ev.type.replace('$md.','');
         var direction = swipe.replace('swipe', '');
 

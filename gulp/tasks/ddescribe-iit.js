@@ -7,10 +7,8 @@ const kDisallowedFunctions = [
   // Allow xit/xdescribe --- disabling tests is okay
   'fit',
   'iit',
-  //'xit',
   'fdescribe',
   'ddescribe',
-  //'xdescribe',
   'describe.only',
   'it.only'
 ];

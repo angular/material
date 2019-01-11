@@ -606,7 +606,7 @@ describe('$mdGesture', function() {
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
       now = 1;
-      //10 distance = boundary. no swipe.
+      // 10 distance = boundary. no swipe.
       $document.triggerHandler({
         type: 'touchend', target: el[0], pageX: 10, pageY: 0
       });
@@ -618,7 +618,7 @@ describe('$mdGesture', function() {
       $document.triggerHandler({
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
-      //11 distance = enough. swipe.
+      // 11 distance = enough. swipe.
       $document.triggerHandler({
         type: 'touchend', target: el[0], pageX: 11, pageY: 0
       });

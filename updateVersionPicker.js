@@ -42,7 +42,7 @@
       'git push'
   ], { cwd: '/tmp/ngcode' });
 
-  //-- utility methods
+  // utility methods
 
   function exec (cmd, userOptions) {
     if (cmd instanceof Array) {

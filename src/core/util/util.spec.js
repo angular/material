@@ -347,16 +347,16 @@ describe('util', function() {
         $rootScope.$watch(digestWatchFn);
         expect(digestWatchFn).not.toHaveBeenCalled();
         expect(callback).not.toHaveBeenCalled();
-        //-- Add a bunch of calls to prove that they are batched
+        // Add a bunch of calls to prove that they are batched
         for (var i = 0; i < 10; i++) {
           timeout = $mdUtil.nextTick(callback);
           expect(timeout.$$timeoutId).toBeOfType('number');
         }
         $timeout.flush();
         expect(digestWatchFn).toHaveBeenCalled();
-        //-- $digest seems to be called one extra time here
+        // $digest seems to be called one extra time here
         expect(digestWatchFn.calls.count()).toBe(2);
-        //-- but callback is still called more
+        // but callback is still called more
         expect(callback.calls.count()).toBe(10);
       }));
 

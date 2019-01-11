@@ -238,7 +238,7 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
         this.state.pos = {x: pointer.x, y: pointer.y};
         this.state.timeout = $timeout(angular.bind(this, function holdDelayFn() {
           this.dispatchEvent(ev, '$md.hold');
-          this.cancel(); //we're done!
+          this.cancel(); // we're done!
         }), this.state.options.delay, false);
       },
       onMove: function (ev, pointer) {

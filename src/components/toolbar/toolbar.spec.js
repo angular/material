@@ -13,7 +13,8 @@ describe('<md-toolbar>', function() {
     $timeout = _$timeout_;
   }));
 
-  it('with scrollShrink, it should shrink scrollbar when going to bottom', inject(function($compile, $rootScope, $mdConstant, mdToolbarDirective) {
+  it('with scrollShrink, it should shrink scrollbar when going to bottom',
+    inject(function($compile, $rootScope, $mdConstant, mdToolbarDirective) {
 
     var parent = angular.element('<div>');
     var toolbar = angular.element('<md-toolbar>');
@@ -21,7 +22,7 @@ describe('<md-toolbar>', function() {
     // Make content and toolbar siblings
     parent.append(toolbar).append(contentEl);
 
-    //Prop will be used for offsetHeight, give a fake offsetHeight
+    // Prop will be used for offsetHeight, give a fake offsetHeight
     spyOn(toolbar, 'prop').and.callFake(function() {
       return 100;
     });
@@ -59,7 +60,7 @@ describe('<md-toolbar>', function() {
     $timeout.flush();
 
 
-    //Expect everything to be in its proper initial state.
+    // Expect everything to be in its proper initial state.
     expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
     expect(contentCss['margin-top']).toEqual('-100px');
     expect(contentCss['margin-bottom']).toEqual('-100px');

@@ -28,7 +28,7 @@ function buildScanner(pattern) {
 
     if (depsMatch) {
       dependencies = depsMatch.split(/\s*,\s*/).map(function(dep) {
-        dep = dep.trim().slice(1, -1); //remove quotes
+        dep = dep.trim().slice(1, -1); // remove quotes
         return dep;
       });
     }
