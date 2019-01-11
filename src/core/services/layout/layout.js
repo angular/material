@@ -6,10 +6,10 @@
   var SUFFIXES = /(-gt)?-(sm|md|lg|print)/g;
   var WHITESPACE = /\s+/g;
 
-  var FLEX_OPTIONS = ['grow', 'initial', 'auto', 'none', 'noshrink', 'nogrow' ];
+  var FLEX_OPTIONS = ['grow', 'initial', 'auto', 'none', 'noshrink', 'nogrow'];
   var LAYOUT_OPTIONS = ['row', 'column'];
-  var ALIGNMENT_MAIN_AXIS= [ "", "start", "center", "end", "stretch", "space-around", "space-between" ];
-  var ALIGNMENT_CROSS_AXIS= [ "", "start", "center", "end", "stretch" ];
+  var ALIGNMENT_MAIN_AXIS= ["", "start", "center", "end", "stretch", "space-around", "space-between"];
+  var ALIGNMENT_CROSS_AXIS= ["", "start", "center", "end", "stretch"];
 
   var config = {
     /**
@@ -77,9 +77,9 @@
     var SPECIAL_CHARS_REGEXP = /([:\-_]+(.))/g;
 
     // NOTE: these are also defined in constants::MEDIA_PRIORITY and constants::MEDIA
-    var BREAKPOINTS     = [ "", "xs", "gt-xs", "sm", "gt-sm", "md", "gt-md", "lg", "gt-lg", "xl", "print" ];
-    var API_WITH_VALUES = [ "layout", "flex", "flex-order", "flex-offset", "layout-align" ];
-    var API_NO_VALUES   = [ "show", "hide", "layout-padding", "layout-margin" ];
+    var BREAKPOINTS     = ["", "xs", "gt-xs", "sm", "gt-sm", "md", "gt-md", "lg", "gt-lg", "xl", "print"];
+    var API_WITH_VALUES = ["layout", "flex", "flex-order", "flex-offset", "layout-align"];
+    var API_NO_VALUES   = ["show", "hide", "layout-padding", "layout-margin"];
 
 
     // Build directive registration functions for the standard Layout API... for all breakpoints.
@@ -213,7 +213,7 @@
    * finish processing. Eliminates flicker with Material.Layouts
    */
   function buildCloakInterceptor(className) {
-    return [ '$timeout', function($timeout){
+    return ['$timeout', function($timeout){
       return {
         restrict : 'A',
         priority : -10,   // run after normal ng-cloak
@@ -510,7 +510,7 @@
     values = attrValue.toLowerCase().trim().replace(WHITESPACE, "-").split("-");
     if (values.length && (values[0] === "space")) {
       // for main-axis values of "space-around" or "space-between"
-      values = [ values[0]+"-"+values[1],values[2] ];
+      values = [values[0]+"-"+values[1],values[2]];
     }
 
     if (values.length > 0) axis.main  = values[0] || axis.main;

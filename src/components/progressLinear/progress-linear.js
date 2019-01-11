@@ -181,7 +181,7 @@ function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
     function animateIndicator(target, value) {
       if (isDisabled || !mode()) return;
 
-      var to = $mdUtil.supplant("translateX({0}%) scale({1},1)", [ (value-100)/2, value/100 ]);
+      var to = $mdUtil.supplant("translateX({0}%) scale({1},1)", [(value-100)/2, value/100]);
       var styles = toVendorCSS({ transform : to });
       angular.element(target).css(styles);
     }

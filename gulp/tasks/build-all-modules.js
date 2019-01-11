@@ -8,7 +8,7 @@ const util = require('../util');
 
 exports.task = function() {
   const isRelease = process.argv.indexOf('--release') !== -1;
-  return gulp.src(['src/core/', 'src/components/*' ])
+  return gulp.src(['src/core/', 'src/components/*'])
       .pipe(through2.obj(function(folder, enc, next) {
         const moduleId = folder.path.indexOf('components') > -1
             ? 'material.components.' + path.basename(folder.path)

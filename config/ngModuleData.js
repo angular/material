@@ -36,7 +36,7 @@ function buildScanner(pattern) {
     return match ? {
       name         : moduleName || '',
       module       : moduleName || '',
-      dependencies : dependencies || [ ]
+      dependencies : dependencies || []
     } : null;
   };
 }

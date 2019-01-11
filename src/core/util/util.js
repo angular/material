@@ -466,7 +466,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      */
     valueOnUse : function (scope, key, getter) {
       var value = null, args = Array.prototype.slice.call(arguments);
-      var params = (args.length > 3) ? args.slice(3) : [ ];
+      var params = (args.length > 3) ? args.slice(3) : [];
 
       Object.defineProperty(scope, key, {
         get: function () {

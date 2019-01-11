@@ -9,13 +9,13 @@ angular.module('progressLinearDemo1', ['ngMaterial'])
     self.determinateValue = 30;
     self.determinateValue2 = 30;
 
-    self.showList = [ ];
+    self.showList = [];
 
     /**
      * Turn off or on the 5 themed loaders
      */
     self.toggleActivation = function() {
-        if (!self.activated) self.showList = [ ];
+        if (!self.activated) self.showList = [];
         if (self.activated) {
           j = counter = 0;
           self.determinateValue = 30;

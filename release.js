@@ -10,8 +10,8 @@
   const child_process  = require('child_process');
   const pkg            = require('./package.json');
   let oldVersion       = pkg.version;
-  const abortCmds      = [ 'git reset --hard', 'git checkout staging', 'rm abort push' ];
-  const pushCmds       = [ 'rm abort push' ];
+  const abortCmds      = ['git reset --hard', 'git checkout staging', 'rm abort push'];
+  const pushCmds       = ['rm abort push'];
   const cleanupCmds    = [];
   const defaultOptions = { encoding: 'utf-8' };
   const origin         = 'git@github.com:angular/material.git';
@@ -134,8 +134,8 @@
 
     function getVersionOptions (version) {
       return version.match(/-rc\.?\d+$/)
-          ? [ increment(version, 'rc'), increment(version, 'minor') ]
-          : [ increment(version, 'patch'), addRC(increment(version, 'minor')) ];
+          ? [increment(version, 'rc'), increment(version, 'minor')]
+          : [increment(version, 'patch'), addRC(increment(version, 'minor'))];
 
       function increment (versionString, type) {
         const version = parseVersion(versionString);
@@ -282,7 +282,7 @@
 
     // update firebase.json file
     updateFirebaseJson();
-    exec([ 'git commit --amend --no-edit -a' ], options);
+    exec(['git commit --amend --no-edit -a'], options);
     done();
 
     // add steps to push script

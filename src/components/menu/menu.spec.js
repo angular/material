@@ -371,7 +371,7 @@ describe('material.components.menu', function() {
           '    <md-button ng-click="doSomething($event)"></md-button>' +
           '  </md-menu-item>' +
           ' </md-menu-content>' +
-          '</md-menu>', [ buttonAttrs || 'ng-click="$mdMenu.open($event)"' ]);
+          '</md-menu>', [buttonAttrs || 'ng-click="$mdMenu.open($event)"']);
 
       inject(function($compile, $rootScope) {
         $rootScope.doSomething = function($event) {

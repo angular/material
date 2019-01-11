@@ -1,4 +1,4 @@
-angular.module('docsApp', [ 'angularytics', 'ngRoute', 'ngMessages', 'ngMaterial' ], [
+angular.module('docsApp', ['angularytics', 'ngRoute', 'ngMessages', 'ngMaterial'], [
   'SERVICES',
   'COMPONENTS',
   'DEMOS',
@@ -361,7 +361,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         response = response.data;
         var versionId = getVersionIdFromPath();
         var head = { type: 'version', url: '/HEAD', id: 'head', name: 'HEAD (master)', github: '' };
-        var commonVersions = versionId === 'head' ? [] : [ head ];
+        var commonVersions = versionId === 'head' ? [] : [head];
         var knownVersions = getAllVersions();
         var listVersions = knownVersions.filter(removeCurrentVersion);
         var currentVersion = getCurrentVersion() || {name: 'local'};
@@ -370,11 +370,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
           name: 'Documentation Version',
           type: 'heading',
           className: 'version-picker',
-          children: [ {
+          children: [{
             name: currentVersion.name,
             type: 'toggle',
             pages: commonVersions.concat(listVersions)
-          } ]
+          }]
         });
         function removeCurrentVersion (version) {
           switch (versionId) {
