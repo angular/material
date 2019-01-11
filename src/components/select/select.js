@@ -1572,8 +1572,8 @@ function SelectProvider($$interimElementProvider) {
         }
 
         function checkCloseMenu(ev) {
-          if (ev && ( ev.type == 'click') && (ev.currentTarget != dropDown[0])) return;
-          if ( mouseOnScrollbar() ) return;
+          if (ev && (ev.type == 'click') && (ev.currentTarget != dropDown[0])) return;
+          if (mouseOnScrollbar()) return;
 
           var option = $mdUtil.getClosest(ev.target, 'md-option');
           if (option && option.hasAttribute && !option.hasAttribute('disabled')) {

@@ -333,11 +333,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
     }]
   });
 
-  sections.push( {
+  sections.push({
         name: 'Contributors',
         url: 'contributors',
         type: 'link'
-      } );
+      });
 
   sections.push({
     name: 'License',
@@ -660,7 +660,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
 
   function goHome($event) {
     menu.selectPage(null, null);
-    $location.path( '/' );
+    $location.path('/');
   }
 
   function openPage() {
@@ -723,7 +723,7 @@ function($scope, $rootScope) {
   '$rootScope', '$http',
 function($rootScope, $http) {
   $rootScope.currentComponent = $rootScope.currentDoc = null;
-  if ( !$rootScope.contributors ) {
+  if (!$rootScope.contributors) {
     $http
       .get('./contributors.json')
       .then(function(response) {

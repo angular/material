@@ -23,7 +23,7 @@ describe('MdIcon directive', function() {
     describe('using font-icons with deprecated md-font-icon=""', function() {
 
       it('should render correct HTML with md-font-icon value as class', function() {
-        el = make( '<md-icon md-font-icon="android"></md-icon>');
+        el = make('<md-icon md-font-icon="android"></md-icon>');
 
         expect(el.html()).toEqual('');
         var classes = clean(el.attr('class'));
@@ -33,7 +33,7 @@ describe('MdIcon directive', function() {
       });
 
       it('should transclude class specifiers', function() {
-        el = make( '<md-icon md-font-icon="android" class="material-icons"></md-icon>');
+        el = make('<md-icon md-font-icon="android" class="material-icons"></md-icon>');
 
         expect(el.html()).toEqual('');
         expect(el.hasClass('md-font')).toBe(true);
@@ -42,7 +42,7 @@ describe('MdIcon directive', function() {
       });
 
       it('should not render any inner content if the md-font-icon value is empty', function() {
-        el = make( '<md-icon md-font-icon=""></md-icon>' );
+        el = make('<md-icon md-font-icon=""></md-icon>');
         expect(el.html()).toEqual('');
       });
 
@@ -88,7 +88,7 @@ describe('MdIcon directive', function() {
     describe('using font-icons with ligatures: md-font-set=""', function() {
 
       it('should render correct HTML with ligatures', function() {
-        el = make( '<md-icon class="md-48">face</md-icon>');
+        el = make('<md-icon class="md-48">face</md-icon>');
 
         expect(el.text()).toEqual('face');
         expect(el.hasClass('material-icons')).toBeTruthy();
@@ -98,28 +98,28 @@ describe('MdIcon directive', function() {
       it('should render correctly using a md-font-set alias', function() {
         $mdIconProvider.fontSet('fa', 'fontawesome');
 
-        el = make( '<md-icon md-font-set="fa">email</md-icon>');
+        el = make('<md-icon md-font-set="fa">email</md-icon>');
 
         expect(el.text()).toEqual('email');
-        expect( clean(el.attr('class')) ).toEqual('fontawesome');
+        expect(clean(el.attr('class'))).toEqual('fontawesome');
       });
 
       it('should remove old font set class and apply the new when set changed', function() {
         $scope.set = 'fontawesome';
 
-        el = make( '<md-icon md-font-set="{{ set }}">email</md-icon>');
+        el = make('<md-icon md-font-set="{{ set }}">email</md-icon>');
 
         expect(el.text()).toEqual('email');
-        expect( clean(el.attr('class')) ).toEqual('fontawesome');
+        expect(clean(el.attr('class'))).toEqual('fontawesome');
 
         $scope.set = 'material-icons';
         $scope.$apply();
 
-        expect( clean(el.attr('class')) ).toEqual('material-icons');
+        expect(clean(el.attr('class'))).toEqual('material-icons');
       });
 
       it('should render correctly using a md-font-set alias', function() {
-        el = make( '<md-icon md-font-set="fa" md-font-icon="fa-info"></md-icon>');
+        el = make('<md-icon md-font-set="fa" md-font-icon="fa-info"></md-icon>');
 
         var classes = clean(el.attr('class'));
         expect(classes).toContain('md-font');
@@ -129,17 +129,17 @@ describe('MdIcon directive', function() {
 
       it('should render correctly using md-font-set value as class', function() {
 
-        el = make( '<md-icon md-font-set="fontawesome">email</md-icon>');
+        el = make('<md-icon md-font-set="fontawesome">email</md-icon>');
 
         expect(el.text()).toEqual('email');
-        expect( clean(el.attr('class')) ).toEqual('fontawesome');
+        expect(clean(el.attr('class'))).toEqual('fontawesome');
       });
     });
 
     describe('using font-icons with classnames', function() {
 
       it('should auto-add the material-icons style', function() {
-        el = make( '<md-icon>apple</md-icon>');
+        el = make('<md-icon>apple</md-icon>');
 
         expect(el.text()).toEqual('apple');
         expect(el.hasClass('material-icons')).toBeTruthy();
@@ -147,7 +147,7 @@ describe('MdIcon directive', function() {
 
 
       it('should render with icon classname', function() {
-        el = make( '<md-icon class="custom-cake"></md-icon>');
+        el = make('<md-icon class="custom-cake"></md-icon>');
 
         expect(el.text()).toEqual('');
         expect(el.hasClass('material-icons')).toBeTruthy();
@@ -157,22 +157,22 @@ describe('MdIcon directive', function() {
       it('should support clearing default fontset', function() {
         $mdIconProvider.defaultFontSet('');
 
-        el = make( '<md-icon class="custom-cake"></md-icon>');
-        expect( clean(el.attr('class')) ).toEqual('custom-cake');
+        el = make('<md-icon class="custom-cake"></md-icon>');
+        expect(clean(el.attr('class'))).toEqual('custom-cake');
 
-        el = make( '<md-icon class="custom-cake">apple</md-icon>');
+        el = make('<md-icon class="custom-cake">apple</md-icon>');
         expect(el.text()).toEqual('apple');
-        expect( clean(el.attr('class')) ).toEqual('custom-cake');
+        expect(clean(el.attr('class'))).toEqual('custom-cake');
 
       });
 
       it('should support custom default fontset', function() {
         $mdIconProvider.defaultFontSet('fa');
 
-        el = make( '<md-icon></md-icon>');
-        expect( clean(el.attr('class')) ).toEqual('fa');
+        el = make('<md-icon></md-icon>');
+        expect(clean(el.attr('class'))).toEqual('fa');
 
-        el = make( '<md-icon md-font-icon="fa-apple">apple</md-icon>');
+        el = make('<md-icon md-font-icon="fa-apple">apple</md-icon>');
         expect(el.text()).toEqual('apple');
 
         var classes = clean(el.attr('class'));
@@ -184,11 +184,11 @@ describe('MdIcon directive', function() {
 
       it('should support clearing an invalid font alias', function() {
 
-        el = make( '<md-icon md-font-set="none" class="custom-cake"></md-icon>');
+        el = make('<md-icon md-font-set="none" class="custom-cake"></md-icon>');
         expect(el.hasClass('none')).toBeTruthy();
         expect(el.hasClass('custom-cake')).toBeTruthy();
 
-        el = make( '<md-icon md-font-set="none" class="custom-cake">apple</md-icon>');
+        el = make('<md-icon md-font-set="none" class="custom-cake">apple</md-icon>');
         expect(el.text()).toEqual('apple');
         expect(el.hasClass('none')).toBeTruthy();
         expect(el.hasClass('custom-cake')).toBeTruthy();
@@ -405,9 +405,9 @@ describe('MdIcon service', function() {
     $mdIconProvider
       .icon('android'           , 'android.svg')
       .icon('c2'                , 'c2.svg')
-      .iconSet('social'         , 'social.svg' )
-      .iconSet('symbol'         , 'symbol.svg' )
-      .iconSet('emptyIconSet'   , 'emptyGroup.svg' )
+      .iconSet('social'         , 'social.svg')
+      .iconSet('symbol'         , 'symbol.svg')
+      .iconSet('emptyIconSet'   , 'emptyGroup.svg')
       .defaultIconSet('core.svg');
 
     $mdIconProvider.icon('missingIcon', 'notfoundicon.svg');
@@ -499,7 +499,7 @@ describe('MdIcon service', function() {
         $mdIcon('c2').then(function(el) {
           var list = el.querySelector('g').classList;
 
-          if ( list ) {
+          if (list) {
             // classList is a part of HTMLElement, but isn't available for SVGElement
             expect(list.contains('override')).toBe(true);
           }
@@ -514,7 +514,7 @@ describe('MdIcon service', function() {
 
       it('should return correct SVG markup', function() {
         $mdIcon('android.svg').then(function(el) {
-          expect(el.outerHTML).toEqual( updateDefaults('<svg><g id="android"></g></svg>') );
+          expect(el.outerHTML).toEqual(updateDefaults('<svg><g id="android"></g></svg>'));
         });
         $scope.$digest();
       });
@@ -526,7 +526,7 @@ describe('MdIcon service', function() {
           it('should return correct SVG markup', function() {
             var data = 'data:image/svg+xml;base64,' + btoa(svgData);
             $mdIcon(data).then(function(el) {
-              expect(el.outerHTML).toEqual( updateDefaults(svgData) );
+              expect(el.outerHTML).toEqual(updateDefaults(svgData));
             });
             $scope.$digest();
           });
@@ -536,7 +536,7 @@ describe('MdIcon service', function() {
           it('should return correct SVG markup', function() {
             var data = 'data:image/svg+xml,' + svgData;
             $mdIcon(data).then(function(el) {
-              expect(el.outerHTML).toEqual( updateDefaults(svgData) );
+              expect(el.outerHTML).toEqual(updateDefaults(svgData));
             });
             $scope.$digest();
           });
@@ -638,7 +638,7 @@ describe('MdIcon service', function() {
         $mdIcon('emptyIconSet:someIcon')
           .catch(function(error) {
             caughtRejection = true;
-            expect(error).toBe( ERROR_ICON_NOT_FOUIND_ICONSET );
+            expect(error).toBe(ERROR_ICON_NOT_FOUIND_ICONSET);
           });
         $timeout.flush();
 

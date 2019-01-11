@@ -754,7 +754,7 @@ function MdDialogProvider($$interimElementProvider) {
       // This is a very common problem, so we have to notify the developer about this.
       if (dialogElement.hasClass('ng-cloak')) {
         var message = '$mdDialog: using `<md-dialog ng-cloak>` will affect the dialog opening animations.';
-        $log.warn( message, element[0] );
+        $log.warn(message, element[0]);
       }
 
       captureParentAndFromToElements(options);
@@ -819,7 +819,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       // For navigation $destroy events, do a quick, non-animated removal,
       // but for normal closes (from clicks, etc) animate the removal
-      return options.$destroy ? detachAndClean() : animateRemoval().then( detachAndClean );
+      return options.$destroy ? detachAndClean() : animateRemoval().then(detachAndClean);
 
       /**
        * For normal closes, animate the removal.
@@ -899,7 +899,7 @@ function MdDialogProvider($$interimElementProvider) {
           options.closeTo  = getBoundingClientRect(getDomElement(options.closeTo));
           options.openFrom = getBoundingClientRect(getDomElement(options.openFrom));
 
-          if ( options.targetEvent ) {
+          if (options.targetEvent) {
             options.origin = getBoundingClientRect(options.targetEvent.target, options.origin);
             options.originInteraction = $mdInteraction.getLastInteractionType();
           }
@@ -956,7 +956,7 @@ function MdDialogProvider($$interimElementProvider) {
       var smartClose = function() {
         // Only 'confirm' dialogs have a cancel button... escape/clickOutside will
         // cancel or fallback to hide.
-        var closeFn = ( options.$type == 'alert' ) ? $mdDialog.hide : $mdDialog.cancel;
+        var closeFn = (options.$type == 'alert') ? $mdDialog.hide : $mdDialog.cancel;
         $mdUtil.nextTick(closeFn, true);
       };
 
@@ -1056,7 +1056,7 @@ function MdDialogProvider($$interimElementProvider) {
        */
       options.hideBackdrop = function hideBackdrop($destroy) {
         if (options.backdrop) {
-          if ( $destroy ) options.backdrop.remove();
+          if ($destroy) options.backdrop.remove();
           else              $animate.leave(options.backdrop);
         }
 

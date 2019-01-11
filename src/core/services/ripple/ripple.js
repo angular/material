@@ -176,9 +176,9 @@ function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdU
  */
 function autoCleanup (self, cleanupFn) {
 
-  if ( self.mousedown || self.lastRipple ) {
+  if (self.mousedown || self.lastRipple) {
     self.mousedown = false;
-    self.$mdUtil.nextTick( angular.bind(self, cleanupFn), false);
+    self.$mdUtil.nextTick(angular.bind(self, cleanupFn), false);
   }
 
 }
@@ -197,7 +197,7 @@ InkRippleCtrl.prototype.color = function (value) {
   }
 
   // If color lookup, use assigned, defined, or inherited
-  return self._color || self._parseColor( self.inkRipple() ) || self._parseColor( getElementColor() );
+  return self._color || self._parseColor(self.inkRipple()) || self._parseColor(getElementColor());
 
   /**
    * Finds the color element and returns its text color for use as default ripple color
@@ -253,7 +253,7 @@ InkRippleCtrl.prototype.bindEvents = function () {
  * @param event {MouseEvent}
  */
 InkRippleCtrl.prototype.handleMousedown = function (event) {
-  if ( this.mousedown ) return;
+  if (this.mousedown) return;
 
   // When jQuery is loaded, we have to get the original event
   if (event.hasOwnProperty('originalEvent')) event = event.originalEvent;

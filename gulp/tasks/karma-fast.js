@@ -17,12 +17,12 @@ const args = util.args;
 exports.task = function (done) {
   let errorCount = 0;
 
-  if ( args.browsers ) {
+  if (args.browsers) {
     karmaConfig.browsers = args.browsers.trim().split(',');
   }
   // NOTE: `karma-fast` does NOT test Firefox by default.
 
-  if ( args.reporters ) {
+  if (args.reporters) {
     karmaConfig.reporters = args.reporters.trim().split(',');
   }
 

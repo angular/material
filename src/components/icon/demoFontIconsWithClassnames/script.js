@@ -1,7 +1,7 @@
 
 angular
   .module('appDemoFontIconsWithClassnames', ['ngMaterial'])
-  .controller('DemoCtrl', function( $scope ) {
+  .controller('DemoCtrl', function($scope) {
       // Create list of font-icon names with color overrides
       var iconData = [
             {name: 'icon-home'        , color: "#777" },

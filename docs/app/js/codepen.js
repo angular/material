@@ -86,7 +86,7 @@
         head: LINK_FONTS_ROBOTO,
 
         js: processJs(files.js),
-        css: mergeFiles( files.css ).join(' '),
+        css: mergeFiles(files.css).join(' '),
 
         js_external: externalScripts.concat([ASSET_CACHE_JS, CORE_JS]).join(';'),
         css_external: [CORE_CSS, DOC_CSS].join(';')

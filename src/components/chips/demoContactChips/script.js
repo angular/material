@@ -47,7 +47,7 @@
           cancelSearch = reject;
           $timeout(function() {
 
-            resolve( self.querySearch(criteria) );
+            resolve(self.querySearch(criteria));
 
             refreshDebounce();
           }, Math.random() * 500, true);

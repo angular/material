@@ -128,7 +128,7 @@ function mdMediaFactory($mdConstant, $rootScope, $window) {
 
   function add(query) {
     var result = mqls[query];
-    if ( !result ) {
+    if (!result) {
       result = mqls[query] = $window.matchMedia(query);
     }
 

@@ -177,7 +177,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
 
   // Use the $mdMenu interim element service to close the menu contents
   this.close = function closeMenu(skipFocus, closeOpts) {
-    if ( !self.isOpen ) return;
+    if (!self.isOpen) return;
     self.isOpen = false;
     $mdUtil.nextTick(function(){ self.onIsOpenChanged(self.isOpen);});
 

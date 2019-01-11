@@ -45,14 +45,14 @@ function buildJs () {
 
   gutil.log("building js files...");
 
-  const jsBuildStream = gulp.src( jsFiles )
+  const jsBuildStream = gulp.src(jsFiles)
       .pipe(filterNonCodeFiles())
       .pipe(utils.buildNgMaterialDefinition())
       .pipe(plumber())
       .pipe(ngAnnotate())
       .pipe(utils.addJsWrapper(true));
 
-  const jsProcess = series(jsBuildStream, themeBuildStream() )
+  const jsProcess = series(jsBuildStream, themeBuildStream())
       .pipe(concat('angular-material.js'))
       .pipe(BUILD_MODE.transform())
       .pipe(insert.prepend(config.banner))
@@ -88,7 +88,7 @@ function minifyCss(extraOptions) {
  */
 function buildModule(module, opts) {
   opts = opts || {};
-  if ( module.indexOf(".") < 0) {
+  if (module.indexOf(".") < 0) {
     module = "material.components." + module;
   }
   gutil.log('Building ' + module + (opts.isRelease && ' minified' || '') + ' ...');
@@ -224,7 +224,7 @@ function filterNonCodeFiles() {
 
 // builds the theming related css and provides it as a JS const for angular
 function themeBuildStream() {
-  return gulp.src( config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss')) )
+  return gulp.src(config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss')))
       .pipe(concat('default-theme.scss'))
       .pipe(utils.hoistScssVariables())
       .pipe(sass())

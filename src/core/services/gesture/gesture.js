@@ -518,7 +518,7 @@ function MdGestureHandler() {
     eventPointer = eventPointer || pointer;
     var eventObj;
 
-    if (eventType === 'click' || eventType === 'mouseup' || eventType === 'mousedown' ) {
+    if (eventType === 'click' || eventType === 'mouseup' || eventType === 'mousedown') {
       eventObj = document.createEvent('MouseEvents');
       eventObj.initMouseEvent(
         eventType, true, true, window, srcEvent.detail,
@@ -543,7 +543,7 @@ function MdGestureHandler() {
  * Attach Gestures: hook document and check shouldHijack clicks
  * @ngInject
  */
-function attachToDocument( $mdGesture, $$MdGestureHandler ) {
+function attachToDocument($mdGesture, $$MdGestureHandler) {
   if (disableAllGestures) {
     return;
   }
@@ -554,7 +554,7 @@ function attachToDocument( $mdGesture, $$MdGestureHandler ) {
     return document.body.contains(node);
   });
 
-  if (!isInitialized && $mdGesture.isHijackingClicks ) {
+  if (!isInitialized && $mdGesture.isHijackingClicks) {
     /*
      * If hijack clicks is true, we preventDefault any click that wasn't
      * sent by AngularJS Material. This is because on older Android & iOS, a false, or 'ghost',
@@ -631,7 +631,7 @@ function attachToDocument( $mdGesture, $$MdGestureHandler ) {
     var handler;
     for (var name in HANDLERS) {
       handler = HANDLERS[name];
-      if( handler instanceof $$MdGestureHandler ) {
+      if(handler instanceof $$MdGestureHandler) {
 
         if (handlerEvent === 'start') {
           // Run cancel to reset any handlers' state

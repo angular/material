@@ -10,7 +10,7 @@ angular
     'material.core',
     'material.components.backdrop'
   ])
-  .factory('$mdSidenav', SidenavService )
+  .factory('$mdSidenav', SidenavService)
   .directive('mdSidenav', SidenavDirective)
   .directive('mdSidenavFocus', SidenavFocusDirective)
   .controller('$mdSidenavController', SidenavController);
@@ -325,7 +325,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInterac
 
     // The backdrop should inherit the sidenavs theme,
     // because the backdrop will take its parent theme by default.
-    if ( backdrop ) $mdTheming.inherit(backdrop, element);
+    if (backdrop) $mdTheming.inherit(backdrop, element);
 
     element.on('$destroy', function() {
       backdrop && backdrop.remove();
@@ -456,7 +456,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInterac
      * Prevent parent scrolling (when the SideNav is open)
      */
     function disableParentScroll(disabled) {
-      if ( disabled && !lastParentOverFlow ) {
+      if (disabled && !lastParentOverFlow) {
         lastParentOverFlow = disableScrollTarget.css('overflow');
         disableScrollTarget.css('overflow', 'hidden');
       } else if (angular.isDefined(lastParentOverFlow)) {
@@ -485,7 +485,7 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInterac
             // When the current `updateIsOpen()` animation finishes
             promise.then(function(result) {
 
-              if ( !scope.isOpen && triggeringElement && triggeringInteractionType === 'keyboard') {
+              if (!scope.isOpen && triggeringElement && triggeringInteractionType === 'keyboard') {
                 // reset focus to originating element (if available) upon close
                 triggeringElement.focus();
                 triggeringElement = null;
@@ -543,9 +543,9 @@ function SidenavController($scope, $attrs, $mdComponentRegistry, $q, $interpolat
   };
 
   // Async actions
-  self.open   = function() { return self.$toggleOpen( true );  };
-  self.close  = function() { return self.$toggleOpen( false ); };
-  self.toggle = function() { return self.$toggleOpen( !$scope.isOpen );  };
+  self.open   = function() { return self.$toggleOpen(true);  };
+  self.close  = function() { return self.$toggleOpen(false); };
+  self.toggle = function() { return self.$toggleOpen(!$scope.isOpen);  };
   self.$toggleOpen = function(value) { return $q.when($scope.isOpen = value); };
 
   // Evaluate the component id.

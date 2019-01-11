@@ -13,9 +13,9 @@ const karmaConfig = {
 exports.dependencies = ['build'];
 
 exports.task = function (done) {
-  if ( args.browsers )  karmaConfig.browsers = args.browsers.trim().split(',');
-  if ( args.reporters ) karmaConfig.reporters = args.reporters.trim().split(',');
-  if ( args.config )    karmaConfig.configFile = ROOT + '/' + args.config.trim();
+  if (args.browsers)  karmaConfig.browsers = args.browsers.trim().split(',');
+  if (args.reporters) karmaConfig.reporters = args.reporters.trim().split(',');
+  if (args.config)    karmaConfig.configFile = ROOT + '/' + args.config.trim();
 
   gutil.log(gutil.colors.blue('Running unit tests on unminified source.'));
 

@@ -30,7 +30,7 @@
     breakpoints: []
   };
 
-  registerLayoutAPI( angular.module('material.core.layout', ['ng']) );
+  registerLayoutAPI(angular.module('material.core.layout', ['ng']));
 
   /**
    *   registerLayoutAPI()
@@ -86,15 +86,15 @@
     angular.forEach(BREAKPOINTS, function(mqb) {
 
       // Attribute directives with expected, observable value(s)
-      angular.forEach( API_WITH_VALUES, function(name){
+      angular.forEach(API_WITH_VALUES, function(name){
         var fullName = mqb ? name + "-" + mqb : name;
-        module.directive( directiveNormalize(fullName), attributeWithObserve(fullName));
+        module.directive(directiveNormalize(fullName), attributeWithObserve(fullName));
       });
 
       // Attribute directives with no expected value(s)
-      angular.forEach( API_NO_VALUES, function(name){
+      angular.forEach(API_NO_VALUES, function(name){
         var fullName = mqb ? name + "-" + mqb : name;
-        module.directive( directiveNormalize(fullName), attributeWithoutValue(fullName));
+        module.directive(directiveNormalize(fullName), attributeWithoutValue(fullName));
       });
 
     });
@@ -118,7 +118,7 @@
         };
       })
 
-      .directive('mdLayoutCss'        , disableLayoutDirective )
+      .directive('mdLayoutCss'        , disableLayoutDirective)
       .directive('ngCloak'            , buildCloakInterceptor('ng-cloak'))
 
       .directive('layoutWrap'   , attributeWithoutValue('layout-wrap'))
@@ -146,7 +146,7 @@
       .directive('showLtLg'       , warnAttrNotSupported('show-lt-lg'))
 
       // Determine if
-      .config( detectDisabledLayouts );
+      .config(detectDisabledLayouts);
 
     /**
      * Converts snake_case to camelCase.
@@ -217,17 +217,17 @@
       return {
         restrict : 'A',
         priority : -10,   // run after normal ng-cloak
-        compile  : function( element ) {
+        compile  : function(element) {
           if (!config.enabled) return angular.noop;
 
           // Re-add the cloak
           element.addClass(className);
 
-          return function( scope, element ) {
+          return function(scope, element) {
             // Wait while layout injectors configure, then uncloak
             // NOTE: $rAF does not delay enough... and this is a 1x-only event,
             //       $timeout is acceptable.
-            $timeout( function(){
+            $timeout(function(){
               element.removeClass(className);
             }, 10, false);
           };
@@ -267,7 +267,7 @@
 
             validateAttributeUsage(className, attr, element, $log);
 
-            validateAttributeValue( className,
+            validateAttributeValue(className,
               getNormalizedAttrValue(className, attr, ""),
               buildUpdateFn(element, className, attr)
             );
@@ -312,7 +312,7 @@
           if (config.enabled) {
             // immediately replace static (non-interpolated) invalid values...
 
-            validateAttributeValue( className,
+            validateAttributeValue(className,
               getNormalizedAttrValue(className, attr, ""),
               buildUpdateFn(element, className, attr)
             );
@@ -358,7 +358,7 @@
 
     return function updateClassFn(newValue) {
       var value = validateAttributeValue(className, newValue || "");
-      if ( angular.isDefined(value) ) {
+      if (angular.isDefined(value)) {
         if (lastClass) element.removeClass(lastClass);
         lastClass = !value ? className : className + "-" + value.trim().replace(WHITESPACE, "-");
         element.addClass(lastClass);
@@ -395,7 +395,7 @@
           url = "https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers";
           message = "Markup '{0}' may not work as expected in IE Browsers. Consult '{1}' for details.";
 
-          $log.warn( $mdUtil.supplant(message, [usage, url]) );
+          $log.warn($mdUtil.supplant(message, [usage, url]));
         }
     }
 
@@ -412,7 +412,7 @@
     if (!needsInterpolation(value)) {
       switch (className.replace(SUFFIXES,"")) {
         case 'layout'        :
-          if ( !findIn(value, LAYOUT_OPTIONS) ) {
+          if (!findIn(value, LAYOUT_OPTIONS)) {
             value = LAYOUT_OPTIONS[0];    // 'row';
           }
           break;
@@ -502,22 +502,22 @@
 
     attrValue = (attrValue || "");
 
-    if ( attrValue.indexOf("-") === 0 || attrValue.indexOf(" ") === 0) {
+    if (attrValue.indexOf("-") === 0 || attrValue.indexOf(" ") === 0) {
       // For missing main-axis values
       attrValue = "none" + attrValue;
     }
 
     values = attrValue.toLowerCase().trim().replace(WHITESPACE, "-").split("-");
-    if ( values.length && (values[0] === "space") ) {
+    if (values.length && (values[0] === "space")) {
       // for main-axis values of "space-around" or "space-between"
       values = [ values[0]+"-"+values[1],values[2] ];
     }
 
-    if ( values.length > 0 ) axis.main  = values[0] || axis.main;
-    if ( values.length > 1 ) axis.cross = values[1] || axis.cross;
+    if (values.length > 0) axis.main  = values[0] || axis.main;
+    if (values.length > 1) axis.cross = values[1] || axis.cross;
 
-    if ( ALIGNMENT_MAIN_AXIS.indexOf(axis.main) < 0 )   axis.main = "start";
-    if ( ALIGNMENT_CROSS_AXIS.indexOf(axis.cross) < 0 ) axis.cross = "stretch";
+    if (ALIGNMENT_MAIN_AXIS.indexOf(axis.main) < 0)   axis.main = "start";
+    if (ALIGNMENT_CROSS_AXIS.indexOf(axis.cross) < 0) axis.cross = "stretch";
 
     return axis;
   }

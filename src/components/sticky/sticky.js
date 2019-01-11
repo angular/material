@@ -194,7 +194,7 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
       while (current && current !== contentEl[0]) {
         item.top += current.offsetTop;
         item.left += current.offsetLeft;
-        if ( current.offsetParent ){
+        if (current.offsetParent){
           item.right += current.offsetParent.offsetWidth - current.offsetWidth - current.offsetLeft; //Compute offsetRight
         }
         current = current.offsetParent;
@@ -310,7 +310,7 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
       } else {
         item.translateY = amount;
 
-        $mdUtil.bidi( item.clone, $mdConstant.CSS.TRANSFORM,
+        $mdUtil.bidi(item.clone, $mdConstant.CSS.TRANSFORM,
           'translate3d(' + item.left + 'px,' + amount + 'px,0)',
           'translateY(' + amount + 'px)'
         );

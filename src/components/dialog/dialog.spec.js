@@ -935,7 +935,7 @@ describe('$mdDialog', function() {
             '</div>'
       );
 
-      body.append( nodes );
+      body.append(nodes);
       $mdDialog.show({
         template: '<md-dialog>Hello</md-dialog>',
         parent: "#owner",

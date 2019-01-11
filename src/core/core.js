@@ -21,7 +21,7 @@ angular
  * @ngInject
  */
 function DetectNgTouch($log, $injector) {
-  if ( $injector.has('$swipe') ) {
+  if ($injector.has('$swipe')) {
     var msg = "" +
       "You are using the ngTouch module. \n" +
       "AngularJS Material already has mobile click, tap, and swipe support... \n" +

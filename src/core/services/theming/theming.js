@@ -9,9 +9,9 @@
 angular.module('material.core.theming', ['material.core.theming.palette', 'material.core.meta'])
   .directive('mdTheme', ThemingDirective)
   .directive('mdThemable', ThemableDirective)
-  .directive('mdThemesDisabled', disableThemesDirective )
+  .directive('mdThemesDisabled', disableThemesDirective)
   .provider('$mdTheming', ThemingProvider)
-  .config( detectDisabledThemes )
+  .config(detectDisabledThemes)
   .run(generateAllThemes);
 
 /**
@@ -295,7 +295,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
      * return a read-only clone of the current theme configuration
      */
     configuration : function() {
-      return angular.extend( { }, themeConfig, {
+      return angular.extend({ }, themeConfig, {
         defaultTheme : defaultTheme,
         alwaysWatchTheme : alwaysWatchTheme,
         registeredStyles : [].concat(themeConfig.registeredStyles)
@@ -434,7 +434,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    *    with variables from `map` overwritten.
    */
   function extendPalette(name, map) {
-    return checkPaletteValid(name,  angular.extend({}, PALETTES[name] || {}, map) );
+    return checkPaletteValid(name,  angular.extend({}, PALETTES[name] || {}, map));
   }
 
   // Make sure that palette has all required hues
@@ -911,7 +911,7 @@ function ThemingDirective($mdTheming, $interpolate, $parse, $mdUtil, $q, $log) {
             return ctrl.$setTheme(theme);
           }
 
-          $q.when( angular.isFunction(theme) ?  theme() : theme )
+          $q.when(angular.isFunction(theme) ?  theme() : theme)
             .then(function(name) {
               ctrl.$setTheme(name);
             });
@@ -991,7 +991,7 @@ function parseRules(theme, colorType, rules) {
       hue = theme.colors[colorType].hues[hue];
     }
 
-    return rgba( (PALETTES[ theme.colors[colorType].name ][hue] || '')[contrast ? 'contrast' : 'value'], opacity );
+    return rgba((PALETTES[ theme.colors[colorType].name ][hue] || '')[contrast ? 'contrast' : 'value'], opacity);
   });
 
   // Matches '{{ primary-color }}', etc
@@ -1037,7 +1037,7 @@ function generateAllThemes($injector, $mdTheming) {
   // Append our custom registered styles to the theme stylesheet.
   themeCss += themeConfig.registeredStyles.join('');
 
-  if ( !firstChild ) return;
+  if (!firstChild) return;
   if (themeCss.length === 0) return; // no rules, so no point in running this expensive task
 
   // Expose contrast colors for palettes to ensure that text is always readable
@@ -1213,7 +1213,7 @@ function colorToRgbaArray(clr) {
 }
 
 function rgba(rgbArray, opacity) {
-  if ( !rgbArray ) return "rgb('0,0,0')";
+  if (!rgbArray) return "rgb('0,0,0')";
 
   if (rgbArray.length == 4) {
     rgbArray = angular.copy(rgbArray);

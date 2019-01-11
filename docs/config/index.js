@@ -48,7 +48,7 @@ module.exports = new Package('angular-md', [
     docTypes: ['content'],
     getPath: function(doc) {
       let docPath = path.dirname(doc.fileInfo.relativePath);
-      if ( doc.fileInfo.baseName !== 'index' ) {
+      if (doc.fileInfo.baseName !== 'index') {
         docPath = path.join(docPath, doc.fileInfo.baseName);
       }
       return docPath;

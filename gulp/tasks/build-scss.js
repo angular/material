@@ -44,9 +44,9 @@ exports.task = function() {
   );
 
   streams.push(
-      gulp.src( config.cssIEPaths.slice() )         // append raw CSS for IE Fixes
-        .pipe( concat('angular-material.layouts.ie_fixes.css') )
-        .pipe( gulp.dest(layoutDest) )
+      gulp.src(config.cssIEPaths.slice())         // append raw CSS for IE Fixes
+        .pipe(concat('angular-material.layouts.ie_fixes.css'))
+        .pipe(gulp.dest(layoutDest))
   );
 
   // Generate standalone SCSS (and CSS) file for Layouts API
@@ -101,7 +101,7 @@ exports.task = function() {
 
   function getPaths () {
     const paths = config.scssBaseFiles.slice();
-    if ( modules ) {
+    if (modules) {
       paths.push.apply(paths, modules.split(',').map(function (module) {
         return 'src/components/' + module + '/*.scss';
       }));

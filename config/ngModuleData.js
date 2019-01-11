@@ -42,6 +42,6 @@ function buildScanner(pattern) {
 }
 
 module.exports = {
-  material : buildScanner( MATERIAL_ONLY ),
-  any      : buildScanner( ANY )
+  material : buildScanner(MATERIAL_ONLY),
+  any      : buildScanner(ANY)
 };
