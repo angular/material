@@ -385,7 +385,7 @@
     var message, usage, url;
     var nodeName = element[0].nodeName.toLowerCase();
 
-    switch(className.replace(SUFFIXES,"")) {
+    switch (className.replace(SUFFIXES,"")) {
       case "flex":
         if ((nodeName == "md-button") || (nodeName == "fieldset")){
           // @see https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers

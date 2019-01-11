@@ -19,7 +19,7 @@ angular
         it.title = it.title + (j+1);
         it.span  = { row : 1, col : 1 };
 
-        switch(j+1) {
+        switch (j+1) {
           case 1:
             it.background = "red";
             it.span.row = it.span.col = 2;

@@ -56,7 +56,7 @@
     "init-declarations": "off",
     "jsx-quotes": "error",
     "key-spacing": "off",
-    "keyword-spacing": "off",
+    "keyword-spacing": ["error", {"before":  true, "after":  true}],
     "line-comment-position": "off",
     "linebreak-style": "off",
     "lines-around-comment": "off",

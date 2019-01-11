@@ -124,7 +124,7 @@
       function appendLicenseFor(content, lang) {
             var commentStart = '', commentEnd = '';
 
-        switch(lang) {
+        switch (lang) {
           case 'html' : commentStart = '<!--'; commentEnd = '-->'; break;
           case 'js'   : commentStart = '/**';  commentEnd = '**/'; break;
           case 'css'  : commentStart = '/*';   commentEnd = '*/';  break;

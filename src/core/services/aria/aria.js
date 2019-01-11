@@ -216,7 +216,7 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
       }
       /* Perform role blacklist check */
       if (parentNode.hasAttribute('role')) {
-        switch(parentNode.getAttribute('role').toLowerCase()) {
+        switch (parentNode.getAttribute('role').toLowerCase()) {
           case 'command':
           case 'definition':
           case 'directory':
@@ -237,7 +237,7 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
         }
       }
       /* Perform tagName blacklist check */
-      switch(parentNode.tagName.toLowerCase()) {
+      switch (parentNode.tagName.toLowerCase()) {
         case 'abbr':
         case 'acronym':
         case 'address':

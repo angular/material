@@ -207,7 +207,7 @@ describe('MdIcon directive', function() {
 
           return {
             then: function(fn) {
-              switch(id) {
+              switch (id) {
                 case 'android'          : fn('<svg><g id="android"></g></svg>');
                   break;
                 case 'cake'             : fn('<svg><g id="cake"></g></svg>');

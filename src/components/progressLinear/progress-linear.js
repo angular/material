@@ -127,7 +127,7 @@ function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
       attr.$observe('mdMode', function(mode) {
         if (lastMode) container.removeClass(lastMode);
 
-        switch(mode) {
+        switch (mode) {
           case MODE_QUERY:
           case MODE_BUFFER:
           case MODE_DETERMINATE:
@@ -160,7 +160,7 @@ function MdProgressLinearDirective($mdTheming, $mdUtil, $log) {
     function mode() {
       var value = (attr.mdMode || "").trim();
       if (value) {
-        switch(value) {
+        switch (value) {
           case MODE_DETERMINATE:
           case MODE_INDETERMINATE:
           case MODE_BUFFER:

@@ -631,7 +631,7 @@ function attachToDocument($mdGesture, $$MdGestureHandler) {
     var handler;
     for (var name in HANDLERS) {
       handler = HANDLERS[name];
-      if(handler instanceof $$MdGestureHandler) {
+      if (handler instanceof $$MdGestureHandler) {
 
         if (handlerEvent === 'start') {
           // Run cancel to reset any handlers' state
