@@ -493,10 +493,11 @@ MdNavBarController.prototype.onKeydown = function(e) {
  * @param $$rAF
  * @param $mdUtil
  * @param $window
+ * @param $timeout
  * @constructor
  * @ngInject
  */
-function MdNavItem($mdAria, $$rAF, $mdUtil, $window) {
+function MdNavItem($mdAria, $$rAF, $mdUtil, $window, $timeout) {
   return {
     restrict: 'E',
     require: ['mdNavItem', '^mdNavBar'],
@@ -591,7 +592,9 @@ function MdNavItem($mdAria, $$rAF, $mdUtil, $window) {
 
         navButton.on('focus', function() {
           if (!mdNavBar.getFocusedTab()) {
-            mdNavBar.onFocus();
+            $timeout(function () {
+              mdNavBar.onFocus();
+            },200);
           }
         });
 
