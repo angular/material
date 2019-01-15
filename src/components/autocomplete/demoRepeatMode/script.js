@@ -24,11 +24,11 @@
      * remote dataservice call.
      */
     function querySearch (query) {
-      var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
+      var results = query ? self.repos.filter(createFilterFor(query)) : self.repos,
           deferred;
       if (self.simulateQuery) {
         deferred = $q.defer();
-        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+        $timeout(function () { deferred.resolve(results); }, Math.random() * 1000, false);
         return deferred.promise;
       } else {
         return results;
@@ -97,7 +97,7 @@
           'forks'     : '303',
         }
       ];
-      return repos.map( function (repo) {
+      return repos.map(function (repo) {
         repo.value = repo.name.toLowerCase();
         return repo;
       });
