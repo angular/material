@@ -5,7 +5,9 @@ angular
 var ITEM_HEIGHT   = 48,
     MAX_ITEMS     = 5,
     MENU_PADDING  = 8,
-    INPUT_PADDING = 2; // Padding provided by `md-input-container`
+    INPUT_PADDING = 2, // Padding provided by `md-input-container`
+    MODE_STANDARD = 'standard',
+    MODE_VIRTUAL = 'virtual';
 
 function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming, $window,
                              $animate, $rootElement, $attrs, $q, $log, $mdLiveAnnouncer) {
@@ -22,7 +24,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
       fetchesInProgress    = 0,
       enableWrapScroll     = null,
       inputModelCtrl       = null,
-      debouncedOnResize    = $mdUtil.debounce(onWindowResize);
+      debouncedOnResize    = $mdUtil.debounce(onWindowResize),
+      mode                 = MODE_VIRTUAL; // default
 
   // Public Exported Variables with handlers
   defineProperty('hidden', handleHiddenChange, true);
@@ -79,7 +82,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     $mdUtil.initOptionalProperties($scope, $attrs, {
       searchText: '',
       selectedItem: null,
-      clearButton: false
+      clearButton: false,
+      disableVirtualRepeat: false,
     });
 
     $mdTheming($element);
@@ -126,7 +130,6 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     }
 
     var dropdownHeight = ($scope.dropdownItems || MAX_ITEMS) * ITEM_HEIGHT;
-
     var hrect  = elements.wrap.getBoundingClientRect(),
         vrect  = elements.snap.getBoundingClientRect(),
         root   = elements.root.getBoundingClientRect(),
@@ -271,18 +274,18 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
     elements = {
       main:  $element[0],
-      scrollContainer: $element[0].querySelector('.md-virtual-repeat-container'),
-      scroller: $element[0].querySelector('.md-virtual-repeat-scroller'),
+      scrollContainer: $element[0].querySelector('.md-virtual-repeat-container, .md-standard-list-container'),
+      scroller: $element[0].querySelector('.md-virtual-repeat-scroller, .md-standard-list-scroller'),
       ul:    $element.find('ul')[0],
       input: $element.find('input')[0],
       wrap:  snapWrap.wrap,
       snap:  snapWrap.snap,
-      root:  document.body
+      root:  document.body,
     };
 
     elements.li   = elements.ul.getElementsByTagName('li');
     elements.$    = getAngularElements(elements);
-
+    mode = elements.scrollContainer.classList.contains('md-standard-list-container') ? MODE_STANDARD : MODE_VIRTUAL;
     inputModelCtrl = elements.$.input.controller('ngModel');
   }
 
@@ -948,15 +951,40 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    */
   function updateScroll () {
     if (!elements.li[0]) return;
-    var height = elements.li[0].offsetHeight,
-        top = height * ctrl.index,
-        bot = top + height,
-        hgt = elements.scroller.clientHeight,
+    if (mode === MODE_STANDARD) {
+      updateStandardScroll();
+    } else {
+      updateVirtualScroll();
+    }
+  }
+
+  function updateVirtualScroll() {
+    // elements in virtual scroll have consistent heights
+    var optionHeight = elements.li[0].offsetHeight,
+        top = optionHeight * ctrl.index,
+        bottom = top + optionHeight,
+        containerHeight = elements.scroller.clientHeight,
         scrollTop = elements.scroller.scrollTop;
+
     if (top < scrollTop) {
       scrollTo(top);
-    } else if (bot > scrollTop + hgt) {
-      scrollTo(bot - hgt);
+    } else if (bottom > scrollTop + containerHeight) {
+      scrollTo(bottom - containerHeight);
+    }
+  }
+
+  function updateStandardScroll() {
+    // elements in standard scroll have variable heights
+    var selected =  elements.li[ctrl.index] || elements.li[0];
+    var containerHeight = elements.scrollContainer.offsetHeight,
+        top = selected && selected.offsetTop || 0,
+        bottom = top + selected.clientHeight,
+        scrollTop = elements.scrollContainer.scrollTop;
+
+    if (top < scrollTop) {
+      scrollTo(top);
+    } else if (bottom > scrollTop + containerHeight) {
+      scrollTo(bottom - containerHeight);
     }
   }
 
@@ -965,7 +993,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   }
 
   function scrollTo (offset) {
-    elements.$.scrollContainer.controller('mdVirtualRepeatContainer').scrollTo(offset);
+    if (mode === MODE_STANDARD) {
+      elements.scrollContainer.scrollTop = offset;
+    } else {
+      elements.$.scrollContainer.controller('mdVirtualRepeatContainer').scrollTo(offset);
+    }
   }
 
   function notFoundVisible () {
