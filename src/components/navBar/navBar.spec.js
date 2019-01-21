@@ -183,6 +183,17 @@ describe('mdNavBar', function() {
       expect($scope.selectedTabRoute).toBe('tab2');
     });
 
+    it('should add the md-focused class when focused', function () {
+      $scope.selectedTabRoute = 'tab1';
+      createTabs();
+      var tab2Ctrl = getTabCtrl('tab2');
+      angular.element(tab2Ctrl.getButtonEl()).triggerHandler('focus');
+      angular.element(tab2Ctrl.getButtonEl()).triggerHandler('click');
+      $scope.$apply();
+      $timeout.flush();
+      expect(tab2Ctrl.getButtonEl().classList.contains('md-focused')).toBe(true);
+    });
+
     it('adds ui-sref-opts attribute to nav item when sref-opts attribute is ' +
         'defined', function() {
           create(

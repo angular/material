@@ -114,10 +114,9 @@ function MdNavBar($mdAria, $mdTheming) {
 
 /**
  * Controller for the nav-bar component.
- *
- * TODO update this with a link to tablist when that implementation gets merged.
- * Accessibility functionality is implemented as a site navigator with a listbox, according to
- * https://www.w3.org/TR/wai-aria-practices/#Site_Navigator_Tabbed_Style.
+ * Accessibility functionality is implemented as a tablist
+ * (https://www.w3.org/TR/wai-aria-1.0/complete#tablist) and
+ * tabs (https://www.w3.org/TR/wai-aria-1.0/complete#tab).
  *
  * @param {!angular.JQLite} $element
  * @param {!angular.Scope} $scope
@@ -196,6 +195,7 @@ MdNavBarController.prototype._initTabs = function() {
 MdNavBarController.prototype._updateTabs = function(newValue, oldValue) {
   var self = this;
   var tabs = this._getTabs();
+  var sameTab = newValue === oldValue;
 
   // this._getTabs can return null if nav-bar has not yet been initialized
   if (!tabs) return;
@@ -217,6 +217,11 @@ MdNavBarController.prototype._updateTabs = function(newValue, oldValue) {
 
   this._$timeout(function() {
     self._updateInkBarStyles(newTab, newIndex, oldIndex);
+    // Don't change focus when there is no newTab, the new and old tabs are the same, or when
+    // called from MdNavBarController._initTabs() which would have no oldTab defined.
+    if (newTab && oldTab && !sameTab) {
+      self._moveFocus(oldTab, newTab);
+    }
   });
 };
 
@@ -596,6 +601,9 @@ function MdNavItem($mdAria, $$rAF, $mdUtil, $window) {
         });
 
         navButton.on('click', function() {
+          // This triggers a watcher on mdNavBar.mdSelectedNavItem which calls
+          // MdNavBarController._updateTabs() after a $timeout. That function calls
+          // MdNavItemController.setSelected() for the old tab with false and the new tab with true.
           mdNavBar.mdSelectedNavItem = mdNavItem.name;
           scope.$apply();
         });
