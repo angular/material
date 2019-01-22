@@ -80,6 +80,7 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-firefox-launcher": "^1.1.0",
     "karma-jasmine": "^1.1.2",
+    "karma-junit-reporter": "^1.2.0",
     "karma-sauce-launcher": "^1.2.0",
     "lazypipe": "^1.0.2",
     "lodash": "^4.17.11",
@@ -96,11 +97,14 @@
   "scripts": {
     "build": "gulp build",
     "contributors:release": "githubcontrib --owner angular --repo material --cols 6 --format md --showlogin true --sha master --sortOrder desc --fromDate ",
+    "ddescribe-iit": "gulp ddescribe-iit",
     "docs:build": "gulp docs",
     "docs:watch": "gulp watch site --dev",
+    "gulp": "gulp",
     "test:fast": "gulp karma-fast",
     "test:full": "gulp karma",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "lint:jshint": "gulp jshint"
   },
   "browserslist": [
     "> 0.5%",
