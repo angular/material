@@ -479,7 +479,7 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   function transformClone(cacheElement) {
     var clone = cacheElement.clone();
     var newUid = $mdUtil.nextUid();
-    var cacheSuffix, svgElement;
+    var cacheSuffix, svgInner, svgAttributes, svgHead, svgTail;
 
     // Verify that the newUid only contains a number and not some XSS content.
     if (!isFinite(Number(newUid))) {
@@ -503,10 +503,15 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
     });
     // innerHTML of SVG elements is not supported by IE11
     if (clone.innerHTML === undefined) {
-      svgElement = $mdUtil.getInnerHTML(clone);
-      svgElement = svgElement.replace(/(.*url\(#)(\w*)(\).*)/g, addCacheSuffixToId);
-      svgElement = svgElement.replace(/(.*xlink:href="#)(\w*)(".*)/g, addCacheSuffixToId);
-      clone = angular.element(svgElement)[0];
+      svgInner = $mdUtil.getInnerHTML(clone);
+      svgInner = svgInner.replace(/(.*url\(#)(\w*)(\).*)/g, addCacheSuffixToId);
+      svgInner = svgInner.replace(/(.*xlink:href="#)(\w*)(".*)/g, addCacheSuffixToId);
+      svgAttributes = clone.attributes;
+      svgHead = '<svg ' + Array.prototype.map.call(svgAttributes, function(attribute) {
+        return attribute.name + (attribute.value ? '="' + attribute.value + '"' : '');
+      }).join(' ') + '>';
+      svgTail = '</svg>';
+      clone = angular.element(svgHead + svgInner + svgTail)[0];
     } else {
       // Inject the cacheSuffix into all instances of url(id) and xlink:href="#id".
       // This use of innerHTML should be safe from XSS attack since we are only injecting the
