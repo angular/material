@@ -38,6 +38,15 @@
  * See the [Material Design Spec](https://material.io/archive/guidelines/components/menus.html#menus-simple-menus)
  * for more information.
  *
+ * ## Menu Density
+ *
+ * You can use dense menus by adding the `md-dense` class to the `md-menu-content` element.
+ * This reduces the height of menu items, their top and bottom padding, and default font size.
+ * Without the `md-dense` class, we use the "mobile" height of `48px`. With the `md-dense` class,
+ * we use the "desktop" height of `32px`. We do not support the "dense desktop" option in the spec,
+ * which uses a height of `24px`, at this time.
+ * See the [Menu Specs](https://material.io/archive/guidelines/components/menus.html#menus-specs)
+ * section of the Material Design Spec for more information.
  *
  * ## Aligning Menus
  *
