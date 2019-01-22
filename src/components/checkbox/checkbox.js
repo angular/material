@@ -14,7 +14,8 @@ angular
  * @restrict E
  *
  * @description
- * The checkbox directive is used like the normal [angular checkbox](https://docs.angularjs.org/api/ng/input/input%5Bcheckbox%5D).
+ * The checkbox directive is used like the normal
+ * [angular checkbox](https://docs.angularjs.org/api/ng/input/input%5Bcheckbox%5D).
  *
  * As per the [Material Design spec](https://material.io/archive/guidelines/style/color.html#color-color-palette)
  * the checkbox is in the accent color by default. The primary color palette may be used with
@@ -23,19 +24,21 @@ angular
  * @param {expression} ng-model Assignable angular expression to data-bind to.
  * @param {string=} name Property name of the form under which the control is published.
  * @param {expression=} ng-true-value The value to which the expression should be set when selected.
- * @param {expression=} ng-false-value The value to which the expression should be set when not selected.
+ * @param {expression=} ng-false-value The value to which the expression should be set when not
+ *    selected.
  * @param {expression=} ng-change Expression to be executed when the model value changes.
- * @param {boolean=} md-no-ink Use of attribute indicates use of ripple ink effects
+ * @param {boolean=} md-no-ink If present, disable ink ripple effects.
  * @param {string=} aria-label Adds label to checkbox for accessibility.
- *     Defaults to checkbox's text. If no default text is found, a warning will be logged.
- * @param {expression=} md-indeterminate This determines when the checkbox should be rendered as 'indeterminate'.
- *     If a truthy expression or no value is passed in the checkbox renders in the md-indeterminate state.
- *     If falsy expression is passed in it just looks like a normal unchecked checkbox.
- *     The indeterminate, checked, and unchecked states are mutually exclusive. A box cannot be in any two states at the same time.
- *     Adding the 'md-indeterminate' attribute overrides any checked/unchecked rendering logic.
- *     When using the 'md-indeterminate' attribute use 'ng-checked' to define rendering logic instead of using 'ng-model'.
- * @param {expression=} ng-checked If this expression evaluates as truthy, the 'md-checked' css class is added to the checkbox and it
- *     will appear checked.
+ *    Defaults to checkbox's text. If no default text is found, a warning will be logged.
+ * @param {expression=} md-indeterminate This determines when the checkbox should be rendered as
+ *    'indeterminate'. If a truthy expression or no value is passed in the checkbox renders in the
+ *    md-indeterminate state. If falsy expression is passed in it just looks like a normal unchecked
+ *    checkbox. The indeterminate, checked, and unchecked states are mutually exclusive. A box
+ *    cannot be in any two states at the same time. Adding the 'md-indeterminate' attribute
+ *    overrides any checked/unchecked rendering logic. When using the 'md-indeterminate' attribute
+ *    use 'ng-checked' to define rendering logic instead of using 'ng-model'.
+ * @param {expression=} ng-checked If this expression evaluates as truthy, the 'md-checked' css
+ *    class is added to the checkbox and it will appear checked.
  *
  * @usage
  * <hljs lang="html">
