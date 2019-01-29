@@ -21,7 +21,7 @@ var_4: &checkout_code
   checkout:
     # After checkout, rebase on top of master. By default, PRs are not rebased on top of master,
     # which we want. See https://discuss.circleci.com/t/1662
-    post: git pull --ff-only origin "refs/pull/${CI_PULL_REQUEST//*pull\//}/merge"
+    post: git pull --ff-only origin "refs/pull/${CIRCLE_PULL_REQUEST//*pull\//}/merge"
 
 # Restores the cache that could be available for the current lock file. The cache
 # includes the node modules.
@@ -154,7 +154,7 @@ jobs:
       - *checkout_code
       - *restore_cache
       - *npm_install
-      - run: ./scripts/circleci/update-snapshot-and-docs.sh
+      - run: ./scripts/circleci/update-snapshot-and-docs.sh --sha=${CIRCLE_SHA1}
 
 # ----------------------------------------------------------------------------------------
 # Workflow definitions. A workflow usually groups multiple jobs together. This is useful if
