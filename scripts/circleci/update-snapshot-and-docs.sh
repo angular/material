@@ -23,4 +23,4 @@ function run {
   ./scripts/snapshot-docs-site.sh --version=$NEW_VERSION
 }
 
-source $(dirname $0)/utils.inc
+source $(dirname $0)/../utils.inc
