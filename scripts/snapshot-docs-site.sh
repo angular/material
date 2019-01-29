@@ -36,7 +36,7 @@ function run {
   git config credential.helper "store --file=.git/credentials"
   echo "https://${ANGULARJS_MATERIAL_DOCS_SITE_TOKEN}:@github.com" > .git/credentials
 
-  echo "-- Commiting snapshot..."
+  echo "-- Committing snapshot..."
   git add -A
   git commit -m "snapshot: $VERSION"
 

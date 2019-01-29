@@ -4,6 +4,9 @@ ARG_DEFS=(
   "--sha=(.*)"
 )
 
+git config --global user.email "ngmaterial@googlegroups.com"
+git config --global user.name "ngMaterial Bot"
+
 function init {
   # If --git-push-dryrun or --verbose are set, be sure to export them
   # so they are set in all the other scripts too
@@ -12,11 +15,6 @@ function init {
 }
 
 function run {
-  if [[ "$CIRCLE_PULL_REQUEST" != "false" ]]; then
-    echo "-- This is a pull request; not pushing out build."
-    exit 0
-  fi
-
   cd ../
 
   NEW_VERSION="$(readJsonProp "package.json" "version")-master-$(echo $SHA | head -c 7)"
