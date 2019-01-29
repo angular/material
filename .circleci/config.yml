@@ -148,14 +148,6 @@ jobs:
   # ------------------------------------------------------------------------------------------
   # Jobs that snapshot the `master` branch and update the docs on commits to master
   # ------------------------------------------------------------------------------------------
-  bower_material_snapshot:
-    <<: *job_defaults
-    steps:
-      - *checkout_code
-      - *restore_cache
-      - *npm_install
-      - run: ./scripts/bower-material-release.sh
-
   update_and_snapshot_docs:
     <<: *job_defaults
     steps:
@@ -193,13 +185,6 @@ workflows:
       - test_angularjs_snapshot:
           requires:
             - build
-      - bower_material_snapshot:
-          filters: *publish_branches_filter
-          requires:
-            - test_angularjs_1.5
-            - test_angularjs_1.6
-            - test_angularjs_1.7
-            - test_angularjs_snapshot
       - update_and_snapshot_docs:
             filters: *publish_branches_filter
             requires:
