@@ -33,9 +33,11 @@ function run {
 
   cd bower-material
 
-  # GitHub token with push permission specified as environment variable
   git config user.name "${commitAuthorName}"
   git config user.email "${commitAuthorEmail}"
+  # Disable CircleCI's forced use of SSH with GitHub
+  git config --global --unset url.ssh://git@github.com.insteadof
+  # GitHub personal access token with push permission specified as environment variable
   git config credential.helper "store --file=.git/credentials"
   echo "https://${ANGULARJS_MATERIAL_BOWER_TOKEN}:@github.com" > .git/credentials
 
