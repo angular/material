@@ -15,7 +15,7 @@ function init {
 }
 
 function run {
-  cd ../
+  cd ../../
 
   NEW_VERSION="$(readJsonProp "package.json" "version")-master-$(echo $SHA | head -c 7)"
 
