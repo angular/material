@@ -33,7 +33,7 @@ function run {
 
   cd bower-material
 
-  # GitHub token specified as Travis environment variable
+  # GitHub token with push permission specified as environment variable
   git config user.name "${commitAuthorName}"
   git config user.email "${commitAuthorEmail}"
   git config credential.helper "store --file=.git/credentials"
