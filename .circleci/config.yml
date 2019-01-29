@@ -154,6 +154,7 @@ jobs:
       - *checkout_code
       - *restore_cache
       - *npm_install
+      - run: npm i -g gulp@3.9
       - run: ./scripts/circleci/update-snapshot-and-docs.sh --sha=${CIRCLE_SHA1}
 
 # ----------------------------------------------------------------------------------------
