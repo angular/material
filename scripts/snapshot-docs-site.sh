@@ -36,11 +36,8 @@ function run {
 
   git config user.name "${commitAuthorName}"
   git config user.email "${commitAuthorEmail}"
-  git config credential.helper "store --file .git/credentials"
-  # Disable CircleCI's forced use of SSH with GitHub
-  echo "-- Removing CircleCI's forced use of SSH..."
-  git config --global --unset url.ssh://git@github.com.insteadof
   # GitHub personal access token with push permission specified as environment variable
+  git config credential.helper "store --file .git/credentials"
   echo "-- Storing credentials..."
   echo "https://${ANGULARJS_MATERIAL_DOCS_SITE_TOKEN}:@github.com" > .git/credentials
 
