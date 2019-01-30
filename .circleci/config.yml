@@ -155,6 +155,7 @@ jobs:
       - *restore_cache
       - *npm_install
       - run: sudo npm i -g gulp@3.9
+      - run: git config --global --unset url.ssh://git@github.com.insteadof
       - run: ./scripts/circleci/update-snapshot-and-docs.sh --sha=${CIRCLE_SHA1}
 
 # ----------------------------------------------------------------------------------------
