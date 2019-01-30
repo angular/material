@@ -73,9 +73,12 @@ function run {
   git push -q origin master
   git push -q origin v$VERSION
 
-  echo "-- Version $VERSION pushed successfully to angular/bower-material!"
-
   cd ../
+
+  echo "-- Cleanup..."
+  rm -rf bower-material/
+
+  echo "-- Version $VERSION pushed successfully to angular/bower-material!"
 }
 
 source $(dirname $0)/utils.inc
