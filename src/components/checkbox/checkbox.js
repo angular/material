@@ -171,10 +171,19 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
 
       function keypressHandler(ev) {
         var keyCode = ev.which || ev.keyCode;
-        if (keyCode === $mdConstant.KEY_CODE.SPACE || keyCode === $mdConstant.KEY_CODE.ENTER) {
-          ev.preventDefault();
-          element.addClass('md-focused');
-          listener(ev);
+        ev.preventDefault();
+        switch(keyCode) {
+          case $mdConstant.KEY_CODE.SPACE:
+            element.addClass('md-focused');
+            listener(ev);
+            break;
+          case $mdConstant.KEY_CODE.ENTER:
+            var form = $mdUtil.getClosest(ev.target, 'form');
+            // We have to use a native event here as the form directive does not use jqlite
+            if (form) {
+              form.dispatchEvent(new Event('submit'));
+            }
+            break;
         }
       }
 
