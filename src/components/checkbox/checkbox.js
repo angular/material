@@ -172,7 +172,7 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
       function keypressHandler(ev) {
         var keyCode = ev.which || ev.keyCode;
         ev.preventDefault();
-        switch(keyCode) {
+        switch (keyCode) {
           case $mdConstant.KEY_CODE.SPACE:
             element.addClass('md-focused');
             listener(ev);
