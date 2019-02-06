@@ -702,8 +702,9 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    */
   function redirectFocus () {
     ctrl.styleTabItemFocus = ($mdInteraction.getLastInteractionType() === 'keyboard');
-    if (ctrl.focusIndex > 0) {
-      getElements().tabs[ctrl.focusIndex].focus();
+    var tabToFocus = getElements().tabs[ctrl.focusIndex];
+    if (tabToFocus) {
+      tabToFocus.focus();
     }
   }
 
