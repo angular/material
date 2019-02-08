@@ -21,7 +21,8 @@ var DURATION = 450;
  * @description
  * The `md-ink-ripple` directive allows you to specify the ripple color or if a ripple is allowed.
  *
- * @param {string|boolean} md-ink-ripple A color string `#FF0000` or boolean (`false` or `0`) for preventing ripple
+ * @param {string|boolean} md-ink-ripple A color string `#FF0000` or boolean (`false` or `0`) for
+ *  preventing ripple
  *
  * @usage
  * ### String values
@@ -84,15 +85,24 @@ function InkRippleDirective ($mdButtonInkRipple, $mdCheckboxInkRipple) {
  *   }
  * });
  * </hljs>
+ */
+
+/**
+ * @ngdoc service
+ * @name $mdInkRippleProvider
+ * @module material.core.ripple
  *
- * ### Disabling ripples globally
- * If you want to disable ink ripples globally, for all components, you can call the
+ * @description
+  * If you want to disable ink ripples globally, for all components, you can call the
  * `disableInkRipple` method in your app's config.
  *
+ *
+ * @usage
  * <hljs lang="js">
  * app.config(function ($mdInkRippleProvider) {
  *   $mdInkRippleProvider.disableInkRipple();
  * });
+ * </hljs>
  */
 
 function InkRippleProvider () {
@@ -131,7 +141,7 @@ function InkRippleProvider () {
 
   /**
    * @ngdoc method
-   * @name $mdInkRipple#disableInkRipple
+   * @name $mdInkRippleProvider#disableInkRipple
    *
    * @description
    * A config-time method that, when called, disables ripples globally.
@@ -175,12 +185,10 @@ function InkRippleCtrl ($scope, $element, rippleOptions, $window, $timeout, $mdU
  * mouseup or mouseleave event)
  */
 function autoCleanup (self, cleanupFn) {
-
   if (self.mousedown || self.lastRipple) {
     self.mousedown = false;
     self.$mdUtil.nextTick(angular.bind(self, cleanupFn), false);
   }
-
 }
 
 
@@ -222,11 +230,10 @@ InkRippleCtrl.prototype.calculateColor = function () {
 
 /**
  * Takes a string color and converts it to RGBA format
- * @param color {string}
- * @param [multiplier] {int}
+ * @param {string} color
+ * @param {number} multiplier
  * @returns {string}
  */
-
 InkRippleCtrl.prototype._parseColor = function parseColor (color, multiplier) {
   multiplier = multiplier || 1;
   var colorUtil = this.$mdColorUtil;
