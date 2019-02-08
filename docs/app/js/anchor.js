@@ -6,7 +6,7 @@
     .directive('h2', MdAnchorDirective)
     .directive('h1', MdAnchorDirective);
 
-  function MdAnchorDirective($mdUtil, $compile) {
+  function MdAnchorDirective($mdUtil, $compile, $rootScope) {
 
     /** @const @type {RegExp} */
     var unsafeCharRegex = /[&\s+$,:;=?@"#{}|^~[`%!'\]./()*\\]/g;
@@ -25,7 +25,7 @@
         return;
       }
 
-      var anchorEl = $compile('<a class="docs-anchor" ng-href="#{{ name }}" name="{{ name }}"></a>')(scope);
+      var anchorEl = $compile('<a class="docs-anchor" ng-href="{{ name }}" name="{{ name }}"></a>')(scope);
 
       // Wrap contents inside of the anchor element.
       anchorEl.append(element.contents());
@@ -40,13 +40,16 @@
        * Creates URL from the text content of the element and writes it into the scope.
        */
       function createContentURL() {
-        scope.name = element.text()
+        var path = scope.$root.$location ? scope.$root.$location.path() : '';
+        var name = element.text();
+        name = name
           .trim()                           // Trim text due to browsers extra whitespace.
           .replace(/'/g, '')                // Transform apostrophes words to a single one.
           .replace(unsafeCharRegex, '-')    // Replace unsafe chars with a dash symbol.
           .replace(/-{2,}/g, '-')           // Remove repeating dash symbols.
           .replace(/^-|-$/g, '')            // Remove preceding or ending dashes.
           .toLowerCase();                   // Link should be lower-case for accessible URL.
+        scope.name = path + '#' + name;
       }
     }
   }
