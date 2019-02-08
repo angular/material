@@ -148,8 +148,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
    AngularyticsProvider.setEventHandlers(['GoogleUniversal']);
 }])
 
-.run(['Angularytics', function(Angularytics) {
+.run(['$rootScope', '$location', 'Angularytics', function($rootScope, $location, Angularytics) {
   Angularytics.init();
+  $rootScope.$location = $location;
 }])
 
 .factory('menu', [
