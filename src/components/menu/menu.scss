@@ -63,7 +63,7 @@ md-menu-content {
     max-height: $max-dense-menu-height;
     md-menu-item {
       height: $dense-menu-item-height;
-      min-height: 0px;
+      min-height: $dense-menu-item-height;
     }
   }
 }
