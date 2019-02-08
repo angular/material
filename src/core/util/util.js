@@ -529,14 +529,15 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       }
     },
 
-    /*
-     * getClosest replicates jQuery.closest() to walk up the DOM tree until it finds a matching nodeName
+    /**
+     * getClosest replicates jQuery.closest() to walk up the DOM tree until it finds a matching
+     * nodeName.
      *
-     * @param el Element to start walking the DOM from
-     * @param check Either a string or a function. If a string is passed, it will be evaluated against
-     * each of the parent nodes' tag name. If a function is passed, the loop will call it with each of
-     * the parents and will use the return value to determine whether the node is a match.
-     * @param onlyParent Only start checking from the parent element, not `el`.
+     * @param {Node} el Element to start walking the DOM from
+     * @param {string|function} validateWith If a string is passed, it will be evaluated against
+     * each of the parent nodes' tag name. If a function is passed, the loop will call it with each
+     * of the parents and will use the return value to determine whether the node is a match.
+     * @param {boolean} onlyParent Only start checking from the parent element, not `el`.
      */
     getClosest: function getClosest(el, validateWith, onlyParent) {
       if (angular.isString(validateWith)) {
@@ -561,6 +562,9 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
     /**
      * Build polyfill for the Node.contains feature (if needed)
+     * @param {Node} node
+     * @param {Node} child
+     * @returns {Node}
      */
     elementContains: function(node, child) {
       var hasContains = (window.Node && window.Node.prototype && Node.prototype.contains);
@@ -576,10 +580,10 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * Functional equivalent for $element.filter(‘md-bottom-sheet’)
      * useful with interimElements where the element and its container are important...
      *
-     * @param {[]} elements to scan
-     * @param {string} name of node to find (e.g. 'md-dialog')
-     * @param {boolean=} optional flag to allow deep scans; defaults to 'false'.
-     * @param {boolean=} optional flag to enable log warnings; defaults to false
+     * @param {angular.JQLite} element to scan
+     * @param {string} nodeName of node to find (e.g. 'md-dialog')
+     * @param {boolean=} scanDeep optional flag to allow deep scans; defaults to 'false'.
+     * @param {boolean=} warnNotFound optional flag to enable log warnings; defaults to false
      */
     extractElementByName: function(element, nodeName, scanDeep, warnNotFound) {
       var found = scanTree(element);
