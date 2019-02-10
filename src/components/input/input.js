@@ -267,7 +267,7 @@ function labelDirective() {
  *
  * You can also disable this functionality manually by adding the `md-auto-hide="false"` expression
  * to the `ng-messages` container. This may be helpful if you always want to see the error messages
- * or if you are building your own visibilty directive.
+ * or if you are building your own visibility directive.
  *
  * _<b>Note:</b> The `md-auto-hide` attribute is a static string that is  only checked upon
  * initialization of the `ng-messages` directive to see if it equals the string `false`._
