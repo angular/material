@@ -864,21 +864,38 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     },
 
     /**
-     * Function to get innerHTML of SVG and Symbol elements in IE11
+     * Gets the inner HTML content of the given HTMLElement.
+     * Only intended for use with SVG or Symbol elements in IE11.
      * @param {Element} element
-     * @returns {string} the innerHTML of the element passed in
+     * @returns {string} the inner HTML of the element passed in
      */
     getInnerHTML: function(element) {
+      // For SVG or Symbol elements, innerHTML returns `undefined` in IE.
+      // Reference: https://stackoverflow.com/q/28129956/633107
+      // The XMLSerializer API is supported on IE11 and is the recommended workaround.
       var serializer = new XMLSerializer();
 
       return Array.prototype.map.call(element.childNodes, function (child) {
         return serializer.serializeToString(child);
       }).join('');
+    },
+
+    /**
+     * Gets the outer HTML content of the given HTMLElement.
+     * Only intended for use with SVG or Symbol elements in IE11.
+     * @param {Element} element
+     * @returns {string} the outer HTML of the element passed in
+     */
+    getOuterHTML: function(element) {
+      // For SVG or Symbol elements, outerHTML returns `undefined` in IE.
+      // Reference: https://stackoverflow.com/q/29888050/633107
+      // The XMLSerializer API is supported on IE11 and is the recommended workaround.
+      var serializer = new XMLSerializer();
+      return serializer.serializeToString(element);
     }
   };
 
-
-// Instantiate other namespace utility methods
+  // Instantiate other namespace utility methods
 
   $mdUtil.dom.animator = $$mdAnimate($mdUtil);
 
@@ -887,7 +904,6 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
   function getNode(el) {
     return el[0] || el;
   }
-
 }
 
 /*
