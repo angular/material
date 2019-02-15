@@ -169,8 +169,13 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
         }
       }
 
+      /**
+       * @param {KeyboardEvent} ev 'keypress' event to handle
+       */
       function keypressHandler(ev) {
         var keyCode = ev.which || ev.keyCode;
+        var submit, form;
+
         ev.preventDefault();
         switch (keyCode) {
           case $mdConstant.KEY_CODE.SPACE:
@@ -178,10 +183,17 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
             listener(ev);
             break;
           case $mdConstant.KEY_CODE.ENTER:
-            var form = $mdUtil.getClosest(ev.target, 'form');
-            // We have to use a native event here as the form directive does not use jqlite
+            // Match the behavior of the native <input type="checkbox">.
+            // When the enter key is pressed while focusing a native checkbox inside a form,
+            // the browser will trigger a `click` on the first non-disabled submit button/input
+            // in the form. Note that this is different from text inputs, which
+            // will directly submit the form without needing a submit button/input to be present.
+            form = $mdUtil.getClosest(ev.target, 'form');
             if (form) {
-              form.dispatchEvent(new Event('submit'));
+              submit = form.querySelector('button[type="submit"]:enabled, input[type="submit"]:enabled');
+              if (submit) {
+                submit.click();
+              }
             }
             break;
         }
