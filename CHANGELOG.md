@@ -1,3 +1,47 @@
+<a name="1.1.13"></a>
+## [1.1.13](https://github.com/angular/material/compare/v1.1.12...v1.1.13) (2019-02-13)
+
+
+### Bug Fixes
+
+* **autocomplete:** show dropdown on top only when there is room ([#11629](https://github.com/angular/material/issues/11629)) ([38fb991](https://github.com/angular/material/commit/38fb991)), closes [#10859](https://github.com/angular/material/issues/10859)
+* **autocomplete:** suggestions can be highlighted incorrectly ([#11529](https://github.com/angular/material/issues/11529)) ([320511c](https://github.com/angular/material/commit/320511c)), closes [#10573](https://github.com/angular/material/issues/10573)
+* **autocomplete:** two chips added on enter w/ IE11 ([#11528](https://github.com/angular/material/issues/11528)) ([705c54e](https://github.com/angular/material/commit/705c54e)), closes [#10640](https://github.com/angular/material/issues/10640) [#10667](https://github.com/angular/material/issues/10667)
+* **checkbox:** submit on enter rather than toggle ([#11584](https://github.com/angular/material/issues/11584)) ([a191a8e](https://github.com/angular/material/commit/a191a8e)), closes [#11583](https://github.com/angular/material/issues/11583)
+* **datepicker:** does not open on focus in Firefox ([#11521](https://github.com/angular/material/issues/11521)) ([45e92ea](https://github.com/angular/material/commit/45e92ea)), closes [#10619](https://github.com/angular/material/issues/10619)
+* **datepicker:** validation error when adding text after date ([#11110](https://github.com/angular/material/issues/11110)) ([57c81c8](https://github.com/angular/material/commit/57c81c8)), closes [#9994](https://github.com/angular/material/issues/9994) [#10520](https://github.com/angular/material/issues/10520) [#10015](https://github.com/angular/material/issues/10015)
+* **icon:** SVG elements are not loaded from the cache properly on IE11 ([#11635](https://github.com/angular/material/issues/11635)) ([7cde443](https://github.com/angular/material/commit/7cde443)), closes [#11603](https://github.com/angular/material/issues/11603) [#11545](https://github.com/angular/material/issues/11545) [#11604](https://github.com/angular/material/issues/11604)
+* **layout:** remove some duplicate layout > flex styles ([#11613](https://github.com/angular/material/issues/11613)) ([6515e6c](https://github.com/angular/material/commit/6515e6c)), closes [#11609](https://github.com/angular/material/issues/11609)
+* **list:** case where user is unable to interact w/ secondary actions ([#11539](https://github.com/angular/material/issues/11539)) ([708fff9](https://github.com/angular/material/commit/708fff9)), closes [#9676](https://github.com/angular/material/issues/9676)
+* **menu:** fix min-height when scrollable ([#11602](https://github.com/angular/material/pull/11602))
+* **nav-bar:** improve focus behavior for click events ([#11600](https://github.com/angular/material/issues/11600)) ([e64875d](https://github.com/angular/material/commit/e64875d)), closes [#11591](https://github.com/angular/material/issues/11591) [#11494](https://github.com/angular/material/issues/11494) [#11598](https://github.com/angular/material/issues/11598)
+* **radio-group:** style focused but unchecked radio buttons ([#11564](https://github.com/angular/material/issues/11564)) ([8a4105c](https://github.com/angular/material/commit/8a4105c)), closes [#11563](https://github.com/angular/material/issues/11563) [#8339](https://github.com/angular/material/issues/8339) [#3643](https://github.com/angular/material/issues/3643)
+* **select:** carrot not aligned to end in IE11 ([#11544](https://github.com/angular/material/issues/11544)) ([bf5bbfc](https://github.com/angular/material/commit/bf5bbfc)), closes [#10714](https://github.com/angular/material/issues/10714) [#3840](https://github.com/angular/material/issues/3840) [#3840](https://github.com/angular/material/issues/3840)
+* **tabs:** exception when no selection and header clicked ([#11520](https://github.com/angular/material/issues/11520)) ([9c079aa](https://github.com/angular/material/commit/9c079aa)), closes [#10042](https://github.com/angular/material/issues/10042)
+
+
+### Features
+
+* **autocomplete:** support variable-height autocomplete list items ([#11516](https://github.com/angular/material/pull/11516)) ([562e0c7](https://github.com/angular/material/commit/562e0c7))
+* **datepicker, calendar:** `md-date-filter` disables months in month mode ([#11526](https://github.com/angular/material/issues/11526)) ([8aa5d58](https://github.com/angular/material/commit/8aa5d58)), closes [#11525](https://github.com/angular/material/issues/11525)
+
+### Documentation
+
+* **checkbox:** clarify description of `md-no-ink` ([#11605](https://github.com/angular/material/pull/11605))
+* **docs:** copying links to example/demo anchor headers gives a bad URL ([#11634](https://github.com/angular/material/pull/11634)), closes [#11285](https://github.com/angular/material/issues/11285)
+* **menu:** add demo and docs for dense menus. ([#11602](https://github.com/angular/material/pull/11602))
+* **ripple:** break out docs for `$mdInkRippleProvider` from `$mdInkRipple` ([#11606](https://github.com/angular/material/pull/11606))
+
+#### Contributors
+
+Thank you to the contributors who helped with the v1.1.13 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="mmalerba" src="https://avatars1.githubusercontent.com/u/14793288?v=4&s=117" width="117">](https://github.com/mmalerba) |[<img alt="codymikol" src="https://avatars1.githubusercontent.com/u/13606342?v=4&s=117" width="117">](https://github.com/codymikol) |[<img alt="marosoft" src="https://avatars0.githubusercontent.com/u/3945455?v=4&s=117" width="117">](https://github.com/marosoft) |[<img alt="mgol" src="https://avatars0.githubusercontent.com/u/1758366?v=4&s=117" width="117">](https://github.com/mgol) |[<img alt="gopherkhan" src="https://avatars0.githubusercontent.com/u/1106145?v=4&s=117" width="117">](https://github.com/gopherkhan) |
+:---: |:---: |:---: |:---: |:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[mmalerba](https://github.com/mmalerba) |[codymikol](https://github.com/codymikol) |[marosoft](https://github.com/marosoft) |[mgol](https://github.com/mgol) |[gopherkhan](https://github.com/gopherkhan) |
+
+
+
 <a name="1.1.12"></a>
 ## [1.1.12](https://github.com/angular/material/compare/v1.1.11...v1.1.12) (2019-01-03)
 
