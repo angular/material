@@ -537,7 +537,8 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * @param {string|function} validateWith If a string is passed, it will be evaluated against
      * each of the parent nodes' tag name. If a function is passed, the loop will call it with each
      * of the parents and will use the return value to determine whether the node is a match.
-     * @param {boolean} onlyParent Only start checking from the parent element, not `el`.
+     * @param {boolean=} onlyParent Only start checking from the parent element, not `el`.
+     * @returns {Node|null} closest matching parent Node or null if not found
      */
     getClosest: function getClosest(el, validateWith, onlyParent) {
       if (angular.isString(validateWith)) {
