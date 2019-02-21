@@ -1,5 +1,5 @@
 <a name="1.1.13"></a>
-## [1.1.13](https://github.com/angular/material/compare/v1.1.12...v1.1.13) (2019-02-13)
+## [1.1.13](https://github.com/angular/material/compare/v1.1.12...v1.1.13) (2019-02-20)
 
 
 ### Bug Fixes
@@ -7,8 +7,8 @@
 * **autocomplete:** show dropdown on top only when there is room ([#11629](https://github.com/angular/material/issues/11629)) ([38fb991](https://github.com/angular/material/commit/38fb991)), closes [#10859](https://github.com/angular/material/issues/10859)
 * **autocomplete:** suggestions can be highlighted incorrectly ([#11529](https://github.com/angular/material/issues/11529)) ([320511c](https://github.com/angular/material/commit/320511c)), closes [#10573](https://github.com/angular/material/issues/10573)
 * **autocomplete:** two chips added on enter w/ IE11 ([#11528](https://github.com/angular/material/issues/11528)) ([705c54e](https://github.com/angular/material/commit/705c54e)), closes [#10640](https://github.com/angular/material/issues/10640) [#10667](https://github.com/angular/material/issues/10667)
-* **checkbox:** submit on enter rather than toggle ([#11584](https://github.com/angular/material/issues/11584)) ([a191a8e](https://github.com/angular/material/commit/a191a8e)), closes [#11583](https://github.com/angular/material/issues/11583)
-* **datepicker:** does not open on focus in Firefox ([#11521](https://github.com/angular/material/issues/11521)) ([45e92ea](https://github.com/angular/material/commit/45e92ea)), closes [#10619](https://github.com/angular/material/issues/10619)
+* **checkbox:** submit on enter rather than toggle ([#11584](https://github.com/angular/material/issues/11584)) ([a191a8e](https://github.com/angular/material/commit/a191a8e)) ([#11640](https://github.com/angular/material/pull/11640)) ([251cfed8](https://github.com/angular/material/commit/251cfed8)), closes [#11583](https://github.com/angular/material/issues/11583) [#11639](https://github.com/angular/material/issues/11639)
+* **datepicker:** does not open on focus in Firefox ([#11521](https://github.com/angular/material/issues/11521)) ([45e92ea](https://github.com/angular/material/commit/251cfed82837270c29e1099b34f5e85874a7bcad)), closes [#10619](https://github.com/angular/material/issues/10619)
 * **datepicker:** validation error when adding text after date ([#11110](https://github.com/angular/material/issues/11110)) ([57c81c8](https://github.com/angular/material/commit/57c81c8)), closes [#9994](https://github.com/angular/material/issues/9994) [#10520](https://github.com/angular/material/issues/10520) [#10015](https://github.com/angular/material/issues/10015)
 * **icon:** SVG elements are not loaded from the cache properly on IE11 ([#11635](https://github.com/angular/material/issues/11635)) ([7cde443](https://github.com/angular/material/commit/7cde443)), closes [#11603](https://github.com/angular/material/issues/11603) [#11545](https://github.com/angular/material/issues/11545) [#11604](https://github.com/angular/material/issues/11604)
 * **layout:** remove some duplicate layout > flex styles ([#11613](https://github.com/angular/material/issues/11613)) ([6515e6c](https://github.com/angular/material/commit/6515e6c)), closes [#11609](https://github.com/angular/material/issues/11609)
