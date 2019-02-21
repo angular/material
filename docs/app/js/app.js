@@ -148,9 +148,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
    AngularyticsProvider.setEventHandlers(['GoogleUniversal']);
 }])
 
-.run(['$rootScope', '$location', 'Angularytics', function($rootScope, $location, Angularytics) {
+.run(['$rootScope', '$window', 'Angularytics', function($rootScope, $window, Angularytics) {
   Angularytics.init();
-  $rootScope.$location = $location;
+  $rootScope.$window = $window;
 }])
 
 .factory('menu', [
@@ -453,7 +453,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       type: "link"
     };
 
-    if (path == '/') {
+    if (path === '/') {
       self.selectSection(introLink);
       self.selectPage(introLink, introLink);
       return;
