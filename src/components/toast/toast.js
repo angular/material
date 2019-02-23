@@ -416,7 +416,7 @@ function MdToastProvider($$interimElementProvider) {
   }
 
   /* @ngInject */
-  function toastDefaultOptions($animate, $mdToast, $mdUtil, $mdMedia, $document) {
+  function toastDefaultOptions($animate, $mdToast, $mdUtil, $mdMedia, $document, $sce) {
     var SWIPE_EVENTS = '$md.swipeleft $md.swiperight $md.swipeup $md.swipedown';
     return {
       onShow: onShow,
@@ -427,19 +427,20 @@ function MdToastProvider($$interimElementProvider) {
       hideDelay: 3000,
       autoWrap: true,
       transformTemplate: function(template, options) {
+        var i, templateRoot, templateElements, wrapper;
         var shouldAddWrapper = options.autoWrap && template && !/md-toast-content/g.test(template);
 
         if (shouldAddWrapper) {
           // Root element of template will be <md-toast>. We need to wrap all of its content inside
           // of <div class="md-toast-content">. All templates provided here should be static,
-          // developer-controlled content (meaning we're not attempting to guard against XSS).
-          var templateRoot = document.createElement('md-template');
-          templateRoot.innerHTML = template;
+          // developer-controlled content (but we're still going to guard against XSS).
+          templateRoot = document.createElement('md-template');
+          templateRoot.innerHTML = sanitizeTemplateContents(template);
 
           // Iterate through all root children, to detect possible md-toast directives.
-          for (var i = 0; i < templateRoot.children.length; i++) {
+          for (i = 0; i < templateRoot.children.length; i++) {
             if (templateRoot.children[i].nodeName === 'MD-TOAST') {
-              var wrapper = angular.element('<div class="md-toast-content">');
+              wrapper = angular.element('<div class="md-toast-content">');
 
               // Wrap the children of the `md-toast` directive in jqLite, to be able to append
               // multiple nodes with the same execution.
@@ -450,14 +451,40 @@ function MdToastProvider($$interimElementProvider) {
             }
           }
 
-          // We have to return the innerHTMl, because we do not want to have the `md-template`
+          // We have to return the innerHTML, because we do not want to have the `md-template`
           // element to be the root element of our interimElement.
           return templateRoot.innerHTML;
+        } else if (template) {
+          // We can't sanitize the contents of these templates as it would affect our simple
+          // templates as well as custom templates. It would remove attributes like
+          // aria-live and aria-relevant. It would also remove md-buttons.
+          // TODO Should we go in and call trustAsHtml on those templates farther up the chain?
+          return template;
         }
 
-        return template || '';
+        return '';
       }
     };
+
+    /**
+     * @param {string} template
+     * @returns {string} template where the innerHTML of each element has been sanitized
+     */
+    function sanitizeTemplateContents(template) {
+      var i;
+      var sanitizedTemplate = '';
+      // Handle multiple elements as the template may have HTML comments
+      var templateElements = angular.element(template);
+      for (i = 0; i < templateElements.length; i++) {
+        // Using getTrustedHtml will run the content through $sanitize if it is not already
+        // explicitly trusted. If the ngSanitize module is not loaded, this will
+        // *correctly* throw an sce error.
+        templateElements[i].innerHTML = $sce.getTrustedHtml(templateElements[i].innerHTML);
+        sanitizedTemplate += templateElements[i].outerHTML;
+
+      }
+      return sanitizedTemplate;
+    }
 
     function onShow(scope, element, options) {
       // support deprecated #content method
