@@ -25,7 +25,7 @@
         return;
       }
 
-      var anchorEl = $compile('<a class="docs-anchor" ng-href="{{ name }}" name="{{ name }}"></a>')(scope);
+      var anchorEl = $compile('<a class="docs-anchor" ng-href="{{ href }}" name="{{ name }}"></a>')(scope);
 
       // Wrap contents inside of the anchor element.
       anchorEl.append(element.contents());
@@ -40,8 +40,14 @@
        * Creates URL from the text content of the element and writes it into the scope.
        */
       function createContentURL() {
-        var path = scope.$root.$location ? scope.$root.$location.path() : '';
+        var path = '';
         var name = element.text();
+        // Use $window.location.pathname to get the path with the baseURL included.
+        // $location.path() does not include the baseURL. This is important to support how the docs
+        // are deployed with baseURLs like /latest, /HEAD, /1.1.13, etc.
+        if (scope.$root.$window && scope.$root.$window.location) {
+          path = scope.$root.$window.location.pathname;
+        }
         name = name
           .trim()                           // Trim text due to browsers extra whitespace.
           .replace(/'/g, '')                // Transform apostrophes words to a single one.
@@ -49,7 +55,8 @@
           .replace(/-{2,}/g, '-')           // Remove repeating dash symbols.
           .replace(/^-|-$/g, '')            // Remove preceding or ending dashes.
           .toLowerCase();                   // Link should be lower-case for accessible URL.
-        scope.name = path + '#' + name;
+        scope.name = name;
+        scope.href = path + '#' + name;
       }
     }
   }
