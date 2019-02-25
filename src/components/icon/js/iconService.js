@@ -479,13 +479,18 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   function transformClone(cacheElement) {
     var clone = cacheElement.clone();
     var newUid = $mdUtil.nextUid();
-    var cacheSuffix, svgElement;
+    var cacheSuffix, svgUrlQuerySelector, i, xlinkHrefValue;
+    // These are SVG attributes that can reference element ids.
+    var svgUrlAttributes = [
+      'clip-path', 'color-profile', 'cursor', 'fill', 'filter', 'href', 'marker-start',
+      'marker-mid', 'marker-end', 'mask', 'stroke', 'style', 'vector-effect'
+    ];
+    var isIeSvg = clone.innerHTML === undefined;
 
     // Verify that the newUid only contains a number and not some XSS content.
     if (!isFinite(Number(newUid))) {
       throw new Error('Unsafe and unexpected non-number result from $mdUtil.nextUid().');
     }
-
     cacheSuffix = '_cache' + newUid;
 
     // For each cached icon, we need to modify the id attributes and references.
@@ -495,27 +500,71 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
       clone.id += cacheSuffix;
     }
 
-    var addCacheSuffixToId = function(match, p1, p2, p3) {
-      return [p1, p2, cacheSuffix, p3].join('');
-    };
+    // Do as much as possible with querySelectorAll as it provides much greater performance
+    // than RegEx against serialized DOM.
     angular.forEach(clone.querySelectorAll('[id]'), function(descendantElem) {
+      svgUrlQuerySelector = '';
+      for (i = 0; i < svgUrlAttributes.length; i++) {
+        svgUrlQuerySelector += '[' + svgUrlAttributes[i] + '="url(#' + descendantElem.id + ')"]';
+        if (i + 1 < svgUrlAttributes.length) {
+          svgUrlQuerySelector += ', ';
+        }
+      }
+      // Append the cacheSuffix to references of the element's id within url(#id) calls.
+      angular.forEach(clone.querySelectorAll(svgUrlQuerySelector), function(refItem) {
+        updateSvgIdReferences(descendantElem, refItem, isIeSvg, newUid);
+      });
+      // Handle usages of url(#id) in the SVG's stylesheets
+      angular.forEach(clone.querySelectorAll('style'), function(refItem) {
+        updateSvgIdReferences(descendantElem, refItem, isIeSvg, newUid);
+      });
+
+      // Update ids referenced by the deprecated (in SVG v2) xlink:href XML attribute. The now
+      // preferred href attribute is handled above. However, this non-standard XML namespaced
+      // attribute cannot be handled in the same way. Explanation of this query selector here:
+      // https://stackoverflow.com/q/23034283/633107.
+      angular.forEach(clone.querySelectorAll('[*|href]:not([href])'), function(refItem) {
+        xlinkHrefValue = refItem.getAttribute('xlink:href');
+        if (xlinkHrefValue) {
+          xlinkHrefValue = xlinkHrefValue.replace("#" + descendantElem.id, "#" + descendantElem.id + cacheSuffix);
+          refItem.setAttribute('xlink:href', xlinkHrefValue);
+        }
+      });
+
       descendantElem.id += cacheSuffix;
     });
-    // innerHTML of SVG elements is not supported by IE11
-    if (clone.innerHTML === undefined) {
-      svgElement = $mdUtil.getOuterHTML(clone);
-      svgElement = svgElement.replace(/(.*url\(#)(\w*)(\).*)/g, addCacheSuffixToId);
-      svgElement = svgElement.replace(/(.*xlink:href="#)(\w*)(".*)/g, addCacheSuffixToId);
-      clone = angular.element(svgElement)[0];
-    } else {
-      // Inject the cacheSuffix into all instances of url(id) and xlink:href="#id".
-      // This use of innerHTML should be safe from XSS attack since we are only injecting the
-      // cacheSuffix with content from $mdUtil.nextUid which we verify is a finite number above.
-      clone.innerHTML = clone.innerHTML.replace(/(.*url\(#)(\w*)(\).*)/g, addCacheSuffixToId);
-      clone.innerHTML = clone.innerHTML.replace(/(.*xlink:href="#)(\w*)(".*)/g, addCacheSuffixToId);
-    }
 
     return clone;
+  }
+
+  /**
+   * @param {Element} referencedElement element w/ id that needs to be updated
+   * @param {Element} referencingElement element that references the original id
+   * @param {boolean} isIeSvg true if we're dealing with an SVG in IE11, false otherwise
+   * @param {string} newUid the cache id to add as part of the cache suffix
+   */
+  function updateSvgIdReferences(referencedElement, referencingElement, isIeSvg, newUid) {
+    var svgElement, cacheSuffix;
+
+    // Verify that the newUid only contains a number and not some XSS content.
+    if (!isFinite(Number(newUid))) {
+      throw new Error('Unsafe and unexpected non-number result for newUid.');
+    }
+    cacheSuffix = '_cache' + newUid;
+
+    // outerHTML of SVG elements is not supported by IE11
+    if (isIeSvg) {
+      svgElement = $mdUtil.getOuterHTML(referencingElement);
+      svgElement = svgElement.replace("url(#" + referencedElement.id + ")",
+        "url(#" + referencedElement.id + cacheSuffix + ")");
+      referencingElement.textContent = angular.element(svgElement)[0].innerHTML;
+    } else {
+      // This use of outerHTML should be safe from XSS attack since we are only injecting the
+      // cacheSuffix with content from $mdUtil.nextUid which we verify is a finite number above.
+      referencingElement.outerHTML = referencingElement.outerHTML.replace(
+        "url(#" + referencedElement.id + ")",
+        "url(#" + referencedElement.id + cacheSuffix + ")");
+    }
   }
 
   /**
