@@ -514,7 +514,7 @@ describe('MdIcon service', function() {
 
       it('should return correct SVG markup', function() {
         $mdIcon('android.svg').then(function(el) {
-          expect(el.outerHTML).toMatch( new RegExp(updateDefaults('<svg><g id="android_cache[0-9]+"></g></svg>') ));
+          expect(el.outerHTML).toMatch(new RegExp(updateDefaults('<svg><g id="android_cache[0-9]+"></g></svg>')));
         });
         $scope.$digest();
       });
