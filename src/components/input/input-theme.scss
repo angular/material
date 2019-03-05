@@ -9,9 +9,11 @@ md-input-container.md-THEME_NAME-theme {
     color: '{{foreground-1}}';
   }
 
+  &[md-no-float] input::placeholder,
   label,
   .md-placeholder {
     color: '{{foreground-2}}';
+    opacity: 1;
   }
 
   label.md-required:after {
