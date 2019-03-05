@@ -3212,6 +3212,59 @@ describe('<md-autocomplete>', function() {
       document.body.removeChild(parent[0]);
     }));
 
+    it('should position dropdown with correct height with a shifted body (virtual list)', inject(function($timeout) {
+      var scope = createScope();
+
+      dropdownItems = 2;
+      scope.match = fakeItemMatch;
+
+      var template =
+        '<div style="height: 2000px">' +
+        '<div style="height: 1200px"></div>' +
+        '<md-autocomplete ' +
+        'md-search-text="searchText" ' +
+        'md-items="item in match(searchText)" ' +
+        'md-item-text="item.display" ' +
+        'md-min-length="0" ' +
+        'md-dropdown-position="bottom" ' +
+        'placeholder="placeholder">' +
+        '<span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>' +
+        '</div>';
+
+      var parent = compile(template, scope);
+      var element = parent.find('md-autocomplete');
+      var ctrl = element.controller('mdAutocomplete');
+
+      // Add container to the DOM to be able to test the rect calculations.
+      document.body.appendChild(parent[0]);
+      window.scrollTo(0, 1200);
+
+      $timeout.flush();
+
+      expect(ctrl.positionDropdown).toBeTruthy();
+
+      // Focus the autocomplete and trigger a query to be able to open the dropdown.
+      ctrl.focus();
+
+      scope.$apply('searchText = "A"');
+      waitForVirtualRepeat(element);
+
+      var scrollContainer = document.body.querySelector('.md-virtual-repeat-container');
+
+      expect(scrollContainer).toBeTruthy();
+      expect(scrollContainer.style.height).toBe(dropdownItems * DEFAULT_ITEM_HEIGHT + 'px');
+
+      dropdownItems = DEFAULT_MAX_ITEMS;
+
+      // Trigger a new query to request an update of the items and dropdown.
+      scope.$apply('searchText = "B"');
+
+      expect(scrollContainer.style.height).toBe(dropdownItems * DEFAULT_ITEM_HEIGHT + 'px');
+
+      document.body.removeChild(parent[0]);
+    }));
+
     it('should grow and shrink virtual list depending on the amount of items', inject(function($timeout) {
       var scope = createScope();
 

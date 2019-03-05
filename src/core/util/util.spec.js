@@ -3,11 +3,12 @@ describe('util', function() {
   describe('with no overrides', function() {
     beforeEach(module('material.core'));
 
-    var $rootScope, $timeout, $$mdAnimate;
-    beforeEach(inject(function(_$animate_, _$rootScope_, _$timeout_) {
+    var $rootScope, $timeout, $$mdAnimate, $document;
+    beforeEach(inject(function(_$animate_, _$rootScope_, _$timeout_, _$document_) {
       $animate = _$animate_;
       $rootScope = _$rootScope_;
       $timeout = _$timeout_;
+      $document = _$document_;
     }));
 
     describe('now', function() {
@@ -337,6 +338,20 @@ describe('util', function() {
         }
       }));
 
+    });
+
+    describe('getDisabledBodyOffset', function(){
+
+      it('should return body top when fixed position', inject(function($mdUtil, $document) {
+        expect($mdUtil.getDisabledBodyOffset()).toBe(0);
+
+        $document[0].body.style.position = 'fixed';
+        $document[0].body.style.top = '-50px';
+
+        expect($mdUtil.getDisabledBodyOffset()).toBe(-50);
+
+        $document[0].body.style = {};
+      }));
     });
 
     describe('nextTick', function() {

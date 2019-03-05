@@ -314,6 +314,15 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
     },
 
+    getDisabledBodyOffset: function() {
+      var body = angular.element($document[0].body);
+      if (body.css('position') == 'fixed') {
+        var pixelOffset = body.css('top');
+        return +pixelOffset.replace('px', '');
+      }
+      return 0;
+    },
+
     enableScrolling: function() {
       var restoreFn = this.disableScrollAround._restoreScroll;
       restoreFn && restoreFn();
