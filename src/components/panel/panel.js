@@ -1167,7 +1167,7 @@ MdPanelService.prototype.create = function(preset, config) {
 
   // Create the panelRef and add it to the `_trackedPanels` object.
   var panelRef = new MdPanelRef(this._config, this._$injector);
-  this._trackedPanels[config.id] = panelRef;
+  this._trackedPanels[this._config.id] = panelRef;
 
   // Add the panel to each of its requested groups.
   if (this._config.groupName) {
