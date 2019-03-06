@@ -393,7 +393,11 @@ VirtualRepeatContainerController.prototype.handleScroll_ = function() {
   var offset = this.isHorizontal() ?
       (ltr?this.scroller.scrollLeft : this.maxSize - this.scroller.scrollLeft)
       : this.scroller.scrollTop;
-  if (offset === this.scrollOffset || offset > this.scrollSize - this.size) return;
+  if (this.scrollSize < this.size) return;
+  if (offset > this.scrollSize - this.size) {
+    offset = this.scrollSize - this.size;
+  }
+  if (offset === this.scrollOffset) return;
 
   var itemSize = this.repeater.getItemSize();
   if (!itemSize) return;
