@@ -157,7 +157,13 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * @returns {number}
      */
     getViewportTop: function() {
-      return window.scrollY || window.pageYOffset || 0;
+      // If body scrolling is disabled, then use the cached viewport top value, otherwise get it
+      // fresh from the $window.
+      if ($mdUtil.disableScrollAround._count && $mdUtil.disableScrollAround._viewPortTop) {
+        return $mdUtil.disableScrollAround._viewPortTop;
+      } else {
+        return $window.scrollY || $window.pageYOffset || 0;
+      }
     },
 
     /**
@@ -232,6 +238,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
       return $mdUtil.disableScrollAround._restoreScroll = function() {
         if (--$mdUtil.disableScrollAround._count <= 0) {
+          delete $mdUtil.disableScrollAround._viewPortTop;
           restoreBody();
           restoreElement();
           delete $mdUtil.disableScrollAround._restoreScroll;
@@ -282,6 +289,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         var prevBodyStyle = body.style.cssText || '';
 
         var viewportTop = $mdUtil.getViewportTop();
+        $mdUtil.disableScrollAround._viewPortTop = viewportTop;
         var clientWidth = body.clientWidth;
         var hasVerticalScrollbar = body.scrollHeight > body.clientHeight + 1;
 

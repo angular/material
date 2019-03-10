@@ -3014,6 +3014,60 @@ describe('<md-autocomplete>', function() {
       document.body.removeChild(parent[0]);
     }));
 
+    it('should default dropdown position to the bottom', inject(function($timeout, $window) {
+      var scope = createScope();
+      scope.topMargin = '0px';
+
+      scope.match = fakeItemMatch;
+
+      var template = '<div style="margin-top: {{topMargin}}">' +
+        '<md-autocomplete ' +
+        'md-search-text="searchText" ' +
+        'md-items="item in match(searchText)" ' +
+        'md-item-text="item" ' +
+        'md-min-length="0" ' +
+        'placeholder="placeholder">' +
+        '<span md-highlight-text="searchText">{{item}}</span>' +
+        '</md-autocomplete>' +
+        '</div>';
+
+      var parent = compile(template, scope);
+      var element = parent.find('md-autocomplete');
+      var ctrl = element.controller('mdAutocomplete');
+
+      // Add container to the DOM to be able to test the rect calculations.
+      document.body.appendChild(parent[0]);
+
+      $timeout.flush();
+
+      // Focus the autocomplete and trigger a query to be able to open the dropdown.
+      ctrl.focus();
+      scope.$apply('searchText = "Query 1"');
+      waitForVirtualRepeat(element);
+
+      var scrollContainer = document.body.querySelector('.md-virtual-repeat-container');
+
+      expect(scrollContainer).toBeTruthy();
+      // Test that the dropdown displays with position = bottom automatically because there is no
+      // room above the element to display the dropdown using position = top.
+      expect(scrollContainer.style.bottom).toBe('auto');
+      expect(scrollContainer.style.top).toMatch(/[0-9]+px/);
+
+      // Change position and resize to force a DOM update.
+      scope.$apply('topMargin = "300px"');
+
+      angular.element($window).triggerHandler('resize');
+      $timeout.flush();
+
+      expect(scrollContainer).toBeTruthy();
+      // Test that the dropdown displays with position = bottom by default, even when there is room
+      // for it to display on the top.
+      expect(scrollContainer.style.bottom).toBe('auto');
+      expect(scrollContainer.style.top).toMatch(/[0-9]+px/);
+
+      parent.remove();
+    }));
+
     it('should allow dropdown position to be specified (virtual list)', inject(function($timeout, $window) {
       var scope = createScope();
 
