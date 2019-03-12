@@ -121,6 +121,9 @@
      * @returns rgba color string
      */
     function parseColor(color, contrast) {
+      if(!color) {
+        return '';
+      }
       contrast = contrast || false;
       var rgbValues = $mdTheming.PALETTES[color.palette][color.hue];
 
@@ -171,6 +174,9 @@
      * For the evaluated expression, extract the color parts into a hash map
      */
     function extractColorOptions(expression) {
+      if(!expression) {
+        return undefined;
+      }
       var parts = expression.split('-');
       var hasTheme = angular.isDefined($mdTheming.THEMES[parts[0]]);
       var theme = hasTheme ? parts.splice(0, 1)[0] : $mdTheming.defaultTheme();
@@ -316,7 +322,7 @@
             if (mdThemeController) {
               Object.keys(colors).forEach(function (prop) {
                 var color = colors[prop];
-                if (!$mdColors.hasTheme(color)) {
+                if (color && !$mdColors.hasTheme(color)) {
                   colors[prop] = (theme || mdThemeController.$mdTheme) + '-' + color;
                 }
               });
