@@ -148,7 +148,7 @@ md-input-container {
     opacity: 0;
   }
 
-  &:not( .md-input-has-value ) input:not( :focus ) {
+  &:not( .md-input-has-value ):not( .md-input-has-placeholder ) input:not( :focus ) {
     color: transparent;
   }
   &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-ampm-field,
