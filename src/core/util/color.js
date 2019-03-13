@@ -30,7 +30,7 @@ function ColorUtilFactory() {
 
   /**
    * Converts rgba value to hex string
-   * @param color {string}
+   * @param {string} color
    * @returns {string}
    */
   function rgbaToHex(color) {
@@ -46,7 +46,7 @@ function ColorUtilFactory() {
 
   /**
    * Converts an RGB color to RGBA
-   * @param color {string}
+   * @param {string} color
    * @returns {string}
    */
   function rgbToRgba (color) {
@@ -55,7 +55,7 @@ function ColorUtilFactory() {
 
   /**
    * Converts an RGBA color to RGB
-   * @param color {string}
+   * @param {string} color
    * @returns {string}
    */
   function rgbaToRgb (color) {
