@@ -112,6 +112,10 @@ exports.pathsForModule = function(name) {
   }
 };
 
+/**
+ * @param {string} name module name
+ * @returns {*}
+ */
 exports.filesForModule = function(name) {
   if (pathsForModules[name]) {
     return srcFiles(pathsForModules[name]);

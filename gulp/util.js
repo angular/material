@@ -40,34 +40,38 @@ exports.args = args;
 /**
  * Builds the entire component library javascript.
  */
-function buildJs () {
-  const jsFiles = config.jsBaseFiles.concat([path.join(config.paths, '*.js')]);
+function buildJs() {
+  const jsFiles = config.jsCoreFiles;
+  config.componentPaths.forEach(component => {
+    jsFiles.push(path.join(component, '*.js'));
+    jsFiles.push(path.join(component, '**/*.js'));
+  });
 
   gutil.log("building js files...");
 
   const jsBuildStream = gulp.src(jsFiles)
-      .pipe(filterNonCodeFiles())
-      .pipe(utils.buildNgMaterialDefinition())
-      .pipe(plumber())
-      .pipe(ngAnnotate())
-      .pipe(utils.addJsWrapper(true));
+  .pipe(filterNonCodeFiles())
+  .pipe(utils.buildNgMaterialDefinition())
+  .pipe(plumber())
+  .pipe(ngAnnotate())
+  .pipe(utils.addJsWrapper(true));
 
   const jsProcess = series(jsBuildStream, themeBuildStream())
-      .pipe(concat('angular-material.js'))
-      .pipe(BUILD_MODE.transform())
-      .pipe(insert.prepend(config.banner))
-      .pipe(insert.append(';window.ngMaterial={version:{full: "' + VERSION +'"}};'))
-      .pipe(gulp.dest(config.outputDir))
-      .pipe(gulpif(!IS_DEV, uglify({ output: { comments: 'some' }})))
-      .pipe(rename({ extname: '.min.js' }))
-      .pipe(gulp.dest(config.outputDir));
+  .pipe(concat('angular-material.js'))
+  .pipe(BUILD_MODE.transform())
+  .pipe(insert.prepend(config.banner))
+  .pipe(insert.append(';window.ngMaterial={version:{full: "' + VERSION + '"}};'))
+  .pipe(gulp.dest(config.outputDir))
+  .pipe(gulpif(!IS_DEV, uglify({output: {comments: 'some'}})))
+  .pipe(rename({extname: '.min.js'}))
+  .pipe(gulp.dest(config.outputDir));
 
   return series(jsProcess, deployMaterialMocks());
 
   // Deploy the `angular-material-mocks.js` file to the `dist` directory
   function deployMaterialMocks() {
     return gulp.src(config.mockFiles)
-        .pipe(gulp.dest(config.outputDir));
+    .pipe(gulp.dest(config.outputDir));
   }
 }
 
@@ -83,8 +87,8 @@ function minifyCss(extraOptions) {
 }
 
 /**
- * @param module {string}
- * @param opts {{isRelease, minify, useBower}}
+ * @param {string} module
+ * @param {{isRelease, minify, useBower}=} opts
  */
 function buildModule(module, opts) {
   opts = opts || {};
@@ -97,54 +101,54 @@ function buildModule(module, opts) {
   utils.copyDemoAssets(name, 'src/components/', 'dist/demos/');
 
   let stream = utils.filesForModule(module)
-      .pipe(filterNonCodeFiles())
-      .pipe(filterLayoutAttrFiles())
-      .pipe(gulpif('*.scss', buildModuleStyles(name)))
-      .pipe(gulpif('*.js', buildModuleJs(name)));
+  .pipe(filterNonCodeFiles())
+  .pipe(filterLayoutAttrFiles())
+  .pipe(gulpif('*.scss', buildModuleStyles(name)))
+  .pipe(gulpif('*.js', buildModuleJs(name)));
 
   if (module === 'material.core') {
     stream = splitStream(stream);
   }
 
   return stream
-      .pipe(BUILD_MODE.transform())
-      .pipe(insert.prepend(config.banner))
-      .pipe(gulpif(opts.minify, buildMin()))
-      .pipe(gulpif(opts.useBower, buildBower()))
-      .pipe(gulp.dest(BUILD_MODE.outputDir + name));
+  .pipe(BUILD_MODE.transform())
+  .pipe(insert.prepend(config.banner))
+  .pipe(gulpif(opts.minify, buildMin()))
+  .pipe(gulpif(opts.useBower, buildBower()))
+  .pipe(gulp.dest(BUILD_MODE.outputDir + name));
 
-  function splitStream (stream) {
+  function splitStream(stream) {
     const js = series(stream, themeBuildStream())
-        .pipe(filter('**/*.js'))
-        .pipe(concat('core.js'));
+    .pipe(filter('**/*.js'))
+    .pipe(concat('core.js'));
 
     const css = stream
-      .pipe(filter(['**/*.css', '!**/ie_fixes.css']));
+    .pipe(filter(['**/*.css', '!**/ie_fixes.css']));
 
     return series(js, css);
   }
 
   function buildMin() {
     return lazypipe()
-        .pipe(gulpif, /.css$/, minifyCss(),
-        uglify({ output: { comments: 'some' }})
-            .on('error', function(e) {
-              console.log('\x07',e.message);
-              return this.end();
-            }
-        )
+    .pipe(gulpif, /.css$/, minifyCss(),
+      uglify({output: {comments: 'some'}})
+      .on('error', function(e) {
+          console.log('\x07', e.message);
+          return this.end();
+        }
+      )
     )
-        .pipe(rename, function(path) {
-          path.extname = path.extname
-              .replace(/.js$/, '.min.js')
-              .replace(/.css$/, '.min.css');
-        })
+    .pipe(rename, function(path) {
+      path.extname = path.extname
+      .replace(/.js$/, '.min.js')
+      .replace(/.css$/, '.min.css');
+    })
     ();
   }
 
   function buildBower() {
     return lazypipe()
-      .pipe(utils.buildModuleBower, name, VERSION)();
+    .pipe(utils.buildModuleBower, name, VERSION)();
   }
 
   function buildModuleJs(name) {
@@ -162,18 +166,21 @@ function buildModule(module, opts) {
       }
     ];
     return lazypipe()
-        .pipe(plumber)
-        .pipe(ngAnnotate)
-        .pipe(frep, patterns)
-        .pipe(concat, name + '.js')
+    .pipe(plumber)
+    .pipe(ngAnnotate)
+    .pipe(frep, patterns)
+    .pipe(concat, name + '.js')
     ();
   }
 
+  /**
+   * @param {string} name module name
+   * @returns {*}
+   */
   function buildModuleStyles(name) {
-
     let files = [];
     config.themeBaseFiles.forEach(function(fileGlob) {
-      files = files.concat(glob(fileGlob, { cwd: ROOT }));
+      files = files.concat(glob(fileGlob, {cwd: ROOT}));
     });
 
     const baseStyles = files.map(function(fileName) {
@@ -181,26 +188,28 @@ function buildModule(module, opts) {
     }).join('\n');
 
     return lazypipe()
-        .pipe(insert.prepend, baseStyles)
-        .pipe(gulpif, /theme.scss/, rename(name + '-default-theme.scss'), concat(name + '.scss'))
-        // Theme files are suffixed with the `default-theme.scss` string.
-        // In some cases there are multiple theme SCSS files, which should be concatenated together.
-        .pipe(gulpif, /default-theme.scss/, concat(name + '-default-theme.scss'))
-        .pipe(sass)
-        .pipe(dedupeCss)
-        .pipe(utils.autoprefix)
+    .pipe(insert.prepend, baseStyles)
+    .pipe(gulpif, /theme.scss/, rename(name + '-default-theme.scss'), concat(name + '.scss'))
+    // Theme files are suffixed with the `default-theme.scss` string.
+    // In some cases there are multiple theme SCSS files, which should be concatenated together.
+    .pipe(gulpif, /default-theme.scss/, concat(name + '-default-theme.scss'))
+    .pipe(sass)
+    .pipe(dedupeCss)
+    .pipe(utils.autoprefix)
     (); // Invoke the returning lazypipe function to create our new pipe.
   }
-
 }
 
+/**
+ * @returns {string} module name. i.e. material.components.icon
+ */
 function readModuleArg() {
   const module = args.c ? 'material.components.' + args.c : (args.module || args.m);
   if (!module) {
     gutil.log('\nProvide a component argument via `-c`:',
-        '\nExample: -c toast');
+      '\nExample: -c toast');
     gutil.log('\nOr provide a module argument via `--module` or `-m`.',
-        '\nExample: --module=material.components.toast or -m material.components.dialog');
+      '\nExample: --module=material.components.toast or -m material.components.dialog');
     throw new Error("Unable to read module arguments.");
   }
   return module;
@@ -224,14 +233,19 @@ function filterNonCodeFiles() {
 
 // builds the theming related css and provides it as a JS const for angular
 function themeBuildStream() {
-  return gulp.src(config.themeBaseFiles.concat(path.join(config.paths, '*-theme.scss')))
-      .pipe(concat('default-theme.scss'))
-      .pipe(utils.hoistScssVariables())
-      .pipe(sass())
-      .pipe(dedupeCss())
-      // The PostCSS orderedValues plugin modifies the theme color expressions.
-      .pipe(minifyCss({ orderedValues: false }))
-      .pipe(utils.cssToNgConstant('material.core', '$MD_THEME_CSS'));
+  // Make a copy so that we don't modify the actual config that is used by other functions
+  var paths = config.themeBaseFiles.slice(0);
+  config.componentPaths.forEach(component => paths.push(path.join(component, '*-theme.scss')));
+  paths.push(config.themeCore);
+
+  return gulp.src(paths)
+  .pipe(concat('default-theme.scss'))
+  .pipe(utils.hoistScssVariables())
+  .pipe(sass())
+  .pipe(dedupeCss())
+  // The PostCSS orderedValues plugin modifies the theme color expressions.
+  .pipe(minifyCss({orderedValues: false}))
+  .pipe(utils.cssToNgConstant('material.core', '$MD_THEME_CSS'));
 }
 
 // Removes duplicated CSS properties.
@@ -260,7 +274,7 @@ function dedupeCss() {
 
           gutil.log(gutil.colors.yellow(
             'Removed duplicate property: "' +
-              prop.prop + ': ' + prop.value + '" from "' + rule.selector + '"...'
+            prop.prop + ': ' + prop.value + '" from "' + rule.selector + '"...'
           ));
         }
       });

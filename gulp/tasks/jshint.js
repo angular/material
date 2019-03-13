@@ -3,7 +3,7 @@ const gulp = require('gulp');
 const jshint = require('gulp-jshint');
 
 exports.task = function() {
-  return gulp.src(config.jsFiles)
+  return gulp.src(config.jsHintFiles)
       .pipe(jshint('.jshintrc'))
       .pipe(jshint.reporter('jshint-summary', {
         fileColCol: ',bold',
