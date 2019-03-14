@@ -1,12 +1,16 @@
 describe("$mdInteraction service", function() {
 
   var $mdInteraction = null;
+  var $rootScope = null;
   var bodyElement = null;
+  var $timeout = null;
 
   beforeEach(module('material.core'));
 
   beforeEach(inject(function($injector) {
     $mdInteraction = $injector.get('$mdInteraction');
+    $rootScope = $injector.get('$rootScope');
+    $timeout = $injector.get('$timeout');
 
     bodyElement = angular.element(document.body);
   }));
@@ -71,6 +75,40 @@ describe("$mdInteraction service", function() {
 
         done();
       }, 10);
+    });
+
+  });
+
+  describe('when $rootScope is destroyed', function () {
+
+    var _initialTouchStartEvent = document.documentElement.ontouchstart;
+
+    beforeAll(function () {
+      document.documentElement.ontouchstart = function () {};
+    });
+
+    beforeEach(function () {
+      $mdInteraction.lastInteractionType = 'initial';
+      $rootScope.$destroy();
+    });
+
+    afterAll(function () {
+      document.documentElement.ontouchstart = _initialTouchStartEvent;
+    });
+
+    it('should remove mousedown events', function () {
+      bodyElement.triggerHandler('mousedown');
+      expect($mdInteraction.getLastInteractionType()).toEqual('initial');
+    });
+
+    it('should remove keydown events', function () {
+      bodyElement.triggerHandler('keydown');
+      expect($mdInteraction.getLastInteractionType()).toEqual('initial');
+    });
+
+    it('should remove touchstart events', function () {
+      bodyElement.triggerHandler('touchstart');
+      expect($mdInteraction.getLastInteractionType()).toEqual('initial');
     });
 
   });
