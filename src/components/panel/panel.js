@@ -3361,7 +3361,7 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl) {
 
       var openSlide = animator.calculateSlideToOrigin(
               panelEl, this._openFrom) || '';
-      openFrom = animator.toTransformCss(openSlide + ' ' + panelTransform);
+      openFrom = animator.toTransformCss(panelTransform + ' ' + openSlide);
       break;
 
     case MdPanelAnimation.animation.SCALE:
@@ -3371,7 +3371,7 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl) {
 
       var openScale = animator.calculateZoomToOrigin(
               panelEl, this._openFrom) || '';
-      openFrom = animator.toTransformCss(openScale + ' ' + panelTransform);
+      openFrom = animator.toTransformCss(panelTransform + ' ' + openScale);
       break;
 
     case MdPanelAnimation.animation.FADE:
@@ -3426,7 +3426,7 @@ MdPanelAnimation.prototype.animateClose = function(panelEl) {
 
       var closeSlide = animator.calculateSlideToOrigin(
               panelEl, this._closeTo) || '';
-      closeTo = animator.toTransformCss(closeSlide + ' ' + panelTransform);
+      closeTo = animator.toTransformCss(panelTransform + ' ' + closeSlide);
       break;
 
     case MdPanelAnimation.animation.SCALE:
@@ -3436,7 +3436,7 @@ MdPanelAnimation.prototype.animateClose = function(panelEl) {
 
       var closeScale = animator.calculateZoomToOrigin(
               panelEl, this._closeTo) || '';
-      closeTo = animator.toTransformCss(closeScale + ' ' + panelTransform);
+      closeTo = animator.toTransformCss(panelTransform + ' ' + closeScale);
       break;
 
     case MdPanelAnimation.animation.FADE:
