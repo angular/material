@@ -2957,6 +2957,49 @@ describe('$mdPanel', function() {
       expect(backdropAnimation._closeDuration).toBe(mdPanelAnimation._closeDuration);
     });
 
+    describe('should add scale after the existing transform when', function () {
+      var animator;
+      var panelEl;
+
+      beforeEach(function () {
+        animator = mdPanelAnimation._$mdUtil.dom.animator;
+
+        var panelDiv = document.createElement('div');
+        panelDiv.id = 'mockPanel'
+        panelDiv.style.transform = 'translateX(-50%) translateY(-50%)'
+        attachToBody(panelDiv);
+        panelEl = angular.element(panelDiv);
+
+        spyOn(animator, 'translate3d');
+
+        spyOn(animator, 'calculateZoomToOrigin')
+          .and.returnValue('translate3d(0, 0, 0) scale(0.5, 0.5)');
+
+      });
+
+      it('opening with the SCALE animation', function () {
+        var animation = mdPanelAnimation.openFrom('button')
+          .withAnimation('md-panel-animate-scale')
+
+        animation.animateOpen(panelEl);
+
+       expect(animator.translate3d.calls.mostRecent().args[1].transform)
+          .toMatch(/^translateX.*scale\(0\.5, 0\.5\)$/g);
+
+      });
+
+      it('closing with the SCALE animation', function () {
+        var animation = mdPanelAnimation.openFrom('button')
+          .withAnimation('md-panel-animate-scale')
+
+        animation.animateClose(panelEl);
+
+        expect(animator.translate3d.calls.mostRecent().args[2].transform)
+          .toMatch(/^translateX.*scale\(0\.5, 0\.5\)$/g);
+
+      });
+    });
+
     describe('should determine openFrom when', function() {
       it('provided a selector', function() {
         var animation = mdPanelAnimation.openFrom('button');
