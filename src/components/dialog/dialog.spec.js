@@ -1480,6 +1480,44 @@ describe('$mdDialog', function() {
       expect(parent[0].querySelectorAll('md-dialog.two').length).toBe(0);
     }));
 
+    it('should be able to close a dialog when a child dialog fails to compile', inject(function ($mdDialog, $q) {
+
+        var root = angular.element('<div>');
+
+        var parent =  angular.element('<md-dialog class="one"></md-dialog>');
+
+        var child = angular.element('<md-dialog class="two"></md-dialog>');
+
+        $mdDialog.show({
+            template: parent,
+            multiple: true,
+            parent: root,
+        });
+        runAnimation();
+
+        expect(root[0].querySelectorAll('md-dialog').length).toBe(1);
+
+        $mdDialog.show({
+            template: child,
+            multiple: true,
+            parent: parent,
+            resolve: {
+                fail: function () {
+                    return $q.reject();
+                }
+            },
+        });
+        runAnimation();
+
+        expect(root[0].querySelectorAll('md-dialog').length).toBe(1);
+
+        $mdDialog.hide();
+        runAnimation();
+
+        expect(root[0].querySelectorAll('md-dialog').length).toBe(0);
+
+    }));
+
     describe('contentElement', function() {
       var $mdDialog, $rootScope, $compile, $timeout;
 
