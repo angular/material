@@ -1,7 +1,13 @@
 <!-- 
 Filling out this template is required! Do not delete it when submitting your issue! Without this information, your issue may be auto-closed. 
 
-Please submit questions to the [AngularJS Material Forum](https://groups.google.com/forum/#!forum/ngmaterial) instead of submitting an issue.
+Please submit AngularJS Material questions to the [AngularJS Material Forum](https://groups.google.com/forum/#!forum/ngmaterial) instead of submitting an issue.
+
+----------------------------------------------------------
+This repo is for AngularJS Material, not Angular Material.
+----------------------------------------------------------
+
+Please submit Angular Material questions [here](https://groups.google.com/forum/#!forum/angular-material2) and issues [here](https://github.com/angular/material2/issues).
 -->
 ## Bug, enhancement request, or proposal:
 
