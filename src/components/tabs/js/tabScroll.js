@@ -7,7 +7,7 @@ function MdTabScroll ($parse) {
     compile: function ($element, attr) {
       var fn = $parse(attr.mdTabScroll, null, true);
       return function ngEventHandler (scope, element) {
-        element.on('mousewheel', function (event) {
+        element.on('wheel', function (event) {
           scope.$apply(function () { fn(scope, { $event: event }); });
         });
       };
