@@ -64,7 +64,7 @@ function InkRippleDirective ($mdButtonInkRipple, $mdCheckboxInkRipple) {
  * @module material.core.ripple
  *
  * @description
- * `$mdInkRipple` is a service for adding ripples to any element
+ * `$mdInkRipple` is a service for adding ripples to any element.
  *
  * @usage
  * <hljs lang="js">

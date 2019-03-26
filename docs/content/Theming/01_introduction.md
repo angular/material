@@ -9,7 +9,7 @@ Theme [**color palettes**](https://material.io/archive/guidelines/style/color.ht
 Theming allows changing the color of your AngularJS Material application. If you
 need more custom styling (such as layout changes including padding, margins,
 etc) you will need to either write CSS rules with custom selectors, or build a
-custom version of the `angular-material.css` file using SASS and custom
+custom version of the `angular-material.css` file using Sass and custom
 variables.
 
 > <b>Note:</b> The Material Theming system provides the <a ng-href="/api/service/$mdThemingProvider#mdthemingprovider-setnonce-noncevalue">

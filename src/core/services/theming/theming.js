@@ -691,6 +691,7 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
    *
    * @param {string} name Theme name to define
    * @param {object} options Theme definition options
+   *
    * Options are:<br/>
    * - `primary` - `{string}`: The name of the primary palette to use in the theme.<br/>
    * - `primaryHues` - `{object=}`: Override hues for primary palette.<br/>
