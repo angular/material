@@ -1,9 +1,8 @@
-angular.module('sliderDemo1', ['ngMaterial'])
+angular.module('sliderDemoBasic', ['ngMaterial'])
   .config(function ($mdIconProvider) {
     $mdIconProvider.iconSet('device', 'img/icons/sets/device-icons.svg', 24);
   })
   .controller('AppCtrl', function ($scope) {
-
     $scope.color = {
       red: Math.floor(Math.random() * 255),
       green: Math.floor(Math.random() * 255),

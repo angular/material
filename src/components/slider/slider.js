@@ -213,7 +213,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
 
     if (tAttrs.disabled || tAttrs.ngDisabled) wrapper.attr('tabindex', -1);
 
-    tElement.attr('role', 'slider');
+    wrapper.attr('role', 'slider');
 
     $mdAria.expect(tElement, 'aria-label');
 
@@ -312,13 +312,13 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     function updateMin(value) {
       min = parseFloat(value);
       ngModelCtrl.$viewValue = minMaxValidator(ngModelCtrl.$modelValue, min, max);
-      element.attr('aria-valuemin', value);
+      wrapper.attr('aria-valuemin', value);
       updateAll();
     }
     function updateMax(value) {
       max = parseFloat(value);
       ngModelCtrl.$viewValue = minMaxValidator(ngModelCtrl.$modelValue, min, max);
-      element.attr('aria-valuemax', value);
+      wrapper.attr('aria-valuemax', value);
       updateAll();
     }
     function updateStep(value) {
@@ -496,7 +496,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
 
       var percent = valueToPercent(ngModelCtrl.$viewValue);
       scope.modelValue = ngModelCtrl.$viewValue;
-      element.attr('aria-valuenow', ngModelCtrl.$viewValue);
+      wrapper.attr('aria-valuenow', ngModelCtrl.$viewValue);
       setSliderPercent(percent);
       thumbText.text(ngModelCtrl.$viewValue);
     }
