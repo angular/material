@@ -1,5 +1,5 @@
 <a name="1.1.17"></a>
-## [1.1.17](https://github.com/angular/material/compare/v1.1.14...v1.1.17) (2019-03-30)
+## [1.1.17](https://github.com/angular/material/compare/v1.1.14...v1.1.17) (2019-03-29)
 
 
 ### Bug Fixes
