@@ -1,5 +1,5 @@
 <a name="1.1.17"></a>
-## [1.1.17](https://github.com/angular/material/compare/v1.1.14...v1.1.17) (2019-03-30
+## [1.1.17](https://github.com/angular/material/compare/v1.1.14...v1.1.17) (2019-03-29)
 
 
 ### Bug Fixes
@@ -15,7 +15,7 @@
 
 ### Contributors
 
-Thank you to the contributors who helped with the v1.1.15 release:
+Thank you to the contributors who helped with the v1.1.17 release:
 
 [<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="gaurav5430" src="https://avatars2.githubusercontent.com/u/12510548?v=4&s=117" width="117">](https://github.com/gaurav5430) |
 :---: | :---: |
