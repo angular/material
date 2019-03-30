@@ -251,6 +251,7 @@
       'git pull --rebase --strategy=ours',
       'git push',
       'git push --tags',
+      'rm -rf .git/',
       'npm publish',
       'cd ..'
     );
