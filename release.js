@@ -335,7 +335,7 @@
     const filePath = path.join(__dirname, '/dist/docs/docs.js');
     const file = fs.readFileSync(filePath);
     const contents = file.toString()
-        .replace(/http:\/\/localhost:8080\/angular-material/g, 'https://cdn.gitcdn.link/cdn/angular/bower-material/v' + newVersion + '/angular-material')
+        .replace(/http:\/\/localhost:8080\/angular-material/g, 'https://gitcdn.xyz/cdn/angular/bower-material/v' + newVersion + '/angular-material')
         .replace(/http:\/\/localhost:8080\/docs.css/g, 'https://material.angularjs.org/' + newVersion + '/docs.css');
     fs.writeFileSync(filePath, contents);
   }

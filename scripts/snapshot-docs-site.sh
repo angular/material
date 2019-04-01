@@ -19,7 +19,7 @@ function run {
   rm -rf code.material.angularjs.org/HEAD
 
   echo "-- Applying substitutions to build..."
-  sed -i.bak "s,http://localhost:8080/angular-material,https://cdn.gitcdn.link/cdn/angular/bower-material/v$VERSION/angular-material,g" dist/docs/docs.js
+  sed -i.bak "s,http://localhost:8080/angular-material,https://gitcdn.xyz/cdn/angular/bower-material/v$VERSION/angular-material,g" dist/docs/docs.js
   sed -i.bak "s,http://localhost:8080/docs.css,https://material.angularjs.org/$VERSION/docs.css,g" dist/docs/docs.js
   rm dist/docs/docs.js.bak
   sed -i.bak "s,base href=\",base href=\"/HEAD,g" dist/docs/index.html
