@@ -577,7 +577,7 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
     return function updateCache(icon) {
       iconCache[id] = isIcon(icon) ? icon : new Icon(icon, config[id]);
 
-      return iconCache[id].clone();
+      return transformClone(iconCache[id]);
     };
   }
 
