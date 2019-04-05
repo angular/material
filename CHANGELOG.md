@@ -1,3 +1,29 @@
+<a name="1.1.18"></a>
+## [1.1.18](https://github.com/angular/material/compare/v1.1.17...v1.1.18) (2019-04-05)
+
+
+### Bug Fixes
+
+* **icon:** stop breaking SVGs that have id references ([#11465](https://github.com/angular/material/issues/11465)) ([1b37e82](https://github.com/angular/material/commit/1b37e82)), closes [#11395](https://github.com/angular/material/issues/11395)
+
+### Documentation
+
+* **docs:** fix demos not loading in CodePen ([#11697](https://github.com/angular/material/pull/11697)) ([43035fd](https://github.com/angular/material/commit/43035fd)), closes [#11696](https://github.com/angular/material/issues/11696)
+
+### Infrastructure
+
+* **release:** workaround NPM bug that publishes `.git/` directory ([#11695](https://github.com/angular/material/pull/11695)) ([f44b271](https://github.com/angular/material/commit/f44b271)), closes [#11684](https://github.com/angular/material/issues/11684)
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.1.18 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="EmielH" src="https://avatars1.githubusercontent.com/u/5822678?v=4&s=117" width="117">](https://github.com/EmielH) |
+:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[EmielH](https://github.com/EmielH) |
+
+
+
 <a name="1.1.17"></a>
 ## [1.1.17](https://github.com/angular/material/compare/v1.1.14...v1.1.17) (2019-03-29)
 
