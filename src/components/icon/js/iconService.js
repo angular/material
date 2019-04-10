@@ -676,17 +676,17 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
    * @constructor
    */
   function Icon(el, config) {
-    var elementContents;
     // If the node is a <symbol>, it won't be rendered so we have to convert it into <svg>.
     if (el && el.tagName.toLowerCase() === 'symbol') {
       var viewbox = el.getAttribute('viewBox');
-      // Check if innerHTML is supported as IE11 does not support innerHTML on SVG elements.
+      // // Check if innerHTML is supported as IE11 does not support innerHTML on SVG elements.
       if (el.innerHTML) {
-        elementContents = el.innerHTML;
+        el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">')
+          .html(el.innerHTML)[0];
       } else {
-        elementContents = $mdUtil.getInnerHTML(el);
+        el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">')
+          .append($mdUtil.getInnerHTML(el))[0];
       }
-      el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">').append(elementContents)[0];
       if (viewbox) el.setAttribute('viewBox', viewbox);
     }
 
