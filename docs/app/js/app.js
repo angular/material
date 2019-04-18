@@ -335,10 +335,16 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   });
 
   sections.push({
-        name: 'Contributors',
-        url: 'contributors',
-        type: 'link'
-      });
+    name: 'Migration to Angular',
+    url: 'migration',
+    type: 'link'
+  });
+
+  sections.push({
+    name: 'Contributors',
+    url: 'contributors',
+    type: 'link'
+  });
 
   sections.push({
     name: 'License',
