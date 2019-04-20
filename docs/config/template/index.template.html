@@ -27,8 +27,12 @@
     </header>
 
     <ul class="skip-links">
-      <li class="md-whiteframe-z2">
-        <md-button ng-click="focusMainContent($event)" href="#">Skip to content</md-button>
+      <li>
+        <md-button class="md-icon-button" ng-click="focusMainContent($event)" href="#"
+                   aria-label="Skip to main content">
+          <md-tooltip>Focus main content header</md-tooltip>
+          <md-icon md-svg-src="img/icons/ic_chevron_right_24px.svg"></md-icon>
+        </md-button>
       </li>
     </ul>
 
@@ -54,7 +58,7 @@
     </md-content>
   </md-sidenav>
 
-  <div layout="column" tabIndex="-1" role="main" flex>
+  <main layout="column" flex>
     <md-toolbar class="md-whiteframe-glow-z1 site-content-toolbar" md-theme="site-toolbar">
 
       <div class="md-toolbar-tools docs-toolbar-tools" tabIndex="-1">
@@ -62,7 +66,7 @@
           <md-icon md-svg-src="img/icons/ic_menu_24px.svg"></md-icon>
         </md-button>
         <div layout="row" flex class="fill-height">
-          <h2 class="md-toolbar-item md-breadcrumb md-headline">
+          <h2 class="md-toolbar-item md-breadcrumb md-headline" tabindex="-1">
             <span ng-if="menu.currentPage.name !== menu.currentSection.name">
               <span hide-sm hide-md>{{menu.currentSection.name}}</span>
               <span class="docs-menu-separator-icon" hide-sm hide-md style="transform: translate3d(0, 1px, 0)">
@@ -176,7 +180,7 @@
 
     </md-content>
 
-  </div>
+  </main>
 
 
   <!-- Preload is (currently) only used for testing jQuery -->

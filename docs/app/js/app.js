@@ -643,7 +643,8 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   this.autoFocusContent = false;
 
 
-  var mainContentArea = document.querySelector("[role='main']");
+  var mainContentArea = document.querySelector("main");
+  var mainContentHeader = mainContentArea.querySelector(".md-breadcrumb");
   var scrollContentEl = mainContentArea.querySelector('md-content[md-scroll-y]');
 
 
@@ -682,12 +683,13 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   }
 
   function focusMainContent($event) {
+    $scope.closeMenu();
     // prevent skip link from redirecting
     if ($event) { $event.preventDefault(); }
 
     $timeout(function(){
-      mainContentArea.focus();
-    },90);
+      mainContentHeader.focus();
+    }, 90);
 
   }
 
@@ -918,7 +920,7 @@ function($rootScope, $scope, component, demos, $templateRequest) {
 .directive('cacheScrollPosition', ['$route', '$mdUtil', '$timeout', '$location', '$anchorScroll',
   'scrollCache',
 function($route, $mdUtil, $timeout, $location, $anchorScroll, scrollCache) {
-  var mainContentArea = document.querySelector("[role='main']");
+  var mainContentArea = document.querySelector("main");
   var scrollContentEl = mainContentArea.querySelector('md-content[md-scroll-y]');
 
   /**

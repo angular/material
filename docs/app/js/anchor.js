@@ -21,7 +21,8 @@
     function postLink(scope, element, attr, ctrl) {
 
       // Only create anchors when being inside of a md-content.
-      if (!ctrl) {
+      // Don't create anchors for menu headers as they have no associated content.
+      if (!ctrl || element[0].classList && element[0].classList.contains('menu-heading')) {
         return;
       }
 

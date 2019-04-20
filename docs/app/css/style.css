@@ -173,21 +173,18 @@ ul.skip-links li {
   padding: 0;
 }
 ul.skip-links li a {
-  background-color: #fff;
-  display: block;
-  margin: 0.5em 0 0.5em 0.5em;
-  opacity: 0;
-  left: 0;
+  color: white;
+  margin: 0.9em 0 0.5em 0.5em !important;
+  right: 0;
   position: absolute;
-  text-decoration: none;
   top: 0;
-  width: 92%;
-  transition: opacity   0.15s linear;
-}
-ul.skip-links li a:focus {
-  background-color: #fff !important;
-  opacity: 1;
   z-index: 2;
+}
+ul.skip-links li a md-icon {
+  color: white;
+}
+.md-breadcrumb:focus {
+  outline: #BDBDC0 solid 2px;
 }
 /*******************
  * CODE HIGHLIGHTING
@@ -346,8 +343,6 @@ body[dir=rtl] .docs-menu .md-button {
   padding: 8px 16px 0;
   text-align: left;
   width: 100%;
-}
-.menu-heading>a {
   color: white;
   font-weight: 700;
   font-size: 12px;
