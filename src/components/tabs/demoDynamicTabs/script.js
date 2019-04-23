@@ -32,14 +32,14 @@
       previous = null;
     $scope.tabs = tabs;
     $scope.selectedIndex = 0;
-    $scope.$watch('selectedIndex', function(current, old) {
+    $scope.$watch('selectedIndex', function(newVal, oldVal) {
       previous = selected;
-      selected = tabs[current];
-      if (old + 1 && (old !== current)) {
-        $log.debug('Goodbye ' + previous.title + '!');
+      selected = tabs[newVal];
+      if (oldVal + 1 && !angular.equals(oldVal, newVal)) {
+        $log.log('Goodbye ' + previous.title + '!');
       }
-      if (current + 1) {
-        $log.debug('Hello ' + selected.title + '!');
+      if (newVal + 1 > 0) {
+        $log.log('Hello ' + selected.title + '!');
       }
     });
     $scope.addTab = function(title, view) {
@@ -52,4 +52,3 @@
     };
   }
 })();
-

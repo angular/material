@@ -901,7 +901,14 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       // The XMLSerializer API is supported on IE11 and is the recommended workaround.
       var serializer = new XMLSerializer();
       return serializer.serializeToString(element);
-    }
+    },
+
+    /**
+     * Support: IE 9-11 only
+     * documentMode is an IE-only property
+     * http://msdn.microsoft.com/en-us/library/ie/cc196988(v=vs.85).aspx
+     */
+    msie: window.document.documentMode
   };
 
   // Instantiate other namespace utility methods

@@ -25,7 +25,8 @@
  * @param {string=} label Optional attribute to specify a simple string as the tab label
  * @param {boolean=} ng-disabled If present and expression evaluates to truthy, disabled tab
  *  selection.
- * @param {string=} md-tab-class Optional attribute to specify a class that will be applied to the tab's button
+ * @param {string=} md-tab-class Optional attribute to specify a class that will be applied to the
+ *  tab's button
  * @param {expression=} md-on-deselect Expression to be evaluated after the tab has been
  *  de-selected.
  * @param {expression=} md-on-select Expression to be evaluated after the tab has been selected.
@@ -36,7 +37,8 @@
  * @usage
  *
  * <hljs lang="html">
- * <md-tab label="My Tab" md-tab-class="my-content-tab" ng-disabled md-on-select="onSelect()" md-on-deselect="onDeselect()">
+ * <md-tab label="My Tab" md-tab-class="my-content-tab" ng-disabled md-on-select="onSelect()"
+ *         md-on-deselect="onDeselect()">
  *   <h3>My Tab content</h3>
  * </md-tab>
  *
