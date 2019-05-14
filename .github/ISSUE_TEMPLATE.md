@@ -3,11 +3,11 @@ Filling out this template is required! Do not delete it when submitting your iss
 
 Please submit AngularJS Material questions to the [AngularJS Material Forum](https://groups.google.com/forum/#!forum/ngmaterial) instead of submitting an issue.
 
-----------------------------------------------------------
-This repo is for AngularJS Material, not Angular Material.
-----------------------------------------------------------
+---------------------------------------------------------------------
+This repo is for AngularJS Material, not Angular Material or the CDK.
+---------------------------------------------------------------------
 
-Please submit Angular Material questions [here](https://groups.google.com/forum/#!forum/angular-material2) and issues [here](https://github.com/angular/material2/issues).
+Please submit Angular Material and CDK questions [here](https://groups.google.com/forum/#!forum/angular-material2) and issues [here](https://github.com/angular/components/issues).
 -->
 ## Bug, enhancement request, or proposal:
 
@@ -31,9 +31,11 @@ Please submit Angular Material questions [here](https://groups.google.com/forum/
 
 
 ### Which versions of AngularJS, Material, OS, and browsers are affected?
-
-- AngularJS: 
-- AngularJS Material: 
+<!-- Please note that only issues related to AngularJS 1.x and AngularJS Material 1.x should be submitted here.
+Please submit Angular Material and CDK questions [here](https://groups.google.com/forum/#!forum/angular-material2) and issues [here](https://github.com/angular/components/issues).
+-->
+- AngularJS: 1.
+- AngularJS Material: 1.
 - OS: 
 - Browsers: 
  
