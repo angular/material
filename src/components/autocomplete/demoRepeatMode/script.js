@@ -74,8 +74,8 @@
         },
         {
           'name'      : 'Angular Material',
-          'url'       : 'https://github.com/angular/material2',
-          'desc'      : 'Material Design (2017+) components built for and with Angular ' +
+          'url'       : 'https://github.com/angular/components',
+          'desc'      : 'Material Design (2018+) components built for and with Angular ' +
                         'and Typescript',
           'watchers'  : '727',
           'forks'     : '1,241',
