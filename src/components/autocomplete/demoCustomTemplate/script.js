@@ -68,7 +68,7 @@
         },
         {
           'name'      : 'Angular Material',
-          'url'       : 'https://github.com/angular/material2',
+          'url'       : 'https://github.com/angular/components',
           'watchers'  : '727',
           'forks'     : '1,241',
         },

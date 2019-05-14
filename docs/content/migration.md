@@ -565,13 +565,13 @@ The `mat-` and `cdk-` prefixes have been omitted to make this table more readabl
 [158]: https://material.angularjs.org/latest/Theming/03_configuring_a_theme#extending-existing-palettes
 [159]: https://angular.io/api/common/NgClass
 [160]: https://caniuse.com/#feat=css-variables
-[161]: https://github.com/angular/material2/releases/tag/7.3.3
-[162]: https://github.com/angular/material2/issues/4352
+[161]: https://github.com/angular/components/releases/tag/7.3.3
+[162]: https://github.com/angular/components/issues/4352
 [163]: https://material.angular.io/guide/theming#using-a-pre-built-theme
 [164]: https://material.angular.io/guide/theming#defining-a-custom-theme
 [165]: https://material.angular.io/guide/theming#multiple-themes
 [166]: https://material.angular.io/guide/theming#theming-only-certain-components
-[167]: https://github.com/angular/material2/blob/7.3.6/src/lib/core/theming/_palette.scss#L72-L103
+[167]: https://github.com/angular/components/blob/7.3.6/src/lib/core/theming/_palette.scss#L72-L103
 [168]: https://material.angular.io/guide/theming-your-components
 [169]: https://material.angularjs.org/latest/Theming/03_configuring_a_theme#specifying-custom-hues-for-color-intentions
 [170]: https://sass-lang.com/

@@ -13,7 +13,7 @@ material design specification for use in AngularJS single-page applications (SPA
 for [AngularJS](https://angularjs.org) developers.
 
 For an implementation of the [Material Design Specification (2018+)](https://material.io/design/),
-please see the [Angular Material](https://github.com/angular/material2) project which is built for
+please see the [Angular Material](https://github.com/angular/components) project which is built for
 [Angular](https://angular.io) developers.
 
 ![venn diagram](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
@@ -56,7 +56,7 @@ that provides a visual representation of this configuration:
 To preserve stability with applications currently using AngularJS Material, we do not follow semver.
 We have three types of releases:
 
-*  `major` :  major releases will be done in the separate [Angular Material](https://github.com/angular/material2) repo.
+*  `major` :  major releases will be done in the separate [Angular Material](https://github.com/angular/components) repo.
  This type of release will not be used within AngularJS Material.
 *  `minor`:  contain breaking changes in addition to patch release changes.
 *  `patch`:  non-breaking changes (no API, CSS, UX changes that will cause breaks in existing AngularJS Material applications).
