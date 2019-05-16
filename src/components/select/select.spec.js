@@ -2,8 +2,28 @@ describe('<md-select>', function() {
   var attachedElements = [];
   var body, $document, $rootScope, $compile, $timeout, $material;
 
+  /**
+   * Register any custom components here.
+   */
+  beforeEach(module(function ($compileProvider) {
+    $compileProvider.component('requiredFormFieldComponent', {
+      controller: ['$scope', function($scope) {
+        var $ctrl = this;
+        $ctrl.value = 'test';
+
+        $scope.$applyAsync(function () {
+          $ctrl.required = true;
+        });
+      }],
+      template: '<md-input-container><label>Test select</label>' +
+        '<md-select name="value" ng-model="$ctrl.value" ng-required="$ctrl.required">' +
+        '<md-option value="test">Test value</md-option>' +
+        '</md-select></md-input-container>'
+    });
+  }));
+
   beforeEach(function() {
-    module('material.components.select', 'material.components.input', 'ngSanitize');
+    module('material.components.select', 'material.components.input', 'ngSanitize', 'ngMessages');
 
     inject(function($injector) {
       $document = $injector.get('$document');
@@ -1485,6 +1505,25 @@ describe('<md-select>', function() {
       });
     });
   });
+
+  // Only test with custom components on AngularJS 1.5+
+  if (angular.version.major === 1 && angular.version.minor >= 5) {
+    describe('with custom components', function() {
+      it('should re-validate when the required value changes within $applyAsync', function() {
+        var nodes = $compile('<form name="testForm">' +
+          ' <required-form-field-component></required-form-field-component>' +
+          '</form>')($rootScope);
+        var ctrl = nodes.find('required-form-field-component')
+                        .controller('requiredFormFieldComponent');
+
+        $rootScope.$digest();
+        $timeout.flush();
+
+        expect(ctrl.value).toBe('test');
+        expect($rootScope.testForm.value.$error.required).toBeUndefined();
+      });
+    });
+  }
 
   function setupSelect(attrs, options, skipLabel, scope, optCompileOpts) {
     var el;
