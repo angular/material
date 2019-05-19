@@ -4,13 +4,19 @@
  - [Signing the CLA](#cla)<br/><br/>
  - [Question or Problem?](#question)
  - [Issues and Bugs](#bug)
- - [Feature Requests](#feature)
- - [Guidelines for Developer Commits and Authorizations](#pr_forks)
+   - [Enhancement Requests](#feature)
+   - [Issue Guidelines](#submit)
+ - [Git Commit Guidelines](#commit)
+ - [Developer Commits Levels](#pr_forks)
  - [Submission Guidelines](#submit)
 
 ## <a name="coc"></a> Code of Conduct
 Please help us keep AngularJS Material open and inclusive by reading and following our
 [Code of Conduct](https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md).
+
+Please note that by using GitHub, you have also agreed to follow the
+[GitHub Terms of Service](https://help.github.com/en/articles/github-terms-of-service#) which
+include [guidelines on conduct](https://help.github.com/en/articles/github-terms-of-service#3-conduct-restrictions). 
 
 We are care deeply about our inclusive community and diverse group of members. As part of this,
 we do take time away from development to enforce this policy through interventions in heated
