@@ -6,7 +6,7 @@
 
   function AppCtrl ($scope, $log) {
     var tabs = [
-        { title: 'Zero (AKA 0, Cero, One - One, -Nineteen + 19, and so forth and so on and continuing into what seems like infinity.)', content: 'Woah...that is a really long title!' },
+        { title: 'Zero (AKA 0, Cero, One - One, -Nineteen + 19, and so forth and so on and continuing into what seems like infinity)', content: 'Whoa...that is a really long title!' },
         { title: 'One', content: "Tabs will become paginated if there isn't enough room for them."},
         { title: 'Two', content: "You can swipe left and right on a mobile device to change tabs."},
         { title: 'Three', content: "You can bind the selected tab via the selected attribute on the md-tabs element."},
