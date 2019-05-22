@@ -1,6 +1,6 @@
 angular
   .module('material.components.icon')
-  .directive('mdIcon', ['$mdIcon', '$mdTheming', '$mdAria', '$sce', mdIconDirective]);
+  .directive('mdIcon', ['$exceptionHandler', '$mdIcon', '$mdTheming', '$mdAria', '$sce', mdIconDirective]);
 
 /**
  * @ngdoc directive
@@ -188,7 +188,7 @@ angular
  * </hljs>
  *
  */
-function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
+function mdIconDirective($exceptionHandler, $mdIcon, $mdTheming, $mdAria, $sce) {
 
   return {
     restrict: 'E',
@@ -253,7 +253,7 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
             .then(function(svg) {
             element.empty();
             element.append(svg);
-          });
+          }).catch($exceptionHandler);
         }
       });
     }
