@@ -29,5 +29,5 @@ angular.module('datepickerValidations', ['ngMaterial', 'ngMessages'])
    */
   this.filter = function(date) {
     return date.getMonth() % 2;
-  }
+  };
 });
