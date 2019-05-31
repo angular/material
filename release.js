@@ -6,7 +6,7 @@
   const strip          = require('cli-color/strip');
   const fs             = require('fs');
   const path           = require('path');
-  const prompt         = require('prompt-sync');
+  const prompt         = require('prompt-sync')({sigint: true});
   const child_process  = require('child_process');
   const pkg            = require('./package.json');
   let oldVersion       = pkg.version;
@@ -20,12 +20,10 @@
   let newVersion;
 
   header();
-  write(`Is this a dry-run? ${"[yes/no]".cyan} `);
-  const dryRun = prompt() !== 'no';
+  const dryRun = prompt(`Is this a dry-run? [${"yes".cyan}/no] `, 'yes') !== 'no';
 
   if (dryRun) {
-    write(`What would you like the old version to be? (default: ${oldVersion.cyan}) `);
-    oldVersion = prompt() || oldVersion;
+    oldVersion = prompt(`What would you like the old version to be? (default: ${oldVersion.cyan}) `, oldVersion);
     build();
   } else if (validate()) {
     build();
@@ -120,8 +118,7 @@
     log('What should the next version be?');
     for (key in options) { log((+key + 1) + ') ' + options[ key ].cyan); }
     log('');
-    write('Please select a new version: ');
-    const type = prompt();
+    const type = prompt('Please select a new version: ');
 
     if (options[ type - 1 ]) version = options[ type - 1 ];
     else if (type.match(/^\d+\.\d+\.\d+(-rc\.?\d+)?$/)) version = type;
@@ -129,13 +126,12 @@
 
     log('');
     log('The new version will be ' + version.cyan + '.');
-    write(`Is this correct? ${"[yes/no]".cyan} `);
-    return prompt() === 'yes' ? version : getNewVersion();
+    return prompt(`Is this correct? [${"yes".cyan}/no] `, 'yes') === 'yes' ? version : getNewVersion();
 
     function getVersionOptions (version) {
       return version.match(/-rc\.?\d+$/)
-          ? [increment(version, 'rc'), increment(version, 'minor')]
-          : [increment(version, 'patch'), addRC(increment(version, 'minor'))];
+        ? [increment(version, 'rc'), increment(version, 'minor')]
+        : [increment(version, 'patch'), addRC(increment(version, 'minor'))];
 
       function increment (versionString, type) {
         const version = parseVersion(versionString);
@@ -181,9 +177,9 @@
   /** adds git tag for release and pushes to github */
   function tagRelease () {
     pushCmds.push(
-        `git tag v${newVersion} -f`,
-        `git push ${origin} HEAD`,
-        `git push --tags ${origin}`
+      `git tag v${newVersion} -f`,
+      `git push ${origin} HEAD`,
+      `git push --tags ${origin}`
     );
   }
 
@@ -229,16 +225,16 @@
       'gulp build-all-modules --mode=default',
       'gulp build-all-modules --mode=closure',
       'rm -rf dist/demos'
-     ]);
+    ]);
     done();
     start('Copy files into bower repo...');
     // copy files over to bower repo
     exec([
-           'cp -Rf ../dist/* ./',
-           'git add -A',
-           `git commit -m "release: version ${newVersion}"`,
-           'rm -rf ../dist'
-         ], options);
+      'cp -Rf ../dist/* ./',
+      'git add -A',
+      `git commit -m "release: version ${newVersion}"`,
+      'rm -rf ../dist'
+    ], options);
     done();
     // add steps to push script
     pushCmds.push(
@@ -265,18 +261,18 @@
 
     // build files for bower
     exec([
-        'rm -rf dist',
-        'gulp docs'
+      'rm -rf dist',
+      'gulp docs'
     ]);
     replaceFilePaths();
 
     // copy files over to site repo
     exec([
-        `cp -Rf ../dist/docs ${newVersion}`,
-        'rm -rf latest && cp -Rf ../dist/docs latest',
-        'git add -A',
-        `git commit -m "release: version ${newVersion}"`,
-        'rm -rf ../dist'
+      `cp -Rf ../dist/docs ${newVersion}`,
+      'rm -rf latest && cp -Rf ../dist/docs latest',
+      'git add -A',
+      `git commit -m "release: version ${newVersion}"`,
+      'rm -rf ../dist'
     ], options);
     replaceBaseHref(newVersion);
     replaceBaseHref('latest');
@@ -288,11 +284,11 @@
 
     // add steps to push script
     pushCmds.push(
-        comment('push the site'),
-        'cd ' + options.cwd,
-        'git pull --rebase --strategy=ours',
-        'git push',
-        'cd ..'
+      comment('push the site'),
+      'cd ' + options.cwd,
+      'git pull --rebase --strategy=ours',
+      'git push',
+      'cd ..'
     );
 
     function updateFirebaseJson () {
@@ -353,15 +349,15 @@
   /** copies the changelog back over to master branch */
   function updateMaster () {
     pushCmds.push(
-        comment('update package.json in master'),
-        'git checkout master',
-        `git pull --rebase ${origin} master --strategy=theirs`,
-        `git checkout release/${newVersion} -- CHANGELOG.md`,
-        `node -e "const newVersion = '${newVersion}'; ${stringifyFunction(buildCommand)}"`,
-        'git add CHANGELOG.md',
-        'git add package.json',
-        `git commit -m "update version number in package.json to ${newVersion}"`,
-        `git push ${origin} master`
+      comment('update package.json in master'),
+      'git checkout master',
+      `git pull --rebase ${origin} master --strategy=theirs`,
+      `git checkout release/${newVersion} -- CHANGELOG.md`,
+      `node -e "const newVersion = '${newVersion}'; ${stringifyFunction(buildCommand)}"`,
+      'git add CHANGELOG.md',
+      'git add package.json',
+      `git commit -m "update version number in package.json to ${newVersion}"`,
+      `git push ${origin} master`
     );
 
     function buildCommand () {
