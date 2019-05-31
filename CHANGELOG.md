@@ -1,3 +1,36 @@
+<a name="1.1.19"></a>
+## [1.1.19](https://github.com/angular/material/compare/v1.1.18...v1.1.19) (2019-05-31)
+
+
+### Bug Fixes
+
+* **datepicker:** auto closes in Chrome when md-open-on-focus is used ([#11719](https://github.com/angular/material/issues/11719)) ([73c424d](https://github.com/angular/material/commit/73c424d)), closes [#11701](https://github.com/angular/material/issues/11701)
+* **gesture:** tapping a submit button fires two submit events on mobile ([#11729](https://github.com/angular/material/issues/11729)) ([244619a](https://github.com/angular/material/commit/244619a)), closes [#10189](https://github.com/angular/material/issues/10189) [#11725](https://github.com/angular/material/issues/11725)
+* **icon:** symbol icons not working on browsers other than IE11 ([#11706](https://github.com/angular/material/issues/11706)) ([a62d160](https://github.com/angular/material/commit/a62d160)), closes [#11705](https://github.com/angular/material/issues/11705)
+* **select:** edge case where the model value is unset w/ AngularJS 1.7.8 ([#11724](https://github.com/angular/material/issues/11724)) ([952a035](https://github.com/angular/material/commit/952a035)), closes [#11679](https://github.com/angular/material/issues/11679)
+* **tabs:** new tab animation broken by code to support IE11 ([#11711](https://github.com/angular/material/issues/11711)) ([1063a92](https://github.com/angular/material/commit/1063a92)), closes [#11689](https://github.com/angular/material/issues/11689)
+
+
+### Features
+
+* **menu-bar:** support md-prevent-menu-close on checkbox/radio items ([#11710](https://github.com/angular/material/issues/11710)) ([d577afd](https://github.com/angular/material/commit/d577afd)), closes [#11707](https://github.com/angular/material/issues/11707)
+
+### Documentation
+
+* **migration:** Add a guide for migration to Angular Material and the CDK ([#11706](https://github.com/angular/material/pull/11706)) ([16cea88](https://github.com/angular/material/commit/16cea88))
+* **docs:** Added support for Sass and TypeScript in code samples ([#11706](https://github.com/angular/material/pull/11706)) ([16cea88](https://github.com/angular/material/commit/16cea88))
+* **docs:** Allow up/down/page up/page down to scroll content ([#11712](https://github.com/angular/material/pull/11712)) ([67826f5](https://github.com/angular/material/commit/67826f5)), closes [#2961](https://github.com/angular/material/issues/2961)
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.1.19 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="codymikol" src="https://avatars1.githubusercontent.com/u/13606342?v=4&s=117" width="117">](https://github.com/codymikol) |
+:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[codymikol](https://github.com/codymikol) |
+
+
+
 <a name="1.1.18"></a>
 ## [1.1.18](https://github.com/angular/material/compare/v1.1.17...v1.1.18) (2019-04-05)
 
