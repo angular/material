@@ -851,22 +851,6 @@ describe('md-datepicker', function() {
       expect(controller.calendarPane.id).toBe(ariaAttr);
     });
 
-    it('should toggle the aria-expanded value', function() {
-      expect(controller.ngInputElement.attr('aria-expanded')).toBe('false');
-
-      controller.openCalendarPane({
-        target: controller.inputElement
-      });
-      scope.$apply();
-
-      expect(controller.ngInputElement.attr('aria-expanded')).toBe('true');
-
-      controller.closeCalendarPane();
-      scope.$apply();
-
-      expect(controller.ngInputElement.attr('aria-expanded')).toBe('false');
-    });
-
     describe('tabindex behavior', function() {
       beforeEach(function() {
         ngElement && ngElement.remove();
