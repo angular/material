@@ -362,16 +362,9 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
       };
 
       if (!isReadonly) {
-        element
-          .on('focus', function(ev) {
-            // Always focus the container (if we have one) so floating labels and other styles are
-            // applied properly
-            containerCtrl && containerCtrl.setFocused(true);
-          });
-
-        // Attach before ngModel's blur listener to stop propagation of blur event
-        // to prevent from setting $touched.
-        element.on('blur', function(event) {
+        var handleBlur = function(event) {
+          // Attach before ngModel's blur listener to stop propagation of blur event
+          // and prevent setting $touched.
           if (untouched) {
             untouched = false;
             if (selectScope._mdSelectIsOpen) {
@@ -379,10 +372,17 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
             }
           }
 
-          if (selectScope._mdSelectIsOpen) return;
           containerCtrl && containerCtrl.setFocused(false);
           inputCheckValue();
-        });
+        };
+        var handleFocus = function(ev) {
+          // Always focus the container (if we have one) so floating labels and other styles are
+          // applied properly
+          containerCtrl && containerCtrl.setFocused(true);
+        };
+
+        element.on('focus', handleFocus);
+        element.on('blur', handleBlur);
       }
 
       mdSelectCtrl.triggerClose = function() {
@@ -510,7 +510,6 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
       });
 
 
-
       function inputCheckValue() {
         // The select counts as having a value if one or more options are selected,
         // or if the input's validity state says it has bad input (eg string in a number input)
@@ -573,7 +572,6 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
           loadingAsync: attr.mdOnOpen ? scope.$eval(attr.mdOnOpen) || true : false
         }).finally(function() {
           selectScope._mdSelectIsOpen = false;
-          element.focus();
           element.attr('aria-expanded', 'false');
           ngModelCtrl.$setTouched();
         });
