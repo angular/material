@@ -15,9 +15,9 @@
           md-items="item in ctrl.querySearch(ctrl.searchText)"
           md-item-text="item.display"
           md-min-length="0"
+          md-escape-options="clear"
           placeholder="Ex. Alaska"
-          input-aria-labelledby="favoriteStateLabel"
-          input-aria-describedby="autocompleteDetailedDescription">
+          input-aria-labelledby="favoriteStateLabel">
         <md-item-template>
           <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
         </md-item-template>

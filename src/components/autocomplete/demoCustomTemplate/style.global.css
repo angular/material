@@ -1,14 +1,14 @@
 md-autocomplete#custom-template {
   width: 200px;
 }
-.autocomplete-custom-template li {
+.autocomplete-custom-template .md-autocomplete-suggestion {
   border-bottom: 1px solid #ccc;
   height: auto;
   padding-top: 8px;
   padding-bottom: 8px;
   white-space: normal;
 }
-.autocomplete-custom-template li:last-child {
+.autocomplete-custom-template .md-autocomplete-suggestion:last-child {
   border-bottom-width: 0;
 }
 .autocomplete-custom-template .item-title,
