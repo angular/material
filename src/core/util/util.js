@@ -696,8 +696,8 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * to minimize $digest thrashing
      *
      * @param {Function} callback function to be called after the tick
-     * @param {boolean} digest true to call $rootScope.$digest() after callback
-     * @param scope scope associated with callback. If the scope is destroyed, the callback will
+     * @param {boolean=} digest true to call $rootScope.$digest() after callback
+     * @param {Object=} scope associated with callback. If the scope is destroyed, the callback will
      *  be skipped.
      * @returns {*}
      */

@@ -1769,10 +1769,12 @@ describe('<md-autocomplete>', function() {
   });
 
   describe('Accessibility', function() {
-    var $timeout = null;
+    var $timeout = null, $mdConstant = null, $material = null;
 
     beforeEach(inject(function ($injector) {
       $timeout = $injector.get('$timeout');
+      $material = $injector.get('$material');
+      $mdConstant = $injector.get('$mdConstant');
     }));
 
     it('should add the placeholder as the input\'s aria-label', function() {
@@ -1793,6 +1795,393 @@ describe('<md-autocomplete>', function() {
       $timeout.flush();
 
       expect(input.attr('aria-label')).toBe('placeholder');
+    });
+
+    it('should set activeOption when autoselect is off', function() {
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder"' +
+        '   md-autoselect="false">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var ul = element.find('ul');
+      var input = element.find('input');
+      // Run our initial flush
+      $timeout.flush();
+
+      expect(ctrl.index).toBe(-1);
+      expect(ctrl.hidden).toBe(true);
+      expect(ctrl.activeOption).toBe(null);
+      expect(input[0].getAttribute('aria-owns')).toBe(null);
+      expect(input[0].getAttribute('aria-activedescendant')).toBe(null);
+
+      // Focus the input
+      ctrl.focus();
+
+      // Update the scope
+      element.scope().searchText = 'ba';
+      waitForVirtualRepeat(element);
+
+      var suggestions = ul.find('li');
+      expect(suggestions[0].classList).not.toContain('selected');
+
+      expect(ctrl.hidden).toBe(false);
+
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+      $material.flushInterimElement();
+
+      expect(suggestions[0].classList).toContain('selected');
+
+      expect(ctrl.index).toBe(0);
+      expect(ctrl.hidden).toBe(false);
+      expect(ctrl.activeOption).toBe('md-option-' + ctrl.id + '-0');
+      expect(input[0].getAttribute('aria-owns')).toBe('ul-' + ctrl.id);
+      expect(input[0].getAttribute('aria-activedescendant')).toBe('md-option-' + ctrl.id + '-0');
+    });
+
+    it('should start from the end when up arrow is pressed', function() {
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder"' +
+        '   md-autoselect="false">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var ul = element.find('ul');
+      var input = element.find('input');
+      // Run our initial flush
+      $timeout.flush();
+
+      expect(ctrl.index).toBe(-1);
+      expect(ctrl.hidden).toBe(true);
+      expect(ctrl.activeOption).toBe(null);
+      expect(input[0].getAttribute('aria-owns')).toBe(null);
+      expect(input[0].getAttribute('aria-activedescendant')).toBe(null);
+
+      // Focus the input
+      ctrl.focus();
+
+      // Update the scope
+      element.scope().searchText = 'ba';
+      waitForVirtualRepeat(element);
+
+      var suggestions = ul.find('li');
+      expect(suggestions[0].classList).not.toContain('selected');
+
+      expect(ctrl.hidden).toBe(false);
+
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.UP_ARROW));
+      $material.flushInterimElement();
+
+      expect(suggestions[1].classList).toContain('selected');
+
+      expect(ctrl.index).toBe(1);
+      expect(ctrl.hidden).toBe(false);
+      expect(ctrl.activeOption).toBe('md-option-' + ctrl.id + '-1');
+      expect(input[0].getAttribute('aria-owns')).toBe('ul-' + ctrl.id);
+      expect(input[0].getAttribute('aria-activedescendant')).toBe('md-option-' + ctrl.id + '-1');
+    });
+
+    it('should set activeOption when autoselect is on', function() {
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder"' +
+        '   md-autoselect="true">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var ul = element.find('ul');
+      var input = element.find('input');
+      // Run our initial flush
+      $timeout.flush();
+
+      expect(ctrl.index).toBe(0);
+      expect(ctrl.hidden).toBe(true);
+      expect(ctrl.activeOption).toBe(null);
+      expect(input[0].getAttribute('aria-owns')).toBe(null);
+      expect(input[0].getAttribute('aria-activedescendant')).toBe(null);
+
+      // Focus the input
+      ctrl.focus();
+
+      // Update the scope
+      element.scope().searchText = 'ba';
+      waitForVirtualRepeat(element);
+
+      // Wait for the next tick when the values will be updated
+      $timeout.flush();
+
+      var suggestions = ul.find('li');
+      expect(suggestions[0].classList).toContain('selected');
+      expect(ctrl.activeOption).toBe('md-option-' + ctrl.id + '-0');
+      expect(input[0].getAttribute('aria-owns')).toBe('ul-' + ctrl.id);
+      expect(input[0].getAttribute('aria-activedescendant')).toBe('md-option-' + ctrl.id + '-0');
+
+      expect(ctrl.hidden).toBe(false);
+
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+      $material.flushInterimElement();
+
+      expect(suggestions[1].classList).toContain('selected');
+
+      expect(ctrl.index).toBe(1);
+      expect(ctrl.hidden).toBe(false);
+      expect(ctrl.activeOption).toBe('md-option-' + ctrl.id + '-1');
+    });
+
+    it('should update activeOption when selection is cleared and autoselect is off', function() {
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder"' +
+        '   md-autoselect="false">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var ul = element.find('ul');
+      var input = element.find('input');
+      // Run our initial flush
+      $timeout.flush();
+
+      expect(ctrl.index).toBe(-1);
+      expect(ctrl.hidden).toBe(true);
+      expect(ctrl.activeOption).toBe(null);
+      expect(input[0].getAttribute('aria-owns')).toBe(null);
+      expect(input[0].getAttribute('aria-activedescendant')).toBe(null);
+
+      // Focus the input
+      ctrl.focus();
+
+      // Update the scope
+      element.scope().searchText = 'ba';
+      waitForVirtualRepeat(element);
+
+      // Wait for the next tick when the values will be updated
+      $timeout.flush();
+
+      var suggestions = ul.find('li');
+      expect(suggestions[0].classList).not.toContain('selected');
+      expect(ctrl.activeOption).toBe(null);
+      expect(ctrl.hidden).toBe(false);
+      expect(input[0].getAttribute('aria-owns')).toBe('ul-' + ctrl.id);
+      expect(input[0].getAttribute('aria-activedescendant')).toBe(null);
+
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+      $material.flushInterimElement();
+
+      expect(suggestions[0].classList).toContain('selected');
+      expect(input[0].getAttribute('aria-activedescendant')).toBe('md-option-' + ctrl.id + '-0');
+
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ENTER));
+      $material.flushInterimElement();
+      expect(ctrl.hidden).toBe(true);
+
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+      $timeout.flush();
+
+      expect(ctrl.index).toBe(-1);
+      expect(ctrl.hidden).toBe(true);
+      expect(ctrl.activeOption).toBe(null);
+      expect(input[0].getAttribute('aria-owns')).toBe(null);
+      expect(input[0].getAttribute('aria-activedescendant')).toBe(null);
+    });
+
+    it('should update activeOption when selection is cleared and autoselect is on', function() {
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder"' +
+        '   md-autoselect="true">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var ul = element.find('ul');
+      var input = element.find('input');
+      // Run our initial flush
+      $timeout.flush();
+
+      expect(ctrl.index).toBe(0);
+      expect(ctrl.hidden).toBe(true);
+      expect(ctrl.activeOption).toBe(null);
+      expect(input[0].getAttribute('aria-owns')).toBe(null);
+      expect(input[0].getAttribute('aria-activedescendant')).toBe(null);
+
+      // Focus the input
+      ctrl.focus();
+
+      // Update the scope
+      element.scope().searchText = 'ba';
+      waitForVirtualRepeat(element);
+
+      // Wait for the next tick when the values will be updated
+      $timeout.flush();
+
+      var suggestions = ul.find('li');
+      expect(suggestions[0].classList).toContain('selected');
+      expect(ctrl.activeOption).toBe('md-option-' + ctrl.id + '-0');
+      expect(input[0].getAttribute('aria-owns')).toBe('ul-' + ctrl.id);
+      expect(input[0].getAttribute('aria-activedescendant')).toBe('md-option-' + ctrl.id + '-0');
+
+      expect(ctrl.hidden).toBe(false);
+
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ENTER));
+      $material.flushInterimElement();
+      expect(ctrl.hidden).toBe(true);
+
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ESCAPE));
+      $timeout.flush();
+
+      expect(ctrl.index).toBe(0);
+      expect(ctrl.hidden).toBe(true);
+      expect(ctrl.activeOption).toBe('md-option-' + ctrl.id + '-0');
+      expect(input[0].getAttribute('aria-owns')).toBe(null);
+      expect(input[0].getAttribute('aria-activedescendant')).toBe(null);
+    });
+
+    it('should always define the name attribute on the input', function() {
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var input = element.find('input');
+      // Run our initial flush
+      $timeout.flush();
+
+      expect(input[0].getAttribute('name')).toBe('input-' + ctrl.id);
+    });
+
+    it('should always define the name attribute on the input when floating label is enabled',
+      function() {
+        var template =
+          '<md-autocomplete' +
+          '   md-floating-label="Test Label"' +
+          '   md-selected-item="selectedItem"' +
+          '   md-search-text="searchText"' +
+          '   md-items="item in match(searchText)"' +
+          '   md-item-text="item.display"' +
+          '   placeholder="placeholder">' +
+          '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+          '</md-autocomplete>';
+        var scope = createScope();
+        var element = compile(template, scope);
+        var ctrl = element.controller('mdAutocomplete');
+        var input = element.find('input');
+        // Run our initial flush
+        $timeout.flush();
+
+        expect(input[0].getAttribute('name')).toBe('fl-input-' + ctrl.id);
+    });
+
+    it('should set proper aria values and remove attributes on input when ng-disabled', function() {
+      var template =
+        '<md-autocomplete' +
+        '   ng-disabled="true"' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var input = element.find('input');
+      // Run our initial flush
+      $timeout.flush();
+
+      expect(input[0].getAttribute('role')).toBe(null);
+      expect(input[0].getAttribute('aria-autocomplete')).toBe(null);
+      expect(input[0].getAttribute('aria-owns')).toBe(null);
+      expect(input[0].getAttribute('aria-haspopup')).toBe('false');
+    });
+
+    it('should set proper aria values and remove attributes on input when disabled', function() {
+      var template =
+        '<md-autocomplete' +
+        '   disabled' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var input = element.find('input');
+      // Run our initial flush
+      $timeout.flush();
+
+      expect(input[0].getAttribute('role')).toBe(null);
+      expect(input[0].getAttribute('aria-autocomplete')).toBe(null);
+      expect(input[0].getAttribute('aria-owns')).toBe(null);
+      expect(input[0].getAttribute('aria-haspopup')).toBe('false');
+    });
+
+    it('should add IDs to each option', function() {
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var ul = element.find('ul');
+
+      // Focus the input
+      ctrl.focus();
+
+      // Update the scope
+      element.scope().searchText = 'fo';
+      waitForVirtualRepeat(element);
+
+      var suggestions = ul.find('li');
+
+      expect(suggestions[0].getAttribute('id')).toContain('md-option-');
     });
 
     it('should add the input-aria-label as the input\'s aria-label', function() {
@@ -1982,48 +2371,17 @@ describe('<md-autocomplete>', function() {
       expect(liveEl.textContent).toBe(scope.items[0].display + ' There are 3 matches available.');
     });
 
-    it('should announce the selection when using the arrow keys', function() {
+    it('should announce when an option is picked', function() {
       ctrl.focus();
       waitForVirtualRepeat();
 
       expect(ctrl.hidden).toBe(false);
 
       ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
-
-      // Flush twice, because the display value will be resolved asynchronously and then the live-announcer will
-      // be triggered.
-      $timeout.flush();
       $timeout.flush();
 
       expect(ctrl.index).toBe(0);
-      expect(liveEl.textContent).toBe(scope.items[0].display);
-
-      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
-
-      // Flush twice, because the display value will be resolved asynchronously and then the
-      // live-announcer will be triggered.
-      $timeout.flush();
-      $timeout.flush();
-
-      expect(ctrl.index).toBe(1);
-      expect(liveEl.textContent).toBe(scope.items[1].display);
-    });
-
-    it('should announce when an option is selected', function() {
-      ctrl.focus();
-      waitForVirtualRepeat();
-
       expect(ctrl.hidden).toBe(false);
-
-      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
-
-      // Flush twice, because the display value will be resolved asynchronously and then the
-      // live-announcer will be triggered.
-      $timeout.flush();
-      $timeout.flush();
-
-      expect(ctrl.index).toBe(0);
-      expect(liveEl.textContent).toBe(scope.items[0].display);
 
       ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.ENTER));
 
@@ -2033,6 +2391,7 @@ describe('<md-autocomplete>', function() {
       $timeout.flush();
 
       expect(liveEl.textContent).toBe(scope.items[0].display + ' ' + ctrl.selectedMessage);
+      expect(ctrl.hidden).toBe(true);
     });
 
     it('should announce the count when matches change', function() {
@@ -2133,6 +2492,7 @@ describe('<md-autocomplete>', function() {
 
       element.remove();
     }));
+
     it('passes the value to the item watcher', inject(function($timeout) {
       var scope = createScope();
       var itemValue = null;

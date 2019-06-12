@@ -49,10 +49,10 @@ md-autocomplete.md-THEME_NAME-theme {
 .md-autocomplete-suggestions-container.md-THEME_NAME-theme,
 .md-autocomplete-standard-list-container.md-THEME_NAME-theme {
   background: '{{background-hue-1}}';
-  li {
+  .md-autocomplete-suggestion {
     color: '{{foreground-1}}';
     &:hover,
-    &#selected_option {
+    &.selected {
       background: '{{background-500-0.18}}';
     }
   }
