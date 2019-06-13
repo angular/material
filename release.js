@@ -19,6 +19,11 @@
   const lastMajorVer   = JSON.parse(exec('curl https://material.angularjs.org/docs.json')).latest;
   let newVersion;
 
+  try {
+    child_process.execSync('gulp --version', defaultOptions);
+  } catch (error) {
+    throw new Error('Please install gulp globally via "npm i -g gulp@^3.9.1".');
+  }
   header();
   const dryRun = prompt(`Is this a dry-run? [${"yes".cyan}/no] `, 'yes') !== 'no';
 
@@ -401,7 +406,12 @@
     log('done'.green);
   }
 
-  /** utility method for executing terminal commands */
+  /**
+   * utility method for executing terminal commands while ignoring stderr
+   * @param {string|Array} cmd
+   * @param {Object=} userOptions
+   * @return
+   */
   function exec (cmd, userOptions) {
     if (cmd instanceof Array) {
       return cmd.map(function (cmd) { return exec(cmd, userOptions); });
