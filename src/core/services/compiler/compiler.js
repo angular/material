@@ -506,7 +506,6 @@ function MdCompilerProvider($compileProvider) {
    * @returns {{element: !JQLite, restore: !function}}
    */
   MdCompilerService.prototype._fetchContentElement = function(options) {
-
     var contentEl = options.contentElement;
     var restoreFn = null;
 

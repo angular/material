@@ -577,12 +577,6 @@ function attachToDocument($mdGesture, $$MdGestureHandler) {
     return;
   }
 
-  // Polyfill document.contains for IE11.
-  // TODO: move to util
-  document.contains || (document.contains = function (node) {
-    return document.body.contains(node);
-  });
-
   if (!isInitialized && $mdGesture.isHijackingClicks) {
     /*
      * If hijack clicks is true, we preventDefault any click that wasn't
