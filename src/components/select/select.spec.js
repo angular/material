@@ -119,13 +119,14 @@ describe('<md-select>', function() {
       expect(ownsId).toBeFalsy();
     });
 
-    it('sets aria-owns between the select and the container if element moved outside parent', function() {
+    it('sets aria-owns between the select and the listbox if element moved outside parent', function() {
       var select = setupSelect('ng-model="val"').find('md-select');
       openSelect(select);
       var ownsId = select.attr('aria-owns');
       expect(ownsId).toBeTruthy();
-      var containerId = $document[0].querySelector('.md-select-menu-container').getAttribute('id');
-      expect(ownsId).toBe(containerId);
+      var listboxContentId =
+        $document[0].querySelector('.md-select-menu-container md-content').getAttribute('id');
+      expect(ownsId).toBe(listboxContentId);
     });
 
     it('calls md-on-close when the select menu closes', function() {
@@ -1377,37 +1378,42 @@ describe('<md-select>', function() {
       expect($log.warn).not.toHaveBeenCalled();
     }));
 
-    it('sets up the aria-expanded attribute', function() {
+    it('does not overwrite user provided aria-labelledby', function() {
+      var select = setupSelect('ng-model="someVal" placeholder="Hello world" aria-labelledby="label"',
+        null, true).find('md-select');
+      expect(select.attr('aria-labelledby')).toBe('label');
+    });
 
-      expect(el.attr('aria-expanded')).toBe('false');
+    it('sets up the aria-expanded attribute', function() {
+      expect(el.attr('aria-expanded')).toBe(undefined);
       openSelect(el);
       expect(el.attr('aria-expanded')).toBe('true');
 
       closeSelect(el);
       $material.flushInterimElement();
 
-      expect(el.attr('aria-expanded')).toBe('false');
+      expect(el.attr('aria-expanded')).toBe(undefined);
     });
 
     it('sets up the aria-multiselectable attribute', function() {
-      $rootScope.model = [1,3];
-      var el = setupSelectMultiple('ng-model="$root.model"', [1,2,3]).find('md-select');
+      $rootScope.model = [1, 3];
+      var el = setupSelectMultiple('ng-model="$root.model"', [1, 2, 3]).find('md-select');
+      var listbox = el.find('md-content');
 
-      expect(el.attr('aria-multiselectable')).toBe('true');
+      expect(listbox.attr('aria-multiselectable')).toBe('true');
     });
 
     it('sets up the aria-selected attribute', function() {
-      var el = setupSelect('ng-model="$root.model"', [1,2,3]);
+      var el = setupSelect('ng-model="$root.model"', [1, 2, 3]);
       var options = el.find('md-option');
       openSelect(el);
-      expect(options.eq(2).attr('aria-selected')).toBe('false');
+      expect(options.eq(2).attr('aria-selected')).toBe(undefined);
       clickOption(el, 2);
       expect(options.eq(2).attr('aria-selected')).toBe('true');
     });
   });
 
   describe('keyboard controls', function() {
-
 
     afterEach(function() {
       var selectMenus = $document.find('md-select-menu');
@@ -1669,7 +1675,7 @@ describe('<md-select>', function() {
     var menu = angular.element($document[0].querySelector('.md-select-menu-container'));
 
     if (menu.length) {
-      if (menu.hasClass('md-active') || menu.attr('aria-hidden') == 'false') {
+      if (menu.hasClass('md-active') || menu.attr('aria-hidden') === 'false') {
         throw Error('Expected select to be closed');
       }
     }
@@ -1678,7 +1684,7 @@ describe('<md-select>', function() {
   function expectSelectOpen() {
     var menu = angular.element($document[0].querySelector('.md-select-menu-container'));
 
-    if (!(menu.hasClass('md-active') && menu.attr('aria-hidden') == 'false')) {
+    if (!(menu.hasClass('md-active') && menu.attr('aria-hidden') === 'false')) {
       throw Error('Expected select to be open');
     }
   }
