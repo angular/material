@@ -155,13 +155,13 @@ ul {
   margin: 0;
   padding: 0;
 }
-ul li:not(.md-nav-item) {
+ul:not(.md-autocomplete-suggestions) li:not(.md-nav-item) {
   margin-left: 16px;
   padding: 0;
   margin-top: 3px;
   list-style-position: inside;
 }
-ul li:not(.md-nav-item):first-child {
+ul:not(.md-autocomplete-suggestions) li:not(.md-nav-item):first-child {
   margin-top: 0;
 }
 /************

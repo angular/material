@@ -154,19 +154,22 @@ md-select-menu.md-THEME_NAME-theme {
 
       &:not([disabled]) {
         &:focus,
-        &:hover {
+        &:hover,
+        &.md-focused {
           background-color: '{{background-500-0.18}}'
         }
       }
 
       &[selected] {
         color: '{{primary-500}}';
-        &:focus {
+        &:focus,
+        &.md-focused {
           color: '{{primary-600}}';
         }
         &.md-accent {
           color: '{{accent-color}}';
-          &:focus {
+          &:focus,
+          &.md-focused {
             color: '{{accent-A700}}';
           }
         }
