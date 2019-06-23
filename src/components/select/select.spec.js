@@ -1446,6 +1446,92 @@ describe('<md-select>', function() {
       clickOption(el, 2);
       expect(options.eq(2).attr('aria-selected')).toBe('true');
     });
+
+    it('applies label element\'s text to optgroup\'s aria-label', function() {
+      $rootScope.val = [1];
+      var select = $compile(
+        '<md-input-container>' +
+        '  <label>Label</label>' +
+        '  <md-select ng-model="val" placeholder="Hello World">' +
+        '    <md-optgroup>' +
+        '      <label>stuff</label>' +
+        '      <md-option value="1">One</md-option>' +
+        '      <md-option value="2">Two</md-option>' +
+        '      <md-option value="3">Three</md-option>' +
+        '    </md-optgroup>' +
+        '  </md-select>' +
+        '</md-input-container>')($rootScope);
+
+      var optgroups = select.find('md-optgroup');
+      expect(optgroups[0].getAttribute('aria-label')).toBe('stuff');
+    });
+
+    it('applies optgroup\'s label as aria-label', function() {
+      $rootScope.val = [1];
+      var select = $compile(
+        '<md-input-container>' +
+        '  <label>Label</label>' +
+        '  <md-select ng-model="val" placeholder="Hello World">' +
+        '    <md-optgroup label="stuff">' +
+        '      <md-option value="1">One</md-option>' +
+        '      <md-option value="2">Two</md-option>' +
+        '      <md-option value="3">Three</md-option>' +
+        '    </md-optgroup>' +
+        '  </md-select>' +
+        '</md-input-container>')($rootScope);
+
+      var optgroups = select.find('md-optgroup');
+      expect(optgroups[0].getAttribute('aria-label')).toBe('stuff');
+    });
+
+    it('applies setsize and posinset when optgroups are used', function() {
+      $rootScope.val = [1];
+      var select = $compile(
+        '<md-input-container>' +
+        '  <label>Label</label>' +
+        '  <md-select ng-model="val" placeholder="Hello World">' +
+        '    <md-optgroup label="stuff">' +
+        '      <md-option value="1">One</md-option>' +
+        '      <md-option value="2">Two</md-option>' +
+        '      <md-option value="3">Three</md-option>' +
+        '    </md-optgroup>' +
+        '  </md-select>' +
+        '</md-input-container>')($rootScope);
+      $rootScope.$digest();
+
+      var options = select.find('md-option');
+      expect(options[0].getAttribute('aria-setsize')).toBe('3');
+      expect(options[0].getAttribute('aria-posinset')).toBe('1');
+    });
+
+    it('applies setsize and posinset when optgroups are used with multiple', function() {
+      $rootScope.val = [1];
+      var select = $compile(
+        '<md-input-container>' +
+        '  <label>Label</label>' +
+        '  <md-select multiple ng-model="val" placeholder="Hello World">' +
+        '    <md-optgroup label="stuff">' +
+        '      <md-option value="1">One</md-option>' +
+        '      <md-option value="2">Two</md-option>' +
+        '      <md-option value="3">Three</md-option>' +
+        '    </md-optgroup>' +
+        '  </md-select>' +
+        '</md-input-container>')($rootScope);
+      $rootScope.$digest();
+
+      var options = select.find('md-option');
+      expect(options[0].getAttribute('aria-setsize')).toBe('3');
+      expect(options[0].getAttribute('aria-posinset')).toBe('1');
+    });
+
+    it('does not apply setsize and posinset when optgroups are not used', function() {
+      var select = setupSelect('ng-model="$root.model"', [1, 2, 3]);
+      $rootScope.$digest();
+
+      var options = select.find('md-option');
+      expect(options[0].getAttribute('aria-setsize')).toBe(null);
+      expect(options[0].getAttribute('aria-posinset')).toBe(null);
+    });
   });
 
   describe('keyboard controls', function() {
