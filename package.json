@@ -114,5 +114,9 @@
     "not ie_mob <= 10",
     "not bb <= 10",
     "not op_mob <= 12.1"
-  ]
+  ],
+  "engines": {
+    "node": ">=8 <12",
+    "npm": ">=5"
+  }
 }
