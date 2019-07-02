@@ -493,6 +493,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
                 ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                 ng-blur="$mdAutocompleteCtrl.blur($event)"\
                 ng-focus="$mdAutocompleteCtrl.focus($event)"\
+                ng-click="$event.stopPropagation()"\
                 aria-label="{{floatingLabel}}"\
                 aria-autocomplete="list"\
                 role="combobox"\
@@ -520,6 +521,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
               ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
               ng-blur="$mdAutocompleteCtrl.blur($event)"\
               ng-focus="$mdAutocompleteCtrl.focus($event)"\
+              ng-click="$event.stopPropagation()"\
               placeholder="{{placeholder}}"\
               aria-label="{{placeholder}}"\
               aria-autocomplete="list"\
