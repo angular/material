@@ -32,7 +32,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * close the options panel when a click outside said panel occurs. We use `documentElement`
    * instead of body because, when scrolling is disabled, some browsers consider the body element
    * to be completely off the screen and propagate events directly to the html element.
-   * @type {!angular.JQLite}
+   * @type {!Object} angular.JQLite
    */
   ctrl.documentElement = angular.element(document.documentElement);
 
@@ -351,8 +351,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
   /**
    * Handles changes to the `hidden` property.
-   * @param hidden
-   * @param oldHidden
+   * @param {boolean} hidden
+   * @param {boolean} oldHidden
    */
   function handleHiddenChange (hidden, oldHidden) {
     if (!hidden && oldHidden) {

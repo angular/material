@@ -215,8 +215,8 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
     /**
      * Disables scroll around the passed parent element.
-     * @param {!Element|!angular.JQLite} element Origin Element (not used)
-     * @param {!Element|!angular.JQLite} parent Element to disable scrolling within.
+     * @param {Element|angular.JQLite=} element Origin Element (not used)
+     * @param {Element|angular.JQLite=} parent Element to disable scrolling within.
      *   Defaults to body if none supplied.
      * @param {Object=} options Object of options to modify functionality
      *   - disableScrollMask Boolean of whether or not to create a scroll mask element or
