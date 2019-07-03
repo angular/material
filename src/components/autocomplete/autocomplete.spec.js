@@ -536,6 +536,32 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
+    it('should support ng-click on the md-autocomplete', inject(function() {
+      var scope = createScope(null, {inputId: 'custom-input-id'});
+      scope.test = false;
+      var template =
+        '<md-autocomplete ' +
+        'md-selected-item="selectedItem" ' +
+        'md-search-text="searchText" ' +
+        'md-items="item in match(searchText)" ' +
+        'md-item-text="item.display" ' +
+        'ng-click="test = true" ' +
+        'placeholder="placeholder">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+
+      var element = compile(template, scope);
+      var input = element.find('input');
+
+      expect(scope.test).toBe(false);
+
+      input[0].click();
+
+      expect(scope.test).toBe(true);
+
+      element.remove();
+    }));
+
     it('should support ng-trim for the search input', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
       var template =
@@ -615,7 +641,7 @@ describe('<md-autocomplete>', function() {
       element.remove();
     }));
 
-    it('always sets the tabindex of the autcomplete to `-1`', inject(function() {
+    it('always sets the tabindex of the autocomplete to `-1`', inject(function() {
       var scope = createScope(null, {inputId: 'custom-input-id'});
       var template =
         '<md-autocomplete ' +
