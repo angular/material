@@ -647,7 +647,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       var size = vertical ? sliderDimensions.height : sliderDimensions.width;
       var calc = (position - offset) / size;
 
-      if (!vertical && $mdUtil.bidi() === 'rtl') {
+      if (!vertical && $mdUtil.isRtl(attr)) {
         calc = 1 - calc;
       }
 

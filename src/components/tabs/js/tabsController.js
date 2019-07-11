@@ -962,6 +962,6 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
   }
 
   function isRtl() {
-    return ($mdUtil.bidi() === 'rtl');
+    return $mdUtil.isRtl($attrs);
   }
 }

@@ -90,11 +90,35 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     },
 
     /**
+     * Determines the current 'dir'ectional value based on the value of 'dir'
+     * attribute of the element. If that is not defined, it will try to use
+     * a 'dir' attribute of the body or html tag.
+     *
+     * @param {Object=} attrs a hash object with key-value pairs of normalized
+     *     attribute names and their corresponding attribute values.
+     * @returns {boolean} true if the element's passed in attributes,
+     *     the document, or the body indicates RTL mode, false otherwise.
+     */
+    isRtl: function(attrs) {
+      var dir = angular.isDefined(attrs) && attrs.hasOwnProperty('dir') && attrs.dir;
+
+      switch (dir) {
+        case 'ltr':
+          return false;
+
+        case 'rtl':
+          return true;
+      }
+
+      return ($document[0].dir === 'rtl' || $document[0].body.dir === 'rtl');
+    },
+
+    /**
      * Bi-directional accessor/mutator used to easily update an element's
      * property based on the current 'dir'ectional value.
      */
-    bidi : function(element, property, lValue, rValue) {
-      var ltr = !($document[0].dir == 'rtl' || $document[0].body.dir == 'rtl');
+    bidi: function(element, property, lValue, rValue) {
+      var ltr = !this.isRtl();
 
       // If accessor
       if (arguments.length == 0) return ltr ? 'ltr' : 'rtl';
@@ -111,7 +135,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     },
 
     bidiProperty: function (element, lProperty, rProperty, value) {
-      var ltr = !($document[0].dir == 'rtl' || $document[0].body.dir == 'rtl');
+      var ltr = !this.isRtl();
 
       var elem = angular.element(element);
 
