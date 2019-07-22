@@ -310,7 +310,7 @@ function MenuProvider($$interimElementProvider) {
               }
               handled = true;
               break;
-            case $mdConstant.KEY_CODE.LEFT_ARROW:
+            case $mdConstant.KEY_CODE[$mdUtil.bidi() === 'ltr' ? 'LEFT_ARROW' : 'RIGHT_ARROW']:
               if (opts.nestLevel) {
                 opts.mdMenuCtrl.close();
               } else {
@@ -318,7 +318,7 @@ function MenuProvider($$interimElementProvider) {
               }
               handled = true;
               break;
-            case $mdConstant.KEY_CODE.RIGHT_ARROW:
+            case $mdConstant.KEY_CODE[$mdUtil.bidi() === 'ltr' ? 'RIGHT_ARROW' : 'LEFT_ARROW']:
               var parentMenu = $mdUtil.getClosest(ev.target, 'MD-MENU');
               if (parentMenu && parentMenu != opts.parent[0]) {
                 ev.target.click();
