@@ -388,8 +388,8 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
  * A gesture will manage its lifecycle through the start,move,end, and cancel
  * functions, which are called by native dom events.
  *
- * A gesture has the concept of 'options' (eg a swipe's required velocity), which can be
- * overridden by elements registering through $mdGesture.register()
+ * A gesture has the concept of 'options' (eg. a swipe's required velocity), which can be
+ * overridden by elements registering through $mdGesture.register().
  */
 function GestureHandler (name) {
   this.name = name;
@@ -436,8 +436,8 @@ function MdGestureHandler() {
     },
     end: function (ev, pointer) {
       if (!this.state.isRunning) return;
-      this.onEnd(ev, pointer);
       this.state.isRunning = false;
+      this.onEnd(ev, pointer);
     },
     cancel: function (ev, pointer) {
       this.onCancel(ev, pointer);
