@@ -61,7 +61,7 @@ angular.module('ngMaterial-mock', [
 
     /**
       * AngularJS Material dynamically generates Style tags
-      * based on themes and palletes; for each ng-app.
+      * based on themes and palettes; for each ng-app.
       *
       * For testing, we want to disable generation and
       * <style> DOM injections. So we clear the huge THEME
