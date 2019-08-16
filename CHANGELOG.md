@@ -1,3 +1,30 @@
+<a name="1.1.20"></a>
+## [1.1.20](https://github.com/angular/material/compare/v1.1.19...v1.1.20) (2019-08-15)
+
+
+### Bug Fixes
+
+* **autocomplete:** options panel flickers on hover after clicking input ([#11757](https://github.com/angular/material/issues/11757)) ([8f14afd](https://github.com/angular/material/commit/8f14afd)), closes [#11625](https://github.com/angular/material/issues/11625)
+* **autocomplete:** support ng-click on md-autocomplete ([#11758](https://github.com/angular/material/issues/11758)) ([313e5e6](https://github.com/angular/material/commit/313e5e6)), closes [#11625](https://github.com/angular/material/issues/11625)
+* **autocomplete:** tap outside options panel on iOS does not close panel ([#11625](https://github.com/angular/material/issues/11625)) ([f81349a](https://github.com/angular/material/commit/f81349a)), closes [#9581](https://github.com/angular/material/issues/9581)
+* **datepicker:** remove invalid aria-expanded ([#11740](https://github.com/angular/material/issues/11740)) ([197d197](https://github.com/angular/material/commit/197d197)), closes [#11475](https://github.com/angular/material/issues/11475)
+* **gesture:** check if navigator is defined before accessing userAgent ([#11755](https://github.com/angular/material/issues/11755)) ([0077d3e](https://github.com/angular/material/commit/0077d3e)), closes [#11751](https://github.com/angular/material/issues/11751)
+* **gesture:** maximum call stack size exceeded on click w/ Tal… ([#11774](https://github.com/angular/material/issues/11774)) ([4acef53](https://github.com/angular/material/commit/4acef53)), closes [#11768](https://github.com/angular/material/issues/11768)
+* **input:** floating label text fails a11y contrast audit ([#11497](https://github.com/angular/material/issues/11497)) ([b5de054](https://github.com/angular/material/commit/b5de054)), closes [#11475](https://github.com/angular/material/issues/11475)
+* **panel:** append panel animation transforms after existing transforms ([#11681](https://github.com/angular/material/issues/11681)) ([ffe9349](https://github.com/angular/material/commit/ffe9349))
+* **rtl:** support applying dir="rtl" on DOM elements other than the body ([#11579](https://github.com/angular/material/issues/11579)) ([bc7833b](https://github.com/angular/material/commit/bc7833b)), closes [#11016](https://github.com/angular/material/issues/11016) [#9754](https://github.com/angular/material/issues/9754)
+* **select:** improve focus/blur handling on iOS ([#11739](https://github.com/angular/material/issues/11739)) ([0284b13](https://github.com/angular/material/commit/0284b13)), closes [#11345](https://github.com/angular/material/issues/11345)
+* **tooltip:** move document.contains polyfill for IE11 into $mdUtil ([#11749](https://github.com/angular/material/issues/11749)) ([f5535f8](https://github.com/angular/material/commit/f5535f8)), closes [#11745](https://github.com/angular/material/issues/11745)
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.1.20 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="marosoft" src="https://avatars0.githubusercontent.com/u/3945455?v=4&s=117" width="117">](https://github.com/marosoft) |[<img alt="Noglen" src="https://avatars0.githubusercontent.com/u/38341522?v=4&s=117" width="117">](https://github.com/Noglen) |
+:---: |:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[marosoft](https://github.com/marosoft) |[Noglen](https://github.com/Noglen) |
+
+
 <a name="1.1.19"></a>
 ## [1.1.19](https://github.com/angular/material/compare/v1.1.18...v1.1.19) (2019-05-31)
 
