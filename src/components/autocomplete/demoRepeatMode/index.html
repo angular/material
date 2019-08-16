@@ -22,6 +22,7 @@
               md-items="item in ctrl.querySearch(ctrl.searchText)"
               md-item-text="item.name"
               md-min-length="0"
+              md-escape-options="clear"
               input-aria-describedby="standard-autocomplete-description"
               input-aria-label="Current Repository"
               placeholder="Pick an Angular repository"
@@ -30,7 +31,7 @@
               md-mode="standard">
             <md-item-template>
               <span class="item-title">
-                <md-icon md-svg-icon="img/icons/octicon-repo.svg"></md-icon>
+                <md-icon md-svg-icon="img/icons/octicon-repo.svg" aria-hidden="true"></md-icon>
                 <span> {{item.name}} </span>
               </span>
               <p class="item-desc">{{item.desc}}</p>
@@ -70,6 +71,7 @@
               md-items="item in ctrl.querySearch(ctrl.searchText)"
               md-item-text="item.name"
               md-min-length="0"
+              md-escape-options="clear"
               input-aria-describedby="virtual-autocomplete-description"
               input-aria-label="Current Repository"
               placeholder="Pick an Angular repository"
@@ -78,7 +80,7 @@
               md-mode="virtual">
             <md-item-template>
               <span class="item-title">
-                <md-icon md-svg-icon="img/icons/octicon-repo.svg"></md-icon>
+                <md-icon md-svg-icon="img/icons/octicon-repo.svg" aria-hidden="true"></md-icon>
                 <span> {{item.name}} </span>
               </span>
               <p class="item-desc">

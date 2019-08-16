@@ -40,14 +40,15 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   defineProperty('hidden', handleHiddenChange, true);
 
   // Public Exported Variables
-  ctrl.scope      = $scope;
-  ctrl.parent     = $scope.$parent;
-  ctrl.itemName   = itemParts[ 0 ];
-  ctrl.matches    = [];
-  ctrl.loading    = false;
-  ctrl.hidden     = true;
-  ctrl.index      = null;
-  ctrl.id         = $mdUtil.nextUid();
+  ctrl.scope = $scope;
+  ctrl.parent = $scope.$parent;
+  ctrl.itemName = itemParts[0];
+  ctrl.matches = [];
+  ctrl.loading = false;
+  ctrl.hidden = true;
+  ctrl.index = -1;
+  ctrl.activeOption = null;
+  ctrl.id = $mdUtil.nextUid();
   ctrl.isDisabled = null;
   ctrl.isRequired = null;
   ctrl.isReadonly = null;
@@ -55,20 +56,20 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   ctrl.selectedMessage = $scope.selectedMessage || 'selected';
 
   // Public Exported Methods
-  ctrl.keydown                       = keydown;
-  ctrl.blur                          = blur;
-  ctrl.focus                         = focus;
-  ctrl.clear                         = clearValue;
-  ctrl.select                        = select;
-  ctrl.listEnter                     = onListEnter;
-  ctrl.listLeave                     = onListLeave;
-  ctrl.mouseUp                       = onMouseup;
-  ctrl.getCurrentDisplayValue        = getCurrentDisplayValue;
-  ctrl.registerSelectedItemWatcher   = registerSelectedItemWatcher;
+  ctrl.keydown = keydown;
+  ctrl.blur = blur;
+  ctrl.focus = focus;
+  ctrl.clear = clearValue;
+  ctrl.select = select;
+  ctrl.listEnter = onListEnter;
+  ctrl.listLeave = onListLeave;
+  ctrl.mouseUp = onMouseup;
+  ctrl.getCurrentDisplayValue = getCurrentDisplayValue;
+  ctrl.registerSelectedItemWatcher = registerSelectedItemWatcher;
   ctrl.unregisterSelectedItemWatcher = unregisterSelectedItemWatcher;
-  ctrl.notFoundVisible               = notFoundVisible;
-  ctrl.loadingIsVisible              = loadingIsVisible;
-  ctrl.positionDropdown              = positionDropdown;
+  ctrl.notFoundVisible = notFoundVisible;
+  ctrl.loadingIsVisible = loadingIsVisible;
+  ctrl.positionDropdown = positionDropdown;
 
   /**
    * Report types to be used for the $mdLiveAnnouncer
@@ -240,6 +241,22 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   }
 
   /**
+   * Update the activeOption based on the selected item in the listbox.
+   * The activeOption is used in the template to set the aria-activedescendant attribute, which
+   * enables screen readers to properly handle visual focus within the listbox and announce the
+   * item's place in the list. I.e. "List item 3 of 50". Anytime that `ctrl.index` changes, this
+   * function needs to be called to update the activeOption.
+   */
+  function updateActiveOption() {
+    var selectedOption = elements.scroller.querySelector('.selected');
+    if (selectedOption) {
+      ctrl.activeOption = selectedOption.id;
+    } else {
+      ctrl.activeOption = null;
+    }
+  }
+
+  /**
    * Sets up any watchers used by autocomplete
    */
   function configureWatchers () {
@@ -366,6 +383,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         $mdUtil.disableScrollAround(elements.ul);
         enableWrapScroll = disableElementScrollEvents(angular.element(elements.wrap));
         ctrl.documentElement.on('click', handleClickOutside);
+        $mdUtil.nextTick(updateActiveOption);
       }
     } else if (hidden && !oldHidden) {
       ctrl.documentElement.off('click', handleClickOutside);
@@ -509,8 +527,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
 
   /**
    * Handles changes to the searchText property.
-   * @param searchText
-   * @param previousSearchText
+   * @param {string} searchText
+   * @param {string} previousSearchText
    */
   function handleSearchText (searchText, previousSearchText) {
     ctrl.index = getDefaultIndex();
@@ -594,17 +612,17 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         if (ctrl.loading || hasSelection()) return;
         event.stopPropagation();
         event.preventDefault();
-        ctrl.index   = Math.min(ctrl.index + 1, ctrl.matches.length - 1);
+        ctrl.index = Math.min(ctrl.index + 1, ctrl.matches.length - 1);
+        $mdUtil.nextTick(updateActiveOption);
         updateScroll();
-        reportMessages(false, ReportType.Selected);
         break;
       case $mdConstant.KEY_CODE.UP_ARROW:
         if (ctrl.loading || hasSelection()) return;
         event.stopPropagation();
         event.preventDefault();
-        ctrl.index   = ctrl.index < 0 ? ctrl.matches.length - 1 : Math.max(0, ctrl.index - 1);
+        ctrl.index = ctrl.index < 0 ? ctrl.matches.length - 1 : Math.max(0, ctrl.index - 1);
+        $mdUtil.nextTick(updateActiveOption);
         updateScroll();
-        reportMessages(false, ReportType.Selected);
         break;
       case $mdConstant.KEY_CODE.TAB:
         // If we hit tab, assume that we've left the list so it will close
@@ -868,7 +886,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    */
   function clearSelectedItem () {
     // Reset our variables
-    ctrl.index = 0;
+    ctrl.index = -1;
+    $mdUtil.nextTick(updateActiveOption);
     ctrl.matches = [];
   }
 
