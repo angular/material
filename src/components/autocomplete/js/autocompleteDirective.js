@@ -400,8 +400,6 @@ function MdAutocomplete ($$mdSvgRegistry) {
             <ul class="md-autocomplete-suggestions"\
                 ng-class="::menuClass"\
                 id="ul-{{$mdAutocompleteCtrl.id}}"\
-                ng-mouseenter="$mdAutocompleteCtrl.listEnter()"\
-                ng-mouseleave="$mdAutocompleteCtrl.listLeave()"\
                 ng-mouseup="$mdAutocompleteCtrl.focusInput()"\
                 role="listbox">\
               <li class="md-autocomplete-suggestion" ' + getRepeatType(attr.mdMode) + ' ="item in $mdAutocompleteCtrl.matches"\
@@ -446,6 +444,8 @@ function MdAutocomplete ($$mdSvgRegistry) {
                 ng-hide="$mdAutocompleteCtrl.hidden"\
                 class="md-standard-list-container md-autocomplete-suggestions-container md-whiteframe-z1' + menuContainerClass + '"\
                 ng-class="{ \'md-not-found\': $mdAutocompleteCtrl.notFoundVisible() }"\
+                ng-mouseenter="$mdAutocompleteCtrl.listEnter()"\
+                ng-mouseleave="$mdAutocompleteCtrl.listLeave()"\
                 role="presentation">\
               <div class="md-standard-list-scroller" role="presentation">';
         }
@@ -457,6 +457,8 @@ function MdAutocomplete ($$mdSvgRegistry) {
               ng-hide="$mdAutocompleteCtrl.hidden"\
               class="md-virtual-repeat-container md-autocomplete-suggestions-container md-whiteframe-z1' + menuContainerClass + '"\
               ng-class="{ \'md-not-found\': $mdAutocompleteCtrl.notFoundVisible() }"\
+              ng-mouseenter="$mdAutocompleteCtrl.listEnter()"\
+              ng-mouseleave="$mdAutocompleteCtrl.listLeave()"\
               role="presentation">';
       }
 
