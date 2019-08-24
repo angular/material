@@ -98,7 +98,7 @@ angular
  * @param {number=} md-delay Specifies the amount of time (in milliseconds) to wait before looking
  *     for results.
  * @param {boolean=} md-clear-button Whether the clear button for the autocomplete input should show
- *     up or not.
+ *     up or not. When `md-floating-label` is set, defaults to false, defaults to true otherwise.
  * @param {boolean=} md-autofocus If true, the autocomplete will be automatically focused when a
  *     `$mdDialog`, `$mdBottomsheet` or `$mdSidenav`, which contains the autocomplete, is opening.
  *     <br/><br/>
@@ -365,7 +365,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
 
         // Stop click events from bubbling up to the document and triggering a flicker of the
         // options panel while still supporting ng-click to be placed on md-autocomplete.
-        element.on('click', function(event) {
+        element.on('click touchstart touchend', function(event) {
           event.stopPropagation();
         });
       };
@@ -402,7 +402,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
                 id="ul-{{$mdAutocompleteCtrl.id}}"\
                 ng-mouseenter="$mdAutocompleteCtrl.listEnter()"\
                 ng-mouseleave="$mdAutocompleteCtrl.listLeave()"\
-                ng-mouseup="$mdAutocompleteCtrl.mouseUp()"\
+                ng-mouseup="$mdAutocompleteCtrl.focusInput()"\
                 role="listbox">\
               <li class="md-autocomplete-suggestion" ' + getRepeatType(attr.mdMode) + ' ="item in $mdAutocompleteCtrl.matches"\
                   ng-class="{ selected: $index === $mdAutocompleteCtrl.index }"\
@@ -496,6 +496,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
                 ng-disabled="$mdAutocompleteCtrl.isDisabled"\
                 ng-model="$mdAutocompleteCtrl.scope.searchText"\
                 ng-model-options="{ allowInvalid: true }"\
+                ng-mousedown="$mdAutocompleteCtrl.focusInput()"\
                 ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
                 ng-blur="$mdAutocompleteCtrl.blur($event)"\
                 ng-focus="$mdAutocompleteCtrl.focus($event)"\
@@ -523,6 +524,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
               ng-minlength="inputMinlength"\
               ng-maxlength="inputMaxlength"\
               ng-model="$mdAutocompleteCtrl.scope.searchText"\
+              ng-mousedown="$mdAutocompleteCtrl.focusInput()"\
               ng-keydown="$mdAutocompleteCtrl.keydown($event)"\
               ng-blur="$mdAutocompleteCtrl.blur($event)"\
               ng-focus="$mdAutocompleteCtrl.focus($event)"\

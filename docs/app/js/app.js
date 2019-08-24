@@ -144,8 +144,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
 
 }])
 
-.config(['AngularyticsProvider', function(AngularyticsProvider) {
-   AngularyticsProvider.setEventHandlers(['GoogleUniversal']);
+.config(['$mdGestureProvider', 'AngularyticsProvider', function($mdGestureProvider, AngularyticsProvider) {
+  $mdGestureProvider.skipClickHijack();
+  AngularyticsProvider.setEventHandlers(['GoogleUniversal']);
 }])
 
 .run(['$rootScope', '$window', 'Angularytics', function($rootScope, $window, Angularytics) {
