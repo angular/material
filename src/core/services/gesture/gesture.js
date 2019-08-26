@@ -14,21 +14,18 @@ var forceSkipClickHijack = false, disableAllGestures = false;
  */
 var lastLabelClickPos = null;
 
-// Used to attach event listeners once when multiple ng-apps are running.
+/**
+ * Used to attach event listeners once when multiple ng-apps are running.
+ * @type {boolean}
+ */
 var isInitialized = false;
-
-// Support material-tools builds.
-if (window.navigator) {
-  var userAgent = window.navigator.userAgent || window.navigator.vendor || window.opera;
-  var isIos = userAgent.match(/ipad|iphone|ipod/i);
-  var isAndroid = userAgent.match(/android/i);
-}
 
 /**
  * @ngdoc module
  * @name material.core.gestures
  * @description
- * AngularJS Material Gesture handling for touch devices. This module replaced the usage of the hammerjs library.
+ * AngularJS Material Gesture handling for touch devices.
+ * This module replaced the usage of the HammerJS library.
  */
 angular
   .module('material.core.gestures', [])
@@ -43,10 +40,11 @@ angular
  *
  * @description
  * In some scenarios on mobile devices (without jQuery), the click events should NOT be hijacked.
- * `$mdGestureProvider` is used to configure the Gesture module to ignore or skip click hijacking on mobile
- * devices.
+ * `$mdGestureProvider` is used to configure the Gesture module to ignore or skip click hijacking
+ * on mobile devices.
  *
- * You can also change the max click distance, `6px` by default, if you have issues on some touch screens.
+ * You can also change the max click distance, `6px` by default, if you have issues on some touch
+ * screens.
  *
  * <hljs lang="js">
  *   app.config(function($mdGestureProvider) {
@@ -105,8 +103,8 @@ MdGestureProvider.prototype = {
    * $get is used to build an instance of $mdGesture
    * @ngInject
    */
-  $get : function($$MdGestureHandler, $$rAF, $timeout) {
-       return new MdGesture($$MdGestureHandler, $$rAF, $timeout);
+  $get : function($$MdGestureHandler, $$rAF, $timeout, $mdUtil) {
+       return new MdGesture($$MdGestureHandler, $$rAF, $timeout, $mdUtil);
   }
 };
 
@@ -116,17 +114,17 @@ MdGestureProvider.prototype = {
  * MdGesture factory construction function
  * @ngInject
  */
-function MdGesture($$MdGestureHandler, $$rAF, $timeout) {
+function MdGesture($$MdGestureHandler, $$rAF, $timeout, $mdUtil) {
   var touchActionProperty = getTouchAction();
-  var hasJQuery =  (typeof window.jQuery !== 'undefined') && (angular.element === window.jQuery);
+  var hasJQuery = (typeof window.jQuery !== 'undefined') && (angular.element === window.jQuery);
 
   var self = {
     handler: addHandler,
     register: register,
-    isAndroid: isAndroid,
-    isIos: isIos,
+    isAndroid: $mdUtil.isAndroid,
+    isIos: $mdUtil.isIos,
     // On mobile w/out jQuery, we normally intercept clicks. Should we skip that?
-    isHijackingClicks: (isIos || isAndroid) && !hasJQuery && !forceSkipClickHijack
+    isHijackingClicks: ($mdUtil.isIos || $mdUtil.isAndroid) && !hasJQuery && !forceSkipClickHijack
   };
 
   if (self.isHijackingClicks) {
@@ -575,7 +573,7 @@ function MdGestureHandler() {
  * Attach Gestures: hook document and check shouldHijack clicks
  * @ngInject
  */
-function attachToDocument($mdGesture, $$MdGestureHandler) {
+function attachToDocument($mdGesture, $$MdGestureHandler, $mdUtil) {
   if (disableAllGestures) {
     return;
   }
@@ -623,7 +621,7 @@ function attachToDocument($mdGesture, $$MdGestureHandler) {
    */
   function clickHijacker(ev) {
     var isKeyClick;
-    if (isIos) {
+    if ($mdUtil.isIos) {
       isKeyClick = angular.isDefined(ev.webkitForce) && ev.webkitForce === 0;
     } else {
       isKeyClick = ev.clientX === 0 && ev.clientY === 0;
