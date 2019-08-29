@@ -959,7 +959,7 @@
   DatePickerCtrl.prototype.onExternalChange = function(value) {
     var timezone = this.$mdUtil.getModelOption(this.ngModelCtrl, 'timezone');
 
-    this.date = value;
+    this.date = !value ? value : new Date(this.locale.formatDate(value, timezone));
     this.inputElement.value = this.locale.formatDate(value, timezone);
     this.mdInputContainer && this.mdInputContainer.setHasValue(!!value);
     this.resizeInputElement();
