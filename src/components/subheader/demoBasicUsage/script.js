@@ -5,7 +5,7 @@ angular.module('subheaderBasicDemo', ['ngMaterial'])
     .primaryPalette('purple');
 })
 .controller('SubheaderAppCtrl', function($scope) {
-    var imagePath = 'img/list/60.jpeg';
+    var imagePath = 'img/60.jpeg';
     $scope.messages = [
       {
         face : imagePath,
