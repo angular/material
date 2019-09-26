@@ -19,14 +19,14 @@ describe('md-slider', function() {
 
     slider = $compile('<md-slider ' + (attrs || '') + '>')(pageScope);
     spyOn(
-      slider[0].querySelector('.md-track-container'), 
+      slider[0].querySelector('.md-track-container'),
       'getBoundingClientRect'
     ).and.returnValue(angular.extend({
-      width: 100, 
-      height: 100, 
-      left: 0, 
-      right: 0, 
-      bottom: 0, 
+      width: 100,
+      height: 100,
+      left: 0,
+      right: 0,
+      bottom: 0,
       top: 0
     }, dimensions || {}));
 
@@ -85,14 +85,14 @@ describe('md-slider', function() {
     var wrapper = getWrapper(slider);
 
     wrapper.triggerHandler({
-      type: 'keydown', 
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
     });
     $timeout.flush();
     expect(pageScope.model).toBe(102);
 
     wrapper.triggerHandler({
-      type: 'keydown', 
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
     });
     $timeout.flush();
@@ -100,7 +100,7 @@ describe('md-slider', function() {
 
     // Stays at max.
     wrapper.triggerHandler({
-      type: 'keydown', 
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
     });
     $timeout.flush();
@@ -114,14 +114,14 @@ describe('md-slider', function() {
     var wrapper = getWrapper(slider);
 
     wrapper.triggerHandler({
-      type: 'keydown', 
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
     expect(pageScope.model).toBe(102);
 
     wrapper.triggerHandler({
-      type: 'keydown', 
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
@@ -129,7 +129,7 @@ describe('md-slider', function() {
 
     // Stays at min.
     wrapper.triggerHandler({
-      type: 'keydown', 
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
@@ -300,7 +300,7 @@ describe('md-slider', function() {
     expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
 
     wrapper.triggerHandler({
-      type: 'keydown', 
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
@@ -352,7 +352,7 @@ describe('md-slider', function() {
     expect(getWrapper(slider).attr('aria-valuenow')).toEqual('102');
 
     wrapper.triggerHandler({
-      type: 'keydown', 
+      type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
@@ -368,7 +368,7 @@ describe('md-slider', function() {
 
     // Doesn't add active class on pressdown when disabled
     wrapper.triggerHandler({
-      type: '$md.pressdown', 
+      type: '$md.pressdown',
       srcEvent: {}
     });
     expect(slider).not.toHaveClass('md-active');
@@ -376,7 +376,7 @@ describe('md-slider', function() {
     // Doesn't remove active class up on pressup when disabled
     slider.addClass('md-active');
     wrapper.triggerHandler({
-      type: '$md.pressup', 
+      type: '$md.pressup',
       srcEvent: {}
     });
     expect(slider).toHaveClass('md-active');
@@ -391,7 +391,7 @@ describe('md-slider', function() {
     // Check for disabled state by triggering the pressdown handler and asserting that
     // the slider is not active.
     wrapper.triggerHandler({
-      type: '$md.pressdown', 
+      type: '$md.pressdown',
       srcEvent: {}
     });
     expect(slider).not.toHaveClass('md-active');
@@ -404,13 +404,13 @@ describe('md-slider', function() {
     expect(slider).not.toHaveClass('md-active');
 
     wrapper.triggerHandler({
-      type: '$md.pressdown', 
+      type: '$md.pressdown',
       srcEvent: {}
     });
     expect(slider).toHaveClass('md-active');
 
     wrapper.triggerHandler({
-      type: 'blur', 
+      type: 'blur',
       srcEvent: {}
     });
     expect(slider).not.toHaveClass('md-active');
@@ -507,14 +507,14 @@ describe('md-slider', function() {
       var wrapper = getWrapper(slider);
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.UP_ARROW
       });
       $timeout.flush();
       expect(pageScope.model).toBe(102);
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.UP_ARROW
       });
       $timeout.flush();
@@ -522,7 +522,7 @@ describe('md-slider', function() {
 
       // Stays at max.
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.UP_ARROW
       });
       $timeout.flush();
@@ -536,14 +536,14 @@ describe('md-slider', function() {
       var wrapper = getWrapper(slider);
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
       });
       $timeout.flush();
       expect(pageScope.model).toBe(102);
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
       });
       $timeout.flush();
@@ -551,7 +551,7 @@ describe('md-slider', function() {
 
       // Stays at min.
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
       });
       $timeout.flush();
@@ -566,7 +566,7 @@ describe('md-slider', function() {
       expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
       });
       $timeout.flush();
@@ -658,7 +658,7 @@ describe('md-slider', function() {
       // Check for disabled state by triggering the pressdown handler and asserting that
       // the slider is not active.
       wrapper.triggerHandler({
-        type: '$md.pressdown', 
+        type: '$md.pressdown',
         srcEvent: {}
       });
       expect(slider).not.toHaveClass('md-active');
@@ -672,21 +672,21 @@ describe('md-slider', function() {
       // Check for disabled state by triggering the pressdown handler and asserting that
       // the slider is not active.
       wrapper.triggerHandler({
-        type: '$md.pressdown', 
+        type: '$md.pressdown',
         srcEvent: {}
       });
       expect(slider).toHaveClass('md-active');
 
       // Removing focus from the slider
       wrapper.triggerHandler({
-        type: 'blur', 
+        type: 'blur',
         srcEvent: {}
       });
 
       pageScope.$apply('isDisabled = true');
 
       wrapper.triggerHandler({
-        type: '$md.pressdown', 
+        type: '$md.pressdown',
         srcEvent: {}
       });
       expect(slider).not.toHaveClass('md-active');
@@ -739,14 +739,14 @@ describe('md-slider', function() {
       var wrapper = getWrapper(slider);
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.UP_ARROW
       });
       $timeout.flush();
       expect(pageScope.model).toBe(102);
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.UP_ARROW
       });
       $timeout.flush();
@@ -754,7 +754,7 @@ describe('md-slider', function() {
 
       // Stays at min.
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.UP_ARROW
       });
       $timeout.flush();
@@ -769,14 +769,14 @@ describe('md-slider', function() {
       var wrapper = getWrapper(slider);
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
       });
       $timeout.flush();
       expect(pageScope.model).toBe(102);
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
       });
       $timeout.flush();
@@ -784,7 +784,7 @@ describe('md-slider', function() {
 
       // Stays at max.
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
       });
       $timeout.flush();
@@ -799,7 +799,7 @@ describe('md-slider', function() {
       expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.DOWN_ARROW
       });
       $timeout.flush();
@@ -882,14 +882,14 @@ describe('md-slider', function() {
       var wrapper = getWrapper(slider);
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
       });
       $timeout.flush();
       expect(pageScope.model).toBe(102);
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
       });
       $timeout.flush();
@@ -897,7 +897,7 @@ describe('md-slider', function() {
 
       // Stays at max.
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
       });
       $timeout.flush();
@@ -911,14 +911,14 @@ describe('md-slider', function() {
       var wrapper = getWrapper(slider);
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
       });
       $timeout.flush();
       expect(pageScope.model).toBe(102);
 
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
       });
       $timeout.flush();
@@ -926,7 +926,7 @@ describe('md-slider', function() {
 
       // Stays at min.
       wrapper.triggerHandler({
-        type: 'keydown', 
+        type: 'keydown',
         keyCode: $mdConstant.KEY_CODE.RIGHT_ARROW
       });
       $timeout.flush();
