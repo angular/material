@@ -136,7 +136,13 @@ function mdListDirective($mdTheming) {
  *   </md-list-item>
  * </hljs>
  *
- * The `md-checkbox` element will be automatically detected as a proxy element and will toggle on click.
+ * The `md-checkbox` element will be automatically detected as a proxy element and will toggle on
+ * click.
+ *
+ * If not provided, an `aria-label` will be applied using the text of the list item.
+ * In this case, the following will be applied to the `md-checkbox`:
+ * `aria-label="Toggle First Line"`.
+ * When localizing your application, you should supply a localized `aria-label`.
  *
  * <hljs lang="html">
  *   <md-list-item>
@@ -220,12 +226,12 @@ function mdListDirective($mdTheming) {
  * because otherwise some elements may not be clickable inside of the button.
  *
  * ---
- * When using a secondary item inside of your list item, the `md-list-item` component will automatically create
- * a secondary container at the end of the `md-list-item`, which contains all secondary items.
+ * When using a secondary item inside of your list item, the `md-list-item` component will
+ * automatically create a secondary container at the end of the `md-list-item`, which contains all
+ * secondary items.
  *
- * The secondary item container is not static, because otherwise the overflow will not work properly on the
- * list item.
- *
+ * The secondary item container is not static, because that would cause issues with the overflow
+ * of the list item.
  */
 function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
   var proxiedTypes = ['md-checkbox', 'md-switch', 'md-menu'];
@@ -260,7 +266,6 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         } else {
           tElement.addClass('md-no-proxy');
         }
-
       }
 
       wrapSecondaryItems();
@@ -278,9 +283,12 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           toggle = tElement.find(toggleTypes[i])[0];
           if (toggle) {
             if (!toggle.hasAttribute('aria-label')) {
-              var p = tElement.find('p')[0];
-              if (!p) return;
-              toggle.setAttribute('aria-label', 'Toggle ' + p.textContent);
+              var labelElement = tElement.find('p')[0];
+              if (!labelElement) {
+                labelElement = tElement.find('span')[0];
+              }
+              if (!labelElement) return;
+              toggle.setAttribute('aria-label', 'Toggle ' + labelElement.textContent);
             }
           }
         }
@@ -326,8 +334,8 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         } else {
           // Element which holds the default list-item content.
           itemContainer = angular.element(
-            '<div class="md-button md-no-style">'+
-            '   <div class="md-list-item-inner"></div>'+
+            '<div class="md-button md-no-style">' +
+            '   <div class="md-list-item-inner"></div>' +
             '</div>'
           );
 
@@ -372,6 +380,10 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         itemContainer.append(secondaryItemsWrapper);
       }
 
+      /**
+       * @param {HTMLElement} secondaryItem
+       * @param container
+       */
       function wrapSecondaryItem(secondaryItem, container) {
         // If the current secondary item is not a button, but contains a ng-click attribute,
         // the secondary item will be automatically wrapped inside of a button.
@@ -391,9 +403,11 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           secondaryItem = buttonWrapper[0];
         }
 
-        if (secondaryItem && (!hasClickEvent(secondaryItem) || (!tAttrs.ngClick && isProxiedElement(secondaryItem)))) {
-          // In this case we remove the secondary class, so we can identify it later, when we searching for the
-          // proxy items.
+        if (secondaryItem &&
+            (!hasClickEvent(secondaryItem) ||
+              (!tAttrs.ngClick && isProxiedElement(secondaryItem)))) {
+          // In this case we remove the secondary class, so we can identify it later, when searching
+          // for the proxy items.
           angular.element(secondaryItem).removeClass('md-secondary');
         }
 
@@ -427,17 +441,29 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         });
       }
 
-      function isProxiedElement(el) {
-        return proxiedTypes.indexOf(el.nodeName.toLowerCase()) !== -1;
+      /**
+       * @param {HTMLElement} element
+       * @return {boolean} true if the element has one of the proxied tags, false otherwise
+       */
+      function isProxiedElement(element) {
+        return proxiedTypes.indexOf(element.nodeName.toLowerCase()) !== -1;
       }
 
-      function isButton(el) {
-        var nodeName = el.nodeName.toUpperCase();
+      /**
+       * @param {HTMLElement} element
+       * @return {boolean} true if the element is a button or md-button, false otherwise
+       */
+      function isButton(element) {
+        var nodeName = element.nodeName.toUpperCase();
 
         return nodeName === "MD-BUTTON" || nodeName === "BUTTON";
       }
 
-      function hasClickEvent (element) {
+      /**
+       * @param {Element} element
+       * @return {boolean} true if the element has an ng-click attribute, false otherwise
+       */
+      function hasClickEvent(element) {
         var attr = element.attributes;
         for (var i = 0; i < attr.length; i++) {
           if (tAttrs.$normalize(attr[i].name) === 'ngClick') return true;
@@ -467,7 +493,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
             $scope.mouseActive = false;
             proxy.on('mousedown', function() {
               $scope.mouseActive = true;
-              $timeout(function(){
+              $timeout(function() {
                 $scope.mouseActive = false;
               }, 100);
             })
@@ -481,20 +507,16 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           });
         }
 
-
         function computeProxies() {
-
           if (firstElement && firstElement.children && !hasClick && !noProxies) {
 
             angular.forEach(proxiedTypes, function(type) {
-
-              // All elements which are not capable for being used a proxy have the .md-secondary class
-              // applied. These items had been sorted out in the secondary wrap function.
+              // All elements which are not capable of being used as a proxy have the .md-secondary
+              // class applied. These items were identified in the secondary wrap function.
               angular.forEach(firstElement.querySelectorAll(type + ':not(.md-secondary)'), function(child) {
                 proxies.push(child);
               });
             });
-
           }
         }
 
@@ -586,7 +608,6 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
  * @ngdoc controller
  * @name MdListController
  * @module material.components.list
- *
  */
 function MdListController($scope, $element, $mdListInkRipple) {
   var ctrl = this;
