@@ -965,7 +965,25 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * documentMode is an IE-only property
      * http://msdn.microsoft.com/en-us/library/ie/cc196988(v=vs.85).aspx
      */
-    msie: window.document.documentMode
+    msie: window.document.documentMode,
+
+    /**
+     * @param {Event} event the event to calculate the bubble path for
+     * @return {EventTarget[]} the set of nodes that this event could bubble up to
+     */
+    getEventPath: function(event) {
+      var path = [];
+      var currentTarget = event.target;
+      while (currentTarget) {
+        path.push(currentTarget);
+        currentTarget = currentTarget.parentElement;
+      }
+      if (path.indexOf(window) === -1 && path.indexOf(document) === -1)
+        path.push(document);
+      if (path.indexOf(window) === -1)
+        path.push(window);
+      return path;
+    }
   };
 
   // Instantiate other namespace utility methods
