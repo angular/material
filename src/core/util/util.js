@@ -978,6 +978,24 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
           return property;
         }
       }
+    },
+
+    /**
+     * @param {Event} event the event to calculate the bubble path for
+     * @return {EventTarget[]} the set of nodes that this event could bubble up to
+     */
+    getEventPath: function(event) {
+      var path = [];
+      var currentTarget = event.target;
+      while (currentTarget) {
+        path.push(currentTarget);
+        currentTarget = currentTarget.parentElement;
+      }
+      if (path.indexOf(window) === -1 && path.indexOf(document) === -1)
+        path.push(document);
+      if (path.indexOf(window) === -1)
+        path.push(window);
+      return path;
     }
   };
 
