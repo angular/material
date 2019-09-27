@@ -643,15 +643,15 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
      * @returns {number}
      */
     function positionToPercent(position) {
-      var offset = vertical ? sliderDimensions.top : sliderDimensions.left;
+      var offset = vertical ? (sliderDimensions.top + window.scrollY) : (sliderDimensions.left + window.scrollX);
       var size = vertical ? sliderDimensions.height : sliderDimensions.width;
       var calc = (position - offset) / size;
 
-      if (!vertical && $mdUtil.isRtl(attr)) {
+      if (vertical || (!vertical && $mdUtil.isRtl(attr))) {
         calc = 1 - calc;
       }
 
-      return Math.max(0, Math.min(1, vertical ? 1 - calc : calc));
+      return Math.min(Math.max(0, calc), 1);
     }
 
     /**
