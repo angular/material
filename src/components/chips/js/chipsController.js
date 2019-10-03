@@ -553,6 +553,14 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
     }
   }
 
+  // Check for a null (but not undefined), or existing chip and cancel appending
+  if (newChip == null) return;
+
+  // Initialize when undefined or null
+  if (!this.items)
+      this.items = [];
+  if (this.items.indexOf(newChip) + 1) return;
+
   // If items contains an identical object to newChip, do not append
   if (angular.isObject(newChip)) {
     var identical = this.items.some(function(item) {
@@ -560,9 +568,6 @@ MdChipsCtrl.prototype.appendChip = function(newChip) {
     });
     if (identical) return;
   }
-
-  // Check for a null (but not undefined), or existing chip and cancel appending
-  if (newChip == null || this.items.indexOf(newChip) + 1) return;
 
   // Append the new chip onto our list
   var length = this.items.push(newChip);
