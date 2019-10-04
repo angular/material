@@ -848,6 +848,13 @@ MdChipsCtrl.prototype.configureNgModel = function(ngModelCtrl) {
 
   ngModelCtrl.$render = function() {
     // model is updated. do something.
+    if(self.ngModelCtrl.$viewValue == null)
+    {
+      // set value as default array for null or undefined
+      self.ngModelCtrl.$setViewValue([]);
+      self.ngModelCtrl.$commitViewValue();
+    }
+
     self.items = self.ngModelCtrl.$viewValue;
   };
 };
