@@ -640,10 +640,13 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     /**
      * Convert position on slider to percentage value of offset from beginning...
      * @param position
+     * @param {{ scrollX:number,scrollY:number }} wnd
      * @returns {number}
      */
-    function positionToPercent(position) {
-      var offset = vertical ? (sliderDimensions.top + window.scrollY) : (sliderDimensions.left + window.scrollX);
+    function positionToPercent(position,wnd) {
+      if(!wnd)
+        wnd = window;
+      var offset = vertical ? (sliderDimensions.top + wnd.scrollY) : (sliderDimensions.left + wnd.scrollX);
       var size = vertical ? sliderDimensions.height : sliderDimensions.width;
       var calc = (position - offset) / size;
 
