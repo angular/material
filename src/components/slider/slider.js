@@ -644,7 +644,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
      * @returns {number}
      */
     function positionToPercent(position,wnd) {
-      if(!wnd)
+      if (!(wnd && Number.isFinite(wnd.scrollX) && Number.isFinite(wnd.scrollY)))
         wnd = window;
       var offset = vertical ? (sliderDimensions.top + wnd.scrollY) : (sliderDimensions.left + wnd.scrollX);
       var size = vertical ? sliderDimensions.height : sliderDimensions.width;
