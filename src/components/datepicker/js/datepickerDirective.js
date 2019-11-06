@@ -838,6 +838,8 @@
       }, false);
 
       window.addEventListener(this.windowEventName, this.windowEventHandler);
+    } else if (this.inputFocusedOnWindowBlur) {
+      this.resetInputFocused();
     }
   };
 
@@ -929,6 +931,14 @@
    */
   DatePickerCtrl.prototype.handleWindowBlur = function() {
     this.inputFocusedOnWindowBlur = document.activeElement === this.inputElement;
+  };
+
+  /**
+   * Reset the flag inputFocusedOnWindowBlur to default state, to permit user to open calendar
+   * again when he back to tab with calendar focused.
+   */
+  DatePickerCtrl.prototype.resetInputFocused = function() {
+    this.inputFocusedOnWindowBlur = false;
   };
 
   /**
