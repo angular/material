@@ -493,7 +493,7 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       }
 
       ngModelCtrl.$viewValue = minMaxValidator(ngModelCtrl.$viewValue);
-
+      ngModelCtrl.$$lastCommittedViewValue = ngModelCtrl.$viewValue;
       var percent = valueToPercent(ngModelCtrl.$viewValue);
       scope.modelValue = ngModelCtrl.$viewValue;
       wrapper.attr('aria-valuenow', ngModelCtrl.$viewValue);

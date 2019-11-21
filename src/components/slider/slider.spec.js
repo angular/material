@@ -160,6 +160,10 @@ describe('md-slider', function() {
       expect(getWrapper(slider).attr('aria-valuenow')).toEqual('6');
     });
 
+    it('should have committed the view value in the ngModelCtrl', function() {
+      expect(getWrapper(slider).controller("ngModel").$$lastCommittedViewValue).toBe(6)
+    });
+
   });
 
   describe('when raising max and model value beyond previous max simultaneously', function() {
@@ -236,6 +240,10 @@ describe('md-slider', function() {
 
     it('should have updated value correctly', function () {
       expect(getWrapper(slider).attr('aria-valuenow')).toEqual('2');
+    });
+
+    it('should have committed the view value in the ngModelCtrl', function() {
+      expect(getWrapper(slider).controller("ngModel").$$lastCommittedViewValue).toBe(2)
     });
 
   });
