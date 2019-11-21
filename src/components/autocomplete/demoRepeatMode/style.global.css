@@ -1,0 +1,41 @@
+#standard-autocomplete,
+#virtual-autocomplete {
+  width: 200px;
+}
+.autocomplete-standard-template .md-autocomplete-suggestion,
+.autocomplete-virtual-template .md-autocomplete-suggestion {
+  border-bottom: 1px solid #ccc;
+  height: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  white-space: normal;
+}
+.autocomplete-virtual-template .md-autocomplete-suggestion:last-child,
+.autocomplete-standard-template .md-autocomplete-suggestion:last-child {
+  border-bottom-width: 0;
+}
+.autocomplete-virtual-template .item-title,
+.autocomplete-virtual-template .item-metadata,
+.autocomplete-standard-template .item-title,
+.autocomplete-standard-template .item-metadata {
+  display: block;
+  line-height: 2;
+}
+.autocomplete-virtual-template .item-title md-icon,
+.autocomplete-standard-template .item-title md-icon {
+  height: 18px;
+  width: 18px;
+}
+.autocomplete-virtual-template .item-desc,
+.autocomplete-standard-template .item-desc {
+  font-size: 12px;
+  margin: 0.8em 0 .8em;
+  max-width: 300px;
+}
+.standard-container,
+.virtual-container {
+  width: 300px;
+}
+.instance-wrapper {
+  padding: 0 8px;
+}

@@ -4,7 +4,7 @@ angular.module('docsApp')
     restrict: 'E',
     compile: function(element, attr) {
       var code;
-      //No attribute? code is the content
+      // No attribute? code is the content
       if (!attr.code) {
         code = element.html();
         element.empty();

@@ -46,6 +46,7 @@ Additionally, all component modules are compiled and deployed as a library to:
 > NOTE: the `dist` directory is **not** version controlled.
 
 <br/>
+
 ## <a name="rules"></a> Coding Rules
 
 #### Coding conventions:

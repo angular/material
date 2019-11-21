@@ -14,7 +14,7 @@ angular.module('colorsDemo', ['ngMaterial'])
       scope: {
         name: '@',
       }
-    }
+    };
   })
   .directive('userCard', function () {
     return {
@@ -27,5 +27,5 @@ angular.module('colorsDemo', ['ngMaterial'])
       controller: function ($scope) {
         $scope.theme = $scope.theme || 'default';
       }
-    }
+    };
   });

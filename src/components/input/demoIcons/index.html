@@ -11,17 +11,18 @@
 
     <md-input-container md-no-float class="md-block">
       <md-icon md-svg-src="img/icons/ic_phone_24px.svg"></md-icon>
-      <input ng-model="user.phone" type="text" placeholder="Phone Number">
+      <input ng-model="user.phone" type="text" placeholder="Phone Number" aria-label="Phone Number">
     </md-input-container>
 
     <md-input-container class="md-block">
       <!-- Use floating placeholder instead of label -->
       <md-icon md-svg-src="img/icons/ic_email_24px.svg" class="email"></md-icon>
-      <input ng-model="user.email" type="email" placeholder="Email (required)" ng-required="true">
+      <input ng-model="user.email" type="email" placeholder="Email (required)" ng-required="true"
+             aria-label="Email (required)">
     </md-input-container>
 
     <md-input-container md-no-float class="md-block">
-      <input ng-model="user.address" type="text" placeholder="Address" >
+      <input ng-model="user.address" type="text" placeholder="Address" aria-label="Address">
       <md-icon md-svg-src="img/icons/ic_place_24px.svg" style="display:inline-block;"></md-icon>
     </md-input-container>
 

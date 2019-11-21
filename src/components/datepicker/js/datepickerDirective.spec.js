@@ -75,6 +75,10 @@ describe('md-datepicker', function() {
     pageScope.$apply();
   }
 
+  it('should be the same date object as the initial ng-model', function() {
+    expect(pageScope.myDate).toBe(initialDate);
+  });
+
   it('should set initial value from ng-model', function() {
     expect(controller.inputElement.value).toBe(dateLocale.formatDate(initialDate));
   });
@@ -342,6 +346,16 @@ describe('md-datepicker', function() {
       populateInputElement('5/30/2012');
 
       expect(controller.ngModelCtrl.$error['mindate']).toBe(true);
+    });
+
+    it('should apply ngMessages errors when the date becomes invalid from keyboard input', function() {
+      populateInputElement('5/30/2012');
+      pageScope.$apply();
+      expect(controller.ngModelCtrl.$error['valid']).toBeFalsy();
+
+      populateInputElement('5/30/2012z');
+      pageScope.$apply();
+      expect(controller.ngModelCtrl.$error['valid']).toBeTruthy();
     });
 
     it('should evaluate ngChange expression when date changes from keyboard input', function() {
@@ -835,22 +849,6 @@ describe('md-datepicker', function() {
 
       expect(ariaAttr).toBeTruthy();
       expect(controller.calendarPane.id).toBe(ariaAttr);
-    });
-
-    it('should toggle the aria-expanded value', function() {
-      expect(controller.ngInputElement.attr('aria-expanded')).toBe('false');
-
-      controller.openCalendarPane({
-        target: controller.inputElement
-      });
-      scope.$apply();
-
-      expect(controller.ngInputElement.attr('aria-expanded')).toBe('true');
-
-      controller.closeCalendarPane();
-      scope.$apply();
-
-      expect(controller.ngInputElement.attr('aria-expanded')).toBe('false');
     });
 
     describe('tabindex behavior', function() {

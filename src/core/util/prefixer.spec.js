@@ -1,7 +1,7 @@
 describe('prefixer', function() {
-  
+
   beforeEach(module('material.core'));
-  
+
   beforeEach(inject(function($injector) {
     $mdUtil = $injector.get('$mdUtil');
   }));
@@ -123,5 +123,5 @@ describe('prefixer', function() {
     });
 
   });
-  
+
 });

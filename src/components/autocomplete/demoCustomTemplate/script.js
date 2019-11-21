@@ -24,11 +24,11 @@
      * remote dataservice call.
      */
     function querySearch (query) {
-      var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
+      var results = query ? self.repos.filter(createFilterFor(query)) : self.repos,
           deferred;
       if (self.simulateQuery) {
         deferred = $q.defer();
-        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+        $timeout(function () { deferred.resolve(results); }, Math.random() * 1000, false);
         return deferred.promise;
       } else {
         return results;
@@ -68,7 +68,7 @@
         },
         {
           'name'      : 'Angular Material',
-          'url'       : 'https://github.com/angular/material2',
+          'url'       : 'https://github.com/angular/components',
           'watchers'  : '727',
           'forks'     : '1,241',
         },
@@ -85,7 +85,7 @@
           'forks'     : '303',
         }
       ];
-      return repos.map( function (repo) {
+      return repos.map(function (repo) {
         repo.value = repo.name.toLowerCase();
         return repo;
       });
@@ -95,7 +95,7 @@
      * Create filter function for a query string
      */
     function createFilterFor(query) {
-      var lowercaseQuery = angular.lowercase(query);
+      var lowercaseQuery = query.toLowerCase();
 
       return function filterFn(item) {
         return (item.value.indexOf(lowercaseQuery) === 0);

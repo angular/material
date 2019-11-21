@@ -18,7 +18,7 @@ describe('$mdMedia', function() {
     spyOn($window, 'matchMedia').and.callFake(function(media) {
       return {
         media: media,
-        matches: matchMediaResult, 
+        matches: matchMediaResult,
         addListener: function(listener) {
           listener.context = this;
           listeners.push(listener);

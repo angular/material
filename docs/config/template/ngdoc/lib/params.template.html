@@ -1,3 +1,5 @@
+{% import "./macros.html" as macros %}
+
 {%- if doc.params %}
   <div class="api-param-section">
     <h2>
@@ -10,7 +12,7 @@
       {% endif %}
     </h2>
     <div class="api-param-table">
-      {$ paramTable(doc.params) $}
+      {$ macros.paramTable(doc.params) $}
     </div>
   </div>
 {%- endif -%}

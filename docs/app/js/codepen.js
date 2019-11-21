@@ -19,7 +19,9 @@
     // using a hidden form.  The hidden form is necessary to avoid a CORS issue.
     // See http://blog.codepen.io/documentation/api/prefill
     function editOnCodepen(demo) {
-      var data = codepenDataAdapter.translate(demo, $demoAngularScripts.all());
+      var externalScripts = $demoAngularScripts.all();
+      externalScripts.push('https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js');
+      var data = codepenDataAdapter.translate(demo, externalScripts);
       var form = buildForm(data);
       $document.find('body').append(form);
       form[0].submit();
@@ -46,7 +48,7 @@
         .replace(/"/g, "&amp;quot;")
         /**
          * Codepen was unescaping &lt; (<) and &gt; (>) which caused, on some demos,
-         * an unclosed elements (like <md-select>). 
+         * an unclosed elements (like <md-select>).
          * Used different unicode lookalike characters so it won't be considered as an element
          */
         .replace(/&amp;lt;/g, "&#x02C2;") // http://graphemica.com/%CB%82
@@ -84,7 +86,7 @@
         head: LINK_FONTS_ROBOTO,
 
         js: processJs(files.js),
-        css: mergeFiles( files.css ).join(' '),
+        css: mergeFiles(files.css).join(' '),
 
         js_external: externalScripts.concat([ASSET_CACHE_JS, CORE_JS]).join(';'),
         css_external: [CORE_CSS, DOC_CSS].join(';')
@@ -122,7 +124,7 @@
       function appendLicenseFor(content, lang) {
             var commentStart = '', commentEnd = '';
 
-        switch(lang) {
+        switch (lang) {
           case 'html' : commentStart = '<!--'; commentEnd = '-->'; break;
           case 'js'   : commentStart = '/**';  commentEnd = '**/'; break;
           case 'css'  : commentStart = '/*';   commentEnd = '*/';  break;
@@ -130,8 +132,8 @@
 
         return content + '\n\n'+
           commentStart + '\n'+
-          'Copyright 2016 Google Inc. All Rights Reserved. \n'+
-          'Use of this source code is governed by an MIT-style license that can be found'+
+          'Copyright 2018 Google LLC. All Rights Reserved. \n'+
+          'Use of this source code is governed by an MIT-style license that can be found\n'+
           'in the LICENSE file at http://material.angularjs.org/HEAD/license.\n'+
           commentEnd;
       }
@@ -206,7 +208,7 @@
 
       // See scripts.js for list of external AngularJS libraries used for the demos
 
-      return file.replace(matchAngularModule, ".module('MyApp',"+ modules + ")");
+      return file.replace(matchAngularModule, ".module('MyApp', "+ modules + ")");
     }
   }
 })();

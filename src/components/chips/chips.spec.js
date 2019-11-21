@@ -9,9 +9,11 @@ describe('<md-chips>', function() {
   var CHIP_ADD_TEMPLATE =
     '<md-chips ng-model="items" md-on-add="addChip($chip, $index)"></md-chips>';
   var CHIP_REMOVE_TEMPLATE =
-    '<md-chips ng-model="items" md-on-remove="removeChip($chip, $index)"></md-chips>';
+    '<md-chips ng-model="items" md-on-remove="removeChip($chip, $index, $event)"></md-chips>';
   var CHIP_SELECT_TEMPLATE =
     '<md-chips ng-model="items" md-on-select="selectChip($chip)"></md-chips>';
+  var CHIP_NG_CHANGE_TEMPLATE =
+    '<md-chips ng-model="items" ng-change="onModelChange(items)"></md-chips>';
   var CHIP_READONLY_TEMPLATE =
     '<md-chips ng-model="items" readonly="isReadonly"></md-chips>';
   var CHIP_READONLY_AUTOCOMPLETE_TEMPLATE =
@@ -37,7 +39,7 @@ describe('<md-chips>', function() {
   describe('with no overrides', function() {
     beforeEach(module('material.components.chips', 'material.components.autocomplete'));
     beforeEach(inject(function($rootScope, _$exceptionHandler_, _$timeout_) {
-      scope = $rootScope.$new();
+      scope = $rootScope.$new(false);
       scope.items = ['Apple', 'Banana', 'Orange'];
       $exceptionHandler = _$exceptionHandler_;
       $timeout = _$timeout_;
@@ -175,6 +177,30 @@ describe('<md-chips>', function() {
         expect(scope.addChip.calls.mostRecent().args[1]).toBe(3);       // Index
       });
 
+      it('should update the view if the add method changes or removes the chip', function() {
+        var element = buildChips(CHIP_ADD_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        scope.addChip = function ($chip, $index) {
+          if ($chip === 'Grape') {
+            var grape = scope.items.pop();
+            grape += '[' + $index + ']';
+            scope.items.push(grape);
+          }
+          if ($chip === 'Broccoli') {
+            scope.items.pop();
+          }
+        };
+
+        element.scope().$apply(function() {
+          ctrl.chipBuffer = 'Broccoli';
+          simulateInputEnterKey(ctrl);
+          ctrl.chipBuffer = 'Grape';
+          simulateInputEnterKey(ctrl);
+        });
+
+        expect(scope.items[3]).toBe('Grape[3]');
+      });
 
       it('should call the remove method when removing a chip', function() {
         var element = buildChips(CHIP_REMOVE_TEMPLATE);
@@ -192,6 +218,39 @@ describe('<md-chips>', function() {
         expect(scope.removeChip.calls.mostRecent().args[1]).toBe(0);       // Index
       });
 
+      it('should make the event available when removing a chip', function() {
+        var element = buildChips(CHIP_REMOVE_TEMPLATE);
+        var chips = getChipElements(element);
+
+        scope.removeChip = jasmine.createSpy('removeChip');
+        var chipButton = angular.element(chips[1]).find('button');
+        chipButton[0].click();
+
+        expect(scope.removeChip).toHaveBeenCalled();
+        expect(scope.removeChip.calls.mostRecent().args[2].type).toBe('click');
+      });
+
+      it('should trigger ng-change on chip addition/removal', function() {
+        var element = buildChips(CHIP_NG_CHANGE_TEMPLATE);
+        var ctrl = element.controller('mdChips');
+
+        scope.onModelChange = jasmine.createSpy('onModelChange');
+
+        element.scope().$apply(function() {
+          ctrl.chipBuffer = 'Melon';
+          simulateInputEnterKey(ctrl);
+        });
+        expect(scope.onModelChange).toHaveBeenCalled();
+        expect(scope.onModelChange.calls.count()).toBe(1);
+        expect(scope.onModelChange.calls.mostRecent().args[0].length).toBe(4);
+
+        element.scope().$apply(function() {
+          ctrl.removeChip(0);
+        });
+        expect(scope.onModelChange).toHaveBeenCalled();
+        expect(scope.onModelChange.calls.count()).toBe(2);
+        expect(scope.onModelChange.calls.mostRecent().args[0].length).toBe(3);
+      });
 
       it('should call the select method when selecting a chip', function() {
         var element = buildChips(CHIP_SELECT_TEMPLATE);
@@ -227,6 +286,61 @@ describe('<md-chips>', function() {
           input.triggerHandler('blur');
 
           expect(scope.items.length).toBe(4);
+        });
+
+        it('should update form state when a chip is added', inject(function($mdConstant) {
+          scope.items = [];
+          var template =
+              '<form name="form">' +
+              '  <md-chips name="chips" ng-model="items"></md-chips>' +
+              '</form>';
+
+          var element = buildChips(template);
+          var ctrl = element.controller('mdChips');
+          var chips = getChipElements(element);
+          var input = element.find('input');
+
+          expect(scope.form.$pristine).toBeTruthy();
+          expect(scope.form.$dirty).toBeFalsy();
+
+          // Add 'Banana'
+          input.val('Banana');
+
+          // IE11 does not support the `input` event to update the ngModel. An alternative for
+          // `input` is to use the `change` event.
+          input.triggerHandler('change');
+
+          var enterEvent = {
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.ENTER,
+            which: $mdConstant.KEY_CODE.ENTER
+          };
+
+          input.triggerHandler(enterEvent);
+          scope.$digest();
+
+          expect(scope.form.$pristine).toBeFalsy();
+          expect(scope.form.$dirty).toBeTruthy();
+          expect(scope.items).toEqual(['Banana']);
+        }));
+
+        it('should allow adding the first chip on blur when required exists', function() {
+          scope.items = [];
+          var template =
+              '<form name="form">' +
+              ' <md-chips name="chips" ng-required="true" ng-model="items" md-add-on-blur="true"></md-chips>' +
+              '</form>';
+
+          var element = buildChips(template);
+          var ctrl = element.find('md-chips').controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+          });
+          element.find('input').triggerHandler('blur');
+
+          expect(scope.form.chips.$error['required']).toBeUndefined();
+          expect(scope.items).toEqual(['Test']);
         });
 
         it('should not append a new chip if the limit has reached', function() {
@@ -641,7 +755,8 @@ describe('<md-chips>', function() {
           input.val('    Test    ');
 
           // We have to trigger the `change` event, because IE11 does not support
-          // the `input` event to update the ngModel. An alternative for `input` is to use the `change` event.
+          // the `input` event to update the ngModel. An alternative for `input` is to use the
+          // `change` event.
           input.triggerHandler('change');
 
           expect(ctrl.chipBuffer).toBeTruthy();
@@ -1042,6 +1157,59 @@ describe('<md-chips>', function() {
           expect(element.find('input').val()).toBe('Orange');
         });
 
+      });
+
+      describe('ng-required', function() {
+        beforeEach(function() {
+          // Clear default items to test the required chips functionality
+          scope.items = [];
+        });
+
+        it('should set the required error when chips is compiled with an empty array', function() {
+          var template =
+              '<form name="form">' +
+              '<md-chips name="chips" ng-required="true" ng-model="items"></md-chips>' +
+              '</form>';
+
+          var element = buildChips(template);
+          element.scope().$apply();
+
+          expect(scope.form.chips.$error['required']).toBe(true);
+        });
+
+        it('should unset the required error when the first chip is added', function() {
+          var template =
+              '<form name="form">' +
+              '<md-chips name="chips" ng-required="true" ng-model="items"></md-chips>' +
+              '</form>';
+
+          var element = buildChips(template);
+          var ctrl = element.find('md-chips').controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.chipBuffer = 'Test';
+            simulateInputEnterKey(ctrl);
+          });
+
+          expect(scope.form.chips.$error['required']).toBeUndefined();
+        });
+
+        it('should set the required when the last chip is removed', function() {
+          scope.items = ['test'];
+          var template =
+              '<form name="form">' +
+              '<md-chips name="chips" required ng-model="items"></md-chips>' +
+              '</form>';
+
+          var element = buildChips(template);
+          var ctrl = element.find('md-chips').controller('mdChips');
+
+          element.scope().$apply(function() {
+            ctrl.removeChip(0);
+          });
+
+          expect(scope.form.chips.$error['required']).toBe(true);
+        });
       });
 
       describe('focus functionality', function() {
@@ -1445,21 +1613,44 @@ describe('<md-chips>', function() {
         expect(chips.length).toBe(3);
 
         // Remove 'Banana'
-        var db = angular.element(chips[1]).find('button');
-        db[0].click();
+        var chipButton = angular.element(chips[1]).find('button');
+        chipButton[0].click();
 
         scope.$digest();
         chips = getChipElements(element);
         expect(chips.length).toBe(2);
 
         // Remove 'Orange'
-        db = angular.element(chips[1]).find('button');
-        db[0].click();
+        chipButton = angular.element(chips[1]).find('button');
+        chipButton[0].click();
 
         scope.$digest();
         chips = getChipElements(element);
         expect(chips.length).toBe(1);
+      });
 
+      it('should update form state when a chip is removed', function() {
+        var template =
+            '<form name="form">' +
+            '  <md-chips name="chips" ng-model="items"></md-chips>' +
+            '</form>';
+
+        var element = buildChips(template);
+        var ctrl = element.controller('mdChips');
+        var chips = getChipElements(element);
+
+        expect(scope.form.$pristine).toBeTruthy();
+        expect(scope.form.$dirty).toBeFalsy();
+
+        // Remove 'Banana'
+        var chipButton = angular.element(chips[1]).find('button');
+        chipButton[0].click();
+
+        scope.$digest();
+
+        expect(scope.form.$pristine).toBeFalsy();
+        expect(scope.form.$dirty).toBeTruthy();
+        expect(scope.items).toEqual(['Apple', 'Orange']);
       });
     });
 
@@ -1603,7 +1794,7 @@ describe('<md-chips>', function() {
       return scope.fruits.filter(function(item) {
         return item.toLowerCase().indexOf(searchText.toLowerCase()) === 0;
       });
-    }
+    };
   }
 
   function simulateInputEnterKey(ctrl) {

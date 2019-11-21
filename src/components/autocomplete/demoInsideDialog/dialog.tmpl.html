@@ -13,15 +13,19 @@
   <md-dialog-content ng-cloak>
     <div class="md-dialog-content">
       <form ng-submit="$event.preventDefault()">
-        <p>Use <code>md-autocomplete</code> to search for matches from local or remote data sources.</p>
+        <p>
+          Use <code>md-autocomplete</code> to search for matches from local or remote data sources.
+        </p>
         <md-autocomplete
             md-selected-item="ctrl.selectedItem"
             md-search-text="ctrl.searchText"
             md-items="item in ctrl.querySearch(ctrl.searchText)"
             md-item-text="item.display"
             md-min-length="0"
+            md-escape-options="clear"
             placeholder="What is your favorite US state?"
-            md-autofocus="">
+            input-aria-label="Favorite State"
+            md-autofocus md-autoselect>
           <md-item-template>
             <span md-highlight-text="ctrl.searchText" md-highlight-flags="^i">{{item.display}}</span>
           </md-item-template>

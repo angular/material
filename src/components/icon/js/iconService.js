@@ -347,14 +347,17 @@ MdIconProvider.prototype = {
   }]
 };
 
-/**
- *  Configuration item stored in the Icon registry; used for lookups
- *  to load if not already cached in the `loaded` cache
- */
-function ConfigurationItem(url, viewBoxSize) {
-  this.url = url;
-  this.viewBoxSize = viewBoxSize || config.defaultViewBoxSize;
-}
+  /**
+   * Configuration item stored in the Icon registry; used for lookups
+   * to load if not already cached in the `loaded` cache
+   * @param {string} url
+   * @param {=number} viewBoxSize
+   * @constructor
+   */
+  function ConfigurationItem(url, viewBoxSize) {
+    this.url = url;
+    this.viewBoxSize = viewBoxSize || config.defaultViewBoxSize;
+  }
 
 /**
  * @ngdoc service
@@ -395,7 +398,7 @@ function ConfigurationItem(url, viewBoxSize) {
   * };
  * </hljs>
  *
- * > <b>Note:</b> The `<md-icon>` directive internally uses the `$mdIcon` service to query, loaded,
+ * > <b>Note:</b> The `<md-icon>` directive internally uses the `$mdIcon` service to query, load,
  *   and instantiate SVG DOM elements.
  */
 
@@ -403,8 +406,8 @@ function ConfigurationItem(url, viewBoxSize) {
 function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   var iconCache = {};
   var svgCache = {};
-  var urlRegex = /[-\w@:%\+.~#?&//=]{2,}\.[a-z]{2,4}\b(\/[-\w@:%\+.~#?&//=]*)?/i;
-  var dataUrlRegex = /^data:image\/svg\+xml[\s*;\w\-\=]*?(base64)?,(.*)$/i;
+  var urlRegex = /[-\w@:%+.~#?&//=]{2,}\.[a-z]{2,4}\b(\/[-\w@:%+.~#?&//=]*)?/i;
+  var dataUrlRegex = /^data:image\/svg\+xml[\s*;\w\-=]*?(base64)?,(.*)$/i;
 
   Icon.prototype = {clone: cloneSVG, prepare: prepareAndStyle};
   getIcon.fontSet = findRegisteredFontSet;
@@ -414,6 +417,8 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
 
   /**
    * Actual $mdIcon service is essentially a lookup function
+   * @param {*} id $sce trust wrapper over a URL string, URL, icon registry id, or icon set id
+   * @returns {angular.$q.Promise}
    */
   function getIcon(id) {
     id = id || '';
@@ -437,7 +442,7 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
       return loadByURL(id).then(cacheIcon(id));
     }
 
-    if (id.indexOf(':') == -1) {
+    if (id.indexOf(':') === -1) {
       id = '$default:' + id;
     }
 
@@ -447,52 +452,140 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   }
 
   /**
-   * Lookup registered fontSet style using its alias...
-   * If not found,
+   * Lookup a registered fontSet style using its alias.
+   * @param {string} alias used to lookup the alias in the array of fontSets
+   * @returns {*} matching fontSet or the defaultFontSet if that alias does not match
    */
   function findRegisteredFontSet(alias) {
     var useDefault = angular.isUndefined(alias) || !(alias && alias.length);
-    if (useDefault) return config.defaultFontSet;
+    if (useDefault) {
+      return config.defaultFontSet;
+    }
 
     var result = alias;
-    angular.forEach(config.fontSets, function(it) {
-      if (it.alias == alias) result = it.fontSet || result;
+    angular.forEach(config.fontSets, function(fontSet) {
+      if (fontSet.alias === alias) {
+        result = fontSet.fontSet || result;
+      }
     });
 
     return result;
   }
 
+  /**
+   * @param {!Icon} cacheElement cached icon from the iconCache
+   * @returns {Icon} cloned Icon element with unique ids
+   */
   function transformClone(cacheElement) {
     var clone = cacheElement.clone();
-    var cacheSuffix = '_cache' + $mdUtil.nextUid();
+    var newUid = $mdUtil.nextUid();
+    var cacheSuffix, svgUrlQuerySelector, i, xlinkHrefValue;
+    // These are SVG attributes that can reference element ids.
+    var svgUrlAttributes = [
+      'clip-path', 'color-profile', 'cursor', 'fill', 'filter', 'href', 'marker-start',
+      'marker-mid', 'marker-end', 'mask', 'stroke', 'style', 'vector-effect'
+    ];
+    var isIeSvg = clone.innerHTML === undefined;
 
-    // We need to modify for each cached icon the id attributes.
-    // This is needed because SVG id's are treated as normal DOM ids
-    // and should not have a duplicated id.
-    if (clone.id) clone.id += cacheSuffix;
-    angular.forEach(clone.querySelectorAll('[id]'), function(item) {
-      item.id += cacheSuffix;
+    // Verify that the newUid only contains a number and not some XSS content.
+    if (!isFinite(Number(newUid))) {
+      throw new Error('Unsafe and unexpected non-number result from $mdUtil.nextUid().');
+    }
+    cacheSuffix = '_cache' + newUid;
+
+    // For each cached icon, we need to modify the id attributes and references.
+    // This is needed because SVG ids are treated as normal DOM ids and should not be duplicated on
+    // the page.
+    if (clone.id) {
+      clone.id += cacheSuffix;
+    }
+
+    // Do as much as possible with querySelectorAll as it provides much greater performance
+    // than RegEx against serialized DOM.
+    angular.forEach(clone.querySelectorAll('[id]'), function(descendantElem) {
+      svgUrlQuerySelector = '';
+      for (i = 0; i < svgUrlAttributes.length; i++) {
+        svgUrlQuerySelector += '[' + svgUrlAttributes[i] + '="url(#' + descendantElem.id + ')"]';
+        if (i + 1 < svgUrlAttributes.length) {
+          svgUrlQuerySelector += ', ';
+        }
+      }
+      // Append the cacheSuffix to references of the element's id within url(#id) calls.
+      angular.forEach(clone.querySelectorAll(svgUrlQuerySelector), function(refItem) {
+        updateSvgIdReferences(descendantElem, refItem, isIeSvg, newUid);
+      });
+      // Handle usages of url(#id) in the SVG's stylesheets
+      angular.forEach(clone.querySelectorAll('style'), function(refItem) {
+        updateSvgIdReferences(descendantElem, refItem, isIeSvg, newUid);
+      });
+
+      // Update ids referenced by the deprecated (in SVG v2) xlink:href XML attribute. The now
+      // preferred href attribute is handled above. However, this non-standard XML namespaced
+      // attribute cannot be handled in the same way. Explanation of this query selector here:
+      // https://stackoverflow.com/q/23034283/633107.
+      angular.forEach(clone.querySelectorAll('[*|href]:not([href])'), function(refItem) {
+        xlinkHrefValue = refItem.getAttribute('xlink:href');
+        if (xlinkHrefValue) {
+          xlinkHrefValue = xlinkHrefValue.replace("#" + descendantElem.id, "#" + descendantElem.id + cacheSuffix);
+          refItem.setAttribute('xlink:href', xlinkHrefValue);
+        }
+      });
+
+      descendantElem.id += cacheSuffix;
     });
 
     return clone;
   }
 
   /**
-   * Prepare and cache the loaded icon for the specified `id`
+   * @param {Element} referencedElement element w/ id that needs to be updated
+   * @param {Element} referencingElement element that references the original id
+   * @param {boolean} isIeSvg true if we're dealing with an SVG in IE11, false otherwise
+   * @param {string} newUid the cache id to add as part of the cache suffix
+   */
+  function updateSvgIdReferences(referencedElement, referencingElement, isIeSvg, newUid) {
+    var svgElement, cacheSuffix;
+
+    // Verify that the newUid only contains a number and not some XSS content.
+    if (!isFinite(Number(newUid))) {
+      throw new Error('Unsafe and unexpected non-number result for newUid.');
+    }
+    cacheSuffix = '_cache' + newUid;
+
+    // outerHTML of SVG elements is not supported by IE11
+    if (isIeSvg) {
+      svgElement = $mdUtil.getOuterHTML(referencingElement);
+      svgElement = svgElement.replace("url(#" + referencedElement.id + ")",
+        "url(#" + referencedElement.id + cacheSuffix + ")");
+      referencingElement.textContent = angular.element(svgElement)[0].innerHTML;
+    } else {
+      // This use of outerHTML should be safe from XSS attack since we are only injecting the
+      // cacheSuffix with content from $mdUtil.nextUid which we verify is a finite number above.
+      referencingElement.outerHTML = referencingElement.outerHTML.replace(
+        "url(#" + referencedElement.id + ")",
+        "url(#" + referencedElement.id + cacheSuffix + ")");
+    }
+  }
+
+  /**
+   * Prepare and cache the loaded icon for the specified `id`.
+   * @param {string} id icon cache id
+   * @returns {function(*=): *}
    */
   function cacheIcon(id) {
 
     return function updateCache(icon) {
       iconCache[id] = isIcon(icon) ? icon : new Icon(icon, config[id]);
 
-      return iconCache[id].clone();
+      return transformClone(iconCache[id]);
     };
   }
 
   /**
    * Lookup the configuration in the registry, if !registered throw an error
    * otherwise load the icon [on-demand] using the registered URL.
-   *
+   * @param {string} id icon registry id
+   * @returns {angular.$q.Promise}
    */
   function loadByID(id) {
     var iconConfig = config[id];
@@ -502,8 +595,9 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   }
 
   /**
-   *    Loads the file as XML and uses querySelector( <id> ) to find
-   *    the desired node...
+   * Loads the file as XML and uses querySelector( <id> ) to find the desired node...
+   * @param {string} id icon id in icon set
+   * @returns {angular.$q.Promise}
    */
   function loadFromIconSet(id) {
     var setName = id.substring(0, id.lastIndexOf(':')) || '$default';
@@ -528,6 +622,8 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
   /**
    * Load the icon by URL (may use the $templateCache).
    * Extract the data for later conversion to Icon
+   * @param {string} url icon URL
+   * @returns {angular.$q.Promise}
    */
   function loadByURL(url) {
     /* Load the icon from embedded data URL. */
@@ -566,17 +662,37 @@ function MdIconService(config, $templateRequest, $q, $log, $mdUtil, $sce) {
 
   /**
    * Check target signature to see if it is an Icon instance.
+   * @param {Icon|Element} target
+   * @returns {boolean} true if the specified target is an Icon object, false otherwise.
    */
   function isIcon(target) {
     return angular.isDefined(target.element) && angular.isDefined(target.config);
   }
 
   /**
-   *  Define the Icon class
+   * Define the Icon class
+   * @param {Element} el
+   * @param {=ConfigurationItem} config
+   * @constructor
    */
   function Icon(el, config) {
-    if (el && el.tagName != 'svg') {
-      el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">').append(el.cloneNode(true))[0];
+    // If the node is a <symbol>, it won't be rendered so we have to convert it into <svg>.
+    if (el && el.tagName.toLowerCase() === 'symbol') {
+      var viewbox = el.getAttribute('viewBox');
+      // // Check if innerHTML is supported as IE11 does not support innerHTML on SVG elements.
+      if (el.innerHTML) {
+        el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">')
+          .html(el.innerHTML)[0];
+      } else {
+        el = angular.element('<svg xmlns="http://www.w3.org/2000/svg">')
+          .append($mdUtil.getInnerHTML(el))[0];
+      }
+      if (viewbox) el.setAttribute('viewBox', viewbox);
+    }
+
+    if (el && el.tagName.toLowerCase() !== 'svg') {
+      el = angular.element(
+        '<svg xmlns="http://www.w3.org/2000/svg">').append(el.cloneNode(true))[0];
     }
 
     // Inject the namespace if not available...

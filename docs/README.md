@@ -9,5 +9,5 @@ generator built by [Pete Bacon Darwin](https://github.com/petebacondarwin).
 To view the Live Docs (locally):
 
 1. Install the dependencies using `npm install`
-1. Build the docs and serve with 'live reload' using `npm run watch`
+1. Build the docs and serve with 'live reload' using `npm run docs:watch`
 1. Open Browser for [http://localhost:8080](http://localhost:8080)

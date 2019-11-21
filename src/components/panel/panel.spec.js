@@ -737,7 +737,7 @@ describe('$mdPanel', function() {
             return $q.when(this);
           };
 
-          var config = angular.extend( {'onCloseSuccess': onCloseSuccess,
+          var config = angular.extend({'onCloseSuccess': onCloseSuccess,
               clickOutsideToClose: true, }, DEFAULT_CONFIG);
 
           openPanel(config);
@@ -760,7 +760,7 @@ describe('$mdPanel', function() {
             return $q.when(this);
           };
 
-          var config = angular.extend( {'onCloseSuccess': onCloseSuccess,
+          var config = angular.extend({'onCloseSuccess': onCloseSuccess,
               escapeToClose: true }, DEFAULT_CONFIG);
 
           openPanel(config);
@@ -1940,6 +1940,26 @@ describe('$mdPanel', function() {
             .toBeApproximately(middleOfPage + parseInt(offset));
       });
 
+      it('horizontally with an integer value', function() {
+        var left = '50px';
+        var offset = -15;
+
+        var position = mdPanelPosition
+            .absolute()
+            .left(left)
+            .withOffsetX(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.left)
+            .toBeApproximately(parseInt(left) + offset);
+      });
+
       it('vertically', function() {
         var top = '50px';
         var offset = '-15px';
@@ -2008,6 +2028,50 @@ describe('$mdPanel', function() {
 
         expect(middleOfPanel)
             .toBeApproximately(middleOfPage + parseInt(offset));
+      });
+
+      it('vertically with an integer value', function() {
+        var top = '50px';
+        var offset = -15;
+
+        var position = mdPanelPosition
+            .absolute()
+            .top(top)
+            .withOffsetY(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.top)
+            .toBeApproximately(parseInt(top) + offset);
+      });
+
+      it('with a function that does not return units', function() {
+        var left = '50px';
+        var offset = -15;
+        var obj = {
+          getOffsetX: function() {
+            return offset;
+          }
+        };
+
+        var position = mdPanelPosition
+            .absolute()
+            .left(left)
+            .withOffsetX(obj.getOffsetX);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.left).toBeApproximately(parseInt(left) + offset);
       });
     });
 
@@ -2243,7 +2307,7 @@ describe('$mdPanel', function() {
         myButton = '<button>myButton</button>';
         attachToBody(myButton);
         myButton = angular.element(document.querySelector('button'));
-        myButton.css('margin', '100px');
+        myButton.css('margin', '120px');
         myButtonRect = myButton[0].getBoundingClientRect();
 
         xPosition = $mdPanel.xPosition;
@@ -2801,7 +2865,7 @@ describe('$mdPanel', function() {
             expect(panelRect.right).toBeApproximately(myButtonRect.right);
           });
 
-          it('offset to the right of an element', function() {
+          it('offset to the left of an element', function() {
             var position = mdPanelPosition
               .relativeTo(myButton)
               .addPanelPosition(xPosition.OFFSET_END, null);
@@ -2891,6 +2955,49 @@ describe('$mdPanel', function() {
 
       expect(backdropAnimation._openDuration).toBe(mdPanelAnimation._openDuration);
       expect(backdropAnimation._closeDuration).toBe(mdPanelAnimation._closeDuration);
+    });
+
+    describe('should add scale after the existing transform when', function () {
+      var animator;
+      var panelEl;
+
+      beforeEach(function () {
+        animator = mdPanelAnimation._$mdUtil.dom.animator;
+
+        var panelDiv = document.createElement('div');
+        panelDiv.id = 'mockPanel'
+        panelDiv.style.transform = 'translateX(-50%) translateY(-50%)'
+        attachToBody(panelDiv);
+        panelEl = angular.element(panelDiv);
+
+        spyOn(animator, 'translate3d');
+
+        spyOn(animator, 'calculateZoomToOrigin')
+          .and.returnValue('translate3d(0, 0, 0) scale(0.5, 0.5)');
+
+      });
+
+      it('opening with the SCALE animation', function () {
+        var animation = mdPanelAnimation.openFrom('button')
+          .withAnimation('md-panel-animate-scale')
+
+        animation.animateOpen(panelEl);
+
+       expect(animator.translate3d.calls.mostRecent().args[1].transform)
+          .toMatch(/^translateX.*scale\(0\.5, 0\.5\)$/g);
+
+      });
+
+      it('closing with the SCALE animation', function () {
+        var animation = mdPanelAnimation.openFrom('button')
+          .withAnimation('md-panel-animate-scale')
+
+        animation.animateClose(panelEl);
+
+        expect(animator.translate3d.calls.mostRecent().args[2].transform)
+          .toMatch(/^translateX.*scale\(0\.5, 0\.5\)$/g);
+
+      });
     });
 
     describe('should determine openFrom when', function() {

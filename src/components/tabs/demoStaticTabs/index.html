@@ -1,7 +1,8 @@
 <div ng-controller="AppCtrl" ng-cloak>
   <md-content class="md-padding">
-    <md-tabs class="md-accent" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}">
-      <md-tab id="tab1">
+    <md-tabs class="md-primary" md-selected="data.selectedIndex"
+             md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}">
+      <md-tab id="tab1" md-tab-class="example-selector-tab1">
         <md-tab-label>Item One</md-tab-label>
         <md-tab-body>
           View for Item #1 <br/>

@@ -31,11 +31,11 @@ function run {
   commitAuthorName=$(git --no-pager show -s --format='%an' HEAD)
   commitAuthorEmail=$(git --no-pager show -s --format='%ae' HEAD)
 
-  cd bower-material
+  cd bower-material/
 
-  # GitHub token specified as Travis environment variable
   git config user.name "${commitAuthorName}"
   git config user.email "${commitAuthorEmail}"
+  # GitHub personal access token with push permission specified as environment variable
   git config credential.helper "store --file=.git/credentials"
   echo "https://${ANGULARJS_MATERIAL_BOWER_TOKEN}:@github.com" > .git/credentials
 
@@ -71,9 +71,12 @@ function run {
   git push -q origin master
   git push -q origin v$VERSION
 
-  echo "-- Version $VERSION pushed successfully to angular/bower-material!"
-
   cd ../
+
+  echo "-- Cleanup..."
+  rm -rf bower-material/
+
+  echo "-- Version $VERSION pushed successfully to angular/bower-material!"
 }
 
 source $(dirname $0)/utils.inc

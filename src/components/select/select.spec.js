@@ -2,8 +2,28 @@ describe('<md-select>', function() {
   var attachedElements = [];
   var body, $document, $rootScope, $compile, $timeout, $material;
 
+  /**
+   * Register any custom components here.
+   */
+  beforeEach(module(function ($compileProvider) {
+    $compileProvider.component('requiredFormFieldComponent', {
+      controller: ['$scope', function($scope) {
+        var $ctrl = this;
+        $ctrl.value = 'test';
+
+        $scope.$applyAsync(function () {
+          $ctrl.required = true;
+        });
+      }],
+      template: '<md-input-container><label>Test select</label>' +
+        '<md-select name="value" ng-model="$ctrl.value" ng-required="$ctrl.required">' +
+        '<md-option value="test">Test value</md-option>' +
+        '</md-select></md-input-container>'
+    });
+  }));
+
   beforeEach(function() {
-    module('material.components.select', 'material.components.input', 'ngSanitize');
+    module('material.components.select', 'material.components.input', 'ngSanitize', 'ngMessages');
 
     inject(function($injector) {
       $document = $injector.get('$document');
@@ -154,7 +174,7 @@ describe('<md-select>', function() {
       $rootScope.onChange = function() { changed = true; };
       $rootScope.val = { id: 1, name: 'Bob' };
 
-      var opts = [ { id: 1, name: 'Bob' }, { id: 2, name: 'Alice' } ];
+      var opts = [{ id: 1, name: 'Bob' }, { id: 2, name: 'Alice' }];
       var select = setupSelect('ng-model="$root.val" ng-change="onChange()" ng-model-options="{trackBy: \'$value.id\'}"', opts);
       expect(changed).toBe(false);
 
@@ -213,11 +233,11 @@ describe('<md-select>', function() {
       $document[0].body.appendChild(select[0]);
 
       var selectMenu = $document.find('md-select-menu');
-      pressKey(selectMenu, 27);
+      pressKeyByCode(selectMenu, 27);
       $material.flushInterimElement();
 
       // FIXME- does not work with minified, jquery
-      //expect($document[0].activeElement).toBe(select[0]);
+      // expect($document[0].activeElement).toBe(select[0]);
 
       // Clean up the DOM after the test.
       $document[0].body.removeChild(select[0]);
@@ -291,9 +311,11 @@ describe('<md-select>', function() {
 
         clickOption(select, 0);
         $rootScope.$apply('showSelect = false');
+        $timeout.flush();
         expectSelectClosed(select);
 
         $rootScope.$apply('showSelect = true');
+        $timeout.flush();
         select = container.find('md-select');
 
         openSelect(select);
@@ -336,6 +358,7 @@ describe('<md-select>', function() {
       expect(el).toHaveClass('md-input-has-value');
 
       $rootScope.$apply('value = null');
+      $timeout.flush();
       expect(el).not.toHaveClass('md-input-has-value');
     });
 
@@ -507,7 +530,7 @@ describe('<md-select>', function() {
 
       $rootScope.$digest();
       $rootScope.$digest();
-
+      $timeout.flush();
       expect(label.text()).toBe('One, Three');
       expect(label.hasClass('md-select-placeholder')).toBe(false);
 
@@ -1010,11 +1033,17 @@ describe('<md-select>', function() {
         expect(ngModelCtrl.$valid).toBe(true);
       });
 
+      it('should have the proper md-has-input-class when the model has selected values', function() {
+        $rootScope.model = [2,4,5,6];
+        var el = setupSelectMultiple('ng-model="$root.model"', [1,2,3,4,5,6]);
+        expect(el).toHaveClass('md-input-has-value');
+      });
+
       it('does not let an empty array satisfy required', function() {
           $rootScope.model = [];
           $rootScope.opts = [1, 2, 3, 4];
           $compile('<form name="testForm">' +
-            '<md-select ng-model="model" name="multiSelect" required="required" multiple="multiple">' +
+            '<md-select ng-model="model" name="multiSelect" required="required" multiple>' +
               '<md-option ng-repeat="opt in opts" ng-value="opt"></md-option>' +
             '</md-select></form>')($rootScope);
           $rootScope.$digest();
@@ -1078,7 +1107,7 @@ describe('<md-select>', function() {
         $rootScope.model = [1, 2];
         $rootScope.opts = [1, 2, 3, 4];
         $compile('<form name="testForm">' +
-          '<md-select ng-model="model" name="multiSelect" multiple="multiple">' +
+          '<md-select ng-model="model" name="multiSelect" multiple>' +
             '<md-option ng-repeat="opt in opts" ng-value="opt"></md-option>' +
           '</md-select></form>')($rootScope);
         $rootScope.$digest();
@@ -1086,6 +1115,36 @@ describe('<md-select>', function() {
 
         expect($rootScope.testForm.$pristine).toBe(true);
       });
+
+        it('should not change a dirty form to pristine', function() {
+            $rootScope.rows = [[2], [4,3]];
+            $rootScope.filterTerm;
+            $rootScope.opts = [1, 2, 3, 4];
+            var select = $compile('<form name="testForm">' +
+                '<div ng-repeat="item in rows | filter:filterTerm">' +
+                '<md-select ng-model="item" name="multiSelect" multiple id="{{$index}}">' +
+                '<md-option ng-repeat="opt in opts" ng-value="opt"></md-option>' +
+                '</md-select>' +
+                '</div></form>')($rootScope);
+            $rootScope.$apply();
+            $timeout.flush();
+            expect(select.find('md-select').length).toBe(2);
+            $rootScope.testForm.$setDirty();
+            $rootScope.$apply();
+            $timeout.flush();
+            expect($rootScope.testForm.$pristine).toBeFalsy();
+            $rootScope.filterTerm = "2";
+            $rootScope.$apply();
+            $timeout.flush();
+            expect(select.find('md-select').length).toBe(1);
+            expect($rootScope.testForm.$pristine).toBeFalsy();
+            $rootScope.filterTerm = "";
+            $rootScope.$apply();
+            $timeout.flush();
+            expect(select.find('md-select').length).toBe(2);
+            expect($rootScope.testForm.$dirty).toBeTruthy();
+            expect($rootScope.testForm.$pristine).toBeFalsy();
+        });
 
       it('should correctly update the input containers label', function() {
         var el = setupSelect('ng-required="isRequired" ng-model="someModel"');
@@ -1193,8 +1252,18 @@ describe('<md-select>', function() {
         expect($rootScope.model).toEqual([1,3]);
       });
 
-      it('should not be multiple if attr.multiple == `false`', function() {
-        var el = setupSelect('multiple="false" ng-model="$root.model"').find('md-select');
+      it('should be multiple if attr.multiple exists', function() {
+        var el = setupSelect('multiple ng-model="$root.model"').find('md-select');
+        openSelect(el);
+        expectSelectOpen(el);
+
+        var selectMenu = $document.find('md-select-menu')[0];
+
+        expect(selectMenu.hasAttribute('multiple')).toBe(true);
+      });
+
+      it('should not be multiple if attr.multiple does not exist', function() {
+        var el = setupSelect('ng-model="$root.model"').find('md-select');
         openSelect(el);
         expectSelectOpen(el);
 
@@ -1203,6 +1272,27 @@ describe('<md-select>', function() {
         expect(selectMenu.hasAttribute('multiple')).toBe(false);
       });
 
+      it('should set the element dirty when selected options changes', function () {
+        $rootScope.model = 2;
+        $rootScope.opts = [1, 2, 3, 4];
+        var form = $compile('<form name="testForm">' +
+          '<md-select multiple ng-model="model" name="multiSelect">' +
+            '<md-option ng-repeat="opt in opts" ng-value="opt">{{opt}}</md-option>' +
+          '</md-select></form>')($rootScope);
+        var el = form.find('md-select');
+
+        $rootScope.$digest();
+        $timeout.flush();
+
+        expect($rootScope.testForm.multiSelect.$pristine).toBe(true);
+        expect($rootScope.testForm.multiSelect.$dirty).toBe(false);
+
+        openSelect(el);
+        clickOption(el, 0);
+
+        expect($rootScope.testForm.multiSelect.$pristine).toBe(false);
+        expect($rootScope.testForm.multiSelect.$dirty).toBe(true);
+      });
     });
   });
 
@@ -1291,35 +1381,35 @@ describe('<md-select>', function() {
     describe('md-select', function() {
       it('can be opened with a space key', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
-        pressKey(el, 32);
+        pressKeyByCode(el, 32);
         $material.flushInterimElement();
         expectSelectOpen(el);
       });
 
       it('can be opened with an enter key', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
-        pressKey(el, 13);
+        pressKeyByCode(el, 13);
         $material.flushInterimElement();
         expectSelectOpen(el);
       });
 
       it('can be opened with the up key', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
-        pressKey(el, 38);
+        pressKeyByCode(el, 38);
         $material.flushInterimElement();
         expectSelectOpen(el);
       });
 
       it('can be opened with the down key', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
-        pressKey(el, 40);
+        pressKeyByCode(el, 40);
         $material.flushInterimElement();
         expectSelectOpen(el);
       });
 
       it('supports typing an option name', function() {
         var el = setupSelect('ng-model="someModel"', [1, 2, 3]).find('md-select');
-        pressKey(el, 50);
+        pressKey(el, '2');
         expect($rootScope.someModel).toBe(2);
       });
 
@@ -1327,7 +1417,7 @@ describe('<md-select>', function() {
         var words = ['algebra', 'álgebra'];
         var el = setupSelect('ng-model="someModel"', words).find('md-select');
 
-        pressKey(el, words[1].charCodeAt(0));
+        pressKey(el, words[1][0]);
         expect($rootScope.someModel).toBe(words[1]);
       }));
 
@@ -1335,8 +1425,20 @@ describe('<md-select>', function() {
         var words = ['algebra', '太阳'];
         var el = setupSelect('ng-model="someModel"', words).find('md-select');
 
-        pressKey(el, words[1].charCodeAt(0));
+        pressKey(el, words[1][0]);
         expect($rootScope.someModel).toBe(words[1]);
+      }));
+
+      it('supports typing dots and commas', inject(function($document, $rootScope) {
+        var words = ['a.b.c', 'a.b,d', 'a.b,c'];
+        var el = setupSelect('ng-model="someModel"', words).find('md-select');
+
+        pressKey(el, 'a');
+        pressKey(el, '.');
+        pressKey(el, 'b');
+        pressKey(el, ',');
+        pressKey(el, 'c');
+        expect($rootScope.someModel).toBe(words[2]);
       }));
 
       // Note, this test is designed to check the shouldHandleKey() method which is the default
@@ -1353,7 +1455,7 @@ describe('<md-select>', function() {
 
         keyCodes.forEach(function(code) {
           customEvent.keyCode = code;
-          pressKey(el, null, customEvent);
+          pressKeyByCode(el, null, customEvent);
           expect(customEvent.preventDefault).not.toHaveBeenCalled();
         });
       });
@@ -1369,13 +1471,13 @@ describe('<md-select>', function() {
 
         customEvent.keyCode = 70;
         customEvent.ctrlKey = true;
-        pressKey(el, null, customEvent);
+        pressKeyByCode(el, null, customEvent);
         expect(customEvent.preventDefault).not.toHaveBeenCalled();
 
         customEvent.keyCode = 82;
         customEvent.ctrlKey = false;
         customEvent.metaKey = true;
-        pressKey(el, null, customEvent);
+        pressKeyByCode(el, null, customEvent);
         expect(customEvent.preventDefault).not.toHaveBeenCalled();
       });
 
@@ -1385,7 +1487,7 @@ describe('<md-select>', function() {
           '<md-option value="2" ng-disabled="true">2</md-option>';
         var el = setupSelect('ng-model="someModel"', optsTemplate).find('md-select');
 
-        pressKey(el, 50);
+        pressKeyByCode(el, 50);
         expect($rootScope.someModel).toBe(undefined);
       });
     });
@@ -1397,12 +1499,31 @@ describe('<md-select>', function() {
         expectSelectOpen(el);
         var selectMenu = $document.find('md-select-menu');
         expect(selectMenu.length).toBe(1);
-        pressKey(selectMenu, 27);
+        pressKeyByCode(selectMenu, 27);
         $material.flushInterimElement();
         expectSelectClosed(el);
       });
     });
   });
+
+  // Only test with custom components on AngularJS 1.5+
+  if (angular.version.major === 1 && angular.version.minor >= 5) {
+    describe('with custom components', function() {
+      it('should re-validate when the required value changes within $applyAsync', function() {
+        var nodes = $compile('<form name="testForm">' +
+          ' <required-form-field-component></required-form-field-component>' +
+          '</form>')($rootScope);
+        var ctrl = nodes.find('required-form-field-component')
+                        .controller('requiredFormFieldComponent');
+
+        $rootScope.$digest();
+        $timeout.flush();
+
+        expect(ctrl.value).toBe('test');
+        expect($rootScope.testForm.value.$error.required).toBeUndefined();
+      });
+    });
+  }
 
   function setupSelect(attrs, options, skipLabel, scope, optCompileOpts) {
     var el;
@@ -1416,6 +1537,7 @@ describe('<md-select>', function() {
 
     el = $compile(template)(scope || $rootScope);
     $rootScope.$digest();
+    $timeout.flush();
     attachedElements.push(el);
 
     return el;
@@ -1423,7 +1545,9 @@ describe('<md-select>', function() {
 
   function setupSelectMultiple(attrs, options, skipLabel, scope) {
     attrs = (attrs || '') + ' multiple';
-    return setupSelect(attrs, options, skipLabel, scope);
+    var toReturn = setupSelect(attrs, options, skipLabel, scope);
+    $timeout.flush();
+    return toReturn;
   }
 
   function optTemplate(options, compileOpts) {
@@ -1459,7 +1583,9 @@ describe('<md-select>', function() {
       el.triggerHandler('click');
       $material.flushInterimElement();
       el.triggerHandler('blur');
-    } catch (e) { }
+    } catch (e) {
+      // ignore error
+    }
   }
 
   function closeSelect() {
@@ -1470,10 +1596,19 @@ describe('<md-select>', function() {
   }
 
 
-  function pressKey(el, code, customEvent) {
+  function pressKeyByCode(el, code, customEvent) {
     var event = customEvent || {
       type: 'keydown',
       keyCode: code
+    };
+
+    el.triggerHandler(event);
+  }
+
+  function pressKey(el, key, customEvent) {
+    var event = customEvent || {
+      type: 'keydown',
+      key: key
     };
 
     el.triggerHandler(event);

@@ -168,7 +168,7 @@ describe('$mdGesture', function() {
     // Click tests should only be enabled when `$$hijackClicks == true` (for mobile)
 
     it('should click if distance < options.maxDistance', inject(function($document, $mdGesture) {
-      if ( $mdGesture.$$hijackClicks ) {
+      if ($mdGesture.$$hijackClicks) {
         var spy = jasmine.createSpy('click');
         var el = angular.element('<div>');
 
@@ -192,7 +192,7 @@ describe('$mdGesture', function() {
     }));
 
     it('should not click if distance > options.maxDistance', inject(function($mdGesture, $document) {
-      if ( $mdGesture.$$hijackClicks ) {
+      if ($mdGesture.$$hijackClicks) {
         var spy = jasmine.createSpy('click');
         var el = angular.element('<div>');
 
@@ -606,7 +606,7 @@ describe('$mdGesture', function() {
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
       now = 1;
-      //10 distance = boundary. no swipe.
+      // 10 distance = boundary. no swipe.
       $document.triggerHandler({
         type: 'touchend', target: el[0], pageX: 10, pageY: 0
       });
@@ -618,7 +618,7 @@ describe('$mdGesture', function() {
       $document.triggerHandler({
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
-      //11 distance = enough. swipe.
+      // 11 distance = enough. swipe.
       $document.triggerHandler({
         type: 'touchend', target: el[0], pageX: 11, pageY: 0
       });

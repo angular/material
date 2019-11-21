@@ -13,10 +13,14 @@ angular
  * returns  a list of possible contacts. The user can select one of these and add it to the list of
  * chips.
  *
- * You may also use the `md-highlight-text` directive along with its parameters to control the
- * appearance of the matched text inside of the contacts' autocomplete popup.
+ * You may also use the <a ng-href="api/directive/mdHighlightText">md-highlight-flags</a> attribute
+ * along with its parameters to control the appearance of the matched text inside of the contacts'
+ * autocomplete popup.
  *
- * @param {string=|object=} ng-model A model to bind the list of items to
+ * @param {expression} ng-model Assignable AngularJS expression to be data-bound to the list of
+ *    contact chips. The expression should evaluate to an `Object` Array.
+ * @param {expression=} ng-change AngularJS expression to be executed on chip addition, removal,
+ *    or content change.
  * @param {string=} placeholder Placeholder text that will be forwarded to the input.
  * @param {string=} secondary-placeholder Placeholder text that will be forwarded to the input,
  *    displayed when there is at least on item in the list
@@ -31,12 +35,30 @@ angular
  *    contact's image.
  * @param {number=} md-min-length Specifies the minimum length of text before autocomplete will
  *    make suggestions
- *
- * @param {expression=} filter-selected Whether to filter selected contacts from the list of
- *    suggestions shown in the autocomplete.
- *
- *    ***Note:** This attribute has been removed but may come back.*
- *
+ * @param {string=} input-aria-describedby A space-separated list of element IDs. This should
+ *     contain the IDs of any elements that describe this autocomplete. Screen readers will read
+ *     the content of these elements at the end of announcing that the chips input has been
+ *     selected and describing its current state. The descriptive elements do not need to be
+ *     visible on the page.
+ * @param {string=} input-aria-labelledby A space-separated list of element IDs. The ideal use
+ *    case is that this would contain the ID of a `<label>` element that is associated with these
+ *    chips.<br><br>
+ *    For `<label id="state">US State</label>`, you would set this to
+ *    `input-aria-labelledby="state"`.
+ * @param {string=} input-aria-label A string read by screen readers to identify the input.
+ *    For static chips, this will be applied to the chips container.
+ * @param {string=} container-hint A string read by screen readers informing users of how to
+ *    navigate the chips when there are chips.
+ * @param {string=} container-empty-hint A string read by screen readers informing users of how to
+ *    add chips when there are no chips. You will want to use this to override the default when
+ *    in a non-English locale.
+ * @param {string=} delete-hint A string read by screen readers instructing users that pressing
+ *    the delete key will remove the chip. You will want to use this to override the default when
+ *    in a non-English locale.
+ * @param {string=} md-removed-message Screen readers will announce this message following the
+ *    chips contents. The default is `"removed"`. If a chip with the content of "Apple" was
+ *    removed, the screen reader would read "Apple removed". You will want to use this to override
+ *    the default when in a non-English locale.
  *
  *
  * @usage
@@ -57,8 +79,10 @@ angular
 var MD_CONTACT_CHIPS_TEMPLATE = '\
       <md-chips class="md-contact-chips"\
           ng-model="$mdContactChipsCtrl.contacts"\
+          ng-change="$mdContactChipsCtrl.ngChange($mdContactChipsCtrl.contacts)"\
           md-require-match="$mdContactChipsCtrl.requireMatch"\
-          md-chip-append-delay="{{$mdContactChipsCtrl.chipAppendDelay}}" \
+          md-chip-append-delay="{{$mdContactChipsCtrl.chipAppendDelay}}"\
+          md-separator-keys="$mdContactChipsCtrl.separatorKeys"\
           md-autocomplete-snap>\
           <md-autocomplete\
               md-menu-class="md-contact-chips-suggestions"\
@@ -69,7 +93,8 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
               md-no-cache="true"\
               md-min-length="$mdContactChipsCtrl.minLength"\
               md-autoselect\
-              placeholder="{{$mdContactChipsCtrl.contacts.length == 0 ?\
+              ng-keydown="$mdContactChipsCtrl.inputKeydown($event)"\
+              placeholder="{{$mdContactChipsCtrl.contacts.length === 0 ?\
                   $mdContactChipsCtrl.placeholder : $mdContactChipsCtrl.secondaryPlaceholder}}">\
             <div class="md-contact-suggestion">\
               <img \
@@ -101,6 +126,7 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
  * MDContactChips Directive Definition
  *
  * @param $mdTheming
+ * @param $mdUtil
  * @returns {*}
  * @ngInject
  */
@@ -116,16 +142,25 @@ function MdContactChips($mdTheming, $mdUtil) {
     compile: compile,
     scope: {
       contactQuery: '&mdContacts',
-      placeholder: '@',
-      secondaryPlaceholder: '@',
+      placeholder: '@?',
+      secondaryPlaceholder: '@?',
       contactName: '@mdContactName',
       contactImage: '@mdContactImage',
       contactEmail: '@mdContactEmail',
       contacts: '=ngModel',
+      ngChange: '&?',
       requireMatch: '=?mdRequireMatch',
       minLength: '=?mdMinLength',
       highlightFlags: '@?mdHighlightFlags',
-      chipAppendDelay: '@?mdChipAppendDelay'
+      chipAppendDelay: '@?mdChipAppendDelay',
+      separatorKeys: '=?mdSeparatorKeys',
+      removedMessage: '@?mdRemovedMessage',
+      inputAriaDescribedBy: '@?inputAriaDescribedby',
+      inputAriaLabelledBy: '@?inputAriaLabelledby',
+      inputAriaLabel: '@?',
+      containerHint: '@?',
+      containerEmptyHint: '@?',
+      deleteHint: '@?'
     }
   };
 

@@ -1,4 +1,7 @@
 {
+  "sub": true,
+  "multistr": true,
+  "-W018": true,
   "expr": true,
   "boss": true,
   "laxbreak": true,

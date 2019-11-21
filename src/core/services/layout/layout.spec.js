@@ -63,7 +63,7 @@ describe("Layout API ", function() {
       it('should ignore invalid values', function() {
         var element = $compile('<div layout="humpty">Layout</div>')(pageScope);
 
-        expect( element.attr('layout') ).toBe('humpty');        // original attribute value unmodified
+        expect(element.attr('layout')).toBe('humpty');        // original attribute value unmodified
         expect(element.hasClass('layout-humpty')).toBeFalsy();
         expect(element.hasClass("layout-row")).toBeTruthy();    // injected className based on fallback value
       });
@@ -331,7 +331,7 @@ describe("Layout API ", function() {
         var markup = $mdUtil.supplant('<div {0}="{1}">Layout</div>', [className, value]);
 
         var element = $compile(markup)(pageScope);
-        if ( !element.hasClass(expected) ) {
+        if (!element.hasClass(expected)) {
           expect(expected).toBe(element[0].classList[1]);
         }
 

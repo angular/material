@@ -1,5 +1,5 @@
 describe('$mdComponentRegistry Service', function() {
-  beforeEach(module( 'material.core', 'material.components.sidenav' ));
+  beforeEach(module('material.core', 'material.components.sidenav'));
 
   /**
    * SideNav element construction macro
@@ -19,7 +19,7 @@ describe('$mdComponentRegistry Service', function() {
   describe('registration', function() {
     var $mdComponentRegistry, $timeout;
 
-    beforeEach( inject(function(_$mdComponentRegistry_, _$timeout_) {
+    beforeEach(inject(function(_$mdComponentRegistry_, _$timeout_) {
       $mdComponentRegistry = _$mdComponentRegistry_;
       $timeout = _$timeout_;
     }));
@@ -118,7 +118,7 @@ describe('$mdComponentRegistry Service', function() {
   describe('component ids', function() {
     var $mdComponentRegistry, $timeout;
 
-    beforeEach( inject(function(_$mdComponentRegistry_, _$timeout_) {
+    beforeEach(inject(function(_$mdComponentRegistry_, _$timeout_) {
       $mdComponentRegistry = _$mdComponentRegistry_;
       $timeout = _$timeout_;
     }));
@@ -147,13 +147,13 @@ describe('$mdComponentRegistry Service', function() {
 
 
       fail = false;
-      $mdComponentRegistry.when(componentID = undefined).catch( onFail );
+      $mdComponentRegistry.when(componentID = undefined).catch(onFail);
       $timeout.flush();
 
       expect(fail).toBe(true);
 
       fail = false;
-      $mdComponentRegistry.when(componentID = "").catch( onFail );
+      $mdComponentRegistry.when(componentID = "").catch(onFail);
       $timeout.flush();
 
       expect(fail).toBe(true);

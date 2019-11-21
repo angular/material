@@ -2,9 +2,11 @@
   <md-content>
     <h2 class="md-headline" style="margin-top: 0;">What is AngularJS Material?</h2>
     <p>
-      AngularJS Material is both a UI Component framework and a reference implementation of Google's
-      Material Design Specification. This project provides a set of reusable, well-tested, and
-      accessible UI components based on Material Design.
+      AngularJS Material is an implementation of Google's
+      <a href="https://material.io/archive/guidelines/" target="_blank" rel="noopener">
+        Material Design Specification (2014-2017)</a>.
+      This project provides a set of reusable, well-tested, and accessible UI components for
+      <a href="https://angularjs.org" target="_blank" rel="noopener">AngularJS</a> developers.
     </p>
     <ul class="buckets" layout layout-align="center center" layout-wrap>
       <li flex="50" flex-gt-md="25" ng-repeat="(index, link) in [
@@ -24,16 +26,40 @@
       </li>
     </ul>
 
-    <br/>
-    <h2 class="md-headline">What about Angular?</h2>
+    <h2 class="md-headline">AngularJS versus Angular?</h2>
     <p>
-      AngularJS Material recently released Version 1 which we consider to be stable and ready for
-      production use. Developers should note that AngularJS Material works only with AngularJS 1.x.
+      The AngularJS Material library is a mature and stable product that is ready for production use.
+      Developers should note that AngularJS Material works only with
+      <a href="https://angularjs.org/" target="_blank" rel="noopener">AngularJS 1.x</a>.
     </p>
     <ul>
-      <li>Current AngularJS Material development efforts are focused on bug fixes and minor improvements.</li>
-      <li>AngularJS Material development is also in-progress at the <a href="https://github.com/angular/material2">angular/material2</a> GitHub repository.</li>
+      <li>
+        Current development efforts are focused on bug fixes, accessibility, performance, and minor
+        enhancements.
+      </li>
     </ul>
+    <br/>
+    <i>
+      The Angular Material and Component Dev Kit (CDK) libraries (for Angular v2+) can be found in the
+      <a href="https://github.com/angular/components" target="_blank" rel="noopener">angular/components</a>
+      GitHub repository.
+    </i>
+    <br/>
+    <br/>
+    <h2 class="md-headline">The Latest Material Design</h2>
+    <p>
+      The latest update to Material Design
+      (<a href="https://www.youtube.com/playlist?list=PLJ21zHI2TNh-rX-Xr_xi9KIEcbdee_1Ah" target="_blank" rel="noopener">video playlist</a>)
+      was announced at Google I/O in May, 2018
+      (<a href="https://design.google/library/io-2018-our-definitive-guide-design/" target="_blank" rel="noopener">recap blog post</a>).
+      For an implementation of this new
+      <a href="https://material.io/design" target="_blank" rel="noopener">Material Design Specification</a>,
+      please see the <a href="https://github.com/angular/components" target="_blank" rel="noopener">Angular Material</a>
+      project which is built for <a href="https://angular.io" target="_blank" rel="noopener">Angular</a>
+      developers.
+    </p>
+
+    <h2 class="md-headline">Change Log</h2>
     <p>
       Please refer to our changelog for up-to-date listings of all v1.x improvements and breaking changes.
     </p>
@@ -56,6 +82,103 @@
       </li>
     </ul>
 
+    <h2 class="md-headline">Browser Support</h2>
+    <p>
+      AngularJS Material generally supports browsers that fall into these categories
+    </p>
+    <ul>
+      <li>Greater than 0.5% global usage</li>
+      <li>Last two versions of Evergreen browsers</li>
+      <li>Firefox ESR</li>
+      <li>Not considered "dead" browsers</li>
+    </ul>
+    <br/>
+    <h3>The following table provides a more detailed view:</h3>
+    <table class="custom-table">
+      <tbody>
+      <tr>
+        <th>
+          Browser
+        </th>
+        <th>
+          Supported Versions
+        </th>
+      </tr>
+      <tr>
+        <td>
+          Chrome<br/>Chrome for Android<br/>Edge<br/>Opera
+        </td>
+        <td>
+          last 2 versions
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Firefox
+        </td>
+        <td>
+          last 2 versions<br/>ESR
+        </td>
+      </tr>
+      <tr>
+        <td>
+          IE<br/>IE Mobile
+        </td>
+        <td>
+          11
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Safari
+        </td>
+        <td>
+          11.x<br>12.x
+        </td>
+      </tr>
+      <tr>
+        <td>
+          iOS
+        </td>
+        <td>
+          11.x<br>12.x
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Firefox for Android<br/>UC<br/>QQ<br/>Baidu
+        </td>
+        <td>
+          latest version
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Android Browser
+        </td>
+        <td>
+          4.4.3-4.4.4<br>latest version
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Samsung Internet
+        </td>
+        <td>
+          4<br>6.2<br>7.2
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Opera for Android
+        </td>
+        <td>
+          Mini all
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
     <md-divider></md-divider>
 
     <br/>
@@ -66,7 +189,7 @@
     <ul class="buckets" layout layout-align="center center" layout-wrap>
       <li flex="100" flex-gt-xs="50" ng-repeat="(index, link) in [
         { href: 'https://egghead.io/series/angular-material-introduction', icon: 'ondemand_video', text: 'Introduction to AngularJS Material', site : 'EggHead', access : 'free'},
-        { href: 'https://app.pluralsight.com/player?author=ajden-towfeek&name=angular-material-fundamentals-m0&mode=live&clip=0&course=angular-material-fundamentals', icon: 'ondemand_video', text: 'AngularJS Material Fundamentals', site : 'Pluralsight', access: 'member'},
+        { href: 'https://app.pluralsight.com/player?author=ajden-towfeek&name=angular-material-fundamentals-m0&mode=live&clip=0&course=angular-material-fundamentals', icon: 'ondemand_video', text: 'AngularJS Material Fundamentals', site : 'Pluralsight', access: 'member'}
       ]">
         <md-button
             class="md-primary md-raised"
@@ -74,7 +197,7 @@
             aria-label="{{link.text}}"
             ng-href="{{link.href}}">
           <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
-          {{link.site}} | <span style="color: rgb(255,82,82); text-transform: none;">{{link.text}}</span> | <span class="training_info">{{link.access}}</span>
+          {{link.site}} | <span class="training_link">{{link.text}}</span> | <span class="training_info">{{link.access}}</span>
         </md-button>
       </li>
     </ul>
@@ -88,7 +211,7 @@
     <ul class="buckets" layout layout-align="center center" layout-wrap>
       <li flex="100" flex-gt-xs="50" ng-repeat="(index, link) in [
         { href: 'https://www.youtube.com/watch?v=Qi31oO5u33U', icon: 'ondemand_video', text: 'Building with AngularJS Material', site : 'ng-conf',  date: '2015'},
-        { href: 'https://www.youtube.com/watch?v=363o4i0rdvU', icon: 'ondemand_video', text: 'AngularJS Material in Practice', site : 'AngularConnect', date:'2015'},
+        { href: 'https://www.youtube.com/watch?v=363o4i0rdvU', icon: 'ondemand_video', text: 'AngularJS Material in Practice', site : 'AngularConnect', date:'2015'}
       ]">
         <md-button
             class="md-primary md-raised"
@@ -111,7 +234,7 @@
     <ul class="buckets" layout layout-align="center center" layout-wrap>
       <li flex="100" flex-gt-xs="50" ng-repeat="(index, link) in [
         { href: 'https://www.youtube.com/watch?v=Q8TXgCzxEnw', icon: 'ondemand_video', text: 'Watch a video', site : 'Google' },
-        { href: 'http://www.google.com/design/spec/material-design/', icon: 'launch', text: 'Learn More', site : 'Google' }
+        { href: 'https://material.io/archive/guidelines/', icon: 'launch', text: 'Learn More', site : 'Google' }
       ]">
         <md-button
             class="md-primary md-raised"
@@ -127,8 +250,8 @@
     <br/>
     <p class="md-caption" style="text-align: center; margin-bottom: 0;">
       These docs were generated from
-      (<a ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}" target="_blank" class="md-accent" >
-      v{{BUILDCONFIG.version}} - SHA {{BUILDCONFIG.commit.substring(0,7)}}</a>)
+      (<a ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}" target="_blank"
+          rel="noopener">v{{BUILDCONFIG.version}} - SHA {{BUILDCONFIG.commit.substring(0,7)}}</a>)
       on (<strong>{{BUILDCONFIG.date}}</strong>) GMT.
     </p>
   </md-content>

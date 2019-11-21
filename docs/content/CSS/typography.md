@@ -2,11 +2,10 @@
 @name Typography
 @description
 
-AngularJS Material provides typography CSS classes you can use to create visual
-consistency across your application.
-
-<p style="text-align: center;">
-  [Material Design Typography Specification](https://material.google.com/style/typography.html)
+<h2 class="md-display-1">CSS classes are provided for typography</h2>
+<h3 class="md-headline">You can use them to create visual consistency across your application.</h3>
+<p class="md-subhead">You can find additional guidance in the 
+[Material Design Typography Specification](https://material.io/archive/guidelines/style/typography.html).
 </p>
 
 <section class="demo-container">
@@ -17,7 +16,7 @@ consistency across your application.
   </md-toolbar>
   <div class="md-whiteframe-z1 docs-list">
     <p>
-      AngularJS Material uses the [Roboto](https://fonts.google.com/?selection.family=Roboto)
+      AngularJS Material uses the [Roboto](https://fonts.google.com/specimen/Roboto)
       font for all of its components.
     </p>
 
@@ -33,7 +32,7 @@ consistency across your application.
 
     <h4 class="md-title">Notes</h4>
     <p>
-      When `Roboto` isn't loaded, then the typography will fallback to the following fonts: 
+      When `Roboto` isn't loaded, the typography will fall back to the following fonts: 
     </p>
 
     <ul>
@@ -50,7 +49,10 @@ consistency across your application.
     </div>
   </md-toolbar>
   <div class="md-whiteframe-z1 docs-list">
-    <p style="margin-top: 0;">To preserve <a href="http://webaim.org/techniques/semanticstructure/">semantic structures</a>, you should style the `<h1>` - `<h6>` heading tags with the styling classes shown below:</p>
+    <p style="margin-top: 0;">
+      To preserve <a href="http://webaim.org/techniques/semanticstructure/">semantic structures</a>, 
+      you should style the `<h1>` - `<h6>` heading tags with the styling classes shown below:
+    </p>
 
 	<div layout="row" class="docs-descriptions">
       <h4 class="md-body-1" flex="25" id="headings-selectors">Selectors</h4>

@@ -40,7 +40,7 @@ The following command line tasks are available:
 - `gulp karma` to test once
 - `gulp karma-watch` to test & watch for changes
 
-###<a name="livedocs"></a> Building the Documentation
+### <a name="livedocs"></a> Building the Documentation
 
 The AngularJS Material **Live Docs** are generated from the source code and demos and actually use the
 AngularJS Material components and themes.
@@ -50,7 +50,7 @@ AngularJS Material components and themes.
 
 See the [Building the Live Documentation](../README.md#docs) document for details.
 
-###<a name="builds"></a> Building the Library
+### <a name="builds"></a> Building the Library
 
 Developers can build the entire AngularJS Material library or individual component modules. The
 library comprises:
@@ -79,7 +79,7 @@ gulp build
 gulp build --release
 ```
 
-###<a name="bower"></a> Using the Library with Bower
+### <a name="bower"></a> Using the Library with Bower
 
 For developers not interested in building the AngularJS Material library, use **bower** to install and
 use the AngularJS Material distribution files.
@@ -109,7 +109,7 @@ dependencies.
 
 For example, the **slider** component is registered as a **material.components.slider** module.
 
-###<a name="comp_builds"></a> Building Individual Components
+### <a name="comp_builds"></a> Building Individual Components
 
 To build and deploy assets for each component individually, run the command
 
@@ -159,7 +159,7 @@ and JS from both the **slider** and the **core** modules:
              -- slider-default-theme.css
 ```
 
-###<a name="comp_debug"></a> Component Debugging
+### <a name="comp_debug"></a> Component Debugging
 
 Debugging a demo in the Live Docs is complicated due the multiple demos loading and initializing. A
 more practical approach is to open and debug a specific, standalone Component demo.
@@ -199,6 +199,6 @@ After running `gulp server` to start a *LiveReload* server in your project root:
 * Open Dev Tools and debug...
 
 
-##<a name="themes"></a> Theming
+## <a name="themes"></a> Theming
 
-https://material.angularjs.org/#/Theming/01_introduction
+[Go to the Theming Guide](https://material.angularjs.org/latest/Theming/01_introduction)

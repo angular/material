@@ -83,8 +83,8 @@
 
   /**
    * Creates a single cell to contain a year in the calendar.
-   * @param {number} opt_year Four-digit year.
-   * @param {number} opt_month Zero-indexed month.
+   * @param {number} year Four-digit year.
+   * @param {number} month Zero-indexed month.
    * @returns {HTMLElement}
    */
   CalendarYearBodyCtrl.prototype.buildMonthCell = function(year, month) {
@@ -98,7 +98,7 @@
     cell.id = calendarCtrl.getDateId(firstOfMonth, 'year');
 
     // Use `data-timestamp` attribute because IE10 does not support the `dataset` property.
-    cell.setAttribute('data-timestamp', firstOfMonth.getTime());
+    cell.setAttribute('data-timestamp', String(firstOfMonth.getTime()));
 
     if (this.dateUtil.isSameMonthAndYear(firstOfMonth, calendarCtrl.today)) {
       cell.classList.add(calendarCtrl.TODAY_CLASS);
@@ -112,15 +112,18 @@
 
     var cellText = this.dateLocale.shortMonths[month];
 
-    if (this.dateUtil.isMonthWithinRange(firstOfMonth,
-        calendarCtrl.minDate, calendarCtrl.maxDate)) {
+    if (this.dateUtil.isMonthWithinRange(
+          firstOfMonth, calendarCtrl.minDate, calendarCtrl.maxDate) &&
+      (!angular.isFunction(this.calendarCtrl.dateFilter) ||
+        this.calendarCtrl.dateFilter(firstOfMonth))) {
       var selectionIndicator = document.createElement('span');
       selectionIndicator.classList.add('md-calendar-date-selection-indicator');
       selectionIndicator.textContent = cellText;
       cell.appendChild(selectionIndicator);
       cell.addEventListener('click', yearCtrl.cellClickHandler);
 
-      if (calendarCtrl.displayDate && this.dateUtil.isSameMonthAndYear(firstOfMonth, calendarCtrl.displayDate)) {
+      if (calendarCtrl.displayDate &&
+          this.dateUtil.isSameMonthAndYear(firstOfMonth, calendarCtrl.displayDate)) {
         this.focusAfterAppend = cell;
       }
     } else {
@@ -133,7 +136,7 @@
 
   /**
    * Builds a blank cell.
-   * @return {HTMLTableCellElement}
+   * @return {HTMLElement}
    */
   CalendarYearBodyCtrl.prototype.buildBlankCell = function() {
     var cell = document.createElement('td');

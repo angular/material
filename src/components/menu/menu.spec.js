@@ -51,6 +51,21 @@ describe('material.components.menu', function() {
       expect(createInvalidMenu).toThrow();
     }));
 
+    it('nested md-menu-content should be allowed', inject(function($compile, $rootScope) {
+        function createValidMenu() {
+            $compile(
+                '<md-menu>' +
+                '  <button ng-click="null">Trigger Element</button>' +
+                '  <some-custom-element>' +
+                '    <md-menu-content>Menu Content</md-menu-content>' +
+                '  </some-custom-element>' +
+                '</md-menu>'
+            )($rootScope);
+        }
+
+        expect(createValidMenu).not.toThrow();
+    }));
+
     it('specifies button type', inject(function($compile, $rootScope) {
       var menu = setup()[0];
       expect(menu.firstElementChild.getAttribute('type')).toBe('button');
@@ -161,6 +176,19 @@ describe('material.components.menu', function() {
       var openMenuEl = $document[0].querySelector('md-menu-content');
 
       pressKey(openMenuEl, $mdConstant.KEY_CODE.ESCAPE);
+      waitForMenuClose();
+
+      expect(getOpenMenuContainer(menu).length).toBe(0);
+    }));
+
+    it('closes on tab', inject(function($document, $mdConstant) {
+      var menu = setup();
+      openMenu(menu);
+      expect(getOpenMenuContainer(menu).length).toBe(1);
+
+      var openMenuEl = $document[0].querySelector('md-menu-content');
+
+      pressKey(openMenuEl, $mdConstant.KEY_CODE.TAB);
       waitForMenuClose();
 
       expect(getOpenMenuContainer(menu).length).toBe(0);
@@ -343,7 +371,7 @@ describe('material.components.menu', function() {
           '    <md-button ng-click="doSomething($event)"></md-button>' +
           '  </md-menu-item>' +
           ' </md-menu-content>' +
-          '</md-menu>', [ buttonAttrs || 'ng-click="$mdMenu.open($event)"' ]);
+          '</md-menu>', [buttonAttrs || 'ng-click="$mdMenu.open($event)"']);
 
       inject(function($compile, $rootScope) {
         $rootScope.doSomething = function($event) {

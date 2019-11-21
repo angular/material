@@ -629,6 +629,47 @@ describe('$mdDialog', function() {
       expect(container.length).toBe(0);
       expect(response).toBe(undefined);
     }));
+
+    it('should only remove the top most dialog on escape', inject(function($mdDialog, $timeout, $mdConstant) {
+
+        var root = angular.element('<div></div>');
+        var parent = '<md-dialog class="one"></md-dialog>';
+        var child = '<md-dialog class="two"></md-dialog>';
+        var grandchild = '<md-dialog class="three"></md-dialog>';
+
+        $mdDialog.show({
+            template: parent,
+            multiple: true,
+            parent: root,
+        });
+        runAnimation();
+
+        $mdDialog.show({
+            template: child,
+            multiple: true,
+            parent: root[0].querySelector('md-dialog.one'),
+        });
+        runAnimation();
+
+        $mdDialog.show({
+            template: grandchild,
+            multiple: true,
+            parent: root[0].querySelector('md-dialog.two'),
+        });
+        runAnimation();
+
+        root.triggerHandler({
+            type: 'keydown',
+            keyCode: $mdConstant.KEY_CODE.ESCAPE
+        });
+        runAnimation();
+
+        expect(root[0].querySelectorAll('md-dialog.one').length).toBe(1);
+        expect(root[0].querySelectorAll('md-dialog.two').length).toBe(1);
+        expect(root[0].querySelectorAll('md-dialog.three').length).toBe(0);
+
+    }));
+
   });
 
   describe('#prompt()', function() {
@@ -781,6 +822,70 @@ describe('$mdDialog', function() {
 
       expect(response).toBe('responsetext');
     }));
+
+    it('should submit after ENTER key when input is not empty and prompt is required', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
+      spyOn($mdDialog, 'hide').and.callThrough();
+
+      jasmine.mockElementFocus(this);
+      var initialValue = 'input value';
+      var parent = angular.element('<div>');
+      var response;
+
+      var prompt = $mdDialog.prompt()
+        .parent(parent)
+        .required(true)
+        .initialValue(initialValue);
+
+      $mdDialog.show(prompt)
+        .then(function(answer) {
+          response = answer;
+        });
+
+      runAnimation();
+
+      var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+      var mdDialog = container.find('md-dialog');
+      var mdContent = mdDialog.find('md-dialog-content');
+      var inputElement = mdContent.find('input');
+
+      inputElement.eq(0).triggerHandler({
+        type: 'keypress',
+        keyCode: $mdConstant.KEY_CODE.ENTER
+      });
+      runAnimation();
+      runAnimation();
+
+      expect(response).toBe(initialValue);
+      expect($mdDialog.hide).toHaveBeenCalled();
+    }));
+
+    it('should not submit after ENTER key when input is empty and prompt is required', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
+      spyOn($mdDialog, 'hide');
+
+      jasmine.mockElementFocus(this);
+      var parent = angular.element('<div>');
+      var response;
+      var prompt = $mdDialog.prompt().parent(parent).required(true);
+      $mdDialog.show(prompt).then(function(answer) {
+        response = answer;
+      });
+      runAnimation();
+
+      var inputElement = angular
+        .element(parent[0].querySelector('.md-dialog-container'))
+        .find('md-dialog')
+        .find('md-dialog-content')
+        .find('input');
+
+      inputElement.eq(0).triggerHandler({
+        type: 'keypress',
+        keyCode: $mdConstant.KEY_CODE.ENTER
+      });
+      runAnimation();
+      runAnimation();
+
+      expect($mdDialog.hide).not.toHaveBeenCalled();
+    }));
   });
 
   describe('#build()', function() {
@@ -801,7 +906,7 @@ describe('$mdDialog', function() {
 
       function onShowing(scope, element, options) {
         showing = true;
-        container = angular.element(parent[0].querySelector('.md-dialog-container'));
+        var container = angular.element(parent[0].querySelector('.md-dialog-container'));
         expect(container.length).toBe(0);
       }
 
@@ -871,7 +976,7 @@ describe('$mdDialog', function() {
             '</div>'
       );
 
-      body.append( nodes );
+      body.append(nodes);
       $mdDialog.show({
         template: '<md-dialog>Hello</md-dialog>',
         parent: "#owner",
@@ -1364,15 +1469,53 @@ describe('$mdDialog', function() {
         template: '<md-dialog class="two">',
         parent: parent
       });
-      //First run is for the old dialog being hidden.
+      // First run is for the old dialog being hidden.
       runAnimation();
-      //Second run is for the new dialog being shown.
+      // Second run is for the new dialog being shown.
       runAnimation();
       $mdDialog.hide();
       runAnimation();
 
       expect(parent[0].querySelectorAll('md-dialog.one').length).toBe(0);
       expect(parent[0].querySelectorAll('md-dialog.two').length).toBe(0);
+    }));
+
+    it('should be able to close a dialog when a child dialog fails to compile', inject(function ($mdDialog, $q) {
+
+        var root = angular.element('<div>');
+
+        var parent =  angular.element('<md-dialog class="one"></md-dialog>');
+
+        var child = angular.element('<md-dialog class="two"></md-dialog>');
+
+        $mdDialog.show({
+            template: parent,
+            multiple: true,
+            parent: root,
+        });
+        runAnimation();
+
+        expect(root[0].querySelectorAll('md-dialog').length).toBe(1);
+
+        $mdDialog.show({
+            template: child,
+            multiple: true,
+            parent: parent,
+            resolve: {
+                fail: function () {
+                    return $q.reject();
+                }
+            },
+        });
+        runAnimation();
+
+        expect(root[0].querySelectorAll('md-dialog').length).toBe(1);
+
+        $mdDialog.hide();
+        runAnimation();
+
+        expect(root[0].querySelectorAll('md-dialog').length).toBe(0);
+
     }));
 
     describe('contentElement', function() {
@@ -1774,6 +1917,59 @@ describe('$mdDialog', function() {
     });
 
     describe('theming', function () {
+
+      it('should inherit md-theme if the child has a md-theme to inherit',
+        inject(function ($mdDialog, $mdTheming, $rootScope, $compile) {
+
+          var template = '<div id="rawContent">Hello</div>';
+          var parent = angular.element('<div>');
+
+          var button = $compile(
+            '<button ng-click="showDialog($event)" md-theme="coolTheme">test</button>'
+          )($rootScope);
+
+          $mdTheming(button);
+
+          $rootScope.showDialog = function (ev) {
+            $mdDialog.show({
+              template: template,
+              parent: parent,
+              targetEvent: ev
+            });
+          };
+
+          button[0].click();
+
+          var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+
+          expect(container.attr('md-theme')).toEqual('coolTheme');
+        }));
+
+      it('should not set md-theme if the child does not have md-theme to inherit',
+        inject(function ($mdDialog, $mdTheming, $rootScope, $compile) {
+
+          var template = '<div id="rawContent">Hello</div>';
+          var parent = angular.element('<div>');
+
+          var button = $compile('<button ng-click="showDialog($event)">test</button>')($rootScope);
+
+          $mdTheming(button);
+
+          $rootScope.showDialog = function (ev) {
+            $mdDialog.show({
+              template: template,
+              parent: parent,
+              targetEvent: ev
+            });
+          };
+
+          button[0].click();
+
+          var container = angular.element(parent[0].querySelector('.md-dialog-container'));
+
+          expect(container.attr('md-theme')).toBeUndefined();
+        }));
+
       it('should inherit targetElement theme', inject(function($mdDialog, $mdTheming, $rootScope, $compile) {
         var template = '<div id="rawContent">Hello</div>';
         var parent = angular.element('<div>');

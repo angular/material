@@ -64,7 +64,7 @@
             this.numItems = 50000;
           }));
         };
-        
+
         this.dynamicItems = new DynamicItems();
       });
 })();
