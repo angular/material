@@ -1,3 +1,21 @@
+<a name="1.1.21"></a>
+## [1.1.21](https://github.com/angular/material/compare/v1.1.20...v1.1.21) (2019-10-22)
+
+
+### Bug Fixes
+
+* **autocomplete:** improve handling of touch pads and touchscreens ([#11782](https://github.com/angular/material/issues/11782)) ([20c4d3f](https://github.com/angular/material/commit/20c4d3f)), closes [#11778](https://github.com/angular/material/issues/11778)
+* **autocomplete:** improve implementation of aria-activedescendant ([#11743](https://github.com/angular/material/issues/11743)) ([8c159aa](https://github.com/angular/material/commit/8c159aa)), closes [#11742](https://github.com/angular/material/issues/11742)
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.1.21 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="neilsh" src="https://avatars3.githubusercontent.com/u/49814?v=4&s=117" width="117">](https://github.com/neilsh) |
+:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[neilsh](https://github.com/neilsh) |
+
+
 <a name="1.1.20"></a>
 ## [1.1.20](https://github.com/angular/material/compare/v1.1.19...v1.1.20) (2019-08-15)
 
