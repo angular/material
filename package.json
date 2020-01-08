@@ -35,7 +35,7 @@
     "@octokit/rest": "^16.27.1",
     "add-stream": "^1.0.0",
     "ajv": "^6.10.0",
-    "angular": "^1.7.8",
+    "angular": "^1.7.9",
     "angular-animate": "^1.7.8",
     "angular-aria": "^1.7.8",
     "angular-messages": "^1.7.8",
