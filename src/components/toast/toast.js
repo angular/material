@@ -541,6 +541,11 @@ function MdToastProvider($$interimElementProvider) {
         return 'md-toast-open-bottom';
       }
 
+      // If no position was provided, use the default.
+      if (!position) {
+        return 'md-toast-open-bottom';
+      }
+
       return 'md-toast-open-' + (position.indexOf('top') > -1 ? 'top' : 'bottom');
     }
 
