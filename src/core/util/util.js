@@ -965,7 +965,20 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * documentMode is an IE-only property
      * http://msdn.microsoft.com/en-us/library/ie/cc196988(v=vs.85).aspx
      */
-    msie: window.document.documentMode
+    msie: window.document.documentMode,
+
+    getTouchAction: function() {
+      var testEl = document.createElement('div');
+      var vendorPrefixes = ['', 'webkit', 'Moz', 'MS', 'ms', 'o'];
+
+      for (var i = 0; i < vendorPrefixes.length; i++) {
+        var prefix = vendorPrefixes[i];
+        var property = prefix ? prefix + 'TouchAction' : 'touchAction';
+        if (angular.isDefined(testEl.style[property])) {
+          return property;
+        }
+      }
+    }
   };
 
   // Instantiate other namespace utility methods
