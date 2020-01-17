@@ -1,0 +1,19 @@
+{
+	"name": "AngularJS Material",
+	"dockerFile": "Dockerfile",
+	// This is the port the docs will be served under when running `npm run docs:watch` 
+	"forwardPorts": [
+		// Documentation gulp-connect server
+		8080,
+		// gulp-connect default live-reload port.
+		35729
+	],
+	"remoteUser": "node",
+	"settings": {
+		"terminal.integrated.shell.linux": "/bin/bash"
+	},
+	"postCreateCommand": "npm install",
+	"extensions": [
+		"dbaeumer.vscode-eslint"
+	]
+}

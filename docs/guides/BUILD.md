@@ -165,3 +165,13 @@ After running the appropriate `watch-demo` and `server` tasks:
 * Open browser to [http://localhost:8080/dist/demos](http://localhost:8080/dist/demos)
 * Navigate to `<component>/<demo>`
 * Open Dev Tools and debug...
+
+### <a name="devcontainer"></a> VS Code DevContainer
+
+When using [VS Code](https://code.visualstudio.com/) as a development environment, you can [develop inside a container](https://code.visualstudio.com/docs/remote/containers) to allow for a predefined environment in which AngularJS Material code is being built.
+
+To use the DevContainer environment defined for AngularJS Material, just open the project in VS Code and you should be prompted to use the container automatically, if you have [Remote Development extension pack](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack) installed.
+
+When you first try to open the project in the container, VS Code will build the container (this can take a while) and then make our source code available to it. When we build the documentation in the container and serve it through `gulp site`, the port will automatically be forwarded and the documentation will be available on your local development machine on http://localhost:8080.
+
+If you run `npm run docs:watch` in the container, the documentation will be rebuilt continuously when you make changes to the code.
