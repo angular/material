@@ -258,6 +258,7 @@ function MenuDirective($mdUtil) {
   function link(scope, element, attr, ctrls) {
     var mdMenuCtrl = ctrls[0];
     var isInMenuBar = !!ctrls[1];
+    var mdMenuBarCtrl = ctrls[1];
     // Move everything into a md-menu-container and pass it to the controller
     var menuContainer = angular.element('<div class="_md md-open-menu-container md-whiteframe-z2"></div>');
     var menuContents = element.children()[1];
@@ -275,7 +276,6 @@ function MenuDirective($mdUtil) {
 
     element.append(menuContainer);
     menuContainer[0].style.display = 'none';
-    mdMenuCtrl.init(menuContainer, { isInMenuBar: isInMenuBar });
-
+    mdMenuCtrl.init(menuContainer, { isInMenuBar: isInMenuBar, mdMenuBarCtrl: mdMenuBarCtrl });
   }
 }
