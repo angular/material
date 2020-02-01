@@ -33,6 +33,7 @@
   "dependencies": {},
   "devDependencies": {
     "@octokit/rest": "^16.36.0",
+    "@types/angular": "~1.6.57",
     "add-stream": "^1.0.0",
     "ajv": "^6.10.2",
     "angular": "^1.7.9",
