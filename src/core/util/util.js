@@ -965,7 +965,17 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      * documentMode is an IE-only property
      * http://msdn.microsoft.com/en-us/library/ie/cc196988(v=vs.85).aspx
      */
-    msie: window.document.documentMode
+    msie: window.document.documentMode,
+
+    /**
+     * Gets the string user has entered and removes Regex identifiers
+     * @param {string} term
+     * @returns {string} sanitized string
+     */
+    sanitize: function(term) {
+      if (!term) return term;
+      return term.replace(/[\\^$*+?.()|{}[]]/g, '\\$&');
+    }
   };
 
   // Instantiate other namespace utility methods
