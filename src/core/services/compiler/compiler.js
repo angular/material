@@ -436,6 +436,15 @@ function MdCompilerProvider($compileProvider) {
         // Create the specified controller instance.
         var ctrl = self._createController(options, injectLocals, locals);
 
+        // Registering extra $destroy listeners should be avoided.
+        // Only register the listener if the controller implements a $onDestroy hook.
+        if (angular.isFunction(ctrl.$onDestroy)) {
+          scope.$on('$destroy', function() {
+            // Call the $onDestroy hook if it's present on the controller.
+            angular.isFunction(ctrl.$onDestroy) && ctrl.$onDestroy();
+          });
+        }
+
         // Unique identifier for AngularJS Route ngView controllers.
         element.data('$ngControllerController', ctrl);
         element.children().data('$ngControllerController', ctrl);
