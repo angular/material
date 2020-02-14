@@ -1,0 +1,13 @@
+.demo-dialog-content {
+  padding: 0 15px;
+  width: 100%;
+}
+
+.demo-dialog-content img {
+  height: 300px;
+  margin: auto;
+}
+
+.demo-dialog-button {
+  width: 100%;
+}
