@@ -195,7 +195,7 @@ describe('$mdCompiler service', function() {
           }
         });
       });
-      
+
       function compileAndLink(options) {
         var compileData;
 
@@ -482,4 +482,61 @@ describe('$mdCompiler service', function() {
     });
   });
 
+  describe('AngularJS 1.6+ lifecycle hooks', function() {
+    var $mdCompiler, pageScope, $rootScope;
+
+    beforeEach(module('material.core'));
+
+    beforeEach(inject(function($injector) {
+      $mdCompiler = $injector.get('$mdCompiler');
+      $rootScope = $injector.get('$rootScope');
+      pageScope = $rootScope.$new(false);
+    }));
+
+    it('calls $onInit on initialization', function(done) {
+      var passed = false;
+
+      class TestController {
+        $onInit() { passed = true; }
+      }
+
+      var compileResult = $mdCompiler.compile({
+        template: '<span></span>',
+        controller: TestController,
+        controllerAs: 'vm',
+        bindToController: true
+      });
+
+      compileResult.then(function(compileOutput) {
+        compileOutput.link(pageScope).scope();
+        expect(passed).toBe(true);
+        done();
+      });
+
+      $rootScope.$apply();
+    });
+
+    it('calls $onDestroy on destruction', function(done) {
+      var passed = false;
+
+      class TestController {
+        $onDestroy() { passed = true; }
+      }
+
+      var compileResult = $mdCompiler.compile({
+        template: '<span></span>',
+        controller: TestController,
+        controllerAs: 'vm',
+        bindToController: true
+      });
+
+      compileResult.then(function(compileOutput) {
+        compileOutput.link(pageScope).scope().$destroy();
+        expect(passed).toBe(true);
+        done();
+      });
+
+      $rootScope.$apply();
+    });
+  });
 });
