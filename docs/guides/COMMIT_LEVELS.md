@@ -11,16 +11,13 @@ contributors learn and improve.
 
 #### General Rules
 
-* Please **do not** commit directly to master; unless explicitly authorized by the Team Leadership
-* Team developers should fork the repository and work on fixes, features, or enhancements on their own fork.
-  * Use the Pull Request feature to submit your changes to the 'upstream' AngularJS Material repository
+* Please **do not** commit directly to master; unless explicitly authorized by a Team Lead
+* Contributors should fork the repository and work on fixes or enhancements on their own fork.
+  * Use the Pull Request feature to submit your changes to the 'origin' AngularJS Material repository
 * When a developer has changes ready for merging into master, those fixes or updates must be submitted via a Pull Request
-* All PRs must be rebased (with master) and commits squashed prior to the final merge process
-* Please **NEVER** use the *green* merge button on GitHub
-  * AngularJS Material maintains a *flat*, linear change history using a specific **manual merge process**
-  * Do not use Github's automated merge process
+* All PRs should be rebased (with master) and commits squashed prior to the final merge process
 * Please include unit tests with all your source (component or core) changes
-* All unit tests must have 100% passing before the PR will be accepted/merged.
+* All unit tests must be 100% passing before the PR will be approved/merged.
 
 #### Commit Authorization Rules
 
@@ -35,29 +32,37 @@ The development team has defined three (3) Github levels of **commit authorizati
   * Should not reassign issues or change milestones
   * Should ensure their issue labels are correct
   * Should ensure their issues are tested with latest HEAD versions of AngularJS Material
-  * Should ensure their issues are tested with latest releases of AngularJS (1.5.x, 1.6.x)
+  * Should ensure their issues are tested with latest releases of AngularJS (1.6.x, 1.7.x)
   * Should communicate with the Team Lead when their PRs are submitted or updates from
     code review are completed
-    * Should direct all questions about the status of presubmit testing to the Team Lead
+    * Should direct all questions about the status of presubmit testing to the Team Leads
+  * Should review PRs
 * **Team Leads**: 
   * Includes: [Michael Prentice](https://github.com/splaktar)
   * Are not authorized to merge PRs
   * Should assign issues and manage milestones
   * Should ensure issue labels are correct
   * Should review PRs
-    * Michael Prentice is the primary PR reviewer 
-    * Should confirm Karma tests pass
-    * Should request that a Caretaker starts Google presubmit tests when PRs are labeled `merge ready`
-  * Should decide when new releases are built
+    * Michael Prentice is the primary PR reviewer and approver
+    * Should confirm all CI tasks and CLA check passes
+  * Should process approved PRs
+    * Should verify that `merge safe` labels are accurate, then request Caretaker to merge
+    * Should request that a Caretaker starts Google presubmit tests when PRs are labeled
+      `merge ready` and do not have the `merge safe` label
+  * Should decide when new releases are built and deployed
+    * Should provider Caretaker with a reviewed and approved CHANGELOG
 * **Google Caretakers**:
-  * Includes: [Jeremy Elbourn](https://github.com/jelbourn), [Andrew Seguin](https://github.com/andrewseguin), [Joey Perrott](https://github.com/josephperrott), [Tina Yuangao](https://github.com/tinayuangao), [Miles Malerba](https://github.com/mmalerba)
+  * Includes: [Jeremy Elbourn](https://github.com/jelbourn), [Andrew Seguin](https://github.com/andrewseguin), [Miles Malerba](https://github.com/mmalerba)
   * Rotate responsibilities by the week. Each week has a primary and backup Caretaker.
-  * Should start Google presubmit tests for `merge ready` PRs when requested by Team Lead
-    * Should report the status of the presubmit tests to the Team Lead and/or in the PR within 2 days
   * Should review PRs
-    * Should confirm Karma tests pass
-    * Should squash as needed
-    * Should ensure the PR is closed when the merge finishes
+    * Should confirm all CI tasks and CLA check passes
+  * Should start Google presubmit tests for `merge ready` PRs when requested by Team Leads
+    * Should report the status of the presubmit tests to the Team Leads and/or in the PR within 2 days
+  * Should merge PRs
+    * Should merge `merge ready` and `merge safe` PRs without running presubmit tests
+    * Should merge `merge ready` PRs after successful presubmit
+    * Should squash and merge PRs with multiple commits
   * Should create new releases
-    * Should confirm new release CHANGELOGs with Team Lead 
+    * Should confirm new release CHANGELOGs with Team Leads
     * Should create CLs to add release assets to the Google CDN
+    * Should notify Team Leads when CDN CLs are completed
