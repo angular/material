@@ -997,7 +997,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         path.push(window);
       return path;
     },
-      
+
     /**
      * Gets the string the user has entered and removes Regex identifiers
      * @param {string} term
