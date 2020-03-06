@@ -195,7 +195,7 @@ describe('<md-select>', function() {
       $rootScope.useTrackBy = false;
       $rootScope.trackByOption = '$value.id';
 
-      var opts = [ { id: 1, name: 'Bob' }, { id: 2, name: 'Alice' } ];
+      var opts = [{ id: 1, name: 'Bob' }, { id: 2, name: 'Alice' }];
       $rootScope.val = opts[0];
       var select = setupSelect('ng-model="$root.val"' +
         'ng-change="onChange()"' +
