@@ -1970,6 +1970,106 @@ describe('<md-autocomplete>', function() {
       element.remove();
     });
 
+    it('should move to the last item when up arrow is pressed when on the first item', function() {
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder"' +
+        '   md-min-length="0"' +
+        '   md-escape-options="clear"' +
+        '   md-autoselect="false">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var input = element.find('input');
+      // Run our initial flush
+      $timeout.flush();
+
+      // Initial state
+      expect(ctrl.index).toBe(-1);
+      expect(ctrl.hidden).toBe(true);
+      expect(ctrl.activeOption).toBe(null);
+
+      ctrl.focus();
+      waitForVirtualRepeat(element);
+
+      // After getting focus
+      expect(ctrl.hidden).toBe(false);
+      expect(ctrl.index).toBe(-1);
+      expect(ctrl.activeOption).toBe(null);
+
+      // Highlighting the first item
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+
+      // Trying to go to the last item by cycling through the list
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.UP_ARROW));
+      $material.flushInterimElement();
+
+      // We should be on the last item
+      expect(ctrl.hidden).toBe(false);
+      expect(ctrl.index).toBe(2);
+      expect(ctrl.activeOption).toBe('md-option-' + ctrl.id + '-2');
+
+      element.remove();
+    });
+
+    it('should move to the first item when down arrow is pressed when on the last item', function() {
+      var template =
+        '<md-autocomplete' +
+        '   md-selected-item="selectedItem"' +
+        '   md-search-text="searchText"' +
+        '   md-items="item in match(searchText)"' +
+        '   md-item-text="item.display"' +
+        '   placeholder="placeholder"' +
+        '   md-min-length="0"' +
+        '   md-escape-options="clear"' +
+        '   md-autoselect="false">' +
+        '  <span md-highlight-text="searchText">{{item.display}}</span>' +
+        '</md-autocomplete>';
+      var scope = createScope();
+      var element = compile(template, scope);
+      var ctrl = element.controller('mdAutocomplete');
+      var input = element.find('input');
+      // Run our initial flush
+      $timeout.flush();
+
+      // Initial state
+      expect(ctrl.index).toBe(-1);
+      expect(ctrl.hidden).toBe(true);
+      expect(ctrl.activeOption).toBe(null);
+
+      ctrl.focus();
+      waitForVirtualRepeat(element);
+
+      // After getting focus
+      expect(ctrl.hidden).toBe(false);
+      expect(ctrl.index).toBe(-1);
+      expect(ctrl.activeOption).toBe(null);
+
+      // Highlighting the first item
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+
+      // Highlighting the last item from the list
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+
+      // Trying to go to the first item by cycling through the list
+      ctrl.keydown(keydownEvent($mdConstant.KEY_CODE.DOWN_ARROW));
+      $material.flushInterimElement();
+
+      // We should be on the first item
+      expect(ctrl.hidden).toBe(false);
+      expect(ctrl.index).toBe(0);
+      expect(ctrl.activeOption).toBe('md-option-' + ctrl.id + '-0');
+
+      element.remove();
+    });
+
     it('should set activeOption when autoselect is on', function() {
       var template =
         '<md-autocomplete' +
