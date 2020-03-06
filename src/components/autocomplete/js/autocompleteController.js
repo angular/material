@@ -640,7 +640,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         if (ctrl.loading || hasSelection()) return;
         event.stopPropagation();
         event.preventDefault();
-        ctrl.index = Math.min(ctrl.index + 1, ctrl.matches.length - 1);
+        ctrl.index = ctrl.index + 1 > ctrl.matches.length - 1 ? 0 : Math.min(ctrl.index + 1, ctrl.matches.length - 1);
         $mdUtil.nextTick(updateActiveOption);
         updateScroll();
         break;
@@ -648,7 +648,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
         if (ctrl.loading || hasSelection()) return;
         event.stopPropagation();
         event.preventDefault();
-        ctrl.index = ctrl.index < 0 ? ctrl.matches.length - 1 : Math.max(0, ctrl.index - 1);
+        ctrl.index = ctrl.index - 1 < 0 ? ctrl.matches.length - 1 : Math.max(0, ctrl.index - 1);
         $mdUtil.nextTick(updateActiveOption);
         updateScroll();
         break;
