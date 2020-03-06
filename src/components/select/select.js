@@ -717,7 +717,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
       }, CLEAR_SEARCH_AFTER);
 
       searchStr += e.key;
-      var search = new RegExp('^' + searchStr, 'i');
+      var search = new RegExp('^' + $mdUtil.sanitize(searchStr), 'i');
       if (!optNodes) {
         optNodes = $element.find('md-option');
         optText = new Array(optNodes.length);
@@ -730,6 +730,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
           return optNodes[i];
         }
       }
+
     };
 
     self.init = function(ngModel, binding) {

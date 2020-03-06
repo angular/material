@@ -996,6 +996,16 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       if (path.indexOf(window) === -1)
         path.push(window);
       return path;
+    },
+
+    /**
+     * Gets the string the user has entered and removes Regex identifiers
+     * @param {string} term
+     * @returns {string} sanitized string
+     */
+    sanitize: function(term) {
+      if (!term) return term;
+      return term.replace(/[\\^$*+?.()|{}[]]/g, '\\$&');
     }
   };
 

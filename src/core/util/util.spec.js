@@ -752,4 +752,20 @@ describe('util', function() {
       expect($mdUtil.uniq(myArray)).toEqual([1, 2, 3, 4]);
     });
   });
+
+  describe('sanitize', function() {
+    var $mdUtil;
+
+    beforeEach(inject(function(_$mdUtil_) {
+      $mdUtil = _$mdUtil_;
+    }));
+
+    it('Removes Regex indentifiers in a text', function() {
+
+      // eslint-disable-next-line no-useless-escape
+      var myText = '\+98';
+
+      expect($mdUtil.sanitize(myText)).toEqual('+98');
+    });
+  });
 });
