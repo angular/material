@@ -17,7 +17,8 @@ const plumber = require('gulp-plumber');
 const ngAnnotate = require('gulp-ng-annotate');
 const insert = require('gulp-insert');
 const gulpif = require('gulp-if');
-const nano = require('gulp-cssnano');
+const cssnano = require('cssnano');
+const gulpPostcss = require('gulp-postcss');
 const postcss = require('postcss');
 const _ = require('lodash');
 const constants = require('./const');
@@ -77,13 +78,17 @@ function buildJs() {
 
 function minifyCss(extraOptions) {
   const options = {
-    autoprefixer: false,
     reduceTransforms: false,
-    svgo: false,
-    safe: true
+    svgo: false
+  };
+  const preset = {
+    preset: [
+      'default',
+      _.assign(options, extraOptions)
+    ]
   };
 
-  return nano(_.assign(options, extraOptions));
+  return gulpPostcss([cssnano(preset)]);
 }
 
 /**
