@@ -1,7 +1,8 @@
 const gulp = require('gulp');
 const through2 = require('through2');
 const gutil = require('gulp-util');
-const autoprefixer = require('gulp-autoprefixer');
+const autoprefixer = require('autoprefixer');
+const gulpPostcss = require('gulp-postcss');
 const Buffer = require('buffer').Buffer;
 const fs = require('fs');
 const path = require('path');
@@ -315,5 +316,5 @@ exports.cssToNgConstant = function(ngModule, factoryName) {
  * @returns {NodeJS.ReadWriteStream | *}
  */
 exports.autoprefix = function() {
-  return autoprefixer();
+  return gulpPostcss([autoprefixer()]);
 };
