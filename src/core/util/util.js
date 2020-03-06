@@ -967,8 +967,39 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      */
     msie: window.document.documentMode,
 
+    getTouchAction: function() {
+      var testEl = document.createElement('div');
+      var vendorPrefixes = ['', 'webkit', 'Moz', 'MS', 'ms', 'o'];
+
+      for (var i = 0; i < vendorPrefixes.length; i++) {
+        var prefix = vendorPrefixes[i];
+        var property = prefix ? prefix + 'TouchAction' : 'touchAction';
+        if (angular.isDefined(testEl.style[property])) {
+          return property;
+        }
+      }
+    },
+
     /**
-     * Gets the string user has entered and removes Regex identifiers
+     * @param {Event} event the event to calculate the bubble path for
+     * @return {EventTarget[]} the set of nodes that this event could bubble up to
+     */
+    getEventPath: function(event) {
+      var path = [];
+      var currentTarget = event.target;
+      while (currentTarget) {
+        path.push(currentTarget);
+        currentTarget = currentTarget.parentElement;
+      }
+      if (path.indexOf(window) === -1 && path.indexOf(document) === -1)
+        path.push(document);
+      if (path.indexOf(window) === -1)
+        path.push(window);
+      return path;
+    },
+      
+    /**
+     * Gets the string the user has entered and removes Regex identifiers
      * @param {string} term
      * @returns {string} sanitized string
      */

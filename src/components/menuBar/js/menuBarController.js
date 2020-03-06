@@ -51,7 +51,8 @@ MenuBarController.prototype.init = function() {
       el[0].classList.remove('md-open');
     }
 
-    if ($element[0].contains(el[0])) {
+    var ctrl = angular.element(el[0]).controller('mdMenu');
+    if (ctrl.isInMenuBar && ctrl.mdMenuBarCtrl === self) {
       var parentMenu = el[0];
       while (parentMenu && rootMenus.indexOf(parentMenu) == -1) {
         parentMenu = $mdUtil.getClosest(parentMenu, 'MD-MENU', true);
@@ -59,9 +60,9 @@ MenuBarController.prototype.init = function() {
       if (parentMenu) {
         if (!opts.skipFocus) parentMenu.querySelector('button:not([disabled])').focus();
         self.currentlyOpenMenu = undefined;
-        self.disableOpenOnHover();
-        self.setKeyboardMode(true);
       }
+      self.disableOpenOnHover();
+      self.setKeyboardMode(true);
     }
   }));
 

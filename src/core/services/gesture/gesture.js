@@ -115,7 +115,7 @@ MdGestureProvider.prototype = {
  * @ngInject
  */
 function MdGesture($$MdGestureHandler, $$rAF, $timeout, $mdUtil) {
-  var touchActionProperty = getTouchAction();
+  var touchActionProperty = $mdUtil.getTouchAction();
   var hasJQuery = (typeof window.jQuery !== 'undefined') && (angular.element === window.jQuery);
 
   var self = {
@@ -276,6 +276,11 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout, $mdUtil) {
         horizontal: true,
         cancelMultiplier: 1.5
       },
+      /**
+       * @param {angular.JQLite} element where touch action styles need to be adjusted
+       * @param {{horizontal: boolean}=} options object whose horizontal property can specify to
+       *  apply 'pan-y' or 'pan-x' touch actions.
+       */
       onSetup: function(element, options) {
         if (touchActionProperty) {
           // We check for horizontal to be false, because otherwise we would overwrite the default opts.
@@ -283,9 +288,14 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout, $mdUtil) {
           element[0].style[touchActionProperty] = options.horizontal ? 'pan-y' : 'pan-x';
         }
       },
+      /**
+       * @param {angular.JQLite} element where styles need to be cleaned up
+       */
       onCleanup: function(element) {
         if (this.oldTouchAction) {
           element[0].style[touchActionProperty] = this.oldTouchAction;
+        } else {
+          element[0].style[touchActionProperty] = null;
         }
       },
       onStart: function (ev) {
@@ -362,20 +372,6 @@ function MdGesture($$MdGestureHandler, $$rAF, $timeout, $mdUtil) {
         }
       }
     });
-
-  function getTouchAction() {
-    var testEl = document.createElement('div');
-    var vendorPrefixes = ['', 'webkit', 'Moz', 'MS', 'ms', 'o'];
-
-    for (var i = 0; i < vendorPrefixes.length; i++) {
-      var prefix = vendorPrefixes[i];
-      var property = prefix ? prefix + 'TouchAction' : 'touchAction';
-      if (angular.isDefined(testEl.style[property])) {
-        return property;
-      }
-    }
-  }
-
 }
 
 /**

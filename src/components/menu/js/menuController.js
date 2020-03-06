@@ -29,6 +29,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
     triggerElement.setAttribute('aria-expanded', 'false');
 
     this.isInMenuBar = opts.isInMenuBar;
+    this.mdMenuBarCtrl = opts.mdMenuBarCtrl;
     this.nestedMenus = $mdUtil.nodesToArray(menuContainer[0].querySelectorAll('.md-nested-menu'));
 
     menuContainer.on('$mdInterimElementRemove', function() {

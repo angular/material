@@ -548,6 +548,22 @@ describe('mdListItem directive', function() {
       expect(buttonEl.attr('aria-label')).toBe('Content');
     });
 
+    it('should determine the toggle label from the content if not set', function() {
+      var listItem = setup(
+        '<md-list-item ng-click="null">' +
+        '  <span>Content</span>' +
+        '  <md-switch class="md-secondary" ng-model="isContentOn"></md-switch>' +
+        '</md-list-item>'
+      );
+
+      var buttonElement = listItem.find('button');
+      var switchElement = listItem.find('md-switch');
+
+      // The aria-label attribute should be determined from the content.
+      expect(buttonElement.attr('aria-label')).toBe('Content');
+      expect(switchElement.attr('aria-label')).toBe('Toggle Content');
+    });
+
     it('should warn when label is missing and content is empty', inject(function($log) {
       // Clear the log stack to assert that a new warning has been added.
       $log.reset();
