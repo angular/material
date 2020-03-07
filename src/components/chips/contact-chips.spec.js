@@ -35,7 +35,7 @@ describe('<md-contact-chips>', function() {
       }
     ];
     scope.contacts = [];
-    scope.keys = [$mdConstant.KEY_CODE.COMMA]
+    scope.keys = [$mdConstant.KEY_CODE.COMMA];
 
     scope.highlightFlags = 'i';
   }));
@@ -54,7 +54,6 @@ describe('<md-contact-chips>', function() {
   describe('basic functionality', function() {
     it('should show the placeholder', inject(function() {
       var element = buildChips(CONTACT_CHIPS_TEMPLATE);
-      var ctrl = element.controller('mdContactChips');
 
       expect(element.find('input').length).toBe(1);
       expect(element.find('input')[0].placeholder).toBe('To');
@@ -69,7 +68,6 @@ describe('<md-contact-chips>', function() {
 
     it('should trigger ng-change on chip addition/removal', function() {
       var element = buildChips(CONTACT_CHIPS_TEMPLATE);
-      var ctrl = element.controller('mdContactChips');
       var chipsElement = element.find('md-chips');
       var chipsCtrl = chipsElement.controller('mdChips');
 
@@ -103,7 +101,6 @@ describe('<md-contact-chips>', function() {
         scope.contacts.push(scope.allContacts[2]);
 
         var element = buildChips(CONTACT_CHIPS_TEMPLATE);
-        var ctrl = element.controller('mdContactChips');
         var chip = angular.element(element[0].querySelector('.md-chip-content'));
 
         expect(chip.find('img').length).toBe(1);
@@ -115,7 +112,6 @@ describe('<md-contact-chips>', function() {
         scope.contacts.push(noImageContact);
 
         var element = buildChips(CONTACT_CHIPS_TEMPLATE);
-        var ctrl = element.controller('mdContactChips');
         var chip = angular.element(element[0].querySelector('.md-chip-content'));
 
         expect(chip.find('img').length).toBe(0);
@@ -138,7 +134,6 @@ describe('<md-contact-chips>', function() {
         scope.contacts.push(scope.allContacts[2]);
 
         var element = buildChips(CONTACT_CHIPS_TEMPLATE);
-        var ctrl = element.controller('mdContactChips');
 
         var autocompleteElement = element.find('md-autocomplete');
         var autocompleteCtrl = autocompleteElement.controller('mdAutocomplete');
@@ -152,27 +147,6 @@ describe('<md-contact-chips>', function() {
         var matches = autocompleteCtrl.matches;
         expect(matches.length).toBe(3);
       }));
-
-      /* it('should not filter when disabled', inject(function($timeout) {
-       scope.querySearch = jasmine.createSpy('querySearch').and.callFake(function(q) {
-       return scope.allContacts;
-       });
-       scope.contacts.push(scope.allContacts[2]);
-       scope.filterSelected = false;
-       var element = buildChips(CONTACT_CHIPS_TEMPLATE);
-       var ctrl = element.controller('mdContactChips');
-       $timeout.flush();
-
-       var autocompleteElement = element.find('md-autocomplete');
-       var autocompleteCtrl = autocompleteElement.controller('mdAutocomplete');
-       element.scope().$apply(function() {
-       autocompleteCtrl.scope.searchText = 'NAME';
-       autocompleteCtrl.keydown({});
-       });
-
-       var matches = autocompleteCtrl.matches;
-       expect(matches.length).toBe(3);
-       }));*/
     });
 
     describe('custom separator keys', function() {
@@ -195,7 +169,6 @@ describe('<md-contact-chips>', function() {
 
         var element = buildChips(CONTACT_CHIPS_TEMPLATE_SEPARATOR);
         var ctrl = element.controller('mdContactChips');
-        var chipsCtrl = angular.element(element[0].querySelector('md-chips')).controller('mdChips');
 
         var autocompleteElement = element.find('md-autocomplete');
         var autocompleteCtrl = autocompleteElement.controller('mdAutocomplete');
@@ -233,15 +206,6 @@ describe('<md-contact-chips>', function() {
     attachedElements.push(container);
 
     return container;
-  }
-
-  function simulateInputEnterKey(ctrl) {
-    var event = {};
-    event.preventDefault = jasmine.createSpy('preventDefault');
-    inject(function($mdConstant) {
-      event.keyCode = $mdConstant.KEY_CODE.ENTER;
-    });
-    ctrl.inputKeydown(event);
   }
 
   function keydownEvent(keyCode, target) {

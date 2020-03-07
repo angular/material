@@ -40,7 +40,7 @@ MdContactChipsCtrl.prototype.init = function() {
   // Timeout required to allow the child elements to be compiled.
   this.$timeout(function() {
     deRegister.push(
-      element.find('md-chips').scope().$watchCollection('$mdChipsCtrl.items', function() {
+      element.find('md-chips').controller('mdChips').$scope.$watchCollection('$mdChipsCtrl.items', function() {
         // Make sure our input and wrapper have the correct ARIA attributes
         ctrl.setupChipsAria();
         ctrl.setupAutocompleteAria();
