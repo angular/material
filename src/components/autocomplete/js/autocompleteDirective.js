@@ -429,7 +429,7 @@ function MdAutocomplete ($$mdSvgRegistry) {
         var templateTag = element.find('md-not-found').detach(),
             template = templateTag.length ? templateTag.html() : '';
         return template
-            ? '<li ng-if="$mdAutocompleteCtrl.notFoundVisible()"\
+            ? '<li ng-if="$mdAutocompleteCtrl.notFoundVisible()" class="md-autocomplete-suggestion"\
                          md-autocomplete-parent-scope>' + template + '</li>'
             : '';
       }
