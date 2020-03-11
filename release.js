@@ -18,6 +18,7 @@
   const lineWidth      = 80;
   const lastMajorVer   = JSON.parse(exec('curl https://material.angularjs.org/docs.json')).latest;
   let newVersion;
+  let npmTag = 'latest';
 
   try {
     child_process.execSync('gulp --version', defaultOptions);
@@ -26,6 +27,7 @@
   }
   header();
   const dryRun = prompt(`Is this a dry-run? [${"yes".cyan}/no] `, 'yes') !== 'no';
+  npmTag = prompt(`What would you like the NPM tag to be? [${npmTag.cyan}/next] `, npmTag);
 
   if (dryRun) {
     oldVersion = prompt(`What would you like the old version to be? (default: ${oldVersion.cyan}) `, oldVersion);
@@ -243,7 +245,7 @@
     done();
     // add steps to push script
     pushCmds.push(
-      comment('push to bower (master and tag) and publish to npm'),
+      comment(`push to bower (master and tag) and publish to npm as '${npmTag}'`),
       'cd ' + options.cwd,
       'cp ../CHANGELOG.md .',
       'git add CHANGELOG.md',
@@ -253,7 +255,7 @@
       'git push',
       'git push --tags',
       'rm -rf .git/',
-      'npm publish',
+      `npm publish --tag ${npmTag}`,
       'cd ..'
     );
   }
