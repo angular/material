@@ -154,6 +154,7 @@ function mdListDirective($mdTheming) {
  * The recognized `md-switch` will toggle its state, when the user clicks on the `md-list-item`.
  *
  * It is also possible to have a `md-menu` inside of a `md-list-item`.
+ *
  * <hljs lang="html">
  *   <md-list-item>
  *     <p>Click anywhere to fire the secondary action</p>
@@ -185,12 +186,13 @@ function mdListDirective($mdTheming) {
  *
  * The menu will automatically open, when the users clicks on the `md-list-item`.<br/>
  *
- * If the developer didn't specify any position mode on the menu, the `md-list-item` will automatically detect the
- * position mode and applies it to the `md-menu`.
+ * If the developer didn't specify any position mode on the menu, the `md-list-item` will
+ * automatically detect the position mode and apply it to the `md-menu`.
  *
  * ### Avatars
- * Sometimes you may want to have some avatars inside of the `md-list-item `.<br/>
- * You are able to create a optimized icon for the list item, by applying the `.md-avatar` class on the `<img>` element.
+ * Sometimes you may want to have avatars inside of the `md-list-item `.<br/>
+ * You are able to create an optimized icon for the list item, by applying the `.md-avatar` class on
+ * the `<img>` element.
  *
  * <hljs lang="html">
  *   <md-list-item>
@@ -199,6 +201,7 @@ function mdListDirective($mdTheming) {
  * </hljs>
  *
  * When using `<md-icon>` for an avatar, you have to use the `.md-avatar-icon` class.
+ *
  * <hljs lang="html">
  *   <md-list-item>
  *     <md-icon class="md-avatar-icon" md-svg-icon="social:person"></md-icon>
@@ -206,8 +209,8 @@ function mdListDirective($mdTheming) {
  *   </md-list-item>
  * </hljs>
  *
- * In cases, you have a `md-list-item`, which doesn't have any avatar,
- * but you want to align it with the other avatar items, you have to use the `.md-offset` class.
+ * In cases where you have a `md-list-item`, which doesn't have an avatar,
+ * but you want to align it with the other avatar items, you need to use the `.md-offset` class.
  *
  * <hljs lang="html">
  *   <md-list-item class="md-offset">
@@ -220,7 +223,7 @@ function mdListDirective($mdTheming) {
  *
  * ---
  * If the `md-list-item` is clickable, we wrap all content inside of a `<div>` and create
- * an overlaying button, which will will execute the given actions (like `ng-href`, `ng-click`)
+ * an overlaying button, which will will execute the given actions (like `ng-href`, `ng-click`).
  *
  * We create an overlaying button, instead of wrapping all content inside of the button,
  * because otherwise some elements may not be clickable inside of the button.
@@ -344,7 +347,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
             '<md-button class="md-no-style"></md-button>'
           );
 
-          copyAttributes(tElement[0], buttonWrap[0]);
+          moveAttributes(tElement[0], buttonWrap[0]);
 
           // If there is no aria-label set on the button (previously copied over if present)
           // we determine the label from the content and copy it to the button.
@@ -353,13 +356,14 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           }
 
           // We allow developers to specify the `md-no-focus` class, to disable the focus style
-          // on the button executor. Once more classes should be forwarded, we should probably make the
-          // class forward more generic.
+          // on the button executor. Once more classes should be forwarded, we should probably make
+          // the class forward more generic.
           if (tElement.hasClass('md-no-focus')) {
             buttonWrap.addClass('md-no-focus');
           }
 
-          // Append the button wrap before our list-item content, because it will overlay in relative.
+          // Append the button wrap before our list-item content, because it will overlay in
+          // relative.
           itemContainer.prepend(buttonWrap);
           itemContainer.children().eq(1).append(tElement.contents());
 
@@ -392,10 +396,10 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           $mdAria.expect(secondaryItem, 'aria-label');
           var buttonWrapper = angular.element('<md-button class="md-secondary md-icon-button">');
 
-          // Copy the attributes from the secondary item to the generated button.
+          // Move the attributes from the secondary item to the generated button.
           // We also support some additional attributes from the secondary item,
           // because some developers may use a ngIf, ngHide, ngShow on their item.
-          copyAttributes(secondaryItem, buttonWrapper[0], ['ng-if', 'ng-hide', 'ng-show']);
+          moveAttributes(secondaryItem, buttonWrapper[0], ['ng-if', 'ng-hide', 'ng-show']);
 
           secondaryItem.setAttribute('tabindex', '-1');
           buttonWrapper.append(secondaryItem);
@@ -416,14 +420,14 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
       }
 
       /**
-       * Copies attributes from a source element to the destination element
-       * By default the function will copy the most necessary attributes, supported
+       * Moves attributes from a source element to the destination element.
+       * By default, the function will copy the most necessary attributes, supported
        * by the button executor for clickable list items.
        * @param source Element with the specified attributes
-       * @param destination Element which will retrieve the attributes
-       * @param extraAttrs Additional attributes, which will be copied over.
+       * @param destination Element which will receive the attributes
+       * @param extraAttrs Additional attributes, which will be moved over
        */
-      function copyAttributes(source, destination, extraAttrs) {
+      function moveAttributes(source, destination, extraAttrs) {
         var copiedAttrs = $mdUtil.prefixer([
           'ng-if', 'ng-click', 'ng-dblclick', 'aria-label', 'ng-disabled', 'ui-sref',
           'href', 'ng-href', 'rel', 'target', 'ng-attr-ui-sref', 'ui-sref-opts', 'download'
@@ -466,7 +470,9 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
       function hasClickEvent(element) {
         var attr = element.attributes;
         for (var i = 0; i < attr.length; i++) {
-          if (tAttrs.$normalize(attr[i].name) === 'ngClick') return true;
+          if (tAttrs.$normalize(attr[i].name) === 'ngClick') {
+            return true;
+          }
         }
         return false;
       }
@@ -555,14 +561,19 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           return false;
         }
 
-        var clickChildKeypressListener = function(e) {
-          if (e.target.nodeName !== 'INPUT' && e.target.nodeName !== 'TEXTAREA' && !e.target.isContentEditable) {
-            var keyCode = e.which || e.keyCode;
+        /**
+         * @param {KeyboardEvent} keypressEvent
+         */
+        var clickChildKeypressListener = function(keypressEvent) {
+          if (keypressEvent.target.nodeName !== 'INPUT' &&
+              keypressEvent.target.nodeName !== 'TEXTAREA' &&
+              !keypressEvent.target.isContentEditable) {
+            var keyCode = keypressEvent.which || keypressEvent.keyCode;
             if (keyCode === $mdConstant.KEY_CODE.SPACE) {
               if (clickChild) {
                 clickChild.click();
-                e.preventDefault();
-                e.stopPropagation();
+                keypressEvent.preventDefault();
+                keypressEvent.stopPropagation();
               }
             }
           }
@@ -574,6 +585,9 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
         $element.off('click');
         $element.off('keypress');
+        // Disable ng-aria's "helpful" keydown event that causes our ng-click handlers to be called
+        // twice.
+        $element.off('keydown');
 
         if (proxies.length === 1 && clickChild) {
           $element.children().eq(0).on('click', function(clickEvent) {
