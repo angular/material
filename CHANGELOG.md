@@ -1,3 +1,39 @@
+<a name="1.1.22-rc.0"></a>
+## [1.1.22-rc.0](https://github.com/angular/material/compare/v1.1.21...v1.1.22-rc.0) (2020-03-13)
+
+
+### Bug Fixes
+
+* **autocomplete:** loop options list when moving past first/last option with arrow keys ([5228f23](https://github.com/angular/material/commit/5228f23b963b8d3811c916c2403469b92b2cca7e)), closes [#11766](https://github.com/angular/material/issues/11766)
+* **autocomplete:** md-not-found template is not styled properly ([ce6e2ff](https://github.com/angular/material/commit/ce6e2ff13702cd462a1b45c06753d16278270ba1)), closes [#11852](https://github.com/angular/material/issues/11852)
+* **autocomplete:** Move mouse enter and leave events to container ([5b0c9ba](https://github.com/angular/material/commit/5b0c9ba9e0e5313925f6a27390559f32028fd95b)), closes [#11776](https://github.com/angular/material/issues/11776)
+* **autocomplete:** scroll to top of the list each time dropdown open ([498c9ed](https://github.com/angular/material/commit/498c9edd26e878d53e8f1b02a86380fe1b9895b1)), closes [#10479](https://github.com/angular/material/issues/10479)
+* **contact-chips:** don't rely on debug info to get access to controller scope ([2f77095](https://github.com/angular/material/commit/2f770957f7d38d9c1386767b82bd662c07af9787)), closes [#11699](https://github.com/angular/material/issues/11699)
+* **datepicker:** md-open-on-focus fails when switching tabs with open datepicker ([7a16778](https://github.com/angular/material/commit/7a16778ecc08593463c361b33b4fe17154b8cb75))
+* **gesture:** 'drag' gestures don't clean up touch action styles on parent ([deb3dfc](https://github.com/angular/material/commit/deb3dfc11e76ea38c2ec65a2a9b4d68560d0c181)), closes [#11147](https://github.com/angular/material/issues/11147)
+* **list:** dense lists cut off descenders of letters like gjqpy ([0ab73bd](https://github.com/angular/material/commit/0ab73bd86ab3f5e564ef73663e3f70e2404b2538)), closes [#8890](https://github.com/angular/material/issues/8890)
+* **list:** isEventFromControl() works on all browsers now ([d537d25](https://github.com/angular/material/commit/d537d251d7281ed446ce5b5502a123884e1af9f4)), closes [#7937](https://github.com/angular/material/issues/7937)
+* **list:** primary action is fired twice on space/enter keydown ([920018e](https://github.com/angular/material/commit/920018efbd51ed4f164db3fa02da721d3148da43)), closes [#11756](https://github.com/angular/material/issues/11756)
+* **list:** secondary actions give aria warning if text is in a span ([90c8b8d](https://github.com/angular/material/commit/90c8b8d6f6265b3c5b71f38fa847dc5c6bb9ce04)), closes [#6152](https://github.com/angular/material/issues/6152)
+* **menu-bar:** z-index not restored on menu close ([4a4dde4](https://github.com/angular/material/commit/4a4dde489835dd1c2ef221563bb5f2fd9fc9bddf)), closes [#11235](https://github.com/angular/material/issues/11235)
+* **nav-bar:** clicked nav item not focused or selected in some cases ([4d4e0ac](https://github.com/angular/material/commit/4d4e0ac9487c9a632447fa5ecf38941934c3cf2c)), closes [#11747](https://github.com/angular/material/issues/11747)
+* **select:** overhaul screen reader support ([928c71d](https://github.com/angular/material/commit/928c71d6ee87bc03ce383bfa555f67e1d373fe13)), closes [#10748](https://github.com/angular/material/issues/10748) [#10967](https://github.com/angular/material/issues/10967)
+* **select:** sanitize user input before searching options ([#11855](https://github.com/angular/material/issues/11855)) ([0ec0cc5](https://github.com/angular/material/commit/0ec0cc5ee8aac0db6103ae4c1ee1fc30620247b2)), closes [#11854](https://github.com/angular/material/issues/11854)
+* **select:** when using trackBy, trigger ng-change only when tracked property is different ([ecd55d0](https://github.com/angular/material/commit/ecd55d0dd2d52c746e4aa907bfd3712f6c03a68a)), closes [#11108](https://github.com/angular/material/issues/11108)
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.1.22-rc.0 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="marosoft" src="https://avatars0.githubusercontent.com/u/3945455?v=4&s=117" width="117">](https://github.com/marosoft) |[<img alt="oliversalzburg" src="https://avatars2.githubusercontent.com/u/1658949?v=4&s=117" width="117">](https://github.com/oliversalzburg) |[<img alt="andrewseguin" src="https://avatars3.githubusercontent.com/u/22898577?v=4&s=117" width="117">](https://github.com/andrewseguin) |[<img alt="free-easy" src="https://avatars2.githubusercontent.com/u/20483759?v=4&s=117" width="117">](https://github.com/free-easy) |[<img alt="nathanael-bice" src="https://avatars2.githubusercontent.com/u/6155868?v=4&s=117" width="117">](https://github.com/nathanael-bice) |
+:---: |:---: |:---: |:---: |:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[marosoft](https://github.com/marosoft) |[oliversalzburg](https://github.com/oliversalzburg) |[andrewseguin](https://github.com/andrewseguin) |[free-easy](https://github.com/free-easy) |[nathanael-bice](https://github.com/nathanael-bice) |
+
+[<img alt="psamim" src="https://avatars3.githubusercontent.com/u/1868679?v=4&s=117" width="117">](https://github.com/psamim) |[<img alt="qubiack" src="https://avatars1.githubusercontent.com/u/19862364?v=4&s=117" width="117">](https://github.com/qubiack) |
+:---: |:---: |
+[psamim](https://github.com/psamim) |[qubiack](https://github.com/qubiack) |
+
+
 <a name="1.1.21"></a>
 ## [1.1.21](https://github.com/angular/material/compare/v1.1.20...v1.1.21) (2019-10-22)
 
