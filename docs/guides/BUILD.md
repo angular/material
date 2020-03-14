@@ -4,121 +4,98 @@
 * [Build Commands](#commands)
 * [Building the Documentation](#livedocs)
 * [Building the Library](#builds)
-* [Using the Library with Bower](#bower)<br/><br/>
-* [Introducing Components](#comp)
+<br/><br/>
+* [Component Modules](#comp)
 * [Building Individual Components](#comp_builds)
-* [Component Debugging](#comp_debug)<br/><br/>
-* [Theming](#themes)
-
+* [Component Debugging](#comp_debug)
 
 ## <a name="intro"></a> Introduction
 
-AngularJS Material has a sophisticated collection of build process and commands available... to deploy
-distribution files, test components, and more.
+AngularJS Material has a collection of build processes and commands available to deploy distribution
+files, test components, and more.
 
-These commands are defined within two (2) **gulp** files:
+These commands are defined within the `package.json` and two (2) **gulp** files:
 
+* [package.json](../../package.json)
 * [Project Gulp](../../gulpfile.js)
 * [Documentation Gulp](../gulpfile.js)
 
+From the project root, install the NPM packages by running
+- `npm install` or `npm i`
 
 ### <a name="commands"></a> Build Commands
 
-For each milestone release, always run:
-
-- `npm update` to update your local gulp dependencies
-- `bower update` to update AngularJS dependencies
-
 The following command line tasks are available:
 
-- `gulp build` (alias `gulp`) to build, add `--release` flag to uglify & strip `console.log`
-- `gulp docs` to build the Live Docs into dist/docs
-- `gulp watch` to build & rebuild on changes
+- `npm run build` to build
+- `npm run build:prod` to uglify, strip `console.log`, and autoprefix CSS
+- `npm run docs:build` to build the docs into `dist/docs`
+- `npm run docs:watch` to build the library and docs, and rebuild on file changes
 
 <a separator></a>
 
-- `gulp karma` to test once
-- `gulp karma-watch` to test & watch for changes
+- `npm run lint` to run ESLint
+- `npm run test:fast` to run smoke tests
+- `npm run test:full` to run all of the unit tests
 
 ### <a name="livedocs"></a> Building the Documentation
 
-The AngularJS Material **Live Docs** are generated from the source code and demos and actually use the
-AngularJS Material components and themes.
+The AngularJS Material Docs are generated from the source code. The documentation itself uses the
+AngularJS Material layout, components, and themes.
 
 > Our build process uses **[dgeni](https://github.com/angular/dgeni)**, the wonderful documentation
-  generator built by [Pete Bacon Darwin](https://github.com/petebacondarwin).
+generator built by [Pete Bacon Darwin](https://github.com/petebacondarwin).
 
-See the [Building the Live Documentation](../README.md#docs) document for details.
+To view the Docs (locally):
+
+1. Build the docs and serve with 'live reload' using `npm run docs:watch`
+1. Open Browser to [http://localhost:8080](http://localhost:8080)
 
 ### <a name="builds"></a> Building the Library
 
 Developers can build the entire AngularJS Material library or individual component modules. The
 library comprises:
 
-* `angular-material.js` - components
-* `angular-material.css` - styles and default theme stylesheet
-* `/themes/**.css` - default theme override stylesheets
+* `angular-material.js` - components, services, and theming
+* `angular-material.css|scss` - styles
+* `layouts/**.css|scss` - default layout stylesheets
 
 To build from the source, simply use:
-
 ```bash
-# Build and deploy the library to
+# Build the library to
 #
 # - `dist/angular-material.js`
-# - `dist/angular-material.css`
-# - `dist/themes`
+# - `dist/angular-material.css|scss`
+# - `dist/layouts`
 
-gulp build
+npm run build
 
 # Build minified assets
 #
 # - `dist/angular-material.min.js`
-# - `dist/angular-material.min.css`
-# - `dist/themes`
+# - `dist/angular-material.min.css|scss`
+# - `dist/layouts`
 
-gulp build --release
+npm run build:prod
 ```
 
-### <a name="bower"></a> Using the Library with Bower
+##<a name="comp"></a> Component Modules
 
-For developers not interested in building the AngularJS Material library, use **bower** to install and
-use the AngularJS Material distribution files.
-
-Change to your project's root directory.
-
-```bash
-# To get the latest stable version, use Bower from the command line.
-bower install angular-material
-
-# To get the most recent, latest committed-to-master version use:
-bower install angular-material#master
-```
-
-Visit [Bower-Material](https://github.com/angular/bower-material/blob/master/README.md) for more
-details on how to install and use the AngularJS Material distribution files within your own local
-project.
-
-<br/>
-##<a name="comp"></a> Introducing Components
-
-AngularJS Material supports the construction and deployment of individual component builds. Within
-AngularJS Material, each component is contained within its own module and specifies its own
-dependencies.
+AngularJS Material supports the construction and deployment of individual component builds.
+Each component is contained within its own module and specifies its own dependencies.
 
 > At a minimum, all components have a dependency upon the `core` module.
 
-For example, the **slider** component is registered as a **material.components.slider** module.
+For example, the **slider** component is registered as the **material.components.slider** module.
 
 ### <a name="comp_builds"></a> Building Individual Components
 
-To build and deploy assets for each component individually, run the command
-
+To build and deploy assets for each component individually, run:
 ```bash
-gulp build-all-modules
+npm run build:modules
 ```
 
 All component modules are compiled and distributed to:
-
 ```text
  -- dist
     -- modules
@@ -128,8 +105,6 @@ All component modules are compiled and distributed to:
 ```
 
 Let's consider the Slider component with its module definition:
-
-
 ```js
 /**
  * @ngdoc module
@@ -144,8 +119,6 @@ First build all the component modules.
 
 To use - for example - the Slider component within your own application, simply load the stylesheets
 and JS from both the **slider** and the **core** modules:
-
-
 ```text
  -- dist
     -- modules
@@ -161,7 +134,7 @@ and JS from both the **slider** and the **core** modules:
 
 ### <a name="comp_debug"></a> Component Debugging
 
-Debugging a demo in the Live Docs is complicated due the multiple demos loading and initializing. A
+Debugging a demo in the Docs is complicated due the multiple demos loading and initializing. A
 more practical approach is to open and debug a specific, standalone Component demo.
 
 To open a Component demo outside of the Docs application, just build, deploy and debug that
@@ -170,19 +143,14 @@ component's demo(s).
 For example, to debug the **textfield** component:
 
 ```bash
-# Watch, build and deploy the 'textfield' demos
+# Watch and build the 'textfield' demos
 #
 # NOTE: watch-demo will rebuild your component source
-#       and demos upon each `save`
+#       and demos upon each `save`.
+# Note: server will livereload demos on port 8080 after updates are
+#       built (by watch-demo) to the dist/demos/ dir.
 #
-gulp watch-demo -c textfield
-
-# launch the liveReload server on port 8080
-#
-# Note: livereload will reload demos after updates are
-#       deployed (by watch-demo) to the dist/demos/
-#
-gulp server
+gulp watch-demo -c textfield server
 ```
 
 The demo build process will deploy a *self-contained* AngularJS application that runs the specified
@@ -192,13 +160,8 @@ component's demo(s). E.g.:
 * `dist/demos/tabs/**/*.*`
 *  etc.
 
-After running `gulp server` to start a *LiveReload* server in your project root:
+After running the appropriate `watch-demo` and `server` tasks:
 
-* Open browser to url `http://localhost:8080/`
-* Navigate to `dist/demos/<component>/<demo>/index.html`
+* Open browser to [http://localhost:8080/dist/demos](http://localhost:8080/dist/demos)
+* Navigate to `<component>/<demo>`
 * Open Dev Tools and debug...
-
-
-## <a name="themes"></a> Theming
-
-[Go to the Theming Guide](https://material.angularjs.org/latest/Theming/01_introduction)
