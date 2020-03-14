@@ -9,7 +9,7 @@ function run {
 
   echo "-- Building docs site release..."
   rm -rf dist/
-  gulp docs --release
+  npm run build:docs:prod
 
   echo "-- Cloning code.material.angularjs.org..."
   rm -rf code.material.angularjs.org

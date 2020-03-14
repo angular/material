@@ -14,4 +14,4 @@ fi
 # Run our check to make sure all tests will actually run
 npm run ddescribe-iit
 
-npm run test:full -- --config=config/karma-circleci.conf.js --reporters='dots,junit'
+npm run test:ci
