@@ -1,10 +1,13 @@
 {
-  "extends": "eslint:recommended",
+  "extends": "plugin:angular/johnpapa",
   "parserOptions": {
     "ecmaVersion": 8
   },
   "rules": {
     "accessor-pairs": "error",
+    "angular/file-name": "off",
+    "angular/no-run-logic": "off",
+    "angular/no-service-method": "off",
     "array-bracket-newline": "off",
     "array-bracket-spacing": ["error", "never"],
     "array-callback-return": "error",

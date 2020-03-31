@@ -52,6 +52,7 @@
     "dgeni": "^0.4.12",
     "dgeni-packages": "0.27.5",
     "eslint": "^6.8.0",
+    "eslint-plugin-angular": "^4.0.1",
     "github-contributors-list": "^1.2.4",
     "glob": "^7.1.6",
     "gulp": "^3.9.1",
