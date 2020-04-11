@@ -1,5 +1,6 @@
 $select-checkbox-border-radius: 2px !default;
 $select-checkbox-border-width: 2px !default;
+$select-border-width-default: 1px !default;
 $select-checkbox-width: rem(1.4) !default;
 $select-option-height: 48px !default;
 $select-option-padding: 16px !default;
@@ -115,12 +116,14 @@ md-select {
   }
 
   &[disabled] .md-select-value {
-    background-position: 0 bottom;
+    // This background-position was taken from the styling of disabled md-inputs.
+    // The negative border width offsets the dotted "border" so it's placed in the same place as the
+    // solid one before it.
+    background-position: bottom $select-border-width-default * -1 left 0;
     // This background-size is coordinated with a linear-gradient set in select-theme.scss
     // to create a dotted line under the input.
     background-size: 4px 1px;
     background-repeat: repeat-x;
-    margin-bottom: -1px; // Shift downward so dotted line is positioned the same as other bottom borders
   }
 
   &:focus {
@@ -141,7 +144,7 @@ md-select {
     }
     &:focus {
       .md-select-value {
-        border-bottom-width: 2px;
+        border-bottom-width: $select-border-width-default + 1px;
         border-bottom-style: solid;
         padding-bottom: 0;
       }
@@ -154,10 +157,26 @@ md-select {
   }
 }
 
-// Fix value by 1px to align with standard text inputs (and spec)
-md-input-container.md-input-has-value .md-select-value {
-  > span:not(.md-select-icon) {
-    transform: translate3d(0, 1px, 0);
+md-input-container md-select {
+  &:not([disabled]) {
+    &:focus {
+      .md-select-value {
+        border-bottom-width: $input-border-width-focused;
+      }
+    }
+  }
+  &[disabled] {
+    .md-select-value {
+      // This background-position was taken from and matches the styling of disabled md-inputs.
+      // The negative border width offsets the dotted "border" so it's placed in the same place as
+      // the solid one before it.
+      background-position: bottom $input-border-width-default * -1 left 0;
+    }
+  }
+  .md-select-value {
+    min-height: ($input-line-height + $input-padding-top * 2) - $input-border-width-focused - $input-border-width-default * 2;
+    padding-bottom: $input-border-width-focused - $input-border-width-default;
+    border-bottom-width: $input-border-width-default;
   }
 }
 
@@ -165,7 +184,7 @@ md-input-container.md-input-has-value .md-select-value {
   display: flex;
   align-items: center;
   padding: 2px 2px 1px;
-  border-bottom-width: 1px;
+  border-bottom-width: $select-border-width-default;
   border-bottom-style: solid;
   background-color: rgba(0,0,0,0);
   position: relative;
@@ -173,7 +192,6 @@ md-input-container.md-input-has-value .md-select-value {
   min-width: 8 * $baseline-grid;
   min-height: 26px;
   flex-grow: 1;
-
 
   > span:not(.md-select-icon) {
     max-width: 100%;
