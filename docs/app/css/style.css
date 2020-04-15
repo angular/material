@@ -449,10 +449,6 @@ a.docs-logo {
 .docs-tools .md-button md-icon {
   color: #666 !important;
 }
-.docs-toolbar-tools .md-button md-icon {
-  color: #666 !important;
-  fill: #666 !important;
-}
 @media (max-width: 400px) {
   .docs-tools {
     display: none;
@@ -528,7 +524,7 @@ md-tabs.demo-source-tabs .active md-tab-label {
   flex: 1 1 auto;
 }
 .demo-content > * {
-  flex: 1 1 0%;
+  flex: 1 1 0;
 }
 
 .demo-content > div[layout-fill] {

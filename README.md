@@ -138,7 +138,7 @@ and use the AngularJS Material distribution files.
 Change to your project's root directory.
 
 ```bash
-# To get the latest stable version, use Bower from the command line.
+# To get the latest stable version, use NPM from the command line.
 npm install angular-material --save
 
 # To get the most recent, latest committed-to-master version use:
@@ -147,16 +147,13 @@ npm install http://github.com/angular/bower-material#master --save
 
 #### Other Dependency Managers
 
-Visit [Bower-Material](https://github.com/angular/bower-material/blob/master/README.md) for more
-details on how to install and use the AngularJS Material distribution files within your own local
-project.
-
-This includes instructions for [Bower](https://github.com/angular/bower-material#bower)
-and [JSPM](https://github.com/angular/bower-material#jspm).
+Visit our [distribution repository](https://github.com/angular/bower-material/blob/master/README.md)
+for more details on how to install and use the AngularJS Material distribution
+files within your local project.
 
 #### CDN
 
-CDN versions of AngularJS Material are now available.
+CDN versions of AngularJS Material are available.
 
 With the Google CDN, you will not need to download local copies of the distribution files. Instead
 simply reference the CDN urls to easily use those remote library files. This is especially useful
@@ -166,26 +163,25 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunker](http://
 ```html
   <head>
 
-    <!-- AngularJS Material CSS now available via Google CDN; version 1.1.9 used here -->
-   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.9/angular-material.min.css">
+    <!-- AngularJS Material CSS now available via Google CDN; version 1.1.21 used here -->
+   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.21/angular-material.min.css">
 
   </head>
   <body>
 
     <!-- AngularJS Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular-aria.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular-messages.min.js"></script>
 
-    <!-- AngularJS Material Javascript now available via Google CDN; version 1.1.10 used here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.10/angular-material.min.js"></script>
+    <!-- AngularJS Material Javascript now available via Google CDN; version 1.1.21 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.21/angular-material.min.js"></script>
   </body>
 ```
 
 Developers seeking the latest, most-current build versions can use [GitCDN.xyz](https://gitcdn.xyz/) to
-pull directly from the distribution GitHub
-[Bower-Material](https://github.com/angular/bower-material) repository:
+pull directly from our [distribution repository](https://github.com/angular/bower-material):
 
 ```html
   <head>
@@ -197,10 +193,10 @@ pull directly from the distribution GitHub
   <body>
 
     <!-- AngularJS Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular-animate.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular-aria.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular-aria.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular-messages.min.js"></script>
 
     <!-- AngularJS Material Javascript using GitCDN to load directly from `bower-material/master` -->
     <script src="https://gitcdn.xyz/cdn/angular/bower-material/master/angular-material.js"></script>
