@@ -84,20 +84,12 @@
 
           <div class="md-toolbar-item docs-tools" layout="row">
             <md-button class="md-icon-button"
-                       aria-label="Install with Bower"
-                       ng-if="!currentComponent.docs.length && !currentComponent.isService"
-                       target="_blank"
-                       ng-href="https://github.com/angular/bower-material">
-              <md-tooltip md-autohide>Install with Bower</md-tooltip>
-              <md-icon md-svg-src="img/icons/bower-logo.svg"></md-icon>
-            </md-button>
-            <md-button class="md-icon-button"
                        aria-label="Install with NPM"
                        ng-if="!currentComponent.docs.length && !currentComponent.isService"
                        target="_blank"
                        ng-href="https://www.npmjs.com/package/angular-material">
               <md-tooltip md-autohide>Install with NPM</md-tooltip>
-              <md-icon md-svg-src="img/icons/npm-logo.svg" style="transform: scale(1.3)"></md-icon>
+              <md-icon md-svg-src="img/icons/npm-logo.svg"></md-icon>
             </md-button>
             <md-button class="md-icon-button"
                        aria-label="View Source on Github"
@@ -105,7 +97,7 @@
                        target="_blank"
                        ng-href="{{BUILDCONFIG.repository}}/{{menu.version.current.github}}">
               <md-tooltip md-autohide>View Source on Github</md-tooltip>
-              <md-icon md-svg-src="img/icons/github.svg" style="color: rgba(255,255,255,0.97);"></md-icon>
+              <md-icon md-svg-src="img/icons/github-icon.svg" style="color: black;"></md-icon>
             </md-button>
 
             <md-select
@@ -137,9 +129,10 @@
             <md-button
               class="md-icon-button"
               aria-label="View Demo"
-              ng-class="{hide: !currentDoc || !currentDoc.hasDemo}"
+              ng-class="{hide: !currentDoc || !currentDoc.hasDemo || !currentComponent.demoUrl}"
               ng-href="{{currentComponent.demoUrl}}">
-              <md-icon md-svg-src="img/icons/ic_play_circle_fill_24px.svg" style="fill:green"></md-icon>
+              <md-icon md-svg-src="img/icons/ic_play_circle_fill_24px.svg" style="fill: #666666">
+              </md-icon>
               <md-tooltip>View Demo</md-tooltip>
             </md-button>
 
@@ -149,7 +142,7 @@
               ng-class="{hide: !currentDoc}"
               ng-href="{{currentDoc.githubUrl}}"
               hide-sm hide-md>
-              <md-icon md-svg-src="img/icons/github.svg" style="color: rgba(255,255,255,0.97);"></md-icon>
+              <md-icon md-svg-src="img/icons/github-icon.svg"></md-icon>
               <md-tooltip>View Source on Github</md-tooltip>
             </md-button>
           </div>
