@@ -133,7 +133,7 @@
           Safari
         </td>
         <td>
-          11.x<br>12.x
+          12.x<br>13.x
         </td>
       </tr>
       <tr>
@@ -141,12 +141,12 @@
           iOS
         </td>
         <td>
-          11.x<br>12.x
+          12.x<br>13.x
         </td>
       </tr>
       <tr>
         <td>
-          Firefox for Android<br/>UC<br/>QQ<br/>Baidu
+          Firefox for Android<br/>UC
         </td>
         <td>
           latest version
@@ -154,18 +154,10 @@
       </tr>
       <tr>
         <td>
-          Android Browser
-        </td>
-        <td>
-          4.4.3-4.4.4<br>latest version
-        </td>
-      </tr>
-      <tr>
-        <td>
           Samsung Internet
         </td>
         <td>
-          4<br>6.2<br>7.2
+          10.x
         </td>
       </tr>
       <tr>
@@ -202,14 +194,16 @@
       </li>
     </ul>
 
-
     <br/>
     <h2 class="md-headline">Conference Presentations:</h2>
     <p>
-      Here are some conference presentations that will provide overviews for your development with AngularJS Material.
+      Here are some conference presentations that will provide overviews for your development with
+      AngularJS Material.
     </p>
     <ul class="buckets" layout layout-align="center center" layout-wrap>
       <li flex="100" flex-gt-xs="50" ng-repeat="(index, link) in [
+        { href: 'https://www.youtube.com/watch?v=rRiV_b3WsoY', icon: 'ondemand_video', text: 'AngularJS Material v1.1.0 Updates', site : 'ng-conf',  date: '2016'},
+        { href: 'https://www.youtube.com/watch?v=6PMe_wc0SjI', icon: 'ondemand_video', text: 'Adaptive UI with AngularJS Material', site : 'DevFest NC',  date: '2015'},
         { href: 'https://www.youtube.com/watch?v=Qi31oO5u33U', icon: 'ondemand_video', text: 'Building with AngularJS Material', site : 'ng-conf',  date: '2015'},
         { href: 'https://www.youtube.com/watch?v=363o4i0rdvU', icon: 'ondemand_video', text: 'AngularJS Material in Practice', site : 'AngularConnect', date:'2015'}
       ]">
@@ -220,29 +214,6 @@
             ng-href="{{link.href}}">
           <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
           <span class="training_site">{{link.site}}</span> | <span class="training_link">{{link.text}}</span> | <span class="training_info">{{link.date}}</span>
-        </md-button>
-      </li>
-    </ul>
-
-
-    <br/>
-    <h2 class="md-headline">Google's Material Design</h2>
-    <p>
-      Material Design is a specification for a unified system of visual, motion, and interaction
-      design that adapts across different devices and different screen sizes.
-    </p>
-    <ul class="buckets" layout layout-align="center center" layout-wrap>
-      <li flex="100" flex-gt-xs="50" ng-repeat="(index, link) in [
-        { href: 'https://www.youtube.com/watch?v=Q8TXgCzxEnw', icon: 'ondemand_video', text: 'Watch a video', site : 'Google' },
-        { href: 'https://material.io/archive/guidelines/', icon: 'launch', text: 'Learn More', site : 'Google' }
-      ]">
-        <md-button
-            class="md-primary md-raised"
-            target="_blank"
-            aria-label="{{link.text}}"
-            ng-href="{{link.href}}">
-          <md-icon class="block" md-svg-src="img/icons/ic_{{link.icon}}_24px.svg"></md-icon>
-          {{link.site}} | <span class="training_link"> {{link.text}} </span>
         </md-button>
       </li>
     </ul>
