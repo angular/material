@@ -603,20 +603,20 @@ md-toolbar.demo-toolbar .md-button {
 /***************
  * Landing Page
  ***************/
-ul.buckets {
+main .doc-content ul.buckets {
   margin: 24px 0 24px -8px;
   padding: 0;
   position: relative;
 }
-ul.buckets li {
+main .doc-content ul.buckets li {
   list-style: none;
   margin: 0;
   text-align: center;
 }
-ul.buckets li md-card md-card-content {
+main .doc-content ul.buckets li md-card md-card-content {
   padding: 0;
 }
-ul.buckets li a {
+main .doc-content ul.buckets li a {
   display: block;
   font-weight: 500;
   padding: 16px 0;
@@ -626,15 +626,15 @@ ul.buckets li a {
   margin-right: 0;
   margin-top: 0;
 }
-ul.buckets li a,
-ul.buckets li a md-icon {
+main .doc-content ul.buckets li a,
+main .doc-content ul.buckets li a md-icon {
   color: #666 !important;
   transition: all 0.15s cubic-bezier(0.35, 0, 0.25, 1);
 }
-ul.buckets li a:hover,
-ul.buckets li a:focus,
-ul.buckets li a:hover md-icon,
-ul.buckets li a:focus md-icon {
+main .doc-content ul.buckets li a:hover,
+main .doc-content ul.buckets li a:focus,
+main .doc-content ul.buckets li a:hover md-icon,
+main .doc-content ul.buckets li a:focus md-icon {
   color: #106CC8 !important;
   background-color: #ebebeb !important;
 }
