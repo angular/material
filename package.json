@@ -88,12 +88,16 @@
     "minimist": "^1.2.3",
     "mkdirp": "0.5.1",
     "moment": "^2.24.0",
-    "natives": "^1.1.6",
     "postcss": "^7.0.27",
     "prompt-sync": "^4.2.0",
     "q": "^1.5.1",
     "stream-series": "^0.1.1",
     "through2": "^3.0.1"
+  },
+  "resolutions": {
+    "graceful-fs": "^4.2.3",
+    "natives": "^1.1.6",
+    "node-sass": "^4.13.1"
   },
   "scripts": {
     "build": "gulp build",
@@ -106,6 +110,7 @@
     "docs:build": "gulp docs",
     "docs:watch": "gulp watch site --dev",
     "gulp": "gulp",
+    "preinstall": "npx npm-force-resolutions",
     "test:ci": "gulp karma --config=config/karma-circleci.conf.js --reporters='dots,junit'",
     "test:fast": "gulp karma-fast",
     "test:full": "gulp karma",
@@ -122,7 +127,7 @@
     "not op_mob <= 12.1"
   ],
   "engines": {
-    "node": ">=8.17 <12",
+    "node": ">=8.17",
     "npm": ">=5"
   }
 }

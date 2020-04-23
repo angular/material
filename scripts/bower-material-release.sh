@@ -64,7 +64,7 @@ function run {
   replaceJsonProp "package.json" "version" "$VERSION"
 
   git add -A
-  git commit -am "release: version $VERSION"
+  git commit -am "release: v$VERSION"
   git tag -f v$VERSION
 
   echo "-- Pushing to bower-material..."
