@@ -9,6 +9,7 @@
   const prompt         = require('prompt-sync')({sigint: true});
   const child_process  = require('child_process');
   const pkg            = require('./package.json');
+  const pkgLock        = require('./package-lock.json');
   let oldVersion       = pkg.version;
   const abortCmds      = ['git reset --hard', 'git checkout staging', 'rm abort push'];
   const pushCmds       = ['rm abort push'];
@@ -57,8 +58,8 @@
     line();
     log('Your repo is ready to be pushed.');
     log(`Please look over ${"CHANGELOG.md".cyan} and make any changes.`);
-    log(`When you are ready, please run "${"./push".cyan}" to finish the process.`);
-    log('If you would like to cancel this release, please run "./abort"');
+    log(`When you are ready, please run "${"./push".green}" to finish the process.`);
+    log(`If you would like to cancel this release, please run "${"./abort".red}"`);
   }
 
   // utility methods
@@ -86,14 +87,20 @@
     abortCmds.push(`git branch -D release/${newVersion}`);
   }
 
-  /** writes the new version to package.json */
+  /** writes the new version to package.json and package-lock.json */
   function updateVersion () {
     start(`Updating ${"package.json".cyan} version from ${oldVersion.cyan} to ${newVersion.cyan}...`);
     pkg.version = newVersion;
     fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2));
     done();
+    start(`Updating ${"package-lock.json".cyan} version from ${oldVersion.cyan} to ${newVersion.cyan}...`);
+    pkgLock.version = newVersion;
+    fs.writeFileSync('./package-lock.json', JSON.stringify(pkgLock, null, 2));
+    done();
     abortCmds.push('git checkout package.json');
+    abortCmds.push('git checkout package-lock.json');
     pushCmds.push('git add package.json');
+    pushCmds.push('git add package-lock.json');
   }
 
   /** generates the changelog from the commits since the last release */
@@ -181,7 +188,7 @@
     }
   }
 
-  /** adds git tag for release and pushes to github */
+  /** adds git tag for release and pushes to GitHub */
   function tagRelease () {
     pushCmds.push(
       `git tag v${newVersion} -f`,
@@ -193,14 +200,14 @@
   /** amends the commit to include local changes (ie. changelog) */
   function commitChanges () {
     start('Committing changes...');
-    exec(`git commit -am "release: version ${newVersion}"`);
+    exec(`git commit -am "release: v${newVersion}"`);
     done();
     pushCmds.push('git commit --amend --no-edit');
   }
 
-  /** utility method for cloning github repos */
+  /** utility method for cloning GitHub repos */
   function cloneRepo (repo) {
-    start(`Cloning ${repo.cyan} from Github...`);
+    start(`Cloning ${repo.cyan} from GitHub...`);
     exec(`rm -rf ${repo}`);
     exec(`git clone git@github.com:angular/${repo}.git --depth=1`);
     done();
@@ -215,7 +222,7 @@
 
   /** updates the version for bower-material in package.json and bower.json */
   function updateBowerVersion () {
-    start('Updating bower version...');
+    start(`Updating ${"bower-material".cyan} version...`);
     const options = { cwd: './bower-material' };
     const bower   = require(options.cwd + '/bower.json'),
           pkg     = require(options.cwd + '/package.json');
@@ -224,7 +231,7 @@
     fs.writeFileSync(options.cwd + '/package.json', JSON.stringify(pkg, null, 2));
     fs.writeFileSync(options.cwd + '/bower.json', JSON.stringify(bower, null, 2));
     done();
-    start('Building bower files...');
+    start(`Building ${"bower-material".cyan} files...`);
     // build files for bower
     exec([
       'rm -rf dist',
@@ -234,18 +241,18 @@
       'rm -rf dist/demos'
     ]);
     done();
-    start('Copy files into bower repo...');
+    start(`Copying files into ${"bower-material".cyan} repo...`);
     // copy files over to bower repo
     exec([
       'cp -Rf ../dist/* ./',
       'git add -A',
-      `git commit -m "release: version ${newVersion}"`,
+      `git commit -am "release: v${newVersion}"`,
       'rm -rf ../dist'
     ], options);
     done();
     // add steps to push script
     pushCmds.push(
-      comment(`push to bower (master and tag) and publish to npm as '${npmTag}'`),
+      comment(`push to bower-material (master and tag) and publish to npm as '${npmTag}'`),
       'cd ' + options.cwd,
       'cp ../CHANGELOG.md .',
       'git add CHANGELOG.md',
@@ -278,7 +285,8 @@
       `cp -Rf ../dist/docs ${newVersion}`,
       'rm -rf latest && cp -Rf ../dist/docs latest',
       'git add -A',
-      `git commit -m "release: version ${newVersion}"`,
+      `git commit -am "release: v${newVersion}"`,
+      `git tag -f v${newVersion}`,
       'rm -rf ../dist'
     ], options);
     replaceBaseHref(newVersion);
@@ -295,6 +303,7 @@
       'cd ' + options.cwd,
       'git pull --rebase --strategy=ours',
       'git push',
+      'git push --tags',
       'cd ..'
     );
 

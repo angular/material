@@ -41,11 +41,12 @@ function run {
   echo "-- Storing credentials..."
   echo "https://${ANGULARJS_MATERIAL_DOCS_SITE_TOKEN}:@github.com" > .git/credentials
 
-  echo "-- Committing snapshot..."
+  echo "-- Committing and tagging snapshot..."
   git add -A
-  git commit -m "snapshot: $VERSION"
+  git commit -am "snapshot: v$VERSION"
+  git tag -f v$VERSION
 
-  echo "-- Pushing snapshot..."
+  echo "-- Pushing snapshot to code.material.angularjs.org..."
   git push -q origin master
 
   cd ../
