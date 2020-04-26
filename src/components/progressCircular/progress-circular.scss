@@ -10,6 +10,8 @@ md-progress-circular {
     position: relative;
     display: block;
 
+    @include rtl(transform, scale(1, 1), scale(-1, 1));
+
     &._md-progress-circular-disabled {
         visibility: hidden;
     }
