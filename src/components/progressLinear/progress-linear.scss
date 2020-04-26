@@ -9,6 +9,8 @@ md-progress-linear {
   padding-top: 0 !important;
   margin-bottom: 0 !important;
 
+  @include rtl(transform, scale(1, 1), scale(-1, 1));
+
   &._md-progress-linear-disabled {
     visibility: hidden;
   }
