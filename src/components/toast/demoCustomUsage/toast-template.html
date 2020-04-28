@@ -1,9 +1,15 @@
-<md-toast>
-  <span class="md-toast-text" flex>Custom toast!</span>
-  <md-button class="md-highlight" ng-click="openMoreInfo($event)">
+<md-toast role="alert" aria-relevant="all">
+  <span class="md-toast-text" flex>{{ctrl.toastMessage}}</span>
+  <span class="md-visually-hidden">
+    Press Escape to dismiss. Press Control-"{{ctrl.dialogKey}}" for
+  </span>
+  <md-button class="md-highlight" ng-click="ctrl.openMoreInfo($event)">
     More info
   </md-button>
-  <md-button ng-click="closeToast()">
-    Close
+  <span class="md-visually-hidden">
+    Press Control-"{{ctrl.undoKey}}" to
+  </span>
+  <md-button ng-click="ctrl.closeToast()">
+    Undo
   </md-button>
 </md-toast>

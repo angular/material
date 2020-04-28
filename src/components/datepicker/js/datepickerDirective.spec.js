@@ -75,6 +75,10 @@ describe('md-datepicker', function() {
     pageScope.$apply();
   }
 
+  it('should be the same date object as the initial ng-model', function() {
+    expect(pageScope.myDate).toBe(initialDate);
+  });
+
   it('should set initial value from ng-model', function() {
     expect(controller.inputElement.value).toBe(dateLocale.formatDate(initialDate));
   });
@@ -105,15 +109,20 @@ describe('md-datepicker', function() {
     expect(controller.inputElement.placeholder).toBe('Fancy new placeholder');
   });
 
-  it('should throw an error when the model is not a date', function() {
-    expect(function() {
-      pageScope.myDate = '2015-01-01';
-      pageScope.$apply();
-    }).toThrowError('The ng-model for md-datepicker must be a Date instance. ' +
-        'Currently the model is a: string');
+  it('should forward the aria-label to the generated input', function() {
+    createDatepickerInstance('<md-datepicker ng-model="myDate" aria-label="Enter a date"></md-datepicker>');
+    expect(controller.ngInputElement.attr('aria-label')).toBe('Enter a date');
   });
 
-  it('should support null and undefined values', function() {
+  it('should throw an error when the model cannot be parsed into a date', function() {
+    expect(function() {
+      pageScope.myDate = 'Frodo Baggins';
+      pageScope.$apply();
+    }).toThrowError('The ng-model for md-datepicker must be a Date instance or a value ' +
+          'that can be parsed into a date. Currently the model is of type: string');
+  });
+
+  it('should support null, undefined and values that can be parsed into a date', function() {
     expect(function() {
       pageScope.myDate = null;
       pageScope.$apply();
@@ -121,6 +130,8 @@ describe('md-datepicker', function() {
       pageScope.myDate = undefined;
       pageScope.$apply();
 
+      pageScope.myDate = '2016-09-08';
+      pageScope.$apply();
     }).not.toThrow();
   });
 
@@ -335,6 +346,16 @@ describe('md-datepicker', function() {
       populateInputElement('5/30/2012');
 
       expect(controller.ngModelCtrl.$error['mindate']).toBe(true);
+    });
+
+    it('should apply ngMessages errors when the date becomes invalid from keyboard input', function() {
+      populateInputElement('5/30/2012');
+      pageScope.$apply();
+      expect(controller.ngModelCtrl.$error['valid']).toBeFalsy();
+
+      populateInputElement('5/30/2012z');
+      pageScope.$apply();
+      expect(controller.ngModelCtrl.$error['valid']).toBeTruthy();
     });
 
     it('should evaluate ngChange expression when date changes from keyboard input', function() {
@@ -828,22 +849,6 @@ describe('md-datepicker', function() {
 
       expect(ariaAttr).toBeTruthy();
       expect(controller.calendarPane.id).toBe(ariaAttr);
-    });
-
-    it('should toggle the aria-expanded value', function() {
-      expect(controller.ngInputElement.attr('aria-expanded')).toBe('false');
-
-      controller.openCalendarPane({
-        target: controller.inputElement
-      });
-      scope.$apply();
-
-      expect(controller.ngInputElement.attr('aria-expanded')).toBe('true');
-
-      controller.closeCalendarPane();
-      scope.$apply();
-
-      expect(controller.ngInputElement.attr('aria-expanded')).toBe('false');
     });
 
     describe('tabindex behavior', function() {

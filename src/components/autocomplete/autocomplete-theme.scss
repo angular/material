@@ -1,7 +1,28 @@
+@mixin md-autocomplete-input($input-color) {
+  md-input-container.md-input-focused {
+    .md-input {
+      border-color: $input-color;
+    }
+    label,
+    md-icon {
+      color: $input-color;
+    }
+  }
+}
+@mixin md-autocomplete-progress($container-color, $bar-color) {
+  md-progress-linear {
+    .md-container {
+      background-color: $container-color;
+    }
+    .md-bar {
+      background-color: $bar-color;
+    }
+  }
+}
 md-autocomplete.md-THEME_NAME-theme {
-  background: '{{background-A100}}';
+  background: '{{background-hue-1}}';
   &[disabled]:not([md-floating-label]) {
-    background: '{{background-100}}';
+    background: '{{background-hue-2}}';
   }
   button {
     md-icon {
@@ -13,17 +34,26 @@ md-autocomplete.md-THEME_NAME-theme {
       background: '{{background-600-0.3}}';
     }
   }
+  input {
+    color: '{{foreground-1}}';
+  }
+  &.md-accent {
+    @include md-autocomplete-input('{{accent-color}}');
+    @include md-autocomplete-progress('{{accent-100}}', '{{accent-color}}');
+  }
+  &.md-warn {
+    @include md-autocomplete-input('{{warn-A700}}');
+    @include md-autocomplete-progress('{{warn-100}}', '{{warn-color}}');
+  }
 }
-.md-autocomplete-suggestions-container.md-THEME_NAME-theme {
-  background: '{{background-A100}}';
-  li {
-    color: '{{background-900}}';
-    .highlight {
-      color: '{{background-600}}';
-    }
+.md-autocomplete-suggestions-container.md-THEME_NAME-theme,
+.md-autocomplete-standard-list-container.md-THEME_NAME-theme {
+  background: '{{background-hue-1}}';
+  .md-autocomplete-suggestion {
+    color: '{{foreground-1}}';
     &:hover,
     &.selected {
-      background: '{{background-200}}';
+      background: '{{background-500-0.18}}';
     }
   }
 }

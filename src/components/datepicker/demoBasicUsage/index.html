@@ -29,5 +29,10 @@
       <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date" md-is-open="ctrl.isOpen"></md-datepicker>
       <md-button class="md-primary md-raised" ng-click="ctrl.isOpen = true">Open</md-button>
     </div>
+
+    <div flex-gt-xs>
+      <h4>Date-picker that only allows for the month to be selected</h4>
+      <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date" md-mode="month"></md-datepicker>
+    </div>
   </div>
 </md-content>

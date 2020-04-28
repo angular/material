@@ -15,14 +15,25 @@
 }
 
 @mixin input-placeholder-color($color) {
-  $pseudos: '::-webkit-input-placeholder', ':-moz-placeholder', '::-moz-placeholder',
-            ':-ms-input-placeholder',  '::-webkit-input-placeholder';
+  $pseudos: '::-webkit-input-placeholder', // For QQ Browser
+            ':-ms-input-placeholder', // For IE
+            '::-ms-input-placeholder', // For Edge
+            '::placeholder';
+  $firefox-pseudos: ':-moz-placeholder', '::-moz-placeholder';
 
   // It is important to export every pseudo within its own block, because otherwise the placeholder
   // won't be set on the most browsers.
   @each $pseudo in $pseudos {
     &#{$pseudo} {
       color: unquote($color);
+    }
+  }
+  // Firefox reduces the opacity of placeholders so we need to keep them opaque to avoid applying
+  // double the transparency and causing a11y failures due to text contrast.
+  @each $pseudo in $firefox-pseudos {
+    &#{$pseudo} {
+      color: unquote($color);
+      opacity: 1;
     }
   }
 }

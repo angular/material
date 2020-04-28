@@ -14,9 +14,10 @@ md-content.autocomplete {
 .contact-item {
   box-sizing: border-box;
   &.selected {
-    opacity: 0.5;
-    h3 {
-      opacity: 0.5;
+    background-color: #E3ECF5;
+    p {
+      color: rgba(0,0,0,0.87);
+      font-weight: 400;
     }
   }
   .md-list-item-text {

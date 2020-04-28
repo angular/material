@@ -1,5 +1,5 @@
 angular
-  .module('sidenavDemo1', ['ngMaterial'])
+  .module('basicUsageSidenavDemo', ['ngMaterial'])
   .controller('AppCtrl', function ($scope, $timeout, $mdSidenav, $log) {
     $scope.toggleLeft = buildDelayedToggler('left');
     $scope.toggleRight = buildToggler('right');

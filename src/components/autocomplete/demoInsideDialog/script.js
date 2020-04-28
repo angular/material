@@ -15,8 +15,8 @@
         parent: angular.element(document.body),
         targetEvent: $event,
         clickOutsideToClose:true
-      })
-    }
+      });
+    };
   }
 
   function DialogCtrl ($timeout, $q, $scope, $mdDialog) {
@@ -46,7 +46,7 @@
      * remote dataservice call.
      */
     function querySearch (query) {
-      return query ? self.states.filter( createFilterFor(query) ) : self.states;
+      return query ? self.states.filter(createFilterFor(query)) : self.states;
     }
 
     /**
@@ -61,7 +61,7 @@
               South Dakota, Tennessee, Texas, Utah, Vermont, Virginia, Washington, West Virginia,\
               Wisconsin, Wyoming';
 
-      return allStates.split(/, +/g).map( function (state) {
+      return allStates.split(/, +/g).map(function (state) {
         return {
           value: state.toLowerCase(),
           display: state
@@ -73,7 +73,7 @@
      * Create filter function for a query string
      */
     function createFilterFor(query) {
-      var lowercaseQuery = angular.lowercase(query);
+      var lowercaseQuery = query.toLowerCase();
 
       return function filterFn(state) {
         return (state.value.indexOf(lowercaseQuery) === 0);

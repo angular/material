@@ -19,7 +19,7 @@
   function ComponentRegistry($log, $q) {
 
     var self;
-    var instances = [ ];
+    var instances = [];
     var pendings = { };
 
     return self = {
@@ -27,7 +27,7 @@
        * Used to print an error when an instance for a handle isn't found.
        */
       notFoundError: function(handle, msgContext) {
-        $log.error( (msgContext || "") + 'No instance found for handle', handle);
+        $log.error((msgContext || "") + 'No instance found for handle', handle);
       },
       /**
        * Return all registered instances as an array.
@@ -41,12 +41,12 @@
        * @param handle the String handle to look up for a registered instance.
        */
       get: function(handle) {
-        if ( !isValidID(handle) ) return null;
+        if (!isValidID(handle)) return null;
 
         var i, j, instance;
-        for(i = 0, j = instances.length; i < j; i++) {
+        for (i = 0, j = instances.length; i < j; i++) {
           instance = instances[i];
-          if(instance.$$mdHandle === handle) {
+          if (instance.$$mdHandle === handle) {
             return instance;
           }
         }
@@ -59,7 +59,7 @@
        * @param handle the handle to identify the instance under.
        */
       register: function(instance, handle) {
-        if ( !handle ) return angular.noop;
+        if (!handle) return angular.noop;
 
         instance.$$mdHandle = handle;
         instances.push(instance);
@@ -82,7 +82,7 @@
          */
         function resolveWhen() {
           var dfd = pendings[handle];
-          if ( dfd ) {
+          if (dfd) {
             dfd.forEach(function (promise) {
               promise.resolve(instance);
             });
@@ -97,12 +97,12 @@
        * all listeners when the instance is registered.
        */
       when : function(handle) {
-        if ( isValidID(handle) ) {
+        if (isValidID(handle)) {
           var deferred = $q.defer();
           var instance = self.get(handle);
 
-          if ( instance )  {
-            deferred.resolve( instance );
+          if (instance)  {
+            deferred.resolve(instance);
           } else {
             if (pendings[handle] === undefined) {
               pendings[handle] = [];

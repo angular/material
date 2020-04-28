@@ -48,13 +48,13 @@ describe('md-slider', function() {
   it('should not set model below the min', function() {
     var slider = setup('ng-model="value" min="0" max="100"');
     pageScope.$apply('value = -50');
-    expect(slider.attr('aria-valuenow')).toEqual('0');
+    expect(getWrapper(slider).attr('aria-valuenow')).toEqual('0');
   });
 
   it('should not set model above the max', function() {
     var slider = setup('ng-model="value" min="0" max="100"');
     pageScope.$apply('value = 150');
-    expect(slider.attr('aria-valuenow')).toEqual('100');
+    expect(getWrapper(slider).attr('aria-valuenow')).toEqual('100');
   });
 
   it('should set model on press', function() {
@@ -136,6 +136,162 @@ describe('md-slider', function() {
     expect(pageScope.model).toBe(100);
   });
 
+  describe('when raising max and model value equally beyond previous max simultaneously', function() {
+
+    var slider = null;
+
+    beforeEach(function() {
+      slider = setup('min="0" max="{{max}}" ng-model="model"');
+      pageScope.max = 5;
+      pageScope.model = 5;
+      pageScope.$apply();
+      expect(getWrapper(slider).attr('aria-valuenow')).toEqual('5');
+      expect(getWrapper(slider).attr('aria-valuemax')).toEqual('5');
+      pageScope.model = 6;
+      pageScope.max = 6;
+      pageScope.$apply();
+    });
+
+    it('should have updated max correctly', function () {
+      expect(getWrapper(slider).attr('aria-valuemax')).toEqual('6');
+    });
+
+    it('should have updated value correctly', function () {
+      expect(getWrapper(slider).attr('aria-valuenow')).toEqual('6');
+    });
+
+  });
+
+  describe('when raising max and model value beyond previous max simultaneously', function() {
+
+    var slider = null;
+
+    beforeEach(function() {
+      slider = setup('min="0" max="{{max}}" ng-model="model"');
+      pageScope.max = 4;
+      pageScope.model = 3;
+      pageScope.$apply();
+      expect(getWrapper(slider).attr('aria-valuenow')).toEqual('3');
+      expect(getWrapper(slider).attr('aria-valuemax')).toEqual('4');
+      pageScope.model = 6;
+      pageScope.max = 7;
+      pageScope.$apply();
+    });
+
+    it('should have updated max correctly', function () {
+      expect(getWrapper(slider).attr('aria-valuemax')).toEqual('7');
+    });
+
+    it('should have updated value correctly', function () {
+      expect(getWrapper(slider).attr('aria-valuenow')).toEqual('6');
+    });
+
+  });
+
+  describe('when raising max and setting model value below previous max simultaneously', function() {
+
+    var slider = null;
+
+    beforeEach(function() {
+      slider = setup('min="0" max="{{max}}" ng-model="model"');
+      pageScope.max = 4;
+      pageScope.model = 2;
+      pageScope.$apply();
+      expect(getWrapper(slider).attr('aria-valuenow')).toEqual('2');
+      expect(getWrapper(slider).attr('aria-valuemax')).toEqual('4');
+      pageScope.model = 3;
+      pageScope.max = 5;
+      pageScope.$apply();
+    });
+
+    it('should have updated max correctly', function () {
+      expect(getWrapper(slider).attr('aria-valuemax')).toEqual('5');
+    });
+
+    it('should have updated value correctly', function () {
+      expect(getWrapper(slider).attr('aria-valuenow')).toEqual('3');
+    });
+
+  });
+
+  describe('when lowering min and model value equally below previous min simultaneously', function() {
+
+    var slider = null;
+
+    beforeEach(function() {
+      slider = setup('min="{{min}}" max="10" ng-model="model"');
+      pageScope.min = 5;
+      pageScope.model = 5;
+      pageScope.$apply();
+      expect(getWrapper(slider).attr('aria-valuenow')).toEqual('5');
+      expect(getWrapper(slider).attr('aria-valuemin')).toEqual('5');
+      pageScope.model = 2;
+      pageScope.min = 2;
+      pageScope.$apply();
+    });
+
+    it('should have updated min correctly', function () {
+      expect(getWrapper(slider).attr('aria-valuemin')).toEqual('2');
+    });
+
+    it('should have updated value correctly', function () {
+      expect(getWrapper(slider).attr('aria-valuenow')).toEqual('2');
+    });
+
+  });
+
+  describe('when lowering min and model value below previous min simultaneously', function() {
+
+    var slider = null;
+
+    beforeEach(function() {
+      slider = setup('min="{{min}}" max="10" ng-model="model"');
+      pageScope.min = 5;
+      pageScope.model = 6;
+      pageScope.$apply();
+      expect(getWrapper(slider).attr('aria-valuenow')).toEqual('6');
+      expect(getWrapper(slider).attr('aria-valuemin')).toEqual('5');
+      pageScope.model = 3;
+      pageScope.min = 2;
+      pageScope.$apply();
+    });
+
+    it('should have updated min correctly', function () {
+      expect(getWrapper(slider).attr('aria-valuemin')).toEqual('2');
+    });
+
+    it('should have updated value correctly', function () {
+      expect(getWrapper(slider).attr('aria-valuenow')).toEqual('3');
+    });
+
+  });
+
+  describe('when lowering min and setting model value above previous min simultaneously', function() {
+
+    var slider = null;
+
+    beforeEach(function() {
+      slider = setup('min="{{min}}" max="10" ng-model="model"');
+      pageScope.min = 5;
+      pageScope.model = 7;
+      pageScope.$apply();
+      expect(getWrapper(slider).attr('aria-valuenow')).toEqual('7');
+      expect(getWrapper(slider).attr('aria-valuemin')).toEqual('5');
+      pageScope.model = 6;
+      pageScope.min = 2;
+      pageScope.$apply();
+    });
+
+    it('should have updated min correctly', function () {
+      expect(getWrapper(slider).attr('aria-valuemin')).toEqual('2');
+    });
+
+    it('should have updated value correctly', function () {
+      expect(getWrapper(slider).attr('aria-valuenow')).toEqual('6');
+    });
+
+  });
+
   it('should update the thumb text', function() {
     var slider = setup('ng-model="value" md-discrete min="0" max="100" step="1"');
     var wrapper = getWrapper(slider);
@@ -191,16 +347,16 @@ describe('md-slider', function() {
     pageScope.$apply('model = 102');
 
     expect(wrapper.attr('role')).toEqual('slider');
-    expect(slider.attr('aria-valuemin')).toEqual('100');
-    expect(slider.attr('aria-valuemax')).toEqual('104');
-    expect(slider.attr('aria-valuenow')).toEqual('102');
+    expect(getWrapper(slider).attr('aria-valuemin')).toEqual('100');
+    expect(getWrapper(slider).attr('aria-valuemax')).toEqual('104');
+    expect(getWrapper(slider).attr('aria-valuenow')).toEqual('102');
 
     wrapper.triggerHandler({
       type: 'keydown',
       keyCode: $mdConstant.KEY_CODE.LEFT_ARROW
     });
     $timeout.flush();
-    expect(slider.attr('aria-valuenow')).toEqual('100');
+    expect(getWrapper(slider).attr('aria-valuenow')).toEqual('100');
   });
 
   it('should ignore pressdown events when disabled', function() {
@@ -779,7 +935,7 @@ describe('md-slider', function() {
 
   });
 
-  
+
   it('should set a default tabindex', function() {
     var slider = setup();
     var wrapper = getWrapper(slider);

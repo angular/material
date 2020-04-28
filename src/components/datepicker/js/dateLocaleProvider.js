@@ -9,33 +9,43 @@
    * @description
    * The `$mdDateLocaleProvider` is the provider that creates the `$mdDateLocale` service.
    * This provider that allows the user to specify messages, formatters, and parsers for date
-   * internationalization. The `$mdDateLocale` service itself is consumed by Angular Material
-   * components that deal with dates.
+   * internationalization. The `$mdDateLocale` service itself is consumed by AngularJS Material
+   * components that deal with dates (i.e. {@link api/directive/mdDatepicker mdDatepicker}).
    *
-   * @property {(Array<string>)=} months Array of month names (in order).
-   * @property {(Array<string>)=} shortMonths Array of abbreviated month names.
-   * @property {(Array<string>)=} days Array of the days of the week (in order).
-   * @property {(Array<string>)=} shortDays Array of abbreviated dayes of the week.
-   * @property {(Array<string>)=} dates Array of dates of the month. Only necessary for locales
-   *     using a numeral system other than [1, 2, 3...].
-   * @property {(Array<string>)=} firstDayOfWeek The first day of the week. Sunday = 0, Monday = 1,
-   *    etc.
-   * @property {(function(string): Date)=} parseDate Function to parse a date object from a string.
-   * @property {(function(Date, string): string)=} formatDate Function to format a date object to a
-   *     string. The datepicker directive also provides the time zone, if it was specified.
-   * @property {(function(Date): string)=} monthHeaderFormatter Function that returns the label for
-   *     a month given a date.
-   * @property {(function(Date): string)=} monthFormatter Function that returns the full name of a month
-   *     for a giben date.
-   * @property {(function(number): string)=} weekNumberFormatter Function that returns a label for
-   *     a week given the week number.
-   * @property {(string)=} msgCalendar Translation of the label "Calendar" for the current locale.
-   * @property {(string)=} msgOpenCalendar Translation of the button label "Open calendar" for the
-   *     current locale.
-   * @property {Date=} firstRenderableDate The date from which the datepicker calendar will begin
-   * rendering. Note that this will be ignored if a minimum date is set. Defaults to January 1st 1880.
-   * @property {Date=} lastRenderableDate The last date that will be rendered by the datepicker
-   * calendar. Note that this will be ignored if a maximum date is set. Defaults to January 1st 2130.
+   * @property {Array<string>} months Array of month names (in order).
+   * @property {Array<string>} shortMonths Array of abbreviated month names.
+   * @property {Array<string>} days Array of the days of the week (in order).
+   * @property {Array<string>} shortDays Array of abbreviated days of the week.
+   * @property {Array<string>} dates Array of dates of the month. Only necessary for locales
+   *  using a numeral system other than [1, 2, 3...].
+   * @property {Array<string>} firstDayOfWeek The first day of the week. Sunday = 0, Monday = 1,
+   *  etc.
+   * @property {function(string): Date} parseDate Function that converts a date string to a Date
+   *  object (the date portion).
+   * @property {function(Date, string): string} formatDate Function to format a date object to a
+   *  string. The datepicker directive also provides the time zone, if it was specified.
+   * @property {function(Date): string} monthHeaderFormatter Function that returns the label for
+   *  a month given a date.
+   * @property {function(Date): string} monthFormatter Function that returns the full name of a month
+   *  for a given date.
+   * @property {function(number): string} weekNumberFormatter Function that returns a label for
+   *  a week given the week number.
+   * @property {function(Date): string} longDateFormatter Function that formats a date into a long
+   *  `aria-label` that is read by the screen reader when the focused date changes.
+   * @property {string} msgCalendar Translation of the label "Calendar" for the current locale.
+   * @property {string} msgOpenCalendar Translation of the button label "Open calendar" for the
+   *  current locale.
+   * @property {Date} firstRenderableDate The date from which the datepicker calendar will begin
+   *  rendering. Note that this will be ignored if a minimum date is set.
+   *  Defaults to January 1st 1880.
+   * @property {Date} lastRenderableDate The last date that will be rendered by the datepicker
+   *  calendar. Note that this will be ignored if a maximum date is set.
+   *  Defaults to January 1st 2130.
+   * @property {function(string): boolean} isDateComplete Function to determine whether a string
+   *  makes sense to be parsed to a `Date` object. Returns `true` if the date appears to be complete
+   *  and parsing should occur. By default, this checks for 3 groups of text or numbers separated
+   *  by delimiters. This means that by default, date strings must include a month, day, and year
+   *  to be parsed and for the model to be updated.
    *
    * @usage
    * <hljs lang="js">
@@ -64,6 +74,16 @@
    *       return m.isValid() ? m.format('L') : '';
    *     };
    *
+   *     // Allow only a day and month to be specified.
+   *     // This is required if using the 'M/D' format with moment.js.
+   *     $mdDateLocaleProvider.isDateComplete = function(dateString) {
+   *       dateString = dateString.trim();
+   *
+   *       // Look for two chunks of content (either numbers or text) separated by delimiters.
+   *       var re = /^(([a-zA-Z]{3,}|[0-9]{1,4})([ .,]+|[/-]))([a-zA-Z]{3,}|[0-9]{1,4})/;
+   *       return re.test(dateString);
+   *     };
+   *
    *     $mdDateLocaleProvider.monthHeaderFormatter = function(date) {
    *       return myShortMonths[date.getMonth()] + ' ' + date.getFullYear();
    *     };
@@ -90,7 +110,7 @@
 
     /** @constructor */
     function DateLocaleProvider() {
-      /** Array of full month names. E.g., ['January', 'Febuary', ...] */
+      /** Array of full month names. E.g., ['January', 'February', ...] */
       this.months = null;
 
       /** Array of abbreviated month names. E.g., ['Jan', 'Feb', ...] */
@@ -138,6 +158,13 @@
        * @type {function(Date): string}
        */
       this.longDateFormatter = null;
+
+      /**
+       * Function to determine whether a string makes sense to be
+       * parsed to a Date object.
+       * @type {function(string): boolean}
+       */
+      this.isDateComplete = null;
 
       /**
        * ARIA label for the calendar "dialog" used in the datepicker.
@@ -208,7 +235,7 @@
 
         // Looks for three chunks of content (either numbers or text) separated
         // by delimiters.
-        var re = /^(([a-zA-Z]{3,}|[0-9]{1,4})([ \.,]+|[\/\-])){2}([a-zA-Z]{3,}|[0-9]{1,4})$/;
+        var re = /^(([a-zA-Z]{3,}|[0-9]{1,4})([ .,]+|[/-])){2}([a-zA-Z]{3,}|[0-9]{1,4})$/;
         return re.test(dateString);
       }
 

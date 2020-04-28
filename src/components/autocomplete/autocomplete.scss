@@ -28,7 +28,6 @@ md-autocomplete {
     }
 
     .md-show-clear-button {
-
       button {
         display: block;
         position: absolute;
@@ -43,10 +42,8 @@ md-autocomplete {
         @include rtl-prop(padding-right, padding-left, $md-autocomplete-clear-size, 0);
       }
     }
-
   }
   md-autocomplete-wrap {
-
     // Layout [layout='row']
     display: flex;
     flex-direction: row;
@@ -59,9 +56,10 @@ md-autocomplete {
       z-index: $z-index-backdrop + 1;
     }
 
-    md-input-container, input {
+    md-input-container,
+    input {
       // Layout [flex]
-      flex: 1 1 0%;
+      flex: 1 1 0;
       box-sizing: border-box;
       min-width : 0;
     }
@@ -174,13 +172,14 @@ md-autocomplete {
     input {
       border: 1px solid $border-color;
     }
-    li:focus {
+    .md-autocomplete-suggestion:focus {
       color: #fff;
     }
   }
 }
 
-.md-virtual-repeat-container.md-autocomplete-suggestions-container {
+.md-virtual-repeat-container.md-autocomplete-suggestions-container,
+.md-standard-list-container.md-autocomplete-suggestions-container {
   position: absolute;
   box-shadow: 0 2px 5px rgba(black, 0.25);
   z-index: $z-index-tooltip;
@@ -188,9 +187,23 @@ md-autocomplete {
   // Expand the virtualRepeatContainer as much as the max-height from the JavaScript allows.
   // This is necessary for the virtualRepeatContainer to be able to grow back.
   height: 100%;
+
+  .highlight {
+    font-weight: bold;
+  }
 }
 
-.md-virtual-repeat-container.md-not-found {
+.md-standard-list-container {
+  box-sizing: border-box;
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.md-virtual-repeat-container.md-not-found,
+.md-standard-list-container.md-not-found {
   height: $md-autocomplete-item-height;
 }
 
@@ -199,7 +212,7 @@ md-autocomplete {
   list-style: none;
   padding: 0;
 
-  li {
+  .md-autocomplete-suggestion {
     font-size: 14px;
     overflow: hidden;
     padding: 0 15px;

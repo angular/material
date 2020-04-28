@@ -1,10 +1,10 @@
 /**
  *
- * Angular-Material-Mocks
+ * AngularJS-Material-Mocks
  *
  * Developers interested in running their own custom unit tests WITH angular-material.js loaded...
  * must also include this *mocks* file. Similar to `angular-mocks.js`, `angular-material-mocks.js`
- * will override and disable specific Angular Material performance settings:
+ * will override and disable specific AngularJS Material performance settings:
  *
  *  - Disabled Theme CSS rule generations
  *  - Forces $mdAria.expectWithText() to be synchronous
@@ -60,8 +60,8 @@ angular.module('ngMaterial-mock', [
     }]);
 
     /**
-      * Angular Material dynamically generates Style tags
-      * based on themes and palletes; for each ng-app.
+      * AngularJS Material dynamically generates Style tags
+      * based on themes and palettes; for each ng-app.
       *
       * For testing, we want to disable generation and
       * <style> DOM injections. So we clear the huge THEME

@@ -76,7 +76,7 @@ md-tabs-wrapper {
   display: block;
   position: relative;
   // transform is needed for iOS Safari to prevent content from disappearing on scroll
-  transform: translate3d(0, 0, 0);
+  transform: translate(0, 0);
   md-prev-button, md-next-button {
     height: 100%;
     width: $tabs-paginator-width;
@@ -103,7 +103,12 @@ md-tabs-wrapper {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate3d(-50%, -50%, 0);
+      transform: translate(-50%, -50%);
+    }
+
+    // For RTL tabs, rotate the buttons
+    [dir="rtl"] & {
+      transform: rotateY(180deg) translateY(-50%);
     }
   }
   md-prev-button {
@@ -113,8 +118,10 @@ md-tabs-wrapper {
   md-next-button {
     @include rtl-prop(right, left, 0, auto);
     background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE3LjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPiA8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPiA8c3ZnIHZlcnNpb249IjEuMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMjQgMjQiIHhtbDpzcGFjZT0icHJlc2VydmUiPiA8ZyBpZD0iSGVhZGVyIj4gPGc+IDxyZWN0IHg9Ii02MTgiIHk9Ii0xMzM2IiBmaWxsPSJub25lIiB3aWR0aD0iMTQwMCIgaGVpZ2h0PSIzNjAwIi8+IDwvZz4gPC9nPiA8ZyBpZD0iTGFiZWwiPiA8L2c+IDxnIGlkPSJJY29uIj4gPGc+IDxwb2x5Z29uIHBvaW50cz0iMTAsNiA4LjYsNy40IDEzLjIsMTIgOC42LDE2LjYgMTAsMTggMTYsMTIgCQkiIHN0eWxlPSJmaWxsOndoaXRlOyIvPiA8cmVjdCBmaWxsPSJub25lIiB3aWR0aD0iMjQiIGhlaWdodD0iMjQiLz4gPC9nPiA8L2c+IDxnIGlkPSJHcmlkIiBkaXNwbGF5PSJub25lIj4gPGcgZGlzcGxheT0iaW5saW5lIj4gPC9nPiA8L2c+IDwvc3ZnPg0K');
+
+    // In regular mode, we need to flip the chevron icon to point the other way
     md-icon {
-      transform: translate3d(-50%, -50%, 0) rotate(180deg);
+      transform: translate(-50%, -50%) rotate(180deg);
     }
   }
   &.md-stretch-tabs {
@@ -159,13 +166,11 @@ md-pagination-wrapper {
   display: flex;
   transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
   position: absolute;
-  width: 999999px;
   @include rtl-prop(left, right, 0, auto);
-  transform: translate3d(0, 0, 0);
+  transform: translate(0, 0);
   &.md-center-tabs {
     position: relative;
-    width: auto;
-    margin: 0 auto;
+    justify-content: center;
   }
 }
 
@@ -189,7 +194,7 @@ md-tab-content {
   transition: transform $swift-ease-in-out-duration $swift-ease-in-out-timing-function;
   overflow: auto;
   // transform is needed for iOS Safari to prevent content from disappearing on scroll
-  transform: translate3d(0, 0, 0);
+  transform: translate(0, 0);
   &.md-no-scroll {
     bottom: auto;
     overflow: hidden;
@@ -200,7 +205,7 @@ md-tab-content {
   &.md-left:not(.md-active) {
     @include rtl(transform, translateX(-100%), translateX(+100%));
     animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
-    opacity: 0;
+    visibility: hidden;
     * {
       transition: visibility 0s linear;
       transition-delay: $swift-ease-in-out-duration;
@@ -210,7 +215,7 @@ md-tab-content {
   &.md-right:not(.md-active) {
     @include rtl(transform, translateX(100%), translateX(-100%));
     animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
-    opacity: 0;
+    visibility: hidden;
     * {
       transition: visibility 0s linear;
       transition-delay: $swift-ease-in-out-duration;
@@ -219,6 +224,7 @@ md-tab-content {
   }
   > div {
     flex: 1 0 100%;
+    min-width: 0;
     &.ng-leave {
       animation: 2 * $swift-ease-in-out-duration md-tab-content-hide;
     }
@@ -264,7 +270,7 @@ md-tab {
   box-sizing: border-box;
   overflow: hidden;
   text-overflow: ellipsis;
-  &.md-focused {
+  &.md-focused, &:focus {
     box-shadow: none;
     outline: none;
   }
@@ -284,7 +290,7 @@ md-tab {
   }
 }
 
-md-toolbar + md-tabs {
+md-toolbar + md-tabs, md-toolbar + md-dialog-content md-tabs {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }

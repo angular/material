@@ -1,12 +1,12 @@
+const path = require('path');
 
 module.exports = function(config) {
 
-  var UNCOMPILED_SRC = [
+  const UNCOMPILED_SRC = [
 
-    // To enabled use of `gulp karma-watch`,
-    // don't use the dist/angular-material.js
-    //
-    //'dist/angular-material.js',   // Un-minified source
+    // To enable use of `gulp karma-watch`,
+    // don't use the dist/angular-material.js.
+    // 'dist/angular-material.js',   // Un-minified source
 
 
     // Test utilities, source, and specifications.
@@ -23,13 +23,13 @@ module.exports = function(config) {
     'src/**/*.spec.js'
   ];
 
-  var COMPILED_SRC = [
+  const COMPILED_SRC = [
     'dist/angular-material.min.css',
     'dist/angular-material.min.js',   // Minified source
     'src/**/*.spec.js'
   ];
 
-  var dependencies = process.env.KARMA_TEST_JQUERY ? ['node_modules/jquery/dist/jquery.js'] : [];
+  let dependencies = process.env.KARMA_TEST_JQUERY ? ['node_modules/jquery/dist/jquery.js'] : [];
       dependencies = dependencies.concat([
         'node_modules/angular/angular.js',
         'node_modules/angular-animate/angular-animate.js',
@@ -42,15 +42,24 @@ module.exports = function(config) {
         'test/angular-material-spec.js'
       ]);
 
-  var testSrc = process.env.KARMA_TEST_COMPRESSED ? COMPILED_SRC : UNCOMPILED_SRC;
+  const testSrc = process.env.KARMA_TEST_COMPRESSED ? COMPILED_SRC : UNCOMPILED_SRC;
 
   config.set({
-
-    basePath: __dirname + '/..',
+    basePath: path.join(__dirname, '/..'),
+    plugins: [
+      require("karma-jasmine"),
+      require("karma-chrome-launcher"),
+      require('karma-firefox-launcher'),
+      require('karma-browserstack-launcher'),
+      require('karma-sauce-launcher')
+    ],
     frameworks: ['jasmine'],
     files: dependencies.concat(testSrc),
 
-    browserDisconnectTimeout:500,
+    browserDisconnectTimeout: 10000,
+    browserDisconnectTolerance: 3,
+    browserNoActivityTimeout: 10000,
+    captureTimeout: 10000,
 
     logLevel: config.LOG_DEBUG,
     port: 9876,
@@ -59,8 +68,16 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // enable / disable watching file and executing tests whenever any file changes
-    singleRun: true,
-    autoWatch: false,
+    singleRun: false,
+    autoWatch: true,
+
+    // Try Websocket for a faster transmission first. Fallback to polling if necessary.
+    transports: ['websocket', 'polling'],
+
+    browserConsoleLogOptions: {
+      terminal: true,
+      level: 'log'
+    },
 
     // Start these browsers, currently available:
     // - Chrome
@@ -74,8 +91,7 @@ module.exports = function(config) {
 
     client: {
       // Do not clear the context as this can cause reload failures with Jasmine
-      clearContext:false
+      clearContext: false
     }
   });
-
 };

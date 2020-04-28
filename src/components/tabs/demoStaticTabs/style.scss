@@ -1,6 +1,5 @@
 md-content {
   md-tabs {
-    border: 1px solid #e1e1e1;
     md-tab-content {
       padding: 25px;
       &:nth-child(1) {
@@ -23,14 +22,14 @@ md-content {
 }
 .after-tabs-area {
   > span {
-    margin-top:25px;
+    margin-top: 25px;
     padding-right: 15px;
     vertical-align: middle;
     line-height: 30px;
     height: 35px;
   }
   > md-checkbox {
-    margin-top:26px;
+    margin-top: 26px;
     margin-left: 0;
   }
 }

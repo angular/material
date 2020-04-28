@@ -105,7 +105,7 @@ md-select {
   margin: 2.5*$baseline-grid 0 3*$baseline-grid + 2 0;
 
   &[required], &.ng-required {
-    &.ng-invalid:not(.md-no-asterisk) {
+    &.ng-empty.ng-invalid:not(.md-no-asterisk) {
       .md-select-value span:first-child:after {
         content: ' *';
         font-size: 13px;
@@ -189,8 +189,8 @@ md-input-container.md-input-has-value .md-select-value {
 
   .md-select-icon {
     display: block;
-    align-items: flex-end;
-    text-align: end;
+    @include rtl(align-items, flex-end, flex-start);
+    @include rtl(text-align, right, left);
     width: 3 * $baseline-grid;
     margin: 0 .5 * $baseline-grid;
     transform: translate3d(0, -2px, 0);

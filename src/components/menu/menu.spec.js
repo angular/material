@@ -27,12 +27,43 @@ describe('material.components.menu', function() {
       expect(element.hasClass('_md')).toBe(true);
     });
 
-    it('errors on invalid markup', inject(function($compile, $rootScope) {
-      function buildBadMenu() {
-        $compile('<md-menu></md-menu>')($rootScope);
+    it('should throw when trigger element is missing', inject(function($compile, $rootScope) {
+      function createInvalidMenu() {
+        $compile(
+          '<md-menu>' +
+          '  <md-menu-content>Menu Content</md-menu-content>' +
+          '</md-menu>'
+        )($rootScope);
       }
 
-      expect(buildBadMenu).toThrow();
+      expect(createInvalidMenu).toThrow();
+    }));
+
+    it('should throw when md-menu-content is missing', inject(function($compile, $rootScope) {
+      function createInvalidMenu() {
+        $compile(
+          '<md-menu>' +
+          '  <button ng-click="null">Trigger Element</button>' +
+          '</md-menu>'
+        )($rootScope);
+      }
+
+      expect(createInvalidMenu).toThrow();
+    }));
+
+    it('nested md-menu-content should be allowed', inject(function($compile, $rootScope) {
+        function createValidMenu() {
+            $compile(
+                '<md-menu>' +
+                '  <button ng-click="null">Trigger Element</button>' +
+                '  <some-custom-element>' +
+                '    <md-menu-content>Menu Content</md-menu-content>' +
+                '  </some-custom-element>' +
+                '</md-menu>'
+            )($rootScope);
+        }
+
+        expect(createValidMenu).not.toThrow();
     }));
 
     it('specifies button type', inject(function($compile, $rootScope) {
@@ -145,6 +176,19 @@ describe('material.components.menu', function() {
       var openMenuEl = $document[0].querySelector('md-menu-content');
 
       pressKey(openMenuEl, $mdConstant.KEY_CODE.ESCAPE);
+      waitForMenuClose();
+
+      expect(getOpenMenuContainer(menu).length).toBe(0);
+    }));
+
+    it('closes on tab', inject(function($document, $mdConstant) {
+      var menu = setup();
+      openMenu(menu);
+      expect(getOpenMenuContainer(menu).length).toBe(1);
+
+      var openMenuEl = $document[0].querySelector('md-menu-content');
+
+      pressKey(openMenuEl, $mdConstant.KEY_CODE.TAB);
       waitForMenuClose();
 
       expect(getOpenMenuContainer(menu).length).toBe(0);
@@ -327,7 +371,7 @@ describe('material.components.menu', function() {
           '    <md-button ng-click="doSomething($event)"></md-button>' +
           '  </md-menu-item>' +
           ' </md-menu-content>' +
-          '</md-menu>', [ buttonAttrs || 'ng-click="$mdMenu.open($event)"' ]);
+          '</md-menu>', [buttonAttrs || 'ng-click="$mdMenu.open($event)"']);
 
       inject(function($compile, $rootScope) {
         $rootScope.doSomething = function($event) {
@@ -339,6 +383,59 @@ describe('material.components.menu', function() {
       attachedElements.push(menu);
       return menu;
     }
+  });
+
+  describe('with $mdMenu service', function() {
+
+    var $mdMenu, $rootScope, $compile, $timeout, $log = null;
+
+    beforeEach(inject(function($injector) {
+      $mdMenu = $injector.get('$mdMenu');
+      $rootScope = $injector.get('$rootScope');
+      $compile = $injector.get('$compile');
+      $timeout = $injector.get('$timeout');
+      $log = $injector.get('$log');
+    }));
+
+    it('should warn when the md-menu-content element is missing', function() {
+      spyOn($log, 'warn');
+
+      var parent = angular.element('<div>');
+      var menuEl = angular.element(
+        '<md-menu>' +
+        '  <button ng-click="null">Trigger</button>' +
+        '</md-menu>'
+      );
+
+      expect($log.warn).not.toHaveBeenCalled();
+
+      $mdMenu.show({
+        scope: $rootScope,
+        mdMenuCtrl: createFakeMenuController(),
+        element: menuEl,
+        target: document.body,
+        preserveElement: true,
+        parent: parent
+      });
+
+      $timeout.flush();
+
+      expect($log.warn).toHaveBeenCalledTimes(1);
+
+      // Close the menu and remove the parent container
+      $mdMenu.hide();
+      parent.remove();
+    });
+
+    function createFakeMenuController() {
+      return {
+        open: function() {},
+        close: function() { $mdMenu.hide(); },
+        positionMode: function() { return { left: 'left', top: 'target' }; },
+        offsets: function() { return { top: 0, left: 0 }; }
+      }
+    }
+
   });
 
 

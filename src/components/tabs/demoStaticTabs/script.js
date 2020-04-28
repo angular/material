@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-      .module('tabsDemoIconTabs', ['ngMaterial'] )
+      .module('tabsDemoIconTabs', ['ngMaterial'])
       .config(function($mdIconProvider) {
         $mdIconProvider
           .iconSet('communication', 'img/icons/sets/communication-icons.svg')
@@ -10,7 +10,7 @@
       })
       .controller('AppCtrl', AppCtrl);
 
-  function AppCtrl ( $scope ) {
+  function AppCtrl ($scope) {
     $scope.data = {
       selectedIndex: 0,
       secondLocked:  true,

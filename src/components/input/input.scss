@@ -148,7 +148,9 @@ md-input-container {
     opacity: 0;
   }
 
-  &:not( .md-input-has-value ) input:not( :focus ),
+  &:not( .md-input-has-value ):not( .md-input-has-placeholder ) input:not( :focus ) {
+    color: transparent;
+  }
   &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-ampm-field,
   &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-day-field,
   &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-hour-field,
@@ -219,13 +221,6 @@ md-input-container {
     overflow: hidden;
     @include rtl(clear, left, right);
 
-    &.ng-enter {
-      // Upon entering the DOM, messages should be hidden
-      .md-input-message-animation {
-        opacity: 0;
-        margin-top: -100px;
-      }
-    }
   }
 
   .md-input-message-animation, .md-char-counter {
@@ -259,16 +254,16 @@ md-input-container {
     }
   }
 
-  // Note: This is a workaround to fix an ng-enter flicker bug
   .md-input-message-animation {
-    &:not(.ng-animate) {
+    // Enter animation
+    // Pre-animation state is transparent and off target
+    &.ng-enter-prepare {
       opacity: 0;
       margin-top: -100px;
     }
-  }
 
-  .md-input-message-animation {
-    &.ng-enter {
+    // First keyframe of entry animation
+    &.ng-enter:not(.ng-enter-active) {
       opacity: 0;
       margin-top: -100px;
     }

@@ -1,44 +1,46 @@
 md-content {
-  background-color: transparent !important;
-  md-tabs {
-    border: 1px solid #e1e1e1;
-    md-tab-content {
-      background: #f6f6f6;
-    }
-    md-tabs-wrapper {
-      background: white;
-    }
-  }
   h1:first-child {
     margin-top: 0;
   }
-}
-md-input-container {
-  padding-bottom: 0;
-}
-.remove-tab {
-  margin-bottom: 40px;
-}
-.demo-tab > div > div {
-  padding: 25px;
-  box-sizing: border-box;
-}
-.edit-form input {
-  width: 100%;
-}
-md-tabs {
-  border-bottom: 1px solid rgba(0,0,0,0.12);
-}
-md-tab[disabled] {
-  opacity: 0.5;
-}
-label {
-  text-align: left;
-}
+  md-tabs {
+    .demo-tab {
+      padding: 25px;
+      text-align: center;
 
-.long > input {
-  width: 264px;
-}
-.md-button.add-tab {
-  transform: translateY(5px);
+      &> div > div {
+        padding: 25px;
+        box-sizing: border-box;
+      }
+    }
+    md-tab {
+      &[disabled] {
+        opacity: 0.5;
+      }
+    }
+  }
+  form {
+    padding-top: 0;
+
+    div[flex] {
+      position: relative;
+
+      h2.md-subhead {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        margin: 0;
+        font-weight: 500;
+        text-transform: uppercase;
+        line-height: 35px;
+        white-space: nowrap;
+      }
+    }
+    md-button.add-tab {
+      margin-right: 0;
+      transform: translateY(5px);
+    }
+    md-input-container {
+      padding-bottom: 0;
+    }
+  }
 }

@@ -26,7 +26,7 @@ function MdTabsDummyWrapper ($mdUtil, $window) {
         ctrl.updateInkBarStyles();
       };
 
-      if('MutationObserver' in $window) {
+      if ('MutationObserver' in $window) {
         var config = {
           childList: true,
           subtree: true,
@@ -41,7 +41,7 @@ function MdTabsDummyWrapper ($mdUtil, $window) {
         disconnect = observer.disconnect.bind(observer);
       } else {
         var debounced = $mdUtil.debounce(mutationCallback, 15, null, false);
-        
+
         element.on('DOMSubtreeModified', debounced);
         disconnect = element.off.bind(element, 'DOMSubtreeModified', debounced);
       }

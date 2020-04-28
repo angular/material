@@ -24,11 +24,11 @@
      * remote dataservice call.
      */
     function querySearch (query) {
-      var results = query ? self.repos.filter( createFilterFor(query) ) : self.repos,
+      var results = query ? self.repos.filter(createFilterFor(query)) : self.repos,
           deferred;
       if (self.simulateQuery) {
         deferred = $q.defer();
-        $timeout(function () { deferred.resolve( results ); }, Math.random() * 1000, false);
+        $timeout(function () { deferred.resolve(results); }, Math.random() * 1000, false);
         return deferred.promise;
       } else {
         return results;
@@ -49,20 +49,26 @@
     function loadAll() {
       var repos = [
         {
-          'name'      : 'Angular 1',
+          'name'      : 'AngularJS',
           'url'       : 'https://github.com/angular/angular.js',
           'watchers'  : '3,623',
           'forks'     : '16,175',
         },
         {
-          'name'      : 'Angular 2',
+          'name'      : 'Angular',
           'url'       : 'https://github.com/angular/angular',
           'watchers'  : '469',
           'forks'     : '760',
         },
         {
-          'name'      : 'Angular Material',
+          'name'      : 'AngularJS Material',
           'url'       : 'https://github.com/angular/material',
+          'watchers'  : '727',
+          'forks'     : '1,241',
+        },
+        {
+          'name'      : 'Angular Material',
+          'url'       : 'https://github.com/angular/components',
           'watchers'  : '727',
           'forks'     : '1,241',
         },
@@ -79,7 +85,7 @@
           'forks'     : '303',
         }
       ];
-      return repos.map( function (repo) {
+      return repos.map(function (repo) {
         repo.value = repo.name.toLowerCase();
         return repo;
       });
@@ -89,7 +95,7 @@
      * Create filter function for a query string
      */
     function createFilterFor(query) {
-      var lowercaseQuery = angular.lowercase(query);
+      var lowercaseQuery = query.toLowerCase();
 
       return function filterFn(item) {
         return (item.value.indexOf(lowercaseQuery) === 0);
