@@ -893,7 +893,6 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
       } else {
         $element.find('md-content').removeAttr('aria-activedescendant');
       }
-      self.setMultiple(self.isMultiple);
     };
 
     /**
