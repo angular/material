@@ -34,6 +34,7 @@
   "devDependencies": {
     "@octokit/rest": "^17.0.1",
     "@types/angular": "~1.6.57",
+    "acorn": "^7.1.1",
     "add-stream": "^1.0.0",
     "ajv": "^6.12.0",
     "angular": "^1.7.9",
@@ -73,7 +74,7 @@
     "gulp-uglify": "^3.0.2",
     "gulp-util": "^3.0.8",
     "jasmine-core": "2.8.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.1",
     "jshint": "^2.11.0",
     "jshint-summary": "^0.4.0",
     "karma": "^4.4.1",
@@ -85,7 +86,7 @@
     "karma-sauce-launcher": "^2.0.2",
     "lazypipe": "^1.0.2",
     "lodash": "^4.17.15",
-    "minimist": "^1.2.3",
+    "minimist": "^1.2.5",
     "mkdirp": "0.5.1",
     "moment": "^2.24.0",
     "postcss": "^7.0.27",
@@ -95,9 +96,8 @@
     "through2": "^3.0.1"
   },
   "resolutions": {
-    "graceful-fs": "^4.2.3",
-    "natives": "^1.1.6",
-    "node-sass": "^4.13.1"
+    "graceful-fs": "^4.2.4",
+    "node-sass": "^4.14.0"
   },
   "scripts": {
     "build": "gulp build",
@@ -127,7 +127,7 @@
     "not op_mob <= 12.1"
   ],
   "engines": {
-    "node": ">=8.17",
-    "npm": ">=5"
+    "node": ">=10",
+    "npm": ">=6"
   }
 }
