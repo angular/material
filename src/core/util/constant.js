@@ -113,7 +113,7 @@ function MdConstantFactory() {
     },
 
     /**
-     * As defined in core/style/variables.scss
+     * As defined in core/style/_variables.scss
      *
      * $layout-breakpoint-xs:     600px !default;
      * $layout-breakpoint-sm:     960px !default;

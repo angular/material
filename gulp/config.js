@@ -85,18 +85,20 @@ module.exports = {
     'src/components/virtualRepeat',
     'src/components/whiteframe'
   ],
+  inputVariables: 'src/components/input/_input-variables.scss',
   mockFiles: [
     'test/angular-material-mocks.js'
   ],
   themeBaseFiles: [
-    'src/core/style/variables.scss',
-    'src/core/style/mixins.scss'
+    'src/core/style/_variables.scss',
+    'src/core/style/_mixins.scss'
   ],
   themeCore: 'src/core/style/core-theme.scss',
   scssBaseFiles: [
     'src/core/style/color-palette.scss',
-    'src/core/style/variables.scss',
-    'src/core/style/mixins.scss',
+    'src/core/style/_variables.scss',
+    'src/components/input/_input-variables.scss',
+    'src/core/style/_mixins.scss',
     'src/core/style/structure.scss',
     'src/core/style/typography.scss',
     'src/core/style/layout.scss',
@@ -104,14 +106,14 @@ module.exports = {
   ],
   scssServicesLayout: 'src/core/services/layout/layout.scss',
   scssLayoutFiles: [
-    'src/core/style/variables.scss',
-    'src/core/style/mixins.scss',
+    'src/core/style/_variables.scss',
+    'src/core/style/_mixins.scss',
     'src/core/style/layout.scss',
     'src/core/services/layout/layout.scss'
   ],
   scssLayoutAttributeFiles: [
-    'src/core/style/variables.scss',
-    'src/core/style/mixins.scss',
+    'src/core/style/_variables.scss',
+    'src/core/style/_mixins.scss',
     'src/core/services/layout/layout-attributes.scss'
   ],
   scssComponentPaths: [

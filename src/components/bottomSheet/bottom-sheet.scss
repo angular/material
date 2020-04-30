@@ -132,7 +132,7 @@ md-bottom-sheet {
         @include grid-items-per-row(7);
       }
 
-      // Override of the IE11 fix from @mixin ie11-min-height-flexbug, line 109 mixins.scss
+      // Override of the IE11 fix from @mixin ie11-min-height-flexbug, line 109 _mixins.scss
       &::before {
         display: none;
       }

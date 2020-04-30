@@ -174,7 +174,7 @@ function buildModule(module, opts) {
   }
 
   /**
-   * @param {string} name module name
+   * @param {string} name module name. I.e. 'select', 'dialog', etc.
    * @returns {*}
    */
   function buildModuleStyles(name) {
@@ -182,6 +182,13 @@ function buildModule(module, opts) {
     config.themeBaseFiles.forEach(function(fileGlob) {
       files = files.concat(glob(fileGlob, {cwd: ROOT}));
     });
+
+    // Handle md-input and md-input-container variables that need to be shared with md-select
+    // in order to orchestrate identical layouts and alignments. In the future, it may be necessary
+    // to also use these variables with md-datepicker and md-autocomplete.
+    if (name === 'input' || name === 'select') {
+      files = files.concat(glob(config.inputVariables, {cwd: ROOT}));
+    }
 
     const baseStyles = files.map(function(fileName) {
       return fs.readFileSync(fileName, 'utf8').toString();
