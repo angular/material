@@ -64,6 +64,8 @@ angular.module('material.components.select', [
  *  is present.
  * @param {string=} md-container-class Class list to get applied to the `.md-select-menu-container`
  *  element (for custom styling).
+ * @param {string=} md-select-only-option If specified, a `<md-select>` will automatically select
+ * it's first option, if it only has one.
  *
  * @usage
  * With a placeholder (label and aria-label are added dynamically)
@@ -157,9 +159,6 @@ angular.module('material.components.select', [
  */
 function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $parse, $sce,
     $injector) {
-  var keyCodes = $mdConstant.KEY_CODE;
-  var NAVIGATION_KEYS = [keyCodes.SPACE, keyCodes.ENTER, keyCodes.UP_ARROW, keyCodes.DOWN_ARROW];
-
   return {
     restrict: 'E',
     require: ['^?mdInputContainer', 'mdSelect', 'ngModel', '?^form'],
@@ -598,12 +597,9 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
           element[0].querySelector('.md-select-menu-container')
         );
         selectScope = scope;
-        if (attrs.mdContainerClass) {
-          var value = selectContainer[0].getAttribute('class') + ' ' + attrs.mdContainerClass;
-          selectContainer[0].setAttribute('class', value);
-        }
+        attrs.mdContainerClass && selectContainer.addClass(attrs.mdContainerClass);
         selectMenuCtrl = selectContainer.find('md-select-menu').controller('mdSelectMenu');
-        selectMenuCtrl.init(ngModelCtrl, attrs.ngModel);
+        selectMenuCtrl.init(ngModelCtrl, attrs);
         element.on('$destroy', function() {
           selectContainer.remove();
         });
@@ -826,9 +822,9 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
       }
     };
 
-    self.init = function(ngModel, binding) {
+    self.init = function(ngModel, parentAttrs) {
       self.ngModel = ngModel;
-      self.modelBinding = binding;
+      self.modelBinding = parentAttrs.ngModel;
 
       // Setup a more robust version of isEmpty to ensure value is a valid option
       self.ngModel.$isEmpty = function($viewValue) {
@@ -870,6 +866,21 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
           return 'object_' + (value.$$mdSelectId || (value.$$mdSelectId = ++selectNextId));
         }
         return value + '';
+      }
+
+      if (parentAttrs.hasOwnProperty('mdSelectOnlyOption')) {
+        $mdUtil.nextTick(function() {
+          var optionKeys = Object.keys(self.options);
+
+          if (optionKeys.length === 1) {
+            var option = self.options[optionKeys[0]];
+
+            self.deselect(Object.keys(self.selected)[0]);
+            self.select(self.hashGetter(option.value), option.value);
+            self.refreshViewValue();
+            self.ngModel.$setPristine();
+          }
+        }, false);
       }
     };
 

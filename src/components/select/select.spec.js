@@ -373,6 +373,41 @@ describe('<md-select>', function() {
         expect($rootScope.testForm.defaultSelect.$error).toEqual({});
       });
     });
+
+    describe('mdSelectOnlyOption support', function() {
+      var $rootScope, $timeout;
+
+      beforeEach(inject(function($injector) {
+        $rootScope = $injector.get('$rootScope');
+        $timeout = $injector.get('$timeout');
+      }));
+
+      it('should select the first option if it only has one option', function() {
+        setupSelect('ng-model="val" md-select-only-option', [1]);
+        $timeout.flush();
+        expect($rootScope.val).toBe(1);
+      });
+
+      it('should work with `multiple`', function() {
+        setupSelectMultiple('ng-model="val" md-select-only-option', [1]);
+        $timeout.flush();
+        expect($rootScope.val).toEqual([1]);
+      });
+
+      it('should not do anything if there is more than one option', function() {
+        setupSelect('ng-model="val" md-select-only-option', [1, 2, 3]);
+        $timeout.flush();
+        expect($rootScope.val).toBeUndefined();
+      });
+
+      it('should keep the ngModel pristine', function() {
+        var el = setupSelect('ng-model="val" md-select-only-option', [1]);
+        var ngModel = el.find('md-select').controller('ngModel');
+
+        $timeout.flush();
+        expect(ngModel.$pristine).toBe(true);
+      });
+    });
   });
 
   describe('input container', function() {
