@@ -73,7 +73,7 @@
     "gulp-uglify": "^3.0.2",
     "gulp-util": "^3.0.8",
     "jasmine-core": "2.8.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jshint": "^2.11.0",
     "jshint-summary": "^0.4.0",
     "karma": "^4.4.1",
