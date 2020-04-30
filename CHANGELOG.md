@@ -1,3 +1,12 @@
+## [1.1.22](https://github.com/angular/material/compare/v1.1.22-rc.0...v1.1.22) (2020-04-30)
+
+
+### Bug Fixes
+
+* **select:** menuController not defined edge case in focusOptionNode ([b9d8322](https://github.com/angular/material/commit/b9d832209f8b9e25b4bc5dc2654bf18421144816)), closes [#11885](https://github.com/angular/material/issues/11885)
+
+
+
 <a name="1.1.22-rc.0"></a>
 ## [1.1.22-rc.0](https://github.com/angular/material/compare/v1.1.21...v1.1.22-rc.0) (2020-03-13)
 
