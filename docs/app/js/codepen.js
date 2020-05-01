@@ -3,7 +3,7 @@
     .factory('codepenDataAdapter', CodepenDataAdapter)
     .factory('codepen', ['$demoAngularScripts', '$document', 'codepenDataAdapter', Codepen]);
 
-  // Provides a service to open a code example in codepen.
+  // Provides a service to open a code example in CodePen.
   function Codepen($demoAngularScripts, $document, codepenDataAdapter) {
 
     // The following URL used to be HTTP and not HTTPS to allow us to do localhost testing
@@ -15,12 +15,14 @@
       editOnCodepen: editOnCodepen
     };
 
-    // Creates a codepen from the given demo model by posting to Codepen's API
-    // using a hidden form.  The hidden form is necessary to avoid a CORS issue.
+    // Creates a CodePen from the given demo model by posting to CodePen's API
+    // using a hidden form. The hidden form is necessary to avoid a CORS issue.
     // See http://blog.codepen.io/documentation/api/prefill
     function editOnCodepen(demo) {
       var externalScripts = $demoAngularScripts.all();
-      externalScripts.push('https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js');
+      externalScripts.push('https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js');
+      // Needed for contact chips demos
+      externalScripts.push('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/md5.js');
       var data = codepenDataAdapter.translate(demo, externalScripts);
       var form = buildForm(data);
       $document.find('body').append(form);
@@ -28,7 +30,7 @@
       form.remove();
     }
 
-    // Builds a hidden form with data necessary to create a codepen.
+    // Builds a hidden form with data necessary to create a CodePen.
     function buildForm(data) {
       var form = angular.element(
         '<form style="display: none;" method="post" target="_blank" action="' +
@@ -40,14 +42,14 @@
       return form;
     }
 
-    // Recommended by Codepen to escape quotes.
+    // Recommended by CodePen to escape quotes.
     // See http://blog.codepen.io/documentation/api/prefill
     function escapeJsonQuotes(json) {
       return JSON.stringify(json)
         .replace(/'/g, "&amp;apos;")
         .replace(/"/g, "&amp;quot;")
         /**
-         * Codepen was unescaping &lt; (<) and &gt; (>) which caused, on some demos,
+         * CodePen was unescaping &lt; (<) and &gt; (>) which caused, on some demos,
          * an unclosed elements (like <md-select>).
          * Used different unicode lookalike characters so it won't be considered as an element
          */
@@ -56,7 +58,7 @@
     }
   }
 
-  // Translates demo metadata and files into Codepen's post form data.  See api documentation for
+  // Translates demo metadata and files into CodePen's post form data.  See api documentation for
   // additional fields not used by this service. http://blog.codepen.io/documentation/api/prefill
   function CodepenDataAdapter() {
 
@@ -70,12 +72,11 @@
     var UNSECURE_CACHE_JS = 'http://ngmaterial.assets.s3.amazonaws.com/svg-assets-cache.js';
     var ASSET_CACHE_JS = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js';
 
-
     return {
       translate: translate
     };
 
-    // Translates a demo model to match Codepen's post data
+    // Translates a demo model to match CodePen's post data
     // See http://blog.codepen.io/documentation/api/prefill
     function translate(demo, externalScripts) {
       var files = demo.files;
@@ -93,7 +94,7 @@
       });
     }
 
-    // Modifies index.html with necessary changes in order to display correctly in codepen
+    // Modifies index.html with necessary changes in order to display correctly in CodePen
     // See each processor to determine how each modifies the html
     function processHtml(demo) {
 
@@ -132,7 +133,7 @@
 
         return content + '\n\n'+
           commentStart + '\n'+
-          'Copyright 2018 Google LLC. All Rights Reserved. \n'+
+          'Copyright 2020 Google LLC. All Rights Reserved. \n'+
           'Use of this source code is governed by an MIT-style license that can be found\n'+
           'in the LICENSE file at http://material.angularjs.org/HEAD/license.\n'+
           commentEnd;
@@ -142,9 +143,9 @@
     }
 
 
-    // Applies modifications the javascript prior to sending to codepen.
-    // Currently merges js files and replaces the module with the Codepen
-    // module.  See documentation for replaceDemoModuleWithCodepenModule.
+    // Applies modifications the JavaScript prior to sending to CodePen.
+    // Currently merges js files and replaces the module with the CodePen
+    // module. See documentation for replaceDemoModuleWithCodepenModule.
     function processJs(jsFiles) {
       var mergedJs = mergeFiles(jsFiles).join(' ');
       var script = replaceDemoModuleWithCodepenModule(mergedJs);
@@ -158,13 +159,13 @@
       });
     }
 
-    // Adds class to parent element so that styles are applied correctly
-    // Adds ng-app attribute.  This is the same module name provided in the asset-cache.js
+    // Adds class to parent element so that styles are applied correctly.
+    // Adds ng-app attribute. This is the same module name provided in the asset-cache.js
     function applyAngularAttributesToParentElement(html, demo) {
       var tmp;
 
       // Grab only the DIV for the demo...
-      angular.forEach(angular.element(html), function(it,key){
+      angular.forEach(angular.element(html), function(it, key) {
         if ((it.nodeName != "SCRIPT") && (it.nodeName != "#text")) {
           tmp = angular.element(it);
         }
@@ -175,7 +176,7 @@
       return tmp[0].outerHTML;
     }
 
-    // Adds templates inline in the html, so that templates are cached in the example
+    // Adds templates inline in the html, so that templates are cached in the example.
     function insertTemplatesAsScriptTags(indexHtml, demo) {
       if (demo.files.html.length) {
         var tmp = angular.element(indexHtml);
@@ -190,23 +191,22 @@
       return indexHtml;
     }
 
-    // Escapes ampersands so that after codepen unescapes the html the escaped code block
-    // uses the correct escaped characters
+    // Escapes ampersands so that after CodePen unescapes the html the escaped code block
+    // uses the correct escaped characters.
     function htmlEscapeAmpersand(html) {
       return html
         .replace(/&/g, "&amp;");
     }
 
-    // Required to make codePen work. Demos define their own module when running on the
-    // docs site.  In order to ensure the codepen example can use the svg-asset-cache.js, the
+    // Required to make CodePen work. Demos define their own module when running on the
+    // docs site.  In order to ensure the CodePen example can use the svg-asset-cache.js, the
     // module needs to match so that the $templateCache is populated with the necessary
     // assets.
-
     function replaceDemoModuleWithCodepenModule(file) {
       var matchAngularModule =  /\.module\(('[^']*'|"[^"]*")\s*,(\s*\[([^\]]*)\]\s*\))/ig;
       var modules = "['ngMaterial', 'ngMessages', 'material.svgAssetsCache']";
 
-      // See scripts.js for list of external AngularJS libraries used for the demos
+      // See scripts.js for list of external AngularJS libraries used for the demos.
 
       return file.replace(matchAngularModule, ".module('MyApp', "+ modules + ")");
     }
