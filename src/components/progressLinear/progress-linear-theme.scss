@@ -28,6 +28,14 @@ md-progress-linear.md-THEME_NAME-theme {
   }
 
   &[md-mode=buffer] {
+    &.md-primary {
+	  .md-bar1 {
+        background-color: '{{primary-100}}';
+      }
+      .md-dashed:before {
+        background: radial-gradient('{{primary-100}}' 0%, '{{primary-100}}' 16%, transparent 42%);
+      } 
+	}
     &.md-warn {
       .md-bar1 {
         background-color: '{{warn-100}}';

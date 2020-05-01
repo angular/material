@@ -1,5 +1,19 @@
 describe('<md-virtual-repeat>', function() {
-  beforeEach(module('material.components.virtualRepeat'));
+
+  var MAX_ELEMENT_PIXELS = 10000;
+
+  beforeEach(module('material.components.virtualRepeat', function($provide) {
+    /*
+     * Overwrite the $mdConstant ELEMENT_MAX_PIXELS property, because for testing it requires too much
+     * memory and crashes the tests sometimes.
+     */
+    $provide.decorator('$mdConstant', function($delegate) {
+
+      $delegate.ELEMENT_MAX_PIXELS = MAX_ELEMENT_PIXELS;
+
+      return $delegate;
+    })
+  }));
 
   var VirtualRepeatController = { NUM_EXTRA : 3 };
 
@@ -13,8 +27,8 @@ describe('<md-virtual-repeat>', function() {
       '     style="height: 10px; width: 10px; box-sizing: border-box;">' +
       '       {{i}} {{$index}}' +
       '</div>';
-  var container, repeater, component, $$rAF, $compile, $document, $mdUtil, $window, scope,
-      scroller, sizer, offsetter;
+  var container, repeater, component, $$rAF, $compile, $document, $mdUtil, $timeout,
+      $window, scope, scroller, sizer, offsetter;
 
   var NUM_ITEMS = 110,
       VERTICAL_PX = 100,
@@ -22,7 +36,7 @@ describe('<md-virtual-repeat>', function() {
       ITEM_SIZE = 10;
 
   beforeEach(inject(function(
-      _$$rAF_, _$compile_, _$document_, _$mdUtil_, $rootScope, _$window_, _$material_) {
+      _$$rAF_, _$compile_, _$document_, _$mdUtil_, $rootScope, _$timeout_, _$window_, _$material_) {
     repeater = angular.element(REPEATER_HTML);
     container = angular.element(CONTAINER_HTML).append(repeater);
     component = null;
@@ -31,6 +45,7 @@ describe('<md-virtual-repeat>', function() {
     $mdUtil = _$mdUtil_;
     $compile = _$compile_;
     $document = _$document_;
+    $timeout = _$timeout_;
     $window = _$window_;
     scope = $rootScope.$new();
     scope.startIndex = 0;
@@ -303,11 +318,9 @@ describe('<md-virtual-repeat>', function() {
   });
 
   it('should cap individual element size for the sizer in large item sets', function() {
-    // Copy max element size because we don't have a good way to reference it.
-    var maxElementSize = 1533917;
+    // Create a larger number of items than will fit in one maximum element size.
+    var numItems = MAX_ELEMENT_PIXELS / ITEM_SIZE + 1;
 
-    // Create a much larger number of items than will fit in one maximum element size.
-    var numItems = 2000000;
     createRepeater();
     scope.items = createItems(numItems);
     scope.$apply();
@@ -319,17 +332,18 @@ describe('<md-virtual-repeat>', function() {
 
     // Expect that sizer only adds as many children as it needs to.
     var numChildren = sizer[0].childNodes.length;
-    expect(numChildren).toBe(Math.ceil(numItems * ITEM_SIZE / maxElementSize));
+    expect(numChildren).toBe(Math.ceil(numItems * ITEM_SIZE / MAX_ELEMENT_PIXELS));
 
     // Expect that every child of sizer does not exceed the maximum element size.
     for (var i = 0; i < numChildren; i++) {
-      expect(sizer[0].childNodes[i].offsetHeight).toBeLessThan(maxElementSize + 1);
+      expect(sizer[0].childNodes[i].offsetHeight).toBeLessThan(MAX_ELEMENT_PIXELS + 1);
     }
   });
 
   it('should clear scroller if large set of items is filtered to much smaller set', function() {
-    // Create a much larger number of items than will fit in one maximum element size.
-    var numItems = 2000000;
+    // Create a larger number of items than will fit in one maximum element size.
+    var numItems = MAX_ELEMENT_PIXELS / ITEM_SIZE + 1;
+
     createRepeater();
     scope.items = createItems(numItems);
     scope.$apply();
@@ -338,6 +352,10 @@ describe('<md-virtual-repeat>', function() {
     // Expect that the sizer as a whole is still exactly the height it should be.
     // We expect the offset to be close to the exact height, because on IE there are some deviations.
     expect(sizer[0].offsetHeight).toBeCloseTo(numItems * ITEM_SIZE, -1);
+
+    // Expect the sizer to have children, because the the children are necessary to not exceed the maximum
+    // size of a DOM element.
+    expect(sizer[0].children.length).not.toBe(0);
 
     // Now that the sizer is really big, change the the number of items to be very small.
     numItems = 2;
@@ -357,6 +375,7 @@ describe('<md-virtual-repeat>', function() {
     scope.items = createItems(200);
     createRepeater();
     scope.$apply();
+    $timeout.flush();
     $$rAF.flush();
 
     expect(scroller[0].scrollTop).toBe(10 * ITEM_SIZE);
@@ -580,6 +599,7 @@ describe('<md-virtual-repeat>', function() {
     scope.items = createItems(200);
     createRepeater();
     scope.$apply();
+    $timeout.flush();
 
     expect(scroller[0].scrollTop).toBe(10 * ITEM_SIZE);
   });

@@ -44,8 +44,13 @@ md-switch {
     height: $switch-height;
     position: relative;
     user-select: none;
-    @include rtl-prop(margin-right, margin-left, 8px, auto);
+    @include rtl-prop(margin-right, margin-left, 8px, 0px);
     float: left;
+  }
+
+  &.md-inverted .md-container {
+    @include rtl(margin-right, initial, 8px);
+    @include rtl(margin-left, 8px, initial);
   }
 
   // If the user moves his mouse off the switch, stil display grabbing cursor
@@ -56,18 +61,12 @@ md-switch {
     }
   }
 
-  &.md-focused:not([disabled]) {
+  &.md-focused {
     .md-thumb:before {
       left: -8px;
       top: -8px;
       right: -8px;
       bottom: -8px;
-    }
-
-    &:not(.md-checked) {
-      .md-thumb:before {
-        background-color: rgba(0, 0, 0, 0.12);
-      }
     }
   }
 

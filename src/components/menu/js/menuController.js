@@ -7,7 +7,7 @@ angular
 /**
  * @ngInject
  */
-function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $rootScope, $q) {
+function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $rootScope, $q, $log) {
 
   var prefixer = $mdUtil.prefixer();
   var menuContainer;
@@ -29,6 +29,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
     triggerElement.setAttribute('aria-expanded', 'false');
 
     this.isInMenuBar = opts.isInMenuBar;
+    this.mdMenuBarCtrl = opts.mdMenuBarCtrl;
     this.nestedMenus = $mdUtil.nodesToArray(menuContainer[0].querySelectorAll('.md-nested-menu'));
 
     menuContainer.on('$mdInterimElementRemove', function() {
@@ -141,9 +142,6 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
     });
   };
 
-  // Expose a open function to the child scope for html to use
-  $scope.$mdOpenMenu = this.open;
-
   this.onIsOpenChanged = function(isOpen) {
     if (isOpen) {
       menuContainer.attr('aria-hidden', 'false');
@@ -162,7 +160,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
     var focusTarget = menuContainer[0]
       .querySelector(prefixer.buildSelector(['md-menu-focus-target', 'md-autofocus']));
 
-    if (!focusTarget) focusTarget = menuContainer[0].querySelector('.md-button');
+    if (!focusTarget) focusTarget = menuContainer[0].querySelector('.md-button:not([disabled])');
     focusTarget.focus();
   };
 
@@ -180,7 +178,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
 
   // Use the $mdMenu interim element service to close the menu contents
   this.close = function closeMenu(skipFocus, closeOpts) {
-    if ( !self.isOpen ) return;
+    if (!self.isOpen) return;
     self.isOpen = false;
     $mdUtil.nextTick(function(){ self.onIsOpenChanged(self.isOpen);});
 
@@ -204,7 +202,7 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
 
     // If attachment is a single item, duplicate it for our second value.
     // ie. 'target' -> 'target target'
-    if (attachment.length == 1) {
+    if (attachment.length === 1) {
       attachment.push(attachment[0]);
     }
 
@@ -220,12 +218,12 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
    */
   this.offsets = function offsets() {
     var position = ($attrs.mdOffset || '0 0').split(' ').map(parseFloat);
-    if (position.length == 2) {
+    if (position.length === 2) {
       return {
         left: position[0],
         top: position[1]
       };
-    } else if (position.length == 1) {
+    } else if (position.length === 1) {
       return {
         top: position[0],
         left: position[0]
@@ -234,4 +232,16 @@ function MenuController($mdMenu, $attrs, $element, $scope, $mdUtil, $timeout, $r
       throw Error('Invalid offsets specified. Please follow format <x, y> or <n>');
     }
   };
+
+  // Functionality that is exposed in the view.
+  $scope.$mdMenu = {
+    open: this.open,
+    close: this.close
+  };
+
+  // Deprecated APIs
+  $scope.$mdOpenMenu = angular.bind(this, function() {
+    $log.warn('mdMenu: The $mdOpenMenu method is deprecated. Please use `$mdMenu.open`.');
+    return this.open.apply(this, arguments);
+  });
 }

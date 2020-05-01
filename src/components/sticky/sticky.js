@@ -119,7 +119,7 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
     var self;
     return self = {
       prev: null,
-      current: null, //the currently stickied item
+      current: null, // the currently stickied item
       next: null,
       items: [],
       add: add,
@@ -165,7 +165,7 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
         return a.top < b.top ? -1 : 1;
       });
 
-      // Find which item in the list should be active, 
+      // Find which item in the list should be active,
       // based upon the content's current scroll position
       var item;
       var currentScrollTop = contentEl.prop('scrollTop');
@@ -185,7 +185,7 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
     // Find the `top` of an item relative to the content element,
     // and also the height.
     function refreshPosition(item) {
-      // Find the top of an item by adding to the offsetHeight until we reach the 
+      // Find the top of an item by adding to the offsetHeight until we reach the
       // content element.
       var current = item.element[0];
       item.top = 0;
@@ -194,8 +194,9 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
       while (current && current !== contentEl[0]) {
         item.top += current.offsetTop;
         item.left += current.offsetLeft;
-        if ( current.offsetParent ){
-          item.right += current.offsetParent.offsetWidth - current.offsetWidth - current.offsetLeft; //Compute offsetRight
+        if (current.offsetParent) {
+          // Compute offsetRight
+          item.right += current.offsetParent.offsetWidth - current.offsetWidth - current.offsetLeft;
         }
         current = current.offsetParent;
       }
@@ -310,7 +311,7 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
       } else {
         item.translateY = amount;
 
-        $mdUtil.bidi( item.clone, $mdConstant.CSS.TRANSFORM,
+        $mdUtil.bidi(item.clone, $mdConstant.CSS.TRANSFORM,
           'translate3d(' + item.left + 'px,' + amount + 'px,0)',
           'translateY(' + amount + 'px)'
         );
@@ -321,7 +322,7 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
 
   // Android 4.4 don't accurately give scroll events.
   // To fix this problem, we setup a fake scroll event. We say:
-  // > If a scroll or touchmove event has happened in the last DELAY milliseconds, 
+  // > If a scroll or touchmove event has happened in the last DELAY milliseconds,
   //   then send a `$scroll` event every animationFrame.
   // Additionally, we add $scrollstart and $scrollend events.
   function setupAugmentedScrollEvents(element) {

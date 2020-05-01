@@ -12,12 +12,6 @@ md-datepicker {
   // Don't let linebreaks happen between the open icon-button and the input.
   white-space: nowrap;
   overflow: hidden;
-
-  // Leave room for the down-triangle button to "overflow" it's parent without modifying scrollLeft.
-  // This prevents the element from shifting right when opening via the triangle button.
-  @include rtl-prop(padding-right, padding-left, $md-datepicker-triangle-button-width / 2, 0);
-  @include rtl-prop(margin-right, margin-left, -$md-datepicker-triangle-button-width / 2, auto);
-
   vertical-align: middle;
 }
 
@@ -67,10 +61,16 @@ md-datepicker {
     }
 
     .md-datepicker-button {
-      // Prevents the button from wrapping around.
+      // Prevents the button from wrapping around, as well as it pushing
+      // down the error messages more than they should be.
       @include rtl(float, left, right);
-      margin-top: -$md-datepicker-border-bottom-gap / 2;
+      margin-top: $button-left-right-padding * -2;
+      top: $button-left-right-padding * 2 - $md-datepicker-border-bottom-gap / 2;
     }
+  }
+
+  .md-input {
+    float: none;
   }
 
   &._md-datepicker-has-calendar-icon {
@@ -89,6 +89,12 @@ md-datepicker {
   }
 }
 
+._md-datepicker-has-triangle-icon {
+  // Leave room for the down-triangle button to "overflow" it's parent without modifying scrollLeft.
+  // This prevents the element from shifting right when opening via the triangle button.
+  @include rtl-prop(padding-right, padding-left, $md-datepicker-triangle-button-width / 2, 0);
+  @include rtl-prop(margin-right, margin-left, -$md-datepicker-triangle-button-width / 2, auto);
+}
 
 // Container for the datepicker input.
 .md-datepicker-input-container {
@@ -188,14 +194,14 @@ md-datepicker {
 .md-datepicker-triangle-button {
   position: absolute;
   @include rtl-prop(right, left, 0, auto);
-  top: $md-date-arrow-size;
+  bottom: -$md-date-arrow-size / 2;
 
   // TODO(jelbourn): This position isn't great on all platforms.
-  @include rtl(transform, translateY(-25%) translateX(45%), translateY(-25%) translateX(-45%));
+  @include rtl(transform, translateX(45%), translateX(-45%));
 }
 
 // Need crazy specificity to override .md-button.md-icon-button.
-// Only apply this high specifiy to the property we need to override.
+// Only apply this high specificity to the property we need to override.
 .md-datepicker-triangle-button.md-button.md-icon-button {
   height: $md-datepicker-triangle-button-width;
   width: $md-datepicker-triangle-button-width;

@@ -43,7 +43,7 @@
           children.wrap('<div class="md-fab-action-item">');
         }
       }
-    }
+    };
   }
 
 })();

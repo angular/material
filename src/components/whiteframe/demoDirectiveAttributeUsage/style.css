@@ -1,5 +1,4 @@
 md-whiteframe, div.padded {
-  background: #fff;
   margin: 30px;
   height: 100px;
 }
@@ -9,7 +8,6 @@ md-whiteframe, div.padded {
   md-whiteframe, div.padded {
     margin: 7px;
     height: 50px;
-    background-color: #c8e4fa;
   }
   md-whiteframe > span, div.padded > span {
     font-size: 0.4em;
@@ -32,7 +30,6 @@ md-whiteframe, div.padded {
   md-whiteframe, div.padded {
     margin: 20px;
     height: 90px;
-    background-color: #fcddde;
   }
   md-whiteframe > span, div.padded > span {
     font-size: 0.9em;
@@ -44,7 +41,6 @@ md-whiteframe, div.padded {
   md-whiteframe, div.padded {
     margin: 25px;
     height: 100px;
-    background-color: #F2FCE2;
   }
   md-whiteframe > span, div.padded > span {
     font-size: 1.0em;

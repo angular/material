@@ -7,7 +7,7 @@
 
 <hr/>
 
-###<a name="curl"></a> Bringing a pull request into your local git
+### <a name="curl"></a> Bringing a pull request into your local git
 
 To bring in a pull request, first create a new branch for that pull request:
 
@@ -27,7 +27,7 @@ If there are any conflicts, go to the [Dealing with conflicts](#conflicts) secti
 If the merge succeeds, use `git diff origin/master` to see all the new changes that will happen
 post-merge.
 
-###<a name="squash"></a> Squashing everything into one commit
+### <a name="squash"></a> Squashing everything into one commit
 
 Before merging a pull request into master, make sure there is only one commit
 representing the changes in the pull request, so the git log stays lean.
@@ -56,7 +56,7 @@ git pull --rebase origin master
 
 This may cause conflicts, see below for how to deal with these.
 
-###<a name="conflicts"></a> Dealing with conflicts
+### <a name="conflicts"></a> Dealing with conflicts
 
 Run the following to see which files are conflicted:
 
@@ -92,7 +92,7 @@ git add -A
 git am --continue
 ```
 
-###<a name="merging"></a> Merging with master
+### <a name="merging"></a> Merging with master
 
 Finally, after you've squashed the whole pull request into one commit and made sure
 it has no conflicts with the latest master and tests are run, you're ready to merge it in.

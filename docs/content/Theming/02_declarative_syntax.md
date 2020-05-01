@@ -2,8 +2,8 @@
 @name Declarative Syntax
 @description
 
-Theming in angular material uses classes to apply an intention group to a given
-component. Most components in Angular Material support intention classes 
+Theming in AngularJS Material uses classes to apply an intention group to a given
+component. Most components in AngularJS Material support intention classes 
 as expected, including:
 
 - md-button

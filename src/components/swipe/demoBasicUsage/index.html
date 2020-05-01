@@ -1,23 +1,23 @@
 <div ng-controller="demoSwipeCtrl" ng-cloak layout="row">
   <div flex>
-    <div class="demo-swipe" md-swipe-left="onSwipeLeft()">
+    <div class="demo-swipe" md-swipe-left="onSwipeLeft($event, $target)">
       <span class="no-select">Swipe me to the left</span>
       <md-icon md-font-icon="android" aria-label="android"></md-icon>
     </div>
     <md-divider></md-divider>
-    <div class="demo-swipe" md-swipe-right="onSwipeRight()">
+    <div class="demo-swipe" md-swipe-right="onSwipeRight($event, $target)">
       <span class="no-select">Swipe me to the right</span>
     </div>
   </div>
   <md-divider></md-divider>
   <div flex layout="row">
     <div flex layout="row" layout-align="center center"
-         class="demo-swipe" md-swipe-up="onSwipeUp()">
+         class="demo-swipe" md-swipe-up="onSwipeUp($event, $target)">
       <span class="no-select">Swipe me up</span>
     </div>
     <md-divider></md-divider>
     <div flex layout="row" layout-align="center center"
-         class="demo-swipe" md-swipe-down="onSwipeDown()">
+         class="demo-swipe" md-swipe-down="onSwipeDown($event, $target)">
       <span class="no-select">Swipe me down</span>
     </div>
   </div>

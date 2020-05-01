@@ -7,7 +7,7 @@ angular
      // to subsequently inject $mdUtil as an argument to the AnimateDomUtils
 
      return function($mdUtil) {
-       return AnimateDomUtils( $mdUtil, $q, $timeout, $mdConstant, $animateCss);
+       return AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss);
      };
    });
 
@@ -20,12 +20,13 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
     /**
      *
      */
-    translate3d : function( target, from, to, options ) {
-      return $animateCss(target,{
-        from:from,
-        to:to,
-        addClass:options.transitionInClass,
-        removeClass:options.transitionOutClass
+    translate3d : function(target, from, to, options) {
+      return $animateCss(target, {
+        from: from,
+        to: to,
+        addClass: options.transitionInClass,
+        removeClass: options.transitionOutClass,
+        duration: options.duration
       })
       .start()
       .then(function(){
@@ -40,7 +41,8 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
         return $animateCss(target, {
            to: newFrom || from,
            addClass: options.transitionOutClass,
-           removeClass: options.transitionInClass
+           removeClass: options.transitionInClass,
+           duration: options.duration
         }).start();
 
       }
@@ -71,9 +73,9 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
          * NOTE: Make sure this transitionEnd didn't bubble up from a child
          */
         function finished(ev) {
-          if ( ev && ev.target !== element[0]) return;
+          if (ev && ev.target !== element[0]) return;
 
-          if ( ev  ) $timeout.cancel(timer);
+          if (ev) $timeout.cancel(timer);
           element.off($mdConstant.CSS.TRANSITIONEND, finished);
 
           // Never reject since ngAnimate may cause timeouts due missed transitionEnd events
@@ -159,14 +161,14 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
     /**
      * Enhance raw values to represent valid css stylings...
      */
-    toCss : function( raw ) {
+    toCss : function(raw) {
       var css = { };
       var lookups = 'left top right bottom width height x y min-width min-height max-width max-height';
 
       angular.forEach(raw, function(value,key) {
-        if ( angular.isUndefined(value) ) return;
+        if (angular.isUndefined(value)) return;
 
-        if ( lookups.indexOf(key) >= 0 ) {
+        if (lookups.indexOf(key) >= 0) {
           css[key] = value + 'px';
         } else {
           switch (key) {

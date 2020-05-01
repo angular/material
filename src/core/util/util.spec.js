@@ -58,8 +58,48 @@ describe('util', function() {
         var results = $mdUtil.supplant(template,[param1, param2]);
         var segment = '<md-select-menu >';  // After supplant() part of the result should be...
 
-        expect( results.indexOf(segment) > -1 ).toBe(true);
+        expect(results.indexOf(segment) > -1).toBe(true);
 
+      }));
+
+    });
+
+    describe('getModelOption', function() {
+
+      it('should support the old ngModelCtrl options', inject(function($mdUtil) {
+        var ngModelCtrl = {
+          $options: {
+            trackBy: 'Test'
+          }
+        };
+
+        expect($mdUtil.getModelOption(ngModelCtrl, 'trackBy')).toBe('Test');
+      }));
+
+      it('should support the newer ngModelCtrl options', inject(function($mdUtil) {
+        var ngModelCtrl = {
+          $options: {
+            getOption: function() {
+              return 'Test';
+            }
+          }
+        };
+
+        expect($mdUtil.getModelOption(ngModelCtrl, 'trackBy')).toBe('Test');
+      }));
+
+      it('should return nothing if $options is not set', inject(function($mdUtil) {
+        expect($mdUtil.getModelOption({}, 'trackBy')).toBeFalsy();
+      }));
+
+      it('should not throw if an option is not available', inject(function($mdUtil) {
+        var ngModelCtrl = {
+          $options: {}
+        };
+
+        expect(function() {
+          $mdUtil.getModelOption(ngModelCtrl, 'Unknown');
+        }).not.toThrow();
       }));
 
     });
@@ -131,7 +171,7 @@ describe('util', function() {
         var target = $mdUtil.extractElementByName(widget, 'md-button');
 
         // Returns same element
-        expect( target[0] === widget[0] ).toBe(true);
+        expect(target[0] === widget[0]).toBe(true);
       }));
 
       it('should not find valid element for shallow scan', inject(function($rootScope, $compile, $mdUtil) {
@@ -139,7 +179,7 @@ describe('util', function() {
         $rootScope.$apply();
         var target = $mdUtil.extractElementByName(widget, 'md-button');
 
-        expect( target[0] !== widget[0] ).toBe(false);
+        expect(target[0] !== widget[0]).toBe(false);
       }));
 
       it('should find valid element for deep scan', inject(function($rootScope, $compile, $mdUtil) {
@@ -147,7 +187,7 @@ describe('util', function() {
         $rootScope.$apply();
         var target = $mdUtil.extractElementByName(widget, 'md-button', true);
 
-        expect( target !== widget ).toBe(true);
+        expect(target !== widget).toBe(true);
       }));
     });
 
@@ -210,6 +250,7 @@ describe('util', function() {
     });
 
     describe('disableScrollAround', function() {
+
       it('should prevent scrolling of the passed element', inject(function($mdUtil) {
         var element = angular.element('<div style="height: 2000px">');
         document.body.appendChild(element[0]);
@@ -223,8 +264,79 @@ describe('util', function() {
         // Restore the scrolling.
         enableScrolling();
         window.scrollTo(0, 0);
-        document.body.removeChild(element[0]);
+
+        element.remove();
       }));
+
+      it('should not remove the element when being use as scroll mask', inject(function($mdUtil) {
+        var element = angular.element('<div>');
+
+        document.body.appendChild(element[0]);
+
+        var enableScrolling = $mdUtil.disableScrollAround(element, null, {
+          disableScrollMask: true
+        });
+
+        // Restore the scrolling.
+        enableScrolling();
+
+        expect(element[0].parentNode).toBeTruthy();
+
+        element.remove();
+      }));
+
+      it('should not get thrown off by the scrollbar on the <html> node',
+        inject(function($mdUtil) {
+          var element = angular.element('<div style="height: 2000px">');
+
+          document.body.appendChild(element[0]);
+          document.body.style.overflowX = 'hidden';
+
+          window.scrollTo(0, 1000);
+
+          var enableScrolling = $mdUtil.disableScrollAround(element);
+
+          expect(document.body.style.overflow).not.toBe('hidden');
+
+          // Restore the scrolling.
+          enableScrolling();
+          window.scrollTo(0, 0);
+          document.body.style.overflowX = '';
+
+          element.remove();
+        })
+      );
+    });
+
+    describe('getViewportTop', function() {
+
+      it('should properly determine the top offset', inject(function($mdUtil) {
+        var viewportHeight = Math.round(window.innerHeight);
+        var element = angular.element('<div style="height: ' + (viewportHeight * 2) + 'px">');
+
+        document.body.appendChild(element[0]);
+
+        // Scroll down the viewport height.
+        window.scrollTo(0, viewportHeight);
+
+        expect(getViewportTop()).toBe(viewportHeight);
+
+        // Restore the scrolling.
+        window.scrollTo(0, 0);
+
+        expect(getViewportTop()).toBe(0);
+
+        element.remove();
+
+        /*
+         * Round the viewport top offset because the test browser might be resized and
+         * could cause deviations for the test.
+         */
+        function getViewportTop() {
+          return Math.round($mdUtil.getViewportTop());
+        }
+      }));
+
     });
 
     describe('nextTick', function() {
@@ -235,16 +347,16 @@ describe('util', function() {
         $rootScope.$watch(digestWatchFn);
         expect(digestWatchFn).not.toHaveBeenCalled();
         expect(callback).not.toHaveBeenCalled();
-        //-- Add a bunch of calls to prove that they are batched
+        // Add a bunch of calls to prove that they are batched
         for (var i = 0; i < 10; i++) {
           timeout = $mdUtil.nextTick(callback);
           expect(timeout.$$timeoutId).toBeOfType('number');
         }
         $timeout.flush();
         expect(digestWatchFn).toHaveBeenCalled();
-        //-- $digest seems to be called one extra time here
+        // $digest seems to be called one extra time here
         expect(digestWatchFn.calls.count()).toBe(2);
-        //-- but callback is still called more
+        // but callback is still called more
         expect(callback.calls.count()).toBe(10);
       }));
 
@@ -503,7 +615,7 @@ describe('util', function() {
       })
     );
   });
-  
+
   describe('isParentFormSubmitted', function() {
     var formTemplate =
       '<form>' +
@@ -514,26 +626,26 @@ describe('util', function() {
     it('returns false if you pass no element', inject(function($mdUtil) {
       expect($mdUtil.isParentFormSubmitted()).toBe(false);
     }));
-    
+
     it('returns false if there is no form', inject(function($mdUtil) {
       var element = angular.element('<input />');
-      
+
       expect($mdUtil.isParentFormSubmitted(element)).toBe(false);
     }));
-    
-    it('returns false if the parent form is NOT submitted', inject(function($compile, $rootScope, $mdUtil) { 
+
+    it('returns false if the parent form is NOT submitted', inject(function($compile, $rootScope, $mdUtil) {
       var scope = $rootScope.$new();
       var form = $compile(formTemplate)(scope);
-      
+
       expect($mdUtil.isParentFormSubmitted(form.find('input'))).toBe(false);
     }));
-    
+
     it('returns true if the parent form is submitted', inject(function($compile, $rootScope, $mdUtil) {
       var scope = $rootScope.$new();
       var form = $compile(formTemplate)(scope);
 
       var formController = form.controller('form');
-      
+
       formController.$setSubmitted();
 
       expect(formController.$submitted).toBe(true);
@@ -615,6 +727,45 @@ describe('util', function() {
       expect(result).toBe(grandparent[0]);
 
       grandparent.remove();
+    });
+
+    it('should be able to handle nodes whose nodeName is lowercase', function() {
+      var parent = angular.element('<svg version="1.1"></svg>');
+      var element = angular.element('<circle/>');
+
+      parent.append(element);
+      expect($mdUtil.getClosest(element, 'svg')).toBeTruthy();
+      parent.remove();
+    });
+  });
+
+  describe('uniq', function() {
+    var $mdUtil;
+
+    beforeEach(inject(function(_$mdUtil_) {
+      $mdUtil = _$mdUtil_;
+    }));
+
+    it('returns a copy of the requested array with only unique values', function() {
+      var myArray = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4];
+
+      expect($mdUtil.uniq(myArray)).toEqual([1, 2, 3, 4]);
+    });
+  });
+
+  describe('sanitize', function() {
+    var $mdUtil;
+
+    beforeEach(inject(function(_$mdUtil_) {
+      $mdUtil = _$mdUtil_;
+    }));
+
+    it('Removes Regex indentifiers in a text', function() {
+
+      // eslint-disable-next-line no-useless-escape
+      var myText = '\+98';
+
+      expect($mdUtil.sanitize(myText)).toEqual('+98');
     });
   });
 });

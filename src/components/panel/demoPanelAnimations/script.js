@@ -10,7 +10,12 @@ function AnimationCtrl($mdPanel) {
   this._mdPanel = $mdPanel;
   this.openFrom = 'button';
   this.closeTo = 'button';
-  this.animationType = 'none';
+  this.animationType = 'scale';
+  this.duration = 300;
+  this.separateDurations = {
+    open: this.duration,
+    close: this.duration
+  };
 }
 
 
@@ -22,7 +27,9 @@ AnimationCtrl.prototype.showDialog = function() {
 
   var animation = this._mdPanel.newPanelAnimation();
 
-  switch(this.openFrom) {
+  animation.duration(this.duration || this.separateDurations);
+
+  switch (this.openFrom) {
     case 'button':
       animation.openFrom('.animation-target');
       break;
@@ -35,7 +42,7 @@ AnimationCtrl.prototype.showDialog = function() {
         left: document.documentElement.clientWidth / 2 - 250
       });
   }
-  switch(this.closeTo) {
+  switch (this.closeTo) {
     case 'button':
       animation.closeTo('.animation-target');
       break;
@@ -49,7 +56,7 @@ AnimationCtrl.prototype.showDialog = function() {
       });
   }
 
-  switch(this.animationType) {
+  switch (this.animationType) {
     case 'custom':
       animation.withAnimation({
         open: 'demo-dialog-custom-animation-open',

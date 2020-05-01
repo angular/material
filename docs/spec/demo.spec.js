@@ -74,5 +74,5 @@ describe('docsDemo', function() {
     $httpBackend.expectGET('img/icons/ic_visibility_24px.svg');
     $httpBackend.whenGET('img/icons/codepen-logo.svg').respond('');
     $httpBackend.expectGET('img/icons/codepen-logo.svg');
-  };
+  }
 });

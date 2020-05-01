@@ -1,5 +1,5 @@
-var connect = require('gulp-connect');
-var LR_PORT = require('../const').LR_PORT;
+const connect = require('gulp-connect');
+const LR_PORT = require('../const').LR_PORT;
 
 exports.task = function () {
   connect.server({

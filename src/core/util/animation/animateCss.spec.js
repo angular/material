@@ -450,14 +450,17 @@ describe('$animateCss', function() {
   function assertStyle(element, prop, val, not) {
     var node = element[0];
     var webKit = '-webkit-';
+    var otherVal;
+    var otherAssertion;
+    var key;
     if (typeof prop === 'string') {
       var assertion = expect(node.style[camelCase(prop)] || node.style[camelCase(webKit+prop)]);
       not ? assertion.not.toBe(val) : assertion.toBe(val);
     } else {
-      for (var key in prop) {
-        var val = prop[key];
-        var assertion = expect(node.style[camelCase(key)] || node.style[camelCase(webKit+key)]);
-        not ? assertion.not.toBe(val) : assertion.toBe(val);
+      for (key in prop) {
+        otherVal = prop[key];
+        otherAssertion = expect(node.style[camelCase(key)] || node.style[camelCase(webKit+key)]);
+        not ? otherAssertion.not.toBe(otherVal) : otherAssertion.toBe(otherVal);
       }
     }
   }

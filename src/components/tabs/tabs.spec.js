@@ -100,23 +100,24 @@ describe('<md-tabs>', function () {
                            '<md-tab ng-disabled="true"></md-tab>' +
                            '<md-tab></md-tab>' +
                            '</md-tabs>');
+      var ctrl = tabs.controller('mdTabs');
       var tabItems = tabs.find('md-tab-item');
 
       expect(tabItems.eq(0)).toBeActiveTab();
 
-      // Boundary case, do nothing
+      // Focus should move to the last tab if left arrow is pressed
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
-      expect(tabItems.eq(0)).toBeActiveTab();
+      expect(ctrl.getFocusedTabId()).toBe(tabItems.eq(2).attr('id'));
+
+      // Focus should move to the first tab if right arrow is pressed
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
+      expect(ctrl.getFocusedTabId()).toBe(tabItems.eq(0).attr('id'));
 
       // Tab 0 should still be active, but tab 2 focused (skip tab 1 it's disabled)
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
       expect(tabItems.eq(0)).toBeActiveTab();
 
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
-      expect(tabItems.eq(2)).toBeActiveTab();
-
-      // Boundary case, do nothing
-      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
       expect(tabItems.eq(2)).toBeActiveTab();
 
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
@@ -129,7 +130,7 @@ describe('<md-tabs>', function () {
 
     }));
 
-    it('should select tab on space or enter', inject(function ($mdConstant) {
+    it('should select tab on space or enter', inject(function ($document, $mdConstant) {
       var tabs     = setup('<md-tabs>' +
                            '<md-tab></md-tab>' +
                            '<md-tab></md-tab>' +
@@ -140,10 +141,15 @@ describe('<md-tabs>', function () {
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.ENTER);
       expect(tabItems.eq(1)).toBeActiveTab();
+      expect(tabItems.eq(1).attr('tabindex')).toBe('0');
 
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.LEFT_ARROW);
       triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.SPACE);
       expect(tabItems.eq(0)).toBeActiveTab();
+      // Active tab should be added to the tab order as per ARIA practices.
+      expect(tabItems.eq(0).attr('tabindex')).toBe('0');
+      // Deactivated tab should be removed from the tab order.
+      expect(tabItems.eq(1).attr('tabindex')).toBe('-1');
     }));
 
     it('should bind to selected', function () {
@@ -157,14 +163,11 @@ describe('<md-tabs>', function () {
 
       expect(tabItems.eq(0)).toBeActiveTab();
       expect(tabs.scope().current).toBe(0);
-      expect(dummyTabs.eq(0).attr('aria-selected')).toBe('true');
 
       tabs.scope().$apply('current = 1');
       expect(tabItems.eq(1)).toBeActiveTab();
 
       expect(tabItems.eq(0).attr('aria-selected')).toBe('false');
-      expect(dummyTabs.eq(0).attr('aria-selected')).toBe('false');
-      expect(dummyTabs.eq(1).attr('aria-selected')).toBe('true');
 
       tabItems.eq(2).triggerHandler('click');
       expect(tabs.scope().current).toBe(2);
@@ -176,27 +179,39 @@ describe('<md-tabs>', function () {
                             '<md-tab ng-disabled="disabled1"></md-tab>' +
                             '</md-tabs>');
       var tabItems  = tabs.find('md-tab-item');
-      var dummyTabs = tabs.find('md-dummy-tab');
 
       expect(tabItems.eq(0)).toBeActiveTab();
-      expect(dummyTabs.eq(0).attr('aria-selected')).toBe('true');
+      expect(tabItems.eq(0).attr('aria-selected')).toBe('true');
 
       tabs.scope().$apply('disabled0 = true');
       expect(tabItems.eq(1)).toBeActiveTab();
 
       expect(tabItems.eq(0).attr('aria-disabled')).toBe('true');
-      expect(dummyTabs.eq(0).attr('aria-disabled')).toBe('true');
       expect(tabItems.eq(1).attr('aria-disabled')).toBe('false');
-      expect(dummyTabs.eq(1).attr('aria-disabled')).toBe('false');
 
       tabs.scope().$apply('disabled0 = false; disabled1 = true');
       expect(tabItems.eq(0)).toBeActiveTab();
 
       expect(tabItems.eq(0).attr('aria-disabled')).toBe('false');
-      expect(dummyTabs.eq(0).attr('aria-disabled')).toBe('false');
       expect(tabItems.eq(1).attr('aria-disabled')).toBe('true');
-      expect(dummyTabs.eq(1).attr('aria-disabled')).toBe('true');
     });
+
+    it('should reconcile focused and active tabs', inject(function($mdConstant) {
+      var tabs = setup('<md-tabs>' +
+                       '<md-tab label="super label"></md-tab>' +
+                       '<md-tab label="super label two"></md-tab>' +
+                       '</md-tabs>' +
+                       '<div tabindex="0">Focusable element</div>');
+      var ctrl = tabs.controller('mdTabs');
+      var tabItems = tabs.find('md-tab-item');
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.RIGHT_ARROW);
+      expect(tabItems.eq(0)).toBeActiveTab();
+      expect(ctrl.getFocusedTabId()).toBe(tabItems.eq(1).attr('id'));
+
+      triggerKeydown(tabs.find('md-tabs-canvas').eq(0), $mdConstant.KEY_CODE.TAB);
+      expect(tabItems.eq(0)).toBeActiveTab();
+      expect(ctrl.getFocusedTabId()).toBe(tabItems.eq(0).attr('id'));
+    }));
 
   });
 
@@ -338,31 +353,67 @@ describe('<md-tabs>', function () {
 
           done();
         });
-      })
+      });
     });
   });
 
   describe('aria', function () {
+    var $timeout;
+
+    beforeEach(inject(function(_$timeout_) {
+      $timeout = _$timeout_;
+    }));
 
     it('should link tab content to tabItem with auto-generated ids', function () {
       var tabs       = setup('<md-tabs>' +
                              '<md-tab label="label!">content!</md-tab>' +
                              '</md-tabs>');
-      var tabItem    = tabs.find('md-dummy-tab');
+      var tabItem    = tabs.find('md-tab-item');
       var tabContent = angular.element(tabs[ 0 ].querySelector('md-tab-content'));
 
-      expect(tabs.find('md-tabs-canvas').attr('role')).toBe('tablist');
+      $timeout.flush();
+
+      expect(tabs.find('md-pagination-wrapper').attr('role')).toBe('tablist');
 
       expect(tabItem.attr('id')).toBeTruthy();
-      expect(tabItem.attr('role')).toBe('tab');
       expect(tabItem.attr('aria-controls')).toBe(tabContent.attr('id'));
 
       expect(tabContent.attr('id')).toBeTruthy();
       expect(tabContent.attr('role')).toBe('tabpanel');
       expect(tabContent.attr('aria-labelledby')).toBe(tabItem.attr('id'));
 
-      //Unique ids check
+      // Unique ids check
       expect(tabContent.attr('id')).not.toEqual(tabItem.attr('id'));
+    });
+
+    it('should not assign role to dummy tabs', function () {
+      var tabs       = setup('<md-tabs>' +
+                             '<md-tab label="label!">content!</md-tab>' +
+                             '</md-tabs>');
+      var tabItem    = tabs.find('md-dummy-tab');
+
+      expect(tabItem.attr('role')).toBeFalsy();
+    });
+
+    it('should assign role to visible tabs', function () {
+      var tabs       = setup('<md-tabs>' +
+                             '<md-tab label="label!">content!</md-tab>' +
+                             '</md-tabs>');
+      var tabItem    = tabs.find('md-tab-item');
+
+      expect(tabItem.attr('role')).toBe('tab');
+    });
+
+    it('should not set `aria-controls` if the tab does not have content', function () {
+      var tabs = setup(
+        '<md-tabs>' +
+          '<md-tab label="label!"></md-tab>' +
+        '</md-tabs>'
+      );
+
+      $timeout.flush();
+
+      expect(tabs.find('md-dummy-tab').attr('aria-controls')).toBeFalsy();
     });
   });
 
@@ -398,6 +449,16 @@ describe('<md-tabs>', function () {
       expect(tab.find('md-tab-label').length).toBe(1);
       expect(tab.find('md-tab-label').text()).toBe('test');
       expect(tab.find('md-tab-body').length).toBe(0);
+    });
+    it('should apply tab class on the associated md-tab-item', function () {
+      var template = '\
+        <md-tabs md-selected="selectedTab">\
+          <md-tab label="a" md-tab-class="tester-class"></md-tab>\
+        </md-tabs>';
+      var element  = setup(template);
+      var tab      = element.find('md-tab-item');
+
+      expect(tab[ 0 ].className.indexOf('tester-class')).toBeGreaterThan(-1);
     });
   });
 
@@ -479,33 +540,35 @@ describe('<md-tabs>', function () {
     }));
   });
 
-  describe('md-pagination-wrapper', function () {
-    var template =  '<md-tabs md-stretch-tabs="{{stretch}}">' +
-                    '  <md-tab label="label!">content!</md-tab>' +
-                    '</md-tabs>';
+  describe('no element content', function() {
+    it('should not add the `md-no-tab-content` class if the element has content', function() {
+      var tabs = setup(
+        '<md-tabs>' +
+           '<md-tab label="label!">content!</md-tab>' +
+        '</md-tabs>'
+      );
 
-    it('should have inline width if md-stretch-tabs="never"',
-      inject(function ($timeout, $document) {
-      var scope = { 'stretch': 'never' };
-      var element = setup(template, scope);
-      // Appending to body is required for style checks
-      angular.element($document.body).append(element);
-      // $timeout.flush required to run nextTick inside init();
-      $timeout.flush();
-      expect(element.find('md-pagination-wrapper').attr('style').indexOf('width')).toBeGreaterThan(-1);
-      element.remove();
-    }));
+      expect(tabs).not.toHaveClass('md-no-tab-content');
+    });
 
-    it('should not have inline width if md-stretch-tabs="always"',
-      inject(function ($timeout, $document) {
-      var scope = { 'stretch': 'always' };
-      var element = setup(template, scope);
-      // Appending to body is required for style checks
-      angular.element($document.body).append(element);
-      // $timeout.flush required to run nextTick inside init();
-      $timeout.flush();
-      expect(element.find('md-pagination-wrapper').attr('style').indexOf('width')).toBe(-1);
-      element.remove();
-    }));
+    it('should add the `md-no-tab-content` class if the element does not have content', function() {
+      var tabs = setup(
+        '<md-tabs>' +
+           '<md-tab label="label!"></md-tab>' +
+        '</md-tabs>'
+      );
+
+      expect(tabs).toHaveClass('md-no-tab-content');
+    });
+
+    it('should trim before determining whether the element has content', function() {
+      var tabs = setup(
+        '<md-tabs>' +
+           '<md-tab label="label!">\n\n\n</md-tab>' +
+        '</md-tabs>'
+      );
+
+      expect(tabs).toHaveClass('md-no-tab-content');
+    });
   });
 });

@@ -1,14 +1,9 @@
 (function() {
   'use strict';
 
-  // POST RELEASE
-  // TODO(jelbourn): Demo that uses moment.js
-  // TODO(jelbourn): make sure this plays well with validation and ngMessages.
-  // TODO(jelbourn): calendar pane doesn't open up outside of visible viewport.
   // TODO(jelbourn): forward more attributes to the internal input (required, autofocus, etc.)
   // TODO(jelbourn): something better for mobile (calendar panel takes up entire screen?)
   // TODO(jelbourn): input behavior (masking? auto-complete?)
-
 
   angular.module('material.components.datepicker')
       .directive('mdDatepicker', datePickerDirective);
@@ -18,38 +13,58 @@
    * @name mdDatepicker
    * @module material.components.datepicker
    *
-   * @param {Date} ng-model The component's model. Expects a JavaScript Date object.
-   * @param {Object=} ng-model-options Allows tuning of the way in which `ng-model` is being updated. Also allows
-   * for a timezone to be specified. <a href="https://docs.angularjs.org/api/ng/directive/ngModelOptions#usage">Read more at the ngModelOptions docs.</a>
+   * @param {Date} ng-model The component's model. Expects either a JavaScript Date object or a
+   *  value that can be parsed into one (e.g. a ISO 8601 string).
+   * @param {Object=} ng-model-options Allows tuning of the way in which `ng-model` is being
+   *  updated. Also allows for a timezone to be specified.
+   *  <a href="https://docs.angularjs.org/api/ng/directive/ngModelOptions#usage">
+   *    Read more at the ngModelOptions docs.</a>
    * @param {expression=} ng-change Expression evaluated when the model value changes.
-   * @param {expression=} ng-focus Expression evaluated when the input is focused or the calendar is opened.
-   * @param {expression=} ng-blur Expression evaluated when focus is removed from the input or the calendar is closed.
+   * @param {expression=} ng-focus Expression evaluated when the input is focused or the calendar
+   *  is opened.
+   * @param {expression=} ng-blur Expression evaluated when focus is removed from the input or the
+   *  calendar is closed.
+   * @param {boolean=} ng-disabled Whether the datepicker is disabled.
+   * @param {boolean=} ng-required Whether a value is required for the datepicker.
    * @param {Date=} md-min-date Expression representing a min date (inclusive).
    * @param {Date=} md-max-date Expression representing a max date (inclusive).
-   * @param {(function(Date): boolean)=} md-date-filter Function expecting a date and returning a boolean whether it can be selected or not.
+   * @param {(function(Date): boolean)=} md-date-filter Function expecting a date and returning a
+   *  boolean whether it can be selected or not.
    * @param {String=} md-placeholder The date input placeholder value.
-   * @param {String=} md-open-on-focus When present, the calendar will be opened when the input is focused.
-   * @param {Boolean=} md-is-open Expression that can be used to open the datepicker's calendar on-demand.
-   * @param {String=} md-current-view Default open view of the calendar pane. Can be either "month" or "year".
-   * @param {String=} md-hide-icons Determines which datepicker icons should be hidden. Note that this may cause the
-   * datepicker to not align properly with other components. **Use at your own risk.** Possible values are:
+   * @param {String=} md-open-on-focus When present, the calendar will be opened when the input
+   *  is focused.
+   * @param {Boolean=} md-is-open Expression that can be used to open the datepicker's calendar
+   *  on-demand.
+   * @param {String=} md-current-view Default open view of the calendar pane. Can be either
+   *  "month" or "year".
+   * @param {String=} md-mode Restricts the user to only selecting a value from a particular view.
+   *  This option can be used if the user is only supposed to choose from a certain date type
+   *  (e.g. only selecting the month).
+   * Can be either "month" or "day". **Note** that this will overwrite the `md-current-view` value.
+   *
+   * @param {String=} md-hide-icons Determines which datepicker icons should be hidden. Note that
+   *  this may cause the datepicker to not align properly with other components.
+   *  **Use at your own risk.** Possible values are:
    * * `"all"` - Hides all icons.
    * * `"calendar"` - Only hides the calendar icon.
    * * `"triangle"` - Only hides the triangle icon.
-   * @param {boolean=} ng-disabled Whether the datepicker is disabled.
-   * @param {boolean=} ng-required Whether a value is required for the datepicker.
+   * @param {Object=} md-date-locale Allows for the values from the `$mdDateLocaleProvider` to be
+   * ovewritten on a per-element basis (e.g. `msgOpenCalendar` can be overwritten with
+   * `md-date-locale="{ msgOpenCalendar: 'Open a special calendar' }"`).
    *
    * @description
    * `<md-datepicker>` is a component used to select a single date.
    * For information on how to configure internationalization for the date picker,
-   * see `$mdDateLocaleProvider`.
+   * see {@link api/service/$mdDateLocaleProvider $mdDateLocaleProvider}.
    *
-   * This component supports [ngMessages](https://docs.angularjs.org/api/ngMessages/directive/ngMessages).
+   * This component supports
+   * [ngMessages](https://docs.angularjs.org/api/ngMessages/directive/ngMessages).
    * Supported attributes are:
    * * `required`: whether a required date is not set.
    * * `mindate`: whether the selected date is before the minimum allowed date.
    * * `maxdate`: whether the selected date is after the maximum allowed date.
-   * * `debounceInterval`: ms to delay input processing (since last debounce reset); default value 500ms
+   * * `debounceInterval`: ms to delay input processing (since last debounce reset);
+   *    default value 500ms
    *
    * @usage
    * <hljs lang="html">
@@ -75,36 +90,43 @@
                      'md-svg-src="' + $$mdSvgRegistry.mdCalendar + '"></md-icon>' +
           '</md-button>';
 
-        var triangleButton = (hiddenIcons === 'all' || hiddenIcons === 'triangle') ? '' :
-          '<md-button type="button" md-no-ink ' +
+        var triangleButton = '';
+
+        if (hiddenIcons !== 'all' && hiddenIcons !== 'triangle') {
+          triangleButton = '' +
+            '<md-button type="button" md-no-ink ' +
               'class="md-datepicker-triangle-button md-icon-button" ' +
               'ng-click="ctrl.openCalendarPane($event)" ' +
-              'aria-label="{{::ctrl.dateLocale.msgOpenCalendar}}">' +
+              'aria-label="{{::ctrl.locale.msgOpenCalendar}}">' +
             '<div class="md-datepicker-expand-triangle"></div>' +
           '</md-button>';
+
+          tElement.addClass(HAS_TRIANGLE_ICON_CLASS);
+        }
 
         return calendarButton +
         '<div class="md-datepicker-input-container" ng-class="{\'md-datepicker-focused\': ctrl.isFocused}">' +
           '<input ' +
             (ariaLabelValue ? 'aria-label="' + ariaLabelValue + '" ' : '') +
             'class="md-datepicker-input" ' +
-            'aria-haspopup="true" ' +
+            'aria-haspopup="dialog" ' +
             'ng-focus="ctrl.setFocused(true)" ' +
             'ng-blur="ctrl.setFocused(false)"> ' +
             triangleButton +
         '</div>' +
 
         // This pane will be detached from here and re-attached to the document body.
-        '<div class="md-datepicker-calendar-pane md-whiteframe-z1">' +
+        '<div class="md-datepicker-calendar-pane md-whiteframe-z1" id="{{::ctrl.calendarPaneId}}">' +
           '<div class="md-datepicker-input-mask">' +
             '<div class="md-datepicker-input-mask-opaque"></div>' +
           '</div>' +
           '<div class="md-datepicker-calendar">' +
-            '<md-calendar role="dialog" aria-label="{{::ctrl.dateLocale.msgCalendar}}" ' +
-                'md-current-view="{{::ctrl.currentView}}"' +
-                'md-min-date="ctrl.minDate"' +
-                'md-max-date="ctrl.maxDate"' +
-                'md-date-filter="ctrl.dateFilter"' +
+            '<md-calendar role="dialog" aria-label="{{::ctrl.locale.msgCalendar}}" ' +
+                'md-current-view="{{::ctrl.currentView}}" ' +
+                'md-mode="{{::ctrl.mode}}" ' +
+                'md-min-date="ctrl.minDate" ' +
+                'md-max-date="ctrl.maxDate" ' +
+                'md-date-filter="ctrl.dateFilter" ' +
                 'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen">' +
             '</md-calendar>' +
           '</div>' +
@@ -116,9 +138,11 @@
         maxDate: '=mdMaxDate',
         placeholder: '@mdPlaceholder',
         currentView: '@mdCurrentView',
+        mode: '@mdMode',
         dateFilter: '=mdDateFilter',
         isOpen: '=?mdIsOpen',
-        debounceInterval: '=mdDebounceInterval'
+        debounceInterval: '=mdDebounceInterval',
+        dateLocale: '=mdDateLocale'
       },
       controller: DatePickerCtrl,
       controllerAs: 'ctrl',
@@ -150,11 +174,11 @@
           mdInputContainer.input = element;
           mdInputContainer.element
             .addClass(INPUT_CONTAINER_CLASS)
-            .toggleClass(HAS_ICON_CLASS, attr.mdHideIcons !== 'calendar' && attr.mdHideIcons !== 'all');
+            .toggleClass(HAS_CALENDAR_ICON_CLASS, attr.mdHideIcons !== 'calendar' && attr.mdHideIcons !== 'all');
 
           if (!mdInputContainer.label) {
             $mdAria.expect(element, 'aria-label', attr.mdPlaceholder);
-          } else if(!mdNoAsterisk) {
+          } else if (!mdNoAsterisk) {
             attr.$observe('required', function(value) {
               mdInputContainer.label.toggleClass('md-required', !!value);
             });
@@ -191,7 +215,10 @@
   var INPUT_CONTAINER_CLASS = '_md-datepicker-floating-label';
 
   /** Class to be applied when the calendar icon is enabled. */
-  var HAS_ICON_CLASS = '_md-datepicker-has-calendar-icon';
+  var HAS_CALENDAR_ICON_CLASS = '_md-datepicker-has-calendar-icon';
+
+  /** Class to be applied when the triangle icon is enabled. */
+  var HAS_TRIANGLE_ICON_CLASS = '_md-datepicker-has-triangle-icon';
 
   /** Default time in ms to debounce input event by. */
   var DEFAULT_DEBOUNCE_INTERVAL = 500;
@@ -216,19 +243,19 @@
    */
   var CALENDAR_PANE_WIDTH = 360;
 
+  /** Used for checking whether the current user agent is on iOS or Android. */
+  var IS_MOBILE_REGEX = /ipad|iphone|ipod|android/i;
+
   /**
    * Controller for md-datepicker.
    *
    * @ngInject @constructor
    */
-  function DatePickerCtrl($scope, $element, $attrs, $window, $mdConstant,
-    $mdTheming, $mdUtil, $mdDateLocale, $$mdDateUtil, $$rAF, $mdGesture, $filter) {
+  function DatePickerCtrl($scope, $element, $attrs, $window, $mdConstant, $mdTheming, $mdUtil,
+                          $mdDateLocale, $$mdDateUtil, $$rAF, $filter, $timeout) {
 
     /** @final */
     this.$window = $window;
-
-    /** @final */
-    this.dateLocale = $mdDateLocale;
 
     /** @final */
     this.dateUtil = $$mdDateUtil;
@@ -236,11 +263,17 @@
     /** @final */
     this.$mdConstant = $mdConstant;
 
-    /* @final */
+    /** @final */
     this.$mdUtil = $mdUtil;
 
     /** @final */
     this.$$rAF = $$rAF;
+
+    /** @final */
+    this.$mdDateLocale = $mdDateLocale;
+
+    /** @final */
+    this.$timeout = $timeout;
 
     /**
      * The root document element. This is used for attaching a top-level click handler to
@@ -291,7 +324,7 @@
     this.isFocused = false;
 
     /** @type {boolean} */
-    this.isDisabled;
+    this.isDisabled = undefined;
     this.setDisabled($element[0].disabled || angular.isString($attrs.disabled));
 
     /** @type {boolean} Whether the date-picker's calendar pane is open. */
@@ -300,7 +333,7 @@
     /** @type {boolean} Whether the calendar should open when the input is focused. */
     this.openOnFocus = $attrs.hasOwnProperty('mdOpenOnFocus');
 
-    /** @final */
+    /** @type {Object} Instance of the mdInputContainer controller */
     this.mdInputContainer = null;
 
     /**
@@ -311,7 +344,7 @@
     this.calendarPaneOpenedFrom = null;
 
     /** @type {String} Unique id for the calendar pane. */
-    this.calendarPane.id = 'md-date-pane' + $mdUtil.nextUid();
+    this.calendarPaneId = 'md-date-pane-' + $mdUtil.nextUid();
 
     /** Pre-bound click handler is saved so that the event listener can be removed. */
     this.bodyClickHandler = angular.bind(this, this.handleBodyClick);
@@ -321,7 +354,9 @@
      * the resize event doesn't make sense on mobile and can have a negative impact since it
      * triggers whenever the browser zooms in on a focused input.
      */
-    this.windowEventName = ($mdGesture.isIos || $mdGesture.isAndroid) ? 'orientationchange' : 'resize';
+    this.windowEventName = IS_MOBILE_REGEX.test(
+      navigator.userAgent || navigator.vendor || window.opera
+    ) ? 'orientationchange' : 'resize';
 
     /** Pre-bound close handler so that the event listener can be removed. */
     this.windowEventHandler = $mdUtil.debounce(angular.bind(this, this.closeCalendarPane), 100);
@@ -329,7 +364,7 @@
     /** Pre-bound handler for the window blur event. Allows for it to be removed later. */
     this.windowBlurHandler = angular.bind(this, this.handleWindowBlur);
 
-    /** The built-in Angular date filter. */
+    /** The built-in AngularJS date filter. */
     this.ngDateFilter = $filter('date');
 
     /** @type {Number} Extra margin for the left side of the floating calendar pane. */
@@ -348,12 +383,10 @@
       $attrs.$set('tabindex', '-1');
     }
 
+    $attrs.$set('aria-owns', this.calendarPaneId);
+
     $mdTheming($element);
     $mdTheming(angular.element(this.calendarPane));
-
-    this.installPropertyInterceptors();
-    this.attachChangeListeners();
-    this.attachInteractionListeners();
 
     var self = this;
 
@@ -372,24 +405,49 @@
         }
       });
     }
+
+    // For AngularJS 1.4 and older, where there are no lifecycle hooks but bindings are pre-assigned,
+    // manually call the $onInit hook.
+    if (angular.version.major === 1 && angular.version.minor <= 4) {
+      this.$onInit();
+    }
+
   }
 
   /**
+   * AngularJS Lifecycle hook for newer AngularJS versions.
+   * Bindings are not guaranteed to have been assigned in the controller, but they are in the $onInit hook.
+   */
+  DatePickerCtrl.prototype.$onInit = function() {
+
+    /**
+     * Holds locale-specific formatters, parsers, labels etc. Allows
+     * the user to override specific ones from the $mdDateLocale provider.
+     * @type {!Object}
+     */
+    this.locale = this.dateLocale ? angular.extend({}, this.$mdDateLocale, this.dateLocale) : this.$mdDateLocale;
+
+    this.installPropertyInterceptors();
+    this.attachChangeListeners();
+    this.attachInteractionListeners();
+  };
+
+  /**
    * Sets up the controller's reference to ngModelController and
-   * applies Angular's `input[type="date"]` directive.
+   * applies AngularJS's `input[type="date"]` directive.
    * @param {!angular.NgModelController} ngModelCtrl Instance of the ngModel controller.
    * @param {Object} mdInputContainer Instance of the mdInputContainer controller.
-   * @param {Object} inputDirective Config for Angular's `input` directive.
+   * @param {Object} inputDirective Config for AngularJS's `input` directive.
    */
   DatePickerCtrl.prototype.configureNgModel = function(ngModelCtrl, mdInputContainer, inputDirective) {
     this.ngModelCtrl = ngModelCtrl;
     this.mdInputContainer = mdInputContainer;
 
-    // The input needs to be [type="date"] in order to be picked up by Angular.
+    // The input needs to be [type="date"] in order to be picked up by AngularJS.
     this.$attrs.$set('type', 'date');
 
     // Invoke the `input` directive link function, adding a stub for the element.
-    // This allows us to re-use Angular's logic for setting the timezone via ng-model-options.
+    // This allows us to re-use AngularJS's logic for setting the timezone via ng-model-options.
     // It works by calling the link function directly which then adds the proper `$parsers` and
     // `$formatters` to the ngModel controller.
     inputDirective[0].link.pre(this.$scope, {
@@ -402,22 +460,43 @@
 
     // Responds to external changes to the model value.
     self.ngModelCtrl.$formatters.push(function(value) {
-      if (value && !(value instanceof Date)) {
-        throw Error('The ng-model for md-datepicker must be a Date instance. ' +
-            'Currently the model is a: ' + (typeof value));
+      var parsedValue = angular.isDefined(value) ? value : null;
+
+      if (!(value instanceof Date)) {
+        parsedValue = Date.parse(value);
+
+        // `parsedValue` is the time since epoch if valid or `NaN` if invalid.
+        if (!isNaN(parsedValue) && angular.isNumber(parsedValue)) {
+          value = new Date(parsedValue);
+        }
+
+        if (value && !(value instanceof Date)) {
+          throw Error(
+            'The ng-model for md-datepicker must be a Date instance or a value ' +
+              'that can be parsed into a date. Currently the model is of type: ' + typeof value
+          );
+        }
       }
 
-      self.date = value;
-      self.inputElement.value = self.dateLocale.formatDate(value);
-      self.mdInputContainer && self.mdInputContainer.setHasValue(!!value);
-      self.resizeInputElement();
-      self.updateErrorState();
+      self.onExternalChange(value);
 
       return value;
     });
 
     // Responds to external error state changes (e.g. ng-required based on another input).
     ngModelCtrl.$viewChangeListeners.unshift(angular.bind(this, this.updateErrorState));
+
+    // Forwards any events from the input to the root element. This is necessary to get `updateOn`
+    // working for events that don't bubble (e.g. 'blur') since AngularJS binds the handlers to
+    // the `<md-datepicker>`.
+    var updateOn = self.$mdUtil.getModelOption(ngModelCtrl, 'updateOn');
+
+    if (updateOn) {
+      this.ngInputElement.on(
+        updateOn,
+        angular.bind(this.$element, this.$element.triggerHandler, updateOn)
+      );
+    }
   };
 
   /**
@@ -430,12 +509,8 @@
 
     self.$scope.$on('md-calendar-change', function(event, date) {
       self.setModelValue(date);
-      self.date = date;
-      self.inputElement.value = self.dateLocale.formatDate(date);
-      self.mdInputContainer && self.mdInputContainer.setHasValue(!!date);
+      self.onExternalChange(date);
       self.closeCalendarPane();
-      self.resizeInputElement();
-      self.updateErrorState();
     });
 
     self.ngInputElement.on('input', angular.bind(self, self.resizeInputElement));
@@ -454,7 +529,7 @@
 
     // Add event listener through angular so that we can triggerHandler in unit tests.
     self.ngInputElement.on('keydown', function(event) {
-      if (event.altKey && event.keyCode == keyCodes.DOWN_ARROW) {
+      if (event.altKey && event.keyCode === keyCodes.DOWN_ARROW) {
         self.openCalendarPane(event);
         $scope.$digest();
       }
@@ -462,6 +537,15 @@
 
     if (self.openOnFocus) {
       self.ngInputElement.on('focus', angular.bind(self, self.openCalendarPane));
+      self.ngInputElement.on('click', function(event) {
+        event.stopPropagation();
+      });
+      self.ngInputElement.on('pointerdown',function(event) {
+        if (event.target && event.target.setPointerCapture) {
+          event.target.setPointerCapture(event.pointerId);
+        }
+      });
+
       angular.element(self.$window).on('blur', self.windowBlurHandler);
 
       $scope.$on('$destroy', function() {
@@ -475,7 +559,7 @@
   };
 
   /**
-   * Capture properties set to the date-picker and imperitively handle internal changes.
+   * Capture properties set to the date-picker and imperatively handle internal changes.
    * This is done to avoid setting up additional $watches.
    */
   DatePickerCtrl.prototype.installPropertyInterceptors = function() {
@@ -552,12 +636,29 @@
       this.ngModelCtrl.$setValidity('valid', date == null);
     }
 
-    // TODO(jelbourn): Change this to classList.toggle when we stop using PhantomJS in unit tests
-    // because it doesn't conform to the DOMTokenList spec.
-    // See https://github.com/ariya/phantomjs/issues/12782.
-    if (!this.ngModelCtrl.$valid) {
-      this.inputContainer.classList.add(INVALID_CLASS);
+    var input = this.inputElement.value;
+    var parsedDate = this.locale.parseDate(input);
+
+    if (!this.isInputValid(input, parsedDate) && this.ngModelCtrl.$valid) {
+      this.ngModelCtrl.$setValidity('valid', date == null);
     }
+
+    angular.element(this.inputContainer).toggleClass(INVALID_CLASS, !this.ngModelCtrl.$valid);
+  };
+
+  /**
+   * Check to see if the input is valid, as the validation should fail if the model is invalid.
+   *
+   * @param {string} inputString
+   * @param {Date} parsedDate
+   * @return {boolean} Whether the input is valid
+   */
+  DatePickerCtrl.prototype.isInputValid = function (inputString, parsedDate) {
+    return inputString === '' || (
+      this.dateUtil.isValidDate(parsedDate) &&
+      this.locale.isDateComplete(inputString) &&
+      this.isDateEnabled(parsedDate)
+    );
   };
 
   /** Clears any error flags set by `updateErrorState`. */
@@ -579,16 +680,12 @@
    */
   DatePickerCtrl.prototype.handleInputEvent = function() {
     var inputString = this.inputElement.value;
-    var parsedDate = inputString ? this.dateLocale.parseDate(inputString) : null;
+    var parsedDate = inputString ? this.locale.parseDate(inputString) : null;
     this.dateUtil.setDateTimeToMidnight(parsedDate);
 
     // An input string is valid if it is either empty (representing no date)
     // or if it parses to a valid date that the user is allowed to select.
-    var isValidInput = inputString == '' || (
-      this.dateUtil.isValidDate(parsedDate) &&
-      this.dateLocale.isDateComplete(inputString) &&
-      this.isDateEnabled(parsedDate)
-    );
+    var isValidInput = this.isInputValid(inputString, parsedDate);
 
     // The datepicker's model is only updated when there is a valid input.
     if (isValidInput) {
@@ -731,16 +828,18 @@
       this.evalAttr('ngFocus');
 
       // Attach click listener inside of a timeout because, if this open call was triggered by a
-      // click, we don't want it to be immediately propogated up to the body and handled.
+      // click, we don't want it to be immediately propagated up to the body and handled.
       var self = this;
       this.$mdUtil.nextTick(function() {
         // Use 'touchstart` in addition to click in order to work on iOS Safari, where click
-        // events aren't propogated under most circumstances.
+        // events aren't propagated under most circumstances.
         // See http://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
         self.documentElement.on('click touchstart', self.bodyClickHandler);
       }, false);
 
       window.addEventListener(this.windowEventName, this.windowEventHandler);
+    } else if (this.inputFocusedOnWindowBlur) {
+      this.resetInputFocused();
     }
   };
 
@@ -765,7 +864,7 @@
         // in IE when md-open-on-focus is set. Also it needs to trigger
         // a digest, in order to prevent issues where the calendar wasn't
         // showing up on the next open.
-        self.$mdUtil.nextTick(reset);
+        self.$timeout(reset);
       } else {
         reset();
       }
@@ -835,6 +934,14 @@
   };
 
   /**
+   * Reset the flag inputFocusedOnWindowBlur to default state, to permit user to open calendar
+   * again when he back to tab with calendar focused.
+   */
+  DatePickerCtrl.prototype.resetInputFocused = function() {
+    this.inputFocusedOnWindowBlur = false;
+  };
+
+  /**
    * Evaluates an attribute expression against the parent scope.
    * @param {String} attr Name of the attribute to be evaluated.
    */
@@ -845,12 +952,27 @@
   };
 
   /**
-   * Sets the ng-model value by first converting the date object into a strng. Converting it
-   * is necessary, in order to pass Angular's `input[type="date"]` validations. Angular turns
+   * Sets the ng-model value by first converting the date object into a string. Converting it
+   * is necessary, in order to pass AngularJS's `input[type="date"]` validations. AngularJS turns
    * the value into a Date object afterwards, before setting it on the model.
    * @param {Date=} value Date to be set as the model value.
    */
   DatePickerCtrl.prototype.setModelValue = function(value) {
-    this.ngModelCtrl.$setViewValue(this.ngDateFilter(value, 'yyyy-MM-dd'));
+    var timezone = this.$mdUtil.getModelOption(this.ngModelCtrl, 'timezone');
+    this.ngModelCtrl.$setViewValue(this.ngDateFilter(value, 'yyyy-MM-dd', timezone));
+  };
+
+  /**
+   * Updates the datepicker when a model change occurred externally.
+   * @param {Date=} value Value that was set to the model.
+   */
+  DatePickerCtrl.prototype.onExternalChange = function(value) {
+    var timezone = this.$mdUtil.getModelOption(this.ngModelCtrl, 'timezone');
+
+    this.date = value;
+    this.inputElement.value = this.locale.formatDate(value, timezone);
+    this.mdInputContainer && this.mdInputContainer.setHasValue(!!value);
+    this.resizeInputElement();
+    this.updateErrorState();
   };
 })();

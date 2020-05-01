@@ -1,7 +1,7 @@
 angular
   .module('colorsThemePickerDemo', ['ngMaterial'])
   .controller('ThemeDemoCtrl', function ($scope, $mdColorPalette) {
-    $scope.colors = Object.keys($mdColorPalette); 
+    $scope.colors = Object.keys($mdColorPalette);
 
     $scope.mdURL = 'https://material.google.com/style/color.html#color-color-palette';
     $scope.primary = 'purple';
@@ -32,10 +32,10 @@ angular
       },
       controller: function ($scope, $mdColors, $mdColorUtil) {
         $scope.getColor = function (color) {
-          return $mdColorUtil.rgbaToHex($mdColors.getThemeColor(color))
+          return $mdColorUtil.rgbaToHex($mdColors.getThemeColor(color));
         };
       }
-    }
+    };
   })
   .directive('mdJustified', function() {
     return {

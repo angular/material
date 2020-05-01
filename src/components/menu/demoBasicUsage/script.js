@@ -8,9 +8,9 @@ angular
   .controller('BasicDemoCtrl', function DemoCtrl($mdDialog) {
     var originatorEv;
 
-    this.openMenu = function($mdOpenMenu, ev) {
+    this.openMenu = function($mdMenu, ev) {
       originatorEv = ev;
-      $mdOpenMenu(ev);
+      $mdMenu.open(ev);
     };
 
     this.notificationsEnabled = true;

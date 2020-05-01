@@ -149,8 +149,16 @@ md-radio-group {
     outline: none;
   }
 
-  &.md-focused {
+  &.md-focused.ng-not-empty {
     .md-checked .md-container:before {
+      left: -8px;
+      top: -8px;
+      right: -8px;
+      bottom: -8px;
+    }
+  }
+  &.md-focused.ng-empty>md-radio-button:first-child {
+    .md-container:before {
       left: -8px;
       top: -8px;
       right: -8px;

@@ -1,24 +1,61 @@
-**Actual Behavior**:
- -  `What is the issue? *`
- -  `What is the expected behavior?`
+<!-- 
+Filling out this template is required! Do not delete it when submitting your issue!
+Without this information, your issue may be auto-closed. 
 
-**CodePen** (or steps to reproduce the issue): *
- -  `CodePen Demo which shows your issue:`
- -  `Details:`
+Please submit AngularJS Material questions to the
+[AngularJS Material Forum](https://groups.google.com/forum/#!forum/ngmaterial)
+instead of submitting an issue.
 
-**Angular Versions**: *
- -  `Angular Version:`
- -  `Angular Material Version:`
+---------------------------------------------------------------------
+This repo is for AngularJS Material, not Angular Material or the CDK.
+---------------------------------------------------------------------
 
-**Additional Information**:
- -  `Browser Type: *`
- -  `Browser Version: *`
- -  `OS: *`
- -  `Stack Traces:`
+Please submit Angular Material and CDK questions
+[here](https://groups.google.com/forum/#!forum/angular-material2)
+and issues [here](https://github.com/angular/components/issues).
+-->
+## Bug, enhancement request, or proposal
 
-----
-Shortcut to create a [new CodePen Demo](http://codepen.io/team/AngularMaterial/pen/bEGJdd).
-Note: `*` indicates required information. Without this information, your issue may be auto-closed.
+<!-- Please note that we are not accepting major feature requests, i.e. requests for new components, at this time. -->
 
-> Do not modify the titles or questions. Simply add your responses to the ends of the questions.
-  Add more lines if needed.
+# Demo and steps to reproduce the issue
+[This blank StackBlitz demo](https://stackblitz.com/edit/angularjs-material-blank?file=app%2Fapp.template.html) can be used to create a reproduction that demonstrates your issue.
+
+**Demo URL (required)***:  
+
+#### Detailed Reproduction Steps
+1. 
+1. 
+
+### Explain the expected behavior
+
+
+### Explain the current behavior
+
+
+### Discuss the use-case or motivation for changing the existing behavior
+
+
+### List the affected versions of AngularJS, Material, OS, and browsers
+<!-- Please note that only issues related to AngularJS 1.x and AngularJS Material 1.x should be submitted here.
+Please submit Angular Material and CDK questions [here](https://groups.google.com/forum/#!forum/angular-material2)
+and issues [here](https://github.com/angular/components/issues).
+-->
+- AngularJS: 1.
+- AngularJS Material: 1.
+- OS: 
+- Browsers: 
+ 
+### Add anything else we should know
+
+#### Stack Trace
+```
+
+```
+
+#### Screenshots
+
+
+<!-- Please double check that you have provided the required reproduction steps
+     and a Demo via StackBlitz, CodePen, Plunker, or GitHub repo.
+-->

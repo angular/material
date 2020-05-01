@@ -25,8 +25,9 @@ describe('material.components.menuBar', function() {
         expect(nestedMenu.getAttribute('md-position-mode')).toBe('left bottom');
       });
 
-      it('should close when clicking on the wrapping toolbar', inject(function($compile, $rootScope, $timeout) {
+      it('should close when clicking on the wrapping toolbar', inject(function($compile, $rootScope, $timeout, $material) {
         var ctrl = null;
+        var menuCtrl = null;
         var toolbar = $compile(
           '<md-toolbar>' +
             '<md-menu-bar>' +
@@ -39,16 +40,135 @@ describe('material.components.menuBar', function() {
         )($rootScope);
 
         $rootScope.$digest();
-        ctrl = toolbar.find('md-menu-bar').controller('mdMenuBar');
+        attachedMenuElements.push(toolbar); // ensure it gets cleaned up
 
-        toolbar.find('md-menu').eq(0).controller('mdMenu').open();
+        ctrl = toolbar.find('md-menu-bar').controller('mdMenuBar');
+        menuCtrl = toolbar.find('md-menu').eq(0).controller('mdMenu');
+
+        menuCtrl.open();
         $timeout.flush();
 
         expect(toolbar).toHaveClass('md-has-open-menu');
+        spyOn(menuCtrl, 'close').and.callThrough();
+
         toolbar.triggerHandler('click');
+        $material.flushInterimElement(); // flush out the scroll mask
 
         expect(toolbar).not.toHaveClass('md-has-open-menu');
         expect(ctrl.getOpenMenuIndex()).toBe(-1);
+        expect(menuCtrl.close).toHaveBeenCalledWith(true, {
+          closeAll: true
+        });
+      }));
+
+      it('should close when clicking on a menu item', inject(function($compile, $rootScope, $timeout, $material) {
+        var toolbar = $compile(
+          '<md-toolbar class="md-menu-toolbar">' +
+            '<md-menu-bar>' +
+              '<md-menu>' +
+                '<button ng-click="clicked=true">root</button>' +
+                '<md-menu-content>' +
+                  '<md-menu-item>' +
+                    '<md-button ng-click="subclicked=true">child</md-button>' +
+                  '</md-menu-item>' +
+                '</md-menu-content>' +
+              '</md-menu>' +
+            '</md-menu-bar>' +
+          '</md-toolbar>'
+        )($rootScope);
+
+        $rootScope.$digest();
+        attachedMenuElements.push(toolbar); // ensure it gets cleaned up
+
+        var ctrl = toolbar.find('md-menu-bar').controller('mdMenuBar');
+        var rootMenu = toolbar[0].querySelector('md-menu');
+
+        angular.element(document.body).append(toolbar);
+
+        var menuCtrl = angular.element(rootMenu).controller('mdMenu');
+
+        menuCtrl.open();
+        waitForMenuOpen();
+
+        expect(toolbar).toHaveClass('md-has-open-menu');
+        spyOn(menuCtrl, 'close').and.callThrough();
+
+        var subMenu = getOpenSubMenu();
+        var childButton = subMenu[0].querySelector('md-button');
+        childButton.dispatchEvent(new MouseEvent('click'));
+        waitForMenuClose();
+
+        expect(toolbar).not.toHaveClass('md-has-open-menu');
+        expect(ctrl.getOpenMenuIndex()).toBe(-1);
+        expect(menuCtrl.close).toHaveBeenCalledWith(true, {
+          closeAll: true
+        });
+
+        function getOpenSubMenu() {
+          var containers = document.body.querySelectorAll('.md-open-menu-container.md-active');
+          var lastContainer = containers.item(containers.length - 1);
+
+          return angular.element(lastContainer.querySelector('md-menu-content'));
+        }
+      }));
+
+      it('should close when clicking on a nested menu item', inject(function($compile, $rootScope, $timeout, $material) {
+        var toolbar = $compile(
+          '<md-toolbar class="md-menu-toolbar">' +
+            '<md-menu-bar>' +
+              '<md-menu>' +
+                '<button>root</button>' +
+                '<md-menu-content>' +
+                  '<md-menu-item>' +
+                    '<md-menu>' +
+                      '<md-button ng-click="$mdMenu.open()">child</md-button>' +
+                      '<md-menu-content>' +
+                        '<md-menu-item>' +
+                          '<md-button>grandchild</md-button>' +
+                        '</md-menu-item>' +
+                      '</md-menu-content>' +
+                    '</md-menu>' +
+                  '</md-menu-item>' +
+                '</md-menu-content>' +
+              '</md-menu>' +
+            '</md-menu-bar>' +
+          '</md-toolbar>'
+        )($rootScope);
+
+        $rootScope.$digest();
+        attachedMenuElements.push(toolbar); // ensure it gets cleaned up
+
+        var ctrl = toolbar.find('md-menu-bar').controller('mdMenuBar');
+        var rootMenu = toolbar[0].querySelector('md-menu');
+
+        angular.element(document.body).append(toolbar);
+
+        var menuCtrl = angular.element(rootMenu).controller('mdMenu');
+
+        menuCtrl.open();
+        waitForMenuOpen();
+
+        expect(toolbar).toHaveClass('md-has-open-menu');
+
+        var subMenu = getLastOpenSubMenu();
+        var childButton = subMenu[0].querySelector('md-button');
+        childButton.dispatchEvent(new MouseEvent('click'));
+        waitForMenuOpen();
+
+        var nestedMenu = getLastOpenSubMenu();
+        var nestedButton = nestedMenu[0].querySelector('md-button');
+        nestedButton.dispatchEvent(new MouseEvent('click'));
+        waitForMenuClose();
+
+        expect(toolbar).not.toHaveClass('md-has-open-menu');
+        expect(ctrl.getOpenMenuIndex()).toBe(-1);
+
+        function getLastOpenSubMenu() {
+          var containers = document.body.querySelectorAll('.md-open-menu-container.md-active');
+          var lastContainer = containers.item(containers.length - 1);
+
+          return angular.element(lastContainer.querySelector('md-menu-content'));
+        }
       }));
 
       describe('ARIA', function() {
