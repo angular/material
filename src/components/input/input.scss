@@ -181,7 +181,7 @@ md-input-container {
     -ms-flex-preferred-size: $input-line-height; //IE fix
     border-radius: 0;
     border-style: solid; // Firefox fix
-    transition: border-color 0.4s cubic-bezier(.25,.8,.25,1);
+    transition: border-color $swift-ease-out-duration $swift-ease-out-timing-function;
 
     // Fix number inputs in Firefox to be full-width
     width: 100%;
