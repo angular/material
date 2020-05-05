@@ -459,6 +459,12 @@ function MdToastProvider($$interimElementProvider) {
       }
     };
 
+    /**
+     * @param {{toast: {actionKey: string=}}=} scope
+     * @param {JQLite} element
+     * @param {Object.<string, string>} options
+     * @return {*}
+     */
     function onShow(scope, element, options) {
       // support deprecated #content method
       // TODO remove support for content in 1.2.
@@ -504,9 +510,24 @@ function MdToastProvider($$interimElementProvider) {
         scope.toast.actionKey : undefined);
 
       element.on(SWIPE_EVENTS, options.onSwipe);
-      element.addClass(isSmScreen ? 'md-bottom' : options.position.split(' ').map(function(pos) {
-        return 'md-' + pos;
-      }).join(' '));
+
+      var verticalPositionDefined = false;
+      var positionClasses = options.position.split(' ').map(function (position) {
+        if (position) {
+          var className = 'md-' + position;
+          if (className === 'md-top' || className === 'md-bottom') {
+            verticalPositionDefined = true;
+          }
+          return className;
+        }
+        return 'md-bottom';
+      });
+      // If only "right" or "left" are defined, default to a vertical position of "bottom"
+      // as documented.
+      if (!verticalPositionDefined) {
+        positionClasses.push('md-bottom');
+      }
+      element.addClass(isSmScreen ? 'md-bottom' : positionClasses.join(' '));
 
       if (options.parent) {
         options.parent.addClass('md-toast-animating');
@@ -544,6 +565,9 @@ function MdToastProvider($$interimElementProvider) {
       return 'md-toast-open-' + (position.indexOf('top') > -1 ? 'top' : 'bottom');
     }
 
+    /**
+     * @param {string} actionKey
+     */
     function setupActionKeyListener(actionKey) {
       /**
        * @param {KeyboardEvent} event
