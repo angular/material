@@ -159,7 +159,7 @@ function MdProgressCircularDirective($window, $mdProgressCircular, $mdTheming,
             diameter = getSize(scope.mdDiameter);
             strokeWidth = getStroke(diameter);
             path.attr('d', getSvgArc(diameter, strokeWidth, true));
-            path.attr('stroke-dasharray', (diameter - strokeWidth) * $window.Math.PI * 0.75);
+            path.attr('stroke-dasharray', getDashLength(diameter, strokeWidth, 75));
           }
           startIndeterminateAnimation();
         } else {
@@ -172,7 +172,7 @@ function MdProgressCircularDirective($window, $mdProgressCircular, $mdTheming,
             diameter = getSize(scope.mdDiameter);
             strokeWidth = getStroke(diameter);
             path.attr('d', getSvgArc(diameter, strokeWidth, false));
-            path.attr('stroke-dasharray', (diameter - strokeWidth) * $window.Math.PI);
+            path.attr('stroke-dasharray', getDashLength(diameter, strokeWidth, 100));
           }
 
           element.attr('aria-valuenow', newValue);
@@ -216,12 +216,12 @@ function MdProgressCircularDirective($window, $mdProgressCircular, $mdTheming,
       path.attr('stroke-linecap', 'square');
       if (scope.mdMode == MODE_INDETERMINATE) {
         path.attr('d', getSvgArc(diameter, strokeWidth, true));
-        path.attr('stroke-dasharray', (diameter - strokeWidth) * $window.Math.PI * 0.75);
-        path.attr('stroke-dashoffset', getDashLength(diameter, strokeWidth, 1, 75));
+        path.attr('stroke-dasharray', getDashLength(diameter, strokeWidth, 75));
+        path.attr('stroke-dashoffset', getDashOffset(diameter, strokeWidth, 1, 75));
       } else {
         path.attr('d', getSvgArc(diameter, strokeWidth, false));
-        path.attr('stroke-dasharray', (diameter - strokeWidth) * $window.Math.PI);
-        path.attr('stroke-dashoffset', getDashLength(diameter, strokeWidth, 0, 100));
+        path.attr('stroke-dasharray', getDashLength(diameter, strokeWidth, 100));
+        path.attr('stroke-dashoffset', getDashOffset(diameter, strokeWidth, 0, 100));
         renderCircle(value, value);
       }
 
@@ -255,7 +255,7 @@ function MdProgressCircularDirective($window, $mdProgressCircular, $mdTheming,
       }
 
       function renderFrame(value) {
-        path.attr('stroke-dashoffset', getDashLength(diameter, strokeWidth, value, dashLimit));
+        path.attr('stroke-dashoffset', getDashOffset(diameter, strokeWidth, value, dashLimit));
         path.attr('transform','rotate(' + (rotation) + ' ' + diameter/2 + ' ' + diameter/2 + ')');
       }
     }
@@ -330,12 +330,12 @@ function MdProgressCircularDirective($window, $mdProgressCircular, $mdTheming,
    * @param {number} diameter Diameter of the container.
    * @param {number} strokeWidth Stroke width to be used when drawing circle
    * @param {number} value Percentage of circle (between 0 and 100)
-   * @param {number} limit Max percentage for circle
+   * @param {number} maxArcLength Maximum length of arc as a percentage of circle (between 0 and 100)
    *
-   * @returns {number} Stroke length for progres circle
+   * @returns {number} Stroke length for progress circle
    */
-  function getDashLength(diameter, strokeWidth, value, limit) {
-    return (diameter - strokeWidth) * $window.Math.PI * ((3 * (limit || 100) / 100) - (value/100));
+  function getDashOffset(diameter, strokeWidth, value, maxArcLength) {
+    return getSpinnerCircumference(diameter, strokeWidth) * ((maxArcLength - value) / 100);
   }
 
   /**
@@ -371,6 +371,31 @@ function MdProgressCircularDirective($window, $mdProgressCircular, $mdTheming,
    */
   function getStroke(diameter) {
     return $mdProgressCircular.strokeWidth / 100 * diameter;
+  }
+
+  /**
+   * Return length of the dash
+   *
+   * @param {number} diameter Diameter of the container.
+   * @param {number} strokeWidth Stroke width to be used when drawing circle
+   * @param {number} value Percentage of circle (between 0 and 100)
+   *
+   * @returns {number} Length of the dash
+   */
+  function getDashLength(diameter, strokeWidth, value) {
+    return getSpinnerCircumference(diameter, strokeWidth) * (value / 100);
+  }
+
+  /**
+   * Return circumference of the spinner
+   *
+   * @param {number} diameter Diameter of the container.
+   * @param {number} strokeWidth Stroke width to be used when drawing circle
+   *
+   * @returns {number} Circumference of the spinner
+   */
+  function getSpinnerCircumference(diameter, strokeWidth) {
+    return ((diameter - strokeWidth) * $window.Math.PI);
   }
 
 }
