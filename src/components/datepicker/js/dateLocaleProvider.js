@@ -183,6 +183,7 @@
      * Factory function that returns an instance of the dateLocale service.
      * @ngInject
      * @param $locale
+     * @param $filter
      * @returns {DateLocale}
      */
     DateLocaleProvider.prototype.$get = function($locale, $filter) {
@@ -214,7 +215,7 @@
 
       /**
        * Default string-to-date parsing function.
-       * @param {string} dateString
+       * @param {string|number} dateString
        * @returns {!Date}
        */
       function defaultParseDate(dateString) {

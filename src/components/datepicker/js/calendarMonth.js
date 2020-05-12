@@ -98,7 +98,7 @@
     this.cellClickHandler = function() {
       var timestamp = $$mdDateUtil.getTimestampFromNode(this);
       self.$scope.$apply(function() {
-        self.calendarCtrl.setNgModelValue(timestamp);
+        self.calendarCtrl.setNgModelValue(self.dateLocale.parseDate(timestamp));
       });
     };
 
@@ -145,7 +145,7 @@
 
   /**
    * Gets the "index" of the currently selected date as it would be in the virtual-repeat.
-   * @returns {number}
+   * @returns {number} the "index" of the currently selected date
    */
   CalendarMonthCtrl.prototype.getSelectedMonthIndex = function() {
     var calendarCtrl = this.calendarCtrl;
@@ -268,7 +268,7 @@
         date = this.dateUtil.clampDate(date, calendarCtrl.minDate, calendarCtrl.maxDate);
 
         this.changeDisplayDate(date).then(function() {
-          calendarCtrl.focus(date);
+          calendarCtrl.focusDate(date);
         });
       }
     }
