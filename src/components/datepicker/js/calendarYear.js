@@ -47,8 +47,7 @@
    * Controller for the mdCalendar component.
    * @ngInject @constructor
    */
-  function CalendarYearCtrl($element, $scope, $animate, $q,
-    $$mdDateUtil, $mdUtil) {
+  function CalendarYearCtrl($element, $scope, $animate, $q, $$mdDateUtil, $mdUtil) {
 
     /** @final {!angular.JQLite} */
     this.$element = $element;
@@ -197,7 +196,7 @@
         date = dateUtil.getFirstDateOfMonth(self.dateUtil.clampDate(date, min, max));
 
         self.changeDate(date).then(function() {
-          calendarCtrl.focus(date);
+          calendarCtrl.focusDate(date);
         });
       }
     }
@@ -228,7 +227,7 @@
 
     if (calendarCtrl.mode) {
       this.$mdUtil.nextTick(function() {
-        calendarCtrl.setNgModelValue(timestamp);
+        calendarCtrl.setNgModelValue(calendarCtrl.$mdDateLocale.parseDate(timestamp));
       });
     } else {
       calendarCtrl.setCurrentView('month', timestamp);

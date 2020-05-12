@@ -82,7 +82,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     /**
      * Cross-version compatibility method to retrieve an option of a ngModel controller,
      * which supports the breaking changes in the AngularJS snapshot (SHA 87a2ff76af5d0a9268d8eb84db5755077d27c84c).
-     * @param {!angular.NgModelController} ngModelCtrl
+     * @param {!ngModel.NgModelController} ngModelCtrl
      * @param {!string} optionName
      * @returns {Object|undefined}
      */
@@ -1028,13 +1028,13 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
  * Since removing jQuery from the demos, some code that uses `element.focus()` is broken.
  * We need to add `element.focus()`, because it's testable unlike `element[0].focus`.
  */
-
 angular.element.prototype.focus = angular.element.prototype.focus || function() {
   if (this.length) {
     this[0].focus();
   }
   return this;
 };
+
 angular.element.prototype.blur = angular.element.prototype.blur || function() {
   if (this.length) {
     this[0].blur();

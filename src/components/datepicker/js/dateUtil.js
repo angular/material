@@ -79,7 +79,7 @@
     }
 
     /**
-     * Gets whether two dates are the same day (not not necesarily the same time).
+     * Gets whether two dates are the same day (not not necessarily the same time).
      * @param {Date} d1
      * @param {Date} d2
      * @returns {boolean}
@@ -207,19 +207,19 @@
 
     /**
      * Creates a date with the time set to midnight.
-     * Drop-in replacement for two forms of the Date constructor:
-     * 1. No argument for Date representing now.
-     * 2. Single-argument value representing number of seconds since Unix Epoch
-     * or a Date object.
-     * @param {number|Date=} opt_value
+     * Drop-in replacement for two forms of the Date constructor via opt_value.
+     * @param {number|Date=} opt_value Leave undefined for a Date representing now. Or use a
+     *  single value representing the number of seconds since the Unix Epoch or a Date object.
      * @return {Date} New date with time set to midnight.
      */
     function createDateAtMidnight(opt_value) {
       var date;
-      if (angular.isUndefined(opt_value)) {
-        date = new Date();
-      } else {
+      if (angular.isDate(opt_value)) {
+        date = opt_value;
+      } else if (angular.isNumber(opt_value)) {
         date = new Date(opt_value);
+      } else {
+        date = new Date();
       }
       setDateTimeToMidnight(date);
       return date;

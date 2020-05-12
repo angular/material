@@ -280,17 +280,20 @@
      * close the calendar panel when a click outside said panel occurs. We use `documentElement`
      * instead of body because, when scrolling is disabled, some browsers consider the body element
      * to be completely off the screen and propagate events directly to the html element.
-     * @type {!angular.JQLite}
+     * @type {!JQLite}
      */
     this.documentElement = angular.element(document.documentElement);
 
-    /** @type {!angular.NgModelController} */
+    /** @type {!ngModel.NgModelController} */
     this.ngModelCtrl = null;
 
     /** @type {HTMLInputElement} */
     this.inputElement = $element[0].querySelector('input');
 
-    /** @final {!angular.JQLite} */
+    /**
+     * @final
+     * @type {!JQLite}
+     */
     this.ngInputElement = angular.element(this.inputElement);
 
     /** @type {HTMLElement} */
@@ -304,17 +307,26 @@
 
     /**
      * Element covering everything but the input in the top of the floating calendar pane.
-     * @type {!angular.JQLite}
+     * @type {!JQLite}
      */
     this.inputMask = angular.element($element[0].querySelector('.md-datepicker-input-mask-opaque'));
 
-    /** @final {!angular.JQLite} */
+    /**
+     * @final
+     * @type {!JQLite}
+     */
     this.$element = $element;
 
-    /** @final {!angular.Attributes} */
+    /**
+     * @final
+     * @type {!angular.Attributes}
+     */
     this.$attrs = $attrs;
 
-    /** @final {!angular.Scope} */
+    /**
+     * @final
+     * @type {!angular.Scope}
+     */
     this.$scope = $scope;
 
     /** @type {Date} */
@@ -411,7 +423,6 @@
     if (angular.version.major === 1 && angular.version.minor <= 4) {
       this.$onInit();
     }
-
   }
 
   /**
@@ -885,7 +896,7 @@
     // Use a timeout in order to allow the calendar to be rendered, as it is gated behind an ng-if.
     var self = this;
     this.$mdUtil.nextTick(function() {
-      self.getCalendarCtrl().focus();
+      self.getCalendarCtrl().focusDate();
     }, false);
   };
 
@@ -959,7 +970,7 @@
    */
   DatePickerCtrl.prototype.setModelValue = function(value) {
     var timezone = this.$mdUtil.getModelOption(this.ngModelCtrl, 'timezone');
-    this.ngModelCtrl.$setViewValue(this.ngDateFilter(value, 'yyyy-MM-dd', timezone));
+    this.ngModelCtrl.$setViewValue(this.ngDateFilter(value, 'yyyy-MM-dd', timezone), 'default');
   };
 
   /**
