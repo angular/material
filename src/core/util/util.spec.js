@@ -760,12 +760,14 @@ describe('util', function() {
       $mdUtil = _$mdUtil_;
     }));
 
-    it('Removes Regex indentifiers in a text', function() {
+    it('sanitizes + signs', function() {
+      var myText = '+98';
+      expect($mdUtil.sanitize(myText)).toEqual('\\+98');
+    });
 
-      // eslint-disable-next-line no-useless-escape
-      var myText = '\+98';
-
-      expect($mdUtil.sanitize(myText)).toEqual('+98');
+    it('sanitizes parenthesis', function() {
+      var myText = '()';
+      expect($mdUtil.sanitize(myText)).toEqual('\\(\\)');
     });
   });
 });

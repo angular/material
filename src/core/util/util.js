@@ -1009,7 +1009,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
      */
     sanitize: function(term) {
       if (!term) return term;
-      return term.replace(/[\\^$*+?.()|{}[]]/g, '\\$&');
+      return term.replace(/[\\^$*+?.()|{}[]/g, '\\$&');
     }
   };
 
