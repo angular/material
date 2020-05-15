@@ -2793,65 +2793,15 @@ MdPanelPosition.prototype.addPanelPosition = function(xPosition, yPosition) {
         'relative positioning. Set relativeTo first.');
   }
 
-  this._validateXPosition(xPosition);
-  this._validateYPosition(yPosition);
+  validatePosition(MdPanelPosition.xPosition, xPosition);
+  validatePosition(MdPanelPosition.yPosition, yPosition);
 
   this._positions.push({
-      x: xPosition,
-      y: yPosition,
+    x: xPosition,
+    y: yPosition
   });
+
   return this;
-};
-
-
-/**
- * Ensures that yPosition is a valid position name. Throw an exception if not.
- * @param {string} yPosition
- */
-MdPanelPosition.prototype._validateYPosition = function(yPosition) {
-  // empty is ok
-  if (yPosition == null) {
-      return;
-  }
-
-  var positionKeys = Object.keys(MdPanelPosition.yPosition);
-  var positionValues = [];
-  for (var key, i = 0; key = positionKeys[i]; i++) {
-    var position = MdPanelPosition.yPosition[key];
-    positionValues.push(position);
-
-    if (position === yPosition) {
-      return;
-    }
-  }
-
-  throw new Error('mdPanel: Panel y position only accepts the following ' +
-      'values:\n' + positionValues.join(' | '));
-};
-
-
-/**
- * Ensures that xPosition is a valid position name. Throw an exception if not.
- * @param {string} xPosition
- */
-MdPanelPosition.prototype._validateXPosition = function(xPosition) {
-  // empty is ok
-  if (xPosition == null) {
-      return;
-  }
-
-  var positionKeys = Object.keys(MdPanelPosition.xPosition);
-  var positionValues = [];
-  for (var key, i = 0; key = positionKeys[i]; i++) {
-    var position = MdPanelPosition.xPosition[key];
-    positionValues.push(position);
-    if (position === xPosition) {
-      return;
-    }
-  }
-
-  throw new Error('mdPanel: Panel x Position only accepts the following ' +
-      'values:\n' + positionValues.join(' | '));
 };
 
 
@@ -3551,6 +3501,33 @@ function getComputedTranslations(el, property) {
   }
 
   return output;
+}
+
+/*
+ * Ensures that a value is a valid position name. Throw an exception if not.
+ * @param {Object} positionMap Object against which the value will be checked.
+ * @param {string} value
+ */
+function validatePosition(positionMap, value) {
+  // empty is ok
+  if (value === null || angular.isUndefined(value)) {
+    return;
+  }
+
+  var positionKeys = Object.keys(positionMap);
+  var positionValues = [];
+
+  for (var key, i = 0; key = positionKeys[i]; i++) {
+    var position = positionMap[key];
+    positionValues.push(position);
+
+    if (position === value) {
+      return;
+    }
+  }
+
+  throw new Error('Panel position only accepts the following values:\n' +
+    positionValues.join(' | '));
 }
 
 /**
