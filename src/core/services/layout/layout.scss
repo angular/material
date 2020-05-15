@@ -1,13 +1,11 @@
 /*
 * Since Layout API uses ng-cloak to hide the dom elements while layouts are adjusted
-*
 */
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
 
 /*
-*
 *  Responsive attributes
 *
 *  References:
@@ -16,10 +14,7 @@
 *  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 *  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
 *  5) http://godban.com.ua/projects/flexgrid
-*
-*
 */
-
 @-moz-document url-prefix() {
   .layout-fill {
     margin: 0;
@@ -29,17 +24,11 @@
   }
 }
 
-
 /*
  *  Apply Mixins to create Layout/Flexbox styles
- *
  */
-
-
 @include layouts_for_breakpoint();
 @include layout-padding-margin();
-
-
 
 /**
  * `hide-gt-sm show-gt-lg` should hide from 600px to 1200px
@@ -53,10 +42,8 @@
  *         $layout-breakpoint-md:     1280px !default;
  *         $layout-breakpoint-lg:     1920px !default;
  */
-
-
 @media (max-width: $layout-breakpoint-xs - 1) {
-  // Xtra-SMALL  SCREEN
+  // Xtra-SMALL SCREEN
   .hide-xs, .hide {
     &:not(.show-xs):not(.show) {
       display: none;

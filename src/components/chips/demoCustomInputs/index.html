@@ -1,28 +1,40 @@
 <div ng-controller="CustomInputDemoCtrl as ctrl" layout="column" ng-cloak>
 
   <md-content class="md-padding" layout="column">
-    <h2 class="md-title">Use an <code>input</code> element with no model to build an ordered set of chips.</h2>
-    <md-chips ng-model="ctrl.numberChips">
-      <input type="number" placeholder="Enter a number">
+    <h2 id="chipsNoModelTitle" class="md-title">
+      Use an <code>input</code> element with no model to build an ordered set of chips.
+    </h2>
+    <md-chips ng-model="ctrl.numberChips" input-aria-label="Numbers with no model"
+              input-aria-describedby="chipsNoModelTitle"
+              container-empty-hint="Chips container. Enter the text area, type a number, and then press enter to add a chip.">
+      <input type="number" placeholder="Enter a number" aria-label="Number chips with no model">
     </md-chips>
 
     <br/>
-    <h2 class="md-title">Use an <code>input</code>  element to build an ordered set of chips.</h2>
-    <md-chips ng-model="ctrl.numberChips2">
-      <input type="number" ng-model="ctrl.numberBuffer" placeholder="Enter a number">
+    <h2 id="chipsWithModelTitle" class="md-title">
+      Use an <code>input</code> element to build an ordered set of chips.
+    </h2>
+    <md-chips ng-model="ctrl.numberChips2" input-aria-label="Numbers with a model"
+              input-aria-describedby="chipsWithModelTitle"
+              container-empty-hint="Chips container. Enter the text area, type a number, and then press enter to add a chip.">
+      <input type="number" ng-model="ctrl.numberBuffer" placeholder="Enter a number"
+             aria-label="Number chips">
     </md-chips>
 
     <br/>
-    <h2 class="md-title">Use <code>md-autocomplete</code>  to build an ordered set of chips.</h2>
-
+    <h2 id="autocompleteTitle" class="md-title">
+      Use <code>md-autocomplete</code> to build an ordered set of chips.
+    </h2>
     <md-chips ng-model="ctrl.selectedVegetables" md-autocomplete-snap
               md-transform-chip="ctrl.transformChip($chip)"
-              md-require-match="ctrl.autocompleteDemoRequireMatch">
+              md-require-match="ctrl.autocompleteDemoRequireMatch"
+              input-aria-label="Favorite Vegetables">
       <md-autocomplete
           md-selected-item="ctrl.selectedItem"
           md-search-text="ctrl.searchText"
           md-items="item in ctrl.querySearch(ctrl.searchText)"
           md-item-text="item.name"
+          input-aria-describedby="autocompleteTitle"
           placeholder="Search for a vegetable">
         <span md-highlight-text="ctrl.searchText">{{item.name}} :: {{item.type}}</span>
       </md-autocomplete>

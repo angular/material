@@ -30,7 +30,8 @@
           <label>State</label>
           <md-select ng-model="ctrl.userState">
             <md-option><em>None</em></md-option>
-            <md-option ng-repeat="state in ctrl.states" ng-value="state.abbrev" ng-disabled="$index === 1">
+            <md-option ng-repeat="state in ctrl.states" ng-value="state.abbrev"
+                       ng-disabled="$index === 1">
               {{state.abbrev}}
             </md-option>
           </md-select>
@@ -60,7 +61,8 @@
 
       <div layout="row" layout-align="space-between center">
         <span>What armor do you wear?</span>
-        <md-select ng-model="armor" placeholder="Armor" class="md-no-underline" required md-no-asterisk="false">
+        <md-select ng-model="armor" placeholder="Armor" class="md-no-underline" required
+                   md-no-asterisk="false">
           <md-option value="cloth">Cloth</md-option>
           <md-option value="leather">Leather</md-option>
           <md-option value="chain">Chainmail</md-option>

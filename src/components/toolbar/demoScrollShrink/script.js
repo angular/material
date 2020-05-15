@@ -4,7 +4,7 @@ angular.module('toolbarDemo2', ['ngMaterial'])
   $scope.title = 'My App Title';
 })
 .controller('AppCtrl', function($scope) {
-  var imagePath = 'img/list/60.jpeg';
+  var imagePath = 'img/60.jpeg';
 
   $scope.todos = [];
   for (var i = 0; i < 15; i++) {

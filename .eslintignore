@@ -1,0 +1,15 @@
+# Ignore miscellaneous folders
+.github/
+.idea/
+node_modules/
+dist/
+tmp/
+bower-material/
+code.material.angularjs.org/
+
+# Ignore certain project files
+# TODO Remove test/ at some point when the files there are fit for linting
+test/
+src/core/services/compiler/compiler.spec.js
+docs/config/template/*.js
+docs/app/js/highlight.pack.js

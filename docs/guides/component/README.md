@@ -1,6 +1,6 @@
 ### Component Templates
 
-This folder and its contents provide a starting template for any Angular Material component.  It is easy to use these assets for your own custom component development.
+This folder and its contents provide a starting template for any AngularJS Material component.  It is easy to use these assets for your own custom component development.
 
 > Please do all of your development work in a Git branch; labelled with a WIP prefix!!
 

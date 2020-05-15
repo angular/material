@@ -39,7 +39,7 @@ demo module.
 
 ### Why is an asset cache needed for Codepen?
 
-Components within angular material at times use icons or SVG.  Images
+Components within AngularJS Material at times use icons or SVG.  Images
 are fetched over http.  Without having a server that will allow cross
 site scripting (`Access-Control-Allow-Origin: *`), the request will
 fail with a [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)

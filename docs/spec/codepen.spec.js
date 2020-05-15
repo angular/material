@@ -1,6 +1,6 @@
 describe('CodepenDataAdapter', function() {
 
-  var codepenDataAdapter, demo, data, externalScripts;
+  let codepenDataAdapter, demo, data, externalScripts;
   beforeEach(module('docsApp'));
 
   beforeEach(inject(function(_codepenDataAdapter_) {
@@ -52,7 +52,7 @@ describe('CodepenDataAdapter', function() {
 
       it('includes the external js files, including the asset cache required to serve svgs to codepen', function() {
 
-        var expected = [
+        const expected = [
           'http://some-url-to-external-js-files-required-for-codepen',
           'http://localhost:8080/angular-material.js',
           'https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/assets-cache.js'
@@ -79,7 +79,7 @@ describe('CodepenDataAdapter', function() {
 
     describe('when html templates are included in the demo', function() {
 
-      var template, $script;
+      let template, script;
       beforeEach(function() {
         template = {
           name: 'template-name',
@@ -134,7 +134,7 @@ describe('CodepenDataAdapter', function() {
     describe('when the module definition in the js file is formatted in different ways', function() {
 
       it('handles second argument on a new line', function() {
-        var script = "angular.module('test',\n \
+        const script = "angular.module('test',\n \
 []);";
         demo.files.js = [{ contents: script }];
 
@@ -143,7 +143,7 @@ describe('CodepenDataAdapter', function() {
       });
 
       it('handles dependencies on new lines', function() {
-        var script = "angular.module('test', [\n \
+        const script = "angular.module('test', [\n \
 'Dep1',\n \
 'Dep2',\n \
 ]);";
@@ -154,7 +154,7 @@ describe('CodepenDataAdapter', function() {
       });
 
       it('handles module on a new line', function() {
-        var script = "angular\n\
+        const script = "angular\n\
 .module('test', [\n \
 'Dep1',\n \
 'Dep2',\n \

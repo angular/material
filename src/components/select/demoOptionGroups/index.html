@@ -9,7 +9,7 @@
         </md-select>
       </md-input-container>
       <md-input-container>
-        <label>Topping</label>
+        <label>Toppings</label>
         <md-select ng-model="selectedToppings" multiple>
           <md-optgroup label="Meats">
             <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'meat' }">{{topping.name}}</md-option>

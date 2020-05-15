@@ -1,5 +1,5 @@
 describe('md-input-container directive', function() {
-  var $rootScope, $compile, $timeout, pageScope;
+  var $rootScope, $compile, $timeout, pageScope, $material;
 
   var invalidAnimation, messagesAnimation, messageAnimation;
   var $animProvider;
@@ -10,6 +10,7 @@ describe('md-input-container directive', function() {
   beforeEach(inject(function($injector) {
     $compile = $injector.get('$compile');
     $timeout = $injector.get('$timeout');
+    $material = $injector.get('$material');
 
     $rootScope = $injector.get('$rootScope');
     pageScope = $rootScope.$new();
@@ -257,6 +258,76 @@ describe('md-input-container directive', function() {
       return angular.element(el[0].querySelector('.md-char-counter'));
     }
 
+    it('should error with a constant and incorrect initial value', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="2" ng-model="foo" name="foo">' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+
+      pageScope.$apply('foo = "ABCDEFGHIJ"');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['md-maxlength']).toBe(true);
+      expect(getCharCounter(el).text()).toBe('10 / 2');
+    });
+
+    it('should work with a constant and correct initial value', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="5" ng-model="foo" name="foo">' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+
+      pageScope.$apply('foo = "abcde"');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('5 / 5');
+    });
+
+    it('should error with an interpolated value and incorrect initial value', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="mymax" ng-model="foo" name="foo">' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+
+        pageScope.$apply('mymax = 8');
+        pageScope.$apply('foo = "ABCDEFGHIJ"');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['md-maxlength']).toBe(true);
+      expect(getCharCounter(el).text()).toBe('10 / 8');
+    });
+
+    it('should work with an interpolated value and correct initial value', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="mymax" ng-model="foo" name="foo">' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+
+      pageScope.$apply('mymax = 5');
+      pageScope.$apply('foo = "abcde"');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('5 / 5');
+    });
+
     it('should work with a constant', function() {
       var el = $compile(
         '<form name="form">' +
@@ -306,6 +377,33 @@ describe('md-input-container directive', function() {
       expect(getCharCounter(element).text()).toBe('3 / 6');
     });
 
+    it('should update correctly the counter, when deleting the model value', function() {
+      var el = $compile(
+        '<form name="form">' +
+          '<md-input-container>' +
+          '<input md-maxlength="5" ng-model="foo" name="foo">' +
+          '</md-input-container>' +
+        '</form>'
+      )(pageScope);
+
+      pageScope.$apply();
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('0 / 5');
+
+      pageScope.$apply('foo = "abcdef"');
+      expect(pageScope.form.foo.$error['md-maxlength']).toBe(true);
+      expect(getCharCounter(el).text()).toBe('6 / 5');
+
+
+      pageScope.$apply('foo = ""');
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+      expect(getCharCounter(el).text()).toBe('0 / 5');
+    });
+
     it('should add and remove maxlength element & error with expression', function() {
       var el = $compile(
         '<form name="form">' +
@@ -314,11 +412,10 @@ describe('md-input-container directive', function() {
         '  </md-input-container>' +
         '</form>')(pageScope);
 
-      pageScope.$apply();
+      pageScope.$apply('max = -1');
 
       // Flush any pending $mdUtil.nextTick calls
       $timeout.flush();
-
       expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
       expect(getCharCounter(el).length).toBe(0);
 
@@ -332,6 +429,80 @@ describe('md-input-container directive', function() {
       pageScope.$apply('foo = "abcdefg"');
       expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
       expect(getCharCounter(el).length).toBe(0);
+    });
+
+    it('should not accept spaces for required inputs by default', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="max" ng-model="foo" name="foo" required>' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+      var input = el.find('input');
+
+      pageScope.$apply('foo = ""');
+      pageScope.$apply('max = 1');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(input.hasClass('ng-invalid')).toBe(true);
+      expect(input.hasClass('ng-invalid-required')).toBe(true);
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+
+      pageScope.$apply('foo = "  "');
+      expect(input.hasClass('ng-invalid')).toBe(true);
+      expect(input.hasClass('ng-invalid-required')).toBe(true);
+      expect(pageScope.form.foo.$error['required']).toBeTruthy();
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+    });
+
+    it('should not trim spaces for required password inputs', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="max" ng-model="foo" name="foo" type="password" required>' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+      var input = el.find('input');
+
+      pageScope.$apply('foo = ""');
+      pageScope.$apply('max = 1');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(input.hasClass('ng-invalid')).toBe(true);
+      expect(input.hasClass('ng-invalid-required')).toBe(true);
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+
+      pageScope.$apply('foo = "  "');
+      expect(input.hasClass('ng-invalid')).toBe(true);
+      expect(input.hasClass('ng-invalid-required')).toBe(false);
+      expect(pageScope.form.foo.$error['required']).toBeFalsy();
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeTruthy();
+    });
+
+    it('should respect ng-trim="false"', function() {
+      var el = $compile(
+        '<form name="form">' +
+        '  <md-input-container>' +
+        '    <input md-maxlength="max" ng-model="foo" name="foo" ng-trim="false" required>' +
+        '  </md-input-container>' +
+        '</form>')(pageScope);
+
+      pageScope.$apply('foo = ""');
+      pageScope.$apply('max = 1');
+
+      // Flush any pending $mdUtil.nextTick calls
+      $timeout.flush();
+
+      expect(pageScope.form.foo.$error['required']).toBeTruthy();
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeFalsy();
+
+      pageScope.$apply('foo = "  "');
+      expect(pageScope.form.foo.$error['required']).toBeFalsy();
+      expect(pageScope.form.foo.$error['md-maxlength']).toBeTruthy();
     });
   });
 
@@ -444,13 +615,13 @@ describe('md-input-container directive', function() {
     pageScope.placeholder = 'bar';
     pageScope.$digest();
 
-    // We should check again to make sure that Angular didn't
+    // We should check again to make sure that AngularJS didn't
     // re-add the placeholder attribute and cause double labels.
     expect(input.hasAttribute('placeholder')).toBe(false);
     expect(label.textContent).toEqual('bar');
   });
 
-  it('should put an aria-label on the input when no label is present', inject(function($timeout) {
+  it('should not copy placeholder text to aria-label on the input', inject(function($timeout) {
     var el = $compile(
       '<form name="form">' +
       '  <md-input-container md-no-float>' +
@@ -462,20 +633,8 @@ describe('md-input-container directive', function() {
     $timeout.flush();
 
     var input = el.find('input');
-    expect(input.attr('aria-label')).toBe('baz');
+    expect(input.attr('aria-label')).toBeUndefined();
   }));
-
-  it('should evaluate the placeholder expression before setting the aria-label', function() {
-    pageScope.placeholder = 'baz';
-    var el = $compile(
-      '<form name="form">' +
-      '  <md-input-container md-no-float>' +
-      '    <input placeholder="{{placeholder}}" ng-model="foo" name="foo">' +
-      '  </md-input-container>' +
-      '</form>')(pageScope);
-
-    expect(el.find('input').attr('aria-label')).toBe('baz');
-  });
 
   it('should put the container in "has value" state when input has a static value', function() {
     var scope = pageScope.$new();
@@ -620,25 +779,45 @@ describe('md-input-container directive', function() {
     });
 
     it('should select the input value on focus', inject(function($timeout) {
-      var container = setup('md-select-on-focus');
-      var input = container.find('input');
-      input.val('Auto Text Select');
+      var input = $compile('<input md-select-on-focus value="Text">')($rootScope);
 
-      document.body.appendChild(container[0]);
+      document.body.appendChild(input[0]);
 
       expect(isTextSelected(input[0])).toBe(false);
 
+      input.focus();
       input.triggerHandler('focus');
+      $timeout.flush();
 
       expect(isTextSelected(input[0])).toBe(true);
 
-      document.body.removeChild(container[0]);
+      input.remove();
+
 
       function isTextSelected(input) {
-        // The selection happens in a timeout which needs to be flushed.
-        $timeout.flush();
-        return input.selectionStart === 0 && input.selectionEnd == input.value.length;
+        if (typeof input.selectionStart === "number") {
+          return input.selectionStart === 0 && input.selectionEnd === input.value.length;
+        } else if (typeof document.selection !== "undefined") {
+          return document.selection.createRange().text === input.value;
+        }
       }
+    }));
+
+    it('should not refocus the input after focus is lost', inject(function($document, $timeout) {
+      var wrapper = $compile('<div><input md-select-on-focus value="Text"><input></div>')($rootScope),
+          input1 = angular.element(wrapper[0].childNodes[0]),
+          input2 = angular.element(wrapper[0].childNodes[1]);
+      $document[0].body.appendChild(wrapper[0]);
+
+      input1.focus();
+      input1.triggerHandler('focus');
+      input2.focus();
+      input2.triggerHandler('focus');
+
+      $timeout.flush();
+      expect(input2).toBeFocused();
+
+      wrapper.remove();
     }));
 
     describe('Textarea auto-sizing', function() {
@@ -803,9 +982,8 @@ describe('md-input-container directive', function() {
           '  <input ng-model="foo">' +
           '</md-input-container>'
         );
-
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-left')).toBeTruthy();
-
       });
 
       it('should add md-icon-left class when .md-icon is before the input', function() {
@@ -815,6 +993,7 @@ describe('md-input-container directive', function() {
           '  <input ng-model="foo">' +
           '</md-input-container>'
         );
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-left')).toBeTruthy();
       });
 
@@ -825,7 +1004,7 @@ describe('md-input-container directive', function() {
           '  <md-icon></md-icon>' +
           '</md-input-container>'
         );
-
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-right')).toBeTruthy();
 
       });
@@ -837,7 +1016,52 @@ describe('md-input-container directive', function() {
           '  <i class="md-icon"></i>' +
           '</md-input-container>'
         );
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-right')).toBeTruthy();
+      });
+      it('should not add md-icon-left class when md-icon is before the input and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <md-icon ng-if="false"></md-icon>' +
+          '  <input ng-model="foo">' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-left')).toBeFalsy();
+      });
+
+      it('should not add md-icon-left class when .md-icon is before the input and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <i class="md-icon" ng-if="false"></i>' +
+          '  <input ng-model="foo">' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-left')).toBeFalsy();
+      });
+
+      it('should not add md-icon-right class when md-icon is after the input and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <input ng-model="foo">' +
+          '  <md-icon ng-if="false"></md-icon>' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-right')).toBeFalsy();
+
+      });
+
+      it('should not add md-icon-right class when .md-icon is after the input and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <input ng-model="foo">' +
+          '  <i class="md-icon" ng-if="false"></i>' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-right')).toBeFalsy();
       });
 
       it('should add md-icon-left and md-icon-right classes when md-icons are before and after the input', function() {
@@ -848,6 +1072,7 @@ describe('md-input-container directive', function() {
           '  <md-icon></md-icon>' +
           '</md-input-container>'
         );
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-left md-icon-right')).toBeTruthy();
       });
 
@@ -859,7 +1084,32 @@ describe('md-input-container directive', function() {
           '  <i class="md-icon"></i>' +
           '</md-input-container>'
         );
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-left md-icon-right')).toBeTruthy();
+      });
+
+      it('should not add md-icon-left and md-icon-right classes when md-icons are before and after the input and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <md-icon ng-if="false"></md-icon>' +
+          '  <input ng-model="foo">' +
+          '  <md-icon ng-if="false"></md-icon>' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-left md-icon-right')).toBeFalsy();
+      });
+
+      it('should not add md-icon-left and md-icon-right classes when .md-icons are before and after the input and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <i class="md-icon" ng-if="false"></i>' +
+          '  <input ng-model="foo">' +
+          '  <i class="md-icon" ng-if="false"></i>' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-left md-icon-right')).toBeFalsy();
       });
 
       it('should add md-icon-left class when md-icon is before select', function() {
@@ -869,7 +1119,7 @@ describe('md-input-container directive', function() {
           '  <md-select ng-model="foo"></md-select>' +
           '</md-input-container>'
         );
-
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-left')).toBeTruthy();
       });
 
@@ -880,7 +1130,7 @@ describe('md-input-container directive', function() {
           '  <md-icon></md-icon>' +
           '</md-input-container>'
         );
-
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-right')).toBeTruthy();
       });
 
@@ -891,7 +1141,7 @@ describe('md-input-container directive', function() {
           '  <textarea ng-model="foo"></textarea>' +
           '</md-input-container>'
         );
-
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-left')).toBeTruthy();
       });
 
@@ -902,8 +1152,30 @@ describe('md-input-container directive', function() {
           '  <md-icon></md-icon>' +
           '</md-input-container>'
         );
-
+        $material.flushOutstandingAnimations();
         expect(el.hasClass('md-icon-right')).toBeTruthy();
+      });
+
+      it('should not add md-icon-left class when md-icon is before textarea and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <md-icon ng-if="false"></md-icon>' +
+          '  <textarea ng-model="foo"></textarea>' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-left')).toBeFalsy();
+      });
+
+      it('should not add md-icon-right class when md-icon is before textarea and ng-if="false"', function() {
+        var el = compile(
+          '<md-input-container>' +
+          '  <textarea ng-model="foo"></textarea>' +
+          '  <md-icon ng-if="false"></md-icon>' +
+          '</md-input-container>'
+        );
+        $material.flushOutstandingAnimations();
+        expect(el.hasClass('md-icon-right')).toBeFalsy();
       });
     });
   });

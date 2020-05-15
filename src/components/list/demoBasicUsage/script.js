@@ -5,7 +5,7 @@ angular.module('listDemo1', ['ngMaterial'])
     .iconSet('communication', 'img/icons/sets/communication-icons.svg', 24);
 })
 .controller('AppCtrl', function($scope) {
-    var imagePath = 'img/list/60.jpeg';
+    var imagePath = 'img/60.jpeg';
 
     $scope.phones = [
       {
@@ -42,10 +42,10 @@ angular.module('listDemo1', ['ngMaterial'])
     $scope.todos = [
       {
         face : imagePath,
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
+        what: 'My quirky, joyful porg',
+        who: 'Kaguya w/ #qjporg',
         when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
+        notes: " I was lucky to find a quirky, joyful porg!"
       },
       {
         face : imagePath,

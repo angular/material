@@ -59,7 +59,7 @@ describe('$mdToast service', function() {
 
       $material.flushOutstandingAnimations();
 
-      expect(parent.find('span').text().trim()).toBe('Do something');
+      expect(parent.find('span').text().trim()).toContain('Do something');
       expect(parent.find('span')).toHaveClass('md-toast-text');
       expect(parent.find('md-toast')).toHaveClass('md-capsule');
       expect(parent.find('md-toast').attr('md-theme')).toBe('some-theme');
@@ -69,13 +69,13 @@ describe('$mdToast service', function() {
       expect(openAndclosed).toBe(true);
     }));
 
-    it('supports dynamicly updating the content', inject(function($mdToast, $rootScope, $rootElement) {
+    it('supports dynamically updating the content', inject(function($mdToast, $rootScope, $rootElement) {
       var parent = angular.element('<div>');
       $mdToast.showSimple('Hello world');
       $rootScope.$digest();
-      $mdToast.updateContent('Goodbye world');
+      $mdToast.updateTextContent('Goodbye world');
       $rootScope.$digest();
-      expect($rootElement.find('span').text().trim()).toBe('Goodbye world');
+      expect($rootElement.find('span').text().trim()).toContain('Goodbye world');
     }));
 
     it('supports an action toast', inject(function($mdToast, $rootScope, $material) {

@@ -21,7 +21,7 @@
         // Whenever a different year is selected, scroll to that year
         $scope.$watch('ctrl.selectedYear', angular.bind(this, function(yearIndex) {
           var scrollYear = Math.floor(this.topIndex / 13);
-          if(scrollYear !== yearIndex) {
+          if (scrollYear !== yearIndex) {
             this.topIndex = yearIndex * 13;
           }
         }));

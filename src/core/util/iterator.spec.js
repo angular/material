@@ -6,7 +6,7 @@ describe('iterator', function() {
     var list, iter;
 
     beforeEach(inject(function ($mdUtil) {
-      list = [ 13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99 ];
+      list = [13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99];
       iter = $mdUtil.iterator(list);
     }));
 
@@ -78,7 +78,7 @@ describe('iterator', function() {
     var list, iter;
 
     beforeEach(inject(function ($mdUtil) {
-      list = [ 13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99 ];
+      list = [13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99];
       iter = $mdUtil.iterator(list);
     }));
 
@@ -133,7 +133,7 @@ describe('iterator', function() {
     var list, iter;
 
     beforeEach(inject(function ($mdUtil) {
-      list = [ 13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99 ];
+      list = [13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99];
       iter = $mdUtil.iterator(list);
     }));
 
@@ -175,7 +175,7 @@ describe('iterator', function() {
       expect(iter.last()).toBe('Max');
       expect(iter.first()).toBe(13);
 
-      iter = $mdUtil.iterator([ 2, 5 ]);
+      iter = $mdUtil.iterator([2, 5]);
       iter.remove(2);
       expect(iter.last()).toBe(iter.first());
 
@@ -183,75 +183,75 @@ describe('iterator', function() {
 
     it('should use hasNext() properly', function () {
 
-      expect( iter.hasNext( iter.first()) ).toBe(true);
-      expect( iter.hasNext( iter.last()) ).toBe(false);
-      expect( iter.hasNext(99)).toBe(false);
-      expect( iter.hasNext('Andrew')).toBe(true);
+      expect(iter.hasNext(iter.first())).toBe(true);
+      expect(iter.hasNext(iter.last())).toBe(false);
+      expect(iter.hasNext(99)).toBe(false);
+      expect(iter.hasNext('Andrew')).toBe(true);
 
       iter.add(100);
-      expect( iter.hasNext(99) ).toBe(true);
+      expect(iter.hasNext(99)).toBe(true);
       iter.remove(100);
-      expect( iter.hasNext(99) ).toBe(false);
+      expect(iter.hasNext(99)).toBe(false);
 
     });
 
     it('should use hasPrevious() properly', inject(function ($mdUtil) {
 
-      expect( iter.hasPrevious( iter.first()) ).toBe(false);
-      expect( iter.hasPrevious( iter.last()) ).toBe(true);
-      expect( iter.hasPrevious(99)).toBe(true);
-      expect( iter.hasPrevious(13)).toBe(false);
-      expect( iter.hasPrevious('Andrew')).toBe(true);
+      expect(iter.hasPrevious(iter.first())).toBe(false);
+      expect(iter.hasPrevious(iter.last())).toBe(true);
+      expect(iter.hasPrevious(99)).toBe(true);
+      expect(iter.hasPrevious(13)).toBe(false);
+      expect(iter.hasPrevious('Andrew')).toBe(true);
 
       iter.add(100);
-      expect( iter.hasPrevious(99) ).toBe(true);
+      expect(iter.hasPrevious(99)).toBe(true);
       iter.remove(100);
-      expect( iter.hasPrevious(99) ).toBe(true);
+      expect(iter.hasPrevious(99)).toBe(true);
 
       iter.remove(13);
-      expect( iter.hasPrevious(iter.first()) ).toBe(false);
+      expect(iter.hasPrevious(iter.first())).toBe(false);
 
-      iter =  $mdUtil.iterator(list = [ 2, 3 ]);
-      expect( iter.hasPrevious(iter.last()) ).toBe(true);
+      iter =  $mdUtil.iterator(list = [2, 3]);
+      expect(iter.hasPrevious(iter.last())).toBe(true);
       iter.remove(2);
-      expect( iter.hasPrevious(iter.last()) ).toBe(false);
-      expect( iter.hasPrevious(iter.first()) ).toBe(false);
+      expect(iter.hasPrevious(iter.last())).toBe(false);
+      expect(iter.hasPrevious(iter.first())).toBe(false);
 
       iter.remove(iter.first());
-      expect( iter.count() ).toBe(0);
-      expect( iter.hasPrevious(iter.first()) ).toBe(false);
+      expect(iter.count()).toBe(0);
+      expect(iter.hasPrevious(iter.first())).toBe(false);
 
 
-      expect( iter.hasPrevious(null) ).toBe(false);
+      expect(iter.hasPrevious(null)).toBe(false);
     }));
 
     it('should use next() properly', function () {
 
-      expect( iter.next(iter.first()) ).toBe(14);
+      expect(iter.next(iter.first())).toBe(14);
 
       iter.add("47",0);
-      expect( iter.next(iter.first()) ).toBe(13);
+      expect(iter.next(iter.first())).toBe(13);
 
       var index = list.length - 3;
-      expect( iter.next(iter.itemAt(index)) ).toBe('Max');
+      expect(iter.next(iter.itemAt(index))).toBe('Max');
 
-      expect( iter.next(99) ).toBeNull();
-      expect( iter.next(null) ).toBeNull();
+      expect(iter.next(99)).toBeNull();
+      expect(iter.next(null)).toBeNull();
     });
 
     it('should use previous() properly', function () {
 
-      expect( iter.previous(iter.last()) ).toBe('Max');
-      expect( iter.previous(iter.first()) ).toBeNull();
+      expect(iter.previous(iter.last())).toBe('Max');
+      expect(iter.previous(iter.first())).toBeNull();
 
       iter.add("47",0);
-      expect( iter.previous(iter.itemAt(1)) ).toBe("47");
+      expect(iter.previous(iter.itemAt(1))).toBe("47");
 
       var index = list.length - 3;
-      expect( iter.previous(iter.itemAt(index)) ).toBe('Adam');
+      expect(iter.previous(iter.itemAt(index))).toBe('Adam');
 
-      expect( iter.previous(99) ).toBe('Max');
-      expect( iter.previous(null) ).toBeNull();
+      expect(iter.previous(99)).toBe('Max');
+      expect(iter.previous(null)).toBeNull();
     });
 
   });
@@ -261,23 +261,23 @@ describe('iterator', function() {
     var validate = function(item) { return (item !== 14) && (item !== 'Andrew'); };
 
     beforeEach(inject(function ($mdUtil) {
-      list = [ 13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99 ];
+      list = [13, 14, 'Marcy', 15, 'Andrew', 16, 21, 'Adam', 37, 'Max', 99];
       iter = $mdUtil.iterator(list);
     }));
 
     it('should use next() properly', function () {
 
-      expect( iter.next(13,      validate) ).toBe('Marcy');
-      expect( iter.next('Marcy', validate) ).toBe(15);
-      expect( iter.next(15,      validate) ).toBe(16);
+      expect(iter.next(13,      validate)).toBe('Marcy');
+      expect(iter.next('Marcy', validate)).toBe(15);
+      expect(iter.next(15,      validate)).toBe(16);
 
     });
 
     it('should use previous() properly', function () {
 
-      expect( iter.previous(16,      validate) ).toBe(15);
-      expect( iter.previous(15,      validate) ).toBe('Marcy');
-      expect( iter.previous('Marcy', validate) ).toBe(13);
+      expect(iter.previous(16,      validate)).toBe(15);
+      expect(iter.previous(15,      validate)).toBe('Marcy');
+      expect(iter.previous('Marcy', validate)).toBe(13);
 
     });
 

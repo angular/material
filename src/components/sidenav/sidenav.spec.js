@@ -59,6 +59,40 @@ describe('mdSidenav', function() {
       expect($rootScope.show).toBe(false);
     }));
 
+    describe('disable click and Escape key events if md-disable-close-events is set to true',
+      function() {
+        it('should not close on escape and still show the backdrop',
+          inject(function($rootScope, $material, $mdConstant, $timeout) {
+            var el = setup('md-is-open="show" md-disable-close-events');
+            $rootScope.$apply('show = true');
+
+            $material.flushOutstandingAnimations();
+            el.parent().triggerHandler({
+              type: 'keydown',
+              keyCode: $mdConstant.KEY_CODE.ESCAPE
+            });
+            $timeout.flush();
+            var backdrop = el.parent().find('md-backdrop');
+
+            expect($rootScope.show).toBe(true);
+            expect(backdrop.length).toBe(1);
+        }));
+
+        it('should not close on backdrop click and still show the backdrop',
+          inject(function($rootScope, $material, $timeout) {
+            var el = setup('md-is-open="show" md-disable-close-events');
+            $rootScope.$apply('show = true');
+
+            $material.flushOutstandingAnimations();
+            el.parent().find('md-backdrop').triggerHandler('click');
+            $timeout.flush();
+            var backdrop = el.parent().find('md-backdrop');
+
+            expect($rootScope.show).toBe(true);
+            expect(backdrop.length).toBe(1);
+        }));
+    });
+
     it('should show a backdrop by default', inject(function($rootScope, $material) {
       var el = setup('md-is-open="show"');
       $rootScope.$apply('show = true');
@@ -165,7 +199,7 @@ describe('mdSidenav', function() {
     });
 
     it('should trigger a resize event when opening',
-      inject(function($rootScope, $material, $window) {
+      inject(function($rootScope, $animate, $$rAF, $window) {
         var el = setup('md-is-open="show"');
         var obj = { callback: function() {} };
 
@@ -173,7 +207,8 @@ describe('mdSidenav', function() {
         angular.element($window).on('resize', obj.callback);
 
         $rootScope.$apply('show = true');
-        $material.flushOutstandingAnimations();
+        $animate.flush();
+        $$rAF.flush();
 
         expect(obj.callback).toHaveBeenCalled();
         angular.element($window).off('resize', obj.callback);
@@ -253,6 +288,82 @@ describe('mdSidenav', function() {
 
       expect(el.hasClass('md-closed')).toBe(false);
     }));
+
+  });
+
+  describe("focus", function() {
+
+    var $material, $mdInteraction, $mdConstant;
+    var triggerElement;
+
+    beforeEach(inject(function($injector) {
+      $material = $injector.get('$material');
+      $mdInteraction = $injector.get('$mdInteraction');
+      $mdConstant = $injector.get('$mdInteraction');
+
+      triggerElement = angular.element('<button>Trigger Element</button>');
+      document.body.appendChild(triggerElement[0]);
+    }));
+
+    afterEach(function() {
+      triggerElement.remove();
+    });
+
+    function dispatchEvent(eventName) {
+      angular.element(document.body).triggerHandler(eventName);
+    }
+
+    function flush() {
+      $material.flushInterimElement();
+    }
+
+    function blur() {
+      if ('documentMode' in document) {
+        document.body.focus();
+      } else {
+        triggerElement.blur();
+      }
+    }
+
+    it("should restore after sidenav triggered by keyboard", function() {
+      var sidenavEl = setup('');
+      var controller = sidenavEl.controller('mdSidenav');
+
+      triggerElement.focus();
+
+      dispatchEvent('keydown');
+
+      controller.$toggleOpen(true);
+      flush();
+
+      blur();
+
+      controller.$toggleOpen(false);
+      flush();
+
+      expect($mdInteraction.getLastInteractionType()).toBe("keyboard");
+      expect(document.activeElement).toBe(triggerElement[0]);
+    });
+
+    it("should not restore after sidenav triggered by mouse", function() {
+      var sidenavEl = setup('');
+      var controller = sidenavEl.controller('mdSidenav');
+
+      triggerElement.focus();
+
+      dispatchEvent('mousedown');
+
+      controller.$toggleOpen(true);
+      flush();
+
+      blur();
+
+      controller.$toggleOpen(false);
+      flush();
+
+      expect($mdInteraction.getLastInteractionType()).toBe("mouse");
+      expect(document.activeElement).not.toBe(triggerElement[0]);
+    });
 
   });
 

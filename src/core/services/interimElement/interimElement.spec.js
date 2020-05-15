@@ -16,7 +16,7 @@ describe('$$interimElement service', function() {
         expect(interimTest.show).toBeOfType('function');
 
         var builder = interimTest.build();
-        [ 'controller', 'controllerAs', 'onRemove', 'onShow', 'resolve', 
+        ['controller', 'controllerAs', 'onRemove', 'onShow', 'resolve',
           'template', 'templateUrl', 'themable', 'transformTemplate', 'parent'
         ].forEach(function(methodName) {
           expect(builder[methodName]).toBeOfType('function');
@@ -234,7 +234,7 @@ describe('$$interimElement service', function() {
         flush();
         expect($compilerSpy.calls.mostRecent().args[0].key).toBe('newValue');
         expect($compilerSpy.calls.mostRecent().args[0].key2).toBe('newValue2');
-        
+
         $compilerSpy.calls.reset();
         flush();
         flush();
@@ -248,6 +248,53 @@ describe('$$interimElement service', function() {
         expect($compilerSpy.calls.mostRecent().args[0].key).toBe('defaultValue');
         expect($compilerSpy.calls.mostRecent().args[0].key2).toBe('superNewValue2');
       });
+    });
+
+    it('should support multiple interims as a preset method', function() {
+
+      var showCount = 0;
+
+      createInterimProvider('interimTest');
+
+      inject(function(interimTest) {
+
+        showInterim(interimTest);
+        expect(showCount).toBe(1);
+
+        showInterim(interimTest);
+        expect(showCount).toBe(2);
+
+        interimTest.hide();
+        flush();
+
+        expect(showCount).toBe(1);
+
+        interimTest.hide();
+        flush();
+
+        expect(showCount).toBe(0);
+
+      });
+
+      function showInterim(service) {
+
+        var preset = service
+          .build()
+          .template('<div>Interim Element</div>')
+          .multiple(true);
+
+        preset._options.onShow = function() {
+          showCount++;
+        };
+
+        preset._options.onRemove = function() {
+          showCount--;
+        };
+
+        service.show(preset);
+        flush();
+      }
+
     });
 
   });
@@ -297,7 +344,7 @@ describe('$$interimElement service', function() {
            templateUrl: 'testing.html',
            onShow : function() { return $q.reject("failed"); }
          })
-         .catch( onShowFail );
+         .catch(onShowFail);
          $timeout.flush();
 
          expect(showFailed).toBe(true);
@@ -314,7 +361,7 @@ describe('$$interimElement service', function() {
            templateUrl: 'testing.html',
            onShow : function() {   throw new Error("exception"); }
          })
-         .catch( onShowFail );
+         .catch(onShowFail);
          $timeout.flush();
 
          expect(showFailed).toBe('exception');
@@ -331,7 +378,7 @@ describe('$$interimElement service', function() {
             return $q.when(true);
           }
         })
-        .then( function() {
+        .then(function() {
           showFinished = true;
         });
 
@@ -680,7 +727,7 @@ describe('$$interimElement service', function() {
         }
       }));
 
-      it('resolves the show promise with string', inject(function( ) {
+      it('resolves the show promise with string', inject(function() {
         var resolved = false;
 
         Service.show().then(function(arg) {
@@ -693,7 +740,7 @@ describe('$$interimElement service', function() {
         expect(resolved).toBe(true);
       }));
 
-      it('resolves the show promise with false', inject(function( ) {
+      it('resolves the show promise with false', inject(function() {
         var resolved = false;
 
         Service.show().then(function(arg) {
@@ -706,7 +753,7 @@ describe('$$interimElement service', function() {
         expect(resolved).toBe(true);
       }));
 
-      it('resolves the show promise with undefined', inject(function( ) {
+      it('resolves the show promise with undefined', inject(function() {
         var resolved = false;
 
         Service.show().then(function(arg) {
@@ -733,13 +780,13 @@ describe('$$interimElement service', function() {
                onRemove : function() {  throw new Error("exception"); }
              };
 
-         Service.show(options).then( onShowHandler, onHideHandler );
+         Service.show(options).then(onShowHandler, onHideHandler);
          $timeout.flush();
 
          expect(showGood).toBeUndefined();
          expect(hideFail).toBeUndefined();
 
-         Service.hide().then( onShowHandler, onHideHandler );
+         Service.hide().then(onShowHandler, onHideHandler);
          $timeout.flush();
 
          expect(showGood).toBeUndefined();
@@ -758,13 +805,13 @@ describe('$$interimElement service', function() {
                 onRemove : function() {  return $q.reject("failed");  }
               };
 
-          Service.show(options).then( onShowHandler, onHideHandler );
+          Service.show(options).then(onShowHandler, onHideHandler);
           $timeout.flush();
 
           expect(showGood).toBeUndefined();
           expect(hideFail).toBeUndefined();
 
-          Service.hide().then( onShowHandler, onHideHandler );
+          Service.hide().then(onShowHandler, onHideHandler);
           $timeout.flush();
 
           expect(showGood).toBeUndefined();
@@ -857,7 +904,7 @@ describe('$$interimElement service', function() {
     $material.flushInterimElement();
   }
 
-  function tailHook( sourceFn, hookFn ) {
+  function tailHook(sourceFn, hookFn) {
     return function() {
       var args = Array.prototype.slice.call(arguments);
       var results = sourceFn.apply(null, args);

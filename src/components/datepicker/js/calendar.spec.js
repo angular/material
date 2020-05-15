@@ -17,7 +17,6 @@ describe('md-calendar', function() {
    */
   function applyDateChange() {
     $timeout.flush();
-    pageScope.$apply();
     $material.flushOutstandingAnimations();
 
     // Internally, the calendar sets scrollTop to scroll to the month for a change.
@@ -26,6 +25,9 @@ describe('md-calendar', function() {
     if (activeViewController) {
       angular.element(activeViewController.calendarScroller).triggerHandler('scroll');
     }
+
+    // Need this to handle the nextTick when setting first scroll.
+    $timeout.flush();
   }
 
   /** Extracts text as an array (one element per cell) from a tr element. */
@@ -54,7 +56,7 @@ describe('md-calendar', function() {
   /**
    * Finds a month `tbody` in the calendar element given a date.
    */
-  function findMonthElement(date) {
+  function findMonthElement(element, date) {
     var months = element.querySelectorAll('[md-calendar-month-body]');
     var monthHeader = dateLocale.monthHeaderFormatter(date);
     var month;
@@ -69,8 +71,9 @@ describe('md-calendar', function() {
   }
 
   /** Find the `tbody` for a year in the calendar. */
-  function findYearElement(year) {
-    var years = element.querySelectorAll('[md-calendar-year-body]');
+  function findYearElement(parent, year) {
+    var node = parent[0] || parent;
+    var years = node.querySelectorAll('[md-calendar-year-body]');
     var yearHeader = year.toString();
     var target;
 
@@ -113,7 +116,8 @@ describe('md-calendar', function() {
   function dispatchKeyEvent(keyCode, opt_modifiers) {
     var mod = opt_modifiers || {};
 
-    angular.element(document.body).triggerHandler({
+
+    angular.element(element).triggerHandler({
       type: 'keydown',
       keyCode: keyCode,
       which: keyCode,
@@ -313,6 +317,31 @@ describe('md-calendar', function() {
         expect(pageScope.myDate).toBeSameDayAs(initialDate);
       });
 
+      it('should ensure that all month elements have a height when the max ' +
+        'date is in the same month as the current date', function() {
+
+        ngElement.remove();
+        var newScope = $rootScope.$new();
+        newScope.myDate = new Date(2016, JUN, 15);
+        newScope.maxDate = new Date(2016, JUN, 20);
+        element = createElement(newScope)[0];
+        applyDateChange();
+
+        var monthWrapper = angular.element(element.querySelector('md-calendar-month'));
+        var scroller = monthWrapper.controller('mdCalendarMonth').calendarScroller;
+
+        scroller.scrollTop -= 50;
+        angular.element(scroller).triggerHandler('scroll');
+
+        var monthElements = $mdUtil.nodesToArray(
+          element.querySelectorAll('[md-calendar-month-body]')
+        );
+
+        expect(monthElements.every(function(currentMonthElement) {
+          return currentMonthElement.offsetHeight > 0;
+        })).toBe(true);
+      });
+
       describe('weeks header', function() {
         it('should display the weeks header in the first row', function() {
           var header = element.querySelector('.md-calendar-day-header tr');
@@ -385,9 +414,9 @@ describe('md-calendar', function() {
         newScope.$apply();
         element = createElement(newScope)[0];
 
-        expect(findMonthElement(new Date(2014, JUL, 1))).not.toBeNull();
-        expect(findMonthElement(new Date(2014, JUN, 1))).not.toBeNull();
-        expect(findMonthElement(new Date(2014, MAY, 1))).toBeNull();
+        expect(findMonthElement(element, new Date(2014, JUL, 1))).not.toBeNull();
+        expect(findMonthElement(element, new Date(2014, JUN, 1))).not.toBeNull();
+        expect(findMonthElement(element, new Date(2014, MAY, 1))).toBeNull();
       });
     });
 
@@ -480,12 +509,57 @@ describe('md-calendar', function() {
         var newScope = $rootScope.$new();
         newScope.minDate = new Date(2014, JUN, 5);
         newScope.myDate = new Date(2014, JUL, 15);
+        element = createElement(newScope);
+        element.controller('mdCalendar').setCurrentView('year');
+        applyDateChange();
+
+        expect(findYearElement(element, 2014)).not.toBeNull();
+        expect(findYearElement(element, 2013)).toBeNull();
+      });
+
+      it('should highlight the proper cell, even when the date is not the ' +
+        'first day of the month', function() {
+        var newScope = $rootScope.$new();
+
+        newScope.myDate = new Date(2015, MAY, 1);
         element = createElement(newScope)[0];
         angular.element(element).controller('mdCalendar').setCurrentView('year');
         applyDateChange();
 
-        expect(findYearElement(2014)).not.toBeNull();
-        expect(findYearElement(2013)).toBeNull();
+        var yearElement = findYearElement(element, 2015);
+
+        expect(findCellByLabel(yearElement, 'May')).toHaveClass('md-calendar-selected-date');
+
+        newScope.myDate = new Date(2015, JUL, 15);
+        applyDateChange();
+
+        expect(findCellByLabel(yearElement, 'Jul')).toHaveClass('md-calendar-selected-date');
+      });
+
+      it('should ensure that all year elements have a height when the ' +
+        'current date is in the same month as the max date', function() {
+
+        ngElement.remove();
+        var newScope = $rootScope.$new();
+        newScope.myDate = new Date(2016, JUN, 15);
+        newScope.maxDate = new Date(2016, JUN, 20);
+        element = createElement(newScope);
+        element.controller('mdCalendar').setCurrentView('year');
+        applyDateChange();
+
+        var yearWrapper = angular.element(element[0].querySelector('md-calendar-year'));
+        var scroller = yearWrapper.controller('mdCalendarYear').calendarScroller;
+
+        scroller.scrollTop -= 50;
+        angular.element(scroller).triggerHandler('scroll');
+
+        var yearElements = $mdUtil.nodesToArray(
+          element[0].querySelectorAll('[md-calendar-year-body]')
+        );
+
+        expect(yearElements.every(function(currentYearElement) {
+          return currentYearElement.offsetHeight > 0;
+        })).toBe(true);
       });
     });
 
@@ -681,6 +755,106 @@ describe('md-calendar', function() {
     });
   });
 
+  describe('md-mode support', function() {
+    var element, controller;
+
+    function compileElement(attrs) {
+      ngElement.remove();
+      element = createElement(pageScope, '<md-calendar ng-model="myDate" ' + (attrs || '') + '></md-calendar>');
+      controller = element.controller('mdCalendar');
+    }
+
+    it('should go to the corresponding view', function() {
+      compileElement('md-mode="month"');
+
+      expect(element.find('md-calendar-month').length).toBe(0);
+      expect(element.find('md-calendar-year').length).toBe(1);
+      expect(controller.currentView).toBe('year');
+    });
+
+    it('should override md-current-view', function() {
+      compileElement('md-mode="day" md-current-view="year"');
+
+      expect(element.find('md-calendar-year').length).toBe(0);
+      expect(element.find('md-calendar-month').length).toBe(1);
+      expect(controller.currentView).toBe('month');
+    });
+
+    it('should not allow users to go to a different view', function() {
+      compileElement('md-mode="day"');
+
+      expect(controller.currentView).toBe('month');
+
+      element[0].querySelector('.md-calendar-month-label').click();
+      applyDateChange();
+
+      expect(controller.currentView).toBe('month');
+    });
+
+    it('should allow users to navigate to a different view if the md-mode is not supported', function() {
+      compileElement('md-mode="invalid-mode"');
+
+      expect(controller.currentView).toBe('month');
+      expect(controller.mode).toBeFalsy();
+
+      element[0].querySelector('.md-calendar-month-label').click();
+      applyDateChange();
+
+      expect(controller.currentView).toBe('year');
+    });
+
+    it('should update the model when clicking on a cell in the year view', function() {
+      pageScope.myDate = new Date(2015, MAY, 15);
+
+      compileElement('md-mode="month"');
+
+      expect(controller.currentView).toBe('year');
+
+      var yearElement = findYearElement(element[0], 2015);
+      var monthCell = findCellByLabel(yearElement, 'Sep');
+      var expectedDate = new Date(2015, SEP, 1);
+
+      monthCell.click();
+      applyDateChange();
+
+      expect(pageScope.myDate).toBeSameDayAs(expectedDate);
+      expect(controller.currentView).toBe('year');
+    });
+
+    it('should update the model when clicking on a cell in the day view', function() {
+      pageScope.myDate = new Date(2015, MAY, 15);
+
+      compileElement('md-mode="day"');
+
+      var monthElement = findMonthElement(element[0], pageScope.myDate);
+      var monthCell = findCellByLabel(monthElement, '28');
+      var expectedDate = new Date(2015, MAY, 28);
+
+      monthCell.click();
+      applyDateChange();
+
+      expect(pageScope.myDate).toBeSameDayAs(expectedDate);
+    });
+  });
+
+  describe('md-current-view support', function() {
+    beforeEach(function() {
+      ngElement && ngElement.remove();
+    });
+
+    it('should have a configurable default view', function() {
+      var calendar = createElement(null, '<md-calendar ng-model="myDate" md-current-view="year"></md-calendar>')[0];
+
+      expect(calendar.querySelector('md-calendar-month')).toBeFalsy();
+      expect(calendar.querySelector('md-calendar-year')).toBeTruthy();
+    });
+
+    it('should default to the month view if no view is supploied', function() {
+      var calendar = createElement(null, '<md-calendar ng-model="myDate"></md-calendar>');
+      expect(calendar.controller('mdCalendar').currentView).toBe('month');
+    });
+  });
+
   it('should render one single-row month of disabled cells after the max date', function() {
     ngElement.remove();
     var newScope = $rootScope.$new();
@@ -689,30 +863,23 @@ describe('md-calendar', function() {
     newScope.$apply();
     element = createElement(newScope)[0];
 
-    expect(findMonthElement(new Date(2014, MAR, 1))).not.toBeNull();
-    expect(findMonthElement(new Date(2014, APR, 1))).not.toBeNull();
+    expect(findMonthElement(element, new Date(2014, MAR, 1))).not.toBeNull();
+    expect(findMonthElement(element, new Date(2014, APR, 1))).not.toBeNull();
 
     // First date of May 2014 on Thursday (i.e. has 3 dates on the first row).
-    var nextMonth = findMonthElement(new Date(2014, MAY, 1));
+    var nextMonth = findMonthElement(element, new Date(2014, MAY, 1));
     expect(nextMonth).not.toBeNull();
     expect(nextMonth.querySelector('.md-calendar-month-label')).toHaveClass(
         'md-calendar-month-label-disabled');
     expect(nextMonth.querySelectorAll('tr').length).toBe(1);
 
     var dates = nextMonth.querySelectorAll('.md-calendar-date');
+    var date;
     for (var i = 0; i < dates.length; i++) {
       date = dates[i];
       if (date.textContent) {
         expect(date).toHaveClass('md-calendar-date-disabled');
       }
     }
-  });
-
-  it('should have a configurable default view', function() {
-    ngElement.remove();
-    var calendar = createElement(null, '<md-calendar ng-model="myDate" md-current-view="year"></md-calendar>')[0];
-
-    expect(calendar.querySelector('md-calendar-month')).toBeFalsy();
-    expect(calendar.querySelector('md-calendar-year')).toBeTruthy();
   });
 });

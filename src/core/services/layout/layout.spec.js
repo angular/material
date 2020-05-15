@@ -63,7 +63,7 @@ describe("Layout API ", function() {
       it('should ignore invalid values', function() {
         var element = $compile('<div layout="humpty">Layout</div>')(pageScope);
 
-        expect( element.attr('layout') ).toBe('humpty');        // original attribute value unmodified
+        expect(element.attr('layout')).toBe('humpty');        // original attribute value unmodified
         expect(element.hasClass('layout-humpty')).toBeFalsy();
         expect(element.hasClass("layout-row")).toBeTruthy();    // injected className based on fallback value
       });
@@ -131,6 +131,13 @@ describe("Layout API ", function() {
         scope.$apply('columnSize = undefined');
         expect(element.hasClass('flex-gt-sm')).toBeTruthy();
       });
+
+      it('should support untrimmed attribute values with spaces', inject(function($rootScope, $compile) {
+        var scope = pageScope;
+        var element = angular.element($compile('<div flex-gt-xs="50 "></div>')(scope));
+
+        expect(element.hasClass('flex-gt-xs-50')).toBe(true);
+      }));
 
       it('should observe the attribute value and update the layout class(es)', inject(function($rootScope, $compile) {
         var scope = pageScope;
@@ -324,7 +331,7 @@ describe("Layout API ", function() {
         var markup = $mdUtil.supplant('<div {0}="{1}">Layout</div>', [className, value]);
 
         var element = $compile(markup)(pageScope);
-        if ( !element.hasClass(expected) ) {
+        if (!element.hasClass(expected)) {
           expect(expected).toBe(element[0].classList[1]);
         }
 

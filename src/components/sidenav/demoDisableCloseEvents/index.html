@@ -1,0 +1,45 @@
+<div ng-controller="AppCtrl" layout="column" style="height: 500px;" ng-cloak>
+
+    <section layout="row" flex>
+  
+      <md-sidenav class="md-sidenav-left" md-component-id="closeEventsDisabled"
+                  md-whiteframe="4" md-disable-close-events>
+  
+        <md-toolbar class="md-theme-indigo">
+          <h1 class="md-toolbar-tools">Disabled Close Events</h1>
+        </md-toolbar>
+  
+        <md-content layout-margin="">
+          <p>
+            This sidenav is showing the backdrop, but users can't close the
+             sidenav by clicking on the backdrop or pressing the 'Escape' key.
+          </p>
+          <md-button ng-click="toggleSidenav()" class="md-accent">
+            Close this Sidenav
+          </md-button>
+        </md-content>
+  
+      </md-sidenav>
+  
+      <md-content flex layout-padding>
+  
+        <div layout="column" layout-align="top center">
+          <p>
+            Developers can disable closing the sidenav on backdrop clicks and
+             'Escape' key events.<br/>
+          </p>
+  
+          <div>
+            <md-button ng-click="toggleSidenav()" class="md-raised md-primary">
+              Open Sidenav
+            </md-button>
+          </div>
+  
+        </div>
+  
+      </md-content>
+  
+    </section>
+  
+  </div>
+  
