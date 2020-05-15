@@ -78,10 +78,12 @@ angular.module('material.components.navBar', ['material.core'])
 /**
  * @param $mdAria
  * @param $mdTheming
+ * @param $window
+ * @param $mdUtil
  * @constructor
  * @ngInject
  */
-function MdNavBar($mdAria, $mdTheming) {
+function MdNavBar($mdAria, $mdTheming, $window, $mdUtil) {
   return {
     restrict: 'E',
     transclude: true,
