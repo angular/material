@@ -3,7 +3,6 @@
 node_modules
 dist
 /.idea/
-.nvmrc
 tmp/
 bower-material/
 code.material.angularjs.org/
