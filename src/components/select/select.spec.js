@@ -738,6 +738,15 @@ describe('<md-select>', function() {
         expect(selectedOptions(el).length).toBe(0);
       });
 
+      it('supports ng-selected on md-options', function() {
+        var el = setupSelect('ng-model="$root.model"', ['a','b','c'], false, $rootScope, null,
+          '$index === 2');
+
+        expect(selectedOptions(el).length).toBe(1);
+        expect(el.find('md-option').eq(2).attr('selected')).toBe('selected');
+        expect($rootScope.model).toBe('c');
+      });
+
       it('supports circular references', function() {
         var opts = [{ id: 1 }, { id: 2 }];
         opts[0].refs = opts[1];
@@ -1688,13 +1697,13 @@ describe('<md-select>', function() {
     });
   }
 
-  function setupSelect(attrs, options, skipLabel, scope, optCompileOpts) {
+  function setupSelect(attrs, options, skipLabel, scope, optCompileOpts, ngSelectedExpression) {
     var el;
     var template = '' +
       '<md-input-container>' +
         (skipLabel ? '' : '<label>Label</label>') +
         '<md-select ' + (attrs || '') + '>' +
-          optTemplate(options, optCompileOpts) +
+          optTemplate(options, optCompileOpts, ngSelectedExpression) +
         '</md-select>' +
       '</md-input-container>';
 
@@ -1713,13 +1722,21 @@ describe('<md-select>', function() {
     return toReturn;
   }
 
-  function optTemplate(options, compileOpts) {
+  /**
+   * @param {any[]=} options Array of option values to create md-options from
+   * @param {object=} compileOpts
+   * @param {object=} ngSelectedExpression If defined, sets the expression used by ng-selected.
+   * @return {string} template containing the generated md-options
+   */
+  function optTemplate(options, compileOpts, ngSelectedExpression) {
     var optionsTpl = '';
+    var ngSelectedTemplate = ngSelectedExpression ? ' ng-selected="' + ngSelectedExpression + '"' : '';
 
     if (angular.isArray(options)) {
       $rootScope.$$values = options;
       var renderValueAs = compileOpts ? compileOpts.renderValueAs || 'value' : 'value';
-      optionsTpl = '<md-option ng-repeat="value in $$values" ng-value="value"><div class="md-text">{{' + renderValueAs + '}}</div></md-option>';
+      optionsTpl = '<md-option ng-repeat="value in $$values" ng-value="value"' + ngSelectedTemplate + '>' +
+        '<div class="md-text">{{' + renderValueAs + '}}</div></md-option>';
     } else if (angular.isString(options)) {
       optionsTpl = options;
     }
@@ -1739,7 +1756,7 @@ describe('<md-select>', function() {
   }
 
   function openSelect(el) {
-    if (el[0].nodeName != 'MD-SELECT') {
+    if (el[0].nodeName !== 'MD-SELECT') {
       el = el.find('md-select');
     }
     try {
