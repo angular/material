@@ -113,8 +113,8 @@
 
     if (this.dateUtil.isMonthWithinRange(
           firstOfMonth, calendarCtrl.minDate, calendarCtrl.maxDate) &&
-      (!angular.isFunction(this.calendarCtrl.dateFilter) ||
-        this.calendarCtrl.dateFilter(firstOfMonth))) {
+      (!angular.isFunction(calendarCtrl.monthFilter) ||
+        calendarCtrl.monthFilter(firstOfMonth))) {
       var selectionIndicator = document.createElement('span');
       selectionIndicator.classList.add('md-calendar-date-selection-indicator');
       selectionIndicator.textContent = cellText;

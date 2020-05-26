@@ -14,7 +14,9 @@
    * @param {Date=} md-min-date Expression representing the minimum date.
    * @param {Date=} md-max-date Expression representing the maximum date.
    * @param {(function(Date): boolean)=} md-date-filter Function expecting a date and returning a
-   *  boolean whether it can be selected or not.
+   *  boolean whether it can be selected in "day" mode or not.
+   * @param {(function(Date): boolean)=} md-month-filter Function expecting a date and returning a
+   *  boolean whether it can be selected in "month" mode or not.
    * @param {String=} md-current-view Current view of the calendar. Can be either "month" or "year".
    * @param {String=} md-mode Restricts the user to only selecting a value from a particular view.
    *  This option can be used if the user is only supposed to choose from a certain date type
@@ -60,6 +62,7 @@
         minDate: '=mdMinDate',
         maxDate: '=mdMaxDate',
         dateFilter: '=mdDateFilter',
+        monthFilter: '=mdMonthFilter',
 
         // These need to be prefixed, because Angular resets
         // any changes to the value due to bindToController.
