@@ -27,7 +27,7 @@ angular.module('datepickerValidations', ['ngMaterial', 'ngMessages'])
    * @param {Date} date
    * @returns {boolean} return false to disable all odd numbered months, true for even months
    */
-  this.filter = function(date) {
-    return date.getMonth() % 2;
+  this.evenMonthsPredicate = function(date) {
+    return date.getMonth() % 2 !== 0;
   };
 });

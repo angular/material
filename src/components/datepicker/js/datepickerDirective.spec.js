@@ -12,15 +12,16 @@ describe('md-datepicker', function() {
 
   var DATEPICKER_TEMPLATE =
     '<md-datepicker name="birthday" ' +
-         'md-max-date="maxDate" ' +
-         'md-min-date="minDate" ' +
-         'md-date-filter="dateFilter"' +
-         'ng-model="myDate" ' +
-         'ng-change="dateChangedHandler()" ' +
-         'ng-focus="focusHandler()" ' +
-         'ng-blur="blurHandler()" ' +
-         'ng-required="isRequired" ' +
-         'ng-disabled="isDisabled">' +
+      'md-max-date="maxDate" ' +
+      'md-min-date="minDate" ' +
+      'md-date-filter="dateFilter"' +
+      'md-month-filter="monthFilter"' +
+      'ng-model="myDate" ' +
+      'ng-change="dateChangedHandler()" ' +
+      'ng-focus="focusHandler()" ' +
+      'ng-blur="blurHandler()" ' +
+      'ng-required="isRequired" ' +
+      'ng-disabled="isDisabled">' +
     '</md-datepicker>';
 
   beforeEach(module('material.components.datepicker', 'material.components.input', 'ngAnimateMock'));
@@ -275,9 +276,19 @@ describe('md-datepicker', function() {
         expect(formCtrl.$error['maxdate']).toBeTruthy();
       });
 
-      it('should set `filtered` $error flag on the form', function() {
+      it('should set `filtered` $error flag on the form when date doesn\'t pass filter', function() {
         pageScope.dateFilter = function(date) {
           return date.getDay() === 1;
+        };
+        populateInputElement('2016-01-03');
+        controller.ngModelCtrl.$render();
+
+        expect(formCtrl.$error['filtered']).toBeTruthy();
+      });
+
+      it('should set `filtered` $error flag on the form when month doesn\'t pass filter', function() {
+        pageScope.monthFilter = function(date) {
+          return date.getMonth() === 10;
         };
         populateInputElement('2016-01-03');
         controller.ngModelCtrl.$render();
@@ -383,9 +394,19 @@ describe('md-datepicker', function() {
       expect(controller.inputContainer).not.toHaveClass('md-datepicker-invalid');
     });
 
-    it('should not update the model when value is not enabled', function() {
+    it('should not update the model when value is not enabled due to date filter', function() {
       pageScope.dateFilter = function(date) {
         return date.getDay() === 1;
+      };
+      pageScope.$apply();
+
+      populateInputElement('5/30/2014');
+      expect(controller.ngModelCtrl.$modelValue).toEqual(initialDate);
+    });
+
+    it('should not update the model when value is not enabled due to month filter', function() {
+      pageScope.monthFilter = function(date) {
+        return date.getMonth() === 10;
       };
       pageScope.$apply();
 

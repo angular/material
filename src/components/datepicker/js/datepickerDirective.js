@@ -29,7 +29,11 @@
    * @param {Date=} md-min-date Expression representing a min date (inclusive).
    * @param {Date=} md-max-date Expression representing a max date (inclusive).
    * @param {(function(Date): boolean)=} md-date-filter Function expecting a date and returning a
-   *  boolean whether it can be selected or not.
+   *  boolean whether it can be selected in "day" mode or not. Returning false will also trigger a
+   *  `filtered` model validation error.
+   * @param {(function(Date): boolean)=} md-month-filter Function expecting a date and returning a
+   *  boolean whether it can be selected in "month" mode or not. Returning false will also trigger a
+   *  `filtered` model validation error.
    * @param {String=} md-placeholder The date input placeholder value.
    * @param {String=} md-open-on-focus When present, the calendar will be opened when the input
    *  is focused.
@@ -49,7 +53,7 @@
    * * `"calendar"` - Only hides the calendar icon.
    * * `"triangle"` - Only hides the triangle icon.
    * @param {Object=} md-date-locale Allows for the values from the `$mdDateLocaleProvider` to be
-   * ovewritten on a per-element basis (e.g. `msgOpenCalendar` can be overwritten with
+   * overwritten on a per-element basis (e.g. `msgOpenCalendar` can be overwritten with
    * `md-date-locale="{ msgOpenCalendar: 'Open a special calendar' }"`).
    *
    * @description
@@ -127,6 +131,7 @@
                 'md-min-date="ctrl.minDate" ' +
                 'md-max-date="ctrl.maxDate" ' +
                 'md-date-filter="ctrl.dateFilter" ' +
+                'md-month-filter="ctrl.monthFilter" ' +
                 'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen">' +
             '</md-calendar>' +
           '</div>' +
@@ -140,6 +145,7 @@
         currentView: '@mdCurrentView',
         mode: '@mdMode',
         dateFilter: '=mdDateFilter',
+        monthFilter: '=mdMonthFilter',
         isOpen: '=?mdIsOpen',
         debounceInterval: '=mdDebounceInterval',
         dateLocale: '=mdDateLocale'
@@ -641,6 +647,10 @@
       if (angular.isFunction(this.dateFilter)) {
         this.ngModelCtrl.$setValidity('filtered', this.dateFilter(date));
       }
+
+      if (angular.isFunction(this.monthFilter)) {
+        this.ngModelCtrl.$setValidity('filtered', this.monthFilter(date));
+      }
     } else {
       // The date is seen as "not a valid date" if there is *something* set
       // (i.e.., not null or undefined), but that something isn't a valid date.
@@ -714,7 +724,8 @@
    */
   DatePickerCtrl.prototype.isDateEnabled = function(opt_date) {
     return this.dateUtil.isDateWithinRange(opt_date, this.minDate, this.maxDate) &&
-          (!angular.isFunction(this.dateFilter) || this.dateFilter(opt_date));
+          (!angular.isFunction(this.dateFilter) || this.dateFilter(opt_date)) &&
+          (!angular.isFunction(this.monthFilter) || this.monthFilter(opt_date));
   };
 
   /** Position and attach the floating calendar to the document. */
@@ -743,11 +754,11 @@
     // then it's possible that the already-scrolled body has a negative top/left. In this case,
     // we want to treat the "real" top as (0 - bodyRect.top). In a normal scrolling situation,
     // though, the top of the viewport should just be the body's scroll position.
-    var viewportTop = (bodyRect.top < 0 && document.body.scrollTop == 0) ?
+    var viewportTop = (bodyRect.top < 0 && document.body.scrollTop === 0) ?
         -bodyRect.top :
         document.body.scrollTop;
 
-    var viewportLeft = (bodyRect.left < 0 && document.body.scrollLeft == 0) ?
+    var viewportLeft = (bodyRect.left < 0 && document.body.scrollLeft === 0) ?
         -bodyRect.left :
         document.body.scrollLeft;
 

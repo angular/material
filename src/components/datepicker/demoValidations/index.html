@@ -39,9 +39,15 @@
   </div>
   <div layout-gt-xs="row">
     <div flex-gt-xs>
-      <h4>Date-picker that only allows for certain months to be selected</h4>
+      <h4>Date-picker that only allows for even months</h4>
       <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date" md-mode="month"
-                     md-date-filter="ctrl.filter"></md-datepicker>
+                     md-month-filter="ctrl.evenMonthsPredicate"></md-datepicker>
+    </div>
+    <div flex-gt-xs>
+      <h4>Only allow even months and weekends</h4>
+      <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"
+                     md-month-filter="ctrl.evenMonthsPredicate" md-current-view="year"
+                     md-date-filter="ctrl.onlyWeekendsPredicate"></md-datepicker>
     </div>
   </div>
 </md-content>
