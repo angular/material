@@ -34,6 +34,7 @@
   "devDependencies": {
     "@octokit/rest": "^17.0.1",
     "@types/angular": "~1.6.57",
+    "@types/q": "^1.5.4",
     "acorn": "^7.1.1",
     "add-stream": "^1.0.0",
     "ajv": "^6.12.0",
