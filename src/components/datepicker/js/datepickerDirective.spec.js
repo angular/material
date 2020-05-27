@@ -678,6 +678,7 @@ describe('md-datepicker', function() {
       });
 
       scope.$emit('md-calendar-change', new Date());
+      $timeout.flush();
       expect(controller.inputContainer).not.toHaveClass('md-datepicker-invalid');
     });
   });
