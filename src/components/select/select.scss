@@ -175,15 +175,22 @@ md-input-container md-select {
   }
   .md-select-value {
     min-height: ($input-line-height + $input-padding-top * 2) - $input-border-width-focused - $input-border-width-default * 2;
-    padding-bottom: $input-border-width-focused - $input-border-width-default;
     border-bottom-width: $input-border-width-default;
+    padding-bottom: $input-border-width-focused - $input-border-width-default;
+    &.md-select-placeholder {
+      @include rtl(padding-left, 0, $input-container-padding);
+      @include rtl(padding-right, $input-container-padding, 0);
+    }
   }
 }
 
 .md-select-value {
   display: flex;
   align-items: center;
-  padding: 2px 2px 1px;
+  padding-top: 2px;
+  padding-bottom: 1px;
+  @include rtl(padding-left, 0, $input-container-padding);
+  @include rtl(padding-right, $input-container-padding, 0);
   border-bottom-width: $select-border-width-default;
   border-bottom-style: solid;
   background-color: rgba(0,0,0,0);
@@ -230,7 +237,6 @@ md-input-container md-select {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
-    padding-left: 2px;
     z-index: 1;
   }
 }
