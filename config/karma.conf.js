@@ -30,17 +30,17 @@ module.exports = function(config) {
   ];
 
   let dependencies = process.env.KARMA_TEST_JQUERY ? ['node_modules/jquery/dist/jquery.js'] : [];
-      dependencies = dependencies.concat([
-        'node_modules/angular/angular.js',
-        'node_modules/angular-animate/angular-animate.js',
-        'node_modules/angular-aria/angular-aria.js',
-        'node_modules/angular-messages/angular-messages.js',
-        'node_modules/angular-sanitize/angular-sanitize.js',
-        'node_modules/angular-touch/angular-touch.js',
-        'node_modules/angular-mocks/angular-mocks.js',
-        'test/angular-material-mocks.js',
-        'test/angular-material-spec.js'
-      ]);
+  dependencies = dependencies.concat([
+    'node_modules/angular/angular.js',
+    'node_modules/angular-animate/angular-animate.js',
+    'node_modules/angular-aria/angular-aria.js',
+    'node_modules/angular-messages/angular-messages.js',
+    'node_modules/angular-sanitize/angular-sanitize.js',
+    'node_modules/angular-touch/angular-touch.js',
+    'node_modules/angular-mocks/angular-mocks.js',
+    'test/angular-material-mocks.js',
+    'test/angular-material-spec.js'
+  ]);
 
   const testSrc = process.env.KARMA_TEST_COMPRESSED ? COMPILED_SRC : UNCOMPILED_SRC;
 
@@ -82,12 +82,19 @@ module.exports = function(config) {
     // Start these browsers, currently available:
     // - Chrome
     // - ChromeCanary
+    // - ChromeHeadless
     // - Firefox
+    // - FirefoxHeadless
     // - Opera (has to be installed with `npm install karma-opera-launcher`)
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
-    // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['Firefox', 'Chrome'],
+    browsers: ['ChromeHeadless', 'FirefoxHeadless'],
+    customLaunchers: {
+      FirefoxHeadless: {
+        base: 'Firefox',
+        flags: ['-headless'],
+      },
+    },
 
     client: {
       // Do not clear the context as this can cause reload failures with Jasmine
