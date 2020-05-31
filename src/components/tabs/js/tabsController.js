@@ -63,10 +63,11 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     defineBooleanAttribute('dynamicHeight', handleDynamicHeight);
     defineBooleanAttribute('noPagination');
     defineBooleanAttribute('swipeContent');
+    // TODO remove noDisconnect in 1.2.0
     defineBooleanAttribute('noDisconnect');
     defineBooleanAttribute('autoselect');
     defineBooleanAttribute('noSelectClick');
-    defineBooleanAttribute('centerTabs', handleCenterTabs, false);
+    defineBooleanAttribute('centerTabs', handleCenterTabs);
     defineBooleanAttribute('enableDisconnect');
 
     // Define public properties
@@ -146,11 +147,11 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
    * Defines boolean attributes with default value set to true. I.e. md-stretch-tabs with no value
    * will be treated as being truthy.
    * @param {string} key
-   * @param {Function} handler
+   * @param {Function=} handler
    */
   function defineBooleanAttribute (key, handler) {
     var attr = $attrs.$normalize('md-' + key);
-    if (handler) defineProperty(key, handler);
+    if (handler) defineProperty(key, handler, undefined);
     if ($attrs.hasOwnProperty(attr)) updateValue($attrs[attr]);
     $attrs.$observe(attr, updateValue);
     function updateValue (newValue) {
@@ -448,6 +449,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
           isActive:     function () { return this.getIndex() === ctrl.selectedIndex; },
           isLeft:       function () { return this.getIndex() < ctrl.selectedIndex; },
           isRight:      function () { return this.getIndex() > ctrl.selectedIndex; },
+          // TODO remove reference to noDisconnect in 1.2.0
           shouldRender: function () { return !ctrl.noDisconnect || this.isActive(); },
           hasFocus:     function () {
             return ctrl.styleTabItemFocus
