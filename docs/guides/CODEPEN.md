@@ -2,20 +2,19 @@
 
 ## Description
 
-Users will be able to click a button on each demo to open in CodePen
-to edit. From there the user can edit, save, or make other
+Users can click a button on each demo to open it in CodePen
+for editing. From there the user can edit, save, or make other
 modifications to the example.
 
 ## Why CodePen?
 
 CodePen appears to be one the most stable and active online sandboxes.
-It also has less accessibility problems than the other tools.
+It offers a more accessible experience compared to other tools.
 
 ## How does it work?
 
-When you click the **'Edit on CodePen'** button, all files including
-html, css, js, templates are used to create the new CodePen by posting
-to the [CodePen API](http://blog.codepen.io/documentation/api/prefill/). 
+Clicking **'Edit on CodePen'** creates a new CodePen instance that includes all HTML, CSS, and
+JavaScript assets via the [CodePen API](http://blog.codepen.io/documentation/api/prefill).
 We append an additional script to the new CodePen to initialize the
 [cache](#asset_cache), which is responsible for serving assets.
 
