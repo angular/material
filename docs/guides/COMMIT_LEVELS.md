@@ -31,10 +31,10 @@ The development team has defined three (3) Github levels of **commit authorizati
   * Are not authorized to merge PRs
   * Should not reassign issues or change milestones
   * Should ensure their issue labels are correct
-  * Should ensure their issues are tested with latest HEAD versions of AngularJS Material
-  * Should ensure their issues are tested with latest releases of AngularJS (1.6.x, 1.7.x)
-  * Should communicate with the Team Lead when their PRs are submitted or updates from
-    code review are completed
+  * Should test their issues with the latest HEAD versions of AngularJS Material
+  * Should test their issues with the latest releases of AngularJS (1.7.x, 1.8.x)
+  * Should communicate with the Team Lead when their PRs are submitted or code review updates
+     are complete
     * Should direct all questions about the status of presubmit testing to the Team Leads
   * Should review PRs
 * **Team Leads**: 
@@ -49,7 +49,7 @@ The development team has defined three (3) Github levels of **commit authorizati
     * Should verify that `merge safe` labels are accurate, then request Caretaker to merge
     * Should request that a Caretaker starts Google presubmit tests when PRs are labeled
       `merge ready` and do not have the `merge safe` label
-  * Should decide when new releases are built and deployed
+  * Should decide when to package and deploy new releases
     * Should provider Caretaker with a reviewed and approved CHANGELOG
 * **Google Caretakers**:
   * Includes: [Jeremy Elbourn](https://github.com/jelbourn), [Andrew Seguin](https://github.com/andrewseguin), [Miles Malerba](https://github.com/mmalerba)
