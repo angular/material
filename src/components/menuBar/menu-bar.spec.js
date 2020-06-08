@@ -226,6 +226,39 @@ describe('material.components.menuBar', function() {
           menuBar.remove();
         });
 
+        it('closes only current sub-menu with escape key', inject(function($mdConstant) {
+          menuBar = setup();
+          ctrl = menuBar.controller('mdMenuBar');
+          menus = menuBar[0].querySelectorAll('md-menu md-menu');
+
+          angular.element(document.body).append(menuBar);
+
+          expect(getNumberOfOpenMenus()).toBe(0);
+
+          // Open the menu-bar menu
+          ctrl.focusMenu(1);
+          ctrl.openFocusedMenu();
+          waitForMenuOpen();
+
+          expect(getNumberOfOpenMenus()).toBe(1);
+
+          // Open the first nested menu
+          openSubMenu(0);
+          waitForMenuOpen();
+          expect(getOpenSubMenu().text().trim()).toBe('Sub 1 - Content');
+
+          expect(getNumberOfOpenMenus()).toBe(2);
+
+          // Close the first nested menu with escape key
+          pressKey(getOpenSubMenu(), $mdConstant.KEY_CODE.ESCAPE);
+          waitForMenuClose();
+
+          // Just main menu should be visible
+          expect(getNumberOfOpenMenus()).toBe(1);
+
+          menuBar.remove();
+        }));
+
         function openSubMenu(index) {
           // If a menu is already open, trigger the mouse leave to close it
           if (subMenuOpen) {
@@ -252,7 +285,19 @@ describe('material.components.menuBar', function() {
           return angular.element(lastContainer.querySelector('md-menu-content'));
         }
 
-        function setup(){
+        function getNumberOfOpenMenus() {
+          var containers = document.body.querySelectorAll('.md-open-menu-container.md-active');
+          return containers.length;
+        }
+
+        function pressKey(el, code) {
+          el.triggerHandler({
+            type: 'keydown',
+            keyCode: code
+          });
+        }
+
+        function setup() {
           var el;
           inject(function($compile, $rootScope) {
             el = $compile([
