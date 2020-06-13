@@ -603,18 +603,23 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     },
 
     /**
-     * Get an element siblings matching a given tag name
+     * Get an element's siblings matching a given tag name.
      *
-     * @param el Element to start walking the DOM from
-     * @param tagName Tag name to match
+     * @param {JQLite|angular.element|HTMLElement} element Element to start walking the DOM from
+     * @param {string} tagName HTML tag name to match against
+     * @returns {Object[]} JQLite
      */
     getSiblings: function getSiblings(element, tagName) {
       var upperCasedTagName = tagName.toUpperCase();
-      if (element instanceof angular.element) element = element[0];
+      if (element instanceof angular.element) {
+        element = element[0];
+      }
       var siblings = Array.prototype.filter.call(element.parentNode.children, function(node) {
         return element !== node && node.tagName.toUpperCase() === upperCasedTagName;
       });
-      return angular.element(siblings);
+      return siblings.map(function (sibling) {
+        return angular.element(sibling);
+      });
     },
 
     /*

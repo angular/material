@@ -679,22 +679,24 @@ describe('util', function() {
       $mdUtil = _$mdUtil_;
     }));
 
-    it('should be able to get the siblings (wihout source element) of a particular node type', function() {
-      var parent = angular.element('<h1>');
-      var element = angular.element('<h2>');
-      var sibling = angular.element('<h2>');
+    it('should be able to get the siblings (without source element) of a particular node type',
+      function () {
+        var parent = angular.element('<h1>');
+        var element = angular.element('<h2>');
+        var sibling = angular.element('<h2>');
 
-      parent.append(element);
-      parent.append(sibling);
+        parent.append(element);
+        parent.append(sibling);
 
-      var result = $mdUtil.getSiblings(element, 'h2');
+        var result = $mdUtil.getSiblings(element, 'h2');
 
-      expect(result).toBeTruthy();
-      expect(result.length).toBe(1);
-      expect(result[0]).toBe(sibling[0]);
+        expect(result).toBeTruthy();
+        expect(result.length).toBe(1);
+        // Get the first sibling and unwrap both jqLite wrappers
+        expect(result[0][0]).toBe(sibling[0]);
 
-      parent.remove();
-    });
+        parent.remove();
+      });
   });
 
   describe('getClosest', function() {
