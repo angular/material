@@ -267,9 +267,10 @@ describe('<md-select>', function() {
       var select = setupSelect('ng-model="val"').find('md-select');
       openSelect(select);
 
-      $document[0].body.appendChild(select[0]);
+      body.appendChild(select[0]);
 
       var selectMenu = $document.find('md-select-menu');
+      // Dismiss the menu with the Escape key.
       pressKeyByCode(selectMenu, 27);
       $material.flushInterimElement();
 
@@ -277,7 +278,66 @@ describe('<md-select>', function() {
       // expect($document[0].activeElement).toBe(select[0]);
 
       // Clean up the DOM after the test.
-      $document[0].body.removeChild(select[0]);
+      body.removeChild(select[0]);
+    });
+
+    it('auto focuses option in the list when opened', function() {
+      var select = setupSelect('ng-model="val"', ['One']).find('md-select');
+      openSelect(select);
+
+      body.appendChild(select[0]);
+
+      var selectMenu = $document.find('md-select-menu');
+      var mdOption = selectMenu.find('md-option');
+      expect(mdOption[0].classList.contains('md-focused')).toBeTruthy();
+
+      // Clean up the DOM after the test.
+      body.removeChild(select[0]);
+    });
+
+    it('changes focus decoration on selection change by keyboard', function() {
+      var select = setupSelect('ng-model="val"', ['One', 'Two']).find('md-select');
+      openSelect(select);
+
+      body.appendChild(select[0]);
+
+      var selectMenu = $document.find('md-select-menu');
+      var mdOption = selectMenu.find('md-option');
+      expect(mdOption[0].classList.contains('md-focused')).toBeTruthy();
+
+      // Select the second option using the down arrow key.
+      pressKeyByCode(selectMenu, 40);
+      expect(mdOption[0].classList.contains('md-focused')).toBeFalsy();
+      expect(mdOption[1].classList.contains('md-focused')).toBeTruthy();
+      $material.flushInterimElement();
+
+      // Clean up the DOM after the test.
+      body.removeChild(select[0]);
+    });
+
+    it('removes md-focused from first option when second option is clicked', function() {
+      var select = setupSelect('ng-model="val"', ['One', 'Two']).find('md-select');
+      openSelect(select);
+
+      body.appendChild(select[0]);
+
+      var selectMenu = $document.find('md-select-menu');
+      var mdOption = selectMenu.find('md-option');
+      expect(mdOption[0].classList.contains('md-focused')).toBeTruthy();
+
+      clickOption(select, 1);
+      $material.flushInterimElement();
+      expect(mdOption[0].classList.contains('md-focused')).toBeFalsy();
+      expect(mdOption[1].classList.contains('md-focused')).toBeFalsy();
+
+      openSelect(select);
+      selectMenu = $document.find('md-select-menu');
+      mdOption = selectMenu.find('md-option');
+      expect(mdOption[0].classList.contains('md-focused')).toBeFalsy();
+      expect(mdOption[1].classList.contains('md-focused')).toBeTruthy();
+
+      // Clean up the DOM after the test.
+      body.removeChild(select[0]);
     });
 
     it('should remove the input-container focus state', function() {

@@ -1884,6 +1884,7 @@ function SelectProvider($$interimElementProvider) {
 
               $mdUtil.nextTick(function () {
                 $mdSelect.hide(selectMenuController.ngModel.$viewValue);
+                opts.focusedNode.classList.remove('md-focused');
               }, true);
             }
           }
