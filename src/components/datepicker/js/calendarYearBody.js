@@ -37,7 +37,10 @@
    * @ngInject @constructor
    */
   function CalendarYearBodyCtrl($element, $$mdDateUtil, $mdDateLocale) {
-    /** @final {!angular.JQLite} */
+    /**
+     * @final
+     * @type {!JQLite}
+     */
     this.$element = $element;
 
     /** @final */
@@ -55,7 +58,7 @@
     /**
      * Number of months from the start of the month "items" that the currently rendered month
      * occurs. Set via angular data binding.
-     * @type {number}
+     * @type {number|null}
      */
     this.offset = null;
 
