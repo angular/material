@@ -407,7 +407,7 @@
    * fallback value
    */
   function validateAttributeValue(className, value, updateFn) {
-    var origValue;
+    var origValue = value;
 
     if (!needsInterpolation(value)) {
       switch (className.replace(SUFFIXES,"")) {
