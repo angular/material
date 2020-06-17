@@ -63,17 +63,17 @@ describe('md-slider', function() {
 
     var wrapper = getWrapper(slider);
 
-    wrapper.triggerHandler({type: '$md.pressdown', pointer: { x: 30 }});
-    wrapper.triggerHandler({type: '$md.dragstart', pointer: { x: 30 }});
+    wrapper.triggerHandler({type: '$md.pressdown', srcEvent: { clientX: 30 }});
+    wrapper.triggerHandler({type: '$md.dragstart', srcEvent: { clientX: 30 }});
     $timeout.flush();
     expect(pageScope.value).toBe(30);
 
-    // When going past max, it should clamp to max.
-    wrapper.triggerHandler({type: '$md.drag', pointer: { x: 150 }});
+    // When going past max,  it should clamp to max.
+    wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientX: 150}});
     $timeout.flush();
     expect(pageScope.value).toBe(100);
 
-    wrapper.triggerHandler({type: '$md.drag', pointer: { x: 50 }});
+    wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientX: 50}});
     $timeout.flush();
     expect(pageScope.value).toBe(50);
   });
@@ -152,11 +152,11 @@ describe('md-slider', function() {
       pageScope.$apply();
     });
 
-    it('should have updated max correctly', function () {
+    it('should have updated max correctly', function() {
       expect(getWrapper(slider).attr('aria-valuemax')).toEqual('6');
     });
 
-    it('should have updated value correctly', function () {
+    it('should have updated value correctly', function() {
       expect(getWrapper(slider).attr('aria-valuenow')).toEqual('6');
     });
 
@@ -178,11 +178,11 @@ describe('md-slider', function() {
       pageScope.$apply();
     });
 
-    it('should have updated max correctly', function () {
+    it('should have updated max correctly', function() {
       expect(getWrapper(slider).attr('aria-valuemax')).toEqual('7');
     });
 
-    it('should have updated value correctly', function () {
+    it('should have updated value correctly', function() {
       expect(getWrapper(slider).attr('aria-valuenow')).toEqual('6');
     });
 
@@ -204,11 +204,11 @@ describe('md-slider', function() {
       pageScope.$apply();
     });
 
-    it('should have updated max correctly', function () {
+    it('should have updated max correctly', function() {
       expect(getWrapper(slider).attr('aria-valuemax')).toEqual('5');
     });
 
-    it('should have updated value correctly', function () {
+    it('should have updated value correctly', function() {
       expect(getWrapper(slider).attr('aria-valuenow')).toEqual('3');
     });
 
@@ -230,11 +230,11 @@ describe('md-slider', function() {
       pageScope.$apply();
     });
 
-    it('should have updated min correctly', function () {
+    it('should have updated min correctly', function() {
       expect(getWrapper(slider).attr('aria-valuemin')).toEqual('2');
     });
 
-    it('should have updated value correctly', function () {
+    it('should have updated value correctly', function() {
       expect(getWrapper(slider).attr('aria-valuenow')).toEqual('2');
     });
 
@@ -256,11 +256,11 @@ describe('md-slider', function() {
       pageScope.$apply();
     });
 
-    it('should have updated min correctly', function () {
+    it('should have updated min correctly', function() {
       expect(getWrapper(slider).attr('aria-valuemin')).toEqual('2');
     });
 
-    it('should have updated value correctly', function () {
+    it('should have updated value correctly', function() {
       expect(getWrapper(slider).attr('aria-valuenow')).toEqual('3');
     });
 
@@ -282,11 +282,11 @@ describe('md-slider', function() {
       pageScope.$apply();
     });
 
-    it('should have updated min correctly', function () {
+    it('should have updated min correctly', function() {
       expect(getWrapper(slider).attr('aria-valuemin')).toEqual('2');
     });
 
-    it('should have updated value correctly', function () {
+    it('should have updated value correctly', function() {
       expect(getWrapper(slider).attr('aria-valuenow')).toEqual('6');
     });
 
@@ -306,23 +306,23 @@ describe('md-slider', function() {
     $timeout.flush();
     expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('29');
 
-    wrapper.triggerHandler({type: '$md.pressdown', pointer: { x: 30 }});
+    wrapper.triggerHandler({type: '$md.pressdown', srcEvent: { clientX: 30}});
     expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
 
-    wrapper.triggerHandler({type: '$md.dragstart', pointer: { x: 31 }});
-    wrapper.triggerHandler({type: '$md.drag', pointer: { x: 31 }});
+    wrapper.triggerHandler({type: '$md.dragstart', srcEvent: { clientX: 31}});
+    wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientX: 31}});
     expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('31');
   });
 
   it('should update the thumb text with the model value when using ng-change', function() {
-    pageScope.stayAt50 = function () {
+    pageScope.stayAt50 = function() {
       pageScope.value = 50;
     };
 
     var slider = setup('ng-model="value" min="0" max="100" ng-change="stayAt50()"');
     var wrapper = getWrapper(slider);
 
-    wrapper.triggerHandler({type: '$md.pressdown', pointer: { x: 30 }});
+    wrapper.triggerHandler({type: '$md.pressdown', srcEvent: { clientX: 30}});
     $timeout.flush();
     expect(pageScope.value).toBe(50);
     expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('50');
@@ -369,7 +369,7 @@ describe('md-slider', function() {
     // Doesn't add active class on pressdown when disabled
     wrapper.triggerHandler({
       type: '$md.pressdown',
-      pointer: {}
+      srcEvent: {}
     });
     expect(slider).not.toHaveClass('md-active');
 
@@ -377,7 +377,7 @@ describe('md-slider', function() {
     slider.addClass('md-active');
     wrapper.triggerHandler({
       type: '$md.pressup',
-      pointer: {}
+      srcEvent: {}
     });
     expect(slider).toHaveClass('md-active');
   });
@@ -392,7 +392,7 @@ describe('md-slider', function() {
     // the slider is not active.
     wrapper.triggerHandler({
       type: '$md.pressdown',
-      pointer: {}
+      srcEvent: {}
     });
     expect(slider).not.toHaveClass('md-active');
   });
@@ -405,13 +405,13 @@ describe('md-slider', function() {
 
     wrapper.triggerHandler({
       type: '$md.pressdown',
-      pointer: {}
+      srcEvent: {}
     });
     expect(slider).toHaveClass('md-active');
 
     wrapper.triggerHandler({
       type: 'blur',
-      pointer: {}
+      srcEvent: {}
     });
     expect(slider).not.toHaveClass('md-active');
   });
@@ -423,8 +423,8 @@ describe('md-slider', function() {
     pageScope.$apply('model = 0');
     expect(slider).toHaveClass('md-min');
 
-    wrapper.triggerHandler({type: '$md.dragstart', pointer: {x: 0}});
-    wrapper.triggerHandler({type: '$md.drag', pointer: {x: 10}});
+    wrapper.triggerHandler({type: '$md.dragstart', srcEvent: { clientX: 0}});
+    wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientX: 10}});
     $timeout.flush();
     expect(slider).not.toHaveClass('md-min');
   });
@@ -436,40 +436,40 @@ describe('md-slider', function() {
     pageScope.$apply('model = 30');
     expect(slider).toHaveClass('md-max');
 
-    wrapper.triggerHandler({type: '$md.dragstart', pointer: {x: 30}});
-    wrapper.triggerHandler({type: '$md.drag', pointer: {x: 10}});
+    wrapper.triggerHandler({type: '$md.dragstart', srcEvent: { clientX: 30}});
+    wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientX: 10}});
     $timeout.flush();
     expect(slider).not.toHaveClass('md-max');
   });
 
   it('should increment at a predictable step', function() {
 
-    buildSlider(0.1, 0, 1).drag({x:70});
+    buildSlider(0.1, 0, 1).drag({clientX: 70});
     expect(pageScope.value).toBe(0.7);
 
-    buildSlider(0.25, 0, 1).drag({x:45});
+    buildSlider(0.25, 0, 1).drag({clientX: 45});
     expect(pageScope.value).toBe(0.5);
 
-    buildSlider(0.25, 0, 1).drag({x:35});
+    buildSlider(0.25, 0, 1).drag({clientX: 35});
     expect(pageScope.value).toBe(0.25);
 
-    buildSlider(1, 0, 100).drag({x:90});
+    buildSlider(1, 0, 100).drag({clientX: 90});
     expect(pageScope.value).toBe(90);
 
-    buildSlider(20, 5, 45).drag({x:50});
+    buildSlider(20, 5, 45).drag({clientX: 50});
     expect(pageScope.value).toBe(25);
 
     function buildSlider(step, min, max) {
       var slider = setup('ng-model="value" min="' + min + '" max="' + max + '" step="' + step + '"');
-          pageScope.$apply('value = 0.5');
+      pageScope.$apply('value = 0.5');
 
       var wrapper = getWrapper(slider);
 
       return {
-        drag : function simulateDrag(drag) {
+        drag: function simulateDrag(drag) {
 
-          wrapper.triggerHandler({type: '$md.pressdown', pointer: drag });
-          wrapper.triggerHandler({type: '$md.dragstart', pointer: drag });
+          wrapper.triggerHandler({type: '$md.pressdown', srcEvent: drag});
+          wrapper.triggerHandler({type: '$md.dragstart', srcEvent: drag});
 
           $timeout.flush();
         }
@@ -478,24 +478,24 @@ describe('md-slider', function() {
 
   });
 
-  describe('vertical', function () {
+  describe('vertical', function() {
     it('should set model on press', function() {
       var slider = setup('md-vertical ng-model="value" min="0" max="100"');
       pageScope.$apply('value = 50');
 
       var wrapper = getWrapper(slider);
 
-      wrapper.triggerHandler({type: '$md.pressdown', pointer: { y: 70 }});
-      wrapper.triggerHandler({type: '$md.dragstart', pointer: { y: 70 }});
+      wrapper.triggerHandler({type: '$md.pressdown', srcEvent: { clientY: 70}});
+      wrapper.triggerHandler({type: '$md.dragstart', srcEvent: { clientY: 70}});
       $timeout.flush();
       expect(pageScope.value).toBe(30);
 
-      // When going past max, it should clamp to max.
-      wrapper.triggerHandler({type: '$md.drag', pointer: { y: 0 }});
+      // When going past max,  it should clamp to max.
+      wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientY: 0}});
       $timeout.flush();
       expect(pageScope.value).toBe(100);
 
-      wrapper.triggerHandler({type: '$md.drag', pointer: { y: 50 }});
+      wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientY: 50}});
       $timeout.flush();
       expect(pageScope.value).toBe(50);
     });
@@ -572,11 +572,11 @@ describe('md-slider', function() {
       $timeout.flush();
       expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('29');
 
-      wrapper.triggerHandler({type: '$md.pressdown', pointer: { y: 70 }});
+      wrapper.triggerHandler({type: '$md.pressdown', srcEvent: { clientY: 70}});
       expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('30');
 
-      wrapper.triggerHandler({type: '$md.dragstart', pointer: { y: 93 }});
-      wrapper.triggerHandler({type: '$md.drag', pointer: { y: 93 }});
+      wrapper.triggerHandler({type: '$md.dragstart', srcEvent: { clientY: 93}});
+      wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientY: 93}});
       expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('7');
     });
 
@@ -587,8 +587,8 @@ describe('md-slider', function() {
       pageScope.$apply('model = 0');
       expect(slider).toHaveClass('md-min');
 
-      wrapper.triggerHandler({type: '$md.dragstart', pointer: {y: 0}});
-      wrapper.triggerHandler({type: '$md.drag', pointer: {y: 10}});
+      wrapper.triggerHandler({type: '$md.dragstart', srcEvent: { clientY: 0}});
+      wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientY: 10}});
       $timeout.flush();
       expect(slider).not.toHaveClass('md-min');
     });
@@ -600,27 +600,27 @@ describe('md-slider', function() {
       pageScope.$apply('model = 30');
       expect(slider).toHaveClass('md-max');
 
-      wrapper.triggerHandler({type: '$md.dragstart', pointer: {y: 30}});
-      wrapper.triggerHandler({type: '$md.drag', pointer: {y: 10}});
+      wrapper.triggerHandler({type: '$md.dragstart', srcEvent: { clientY: 30}});
+      wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientY: 10}});
       $timeout.flush();
       expect(slider).not.toHaveClass('md-max');
     });
 
     it('should increment at a predictable step', function() {
 
-      buildSlider(0.1, 0, 1).drag({y:30});
+      buildSlider(0.1, 0, 1).drag({clientY: 30});
       expect(pageScope.value).toBe(0.7);
 
-      buildSlider(0.25, 0, 1).drag({y:45});
+      buildSlider(0.25, 0, 1).drag({clientY: 45});
       expect(pageScope.value).toBe(0.5);
 
-      buildSlider(0.25, 0, 1).drag({y:75});
+      buildSlider(0.25, 0, 1).drag({clientY: 75});
       expect(pageScope.value).toBe(0.25);
 
-      buildSlider(1, 0, 100).drag({y:10});
+      buildSlider(1, 0, 100).drag({clientY: 10});
       expect(pageScope.value).toBe(90);
 
-      buildSlider(20, 5, 45).drag({y:50});
+      buildSlider(20, 5, 45).drag({clientY: 50});
       expect(pageScope.value).toBe(25);
 
       function buildSlider(step, min, max) {
@@ -632,8 +632,8 @@ describe('md-slider', function() {
         return {
           drag : function simulateDrag(drag) {
 
-            wrapper.triggerHandler({type: '$md.pressdown', pointer: drag });
-            wrapper.triggerHandler({type: '$md.dragstart', pointer: drag });
+            wrapper.triggerHandler({type: '$md.pressdown', srcEvent: drag});
+            wrapper.triggerHandler({type: '$md.dragstart', srcEvent: drag});
 
             $timeout.flush();
           }
@@ -643,7 +643,7 @@ describe('md-slider', function() {
     });
   });
 
-  describe('slider container', function () {
+  describe('slider container', function() {
 
     it('should have `._md` class indicator', inject(function() {
       var element = setupContainer('disabled="disabled"');
@@ -659,7 +659,7 @@ describe('md-slider', function() {
       // the slider is not active.
       wrapper.triggerHandler({
         type: '$md.pressdown',
-        pointer: {}
+        srcEvent: {}
       });
       expect(slider).not.toHaveClass('md-active');
     });
@@ -673,21 +673,21 @@ describe('md-slider', function() {
       // the slider is not active.
       wrapper.triggerHandler({
         type: '$md.pressdown',
-        pointer: {}
+        srcEvent: {}
       });
       expect(slider).toHaveClass('md-active');
 
       // Removing focus from the slider
       wrapper.triggerHandler({
         type: 'blur',
-        pointer: {}
+        srcEvent: {}
       });
 
       pageScope.$apply('isDisabled = true');
 
       wrapper.triggerHandler({
         type: '$md.pressdown',
-        pointer: {}
+        srcEvent: {}
       });
       expect(slider).not.toHaveClass('md-active');
     });
@@ -710,24 +710,24 @@ describe('md-slider', function() {
 
   });
 
-  describe('invert', function () {
+  describe('invert', function() {
     it('should set model on press', function() {
       var slider = setup('md-vertical md-invert ng-model="value" min="0" max="100"');
       pageScope.$apply('value = 50');
 
       var wrapper = getWrapper(slider);
 
-      wrapper.triggerHandler({type: '$md.pressdown', pointer: { y: 70 }});
-      wrapper.triggerHandler({type: '$md.dragstart', pointer: { y: 70 }});
+      wrapper.triggerHandler({type: '$md.pressdown', srcEvent: { clientY: 70}});
+      wrapper.triggerHandler({type: '$md.dragstart', srcEvent: { clientY: 70}});
       $timeout.flush();
       expect(pageScope.value).toBe(70);
 
-      // When going past max, it should clamp to max.
-      wrapper.triggerHandler({type: '$md.drag', pointer: { y: 0 }});
+      // When going past max,  it should clamp to max.
+      wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientY: 0}});
       $timeout.flush();
       expect(pageScope.value).toBe(0);
 
-      wrapper.triggerHandler({type: '$md.drag', pointer: { y: 50 }});
+      wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientY: 50}});
       $timeout.flush();
       expect(pageScope.value).toBe(50);
     });
@@ -805,11 +805,11 @@ describe('md-slider', function() {
       $timeout.flush();
       expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('31');
 
-      wrapper.triggerHandler({type: '$md.pressdown', pointer: { y: 70 }});
+      wrapper.triggerHandler({type: '$md.pressdown', srcEvent: { clientY: 70}});
       expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('70');
 
-      wrapper.triggerHandler({type: '$md.dragstart', pointer: { y: 93 }});
-      wrapper.triggerHandler({type: '$md.drag', pointer: { y: 93 }});
+      wrapper.triggerHandler({type: '$md.dragstart', srcEvent: { clientY: 93}});
+      wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientY: 93}});
       expect(slider[0].querySelector('.md-thumb-text').textContent).toBe('93');
     });
 
@@ -820,8 +820,8 @@ describe('md-slider', function() {
       pageScope.$apply('model = 0');
       expect(slider).toHaveClass('md-min');
 
-      wrapper.triggerHandler({type: '$md.dragstart', pointer: {y: 0}});
-      wrapper.triggerHandler({type: '$md.drag', pointer: {y: 10}});
+      wrapper.triggerHandler({type: '$md.dragstart', srcEvent: { clientY: 0}});
+      wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientY: 10}});
       $timeout.flush();
       expect(slider).not.toHaveClass('md-min');
     });
@@ -833,27 +833,27 @@ describe('md-slider', function() {
       pageScope.$apply('model = 30');
       expect(slider).toHaveClass('md-max');
 
-      wrapper.triggerHandler({type: '$md.dragstart', pointer: {y: 30}});
-      wrapper.triggerHandler({type: '$md.drag', pointer: {y: 10}});
+      wrapper.triggerHandler({type: '$md.dragstart', srcEvent: { clientY: 30}});
+      wrapper.triggerHandler({type: '$md.drag', srcEvent: { clientY: 10}});
       $timeout.flush();
       expect(slider).not.toHaveClass('md-max');
     });
 
     it('should increment at a predictable step', function() {
 
-      buildSlider(0.1, 0, 1).drag({y:30});
+      buildSlider(0.1, 0, 1).drag({clientY: 30});
       expect(pageScope.value).toBe(0.3);
 
-      buildSlider(0.25, 0, 1).drag({y:45});
+      buildSlider(0.25, 0, 1).drag({clientY: 45});
       expect(pageScope.value).toBe(0.5);
 
-      buildSlider(0.25, 0, 1).drag({y:75});
+      buildSlider(0.25, 0, 1).drag({clientY: 75});
       expect(pageScope.value).toBe(0.75);
 
-      buildSlider(1, 0, 100).drag({y:10});
+      buildSlider(1, 0, 100).drag({clientY: 10});
       expect(pageScope.value).toBe(10);
 
-      buildSlider(20, 5, 45).drag({y:50});
+      buildSlider(20, 5, 45).drag({clientY: 50});
       expect(pageScope.value).toBe(25);
 
       function buildSlider(step, min, max) {
@@ -863,10 +863,10 @@ describe('md-slider', function() {
         var wrapper = getWrapper(slider);
 
         return {
-          drag : function simulateDrag(drag) {
+          drag: function simulateDrag(drag) {
 
-            wrapper.triggerHandler({type: '$md.pressdown', pointer: drag });
-            wrapper.triggerHandler({type: '$md.dragstart', pointer: drag });
+            wrapper.triggerHandler({type: '$md.pressdown', srcEvent: drag});
+            wrapper.triggerHandler({type: '$md.dragstart', srcEvent: drag});
 
             $timeout.flush();
           }
@@ -956,5 +956,4 @@ describe('md-slider', function() {
 
     expect(wrapper.attr('tabindex')).toBe('2');
   });
-
 });
