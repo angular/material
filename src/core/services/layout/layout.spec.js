@@ -1,3 +1,12 @@
+// AngularJS Component test setup
+angular.module('layoutTestApp', [])
+.component('testComponent', {
+  bindings: {
+    show: '=',
+  },
+  controller: function() {}
+});
+
 describe("Layout API ", function() {
 
   describe("can be globally disabled with 'md-layouts-disabled' ", function() {
@@ -46,6 +55,7 @@ describe("Layout API ", function() {
     var suffixes = ['xs', 'gt-xs', 'sm', 'gt-sm', 'md', 'gt-md', 'lg', 'gt-lg', 'xl', 'print'],
       $mdUtil, $compile, pageScope;
 
+    beforeEach(module('layoutTestApp'));
     beforeEach(inject(function(_$compile_, _$rootScope_, _$mdUtil_) {
       $mdUtil = _$mdUtil_;
       $compile = _$compile_;
@@ -298,6 +308,13 @@ describe("Layout API ", function() {
         testNoValueAllowed(className);
       });
 
+      it('should not throw Token \'&&\' not a primary expression', inject(function($rootScope, $compile) {
+        var scope = pageScope;
+        scope.left = true;
+        scope.right = true;
+        var element = angular.element($compile('<test-component show="left && right"></test-component>')(scope));
+        expect(element.attr('show')).toBe('left && right');
+      }));
     });
 
     // *****************************************************************
