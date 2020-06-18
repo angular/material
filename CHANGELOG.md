@@ -1,3 +1,54 @@
+<a name="1.1.23"></a>
+## [1.1.23](https://github.com/angular/material/compare/v1.1.22...v1.1.23) (2020-06-18)
+
+
+### Bug Fixes
+
+* **calendar, datepicker:** in year view, `md-date-filter` only evaluates first day of month ([3d5ff5d](https://github.com/angular/material/commit/3d5ff5db56d3b84b2c7d813886d13ef831b7a295)), closes [#11703](https://github.com/angular/material/issues/11703)
+* **compiler:** `$onDestroy` hook not called ([8bb1d98](https://github.com/angular/material/commit/8bb1d9811e39ae26e79f629902c3be619eba8b30)), closes [#11847](https://github.com/angular/material/issues/11847)
+* **datepicker:** update error state only after `$validate` has run ([11f65e3](https://github.com/angular/material/commit/11f65e3371eb5fcffba0c1194ef3f9b022d0cf87)), closes [#10360](https://github.com/angular/material/issues/10360)
+* **layout:** Syntax Error: Token `'&&'` not a primary expression ([#11940](https://github.com/angular/material/pull/11940)) ([1bd1a97](https://github.com/angular/material/commit/1bd1a97d7d22921e2cfb1fcb940f485a095130f8)), closes [#10935](https://github.com/angular/material/issues/10935)
+* **list:** allow overriding `md-list-item` padding for clickable items ([f7d9027](https://github.com/angular/material/commit/f7d9027e9b0a91050213372cc0dfa52230d528d1)), closes [#10384](https://github.com/angular/material/issues/10384)
+* **menuBar:** close top nested menu when escape key is pressed ([98e259b](https://github.com/angular/material/commit/98e259bec4dc026fa38fb1a5c16a6c4f37722e7a)), closes [#11678](https://github.com/angular/material/issues/11678)
+* **navBar:** update inkbar on screen resize ([c1e2b12](https://github.com/angular/material/commit/c1e2b1277e59fd802e0e1e2da7eee492d39b84b0)), closes [#10121](https://github.com/angular/material/issues/10121)
+* **panel:** allow transform to be animated on an offset panel ([269b68e](https://github.com/angular/material/commit/269b68e8540062e2a0e195edb54a75903b17fdd0)), closes [#9641](https://github.com/angular/material/issues/9641) [#9905](https://github.com/angular/material/issues/9905)
+* **panel:** consolidate redundant validations ([#9631](https://github.com/angular/material/issues/9631)) ([a334134](https://github.com/angular/material/commit/a3341349631e5a2df4d4a6e0b9a527206f1b7686))
+* **panel:** invisible after hide/show cycle ([a3c533f](https://github.com/angular/material/commit/a3c533f1c657588d4625c2b26c7b59ba7eeefb25)), closes [#11291](https://github.com/angular/material/issues/11291)
+* **progress-circular:** correct rendering for diameter bigger than 60 ([#11896](https://github.com/angular/material/issues/11896)) ([0cca317](https://github.com/angular/material/commit/0cca317c3dfb6455609c840d2b03bb575a4cc35b)), closes [#10376](https://github.com/angular/material/issues/10376)
+* **progress-linear, progress-circular:** mirror indicator when rtl is on ([#11895](https://github.com/angular/material/pull/11895)) ([9fc2f3f](https://github.com/angular/material/commit/9fc2f3fbb9d61fcdcbd32bdbdedca0d2cc9d4664)), closes [#10814](https://github.com/angular/material/issues/10814)
+* **select:** height changes when disabled ([e2af2a3](https://github.com/angular/material/commit/e2af2a3f7fa05de81729d976512304c0f90f2891)), closes [#11812](https://github.com/angular/material/issues/11812)
+* **select:** `md-focused` not removed from options on panel close ([5a7e967](https://github.com/angular/material/commit/5a7e967d9f2a7d568d6b9ede7a8e6a47d9270265)), closes [#11927](https://github.com/angular/material/issues/11927)
+* **select:** optgroups are not visible to screen readers ([5fbabe7](https://github.com/angular/material/commit/5fbabe7e107a623303bcbcfed5c6d9e194f417e2)), closes [#11240](https://github.com/angular/material/issues/11240)
+* **select:** perform correct position calculation in rtl for long labels ([#11894](https://github.com/angular/material/pull/11894)) ([9f49e10](https://github.com/angular/material/commit/9f49e1043b98977ab4e7e1053d0f4ea5ee978df5)), closes [#10395](https://github.com/angular/material/issues/10395)
+* **select:** revert removal of support for `ng-selected` on `md-options` ([546bd84](https://github.com/angular/material/commit/546bd84b6c8e784aa43e88b926a117f077e1200c)), closes [#11914](https://github.com/angular/material/issues/11914)
+* **slider:** vertical slider in a scrolled container sets value to zero on all clicks ([#11801](https://github.com/angular/material/issues/11801)) ([79bf96b](https://github.com/angular/material/commit/79bf96b64e992a99a10145ee6b5a2479afaa5d21)), closes [#11800](https://github.com/angular/material/issues/11800)
+* **toast:** `onRemove` doesn't return a `Promise` in some cases ([e625a9c](https://github.com/angular/material/commit/e625a9ce108722a061bf087ee3b1a600ceee3fb9)), closes [#10379](https://github.com/angular/material/issues/10379)
+* **toolbar:** `md-scroll-shrink` conflicts with `md-select` in toolbar ([1ed54bb](https://github.com/angular/material/commit/1ed54bb90bc9c71cce4575e325250606d97fa867)), closes [#10413](https://github.com/angular/material/issues/10413) [#9871](https://github.com/angular/material/issues/9871)
+* **tooltip:** change from `inline` to `inline-block` to account for `md-panel` change ([20194ba](https://github.com/angular/material/commit/20194ba2f11227f0e3965089af598e9c89ce71a6))
+* **util:** sanitize function used by select and autocomplete throws "Invalid regular expression" when typing `(` ([bc71d0b](https://github.com/angular/material/commit/bc71d0b0b6dd58a3025d8d65a309841783ebb0a9)), closes [#11908](https://github.com/angular/material/issues/11908)
+
+
+### Features
+
+* **calendar:** support specifying timezone in `ng-model-options` ([2a01746](https://github.com/angular/material/commit/2a01746c4fbea1bbd2ca82808a6e9f0f979a2968)), closes [#10431](https://github.com/angular/material/issues/10431)
+* **input:** add animation to color change ([#10079](https://github.com/angular/material/issues/10079)) ([b486a41](https://github.com/angular/material/commit/b486a4104e2fdfdac8563b0c301fb3bfaf060142))
+* **select:** add the ability to pre-select the only option in the list ([#9940](https://github.com/angular/material/issues/9940)) ([6372027](https://github.com/angular/material/commit/6372027e8c042845c302dfd52d8cd490faf1f43e)), closes [#9626](https://github.com/angular/material/issues/9626)
+
+### Documentation
+
+* **codepen:** update for AngularJS `1.8.0`
+* **security:** added [Security Policy](https://github.com/angular/material/blob/master/SECURITY.md)
+* **tabs:** improve correctness of API docs and types [a17ef4f](https://github.com/angular/material/commit/a17ef4fa9f7fe0ca812364fb9256f75c17d99442), closes [#10407](https://github.com/angular/material/issues/10407)
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.1.23 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="crisbeto" src="https://avatars0.githubusercontent.com/u/4450522?v=4&s=117" width="117">](https://github.com/crisbeto) |[<img alt="marosoft" src="https://avatars0.githubusercontent.com/u/3945455?v=4&s=117" width="117">](https://github.com/marosoft) |[<img alt="nnmrts" src="https://avatars0.githubusercontent.com/u/20396367?v=4&s=117" width="117">](https://github.com/nnmrts) |[<img alt="Thaina" src="https://avatars1.githubusercontent.com/u/1042507?v=4&s=117" width="117">](https://github.com/Thaina) |[<img alt="chmelevskij" src="https://avatars1.githubusercontent.com/u/7774918?v=4&s=117" width="117">](https://github.com/chmelevskij) |
+:---: |:---: |:---: |:---: |:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[crisbeto](https://github.com/crisbeto) |[marosoft](https://github.com/marosoft) |[nnmrts](https://github.com/nnmrts) |[Thaina](https://github.com/Thaina) |[chmelevskij](https://github.com/chmelevskij) |
+
+
 <a name="1.1.22"></a>
 ## [1.1.22](https://github.com/angular/material/compare/v1.1.21...v1.1.22) (2020-04-30)
 
