@@ -10,7 +10,8 @@
    * The `$mdDateLocaleProvider` is the provider that creates the `$mdDateLocale` service.
    * This provider that allows the user to specify messages, formatters, and parsers for date
    * internationalization. The `$mdDateLocale` service itself is consumed by AngularJS Material
-   * components that deal with dates (i.e. {@link api/directive/mdDatepicker mdDatepicker}).
+   * components that deal with dates
+   * (i.e. <a ng-href="api/directive/mdDatepicker">mdDatepicker</a>).
    *
    * @property {Array<string>} months Array of month names (in order).
    * @property {Array<string>} shortMonths Array of abbreviated month names.

@@ -22,8 +22,8 @@ present a performance burden for Internet Explorer. When switching or modifying 
 is not a requirement, the theming CSS can be exported to an external file which can be loaded statically.
 The following steps should be performed:
 
-* Configure your theme as explained [here](Theming/03_configuring_a_theme)
- - This step is only required when a custom theme is used
+* Configure your theme as explained <a ng-href="Theming/03_configuring_a_theme">here</a>
+  - If you are using a custom theme, don't forget this step 
 * Run the application in Chrome 
 * Open the Chrome DevTools
 * Execute the following javascript - <i>This copies the theming CSS to the clipboard</i>

@@ -31,7 +31,10 @@ angular
  * will effect **bindings** in controllers created by AngularJS Material's services like
  * `$mdDialog`, `$mdPanel`, `$mdToast`, or `$mdBottomSheet`.
  *
- * See [$mdCompilerProvider.respectPreAssignBindingsEnabled](#mdcompilerprovider-respectpreassignbindingsenabled-respected)
+ * See
+ * <a ng-href="#mdcompilerprovider-respectpreassignbindingsenabled-respected">
+ *   $mdCompilerProvider.respectPreAssignBindingsEnabled
+ * </a>
  * for the details of how the different versions and settings of AngularJS affect this behavior.
  *
  * @usage
@@ -271,19 +274,34 @@ function MdCompilerProvider($compileProvider) {
    */
   function MdCompilerService($q, $templateRequest, $injector, $compile, $controller) {
 
-    /** @private @const {!angular.$q} */
+    /**
+     * @private @const
+     * @type {!IQService}
+     */
     this.$q = $q;
 
-    /** @private @const {!angular.$templateRequest} */
+    /**
+     * @private @const
+     * @type {!ITemplateRequestService}
+     */
     this.$templateRequest = $templateRequest;
 
-    /** @private @const {!angular.$injector} */
+    /**
+     * @private @const
+     * @type {!IInjectorService}
+     */
     this.$injector = $injector;
 
-    /** @private @const {!angular.$compile} */
+    /**
+     * @private @const
+     * @type{!ICompileService}
+     */
     this.$compile = $compile;
 
-    /** @private @const {!angular.$controller} */
+    /**
+     * @private @const
+     * @type {!IControllerService}
+     */
     this.$controller = $controller;
   }
 

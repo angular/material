@@ -132,7 +132,7 @@ angular
  *
  * @param {string} name Preset name.
  * @param {!Object} preset Specific configuration object that can contain any
- *     and all of the parameters avaialble within the `$mdPanel.create` method.
+ *     and all of the parameters available within the `$mdPanel.create` method.
  *     However, parameters that pertain to id, position, animation, and user
  *     interaction are not allowed and will be removed from the preset
  *     configuration.
@@ -154,9 +154,9 @@ angular
  * the screen. It can be used to implement tooltips, dialogs, pop-ups, etc.
  *
  * The following types, referenced below, have separate documentation:
- * - <a href="api/type/MdPanelAnimation">MdPanelAnimation</a> from `$mdPanel.newPanelAnimation()`
- * - <a href="api/type/MdPanelPosition">MdPanelPosition</a> from `$mdPanel.newPanelPosition()`
- * - <a href="api/type/MdPanelRef">MdPanelRef</a> from the `$mdPanel.open()` Promise or
+ * - <a ng-href="api/type/MdPanelAnimation">MdPanelAnimation</a> from `$mdPanel.newPanelAnimation()`
+ * - <a ng-href="api/type/MdPanelPosition">MdPanelPosition</a> from `$mdPanel.newPanelPosition()`
+ * - <a ng-href="api/type/MdPanelRef">MdPanelRef</a> from the `$mdPanel.open()` Promise or
  * injected in the panel's controller
  *
  * @usage
@@ -232,7 +232,7 @@ angular
  *     [$sce service](https://docs.angularjs.org/api/ng/service/$sce).
  *   - `templateUrl` - `{string=}`: The URL that will be used as the content of
  *     the panel.
- *   - `contentElement` - `{(string|!angular.JQLite|!Element)=}`: Pre-compiled
+ *   - `contentElement` - `{(string|!JQLite|!Element)=}`: Pre-compiled
  *     element to be used as the panel's content.
  *   - `controller` - `{(function|string)=}`: The controller to associate with
  *     the panel. The controller can inject a reference to the returned
@@ -251,7 +251,7 @@ angular
  *     be set to the created MdPanelRef instance.
  *   - `resolve` - `{Object=}`: Similar to locals, except it takes promises as
  *     values. The panel will not open until all of the promises resolve.
- *   - `attachTo` - `{(string|!angular.JQLite|!Element)=}`: The element to
+ *   - `attachTo` - `{(string|!JQLite|!Element)=}`: The element to
  *     attach the panel to. Defaults to appending to the root element of the
  *     application.
  *   - `propagateContainerEvents` - `{boolean=}`: Whether pointer or touch
@@ -299,7 +299,7 @@ angular
  *     close/hide() action is starting.
  *   - `onDomRemoved` - `{function=}`: Callback function used to announce when
  *     the panel is removed from the DOM.
- *   - `origin` - `{(string|!angular.JQLite|!Element)=}`: The element to focus
+ *   - `origin` - `{(string|!JQLite|!Element)=}`: The element to focus
  *     on when the panel closes. This is commonly the element which triggered
  *     the opening of the panel. If you do not use `origin`, you need to control
  *     the focus manually.
@@ -324,7 +324,7 @@ angular
  *
  * @param {!Object=} config Specific configuration object that may contain
  *     the properties defined in `$mdPanel.create`.
- * @returns {!angular.$q.Promise<!MdPanelRef>} panelRef A promise that resolves
+ * @returns {!Q.IPromise<!MdPanelRef>} panelRef A promise that resolves
  *     to an instance of the panel.
  */
 
@@ -399,10 +399,10 @@ angular
  *     create.
  *   - `isAttached` - `{boolean}`: Whether the panel is attached to the DOM.
  *     Visibility to the user does not factor into isAttached.
- *   - `panelContainer` - `{angular.JQLite}`: The wrapper element containing the
+ *   - `panelContainer` - `{JQLite}`: The wrapper element containing the
  *     panel. This property is added in order to have access to the `addClass`,
  *     `removeClass`, `toggleClass`, etc methods.
- *   - `panelEl` - `{angular.JQLite}`: The panel element. This property is added
+ *   - `panelEl` - `{JQLite}`: The panel element. This property is added
  *     in order to have access to the `addClass`, `removeClass`, `toggleClass`,
  *     etc methods.
  */
@@ -413,7 +413,7 @@ angular
  * @description
  * Attaches and shows the panel.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * @returns {!Q.IPromise} A promise that is resolved when the panel is
  *     opened.
  */
 
@@ -425,7 +425,7 @@ angular
  * If you don't intend on using the panel again, call the {@link #destroy
  * destroy} method afterwards.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * @returns {!Q.IPromise} A promise that is resolved when the panel is
  *     closed.
  */
 
@@ -436,7 +436,7 @@ angular
  * Create the panel elements and attach them to the DOM. The panel will be
  * hidden by default.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * @returns {!Q.IPromise} A promise that is resolved when the panel is
  *     attached.
  */
 
@@ -447,7 +447,7 @@ angular
  * Removes the panel from the DOM. This will NOT hide the panel before removing
  * it.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * @returns {!Q.IPromise} A promise that is resolved when the panel is
  *     detached.
  */
 
@@ -457,7 +457,7 @@ angular
  * @description
  * Shows the panel.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * @returns {!Q.IPromise} A promise that is resolved when the panel has
  *     shown and animations are completed.
  */
 
@@ -467,7 +467,7 @@ angular
  * @description
  * Hides the panel.
  *
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * @returns {!Q.IPromise} A promise that is resolved when the panel has
  *     hidden and animations are completed.
  */
 
@@ -566,7 +566,7 @@ angular
  * * `CLOSE` - Gets called before the panel begins closing.
  *
  * @param {string} type Type of interceptor.
- * @param {!angular.$q.Promise<any>} callback Callback to be registered.
+ * @param {!Q.IPromise<any>} callback Callback to be registered.
  * @returns {!MdPanelRef}
  */
 
@@ -577,7 +577,7 @@ angular
  * Removes a registered interceptor.
  *
  * @param {string} type Type of interceptor to be removed.
- * @param {function(): !angular.$q.Promise<any>} callback Interceptor to be removed.
+ * @param {function(): !Q.IPromise<any>} callback Interceptor to be removed.
  * @returns {!MdPanelRef}
  */
 
@@ -661,7 +661,7 @@ angular
  * @description
  * Positions the panel relative to a specific element.
  *
- * @param {string|!Element|!angular.JQLite} element Query selector, DOM element,
+ * @param {string|!Element|!JQLite} element Query selector, DOM element,
  *     or angular element to position the panel with respect to.
  * @returns {!MdPanelPosition}
  */
@@ -1003,10 +1003,10 @@ function clearPresets() {
  * reference to the MdPanelService is returned where the needed arguments are
  * passed in including the MdPanelProvider `_presets`.
  * @param {!Object} _presets
- * @param {!angular.JQLite} $rootElement
+ * @param {!JQLite} $rootElement
  * @param {!angular.Scope} $rootScope
- * @param {!angular.$injector} $injector
- * @param {!angular.$window} $window
+ * @param {!IInjectorService} $injector
+ * @param {!IWindowService} $window
  */
 function $getProvider() {
   return [
@@ -1027,10 +1027,10 @@ function $getProvider() {
 /**
  * A service that is used for controlling/displaying panels on the screen.
  * @param {!Object} presets
- * @param {!angular.JQLite} $rootElement
+ * @param {!JQLite} $rootElement
  * @param {!angular.Scope} $rootScope
- * @param {!angular.$injector} $injector
- * @param {!angular.$window} $window
+ * @param {!IInjectorService} $injector
+ * @param {!IWindowService} $window
  * @final @constructor @ngInject
  */
 function MdPanelService(presets, $rootElement, $rootScope, $injector, $window) {
@@ -1130,7 +1130,7 @@ function MdPanelService(presets, $rootElement, $rootScope, $injector, $window) {
 
 /**
  * Creates a panel with the specified options.
- * @param {string=} preset Name of a preset configuration that can be used to
+ * @param {string|Object=} preset Name of a preset configuration that can be used to
  *     extend the panel configuration.
  * @param {!Object=} config Configuration object for the panel.
  * @returns {!MdPanelRef}
@@ -1190,7 +1190,7 @@ MdPanelService.prototype.create = function(preset, config) {
  * @param {string=} preset Name of a preset configuration that can be used to
  *     extend the panel configuration.
  * @param {!Object=} config Configuration object for the panel.
- * @returns {!angular.$q.Promise<!MdPanelRef>} The panel created from create.
+ * @returns {!Q.IPromise<!MdPanelRef>} The panel created from create.
  */
 MdPanelService.prototype.open = function(preset, config) {
   var panelRef = this.create(preset, config);
@@ -1321,7 +1321,7 @@ MdPanelService.prototype._wrapTemplate = function(origTemplate) {
   // height and width for positioning.
   return '' +
       '<div class="md-panel-outer-wrapper">' +
-        '<div class="md-panel-inner-wrapper" style="left: -9999px;">' +
+        '<div class="md-panel-inner-wrapper _md-panel-offscreen">' +
           '<div class="md-panel _md-panel-offscreen">' + template + '</div>' +
         '</div>' +
       '</div>';
@@ -1331,15 +1331,15 @@ MdPanelService.prototype._wrapTemplate = function(origTemplate) {
 /**
  * Wraps a content element in a `md-panel-outer-wrapper`, as well as
  * a `md-panel-inner-wrapper`, and positions it off-screen. Allows for
- * proper control over positoning and animations.
- * @param {!angular.JQLite} contentElement Element to be wrapped.
- * @return {!angular.JQLite} Wrapper element.
+ * proper control over positioning and animations.
+ * @param {!JQLite} contentElement Element to be wrapped.
+ * @return {!JQLite} Wrapper element.
  * @private
  */
 MdPanelService.prototype._wrapContentElement = function(contentElement) {
   var outerWrapper = angular.element(
     '<div class="md-panel-outer-wrapper">' +
-      '<div class="md-panel-inner-wrapper" style="left: -9999px;"></div>' +
+      '<div class="md-panel-inner-wrapper _md-panel-offscreen"></div>' +
     '</div>'
   );
 
@@ -1359,12 +1359,12 @@ MdPanelService.prototype._wrapContentElement = function(contentElement) {
  * A reference to a created panel. This reference contains a unique id for the
  * panel, along with properties/functions used to control the panel.
  * @param {!Object} config
- * @param {!angular.$injector} $injector
+ * @param {!IInjectorService} $injector
  * @final @constructor
  */
 function MdPanelRef(config, $injector) {
   // Injected variables.
-  /** @private @const {!angular.$q} */
+  /** @private @const {!IQService} */
   this._$q = $injector.get('$q');
 
   /** @private @const {!angular.$mdCompiler} */
@@ -1379,7 +1379,7 @@ function MdPanelRef(config, $injector) {
   /** @private @const {!angular.$mdTheming} */
   this._$mdTheming = $injector.get('$mdTheming');
 
-  /** @private @const {!angular.Scope} */
+  /** @private @const {!IRootScopeService} */
   this._$rootScope = $injector.get('$rootScope');
 
   /** @private @const {!angular.$animate} */
@@ -1388,10 +1388,10 @@ function MdPanelRef(config, $injector) {
   /** @private @const {!MdPanelRef} */
   this._$mdPanel = $injector.get('$mdPanel');
 
-  /** @private @const {!angular.$log} */
+  /** @private @const {!ILogService} */
   this._$log = $injector.get('$log');
 
-  /** @private @const {!angular.$window} */
+  /** @private @const {!IWindowService} */
   this._$window = $injector.get('$window');
 
   /** @private @const {!Function} */
@@ -1407,14 +1407,14 @@ function MdPanelRef(config, $injector) {
   /** @type {!Object} */
   this.config = config;
 
-  /** @type {!angular.JQLite|undefined} */
-  this.panelContainer;
+  /** @type {!JQLite|undefined} */
+  this.panelContainer = undefined;
 
-  /** @type {!angular.JQLite|undefined} */
-  this.panelEl;
+  /** @type {!JQLite|undefined} */
+  this.panelEl = undefined;
 
-  /** @type {!angular.JQLite|undefined} */
-  this.innerWrapper;
+  /** @type {!JQLite|undefined} */
+  this.innerWrapper = undefined;
 
   /**
    * Whether the panel is attached. This is synchronous. When attach is called,
@@ -1428,14 +1428,14 @@ function MdPanelRef(config, $injector) {
   /** @private {Array<function()>} */
   this._removeListeners = [];
 
-  /** @private {!angular.JQLite|undefined} */
-  this._topFocusTrap;
+  /** @private {!JQLite|undefined} */
+  this._topFocusTrap = undefined;
 
-  /** @private {!angular.JQLite|undefined} */
-  this._bottomFocusTrap;
+  /** @private {!JQLite|undefined} */
+  this._bottomFocusTrap = undefined;
 
   /** @private {!$mdPanel|undefined} */
-  this._backdropRef;
+  this._backdropRef = undefined;
 
   /** @private {Function?} */
   this._restoreScroll = null;
@@ -1450,7 +1450,7 @@ function MdPanelRef(config, $injector) {
    * Cleanup function, provided by `$mdCompiler` and assigned after the element
    * has been compiled. When `contentElement` is used, the function is used to
    * restore the element to it's proper place in the DOM.
-   * @private {!Function}
+   * @private {Function|null}
    */
   this._compilerCleanup = null;
 
@@ -1473,7 +1473,7 @@ MdPanelRef.interceptorTypes = {
 /**
  * Opens an already created and configured panel. If the panel is already
  * visible, does nothing.
- * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when
+ * @returns {!Q.IPromise<!MdPanelRef>} A promise that is resolved when
  *     the panel is opened and animations finish.
  */
 MdPanelRef.prototype.open = function() {
@@ -1503,7 +1503,7 @@ MdPanelRef.prototype.open = function() {
 /**
  * Closes the panel.
  * @param {string} closeReason The event type that triggered the close.
- * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when
+ * @returns {!Q.IPromise<!MdPanelRef>} A promise that is resolved when
  *     the panel is closed and animations finish.
  */
 MdPanelRef.prototype.close = function(closeReason) {
@@ -1528,7 +1528,7 @@ MdPanelRef.prototype.close = function(closeReason) {
 
 /**
  * Attaches the panel. The panel will be hidden afterwards.
- * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when
+ * @returns {!Q.IPromise<!MdPanelRef>} A promise that is resolved when
  *     the panel is attached.
  */
 MdPanelRef.prototype.attach = function() {
@@ -1560,7 +1560,7 @@ MdPanelRef.prototype.attach = function() {
 
 /**
  * Only detaches the panel. Will NOT hide the panel first.
- * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when
+ * @returns {!Q.IPromise<!MdPanelRef>} A promise that is resolved when
  *     the panel is detached.
  */
 MdPanelRef.prototype.detach = function() {
@@ -1637,7 +1637,7 @@ MdPanelRef.prototype.destroy = function() {
 
 /**
  * Shows the panel.
- * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when
+ * @returns {!Q.IPromise<!MdPanelRef>} A promise that is resolved when
  *     the panel has shown and animations finish.
  */
 MdPanelRef.prototype.show = function() {
@@ -1681,7 +1681,7 @@ MdPanelRef.prototype.show = function() {
 
 /**
  * Hides the panel.
- * @returns {!angular.$q.Promise<!MdPanelRef>} A promise that is resolved when
+ * @returns {!Q.IPromise<!MdPanelRef>} A promise that is resolved when
  *     the panel has hidden and animations finish.
  */
 MdPanelRef.prototype.hide = function() {
@@ -1832,7 +1832,7 @@ MdPanelRef.prototype.toggleClass = function(toggleClass, onElement) {
  * Compiles the panel, according to the passed in config and appends it to
  * the DOM. Helps normalize differences in the compilation process between
  * using a string template and a content element.
- * @returns {!angular.$q.Promise<!MdPanelRef>} Promise that is resolved when
+ * @returns {!Q.IPromise<!MdPanelRef>} Promise that is resolved when
  *     the element has been compiled and added to the DOM.
  * @private
  */
@@ -1880,7 +1880,7 @@ MdPanelRef.prototype._compile = function() {
 
 /**
  * Creates a panel and adds it to the dom.
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel is
+ * @returns {!Q.IPromise} A promise that is resolved when the panel is
  *     created.
  * @private
  */
@@ -1936,7 +1936,7 @@ MdPanelRef.prototype._createPanel = function() {
 /**
  * Adds the styles for the panel, such as positioning and z-index. Also,
  * themes the panel element and panel container using `$mdTheming`.
- * @returns {!angular.$q.Promise<!MdPanelRef>}
+ * @returns {!Q.IPromise<!MdPanelRef>}
  * @private
  */
 MdPanelRef.prototype._addStyles = function() {
@@ -1949,11 +1949,9 @@ MdPanelRef.prototype._addStyles = function() {
       // Theme the element and container.
       self._setTheming();
 
-      // Remove offscreen class and add hidden class.
+      // Remove offscreen classes and add hidden class.
       self.panelEl.removeClass('_md-panel-offscreen');
-
-      // Remove left: -9999px and add hidden class.
-      self.innerWrapper.css('left', '');
+      self.innerWrapper.removeClass('_md-panel-offscreen');
       self.panelContainer.addClass(MD_PANEL_HIDDEN);
 
       resolve(self);
@@ -2069,7 +2067,7 @@ MdPanelRef.prototype._focusOnOpen = function() {
 
 /**
  * Shows the backdrop.
- * @returns {!angular.$q.Promise} A promise that is resolved when the backdrop
+ * @returns {!Q.IPromise} A promise that is resolved when the backdrop
  *     is created and attached.
  * @private
  */
@@ -2290,7 +2288,7 @@ MdPanelRef.prototype.updateAnimation = function(animation) {
 
 /**
  * Animate the panel opening.
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * @returns {!Q.IPromise} A promise that is resolved when the panel has
  *     animated open.
  * @private
  */
@@ -2321,7 +2319,7 @@ MdPanelRef.prototype._animateOpen = function() {
 
 /**
  * Animate the panel closing.
- * @returns {!angular.$q.Promise} A promise that is resolved when the panel has
+ * @returns {!Q.IPromise} A promise that is resolved when the panel has
  *     animated closed.
  * @private
  */
@@ -2357,7 +2355,7 @@ MdPanelRef.prototype._animateClose = function() {
  * which will allow the action to continue when it gets resolved, or will
  * prevent an action if it is rejected.
  * @param {string} type Type of interceptor.
- * @param {!angular.$q.Promise<!any>} callback Callback to be registered.
+ * @param {!Q.IPromise<!any>} callback Callback to be registered.
  * @returns {!MdPanelRef}
  */
 MdPanelRef.prototype.registerInterceptor = function(type, callback) {
@@ -2423,7 +2421,7 @@ MdPanelRef.prototype.removeAllInterceptors = function(type) {
  *     reverse order. Works in a similar way to `$q.all`, except it
  *     respects the order of the functions.
  * @param {string} type Type of interceptors to be invoked.
- * @returns {!angular.$q.Promise<!MdPanelRef>}
+ * @returns {!Q.IPromise<!MdPanelRef>}
  * @private
  */
 MdPanelRef.prototype._callInterceptors = function(type) {
@@ -2550,11 +2548,11 @@ MdPanelRef.closeReasons = {
  *   position: panelPosition
  * });
  *
- * @param {!angular.$injector} $injector
+ * @param {!IInjectorService} $injector
  * @final @constructor
  */
 function MdPanelPosition($injector) {
-  /** @private @const {!angular.$window} */
+  /** @private @const {!IWindowService} */
   this._$window = $injector.get('$window');
 
   /** @private {boolean} */
@@ -2566,8 +2564,8 @@ function MdPanelPosition($injector) {
   /** @private {boolean} */
   this._absolute = false;
 
-  /** @private {!angular.JQLite} */
-  this._relativeToEl;
+  /** @private {!JQLite} */
+  this._relativeToEl = undefined;
 
   /** @private {string} */
   this._top = '';
@@ -2591,7 +2589,7 @@ function MdPanelPosition($injector) {
   this._positions = [];
 
   /** @private {?{x:string, y:string}} */
-  this._actualPosition;
+  this._actualPosition = undefined;
 }
 
 
@@ -2785,7 +2783,7 @@ MdPanelPosition.prototype.center = function() {
 
 /**
  * Sets element for relative positioning.
- * @param {string|!Element|!angular.JQLite} element Query selector, DOM element,
+ * @param {string|!Element|!JQLite} element Query selector, DOM element,
  *     or angular element to set the panel relative to.
  * @returns {!MdPanelPosition}
  */
@@ -2898,8 +2896,8 @@ MdPanelPosition.prototype.getTransform = function() {
 
 /**
  * Sets the `transform` value for an element.
- * @param {!angular.JQLite} el
- * @returns {!angular.JQLite}
+ * @param {!JQLite} el
+ * @returns {!JQLite}
  * @private
  */
 MdPanelPosition.prototype._setTransform = function(el) {
@@ -2910,7 +2908,7 @@ MdPanelPosition.prototype._setTransform = function(el) {
 /**
  * True if the panel is completely on-screen with this positioning; false
  * otherwise.
- * @param {!angular.JQLite} el
+ * @param {!JQLite} el
  * @return {boolean}
  * @private
  */
@@ -2967,7 +2965,7 @@ MdPanelPosition.prototype._reduceTranslateValues =
 /**
  * Sets the panel position based on the created panel element and best x/y
  * positioning.
- * @param {!angular.JQLite} el
+ * @param {!JQLite} el
  * @private
  */
 MdPanelPosition.prototype._setPanelPosition = function(el) {
@@ -3003,7 +3001,7 @@ MdPanelPosition.prototype._setPanelPosition = function(el) {
 
 /**
  * Constrains a panel's position to the viewport.
- * @param {!angular.JQLite} el
+ * @param {!JQLite} el
  * @private
  */
 MdPanelPosition.prototype._constrainToViewport = function(el) {
@@ -3075,7 +3073,7 @@ MdPanelPosition.prototype._bidi = function(position) {
 /**
  * Calculates the panel position based on the created panel element and the
  * provided positioning.
- * @param {!angular.JQLite} el
+ * @param {!JQLite} el
  * @param {!{x:string, y:string}} position
  * @private
  */
@@ -3155,7 +3153,7 @@ MdPanelPosition.prototype._calculatePanelPosition = function(el, position) {
  *   animation: panelAnimation
  * });
  *
- * @param {!angular.$injector} $injector
+ * @param {!IInjectorService} $injector
  * @final @constructor
  */
 function MdPanelAnimation($injector) {
@@ -3163,13 +3161,13 @@ function MdPanelAnimation($injector) {
   this._$mdUtil = $injector.get('$mdUtil');
 
   /**
-   * @private {{element: !angular.JQLite|undefined, bounds: !DOMRect}|
+   * @private {{element: !JQLite|undefined, bounds: !DOMRect}|
    *     undefined}
    */
   this._openFrom;
 
   /**
-   * @private {{element: !angular.JQLite|undefined, bounds: !DOMRect}|
+   * @private {{element: !JQLite|undefined, bounds: !DOMRect}|
    *     undefined}
    */
   this._closeTo;
@@ -3262,7 +3260,7 @@ MdPanelAnimation.prototype.duration = function(duration) {
 /**
  * Returns the element and bounds for the animation target.
  * @param {string|!Element|{top: number, left: number}} location
- * @returns {{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ * @returns {{element: !JQLite|undefined, bounds: !DOMRect}}
  * @private
  */
 MdPanelAnimation.prototype._getPanelAnimationTarget = function(location) {
@@ -3301,8 +3299,8 @@ MdPanelAnimation.prototype.withAnimation = function(cssClass) {
 
 /**
  * Animate the panel open.
- * @param {!angular.JQLite} panelEl
- * @returns {!angular.$q.Promise} A promise that is resolved when the open
+ * @param {!JQLite} panelEl
+ * @returns {!Q.IPromise} A promise that is resolved when the open
  *     animation is complete.
  */
 MdPanelAnimation.prototype.animateOpen = function(panelEl) {
@@ -3370,8 +3368,8 @@ MdPanelAnimation.prototype.animateOpen = function(panelEl) {
 
 /**
  * Animate the panel close.
- * @param {!angular.JQLite} panelEl
- * @returns {!angular.$q.Promise} A promise that resolves when the close
+ * @param {!JQLite} panelEl
+ * @returns {!Q.IPromise} A promise that resolves when the close
  *     animation is complete.
  */
 MdPanelAnimation.prototype.animateClose = function(panelEl) {
@@ -3438,7 +3436,7 @@ MdPanelAnimation.prototype.animateClose = function(panelEl) {
 
 /**
  * Set the height and width to match the panel if not provided.
- * @param {!angular.JQLite} panelEl
+ * @param {!JQLite} panelEl
  * @private
  */
 MdPanelAnimation.prototype._fixBounds = function(panelEl) {
@@ -3462,8 +3460,8 @@ MdPanelAnimation.prototype._fixBounds = function(panelEl) {
 
 /**
  * Identify the bounding RECT for the target element.
- * @param {!angular.JQLite} element
- * @returns {{element: !angular.JQLite|undefined, bounds: !DOMRect}}
+ * @param {!JQLite} element
+ * @returns {{element: !JQLite|undefined, bounds: !DOMRect}}
  * @private
  */
 MdPanelAnimation.prototype._getBoundingClientRect = function(element) {
@@ -3483,8 +3481,8 @@ MdPanelAnimation.prototype._getBoundingClientRect = function(element) {
 
 /**
  * Returns the angular element associated with a css selector or element.
- * @param el {string|!angular.JQLite|!Element}
- * @returns {!angular.JQLite}
+ * @param el {string|!JQLite|!Element}
+ * @returns {!JQLite}
  */
 function getElement(el) {
   var queryResult = angular.isString(el) ?
@@ -3494,7 +3492,7 @@ function getElement(el) {
 
 /**
  * Gets the computed values for an element's translateX and translateY in px.
- * @param {!angular.JQLite|!Element} el
+ * @param {!JQLite|!Element} el
  * @param {string} property
  * @return {{x: number, y: number}}
  */

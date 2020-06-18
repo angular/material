@@ -21,7 +21,7 @@ describe('$mdPanel', function() {
   var VIEWPORT_MARGIN = 8;
 
   /**
-   * @param {!angular.$injector} $injector
+   * @param {!IInjectorService} $injector
    * @ngInject
    */
   var injectLocals = function($injector) {
