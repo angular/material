@@ -59,7 +59,7 @@
    * @description
    * `<md-datepicker>` is a component used to select a single date.
    * For information on how to configure internationalization for the date picker,
-   * see {@link api/service/$mdDateLocaleProvider $mdDateLocaleProvider}.
+   * see <a ng-href="api/service/$mdDateLocaleProvider">$mdDateLocaleProvider</a>.
    *
    * This component supports
    * [ngMessages](https://docs.angularjs.org/api/ngMessages/directive/ngMessages).

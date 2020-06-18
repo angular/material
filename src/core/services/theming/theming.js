@@ -328,7 +328,9 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
      * @ngdoc method
      * @name $mdThemingProvider#setNonce
      * @param {string} nonceValue The nonce to be added as an attribute to the theme style tags.
-     * Setting a value allows the use of CSP policy without using the unsafe-inline directive.
+     * Setting a value allows the use of CSP policy without using the `'unsafe-inline'` directive.
+     * The string must already be base64 encoded. You can use `btoa(string)` to do this encoding.
+     * In your CSP's `style-src`, you would then add an entry for `'nonce-nonceValue'`.
      */
     setNonce: function(nonceValue) {
       themeConfig.nonce = nonceValue;
