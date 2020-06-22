@@ -12,6 +12,10 @@ function MdConstantFactory() {
   var isWebkit = /webkit/i.test(vendorPrefix);
   var SPECIAL_CHARS_REGEXP = /([:\-_]+(.))/g;
 
+  /**
+   * @param {string} name CSS property name
+   * @return {string} the property name supported by the browser
+   */
   function vendorProperty(name) {
     // Add a dash between the prefix and name, to be able to transform the string into camelcase.
     var prefixedName = vendorPrefix + '-' + name;
@@ -27,6 +31,10 @@ function MdConstantFactory() {
     return angular.isDefined(testElement.style[property]);
   }
 
+  /**
+   * @param {!string} input value to convert to camelCase
+   * @return {string} camelCased version of the input string
+   */
   function camelCase(input) {
     return input.replace(SPECIAL_CHARS_REGEXP, function(matches, separator, letter, offset) {
       return offset ? letter.toUpperCase() : letter;
