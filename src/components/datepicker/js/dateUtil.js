@@ -5,7 +5,7 @@
    * Utility for performing date calculations to facilitate operation of the calendar and
    * datepicker.
    */
-  angular.module('material.components.datepicker').factory('$$mdDateUtil', function() {
+  angular.module('material.components.datepicker').factory('$$mdDateUtil', function($mdDateLocale) {
     return {
       getFirstDateOfMonth: getFirstDateOfMonth,
       getNumberOfDaysInMonth: getNumberOfDaysInMonth,
@@ -29,7 +29,8 @@
       getYearDistance: getYearDistance,
       clampDate: clampDate,
       getTimestampFromNode: getTimestampFromNode,
-      isMonthWithinRange: isMonthWithinRange
+      isMonthWithinRange: isMonthWithinRange,
+      removeLocalTzAndReparseDate: removeLocalTzAndReparseDate
     };
 
     /**
@@ -307,5 +308,18 @@
        return (!minDate || minDate.getFullYear() < year || minDate.getMonth() <= month) &&
         (!maxDate || maxDate.getFullYear() > year || maxDate.getMonth() >= month);
      }
+
+    /**
+     * @param {Date} value
+     * @return {boolean|boolean}
+     */
+    function removeLocalTzAndReparseDate(value) {
+      var dateValue, formattedDate;
+      // Remove the local timezone offset before calling formatDate.
+      dateValue = new Date(value.getTime() + 60000 * value.getTimezoneOffset());
+      formattedDate = $mdDateLocale.formatDate(dateValue);
+      // parseDate only works with a date formatted by formatDate when using Moment validation.
+      return $mdDateLocale.parseDate(formattedDate);
+    }
   });
 })();

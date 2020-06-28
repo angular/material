@@ -98,7 +98,8 @@
     this.cellClickHandler = function() {
       var timestamp = $$mdDateUtil.getTimestampFromNode(this);
       self.$scope.$apply(function() {
-        self.calendarCtrl.setNgModelValue(self.dateLocale.parseDate(timestamp));
+        // The timestamp has to be converted to a valid date.
+        self.calendarCtrl.setNgModelValue(new Date(timestamp));
       });
     };
 

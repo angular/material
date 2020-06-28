@@ -85,6 +85,7 @@
         // may be confusing.
         var hiddenIcons = tAttrs.mdHideIcons;
         var ariaLabelValue = tAttrs.ariaLabel || tAttrs.mdPlaceholder;
+        var ngModelOptions = tAttrs.ngModelOptions;
 
         var calendarButton = (hiddenIcons === 'all' || hiddenIcons === 'calendar') ? '' :
           '<md-button class="md-datepicker-button md-icon-button" type="button" ' +
@@ -132,6 +133,7 @@
                 'md-max-date="ctrl.maxDate" ' +
                 'md-date-filter="ctrl.dateFilter" ' +
                 'md-month-filter="ctrl.monthFilter" ' +
+                (ngModelOptions ? 'ng-model-options="' + ngModelOptions + '" ' : '') +
                 'ng-model="ctrl.date" ng-if="ctrl.isCalendarOpen">' +
             '</md-calendar>' +
           '</div>' +
@@ -180,7 +182,8 @@
           mdInputContainer.input = element;
           mdInputContainer.element
             .addClass(INPUT_CONTAINER_CLASS)
-            .toggleClass(HAS_CALENDAR_ICON_CLASS, attr.mdHideIcons !== 'calendar' && attr.mdHideIcons !== 'all');
+            .toggleClass(HAS_CALENDAR_ICON_CLASS,
+              attr.mdHideIcons !== 'calendar' && attr.mdHideIcons !== 'all');
 
           if (!mdInputContainer.label) {
             $mdAria.expect(element, 'aria-label', attr.mdPlaceholder);
@@ -191,7 +194,8 @@
           }
 
           scope.$watch(mdInputContainer.isErrorGetter || function() {
-            return ngModelCtrl.$invalid && (ngModelCtrl.$touched || (parentForm && parentForm.$submitted));
+            return ngModelCtrl.$invalid && (ngModelCtrl.$touched ||
+              (parentForm && parentForm.$submitted));
           }, mdInputContainer.setInvalid);
         } else if (parentForm) {
           // If invalid, highlights the input when the parent form is submitted.
@@ -424,8 +428,8 @@
       });
     }
 
-    // For AngularJS 1.4 and older, where there are no lifecycle hooks but bindings are pre-assigned,
-    // manually call the $onInit hook.
+    // For AngularJS 1.4 and older, where there are no lifecycle hooks but bindings are
+    // pre-assigned, manually call the $onInit hook.
     if (angular.version.major === 1 && angular.version.minor <= 4) {
       this.$onInit();
     }
@@ -433,7 +437,8 @@
 
   /**
    * AngularJS Lifecycle hook for newer AngularJS versions.
-   * Bindings are not guaranteed to have been assigned in the controller, but they are in the $onInit hook.
+   * Bindings are not guaranteed to have been assigned in the controller, but they are in the
+   * $onInit hook.
    */
   DatePickerCtrl.prototype.$onInit = function() {
 
@@ -442,7 +447,8 @@
      * the user to override specific ones from the $mdDateLocale provider.
      * @type {!Object}
      */
-    this.locale = this.dateLocale ? angular.extend({}, this.$mdDateLocale, this.dateLocale) : this.$mdDateLocale;
+    this.locale = this.dateLocale ? angular.extend({}, this.$mdDateLocale, this.dateLocale)
+      : this.$mdDateLocale;
 
     this.installPropertyInterceptors();
     this.attachChangeListeners();
@@ -743,7 +749,9 @@
     var bodyRect = body.getBoundingClientRect();
 
     if (!this.topMargin || this.topMargin < 0) {
-      this.topMargin = (this.inputMask.parent().prop('clientHeight') - this.ngInputElement.prop('clientHeight')) / 2;
+      this.topMargin =
+        (this.inputMask.parent().prop('clientHeight')
+          - this.ngInputElement.prop('clientHeight')) / 2;
     }
 
     // Check to see if the calendar pane would go off the screen. If so, adjust position
@@ -993,7 +1001,11 @@
     var self = this;
     var timezone = this.$mdUtil.getModelOption(this.ngModelCtrl, 'timezone');
 
-    this.date = value;
+    if (this.dateUtil.isValidDate(value)) {
+      this.date = this.dateUtil.removeLocalTzAndReparseDate(value);
+    } else {
+      this.date = value;
+    }
     this.inputElement.value = this.locale.formatDate(value, timezone);
     this.mdInputContainer && this.mdInputContainer.setHasValue(!!value);
     this.resizeInputElement();

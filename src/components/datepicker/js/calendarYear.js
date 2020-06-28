@@ -227,7 +227,8 @@
 
     if (calendarCtrl.mode) {
       this.$mdUtil.nextTick(function() {
-        calendarCtrl.setNgModelValue(calendarCtrl.$mdDateLocale.parseDate(timestamp));
+        // The timestamp has to be converted to a valid date.
+        calendarCtrl.setNgModelValue(new Date(timestamp));
       });
     } else {
       calendarCtrl.setCurrentView('month', timestamp);
