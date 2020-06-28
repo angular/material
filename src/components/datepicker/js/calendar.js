@@ -321,17 +321,14 @@
     }, this.$attrs, [ngModelCtrl]);
 
     ngModelCtrl.$render = function() {
-      var value = this.$viewValue;
-      var parsedValue, convertedValue;
+      var value = this.$viewValue, convertedDate;
 
       // In the case where a conversion is needed, the $viewValue here will be a string like
       // "2020-05-10" instead of a Date object.
       if (!self.dateUtil.isValidDate(value)) {
-        parsedValue = self.$mdDateLocale.parseDate(this.$viewValue);
-        convertedValue =
-          new Date(parsedValue.getTime() + 60000 * parsedValue.getTimezoneOffset());
-        if (self.dateUtil.isValidDate(convertedValue)) {
-          value = convertedValue;
+        convertedDate = self.dateUtil.removeLocalTzAndReparseDate(new Date(this.$viewValue));
+        if (self.dateUtil.isValidDate(convertedDate)) {
+          value = convertedDate;
         }
       }
 
