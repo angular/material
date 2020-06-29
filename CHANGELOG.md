@@ -1,3 +1,22 @@
+<a name="1.1.24"></a>
+## [1.1.24](https://github.com/angular/material/compare/v1.1.23...v1.1.24) (2020-06-29)
+
+
+### Bug Fixes
+
+* **datepicker:** support `ng-model-options` timezone w/ MomentJS and datepicker now passes `ng-model-options` on to calendar ([12562b0](https://github.com/angular/material/commit/12562b0e0c47472477729ed54b9aa30bfc4110e3)), closes [#11945](https://github.com/angular/material/issues/11945) [#10598](https://github.com/angular/material/issues/10598)
+* **panel:** animated panels never appear on the screen ([e81e2e3](https://github.com/angular/material/commit/e81e2e33cccd414310f47ef9cec22aa54dd604a7)), closes [#11946](https://github.com/angular/material/issues/11946)
+* **panel:** inline transforms accumulate after each time the close animation runs ([6322e98](https://github.com/angular/material/commit/6322e982db2ebe5bc99bddcf1e6ffde4c5041305)), closes [#11946](https://github.com/angular/material/issues/11946)
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.1.24 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="mmalerba" src="https://avatars1.githubusercontent.com/u/14793288?v=4&s=117" width="117">](https://github.com/mmalerba) |
+:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[mmalerba](https://github.com/mmalerba) |
+
+
 <a name="1.1.23"></a>
 ## [1.1.23](https://github.com/angular/material/compare/v1.1.22...v1.1.23) (2020-06-18)
 
