@@ -107,6 +107,11 @@ md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) {
     background-color: '{{warn-color}}';
     color: '{{warn-contrast}}';
 
+    md-icon {
+      color: '{{accent-contrast}}';
+      fill: '{{accent-contrast}}';
+    }
+
     md-input-container[md-no-float] {
       .md-input {
         @include input-placeholder-color('\'{{warn-default-contrast-hint}}\'');

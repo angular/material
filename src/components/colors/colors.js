@@ -5,7 +5,7 @@
    *  Use a RegExp to check if the `md-colors="<expression>"` is static string
    *  or one that should be observed and dynamically interpolated.
    */
-  var STATIC_COLOR_EXPRESSION = /^{((\s|,)*?["'a-zA-Z-]+?\s*?:\s*?('|")[a-zA-Z0-9-.]*('|"))+\s*}$/;
+  var STATIC_COLOR_EXPRESSION = /^{((\s|,)*?["'a-zA-Z-]+?\s*?:\s*?(['"])[a-zA-Z0-9-.]*(['"]))+\s*}$/;
   var colorPalettes = null;
 
   /**
