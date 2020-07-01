@@ -13,5 +13,5 @@ section .md-button {
   bottom: 5px;
   left: 7px;
   font-size: 14px;
-  opacity: 0.54;
+  color: rgba(0, 0, 0, 0.54);
 }

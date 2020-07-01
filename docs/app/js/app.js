@@ -51,8 +51,8 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     '800': '#014AB6',
     '900': '#013583',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '300 400 A200 A400'
+    'contrastDarkColors': '50 100 200 300 400 A100 A200',
+    'contrastStrongLightColors': '500 600 700 800 900 A400 A700'
   }));
   $mdThemingProvider.definePalette('docs-red', $mdThemingProvider.extendPalette('red', {
     'A100': '#DE3641'
@@ -76,8 +76,10 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     .defaultIconSet('img/icons/sets/core-icons.svg', 24);
 
   $mdThemingProvider.theme('default')
-      .primaryPalette('docs-blue')
-      .accentPalette('docs-red');
+    .primaryPalette('docs-blue')
+    .accentPalette('docs-red', {
+      'default': 'A700'
+    });
 
   $mdThemingProvider.enableBrowserColor();
 

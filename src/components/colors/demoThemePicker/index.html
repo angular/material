@@ -1,12 +1,12 @@
 <div layout="column" ng-cloak ng-controller="ThemeDemoCtrl" class="md-padding">
   <p>
-    Select two of the <a class="md-accent" href="{{mdURL}}">Material Palettes</a>
+    Select two of the <a href="{{mdURL}}">Material Palettes</a>
     below:
   </p>
   <!-- Theme Options -->
   <div layout="row" layout-wrap layout-align="center center">
     <md-button ng-repeat="color in colors" flex-gt-md="15" flex="30"
-               md-colors="{background: '{{color}}'}" md-colors-watch="false"
+               md-colors="{background: '{{color}}-400'}" md-colors-watch="false"
                ng-disabled="primary === color && !isPrimary" ng-click="selectTheme(color)">
       {{color}}
     </md-button>
