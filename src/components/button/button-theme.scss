@@ -52,21 +52,6 @@
       }
     }
   }
-  &.md-fab {
-    background-color: '{{accent-color}}';
-    color: '{{accent-contrast}}';
-    &:not([disabled]) {
-      .md-icon {
-        color: '{{accent-contrast}}';
-      }
-      &:hover {
-        background-color: '{{accent-A700}}';
-      }
-      &.md-focused {
-        background-color: '{{accent-A700}}';
-      }
-    }
-  }
 
   &.md-raised {
     color: '{{background-900}}';
