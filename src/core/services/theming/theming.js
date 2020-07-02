@@ -1217,8 +1217,13 @@ function generateAllThemes($injector, $mdTheming) {
     delete palette.contrastStrongLightColors;
     delete palette.contrastDarkColors;
 
+    /**
+     * @param {string} hueName
+     * @return {'dark'|'light'|'strongLight'}
+     */
     function getContrastType(hueName) {
-      if (defaultContrast === 'light' ? darkColors.indexOf(hueName) !== -1  : lightColors.indexOf(hueName) === -1) {
+      if (defaultContrast === 'light' ? darkColors.indexOf(hueName) !== -1  :
+        (lightColors.indexOf(hueName) === -1 && strongLightColors.indexOf(hueName) === -1)) {
         return 'dark';
       }
       if (strongLightColors.indexOf(hueName) !== -1) {
@@ -1226,6 +1231,11 @@ function generateAllThemes($injector, $mdTheming) {
       }
       return 'light';
     }
+
+    /**
+     * @param {'dark'|'light'|'strongLight'} contrastType
+     * @return {[number, number, number]} [red, green, blue] array
+     */
     function getContrastColor(contrastType) {
       switch (contrastType) {
         default:
@@ -1237,6 +1247,11 @@ function generateAllThemes($injector, $mdTheming) {
           return DARK_CONTRAST_COLOR;
       }
     }
+
+    /**
+     * @param {'dark'|'light'|'strongLight'} contrastType
+     * @return {{secondary: number, divider: number, hint: number, icon: number, disabled: number}}
+     */
     function getOpacityValues(contrastType) {
       switch (contrastType) {
         default:
@@ -1313,6 +1328,10 @@ function checkValidPalette(theme, colorType) {
   }
 }
 
+/**
+ * @param {string} clr rbg or rgba color
+ * @return {number[]|undefined} [red, green, blue] array if it can be computed
+ */
 function colorToRgbaArray(clr) {
   if (angular.isArray(clr) && clr.length === 3) return clr;
   if (/^rgb/.test(clr)) {
