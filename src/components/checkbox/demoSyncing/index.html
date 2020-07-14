@@ -1,40 +1,35 @@
 <div ng-controller="AppCtrl" class="md-padding" ng-cloak style="min-height:270px">
   <div layout="row" layout-wrap>
-
     <div flex="100" flex-gt-sm="50" layout="column">
-      <div>
-        <!--
-          In IE, we cannot apply flex directly to <fieldset>
-          @see https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers
-        -->
-        <fieldset class="standard" >
-          <legend>Using &lt;md-checkbox&gt; with &lt;ng-checked&gt; </legend>
-          <div layout="row" layout-wrap flex>
-            <div flex="50" ng-repeat="item in items">
-              <md-checkbox ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
-                {{ item }} <span ng-if="exists(item, selected)">selected</span>
-              </md-checkbox>
-            </div>
+      <!--
+        In IE, we cannot apply flex directly to <fieldset>
+        @see https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers
+      -->
+      <fieldset class="standard">
+        <legend>Using &lt;md-checkbox&gt; with &lt;ng-checked&gt;</legend>
+        <div layout="row" layout-wrap flex>
+          <div flex="50" ng-repeat="item in items">
+            <md-checkbox ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
+              {{ item }} <span ng-if="exists(item, selected)">selected</span>
+            </md-checkbox>
           </div>
-        </fieldset>
-      </div>
+        </div>
+      </fieldset>
     </div>
 
     <div flex="100" flex-gt-sm="50" layout="column">
-      <div >
-        <fieldset class="standard">
-          <legend>Using &lt;input type="checkbox"&gt;</legend>
-          <div layout="row" layout-wrap flex>
-            <div ng-repeat="item in items" class="standard" flex="50">
-              <label>
-                <input type="checkbox" ng-checked="exists(item, selected)"
-                       ng-click="toggle(item, selected)"/>
-                {{ item }}
-              </label>
-            </div>
+      <fieldset class="standard">
+        <legend>Using &lt;input type="checkbox"&gt;</legend>
+        <div layout="row" layout-wrap flex>
+          <div ng-repeat="item in items" class="standard" flex="50">
+            <label>
+              <input type="checkbox" ng-checked="exists(item, selected)"
+                     ng-click="toggle(item, selected)"/>
+              {{ item }}
+            </label>
           </div>
-        </fieldset>
-      </div>
+        </div>
+      </fieldset>
     </div>
 
     <div flex="100">
@@ -42,6 +37,4 @@
       <code style="display: block; padding: 8px;">{{selected | json}}</code>
     </div>
   </div>
-
-
 </div>

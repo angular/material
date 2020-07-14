@@ -5,6 +5,7 @@ md-toolbar {
     }
   }
   md-toolbar-filler {
+    display: flex;
     background-color: #e0e0e0; // grey 200
 
     #filler-icon {
