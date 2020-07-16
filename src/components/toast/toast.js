@@ -336,7 +336,7 @@ function MdToastProvider($$interimElementProvider) {
     })
     .addPreset('simple', {
       argOption: 'textContent',
-      methods: ['textContent', 'content', 'action', 'actionKey', 'actionHint', 'highlightAction',
+      methods: ['textContent', 'action', 'actionKey', 'actionHint', 'highlightAction',
                 'highlightClass', 'theme', 'parent', 'dismissHint'],
       options: /* @ngInject */ function($mdToast, $mdTheming) {
         return {
@@ -363,10 +363,7 @@ function MdToastProvider($$interimElementProvider) {
         };
       }
     })
-    .addMethod('updateTextContent', updateTextContent)
-    // updateContent is deprecated. Use updateTextContent instead.
-    // TODO remove this in 1.2.
-    .addMethod('updateContent', updateTextContent);
+    .addMethod('updateTextContent', updateTextContent);
 
     function updateTextContent(newContent) {
       activeToastContent = newContent;
@@ -466,9 +463,7 @@ function MdToastProvider($$interimElementProvider) {
      * @return {*}
      */
     function onShow(scope, element, options) {
-      // support deprecated #content method
-      // TODO remove support for content in 1.2.
-      activeToastContent = options.textContent || options.content;
+      activeToastContent = options.textContent;
 
       var isSmScreen = !$mdMedia('gt-sm');
 
