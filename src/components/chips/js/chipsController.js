@@ -806,18 +806,6 @@ MdChipsCtrl.prototype.selectChip = function(index) {
 };
 
 /**
- * Selects the chip at {@code index} and gives it focus.
- * @param {number} index location of chip to select and focus
- * @deprecated use MdChipsCtrl.selectAndFocusChipSafe. Will be removed in 1.2.
- */
-MdChipsCtrl.prototype.selectAndFocusChip = function(index) {
-  this.selectChip(index);
-  if (index !== -1) {
-    this.focusChip(index);
-  }
-};
-
-/**
  * Call {@code focus()} on the chip at {@code index}
  * @param {number} index location of chip to focus
  */
