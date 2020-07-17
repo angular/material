@@ -263,7 +263,7 @@ describe('mdNavBar', function() {
       createTabs();
 
       expect(ctrl._updateInkBarStyles)
-      .toHaveBeenCalledWith(null, -1, -1);
+      .toHaveBeenCalledWith(null, -1);
     });
   });
 
