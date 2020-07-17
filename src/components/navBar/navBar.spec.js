@@ -254,6 +254,17 @@ describe('mdNavBar', function() {
       expect(ctrl._updateInkBarStyles)
         .not.toHaveBeenCalled();
     });
+
+    it('does not update selected tab if controller is undefined', function() {
+      $scope.selectedTabRoute = 'tab1';
+
+      spyOn(Object.getPrototypeOf(ctrl), '_updateInkBarStyles');
+      spyOn(Object.getPrototypeOf(ctrl), '_findTab').and.returnValue(null);
+      createTabs();
+
+      expect(ctrl._updateInkBarStyles)
+      .toHaveBeenCalledWith(null, -1);
+    });
   });
 
   describe('inkbar', function() {
