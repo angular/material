@@ -322,7 +322,7 @@ MdNavBarController.prototype.getFocusedTab = function() {
  * Find a tab that matches the specified function, starting from the first tab.
  * @param {Function} fn
  * @param {number=} startIndex index to start at. Defaults to 0.
- * @returns {MdNavItemController}
+ * @returns {MdNavItemController|null}
  * @private
  */
 MdNavBarController.prototype._findTab = function(fn, startIndex) {
