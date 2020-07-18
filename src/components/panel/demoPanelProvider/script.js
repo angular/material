@@ -13,8 +13,7 @@
    * `$mdPanel.create` and `$mdPanel.open` methods. When the parameters are
    * defined here, they overwrite the default parameters for any panel that the
    * preset is requested for.
-   * @param {!MdPanelProvider} $mdPanelProvider Provider method of the MdPanel
-   *     API.
+   * @param {!MdPanelProvider} $mdPanelProvider Provider method of the MdPanel API.
    */
   function PanelProviderConfig($mdPanelProvider) {
     $mdPanelProvider.definePreset('demoPreset', {

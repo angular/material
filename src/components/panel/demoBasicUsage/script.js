@@ -47,7 +47,6 @@ BasicDemoCtrl.prototype.showDialog = function() {
   this._mdPanel.open(config);
 };
 
-
 BasicDemoCtrl.prototype.showMenu = function(ev) {
   var position = this._mdPanel.newPanelPosition()
       .relativeTo('.demo-menu-open-button')
@@ -93,7 +92,6 @@ function PanelDialogCtrl(mdPanelRef) {
   this._mdPanelRef = mdPanelRef;
 }
 
-
 PanelDialogCtrl.prototype.closeDialog = function() {
   var panelRef = this._mdPanelRef;
 
@@ -103,12 +101,14 @@ PanelDialogCtrl.prototype.closeDialog = function() {
   });
 };
 
-
-
 function PanelMenuCtrl(mdPanelRef, $timeout) {
   this._mdPanelRef = mdPanelRef;
+  this.$timeout = $timeout;
+}
+
+PanelMenuCtrl.prototype.$onInit = function() {
   this.favoriteDessert = this.selected.favoriteDessert;
-  $timeout(function() {
+  this.$timeout(function() {
     var selected = document.querySelector('.demo-menu-item.selected');
     if (selected) {
       angular.element(selected).focus();
@@ -116,8 +116,7 @@ function PanelMenuCtrl(mdPanelRef, $timeout) {
       angular.element(document.querySelectorAll('.demo-menu-item')[0]).focus();
     }
   });
-}
-
+};
 
 PanelMenuCtrl.prototype.selectDessert = function(dessert) {
   this.selected.favoriteDessert = dessert;
