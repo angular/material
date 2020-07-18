@@ -109,7 +109,7 @@ function MdBottomSheetDirective($mdBottomSheet) {
  * </hljs>
  */
 
- /**
+/**
  * @ngdoc method
  * @name $mdBottomSheet#show
  *
@@ -124,39 +124,42 @@ function MdBottomSheetDirective($mdBottomSheet) {
  * Newer versions of Angular will throw a `Possibly unhandled rejection` exception if you forget
  * this.</em>
  *
- * @param {object} optionsOrPreset Either provide an `$mdBottomSheetPreset` defined during the config phase or
- * an options object, with the following properties:
+ * @param {Object} optionsOrPreset Either provide an `$mdBottomSheetPreset` defined during the
+ * config phase or an options object, with the following properties:
  *
  *   - `templateUrl` - `{string=}`: The url of an html template file that will
  *   be used as the content of the bottom sheet. Restrictions: the template must
  *   have an outer `md-bottom-sheet` element.
  *   - `template` - `{string=}`: Same as templateUrl, except this is an actual
  *   template string.
- *   - `scope` - `{object=}`: the scope to link the template / controller to. If none is specified, it will create a new child scope.
- *     This scope will be destroyed when the bottom sheet is removed unless `preserveScope` is set to true.
- *   - `preserveScope` - `{boolean=}`: whether to preserve the scope when the element is removed. Default is false
+ *   - `scope` - `{Object=}`: the scope to link the template / controller to. If none is specified,
+ *   it will create a new child scope. This scope will be destroyed when the bottom sheet is
+ *   removed unless `preserveScope` is set to true.
+ *   - `preserveScope` - `{boolean=}`: whether to preserve the scope when the element is removed.
+ *   Default is false
  *   - `controller` - `{string=}`: The controller to associate with this bottom sheet.
- *   - `locals` - `{string=}`: An object containing key/value pairs. The keys will
- *   be used as names of values to inject into the controller. For example,
- *   `locals: {three: 3}` would inject `three` into the controller with the value
- *   of 3.
+ *   - `locals` - `{string=}`: An object containing key/value pairs. The keys will be used as names
+ *   of values to inject into the controller. For example, `locals: {three: 3}` would inject
+ *   `three` into the controller with the value of 3.
  *   - `clickOutsideToClose` - `{boolean=}`: Whether the user can click outside the bottom sheet to
  *     close it. Default true.
- *   - `bindToController` - `{boolean=}`: When set to true, the locals will be bound to the controller instance.
+ *   - `bindToController` - `{boolean=}`: When set to true, the locals will be bound to the
+ *   controller instance and available in it's $onInit function.
  *   - `disableBackdrop` - `{boolean=}`: When set to true, the bottomsheet will not show a backdrop.
  *   - `escapeToClose` - `{boolean=}`: Whether the user can press escape to close the bottom sheet.
  *     Default true.
- *   - `isLockedOpen` - `{boolean=}`: Disables all default ways of closing the bottom sheet. **Note:** this will override
- *     the `clickOutsideToClose` and `escapeToClose` options, leaving only the `hide` and `cancel`
- *     methods as ways of closing the bottom sheet. Defaults to false.
- *   - `resolve` - `{object=}`: Similar to locals, except it takes promises as values
+ *   - `isLockedOpen` - `{boolean=}`: Disables all default ways of closing the bottom sheet.
+ *   **Note:** this will override the `clickOutsideToClose` and `escapeToClose` options, leaving
+ *   only the `hide` and `cancel` methods as ways of closing the bottom sheet. Defaults to false.
+ *   - `resolve` - `{Object=}`: Similar to locals, except it takes promises as values
  *   and the bottom sheet will not open until the promises resolve.
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
- *   - `parent` - `{element=}`: The element to append the bottom sheet to. The `parent` may be a `function`, `string`,
- *   `object`, or null. Defaults to appending to the body of the root element (or the root element) of the application.
+ *   - `parent` - `{element=}`: The element to append the bottom sheet to. The `parent` may be a
+ *   `function`, `string`, `Object`, or null. Defaults to appending to the body of the root element
+ *   (or the root element) of the application.
  *   e.g. angular.element(document.getElementById('content')) or "#content"
- *   - `disableParentScroll` - `{boolean=}`: Whether to disable scrolling while the bottom sheet is open.
- *     Default true.
+ *   - `disableParentScroll` - `{boolean=}`: Whether to disable scrolling while the bottom sheet is
+ *   open. Default true.
  *
  * @returns {promise} A promise that can be resolved with `$mdBottomSheet.hide()` or
  * rejected with `$mdBottomSheet.cancel()`.
@@ -218,9 +221,7 @@ function MdBottomSheetProvider($$interimElementProvider) {
       isLockedOpen: false
     };
 
-
-    function onShow(scope, element, options, controller) {
-
+    function onShow(scope, element, options) {
       element = $mdUtil.extractElementByName(element, 'md-bottom-sheet');
 
       // prevent tab focus or click focus on the bottom-sheet container
@@ -303,8 +304,8 @@ function MdBottomSheetProvider($$interimElementProvider) {
 
     /**
      * Adds the drag gestures to the bottom sheet.
-     * @param {angular.JQLite} element where CSS transitions will be applied
-     * @param {angular.JQLite} parent used for registering gesture listeners
+     * @param {JQLite} element where CSS transitions will be applied
+     * @param {JQLite} parent used for registering gesture listeners
      * @return {Function} function that removes gesture listeners that were set up by
      *  registerGestures()
      */
@@ -348,7 +349,5 @@ function MdBottomSheetProvider($$interimElementProvider) {
         }
       }
     }
-
   }
-
 }

@@ -79,12 +79,14 @@ ReuseDemoCtrl.prototype.showDialog = function($event, text) {
 };
 
 
-function ReusePanelCtrl(mdPanelRef, _demoCtrl) {
+function ReusePanelCtrl(mdPanelRef) {
   this._mdPanelRef = mdPanelRef;
-
-  // Register the controller for this panel with the parent controller.
-  _demoCtrl._mdPanelRefCtrl = this;
 }
+
+ReusePanelCtrl.prototype.$onInit = function() {
+  // Register the controller for this panel with the parent controller.
+  this._demoCtrl._mdPanelRefCtrl = this;
+};
 
 ReusePanelCtrl.prototype.closeDialog = function() {
   this._mdPanelRef && this._mdPanelRef.hide();

@@ -95,8 +95,6 @@ AnimationCtrl.prototype.showDialog = function() {
   this._mdPanel.open(config);
 };
 
-
-// Necessary to pass locals to the dialog template.
 function DialogCtrl(mdPanelRef) {
   this._mdPanelRef = mdPanelRef;
 }

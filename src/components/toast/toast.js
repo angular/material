@@ -243,7 +243,7 @@ function MdToastDirective($mdToast) {
  *
  * @description Shows the toast.
  *
- * @param {object} optionsOrPreset Either provide an `$mdToastPreset` returned from `simple()`
+ * @param {Object} optionsOrPreset Either provide an `$mdToastPreset` returned from `simple()`
  * and `build()`, or an options object with the following properties:
  *
  *   - `templateUrl` - `{string=}`: The url of an html template file that will
@@ -254,7 +254,7 @@ function MdToastDirective($mdToast) {
  *   - `autoWrap` - `{boolean=}`: Whether or not to automatically wrap the template content with a
  *     `<div class="md-toast-content">` if one is not provided. Defaults to true. Can be disabled
  *     if you provide a custom toast directive.
- *   - `scope` - `{object=}`: the scope to link the template / controller to. If none is specified,
+ *   - `scope` - `{Object=}`: the scope to link the template / controller to. If none is specified,
  *     it will create a new child scope. This scope will be destroyed when the toast is removed
  *     unless `preserveScope` is set to true.
  *   - `preserveScope` - `{boolean=}`: whether to preserve the scope when the element is removed.
@@ -273,13 +273,12 @@ function MdToastDirective($mdToast) {
  *   - `controller` - `{string=}`: The controller to associate with this toast.
  *     The controller will be injected the local `$mdToast.hide()`, which is a function
  *     used to hide the toast.
- *   - `locals` - `{object=}`: An object containing key/value pairs. The keys will
- *     be used as names of values to inject into the controller. For example,
- *     `locals: {three: 3}` would inject `three` into the controller with the value
- *     of 3.
+ *   - `locals` - `{Object=}`: An object containing key/value pairs. The keys will be used as names
+ *     of values to inject into the controller. For example, `locals: {three: 3}` would inject
+ *     `three` into the controller with the value of 3.
  *   - `bindToController` - `{boolean=}`: bind the locals to the controller, instead of passing
  *     them in.
- *   - `resolve` - `{object=}`: Similar to locals, except it takes promises as values
+ *   - `resolve` - `{Object=}`: Similar to locals, except it takes promises as values
  *     and the toast will not open until the promises resolve.
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
  *   - `parent` - `{element=}`: The element to append the toast to. Defaults to appending
@@ -535,9 +534,9 @@ function MdToastProvider($$interimElementProvider) {
     }
 
     /**
-     * @param {object} scope the toast's scope
+     * @param {Object} scope the toast's scope
      * @param {JQLite} element the toast to be removed
-     * @param {object} options
+     * @param {Object} options
      * @return {Promise<*>} a Promise to remove the element immediately or to animate it out.
      */
     function onRemove(scope, element, options) {
