@@ -688,19 +688,33 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
     element.on('click', clickListener);
     element.on('keypress', keyListener);
 
-    function keyListener(e) {
-      if (e.keyCode === 13 || e.keyCode === 32) {
-        clickListener(e);
+    /**
+     * @param {KeyboardEvent} keyboardEvent
+     */
+    function keyListener(keyboardEvent) {
+      if (keyboardEvent.keyCode === 13 || keyboardEvent.keyCode === 32) {
+        clickListener(keyboardEvent);
       }
     }
 
-    function clickListener(ev) {
-      var option = $mdUtil.getClosest(ev.target, 'md-option');
+    /**
+     * @param {Event} mouseEvent
+     * @return {void}
+     */
+    function clickListener(mouseEvent) {
+      var option = $mdUtil.getClosest(mouseEvent.target, 'md-option');
       var optionCtrl = option && angular.element(option).data('$mdOptionController');
-      if (!option || !optionCtrl) return;
-      if (option.hasAttribute('disabled')) {
-        ev.stopImmediatePropagation();
-        return false;
+
+      if (!option || !optionCtrl) {
+        // Avoid closing the menu when the select header's input is clicked
+        if (mouseEvent.target && mouseEvent.target.parentNode &&
+          mouseEvent.target.parentNode.tagName === 'MD-SELECT-HEADER') {
+          mouseEvent.stopImmediatePropagation();
+        }
+        return;
+      } else if (option.hasAttribute('disabled')) {
+        mouseEvent.stopImmediatePropagation();
+        return;
       }
 
       var optionHashKey = selectMenuCtrl.hashGetter(optionCtrl.value);

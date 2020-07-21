@@ -6,17 +6,17 @@
         <label>Vegetables</label>
         <md-select ng-model="selectedVegetables"
                    md-on-close="clearSearchTerm()"
-                   data-md-container-class="selectdemoSelectHeader"
+                   md-container-class="selectdemoSelectHeader"
                    multiple>
           <md-select-header class="demo-select-header">
-            <input ng-model="searchTerm"
-                   type="search"
-                   placeholder="Search for a vegetable.."
+            <input ng-model="searchTerm" aria-label="Vegetable filter"
+                   type="search" placeholder="Ex. Onions"
                    class="demo-header-searchbox md-text">
           </md-select-header>
           <md-optgroup label="vegetables">
-            <md-option ng-value="vegetable" ng-repeat="vegetable in vegetables |
-              filter:searchTerm">{{vegetable}}</md-option>
+            <md-option ng-value="vegetable" ng-repeat="vegetable in vegetables | filter:searchTerm">
+              {{vegetable}}
+            </md-option>
           </md-optgroup>
         </md-select>
       </md-input-container>
