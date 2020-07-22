@@ -28,7 +28,7 @@ $list-item-height: 6 * $baseline-grid !default;
 $list-item-two-line-height: 9 * $baseline-grid !default;
 $list-item-three-line-height: 11 * $baseline-grid !default;
 
-$list-item-dense-height: 12 * $dense-baseline-grid !default;
+$list-item-dense-height: 10 * $dense-baseline-grid !default;
 $list-item-dense-two-line-height: 15 * $dense-baseline-grid !default;
 $list-item-dense-three-line-height: 19 * $dense-baseline-grid !default;
 $list-item-dense-primary-icon-width: $dense-baseline-grid * 5 !default;
@@ -48,7 +48,7 @@ md-list {
     line-height: $list-header-line-height;
   }
 
-  &.md-dense {
+  &.md-dense:not(.md-dense-disabled) {
     md-list-item {
       &,
       .md-list-item-inner {
@@ -65,14 +65,27 @@ md-list {
 
         > md-icon:first-child:not(.md-avatar-icon) {
           @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-dense-primary-icon-width, auto);
+          margin-top: $dense-baseline-grid;
+          margin-bottom: $dense-baseline-grid;
         }
         .md-avatar, .md-avatar-icon {
           @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-dense-primary-avatar-width, auto);
+          margin-top: $dense-baseline-grid + 2px;
+          margin-bottom: $dense-baseline-grid + 2px;
         }
         .md-avatar {
           flex: none;
           width: $list-item-dense-primary-avatar-width;
           height: $list-item-dense-primary-avatar-width;
+        }
+        .md-secondary-container {
+          .md-secondary.md-button {
+            margin-top: $dense-baseline-grid;
+            margin-bottom: $dense-baseline-grid;
+          }
+          md-checkbox:not(.md-dense-disabled) {
+            min-height: $icon-button-height;
+          }
         }
       }
 
@@ -122,6 +135,10 @@ md-list {
           }
         }
       }
+    }
+    .md-subheader-inner {
+      padding-top: $dense-baseline-grid * 3;
+      padding-bottom: $dense-baseline-grid * 3;
     }
   }
 }
@@ -277,9 +294,9 @@ md-list-item {
 
     & > md-checkbox {
       width: 3 * $baseline-grid;
-      @include rtl(margin-left, 3px, 29px);
-      @include rtl(margin-right, 29px, 3px);
-      margin-top: 16px;
+      min-height: $icon-button-height;
+      @include rtl(margin-left, 0px, 29px);
+      @include rtl(margin-right, 29px, 0px);
     }
 
     .md-secondary-container {
@@ -311,11 +328,12 @@ md-list-item {
       }
 
       md-checkbox {
-        margin-top: 0;
-        margin-bottom: 0;
+        margin: 0 6px;
+        padding: 0 8px;
+        min-height: $icon-button-height;
 
         &:last-child {
-          width: 3 * $baseline-grid;
+          width: $icon-button-width;
           @include rtl-prop(margin-right, margin-left, 0, auto);
         }
       }
