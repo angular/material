@@ -367,7 +367,7 @@
     pushCmds.push(
       comment('update package.json in master'),
       'git checkout master',
-      `git pull --rebase ${origin} master --strategy=theirs`,
+      `git pull --rebase ${origin} master --strategy=recursive --strategy-option==theirs`,
       `git checkout release/${newVersion} -- CHANGELOG.md`,
       `node -e "const newVersion = '${newVersion}'; ${stringifyFunction(buildCommand)}"`,
       'git add CHANGELOG.md',
