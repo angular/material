@@ -1,3 +1,353 @@
+<a name="1.2.0-rc.1"></a>
+# [1.2.0-rc.1](https://github.com/angular/material/compare/v1.1.24...v1.2.0-rc.1) (2020-07-23)
+
+
+### Bug Fixes
+
+* **button:** horizontal padding should match the spec ([3205b33](https://github.com/angular/material/commit/3205b33b57bc08ef92aae28ac2fb898f307c0ac1)), closes [#10535](https://github.com/angular/material/issues/10535) [#10535](https://github.com/angular/material/issues/10535)
+* **checkbox:** handle links in transcluded label in an a11y-friendly way ([4d36fd2](https://github.com/angular/material/commit/4d36fd27be8960c9a5fceed5b8750e201668e4a0)), closes [#11134](https://github.com/angular/material/issues/11134)
+* **checkbox:** update CSS to match spec ([c893050](https://github.com/angular/material/commit/c8930506996a56adb1cbce20a236b7c2f76cbe93)), closes [#9351](https://github.com/angular/material/issues/9351) [#9927](https://github.com/angular/material/issues/9927) [#8713](https://github.com/angular/material/issues/8713)
+* **chips:** chip remove icon isn't sized to match the spec ([#10491](https://github.com/angular/material/issues/10491)) ([29c0a4a](https://github.com/angular/material/commit/29c0a4a7fb53bb92ef97422df8e5c9fa7199d6b1)), closes [#9619](https://github.com/angular/material/issues/9619)
+* **datepicker:** support ng-model-options timezone w/ Moment ([e24d09c](https://github.com/angular/material/commit/e24d09c68ce255ed82cac68361c8ee3dfeeb56e4)), closes [#11945](https://github.com/angular/material/issues/11945) [#10598](https://github.com/angular/material/issues/10598)
+* **input-container:** align indentation with spec ([31a596f](https://github.com/angular/material/commit/31a596f484fa32b07f42e116abad91999c4385d3)), closes [#10105](https://github.com/angular/material/issues/10105) [#11421](https://github.com/angular/material/issues/11421)
+* **list:** fix checkbox alignment and match dense heights to spec ([a13722e](https://github.com/angular/material/commit/a13722ee69ab01babefe1f0bcc5af77f55a3f76c)), closes [#11966](https://github.com/angular/material/issues/11966)
+* **nav-bar:** throws exception when indexing null tabs variable ([b1c7154](https://github.com/angular/material/commit/b1c7154bfe684c92497fb08dea6ce98af94ed1a8)), closes [#11964](https://github.com/angular/material/issues/11964)
+* **panel:** demos need to access locals in controller's $onInit ([6e91c62](https://github.com/angular/material/commit/6e91c621393cd2f5260689cec2c799eef3056a2c))
+* **panel:** don't throw exceptions when the groupName is a string ([4178459](https://github.com/angular/material/commit/4178459c4251f92fac44e4eb9f182704085a2ab9))
+* **select:** md-select-header closes on mouse click when not using multiple ([f2fca2e](https://github.com/angular/material/commit/f2fca2eea9d01be9f72e1dc2a275f1fdbc40764e)), closes [#11969](https://github.com/angular/material/issues/11969)
+* **tabs:** update min-width to follow the spec ([693ecca](https://github.com/angular/material/commit/693eccad4e0c1605513e9b9f747cff53fef6d62a)), closes [#10406](https://github.com/angular/material/issues/10406) [#11432](https://github.com/angular/material/issues/11432)
+* **theming:** dark contrast used incorrectly when only contrastStrongLightColors defined ([4e3f7a7](https://github.com/angular/material/commit/4e3f7a7e0839d9adce8327e67bdb9237e1e91f78))
+* **theming:** update palette contrast types to current spec ([d716fde](https://github.com/angular/material/commit/d716fde69983273940cf67c641c003ba3ffc32c7)), closes [#8992](https://github.com/angular/material/issues/8992) [#10164](https://github.com/angular/material/issues/10164)
+* **theming, toolbar, subheader, input:** align color palettes and contrasts with AA standards ([3a291ac](https://github.com/angular/material/commit/3a291ac6f6ae52093375f4c3dab5f15c4cf476b8)), closes [#8992](https://github.com/angular/material/issues/8992) [#10164](https://github.com/angular/material/issues/10164) [#8993](https://github.com/angular/material/issues/8993)
+* **toast:** improve position handling to better align with docs ([96ec741](https://github.com/angular/material/commit/96ec741e69bfb3d2637a00366e05c11d9538371f)), closes [#11843](https://github.com/angular/material/issues/11843)
+* **toolbar:** input placeholders and ink need more contrast ([a82fc93](https://github.com/angular/material/commit/a82fc93d54793472878da18a64ac8780295fac1f)), closes [#7987](https://github.com/angular/material/issues/7987) [#11376](https://github.com/angular/material/issues/11376)
+
+
+### Code Refactoring
+
+* **$mdCompilerProvider:** remove deprecated $mdCompilerProvider.respectPreAssignBindingsEnabled() ([579a327](https://github.com/angular/material/commit/579a3271698381c49803210c2efaa3b1f9e802bb))
+* **chips:** remove deprecated MdChipsCtrl.selectAndFocusChip ([01d2cde](https://github.com/angular/material/commit/01d2cde76fdc127bef4d52027c143b33dc0666c0))
+* **select:** rename ngMultiple to mdMultiple ([4c75858](https://github.com/angular/material/commit/4c758589f5ff8ad1b6fc1c990ffbbfd5dba913f7))
+* **toast:** remove deprecated content() method and option and updateContent() method ([cf3d56c](https://github.com/angular/material/commit/cf3d56c74fe28b7500bd1d8bc312c132ba06d2b9))
+
+
+### Features
+
+* **theming:** add contrast opacity values for all color types and hues ([68c1d02](https://github.com/angular/material/commit/68c1d02fb40951ea95bf3a136e12e0ff66b2a780))
+
+
+### Documentation
+
+* **theming, colors:** md-colors demo was broken. improve JSDoc and fix lint issues ([01917b3](https://github.com/angular/material/commit/01917b37ec6a8b6a913f9594130b841912e37244))
+
+
+### BREAKING CHANGES
+
+* **list:** `md-list` with the `md-dense` class has been updated to align with the Material Design specification. This means that `md-list-item`s heights have changed when using `md-dense`. The `md-dense-disabled` class is now supported on `md-list`. After updating to this version, you may need to adjust the layout of your app if you use `md-dense` with `md-list` or customize the layout of `md-checkbox`s within `md-list-item`s.
+* **button:** `md-button`'s internal horizontal padding has changed from `6px` to `8px` to match the Material Design spec. This may affect the layout of portions of your application where `md-button`, `md-datepicker`, or `md-toast` with actions are used.
+
+If you are using our SCSS files, you can override this back to the default, or another value, in your app's SCSS files:
+```scss
+$button-left-right-padding: rem(0.600); // For 6px horizontal padding
+```
+
+* **$mdCompilerProvider:** The deprecated `$mdCompilerProvider.respectPreAssignBindingsEnabled()` API has been removed.
+We no longer respect AngularJS's `$compileProvider.preAssignBindingsEnabled()` value as this API was removed
+in AngularJS `1.7.0`.
+
+If you had the recommended configuration for AngularJS 1.6.x:
+```js
+  $compileProvider.preAssignBindingsEnabled(false);
+  $mdCompilerProvider.respectPreAssignBindingsEnabled(true);
+```
+Then you should remove both of these calls as they are now the defaults in AngularJS `1.7.0`
+and AngularJS Material `1.2.0`.
+
+If you had the recommended configuration for AngularJS 1.7+:
+```js
+  $mdCompilerProvider.respectPreAssignBindingsEnabled(true);
+```
+Then you should remove this call as it is now the default in AngularJS Material `1.2.0`.
+
+If you were using a backwards-compatible configuration for AngularJS 1.6+:
+```js
+  $mdCompilerProvider.respectPreAssignBindingsEnabled(false);
+```
+Then you will need to remove this call and may need to refactor your Controllers for
+AngularJS Material components like `$mdDialog`, `$mdPanel`, `$mdToast`, or `$mdBottomSheet`.
+
+For example:
+```js
+ $mdDialog.show({
+   locals: {
+     myVar: true
+   },
+   controller: MyController,
+   bindToController: true
+ }
+  function MyController() {
+   // No locals from Angular Material are available. e.g myVar is undefined.
+   // You would need to move anything accessing locals in here to $onInit().
+ }
+  MyController.prototype.$onInit = function() {
+   // Bindings are now available in the $onInit lifecycle hook.
+ }
+```
+* **toast:** The deprecated `content()` and `updateContent()` methods have been removed.
+
+If you had:
+```js
+  $mdToast.show($mdToast.simple().content('This no longer works.'));
+```
+You will need to change to:
+```js
+  $mdToast.show($mdToast.simple().textContent('This works.'));
+```
+
+If you had:
+```js
+  $mdToast.updateContent('This no longer works.');
+```
+You will need to change to:
+```js
+  $mdToast.updateTextContent('This works.');
+```
+
+If you had:
+```js
+  $mdToast.show($mdToast.simple({parent: parent, content: 'This no longer works.', theme: 'some-theme', capsule: true}));
+```
+You will need to change to:
+```js
+  $mdToast.show($mdToast.simple({parent: parent, textContent: 'This works.', theme: 'some-theme', capsule: true}));
+```
+* **select:** `ngMultiple` has been renamed to `mdMultiple` to make it clear that this
+API is provided by AngularJS Material and not by AngularJS.
+
+If you had:
+```html
+  <md-select ng-multiple="expression">...</md-select>
+```
+You need to change to:
+```html
+  <md-select md-multiple="expression">...</md-select>
+```
+* **chips:** The deprecated `MdChipsCtrl.selectAndFocusChip()` function has been removed.
+`MdChipsCtrl.selectAndFocusChipSafe()` should be used instead.
+* **theming, toolbar, subheader, input:** The contrast colors (the text or icon color, for example on a raised button) of many of our default palettes have been updated to meet the [AA level of the contrast guidelines](https://www.w3.org/TR/WCAG21/#contrast-minimum) for web accessibility. If you are using our default palettes directly, the accessibility of your application should be improved. However, we recommend that you evaluate this after updating to `1.2.0`. There may be edge cases in your app or custom styles that need to be updated to meet accessibility guidelines.
+
+If you find significant accessibility issues after updating, please report them to us. In `1.2.x`, we have a lot more control over our component theming in regards to hues and opacities.
+
+If your app is using a custom palette, whether based on a copy of default palette or not, we encourage you to evaluate that your contrast configuration meets the WebAIM guidelines. Please review our guide on [Defining Custom Palettes](https://material.angularjs.org/latest/Theming/03_configuring_a_theme#defining-custom-palettes) for details.
+* **tabs:** Tab items now have a `min-width` and `padding` which matches the Material Design specification. For width, this is `72px` on `xs` screens and `160px` on all other screens. For left and right `padding`, this is now `12px` instead of `24px`. If your app needs to have tabs which are smaller than the spec, you will need to override `md-tab-item`'s `min-width` and `md-tab`'s `padding` styles.
+* **checkbox:** If you've created a custom solution to style links within `md-checkbox` labels, then you may need to remove or change that code now. This is because we automatically detect `<a>` tags in these labels and re-render them in an accessible way.
+* **input-container:** `md-input` and `md-select` inside of `md-input-container`s have been updated to use indentation that is consistent with the spec (aligned to the left in LTR and the right in RTL). This may cause some minor layout issues in apps that depended upon the previous `2px` padding inside of `md-input-container`.
+* The default size and spacing for `md-checkbox` has been updated to align with the Material Design specification. Additionally, many new Sass variables have been added for customizing the size and spacing of `md-checkbox`. The `md-dense` class is now supported. After updating to this version, you may need to adjust the layout of your app due to the larger touch-friendly size of checkbox. You may also want to make use of `md-dense` in cases where space is limited.
+* **toast:** `$mdToast.show()`'s position behavior has been updated to be consistent with the documentation. If you relied on the previously undocumented behavior where it defaulted to `top left` instead of `bottom left`, you will need to update your app.
+
+Change your code from this:
+
+```js
+    $mdToast.show(
+      $mdToast.simple()
+      .textContent('Simple Toast!'))
+    .then(...
+```
+
+To this:
+
+```js
+    $mdToast.show(
+      $mdToast.simple()
+      .textContent('Simple Toast!')
+      .position('top left'))
+    .then(...
+```
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.2.0-rc.1 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="jelbourn" src="https://avatars3.githubusercontent.com/u/838736?v=4&s=117" width="117">](https://github.com/jelbourn) |[<img alt="clshortfuse" src="https://avatars3.githubusercontent.com/u/9271155?v=4&s=117" width="117">](https://github.com/clshortfuse) |[<img alt="oliversalzburg" src="https://avatars2.githubusercontent.com/u/1658949?v=4&s=117" width="117">](https://github.com/oliversalzburg) |[<img alt="batsauto" src="https://avatars3.githubusercontent.com/u/17678174?v=4&s=117" width="117">](https://github.com/batsauto) |[<img alt="tomaszgrabowski" src="https://avatars0.githubusercontent.com/u/6688790?v=4&s=117" width="117">](https://github.com/tomaszgrabowski) |
+:---: |:---: |:---: |:---: |:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[jelbourn](https://github.com/jelbourn) |[clshortfuse](https://github.com/clshortfuse) |[oliversalzburg](https://github.com/oliversalzburg) |[batsauto](https://github.com/batsauto) |[tomaszgrabowski](https://github.com/tomaszgrabowski) |
+
+# [1.2.0-rc.1](https://github.com/angular/material/compare/v1.1.24...v1.2.0-rc.1) (2020-07-23)
+
+
+### Bug Fixes
+
+* **button:** horizontal padding should match the spec ([3205b33](https://github.com/angular/material/commit/3205b33b57bc08ef92aae28ac2fb898f307c0ac1)), closes [#10535](https://github.com/angular/material/issues/10535) [#10535](https://github.com/angular/material/issues/10535)
+* **checkbox:** handle links in transcluded label in an a11y-friendly way ([4d36fd2](https://github.com/angular/material/commit/4d36fd27be8960c9a5fceed5b8750e201668e4a0)), closes [#11134](https://github.com/angular/material/issues/11134)
+* **checkbox:** labels with links throw exception in IE11 ([dda25a6](https://github.com/angular/material/commit/dda25a63cf1ebe70c33c4f45cc65a620de622a84))
+* **chips:** chip remove icon isn't sized to match the spec ([#10491](https://github.com/angular/material/issues/10491)) ([29c0a4a](https://github.com/angular/material/commit/29c0a4a7fb53bb92ef97422df8e5c9fa7199d6b1)), closes [#9619](https://github.com/angular/material/issues/9619)
+* **datepicker:** support ng-model-options timezone w/ Moment ([e24d09c](https://github.com/angular/material/commit/e24d09c68ce255ed82cac68361c8ee3dfeeb56e4)), closes [#11945](https://github.com/angular/material/issues/11945) [#10598](https://github.com/angular/material/issues/10598)
+* **input-container:** align indentation with spec ([31a596f](https://github.com/angular/material/commit/31a596f484fa32b07f42e116abad91999c4385d3)), closes [#10105](https://github.com/angular/material/issues/10105) [#11421](https://github.com/angular/material/issues/11421)
+* **list:** fix checkbox alignment and match dense heights to spec ([a13722e](https://github.com/angular/material/commit/a13722ee69ab01babefe1f0bcc5af77f55a3f76c)), closes [#11966](https://github.com/angular/material/issues/11966)
+* **nav-bar:** add test for handling when a nav item's controller isn't found ([#11964](https://github.com/angular/material/issues/11964)) ([91300ec](https://github.com/angular/material/commit/91300ec87ff14ce9c377528ed31c57d43b504d48))
+* **nav-bar:** throws exception when indexing null tabs variable ([b1c7154](https://github.com/angular/material/commit/b1c7154bfe684c92497fb08dea6ce98af94ed1a8)), closes [#11964](https://github.com/angular/material/issues/11964)
+* **panel:** demos need to access locals in controller's $onInit ([6e91c62](https://github.com/angular/material/commit/6e91c621393cd2f5260689cec2c799eef3056a2c))
+* **panel:** don't throw exceptions when the groupName is a string ([4178459](https://github.com/angular/material/commit/4178459c4251f92fac44e4eb9f182704085a2ab9))
+* **select:** md-select-header closes on mouse click when not using multiple ([f2fca2e](https://github.com/angular/material/commit/f2fca2eea9d01be9f72e1dc2a275f1fdbc40764e)), closes [#11969](https://github.com/angular/material/issues/11969)
+* **tabs:** update min-width to follow the spec ([693ecca](https://github.com/angular/material/commit/693eccad4e0c1605513e9b9f747cff53fef6d62a)), closes [#10406](https://github.com/angular/material/issues/10406) [#11432](https://github.com/angular/material/issues/11432)
+* **theme, colors:** md-colors demo was broken. improve JSDoc and fix lint issues ([01917b3](https://github.com/angular/material/commit/01917b37ec6a8b6a913f9594130b841912e37244))
+* **theming:** dark contrast used incorrectly when only contrastStrongLightColors defined ([4e3f7a7](https://github.com/angular/material/commit/4e3f7a7e0839d9adce8327e67bdb9237e1e91f78))
+* **theming:** update palette contrast types to current spec ([d716fde](https://github.com/angular/material/commit/d716fde69983273940cf67c641c003ba3ffc32c7)), closes [#8992](https://github.com/angular/material/issues/8992) [#10164](https://github.com/angular/material/issues/10164)
+* **theming, toolbar, subheader, input:** align color palettes and contrasts with AA standards ([3a291ac](https://github.com/angular/material/commit/3a291ac6f6ae52093375f4c3dab5f15c4cf476b8)), closes [#8992](https://github.com/angular/material/issues/8992) [#10164](https://github.com/angular/material/issues/10164) [#8993](https://github.com/angular/material/issues/8993)
+* **toast:** improve position handling to better align with docs ([96ec741](https://github.com/angular/material/commit/96ec741e69bfb3d2637a00366e05c11d9538371f)), closes [#11843](https://github.com/angular/material/issues/11843)
+* **toolbar:** input placeholders and ink need more contrast ([a82fc93](https://github.com/angular/material/commit/a82fc93d54793472878da18a64ac8780295fac1f)), closes [#7987](https://github.com/angular/material/issues/7987) [#11376](https://github.com/angular/material/issues/11376)
+
+
+### Code Refactoring
+
+* **$mdCompilerProvider:** remove deprecated $mdCompilerProvider.respectPreAssignBindingsEnabled() ([579a327](https://github.com/angular/material/commit/579a3271698381c49803210c2efaa3b1f9e802bb))
+* **chips:** remove deprecated MdChipsCtrl.selectAndFocusChip ([01d2cde](https://github.com/angular/material/commit/01d2cde76fdc127bef4d52027c143b33dc0666c0))
+* **select:** rename ngMultiple to mdMultiple ([4c75858](https://github.com/angular/material/commit/4c758589f5ff8ad1b6fc1c990ffbbfd5dba913f7))
+* **toast:** remove deprecated content() method and option and updateContent() method ([cf3d56c](https://github.com/angular/material/commit/cf3d56c74fe28b7500bd1d8bc312c132ba06d2b9))
+
+
+### Features
+
+* **theming:** add contrast opacity values for all color types and hues ([68c1d02](https://github.com/angular/material/commit/68c1d02fb40951ea95bf3a136e12e0ff66b2a780))
+
+
+* fix(checkbox) update CSS to match spec ([c893050](https://github.com/angular/material/commit/c8930506996a56adb1cbce20a236b7c2f76cbe93)), closes [#9351](https://github.com/angular/material/issues/9351) [#9927](https://github.com/angular/material/issues/9927) [#8713](https://github.com/angular/material/issues/8713)
+
+
+### BREAKING CHANGES
+
+* **list:** `md-list` with the `md-dense` class has been updated to align with the Material Design specification. This means that `md-list-item`s heights have changed when using `md-dense`. The `md-dense-disabled` class is now supported on `md-list`. After updating to this version, you may need to adjust the layout of your app if you use `md-dense` with `md-list` or customize the layout of `md-checkbox`s within `md-list-item`s.
+* **button:** `md-button`'s internal horizontal padding has changed from `6px` to `8px` to match the Material Design spec. This may affect the layout of portions of your application where `md-button`, `md-datepicker`, or `md-toast` with actions are used.
+
+If you are using our SCSS files, you can override this back to the default, or another value, in your app's SCSS files:
+```scss
+$button-left-right-padding: rem(0.600); // For 6px horizontal padding
+```
+
+fix(button): horizontal padding should match the spec
+
+- left and right padding changed from `6px` to `8px`
+* **button:** `md-button`'s internal horizontal padding has changed from `6px` to `8px` to match the Material Design spec. This may affect the layout of portions of your application where `md-button`, `md-datepicker`, or `md-toast` with actions are used.
+
+If you are using our SCSS files, you can override this back to the default, or another value, in your app's SCSS files:
+```scss
+$button-left-right-padding: rem(0.600); // For 6px horizontal padding
+```
+* **$mdCompilerProvider:** The deprecated `$mdCompilerProvider.respectPreAssignBindingsEnabled()` API has been removed.
+We no longer respect AngularJS's `$compileProvider.preAssignBindingsEnabled()` value as this API was removed
+in AngularJS `1.7.0`.
+
+If you had the recommended configuration for AngularJS 1.6.x:
+```js
+  $compileProvider.preAssignBindingsEnabled(false);
+  $mdCompilerProvider.respectPreAssignBindingsEnabled(true);
+```
+Then you should remove both of these calls as they are now the defaults in AngularJS `1.7.0`
+and AngularJS Material `1.2.0`.
+
+If you had the recommended configuration for AngularJS 1.7+:
+```js
+  $mdCompilerProvider.respectPreAssignBindingsEnabled(true);
+```
+Then you should remove this call as it is now the default in AngularJS Material `1.2.0`.
+
+If you were using a backwards-compatible configuration for AngularJS 1.6+:
+```js
+  $mdCompilerProvider.respectPreAssignBindingsEnabled(false);
+```
+Then you will need to remove this call and may need to refactor your Controllers for
+AngularJS Material components like `$mdDialog`, `$mdPanel`, `$mdToast`, or `$mdBottomSheet`.
+
+For example:
+```js
+ $mdDialog.show({
+   locals: {
+     myVar: true
+   },
+   controller: MyController,
+   bindToController: true
+ }
+  function MyController() {
+   // No locals from Angular Material are available. e.g myVar is undefined.
+   // You would need to move anything accessing locals in here to $onInit().
+ }
+  MyController.prototype.$onInit = function() {
+   // Bindings are now available in the $onInit lifecycle hook.
+ }
+```
+* **toast:** The deprecated `content()` and `updateContent()` methods have been removed.
+
+If you had:
+```js
+  $mdToast.show($mdToast.simple().content('This no longer works.'));
+```
+You will need to change to:
+```js
+  $mdToast.show($mdToast.simple().textContent('This works.'));
+```
+
+If you had:
+```js
+  $mdToast.updateContent('This no longer works.');
+```
+You will need to change to:
+```js
+  $mdToast.updateTextContent('This works.');
+```
+
+If you had:
+```js
+  $mdToast.show($mdToast.simple({parent: parent, content: 'This no longer works.', theme: 'some-theme', capsule: true}));
+```
+You will need to change to:
+```js
+  $mdToast.show($mdToast.simple({parent: parent, textContent: 'This works.', theme: 'some-theme', capsule: true}));
+```
+* **select:** `ngMultiple` has been renamed to `mdMultiple` to make it clear that this
+API is provided by AngularJS Material and not by AngularJS.
+
+If you had:
+```html
+  <md-select ng-multiple="expression">...</md-select>
+```
+You need to change to:
+```html
+  <md-select md-multiple="expression">...</md-select>
+```
+* **chips:** The deprecated `MdChipsCtrl.selectAndFocusChip()` function has been removed.
+`MdChipsCtrl.selectAndFocusChipSafe()` should be used instead.
+* **theming, toolbar, subheader, input:** The contrast colors (the text or icon color, for example on a raised button) of many of our default palettes have been updated to meet the [AA level of the contrast guidelines](https://www.w3.org/TR/WCAG21/#contrast-minimum) for web accessibility. If you are using our default palettes directly, the accessibility of your application should be improved. However, we recommend that you evaluate this after updating to `1.2.0`. There may be edge cases in your app or custom styles that need to be updated to meet accessibility guidelines.
+
+If you find significant accessibility issues after updating, please report them to us. In `1.2.x`, we have a lot more control over our component theming in regards to hues and opacities.
+
+If your app is using a custom palette, whether based on a copy of default palette or not, we encourage you to evaluate that your contrast configuration meets the WebAIM guidelines. Please review our guide on [Defining Custom Palettes](https://material.angularjs.org/latest/Theming/03_configuring_a_theme#defining-custom-palettes) for details.
+* **tabs:** Tab items now have a `min-width` and `padding` which matches the Material Design specification. For width, this is `72px` on `xs` screens and `160px` on all other screens. For left and right `padding`, this is now `12px` instead of `24px`. If your app needs to have tabs which are smaller than the spec, you will need to override `md-tab-item`'s `min-width` and `md-tab`'s `padding` styles.
+* **checkbox:** If you've created a custom solution to style links within `md-checkbox` labels, then you may need to remove or change that code now. This is because we automatically detect `<a>` tags in these labels and re-render them in an accessible way.
+* **input-container:** `md-input` and `md-select` inside of `md-input-container`s have been updated to use indentation that is consistent with the spec (aligned to the left in LTR and the right in RTL). This may cause some minor layout issues in apps that depended upon the previous `2px` padding inside of `md-input-container`.
+* The default size and spacing for `md-checkbox` has been updated to align with the Material Design specification. Additionally, many new Sass variables have been added for customizing the size and spacing of `md-checkbox`. The `md-dense` class is now supported. After updating to this version, you may need to adjust the layout of your app due to the larger touch-friendly size of checkbox. You may also want to make use of `md-dense` in cases where space is limited.
+* **toast:** `$mdToast.show()`'s position behavior has been updated to be consistent with the documentation. If you relied on the previously undocumented behavior where it defaulted to `top left` instead of `bottom left`, you will need to update your app.
+
+Change your code from this:
+
+```js
+    $mdToast.show(
+      $mdToast.simple()
+      .textContent('Simple Toast!'))
+    .then(...
+```
+
+To this:
+
+```js
+    $mdToast.show(
+      $mdToast.simple()
+      .textContent('Simple Toast!')
+      .position('top left'))
+    .then(...
+```
+
+
+
 <a name="1.1.24"></a>
 ## [1.1.24](https://github.com/angular/material/compare/v1.1.23...v1.1.24) (2020-06-29)
 
@@ -681,9 +1031,9 @@ Thank you to the excellent contributors who helped with the v1.1.6 release:
 
 The `$mdCompiler` is able to respect the AngularJS `preAssignBindingsEnabled` state when using AngularJS 1.5.10 or higher.
 
-To enable/disable whether Material-specific (dialogs/toasts) controllers respect the AngularJS `$compile.preAssignBindingsEnabled` flag, call the AngularJS Material method: `$mdCompilerProvider.respectPreAssignBindingsEnabled(true/false)`. 
+To enable/disable whether Material-specific (dialogs/toasts) controllers respect the AngularJS `$compile.preAssignBindingsEnabled` flag, call the AngularJS Material method: `$mdCompilerProvider.respectPreAssignBindingsEnabled(true/false)`.
 
-This AngularJS Material *flag* doesn't affect directives/components created via regular AngularJS methods which constitute most Material & user-created components. 
+This AngularJS Material *flag* doesn't affect directives/components created via regular AngularJS methods which constitute most Material & user-created components.
 
 Only dynamic construction of elements such as Dialogs, Toast, BottomSheet, etc. may be affected. Invoking `$mdCompilerProvider.respectPreAssignBindingsEnabled(true)` will make **bindings** in Material custom components like `$mdDialog` or `$mdToast` only available in controller constructors.
 
