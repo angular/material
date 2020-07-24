@@ -306,6 +306,9 @@ function InterimElementProvider() {
             .show()
             .then(function () {
               showingInterims.push(interimElement);
+              // Trigger onComplete callback when the `show()` finishes and showingInterims is updated
+              var notifyComplete = options.onComplete || angular.noop;
+              notifyComplete(options.scope, interimElement, options);
             })
             .catch(function (reason) {
               return reason;
@@ -696,8 +699,6 @@ function InterimElementProvider() {
         function showElement(element, options, controller) {
           // Trigger onShowing callback before the `show()` starts
           var notifyShowing = options.onShowing || angular.noop;
-          // Trigger onComplete callback when the `show()` finishes
-          var notifyComplete = options.onComplete || angular.noop;
 
           // Necessary for consistency between AngularJS 1.5 and 1.6.
           try {
@@ -711,7 +712,6 @@ function InterimElementProvider() {
               // Start transitionIn
               $q.when(options.onShow(options.scope, element, options, controller))
                 .then(function () {
-                  notifyComplete(options.scope, element, options);
                   startAutoHide();
 
                   resolve(element);
