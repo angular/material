@@ -113,6 +113,7 @@ function SidenavService($mdComponentRegistry, $mdUtil, $q, $log) {
 
     return angular.extend({
       isLockedOpen: falseFn,
+      isLockedClosed: falseFn,
       isOpen: falseFn,
       toggle: rejectFn,
       open: rejectFn,
@@ -244,16 +245,19 @@ function SidenavFocusDirective() {
  * @param {expression=} md-is-locked-open When this expression evaluates to true,
  * the sidenav 'locks open': it falls into the content's flow instead
  * of appearing over it. This overrides the `md-is-open` attribute.
+ * @param {expression=} md-is-locked-closed When this expression evaluates to true,
+ * the sidenav 'locks closed': hides sidenav.
  * @param {string=} md-disable-scroll-target Selector, pointing to an element, whose scrolling will
  * be disabled when the sidenav is opened. By default this is the sidenav's direct parent.
  *
-* The $mdMedia() service is exposed to the is-locked-open attribute, which
+ * The $mdMedia() service is exposed to the is-locked-open and is-locked-closed attributes, which
  * can be given a media query or one of the `sm`, `gt-sm`, `md`, `gt-md`, `lg` or `gt-lg` presets.
  * Examples:
  *
  *   - `<md-sidenav md-is-locked-open="shouldLockOpen"></md-sidenav>`
  *   - `<md-sidenav md-is-locked-open="$mdMedia('min-width: 1000px')"></md-sidenav>`
  *   - `<md-sidenav md-is-locked-open="$mdMedia('sm')"></md-sidenav>` (locks open on small screens)
+ *   - `<md-sidenav md-is-locked-closed="$mdMedia('sm')"></md-sidenav>` (locks closed on small screens)
  */
 function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInteraction, $animate,
                           $compile, $parse, $log, $q, $document, $window, $$rAF) {
@@ -282,11 +286,21 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInterac
     var previousContainerStyles;
     var promise = $q.when(true);
     var isLockedOpenParsed = $parse(attr.mdIsLockedOpen);
+    var isLockedClosedParsed = $parse(attr.mdIsLockedClosed);
     var ngWindow = angular.element($window);
-    var isLocked = function() {
+    var isLockedOpen = function() {
       return isLockedOpenParsed(scope.$parent, {
         $media: function(arg) {
           $log.warn("$media is deprecated for is-locked-open. Use $mdMedia instead.");
+          return $mdMedia(arg);
+        },
+        $mdMedia: $mdMedia
+      });
+    };
+    var isLockedClosed = function() {
+      return isLockedClosedParsed(scope.$parent, {
+        $media: function(arg) {
+          $log.warn("$media is deprecated for is-locked-closed. Use $mdMedia instead.");
           return $mdMedia(arg);
         },
         $mdMedia: $mdMedia
@@ -336,7 +350,8 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInterac
       backdrop && backdrop.remove();
     });
 
-    scope.$watch(isLocked, updateIsLocked);
+    scope.$watch(isLockedOpen, updateIsLockedOpen);
+    scope.$watch(isLockedClosed, updateIsLockedClosed);
     scope.$watch('isOpen', updateIsOpen);
 
 
@@ -345,18 +360,30 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInterac
 
     /**
      * Toggle the DOM classes to indicate `locked`
-     * @param isLocked
+     * @param isLockedOpen
      * @param oldValue
      */
-    function updateIsLocked(isLocked, oldValue) {
-      scope.isLockedOpen = isLocked;
-      if (isLocked === oldValue) {
-        element.toggleClass('md-locked-open', !!isLocked);
+    function updateIsLockedOpen(isLockedOpen, oldValue) {
+      scope.isLockedOpen = isLockedOpen;
+      if (isLockedOpen === oldValue) {
+        element.toggleClass('md-locked-open', !!isLockedOpen);
       } else {
-        $animate[isLocked ? 'addClass' : 'removeClass'](element, 'md-locked-open');
+        $animate[isLockedOpen ? 'addClass' : 'removeClass'](element, 'md-locked-open');
       }
       if (backdrop) {
-        backdrop.toggleClass('md-locked-open', !!isLocked);
+        backdrop.toggleClass('md-locked-open', !!isLockedOpen);
+      }
+    }
+
+    /**
+     * Toggle the DOM classes to indicate `locked`
+     * @param isLockedClosed
+     * @param oldValue
+     */
+    function updateIsLockedClosed(isLockedClosed, oldValue) {
+      scope.isLockedClosed = isLockedClosed;
+      if (true === !!isLockedClosed) {
+        sidenavCtrl.close();
       }
     }
 
@@ -535,6 +562,7 @@ function SidenavController($scope, $attrs, $mdComponentRegistry, $q, $interpolat
   // Synchronous getters
   self.isOpen = function() { return !!$scope.isOpen; };
   self.isLockedOpen = function() { return !!$scope.isLockedOpen; };
+  self.isLockedClosed = function() { return !!$scope.isLockedClosed; };
 
   // Synchronous setters
   self.onClose = function (callback) {
