@@ -63,8 +63,6 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
     defineBooleanAttribute('dynamicHeight', handleDynamicHeight);
     defineBooleanAttribute('noPagination');
     defineBooleanAttribute('swipeContent');
-    // TODO remove noDisconnect in 1.2.0
-    defineBooleanAttribute('noDisconnect');
     defineBooleanAttribute('autoselect');
     defineBooleanAttribute('noSelectClick');
     defineBooleanAttribute('centerTabs', handleCenterTabs);
@@ -449,8 +447,7 @@ function MdTabsController ($scope, $element, $window, $mdConstant, $mdTabInkRipp
           isActive:     function () { return this.getIndex() === ctrl.selectedIndex; },
           isLeft:       function () { return this.getIndex() < ctrl.selectedIndex; },
           isRight:      function () { return this.getIndex() > ctrl.selectedIndex; },
-          // TODO remove reference to noDisconnect in 1.2.0
-          shouldRender: function () { return !ctrl.noDisconnect || this.isActive(); },
+          shouldRender: function () { return ctrl.dynamicHeight || this.isActive(); },
           hasFocus:     function () {
             return ctrl.styleTabItemFocus
                 && ctrl.hasFocus && this.getIndex() === ctrl.focusIndex;

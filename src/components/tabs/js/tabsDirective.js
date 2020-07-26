@@ -84,9 +84,6 @@
  * @param {boolean=} md-enable-disconnect When enabled, scopes will be disconnected for tabs that
  *  are not being displayed. This provides a performance boost, but may also cause unexpected
  *  issues. It is not recommended for most users.
- * @param {boolean=} md-no-disconnect **Deprecated**: If your tab content has background tasks
- *  (ie. event listeners), you will want to include this to prevent the scope from being
- *  disconnected.
  * @param {boolean=} md-autoselect If the attribute is present, any tabs added after the initial
  *  load will be automatically selected.
  * @param {boolean=} md-no-select-click When true, click events will not be fired when the value of
