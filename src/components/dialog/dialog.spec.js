@@ -124,7 +124,7 @@ describe('$mdDialog', function() {
       expect(resolved).toBe(true);
     }));
 
-    it('should normally use the default theme', inject(function($animate, $rootScope, $mdDialog, $compile) {
+    it('should normally use the default theme', inject(function($animate, $rootScope, $mdDialog) {
       var dialogParent = angular.element('<div>');
 
       $mdDialog.show(
@@ -145,7 +145,7 @@ describe('$mdDialog', function() {
       expect(mdDialog.attr('md-theme')).toBe('default');
     }));
 
-    it('should apply the specified theme', inject(function($animate, $rootScope, $mdDialog, $compile) {
+    it('should apply the specified theme', inject(function($animate, $rootScope, $mdDialog) {
       var dialogParent = angular.element('<div>');
 
       $mdDialog.show(
@@ -212,7 +212,7 @@ describe('$mdDialog', function() {
       expect($log.warn).toHaveBeenCalled();
     }));
 
-    it('should use the prefixed id from `md-dialog` for `md-dialog-content`', inject(function ($mdDialog, $rootScope, $document) {
+    it('should use the prefixed id from `md-dialog` for `md-dialog-content`', inject(function ($mdDialog) {
       jasmine.mockElementFocus(this);
 
       var parent = angular.element('<div>');
@@ -236,7 +236,7 @@ describe('$mdDialog', function() {
       expect(content.id).toBe('dialogContent_' + dialog[0].id);
     }));
 
-    it('should not clobber the id from `md-dialog` when there is no content', inject(function ($mdDialog, $rootScope, $document) {
+    it('should not clobber the id from `md-dialog` when there is no content', inject(function ($mdDialog) {
       jasmine.mockElementFocus(this);
 
       var parent = angular.element('<div>');
@@ -257,7 +257,7 @@ describe('$mdDialog', function() {
       expect(dialog[0].id).toBe('demoid');
     }));
 
-    it('should apply a prefixed id for `md-dialog-content`', inject(function ($mdDialog, $rootScope, $document) {
+    it('should apply a prefixed id for `md-dialog-content`', inject(function ($mdDialog) {
       jasmine.mockElementFocus(this);
 
       var parent = angular.element('<div>');
@@ -316,7 +316,7 @@ describe('$mdDialog', function() {
       expect(container.length).toBe(0);
     }));
 
-    it('should remove `md-dialog-container` on scope.$destroy()', inject(function($mdDialog, $rootScope, $timeout) {
+    it('should remove `md-dialog-container` on scope.$destroy()', inject(function($mdDialog, $rootScope) {
       var container, parent = angular.element('<div>');
 
       $mdDialog.show(
@@ -467,7 +467,7 @@ describe('$mdDialog', function() {
       expect(contentBody.textContent).toBe('{{1 + 1}}');
     }));
 
-    it('should focus `md-button.dialog-close` on open', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
+    it('should focus `md-button.dialog-close` on open', inject(function($mdDialog, $rootScope, $document) {
       jasmine.mockElementFocus(this);
 
       var parent = angular.element('<div>');
@@ -485,7 +485,7 @@ describe('$mdDialog', function() {
       expect($document.activeElement).toBe(parent[0].querySelector('.dialog-close'));
     }));
 
-    it('should remove `md-dialog-container` after mousedown mouseup outside', inject(function($mdDialog, $rootScope, $timeout, $animate) {
+    it('should remove `md-dialog-container` after mousedown mouseup outside', inject(function($mdDialog) {
       jasmine.mockElementFocus(this);
       var container, parent = angular.element('<div>');
 
@@ -521,7 +521,7 @@ describe('$mdDialog', function() {
       expect(container.length).toBe(0);
     }));
 
-    it('should not remove `md-dialog-container` after mousedown outside mouseup inside', inject(function($mdDialog, $rootScope, $timeout, $animate) {
+    it('should not remove `md-dialog-container` after mousedown outside mouseup inside', inject(function($mdDialog) {
       jasmine.mockElementFocus(this);
       var container, parent = angular.element('<div>');
 
@@ -558,7 +558,7 @@ describe('$mdDialog', function() {
       expect(container.length).toBe(1);
     }));
 
-    it('should not remove `md-dialog-container` after mousedown inside mouseup outside', inject(function($mdDialog, $rootScope, $timeout, $animate) {
+    it('should not remove `md-dialog-container` after mousedown inside mouseup outside', inject(function($mdDialog) {
       jasmine.mockElementFocus(this);
       var container, parent = angular.element('<div>');
 
@@ -754,7 +754,7 @@ describe('$mdDialog', function() {
       expect($document.activeElement).toBe(parent[0].querySelector('input'));
     }));
 
-    it('should cancel the first dialog when opening a second', inject(function($mdDialog, $rootScope, $document) {
+    it('should cancel the first dialog when opening a second', inject(function($mdDialog, $rootScope) {
       var firstParent = angular.element('<div>');
       var secondParent = angular.element('<div>');
       var isCancelled = false;
@@ -913,7 +913,7 @@ describe('$mdDialog', function() {
       expect(showing).toBe(true);
     }));
 
-    it('should support onComplete callbacks within `show()`', inject(function($mdDialog, $rootScope, $timeout, $mdConstant) {
+    it('should support onComplete callbacks within `show()`', inject(function($mdDialog, $rootScope) {
 
       var template = '<md-dialog>Hello</md-dialog>';
       var parent = angular.element('<div>');
@@ -1131,7 +1131,7 @@ describe('$mdDialog', function() {
       expect(parent.find('md-dialog').length).toBe(1);
     }));
 
-    it('should clickOutsideToClose == true', inject(function($mdDialog, $rootScope, $timeout, $animate, $mdConstant) {
+    it('should clickOutsideToClose == true', inject(function($mdDialog, $rootScope) {
 
       var parent = angular.element('<div>');
       $mdDialog.show({
@@ -1159,7 +1159,7 @@ describe('$mdDialog', function() {
       expect(parent.find('md-dialog').length).toBe(0);
     }));
 
-    it('should clickOutsideToClose == false', inject(function($mdDialog, $rootScope, $timeout, $animate) {
+    it('should clickOutsideToClose == false', inject(function($mdDialog, $rootScope) {
 
       var parent = angular.element('<div>');
       $mdDialog.show({
@@ -1195,7 +1195,7 @@ describe('$mdDialog', function() {
       expect($mdUtil.disableScrollAround).toHaveBeenCalled();
     }));
 
-    it('should hasBackdrop == true', inject(function($mdDialog, $animate, $rootScope) {
+    it('should hasBackdrop == true', inject(function($mdDialog) {
       var parent = angular.element('<div>');
       $mdDialog.show({
         template: '',
@@ -1221,7 +1221,7 @@ describe('$mdDialog', function() {
       expect(parent[0].querySelectorAll('md-backdrop').length).toBe(0);
     }));
 
-    it('should focusOnOpen == true', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
+    it('should focusOnOpen == true', inject(function($mdDialog, $rootScope, $document) {
       jasmine.mockElementFocus(this);
       var parent = angular.element('<div>');
       $mdDialog.show({
@@ -1336,7 +1336,7 @@ describe('$mdDialog', function() {
 
     }));
 
-    it('should focusOnOpen == false', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
+    it('should focusOnOpen == false', inject(function($mdDialog, $rootScope, $document) {
       jasmine.mockElementFocus(this);
 
       var parent = angular.element('<div>');
@@ -1361,46 +1361,28 @@ describe('$mdDialog', function() {
       expect($document.activeElement).toBe(undefined);
     }));
 
-    it('should focus the last `md-button` in md-dialog-actions open if no `.dialog-close`', inject(function($mdDialog, $rootScope, $document, $timeout, $mdConstant) {
-      jasmine.mockElementFocus(this);
+    it('should focus the last `md-button` in md-dialog-actions open if no `.dialog-close`',
+      inject(function ($mdDialog, $rootScope, $document) {
+        jasmine.mockElementFocus(this);
 
-      var parent = angular.element('<div>');
-      $mdDialog.show({
-        template:
-          '<md-dialog>' +
-          '  <md-dialog-actions>' +
-          '    <button id="a">A</md-button>' +
-          '    <button id="focus-target">B</md-button>' +
-          '  </md-dialog-actions>' +
-          '</md-dialog>',
-        parent: parent
-      });
+        var parent = angular.element('<div>');
+        $mdDialog.show({
+          template:
+            '<md-dialog>' +
+            '  <md-dialog-actions>' +
+            '    <button id="a">A</md-button>' +
+            '    <button id="focus-target">B</md-button>' +
+            '  </md-dialog-actions>' +
+            '</md-dialog>',
+          parent: parent
+        });
 
-      runAnimation();
+        runAnimation();
 
-      expect($document.activeElement).toBe(parent[0].querySelector('#focus-target'));
-    }));
+        expect($document.activeElement).toBe(parent[0].querySelector('#focus-target'));
+      }));
 
-    it('should warn if the deprecated .md-actions class is used', inject(function($mdDialog, $rootScope, $log, $timeout) {
-       spyOn($log, 'warn');
-
-      var parent = angular.element('<div>');
-      $mdDialog.show({
-        template:
-          '<md-dialog>' +
-            '<div class="md-actions">' +
-              '<button class="md-button">Ok good</button>' +
-            '</div>' +
-          '</md-dialog>',
-        parent: parent
-      });
-
-      runAnimation();
-
-      expect($log.warn).toHaveBeenCalled();
-    }));
-
-    it('should only allow one open at a time', inject(function($mdDialog, $rootScope, $animate) {
+    it('should only allow one open at a time', inject(function($mdDialog) {
       var parent = angular.element('<div>');
       $mdDialog.show({
         template: '<md-dialog class="one">',
@@ -1421,7 +1403,7 @@ describe('$mdDialog', function() {
       expect(parent[0].querySelectorAll('md-dialog.two').length).toBe(1);
     }));
 
-    it('should hide dialog', inject(function($mdDialog, $rootScope, $animate) {
+    it('should hide dialog', inject(function($mdDialog) {
       var parent = angular.element('<div>');
       $mdDialog.show({
         template: '<md-dialog class="one">',
@@ -1435,7 +1417,7 @@ describe('$mdDialog', function() {
       expect(parent[0].querySelectorAll('md-dialog.one').length).toBe(0);
     }));
 
-    it('should allow opening new dialog after existing without corruption', inject(function($mdDialog, $rootScope, $animate) {
+    it('should allow opening new dialog after existing without corruption', inject(function($mdDialog) {
       var parent = angular.element('<div>');
       $mdDialog.show({
         template: '<md-dialog class="one">',
@@ -1457,7 +1439,7 @@ describe('$mdDialog', function() {
       expect(parent[0].querySelectorAll('md-dialog.two').length).toBe(0);
     }));
 
-    it('should allow opening new dialog from existing without corruption', inject(function($mdDialog, $rootScope, $animate) {
+    it('should allow opening new dialog from existing without corruption', inject(function($mdDialog) {
       var parent = angular.element('<div>');
       $mdDialog.show({
         template: '<md-dialog class="one">',
@@ -1787,7 +1769,7 @@ describe('$mdDialog', function() {
       expect(dialog.attr('role')).toBe('dialog');
     }));
 
-    it('should create an ARIA label if one is missing', inject(function($mdDialog, $rootScope, $$rAF) {
+    it('should create an ARIA label if one is missing', inject(function($mdDialog) {
       var template = '<md-dialog>Hello</md-dialog>';
       var parent = angular.element('<div>');
 
@@ -1801,7 +1783,7 @@ describe('$mdDialog', function() {
       expect(dialog.attr('aria-label')).toEqual(dialog.text());
     }));
 
-    it('should not modify an existing ARIA label', inject(function($mdDialog, $rootScope) {
+    it('should not modify an existing ARIA label', inject(function($mdDialog) {
       var template = '<md-dialog aria-label="Some Other Thing">Hello</md-dialog>';
       var parent = angular.element('<div>');
 
@@ -1817,7 +1799,7 @@ describe('$mdDialog', function() {
       expect(dialog.attr('aria-label')).toEqual('Some Other Thing');
     }));
 
-    it('should add an ARIA label if supplied through chaining', inject(function($mdDialog, $rootScope, $animate) {
+    it('should add an ARIA label if supplied through chaining', inject(function($mdDialog) {
       var parent = angular.element('<div>');
 
       $mdDialog.show(
@@ -1833,7 +1815,7 @@ describe('$mdDialog', function() {
       expect(dialog.attr('aria-label')).toEqual('label');
     }));
 
-    it('should apply aria-hidden to siblings', inject(function($mdDialog, $rootScope, $timeout) {
+    it('should apply aria-hidden to siblings', inject(function($mdDialog) {
 
       var template = '<md-dialog aria-label="Some Other Thing">Hello</md-dialog>';
       var parent = angular.element('<div>');
@@ -1854,11 +1836,11 @@ describe('$mdDialog', function() {
       expect(sibling.attr('aria-hidden')).toBe('true');
     }));
 
-    it('should not apply aria-hidden to live region siblings', inject(function($mdDialog, $rootScope, $timeout) {
+    it('should not apply aria-hidden to live region siblings', inject(function($mdDialog) {
 
       var template = '<md-dialog aria-label="Some Other Thing">Hello</md-dialog>';
       var parent = angular.element('<div>');
-      parent.append('<div aria-live="polite"></div>')
+      parent.append('<div aria-live="polite"></div>');
 
       $mdDialog.show({
         template: template,
@@ -2058,22 +2040,6 @@ describe('$mdDialog', function() {
       }));
     });
   }
-
-  /**
-   * Verifies that an element has the expected CSS for its transform property.
-   * Works by creating a new element, setting the expected CSS on that
-   * element, and comparing to the element being tested. This convoluted
-   * approach is needed because if jQuery is installed it can rewrite
-   * 'translate3d' values to equivalent 'matrix' values, for example turning
-   * 'translate3d(240px, 120px, 0px) scale(0.5, 0.5)' into
-   * 'matrix(0.5, 0, 0, 0.5, 240, 120)'.
-   */
-  var verifyTransformCss = function(element, transformAttr, expectedCss) {
-    var testDiv = angular.element('<div>');
-    testDiv.css(transformAttr, expectedCss);
-    expect(element.css(transformAttr)).toBe(testDiv.css(transformAttr));
-  };
-
 });
 
 describe('$mdDialog with custom interpolation symbols', function() {

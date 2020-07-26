@@ -80,7 +80,7 @@ md-dialog {
     }
   }
 
-  .md-actions, md-dialog-actions {
+  md-dialog-actions {
     display: flex;
     order: 2;
     box-sizing: border-box;
@@ -100,12 +100,11 @@ md-dialog {
     }
   }
   &.md-content-overflow {
-    .md-actions, md-dialog-actions {
+    md-dialog-actions {
       border-top-width: 1px;
       border-top-style: solid;
     }
   }
-
 }
 
 @media screen and (-ms-high-contrast: active) {
