@@ -4739,7 +4739,7 @@ it is disabled, change it to an ng-disabled expression.
     - **md-scroll-xy**
   * &lt;md-divider **md-inset**="" &gt;
   * &lt;md-linear-progress **md-buffer-value**="someValue" **md-mode**="query" &gt;
-  * &lt;md-circular-rogress **md-mode**="query" **md-diameter**="60" &gt;
+  * &lt;md-circular-progress **md-mode**="query" **md-diameter**="60" &gt;
   * &lt;md-sidenav&gt;
     - **md-is-open**="isOpen"
     - **md-is-locked-open**="isLockedOpen"
