@@ -272,7 +272,7 @@ angular
  *     called after the close successfully finishes. The first parameter passed
  *     into this function is the current panelRef and the 2nd is an optional
  *     string explaining the close reason. The currently supported closeReasons
- *     can be found in the MdPanelRef.closeReasons enum. These are by default
+ *     can be found in the `MdPanelRef.closeReasons` enum. These are by default
  *     passed along by the panel.
  *   - `trapFocus` - `{boolean=}`: Whether focus should be trapped within the
  *     panel. If `trapFocus` is true, the user will not be able to interact
@@ -457,51 +457,6 @@ angular
  * @name MdPanelRef#destroy
  * @description
  * Destroys the panel. The panel cannot be opened again after this is called.
- */
-
-/**
- * @ngdoc method
- * @name MdPanelRef#addClass
- * @deprecated
- * This method is in the process of being deprecated in favor of using the panel
- * and container JQLite elements that are referenced in the MdPanelRef object.
- * Full deprecation is scheduled for material 1.2.
- * @description
- * Adds a class to the panel. DO NOT use this hide/show the panel.
- *
- * @param {string} newClass class to be added.
- * @param {boolean} toElement Whether or not to add the class to the panel
- *     element instead of the container.
- */
-
-/**
- * @ngdoc method
- * @name MdPanelRef#removeClass
- * @deprecated
- * This method is in the process of being deprecated in favor of using the panel
- * and container JQLite elements that are referenced in the MdPanelRef object.
- * Full deprecation is scheduled for material 1.2.
- * @description
- * Removes a class from the panel. DO NOT use this to hide/show the panel.
- *
- * @param {string} oldClass Class to be removed.
- * @param {boolean} fromElement Whether or not to remove the class from the
- *     panel element instead of the container.
- */
-
-/**
- * @ngdoc method
- * @name MdPanelRef#toggleClass
- * @deprecated
- * This method is in the process of being deprecated in favor of using the panel
- * and container JQLite elements that are referenced in the MdPanelRef object.
- * Full deprecation is scheduled for material 1.2.
- * @description
- * Toggles a class on the panel. DO NOT use this to hide/show the panel.
- *
- * @param {string} toggleClass Class to be toggled.
- * @param {boolean} onElement Whether or not to remove the class from the panel
- *     element instead of the container.
  */
 
 /**
@@ -1731,99 +1686,6 @@ MdPanelRef.prototype.hide = function() {
     ]).then(done, reject);
   });
 };
-
-/**
- * Add a class to the panel. DO NOT use this to hide/show the panel.
- * @deprecated
- * This method is in the process of being deprecated in favor of using the panel
- * and container JQLite elements that are referenced in the MdPanelRef object.
- * Full deprecation is scheduled for material 1.2.
- *
- * @param {string} newClass Class to be added.
- * @param {boolean} toElement Whether or not to add the class to the panel
- *     element instead of the container.
- */
-MdPanelRef.prototype.addClass = function(newClass, toElement) {
-  this._$log.warn(
-      'mdPanel: The addClass method is in the process of being deprecated. ' +
-      'Full deprecation is scheduled for the AngularJS Material 1.2 release. ' +
-      'To achieve the same results, use the panelContainer or panelEl ' +
-      'JQLite elements that are referenced in MdPanelRef.');
-
-  if (!this.panelContainer) {
-    throw new Error(
-        'mdPanel: Panel does not exist yet. Call open() or attach().');
-  }
-
-  if (!toElement && !this.panelContainer.hasClass(newClass)) {
-    this.panelContainer.addClass(newClass);
-  } else if (toElement && !this.panelEl.hasClass(newClass)) {
-    this.panelEl.addClass(newClass);
-  }
-};
-
-
-/**
- * Remove a class from the panel. DO NOT use this to hide/show the panel.
- * @deprecated
- * This method is in the process of being deprecated in favor of using the panel
- * and container JQLite elements that are referenced in the MdPanelRef object.
- * Full deprecation is scheduled for material 1.2.
- *
- * @param {string} oldClass Class to be removed.
- * @param {boolean} fromElement Whether or not to remove the class from the
- *     panel element instead of the container.
- */
-MdPanelRef.prototype.removeClass = function(oldClass, fromElement) {
-  this._$log.warn(
-      'mdPanel: The removeClass method is in the process of being deprecated. ' +
-      'Full deprecation is scheduled for the AngularJS Material 1.2 release. ' +
-      'To achieve the same results, use the panelContainer or panelEl ' +
-      'JQLite elements that are referenced in MdPanelRef.');
-
-  if (!this.panelContainer) {
-    throw new Error(
-        'mdPanel: Panel does not exist yet. Call open() or attach().');
-  }
-
-  if (!fromElement && this.panelContainer.hasClass(oldClass)) {
-    this.panelContainer.removeClass(oldClass);
-  } else if (fromElement && this.panelEl.hasClass(oldClass)) {
-    this.panelEl.removeClass(oldClass);
-  }
-};
-
-
-/**
- * Toggle a class on the panel. DO NOT use this to hide/show the panel.
- * @deprecated
- * This method is in the process of being deprecated in favor of using the panel
- * and container JQLite elements that are referenced in the MdPanelRef object.
- * Full deprecation is scheduled for material 1.2.
- *
- * @param {string} toggleClass The class to toggle.
- * @param {boolean} onElement Whether or not to toggle the class on the panel
- *     element instead of the container.
- */
-MdPanelRef.prototype.toggleClass = function(toggleClass, onElement) {
-  this._$log.warn(
-      'mdPanel: The toggleClass method is in the process of being deprecated. ' +
-      'Full deprecation is scheduled for the AngularJS Material 1.2 release. ' +
-      'To achieve the same results, use the panelContainer or panelEl ' +
-      'JQLite elements that are referenced in MdPanelRef.');
-
-  if (!this.panelContainer) {
-    throw new Error(
-        'mdPanel: Panel does not exist yet. Call open() or attach().');
-  }
-
-  if (!onElement) {
-    this.panelContainer.toggleClass(toggleClass);
-  } else {
-    this.panelEl.toggleClass(toggleClass);
-  }
-};
-
 
 /**
  * Compiles the panel, according to the passed in config and appends it to
