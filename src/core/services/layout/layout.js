@@ -21,7 +21,6 @@
 
     /**
      * List of mediaQuery breakpoints and associated suffixes
-     *
      *   [
      *    { suffix: "sm", mediaQuery: "screen and (max-width: 599px)" },
      *    { suffix: "md", mediaQuery: "screen and (min-width: 600px) and (max-width: 959px)" }
@@ -55,12 +54,12 @@
    *  browsers... mainly IE.
    *
    *  This module registers directives that allow the same layout attributes to be
-   *  interpreted and converted to class selectors. The directive will add equivalent classes to each element that
-   *  contains a Layout directive.
+   *  interpreted and converted to class selectors. The directive will add equivalent classes to
+   *  each element that contains a Layout directive.
    *
    * ```html
    *   <div layout="column" class="layout layout-column"> My Content </div>
-   *```
+   * ```
    *
    *  ```css
    *  .layout {
@@ -101,8 +100,7 @@
 
     // Register other, special directive functions for the Layout features:
     module
-
-      .provider('$$mdLayout'     , function() {
+      .provider('$$mdLayout', function() {
         // Publish internal service for Layouts
         return {
           $get : angular.noop,
@@ -126,25 +124,6 @@
       .directive('layoutNoWrap' , attributeWithoutValue('layout-no-wrap'))
       .directive('layoutFill'   , attributeWithoutValue('layout-fill'))
 
-      // !! Deprecated attributes: use the `-lt` (aka less-than) notations
-
-      .directive('layoutLtMd'     , warnAttrNotSupported('layout-lt-md', true))
-      .directive('layoutLtLg'     , warnAttrNotSupported('layout-lt-lg', true))
-      .directive('flexLtMd'       , warnAttrNotSupported('flex-lt-md', true))
-      .directive('flexLtLg'       , warnAttrNotSupported('flex-lt-lg', true))
-
-      .directive('layoutAlignLtMd', warnAttrNotSupported('layout-align-lt-md'))
-      .directive('layoutAlignLtLg', warnAttrNotSupported('layout-align-lt-lg'))
-      .directive('flexOrderLtMd'  , warnAttrNotSupported('flex-order-lt-md'))
-      .directive('flexOrderLtLg'  , warnAttrNotSupported('flex-order-lt-lg'))
-      .directive('offsetLtMd'     , warnAttrNotSupported('flex-offset-lt-md'))
-      .directive('offsetLtLg'     , warnAttrNotSupported('flex-offset-lt-lg'))
-
-      .directive('hideLtMd'       , warnAttrNotSupported('hide-lt-md'))
-      .directive('hideLtLg'       , warnAttrNotSupported('hide-lt-lg'))
-      .directive('showLtMd'       , warnAttrNotSupported('show-lt-md'))
-      .directive('showLtLg'       , warnAttrNotSupported('show-lt-lg'))
-
       // Determine if
       .config(detectDisabledLayouts);
 
@@ -160,7 +139,6 @@
           return offset ? letter.toUpperCase() : letter;
         });
     }
-
   }
 
 
@@ -169,8 +147,6 @@
     * If yes, then immediately disable all layout API features
     *
     * Note: this attribute should be specified on either the HTML or BODY tags
-    */
-   /**
     * @ngInject
     */
    function detectDisabledLayouts() {
@@ -196,7 +172,6 @@
    *
    * Another option is to use the LayoutProvider to configure and disable the attribute
    * conversions; this would obviate the use of the `md-layout-css` directive
-   *
    */
   function disableLayoutDirective() {
     // Return a 1x-only, first-match attribute directive
@@ -239,10 +214,9 @@
 
   // *********************************************************************************
   //
-  // These functions create registration functions for AngularJS Material Layout attribute directives
-  // This provides easy translation to switch AngularJS Material attribute selectors to
-  // CLASS selectors and directives; which has huge performance implications
-  // for IE Browsers
+  // These functions create registration functions for AngularJS Material Layout attribute
+  // directives. This provides easy translation to switch AngularJS Material attribute selectors to
+  // CLASS selectors and directives; which has huge performance implications for IE Browsers.
   //
   // *********************************************************************************
 
@@ -282,8 +256,7 @@
     }];
 
     /**
-     * Add as transformed class selector(s), then
-     * remove the deprecated attribute selector
+     * Observe deprecated layout attributes and update the element's layout classes to match.
      */
     function translateWithValueToCssClass(scope, element, attrs) {
       var updateFn = updateClassWithValue(element, className, attrs);
@@ -297,7 +270,7 @@
   /**
    * Creates a registration function for AngularJS Material Layout attribute directive.
    * This is a `simple` transpose of attribute usage to class usage; where we ignore
-   * any attribute value
+   * any attribute value.
    */
   function attributeWithoutValue(className) {
     return ['$mdUtil', '$interpolate', "$log", function(_$mdUtil_, _$interpolate_, _$log_) {
@@ -329,15 +302,12 @@
     }];
 
     /**
-     * Add as transformed class selector, then
-     * remove the deprecated attribute selector
+     * Add transformed class selector.
      */
     function translateToCssClass(scope, element) {
       element.addClass(className);
     }
   }
-
-
 
   /**
    * After link-phase, do NOT remove deprecated layout attribute selector.
@@ -351,7 +321,6 @@
    * NOTE: The value must match one of the specified styles in the CSS.
    * For example `flex-gt-md="{{size}}`  where `scope.size == 47` will NOT work since
    * only breakpoints for 0, 5, 10, 15... 100, 33, 34, 66, 67 are defined.
-   *
    */
   function updateClassWithValue(element, className) {
     var lastClass;
@@ -367,18 +336,6 @@
   }
 
   /**
-   * Provide console warning that this layout attribute has been deprecated
-   *
-   */
-  function warnAttrNotSupported(className) {
-    var parts = className.split("-");
-    return ["$log", function($log) {
-      $log.warn(className + "has been deprecated. Please use a `" + parts[0] + "-gt-<xxx>` variant.");
-      return angular.noop;
-    }];
-  }
-
-  /**
    * Centralize warnings for known flexbox issues (especially IE-related issues)
    */
   function validateAttributeUsage(className, attr, element, $log){
@@ -387,7 +344,7 @@
 
     switch (className.replace(SUFFIXES,"")) {
       case "flex":
-        if ((nodeName == "md-button") || (nodeName == "fieldset")){
+        if ((nodeName === "md-button") || (nodeName === "fieldset")){
           // @see https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers
           // Use <div flex> wrapper inside (preferred) or outside
 
@@ -398,13 +355,11 @@
           $log.warn($mdUtil.supplant(message, [usage, url]));
         }
     }
-
   }
 
 
   /**
-   * For the Layout attribute value, validate or replace with default
-   * fallback value
+   * For the Layout attribute value, validate or replace with default fallback value.
    */
   function validateAttributeValue(className, value, updateFn) {
     var origValue = value;
@@ -446,7 +401,7 @@
           break;
       }
 
-      if (value != origValue) {
+      if (value !== origValue) {
         (updateFn || angular.noop)(value);
       }
     }
@@ -478,7 +433,8 @@
 
   function getNormalizedAttrValue(className, attrs, defaultVal) {
     var normalizedAttr = attrs.$normalize(className);
-    return attrs[normalizedAttr] ? attrs[normalizedAttr].trim().replace(WHITESPACE, "-") : defaultVal || null;
+    return attrs[normalizedAttr] ? attrs[normalizedAttr].trim().replace(WHITESPACE, "-") :
+      defaultVal || null;
   }
 
   function findIn(item, list, replaceWith) {
@@ -521,6 +477,4 @@
 
     return axis;
   }
-
-
 })();

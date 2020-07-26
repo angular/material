@@ -285,7 +285,7 @@ describe("Layout API ", function() {
 
       angular.forEach(allowedAttrsNoValues, function(name) {
         testNoValueAllowed(name);
-      })
+      });
     });
 
     describe('using [hide] attributes', function() {
