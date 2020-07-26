@@ -596,14 +596,6 @@ function ThemingProvider($mdColorPalette, $$mdMetaProvider) {
         });
         return self;
       };
-
-      self[colorType + 'Color'] = function() {
-        var args = Array.prototype.slice.call(arguments);
-        // eslint-disable-next-line no-console
-        console.warn('$mdThemingProviderTheme.' + colorType + 'Color() has been deprecated. ' +
-                     'Use $mdThemingProviderTheme.' + colorType + 'Palette() instead.');
-        return self[colorType + 'Palette'].apply(self, args);
-      };
     });
   }
 
