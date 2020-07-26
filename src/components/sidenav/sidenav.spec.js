@@ -169,20 +169,20 @@ describe('mdSidenav', function() {
       expect(el.parent().find('md-backdrop').hasClass('md-locked-open')).toBe(true);
     }));
 
-    it('should expose $mdMedia service as $media local in is-locked-open attribute', function() {
+    it('should expose $mdMedia service as local in is-locked-open attribute', function() {
       var mdMediaSpy = jasmine.createSpy('$mdMedia');
       module(function($provide) {
         $provide.value('$mdMedia', mdMediaSpy);
       });
       inject(function($rootScope, $animate, $document, $mdMedia) {
-        var el = setup('md-is-locked-open="$mdMedia(123)"');
+        setup('md-is-locked-open="$mdMedia(123)"');
         expect($mdMedia).toHaveBeenCalledWith(123);
       });
     });
 
     it('should trigger a resize event when opening',
       inject(function($rootScope, $animate, $$rAF, $window) {
-        var el = setup('md-is-open="show"');
+        setup('md-is-open="show"');
         var obj = { callback: function() {} };
 
         spyOn(obj, 'callback');
