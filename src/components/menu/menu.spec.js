@@ -198,7 +198,7 @@ describe('material.components.menu', function() {
       it('should focus on first item automatically', inject(function($compile, $rootScope, $document) {
         var menu = $compile(
           '<md-menu>' +
-            '<button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+            '<button ng-click="$mdMenu.open($event)">Hello World</button>' +
             '<md-menu-content>' +
               '<md-menu-item>' +
                 '<button id="menuItem0" ng-click="doSomething($event)"></button>' +
@@ -220,7 +220,7 @@ describe('material.components.menu', function() {
       it('should focus on first non-disabled item', inject(function($compile, $rootScope, $document) {
         var menu = $compile(
           '<md-menu>' +
-            '<button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+            '<button ng-click="$mdMenu.open($event)">Hello World</button>' +
             '<md-menu-content>' +
               '<md-menu-item>' +
                 '<button disabled ng-click="doSomething($event)"></button>' +
