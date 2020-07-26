@@ -208,18 +208,24 @@ function SidenavService($mdComponentRegistry, $mdUtil, $q, $log) {
  *  pressing the 'Escape' key will not close the sidenav.
  * @param {string=} md-component-id componentId to use with $mdSidenav service.
  * @param {expression=} md-is-locked-open When this expression evaluates to true,
- * the sidenav 'locks open': it falls into the content's flow instead
- * of appearing over it. This overrides the `md-is-open` attribute.
+ * the sidenav "locks open": it falls into the content's flow instead of appearing over it. This
+ * overrides the `md-is-open` attribute.
+ *
+ * The `$mdMedia()` service is exposed to the `md-is-locked-open` attribute, which
+ * can be given a media query or one of the `sm`, `gt-sm`, `md`, `gt-md`, `lg` or `gt-lg` presets.
+ * <br><br>Examples:
+ *
+ *   Lock open when `true`:<br>
+ *   `<md-sidenav md-is-locked-open="shouldLockOpen"></md-sidenav>`
+ *
+ *   Lock open when the width is `1000px` or greater:<br>
+ *   `<md-sidenav md-is-locked-open="$mdMedia('min-width: 1000px')"></md-sidenav>`
+ *
+ *   Lock open on small screens:<br>
+ *   `<md-sidenav md-is-locked-open="$mdMedia('sm')"></md-sidenav>`
+ *
  * @param {string=} md-disable-scroll-target Selector, pointing to an element, whose scrolling will
  * be disabled when the sidenav is opened. By default this is the sidenav's direct parent.
- *
-* The $mdMedia() service is exposed to the is-locked-open attribute, which
- * can be given a media query or one of the `sm`, `gt-sm`, `md`, `gt-md`, `lg` or `gt-lg` presets.
- * Examples:
- *
- *   - `<md-sidenav md-is-locked-open="shouldLockOpen"></md-sidenav>`
- *   - `<md-sidenav md-is-locked-open="$mdMedia('min-width: 1000px')"></md-sidenav>`
- *   - `<md-sidenav md-is-locked-open="$mdMedia('sm')"></md-sidenav>` (locks open on small screens)
  */
 function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInteraction, $animate,
                           $compile, $parse, $log, $q, $document, $window, $$rAF) {
@@ -251,10 +257,6 @@ function SidenavDirective($mdMedia, $mdUtil, $mdConstant, $mdTheming, $mdInterac
     var ngWindow = angular.element($window);
     var isLocked = function() {
       return isLockedOpenParsed(scope.$parent, {
-        $media: function(arg) {
-          $log.warn("$media is deprecated for is-locked-open. Use $mdMedia instead.");
-          return $mdMedia(arg);
-        },
         $mdMedia: $mdMedia
       });
     };
