@@ -458,12 +458,12 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  * @param {Object} optionsOrPreset Either provide a dialog preset returned from `alert()`,
  * `prompt()`, or `confirm()`; or an options object with the following properties:
  *   - `templateUrl` - `{string=}`: The url of a template that will be used as the content
- *   of the dialog.
+ *      of the dialog.
  *   - `template` - `{string=}`: HTML template to show in the dialog. This **must** be trusted HTML
  *      with respect to Angular's [$sce service](https://docs.angularjs.org/api/ng/service/$sce).
  *      This template should **never** be constructed with any kind of user input or user data.
  *   - `contentElement` - `{string|Element}`: Instead of using a template, which will be compiled
- *   each time a dialog opens, you can also use a DOM element.<br/>
+ *      each time a dialog opens, you can also use a DOM element.<br/>
  *     * When specifying an element, which is present on the DOM, `$mdDialog` will temporary fetch
  *     the element into the dialog and restores it at the old DOM position upon close.
  *     * When specifying a string, the string be used as a CSS selector, to lookup for the element
@@ -485,7 +485,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  *     This scope will be destroyed when the dialog is removed unless `preserveScope` is set to
  *     true.
  *   - `preserveScope` - `{boolean=}`: whether to preserve the scope when the element is removed.
- *   Default is false
+ *     Default is false
  *   - `disableParentScroll` - `{boolean=}`: Whether to disable scrolling while the dialog is open.
  *     Default true.
  *   - `hasBackdrop` - `{boolean=}`: Whether there should be an opaque backdrop behind the dialog.
@@ -497,31 +497,30 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  *   - `focusOnOpen` - `{boolean=}`: An option to override focus behavior on open. Only disable if
  *     focusing some other way, as focus management is required for dialogs to be accessible.
  *     Defaults to true.
- *   - `controller` - `{function|string=}`: The controller to associate with the dialog. The
- *   controller will be injected with the local `$mdDialog`, which passes along a scope for the
- *   dialog.
+ *   - `controller` - `{Function|string=}`: The controller to associate with the dialog. The
+ *     controller will be injected with the local `$mdDialog`, which passes along a scope for the
+ *     dialog.
  *   - `locals` - `{Object=}`: An object containing key/value pairs. The keys will be used as names
  *     of values to inject into the controller. For example, `locals: {three: 3}` would inject
  *     `three` into the controller, with the value 3. If `bindToController` is true, they will be
  *     copied to the controller instead.
  *   - `bindToController` - `bool`: bind the locals to the controller, instead of passing them in.
- *   - `resolve` - `{function=}`: Similar to locals, except it takes as values functions that return
- *   promises, and the
- *      dialog will not open until all of the promises resolve.
+ *   - `resolve` - `{Function=}`: Similar to locals, except it takes as values functions that return
+ *     promises, and the dialog will not open until all of the promises resolve.
  *   - `controllerAs` - `{string=}`: An alias to assign the controller to on the scope.
  *   - `parent` - `{element=}`: The element to append the dialog to. Defaults to appending
  *     to the root element of the application.
- *   - `onShowing` - `function(scope, element)`: Callback function used to announce the show()
- *   action is starting.
- *   - `onComplete` - `function(scope, element)`: Callback function used to announce when the show()
- *   action is finished.
- *   - `onRemoving` - `function(element, removePromise)`: Callback function used to announce the
+ *   - `onShowing` - `Function(scope, element, options: Object=, controller: Object)=`: Callback
+ *     function used to notify the show() animation is starting.
+ *   - `onComplete` - `Function(scope, element, options: Object=)=`: Callback function used to
+ *     notify when the show() animation is finished.
+ *   - `onRemoving` - `Function(element, removePromise)`: Callback function used to announce the
  *      close/hide() action is starting. This allows developers to run custom animations
  *      in parallel with the close animations.
  *   - `fullscreen` `{boolean=}`: An option to toggle whether the dialog should show in fullscreen
  *      or not. Defaults to `false`.
  *   - `multiple` `{boolean=}`: An option to allow this dialog to display over one that's currently
- *   open.
+ *     open.
  * @returns {Promise} A promise that can be resolved with `$mdDialog.hide()` or
  * rejected with `$mdDialog.cancel()`.
  */
