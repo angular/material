@@ -123,8 +123,7 @@ function MdToastDirective($mdToast) {
  * @description
  * Convenience method which builds and shows a simple toast.
  *
- * @returns {promise} A promise that can be resolved with `$mdToast.hide()` or
- * rejected with `$mdToast.cancel()`.
+ * @returns {promise} A promise that can be resolved with `$mdToast.hide()`.
  */
 
 /**
@@ -284,10 +283,9 @@ function MdToastDirective($mdToast) {
  *   - `parent` - `{element=}`: The element to append the toast to. Defaults to appending
  *     to the root element of the application.
  *
- * @returns {promise} A promise that can be resolved with `$mdToast.hide()` or
- * rejected with `$mdToast.cancel()`. `$mdToast.hide()` will resolve either with the Boolean
- * value `true` or the value passed as an argument to `$mdToast.hide()`.
- * `$mdToast.cancel()` will resolve the promise with the Boolean value `false`.
+ * @returns {promise} A promise that can be resolved with `$mdToast.hide()`. `$mdToast.hide()` will
+ * resolve either with the boolean value `true` or the value passed as an argument to
+ * `$mdToast.hide()`.
  */
 
 /**
@@ -302,24 +300,6 @@ function MdToastDirective($mdToast) {
  * @returns {promise} A promise that is called when the existing element is removed from the DOM.
  * The promise is resolved with either the Boolean value `true` or the value passed as the
  * argument to `$mdToast.hide()`.
- */
-
-/**
- * @ngdoc method
- * @name $mdToast#cancel
- *
- * @description
- * `DEPRECATED` - The promise returned from opening a toast is used only to notify about the
- * closing of the toast. As such, there isn't any reason to also allow that promise to be rejected,
- * since it's not clear what the difference between resolve and reject would be.
- *
- * Hide the existing toast and reject the promise returned from
- * `$mdToast.show()`.
- *
- * @param {*=} response An argument for the rejected promise.
- *
- * @returns {promise} A promise that is called when the existing element is removed from the DOM
- * The promise is resolved with the Boolean value `false`.
  */
 
 function MdToastProvider($$interimElementProvider) {
@@ -469,7 +449,7 @@ function MdToastProvider($$interimElementProvider) {
       element = $mdUtil.extractElementByName(element, 'md-toast', true);
       options.element = element;
 
-      options.onSwipe = function(ev, gesture) {
+      options.onSwipe = function(ev) {
         // Add the relevant swipe class to the element so it can animate correctly
         var swipe = ev.type.replace('$md.','');
         var direction = swipe.replace('swipe', '');
