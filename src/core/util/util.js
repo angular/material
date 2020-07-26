@@ -212,9 +212,9 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
     /**
      * Finds the proper focus target by searching the DOM.
      *
-     * @param containerEl
-     * @param attributeVal
-     * @returns {*}
+     * @param {!JQLite} containerEl
+     * @param {string=} attributeVal
+     * @returns {JQLite|undefined}
      */
     findFocusTarget: function(containerEl, attributeVal) {
       var AUTO_FOCUS = this.prefixer('md-autofocus', true);
@@ -222,7 +222,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
       elToFocus = scanForFocusable(containerEl, attributeVal || AUTO_FOCUS);
 
-      if (!elToFocus && attributeVal != AUTO_FOCUS) {
+      if (!elToFocus && attributeVal !== AUTO_FOCUS) {
         // Scan for deprecated attribute
         elToFocus = scanForFocusable(containerEl, this.prefixer('md-auto-focus', true));
 
@@ -237,12 +237,15 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       /**
        * Can target and nested children for specified Selector (attribute)
        * whose value may be an expression that evaluates to True/False.
+       * @param {!JQLite} target
+       * @param {!string} selector
+       * @return {JQLite|undefined}
        */
       function scanForFocusable(target, selector) {
         var elFound, items = target[0].querySelectorAll(selector);
 
         // Find the last child element with the focus attribute
-        if (items && items.length){
+        if (items && items.length) {
           items.length && angular.forEach(items, function(it) {
             it = angular.element(it);
 
@@ -258,8 +261,8 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
     /**
      * Disables scroll around the passed parent element.
-     * @param {Element|angular.JQLite=} element Origin Element (not used)
-     * @param {Element|angular.JQLite=} parent Element to disable scrolling within.
+     * @param {Element|JQLite=} element Origin Element (not used)
+     * @param {Element|JQLite=} parent Element to disable scrolling within.
      *   Defaults to body if none supplied.
      * @param {Object=} options Object of options to modify functionality
      *   - disableScrollMask Boolean of whether or not to create a scroll mask element or
@@ -291,7 +294,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       /**
        * Creates a virtual scrolling mask to prevent touchmove, keyboard, scrollbar clicking,
        * and wheel events.
-       * @param {!Element|!angular.JQLite} elementToDisable
+       * @param {!Element|!JQLite} elementToDisable
        * @param {Object=} scrollMaskOptions Object of options to modify functionality
        *   - disableScrollMask Boolean of whether or not to create a scroll mask element or
        *     use the passed parent element.
@@ -387,7 +390,8 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
         tempNode.children().css('height', '60px');
 
         $document[0].body.appendChild(tempNode[0]);
-        this.floatingScrollbars.cached = (tempNode[0].offsetWidth == tempNode[0].childNodes[0].offsetWidth);
+        this.floatingScrollbars.cached =
+          (tempNode[0].offsetWidth === tempNode[0].childNodes[0].offsetWidth);
         tempNode.remove();
       }
       return this.floatingScrollbars.cached;
@@ -395,7 +399,7 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
 
     /**
      * Mobile safari only allows you to set focus in click event listeners.
-     * @param {Element|angular.JQLite} element to focus
+     * @param {Element|JQLite} element to focus
      */
     forceFocus: function(element) {
       var node = element[0] || element;
