@@ -298,7 +298,6 @@
         secondaryPlaceholder: '@?',
         maxChips: '@?mdMaxChips',
         transformChip: '&mdTransformChip',
-        onAppend: '&?mdOnAppend',
         onAdd: '&?mdOnAdd',
         onRemove: '&?mdOnRemove',
         addedMessage: '@?mdAddedMessage',
@@ -415,13 +414,6 @@
           // If an `md-transform-chip` attribute was set, tell the controller to use the expression
           // before appending chips.
           if (attrs.mdTransformChip) mdChipsCtrl.useTransformChipExpression();
-
-          // If an `md-on-append` attribute was set, tell the controller to use the expression
-          // when appending chips.
-          //
-          // TODO: Remove this now that 1.0 is long since released
-          // DEPRECATED: Will remove in official 1.0 release
-          if (attrs.mdOnAppend) mdChipsCtrl.useOnAppendExpression();
 
           // If an `md-on-add` attribute was set, tell the controller to use the expression
           // when adding chips.
