@@ -737,18 +737,8 @@ function MdDialogProvider($$interimElementProvider) {
       return dialogPopIn(element, options)
         .then(function() {
           lockScreenReader(element, options);
-          warnDeprecatedActions();
           focusOnOpen();
         });
-
-      /**
-       * Check to see if they used the deprecated .md-actions class and log a warning
-       */
-      function warnDeprecatedActions() {
-        if (element[0].querySelector('.md-actions')) {
-          $log.warn('Using a class of md-actions is deprecated, please use <md-dialog-actions>.');
-        }
-      }
 
       /**
        * For alerts, focus on content... otherwise focus on
@@ -762,7 +752,7 @@ function MdDialogProvider($$interimElementProvider) {
 
         /**
          * If no element with class dialog-close, try to find the last
-         * button child in md-actions and assume it is a close button.
+         * button child in md-dialog-actions and assume it is a close button.
          *
          * If we find no actions at all, log a warning to the console.
          */
