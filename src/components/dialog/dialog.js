@@ -561,17 +561,17 @@ function MdDialogProvider($$interimElementProvider) {
       options: dialogDefaultOptions
     })
     .addPreset('alert', {
-      methods: ['title', 'htmlContent', 'textContent', 'content', 'ariaLabel', 'ok', 'theme',
+      methods: ['title', 'htmlContent', 'textContent', 'ariaLabel', 'ok', 'theme',
           'css'],
       options: advancedDialogOptions
     })
     .addPreset('confirm', {
-      methods: ['title', 'htmlContent', 'textContent', 'content', 'ariaLabel', 'ok', 'cancel',
+      methods: ['title', 'htmlContent', 'textContent', 'ariaLabel', 'ok', 'cancel',
           'theme', 'css'],
       options: advancedDialogOptions
     })
     .addPreset('prompt', {
-      methods: ['title', 'htmlContent', 'textContent', 'initialValue', 'content', 'placeholder', 'ariaLabel',
+      methods: ['title', 'htmlContent', 'textContent', 'initialValue', 'placeholder', 'ariaLabel',
           'ok', 'cancel', 'theme', 'css', 'required'],
       options: advancedDialogOptions
     });
@@ -698,8 +698,7 @@ function MdDialogProvider($$interimElementProvider) {
 
       if (controller) {
         var mdHtmlContent = controller.htmlContent || options.htmlContent || '';
-        var mdTextContent = controller.textContent || options.textContent ||
-            controller.content || options.content || '';
+        var mdTextContent = controller.textContent || options.textContent || '';
 
         if (mdHtmlContent && !$injector.has('$sanitize')) {
           throw Error('The ngSanitize module must be loaded in order to use htmlContent.');
@@ -741,8 +740,7 @@ function MdDialogProvider($$interimElementProvider) {
         });
 
       /**
-       * For alerts, focus on content... otherwise focus on
-       * the close button (or equivalent)
+       * For alerts, focus on content... otherwise focus on the close button (or equivalent)
        */
       function focusOnOpen() {
         if (options.focusOnOpen) {

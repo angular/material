@@ -33,8 +33,7 @@ describe('$mdDialog', function() {
 
   describe('#alert()', function() {
     hasConfigurationMethods('alert', [
-      'title', 'htmlContent', 'textContent', 'ariaLabel',
-      'ok', 'targetEvent', 'theme'
+      'title', 'htmlContent', 'textContent', 'ariaLabel', 'ok', 'targetEvent', 'theme'
     ]);
 
     it('shows a basic confirm dialog without content', inject(function($animate, $rootScope, $mdDialog) {
@@ -342,8 +341,7 @@ describe('$mdDialog', function() {
 
   describe('#confirm()', function() {
     hasConfigurationMethods('confirm', [
-      'title', 'htmlContent', 'textContent', 'ariaLabel',
-      'ok', 'cancel', 'targetEvent', 'theme'
+      'title', 'htmlContent', 'textContent', 'ariaLabel', 'ok', 'cancel', 'targetEvent', 'theme'
     ]);
 
     it('shows a basic confirm dialog with simple text content', inject(function($rootScope, $mdDialog) {
@@ -403,26 +401,6 @@ describe('$mdDialog', function() {
       var content = angular.element(container[0].querySelector('.mine'));
 
       expect(content.text()).toBe('Choose');
-    }));
-
-    it('should support the deprecated `content` method as text', inject(function($mdDialog) {
-      var parent = angular.element('<div>');
-
-      $mdDialog.show(
-        $mdDialog.confirm({
-          parent: parent,
-          ok: 'Next',
-          cancel: 'Back',
-          title: 'Which Way ',
-          content: '<div class="mine">Choose</div>'
-        })
-      );
-
-      runAnimation();
-
-      var contentBody = parent[0].querySelector('.md-dialog-content-body');
-
-      expect(contentBody.textContent).toBe('<div class="mine">Choose</div>');
     }));
 
     it('should NOT allow custom elements in confirm htmlContent', inject(function($mdDialog) {
@@ -674,7 +652,7 @@ describe('$mdDialog', function() {
 
   describe('#prompt()', function() {
     hasConfigurationMethods('prompt', ['title', 'htmlContent', 'textContent',
-      'content', 'placeholder', 'ariaLabel', 'ok', 'cancel', 'theme', 'css'
+      'placeholder', 'ariaLabel', 'ok', 'cancel', 'theme', 'css'
     ]);
 
     it('shows a basic prompt dialog', inject(function($animate, $rootScope, $mdDialog) {
