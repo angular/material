@@ -154,29 +154,29 @@ function MdCompilerProvider() {
    *        dependency. If the result is a promise, it is resolved before its value is
    *        injected into the controller.
    *
-   * @returns {Object} promise A promise, which will be resolved with a `compileData` object.
-   * `compileData` has the following properties:
+   * @returns {Q.Promise<{element: JQLite, link: Function, locals: Object, cleanup: any,
+   *  controller: Object=}>} promise A promise, which will be resolved with a `compileData` object.
+   *  `compileData` has the following properties:
    *
-   *   - `element` - `{Element}`: an uncompiled element matching the provided template.
+   *   - `element` - `{JQLite}`: an uncompiled element matching the provided template.
    *   - `link` - `{function(scope)}`: A link function, which, when called, will compile
    *     the element and instantiate the provided controller (if given).
    *   - `locals` - `{Object}`: The locals which will be passed into the controller once `link` is
    *     called. If `bindToController` is true, they will be copied to the ctrl instead
    */
   MdCompilerService.prototype.compile = function(options) {
-
     if (options.contentElement) {
       return this._prepareContentElement(options);
     } else {
       return this._compileTemplate(options);
     }
-
   };
 
   /**
    * Instead of compiling any template, the compiler just fetches an existing HTML element from the
    * DOM and provides a restore function to put the element back it old DOM position.
    * @param {!Object} options Options to be used for the compiler.
+   * @returns {Q.Promise<{element: JQLite, link: Function, locals: Object, cleanup: any}>}
    */
   MdCompilerService.prototype._prepareContentElement = function(options) {
 
@@ -196,7 +196,8 @@ function MdCompilerProvider() {
   /**
    * Compiles a template by considering all options and waiting for all resolves to be ready.
    * @param {!Object} options Compile options
-   * @returns {!Object} Compile data with link function.
+   * @returns {!Q.Promise<{element: JQLite, link: Function, locals: Object, cleanup: any}>} Compile
+   *  data with link function.
    */
   MdCompilerService.prototype._compileTemplate = function(options) {
 
@@ -245,7 +246,7 @@ function MdCompilerProvider() {
    * @param {!Object} locals Locals to be injected to the controller if present
    * @param {!JQLite} element Element to be compiled and linked
    * @param {!Object} options Options to be used for linking.
-   * @returns {!Object} Compile data with link function.
+   * @returns {!{element: JQLite, link: Function, locals: Object, cleanup: any, controller: Object}} Compile data with link function.
    */
   MdCompilerService.prototype._compileElement = function(locals, element, options) {
     var self = this;

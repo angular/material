@@ -446,7 +446,7 @@ function MdToastProvider($$interimElementProvider) {
             }
           }
 
-          // We have to return the innerHTMl, because we do not want to have the `md-template`
+          // We have to return the innerHTML, because we do not want to have the `md-template`
           // element to be the root element of our interimElement.
           return templateRoot.innerHTML;
         }

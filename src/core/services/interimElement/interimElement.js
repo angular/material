@@ -278,7 +278,7 @@ function InterimElementProvider() {
        * Adds the `$interimElement` to the DOM and returns a special promise that will be resolved
        * or rejected with hide or cancel, respectively.
        *
-       * @param {object} options map of options and values
+       * @param {Object} options map of options and values
        * @returns {Promise} a Promise that will be resolved when hide() is called or rejected when
        *  cancel() is called.
        */
@@ -491,8 +491,9 @@ function InterimElementProvider() {
         };
 
         /**
-         * Compile, link, and show this interim element
-         * Use optional autoHided and transition-in effects
+         * Compile, link, and show this interim element. Use optional autoHide and transition-in
+         * effects.
+         * @return {Q.Promise}
          */
         function createAndTransitionIn() {
           return $q(function(resolve, reject) {
@@ -606,6 +607,9 @@ function InterimElementProvider() {
 
         /**
          * Compile an element with a templateUrl, controller, and locals
+         * @param {Object} options
+         * @return {Q.Promise<{element: JQLite=, link: Function, locals: Object, cleanup: any=,
+         *  controller: Object=}>}
          */
         function compileElement(options) {
 
@@ -622,9 +626,12 @@ function InterimElementProvider() {
         }
 
         /**
-         *  Link an element with compiled configuration
+         * Link an element with compiled configuration
+         * @param {{element: JQLite=, link: Function, locals: Object, controller: Object=}} compileData
+         * @param {Object} options
+         * @return {JQLite}
          */
-        function linkElement(compileData, options){
+        function linkElement(compileData, options) {
           angular.extend(compileData.locals, options);
 
           var element = compileData.link(options.scope);
@@ -638,7 +645,10 @@ function InterimElementProvider() {
         }
 
         /**
-         * Search for parent at insertion time, if not specified
+         * Search for parent at insertion time, if not specified.
+         * @param {JQLite} element
+         * @param {Object} options
+         * @return {JQLite}
          */
         function findParent(element, options) {
           var parent = options.parent;
@@ -660,7 +670,7 @@ function InterimElementProvider() {
               el = $rootElement[0].querySelector(':not(svg) > body');
             }
             if (!el) el = $rootElement[0];
-            if (el.nodeName == '#comment') {
+            if (el.nodeName === '#comment') {
               el = $document[0].body;
             }
             return angular.element(el);
@@ -690,8 +700,12 @@ function InterimElementProvider() {
         }
 
         /**
-         * Show the element ( with transitions), notify complete and start
-         * optional auto-Hide
+         * Show the element (with transitions), notify complete and start optional auto hiding
+         * timer.
+         * @param {JQLite} element
+         * @param {Object} options
+         * @param {Object} controller
+         * @return {Q.Promise<JQLite>}
          */
         function showElement(element, options, controller) {
           // Trigger onShowing callback before the `show()` starts
@@ -701,6 +715,7 @@ function InterimElementProvider() {
 
           // Necessary for consistency between AngularJS 1.5 and 1.6.
           try {
+            // This fourth controller parameter is used by $mdDialog in beforeShow().
             notifyShowing(options.scope, element, options, controller);
           } catch (e) {
             return $q.reject(e);
@@ -709,7 +724,7 @@ function InterimElementProvider() {
           return $q(function (resolve, reject) {
             try {
               // Start transitionIn
-              $q.when(options.onShow(options.scope, element, options, controller))
+              $q.when(options.onShow(options.scope, element, options))
                 .then(function () {
                   notifyComplete(options.scope, element, options);
                   startAutoHide();
