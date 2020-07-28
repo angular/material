@@ -17,7 +17,7 @@ md-datepicker {
 
 .md-inline-form {
   md-datepicker {
-    margin-top: 12px;
+    margin-top: $input-container-vertical-margin - 6px;
   }
 }
 

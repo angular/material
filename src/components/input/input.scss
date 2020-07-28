@@ -3,7 +3,7 @@ md-input-container {
   display: inline-block;
   position: relative;
   padding: $input-container-padding;
-  margin: 18px 0;
+  margin: $input-container-vertical-margin $input-container-horizontal-margin;
   vertical-align: middle;
 
   &.md-block {
@@ -51,15 +51,15 @@ md-input-container {
   input[type="month"],
   input[type="time"],
   input[type="week"] {
-    min-height: $input-line-height;
+    min-height: $input-line-height + $input-padding-top * 2;
   }
   textarea {
     resize: none;
     overflow: hidden;
 
     &.md-input {
-      min-height: $input-line-height;
-      -ms-flex-preferred-size: auto; //IE fix
+      min-height: $input-line-height + $input-padding-top * 2;
+      -ms-flex-preferred-size: auto; // IE fix
     }
 
     // The height usually gets set to 1 line by `.md-input`.
@@ -153,12 +153,12 @@ md-input-container {
 
     background: none;
     padding-top: $input-padding-top;
-    padding-bottom: $input-border-width-focused - $input-border-width-default;
+    padding-bottom: $input-padding-bottom;
     @include rtl(padding-left, 0, $input-container-padding);
     @include rtl(padding-right, $input-container-padding, 0);
     border-width: 0 0 $input-border-width-default 0;
     line-height: $input-line-height;
-    height: $input-line-height + ($input-padding-top * 2);
+    height: $input-line-height + $input-padding-top * 2;
     -ms-flex-preferred-size: $input-line-height; //IE fix
     border-radius: 0;
     border-style: solid; // Firefox fix
@@ -200,7 +200,6 @@ md-input-container {
     order: 4;
     overflow: hidden;
     @include rtl(clear, left, right);
-
   }
 
   .md-input-message-animation, .md-char-counter {
@@ -213,9 +212,6 @@ md-input-container {
     // Default state for messages is to be visible
     opacity: 1;
     margin-top: 0;
-
-    // Add some top padding which is equal to half the difference between the expected height
-    // and the actual height
     padding-top: $error-padding-top;
 
     &:not(.md-char-counter) {

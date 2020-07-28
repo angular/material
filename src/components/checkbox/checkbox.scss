@@ -12,15 +12,8 @@ $checkbox-min-height: 48px !default;
 $checkbox-min-height-dense: 36px !default;
 $checkbox-text-margin: 36px !default;
 
-// from input.scss
-$input-container-margin-top: 18px !default;
-$input-container-padding-top: 2px !default;
-$input-padding-top: 2px !default;
-$input-padding-bottom: 1px !default;
-$input-border: 1px !default;
-
-$md-inline-alignment: $input-container-margin-top + $input-container-padding-top
-                    + $input-padding-top + $input-padding-bottom + $input-border
+$md-inline-alignment: $input-container-vertical-margin + $input-container-padding
+                    + $input-padding-top + $input-padding-bottom + $input-border-width-default
                     - $checkbox-text-margin-top !default;
 
 .md-inline-form {
