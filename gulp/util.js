@@ -184,6 +184,9 @@ function buildModule(module, opts) {
    */
   function buildModuleStyles(name) {
     let files = [];
+    const inputVariableConsumers = [
+      'input', 'select', 'checkbox', 'datepicker', 'radioButton', 'switch'
+    ];
     config.themeBaseFiles.forEach(function(fileGlob) {
       files = files.concat(glob(fileGlob, {cwd: ROOT}));
     });
@@ -191,7 +194,7 @@ function buildModule(module, opts) {
     // Handle md-input and md-input-container variables that need to be shared with md-select
     // in order to orchestrate identical layouts and alignments. In the future, it may be necessary
     // to also use these variables with md-datepicker and md-autocomplete.
-    if (name === 'input' || name === 'select') {
+    if (inputVariableConsumers.includes(name)) {
       files = files.concat(glob(config.inputVariables, {cwd: ROOT}));
     }
 
