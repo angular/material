@@ -1,9 +1,6 @@
 describe('md-input-container directive', function() {
   var $rootScope, $compile, $timeout, pageScope, $material;
 
-  var invalidAnimation, messagesAnimation, messageAnimation;
-  var $animProvider;
-
   beforeEach(module('ngAria', 'material.components.input', 'ngMessages'));
 
   // Setup/grab our variables
@@ -916,8 +913,6 @@ describe('md-input-container directive', function() {
         createAndAppendElement('rows="5"');
         ngTextarea.val('1\n2\n3\n4\n5\n6\n7');
         ngTextarea.triggerHandler('input');
-        expect(textarea.rows).toBe(7);
-
         ngTextarea.val('');
         ngTextarea.triggerHandler('input');
         expect(textarea.rows).toBe(5);

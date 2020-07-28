@@ -146,14 +146,21 @@ md-radio-group {
 
 .md-inline-form {
   md-radio-group {
-    margin: 18px 0 19px;
+    margin: $input-container-vertical-margin 0 $input-container-vertical-margin + 1px;
     md-radio-button {
       display: inline-block;
       height: 30px;
-      padding: 2px;
+      padding: 2px 10px 2px 6px;
       box-sizing: border-box;
       margin-top: 0;
       margin-bottom: 0;
+
+      .md-label {
+        top: 4px;
+      }
+      .md-container {
+        margin-top: 2px;
+      }
     }
   }
 }
