@@ -1,3 +1,97 @@
+<a name="1.2.0-rc.2"></a>
+
+# [1.2.0-rc.2](https://github.com/angular/material/compare/v1.2.0-rc.1...v1.2.0-rc.2) (2020-07-28)
+
+
+### Bug Fixes
+
+* **checkbox, date-picker, input, radio-button, select, switch:** md-inline-form support ([b3e9ffe](https://github.com/angular/material/commit/b3e9ffec50cdfb560fa4bf0a32df3ad22d553291))
+* **select:** support for md-inline-form, more configurable SCSS ([0d4d37f](https://github.com/angular/material/commit/0d4d37f079c44979be934c5babd4ed1c62383762)), closes [#8712](https://github.com/angular/material/issues/8712) [#8716](https://github.com/angular/material/issues/8716)
+
+
+### Code Refactoring
+
+* **autofocus:** remove deprecated md-auto-focus attribute ([bf0ec8c](https://github.com/angular/material/commit/bf0ec8c853c17cd60547ead11b2c1e9310ca8377))
+* **card:** remove styles for md-actions class ([75aa734](https://github.com/angular/material/commit/75aa734674324df42b3e5e57508281f60d576090))
+* **chips:** remove deprecated md-on-append attribute ([1a2e3d0](https://github.com/angular/material/commit/1a2e3d0b424fec4d2e3f68071b6520a5477284c8))
+* **dialog:** remove deprecated content options and methods ([e3b52a0](https://github.com/angular/material/commit/e3b52a0c84134faaa7371041b732ee4c3f1ec713))
+* **dialog:** remove styles for deprecated md-actions class ([93e2081](https://github.com/angular/material/commit/93e20819053117fa2b8679178840bbb65c97a301))
+* **layout:** remove deprecated *-lt-* ("less than") attributes ([e8e785e](https://github.com/angular/material/commit/e8e785e5a3a118026ca8e10e087bc76aa8db745a))
+* **menu:** removed deprecated $mdOpenMenu API ([f023ce7](https://github.com/angular/material/commit/f023ce766a816035fb3de8c1a47f9d089cb2f11d))
+* **panel:** remove deprecated MdPanelRef.addClass/removeClass/toggleClass ([bafbd96](https://github.com/angular/material/commit/bafbd96905a016878fb45f5c6ff9992d0d743e6d)), closes [#9310](https://github.com/angular/material/issues/9310)
+* **sidenav:** remove deprecated access to $media in md-is-locked-open ([baa7563](https://github.com/angular/material/commit/baa7563fc9ef32c179add7071e794771f729c991))
+* **sidenav:** remove md-sidenav-focus directive ([8fc36d4](https://github.com/angular/material/commit/8fc36d4a7ce1f15cb1398a31e5ea6cea36bcfcda))
+* **theming:** remove support for deprecated $mdThemingProviderTheme.primaryColor() and related APIs ([00a50de](https://github.com/angular/material/commit/00a50deb39997c73c89e5567b76b028f0cf6e16c))
+* **tabs:** remove deprecated md-no-disconnect ([05bee8f](https://github.com/angular/material/commit/05bee8fb2350b066a778052db08a6009c0465ee1))
+
+### Features
+
+* **layouts:** add mixin for responsive support of rows ([c2c336b](https://github.com/angular/material/commit/c2c336b946b8c017c12dcb80955767339da3eb3b)), closes [#9112](https://github.com/angular/material/issues/9112) [#9220](https://github.com/angular/material/issues/9220)
+
+
+### BREAKING CHANGES
+
+* **layouts:** The way that margins are applied to `md-checkbox`, `md-input-container`, `md-radio-group`, and `md-select` has been changed. You can now use the `$default-horizontal-margin` Sass variable to override the default `16px` horizontal margin size. As part of this, `md-radio-button`s inside of `layout="row"` containers are now aligned vertically with other content as they no longer have a `16px` `margin-bottom`. If you have previously added custom styles, to your components inside of a row layout, in order to give them extra `margin-right` in LTR or `margin-left` in RTL, you will need to re-evaluate those styles. In most cases, they can now be removed.
+* **sidenav:** Removed access for the deprecated `$media` service in `md-is-locked-open`. This was deprecated in favor of the `$mdMedia` service. The functionality is the same and only a rename to the current name of the service is required.
+* **dialog:** Removed support for the deprecated `.content('string')` methods and options. These were deprecated in favor of `.textContent('string')` and `.htmlContent('sanitized-string')'` methods and their associated options. Please note that use of `.htmlContent` requires that the `ngSanitize` module be loaded.
+
+If you have
+```js
+  alert = $mdDialog.alert()
+    .content('This is an example.');
+```
+It needs to be changed to
+```js
+  alert = $mdDialog.alert()
+    .textContent('This is an example.');
+```
+If you have
+```js
+  alert = $mdDialog.alert({
+    content: 'This is an example.'
+  });
+```
+It needs to be changed to
+```js
+  alert = $mdDialog.alert({
+    textContent: 'This is an example.'
+  });
+```
+* **theming:** Removed support for the deprecated `$mdThemingProviderTheme.primaryColor()` and the related accent/warn/background APIs. These were deprecated in favor of `$mdThemingProviderTheme.primaryPalette()` (and accent/warn/background) in 2015 and they have been logging warnings when used since then.
+* **layout:** Removed the deprecated, undocumented `*-lt-*` layout attributes and classes. This includes the following attributes and their matching classes, which have been giving deprecation warnings since 2015:
+- layout-lt-md
+- layout-lt-lg
+- flex-lt-md
+- flex-lt-lg
+- layout-align-lt-md
+- layout-align-lt-lg
+- flex-order-lt-md
+- flex-order-lt-lg
+- flex-offset-lt-md
+- flex-offset-lt-lg
+- hide-lt-md
+- hide-lt-lg
+- show-lt-md
+- show-lt-lg
+
+* **autofocus:** Removed the deprecated `md-auto-focus` directive. It was deprecated in favor of `md-autofocus`. Please see the [md-autofocus Docs](https://material.angularjs.org/latest/api/directive/mdAutofocus) for examples.
+* **sidenav:** Removed the `md-sidenav-focus` directive. It was deprecated in favor of `md-autofocus`. Please see the [md-autofocus Docs](https://material.angularjs.org/latest/api/directive/mdAutofocus) and [md-sidenav Basic Usage Demo](https://material.angularjs.org/latest/demo/sidenav#basic-usage) for examples.
+* **menu:** Removed the deprecated `$mdOpenMenu` API. It was deprecated in favor of `$mdMenu.open`.
+* **chips:** Removed the deprecated, since 2015, `md-on-append` attribute. It was deprecated in favor of `md-transform-chip` or the simple notifier `md-on-add`. Please see the [md-chips Demos](https://material.angularjs.org/latest/demo/chips) for examples of using `md-transform-chip`.
+* **card:** Removed support for the `class="md-actions"` inside of an `md-card` template. This is deprecated in favor of using the `<md-card-actions>` element.
+* **dialog:** Removed support for the deprecated `class="md-actions"` inside of an `md-dialog` template. This was deprecated in favor of using the `<md-dialog-actions>` element.
+* **panel:** The deprecated `MdPanelRef.addClass()`, `MdPanelRef.removeClass()`, and `MdPanelRef.toggleClass()` functions have been removed. These were deprecated in 2016 in favor of using the `panelContainer` or `panelEl` JQLite elements that are referenced in the [MdPanelRef](https://material.angularjs.org/latest/api/type/MdPanelRef) object.
+
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.2.0-rc.2 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="clshortfuse" src="https://avatars3.githubusercontent.com/u/9271155?v=4&s=117" width="117">](https://github.com/clshortfuse) |[<img alt="wagnermaciel" src="https://avatars1.githubusercontent.com/u/25158423?v=4&s=117" width="117">](https://github.com/wagnermaciel) |
+:---: |:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[clshortfuse](https://github.com/clshortfuse) |[wagnermaciel](https://github.com/wagnermaciel) |
+
+
 <a name="1.2.0-rc.1"></a>
 # [1.2.0-rc.1](https://github.com/angular/material/compare/v1.1.24...v1.2.0-rc.1) (2020-07-23)
 
