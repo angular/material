@@ -126,7 +126,7 @@ angular
  *     An exact match is when only one match is displayed.
  * @param {boolean=} md-match-case-insensitive When set and using `md-select-on-match`, autocomplete
  *     will select on case-insensitive match.
- * @param {string=} md-escape-options Override escape key logic. Default is `blur clear`.<br/>
+ * @param {string=} md-escape-options Override escape key logic. Default is `clear`.<br/>
  *     Options: `blur`, `clear`, `none`.
  * @param {string=} md-dropdown-items Specifies the maximum amount of items to be shown in
  *     the dropdown.<br/><br/>
