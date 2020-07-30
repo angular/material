@@ -14,10 +14,12 @@
      });
 
   /**
-   * iterator is a list facade to easily support iteration and accessors
+   * iterator is a list facade to easily support iteration and accessors/
    *
-   * @param items Array list which this iterator will enumerate
-   * @param reloop Boolean enables iterator to consider the list as an endless reloop
+   * @param {any[]} items Array list which this iterator will enumerate
+   * @param {boolean=} reloop enables iterator to consider the list as an endless loop
+   * @return {{add: add, next: (function()), last: (function(): any|null), previous: (function()), count: (function(): number), hasNext: (function(*=): Array.length|*|number|boolean), inRange: (function(*): boolean), remove: remove, contains: (function(*=): *|boolean), itemAt: (function(*=): any|null), findBy: (function(*, *): *[]), hasPrevious: (function(*=): Array.length|*|number|boolean), items: (function(): *[]), indexOf: (function(*=): number), first: (function(): any|null)}}
+   * @constructor
    */
   function MdIterator(items, reloop) {
     var trueFn = function() { return true; };
@@ -51,7 +53,6 @@
 
       hasPrevious: hasPrevious,
       hasNext: hasNext
-
     };
 
     /**
