@@ -1,42 +1,33 @@
-
 body {
   padding: 20px;
 }
-
 hr {
   margin-left: -20px;
   opacity: 0.3;
 }
-
 md-radio-group {
   width: 150px;
 }
-
 p:last-child {
   padding-bottom: 50px;
 }
-
-
-[ng-controller] {
+form {
   padding: 0 20px;
 }
-
 .radioValue {
   margin-left: 5px;
   color: #0f9d58;
   font-weight: bold;
-  padding:5px;
-
 }
-
 md-icon {
   margin: 0 20px 20px;
   width: 128px;
   height: 128px;
 }
-
-
 .ipsum {
   color: saddlebrown;
   font-size: 0.9em;
+}
+.demo-description {
+  margin-bottom: 0;
 }

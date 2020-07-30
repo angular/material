@@ -1,5 +1,5 @@
 angular
-  .module('radioDemo2', ['ngMaterial'])
+  .module('radioMultiColumnDemo', ['ngMaterial'])
   .controller('ContactController', function($scope, $filter) {
     var self = this;
 
