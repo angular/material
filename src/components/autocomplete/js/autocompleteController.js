@@ -54,6 +54,7 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   ctrl.isReadonly = null;
   ctrl.hasNotFound = false;
   ctrl.selectedMessage = $scope.selectedMessage || 'selected';
+  ctrl.defaultEscapeOptions = 'clear';
 
   // Public Exported Methods
   ctrl.keydown = keydown;
@@ -804,7 +805,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
    * @returns {boolean} if the specified escape option is set, return true. Return false otherwise.
    */
   function hasEscapeOption(option) {
-    return !$scope.escapeOptions || $scope.escapeOptions.toLowerCase().indexOf(option) !== -1;
+    if (!angular.isString($scope.escapeOptions)) {
+      return ctrl.defaultEscapeOptions.indexOf(option) !== -1;
+    } else {
+      return $scope.escapeOptions.toLowerCase().indexOf(option) !== -1;
+    }
   }
 
   /**
