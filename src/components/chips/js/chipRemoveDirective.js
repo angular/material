@@ -24,8 +24,8 @@ angular
  * ### With Standard Chips
  * <hljs lang="html">
  *   <md-chips ...>
- *     <button md-chip-remove class="md-primary" type="button" aria-label="Remove {{$chip}}">
- *       <md-icon md-svg-icon="md-close"></md-icon>
+ *     <button md-chip-remove type="button" aria-label="Remove {{$chip}}">
+ *       <md-icon md-svg-icon="md-cancel"></md-icon>
  *     </button>
  *   </md-chips>
  * </hljs>
@@ -33,8 +33,8 @@ angular
  * ### With Object Chips
  * <hljs lang="html">
  *   <md-chips ...>
- *     <button md-chip-remove class="md-primary" type="button" aria-label="Remove {{$chip.name}}">
- *       <md-icon md-svg-icon="md-close"></md-icon>
+ *     <button md-chip-remove type="button" aria-label="Remove {{$chip.name}}">
+ *       <md-icon md-svg-icon="md-cancel"></md-icon>
  *     </button>
  *   </md-chips>
  * </hljs>
@@ -57,7 +57,7 @@ function MdChipRemove ($timeout) {
   };
 
   function postLink(scope, element, attr, ctrl) {
-    element.on('click', function(event) {
+    element.on('click', function() {
       scope.$apply(function() {
         ctrl.removeChip(scope.$$replacedScope.$index);
       });
