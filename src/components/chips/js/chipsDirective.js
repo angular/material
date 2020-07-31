@@ -33,7 +33,7 @@
    * <ul style="padding-left:20px;">
    *
    *   <ul>Style
-   *     <li>Colours for hover, press states (ripple?).</li>
+   *     <li>Colors for hover, press states (ripple?).</li>
    *   </ul>
    *
    *   <ul>Validation
@@ -135,6 +135,9 @@
    * @param {expression=} md-on-select An expression which will be called when a chip is selected.
    * @param {boolean=} md-require-match If true, and the chips template contains an autocomplete,
    *    only allow selection of pre-defined chips (i.e. you cannot add new ones).
+   * @param {string=} md-input-class This class will be applied to the child input for custom
+   *    styling. If you are using an `md-autocomplete`, then you need to put this attribute on the
+   *    `md-autocomplete` rather than the `md-chips`.
    * @param {string=} input-aria-describedby A space-separated list of element IDs. This should
    *     contain the IDs of any elements that describe this autocomplete. Screen readers will read
    *     the content of these elements at the end of announcing that the chips input has been
@@ -249,7 +252,7 @@
 
   var CHIP_INPUT_TEMPLATE = '\
         <input\
-            class="md-input"\
+            class="md-input{{ $mdChipsCtrl.inputClass ? \' \' + $mdChipsCtrl.inputClass: \'\'}}"\
             tabindex="0"\
             aria-label="{{$mdChipsCtrl.inputAriaLabel}}"\
             placeholder="{{$mdChipsCtrl.getPlaceholder()}}"\
@@ -306,6 +309,7 @@
         addedMessage: '@?mdAddedMessage',
         removedMessage: '@?mdRemovedMessage',
         onSelect: '&?mdOnSelect',
+        inputClass: '@?mdInputClass',
         inputAriaDescribedBy: '@?inputAriaDescribedby',
         inputAriaLabelledBy: '@?inputAriaLabelledby',
         inputAriaLabel: '@?',

@@ -82,6 +82,12 @@ function MdChipsCtrl ($scope, $attrs, $mdConstant, $log, $element, $timeout, $md
   this.addOnBlur = $mdUtil.parseAttributeBoolean($attrs.mdAddOnBlur);
 
   /**
+   * The class names to apply to the autocomplete or input.
+   * @type {string}
+   */
+  this.inputClass = '';
+
+  /**
    * The text to be used as the aria-label for the input.
    * @type {string}
    */

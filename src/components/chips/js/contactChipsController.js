@@ -71,6 +71,9 @@ MdContactChipsCtrl.prototype.setupChipsAria = function() {
   if (this.inputAriaLabel) {
     chipsCtrl.inputAriaLabel = this.inputAriaLabel;
   }
+  if (this.inputClass) {
+    chipsCtrl.inputClass = this.inputClass;
+  }
 };
 
 MdContactChipsCtrl.prototype.setupAutocompleteAria = function() {
