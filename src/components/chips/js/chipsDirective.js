@@ -400,7 +400,7 @@
         mdChipsCtrl.chipRemoveTemplate   = chipRemoveTemplate;
         mdChipsCtrl.chipInputTemplate    = chipInputTemplate;
 
-        mdChipsCtrl.mdCloseIcon = $$mdSvgRegistry.mdClose;
+        mdChipsCtrl.mdCloseIcon = $$mdSvgRegistry.mdCancel;
 
         element
             .attr({ tabindex: -1 })
