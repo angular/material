@@ -1,11 +1,16 @@
 @mixin md-tab-primary {
   > md-tabs-wrapper {
     background-color: '{{primary-color}}';
+
+    md-prev-button md-icon,
+    md-next-button md-icon {
+      color: '{{primary-contrast}}';
+    }
     > md-tabs-canvas {
       > md-pagination-wrapper {
         > md-tab-item:not([disabled]) {
           &, md-icon {
-            color: '{{primary-100}}';
+            color: '{{primary-contrast-0.7}}';
           }
           &.md-active, &.md-focused {
             &, md-icon {
@@ -16,27 +21,46 @@
             background: '{{primary-contrast-0.1}}';
           }
         }
+        > md-ink-bar {
+          color: '{{accent-color}}';
+          background: '{{accent-color}}';
+        }
       }
+    }
+  }
+  &.md-no-ink-bar-color {
+    &>md-tabs-wrapper>md-tabs-canvas>md-pagination-wrapper>md-ink-bar {
+      color: '{{primary-contrast}}';
+      background: '{{primary-contrast}}';
     }
   }
 }
 @mixin md-tab-warn {
   > md-tabs-wrapper {
-    background-color: '{{warn-color}}';
+    background-color: '{{warn-500}}';
+
+    md-prev-button md-icon,
+    md-next-button md-icon {
+      color: '{{warn-500-contrast}}';
+    }
     > md-tabs-canvas {
       > md-pagination-wrapper {
         > md-tab-item:not([disabled]) {
           &, md-icon {
-            color: '{{warn-100}}';
+            color: '{{warn-500-contrast-0.7}}';
           }
           &.md-active, &.md-focused {
             &, md-icon {
-              color: '{{warn-contrast}}';
+              color: '{{warn-500-contrast-1}}';
             }
           }
           &.md-focused {
-            background: '{{warn-contrast-0.1}}';
+            background: '{{warn-500-contrast-0.1}}';
           }
+        }
+        > md-ink-bar {
+          color: '{{warn-500-contrast}}';
+          background: '{{warn-500-contrast}}';
         }
       }
     }
@@ -44,38 +68,43 @@
 }
 @mixin md-tab-accent {
   > md-tabs-wrapper {
-    background-color: '{{accent-color}}';
+    background-color: '{{accent-500}}';
+
+    md-prev-button md-icon,
+    md-next-button md-icon {
+      color: '{{accent-500-contrast-0.7}}';
+    }
     > md-tabs-canvas {
       > md-pagination-wrapper {
         > md-tab-item:not([disabled]) {
           &, md-icon {
-            color: '{{accent-A100}}';
+            color: '{{accent-500-contrast-0.7}}';
           }
           &.md-active, &.md-focused {
             &, md-icon {
-              color: '{{accent-contrast}}';
+              color: '{{accent-500-contrast-1}}';
             }
           }
           &.md-focused {
-            background: '{{accent-contrast-0.1}}';
+            background: '{{accent-500-contrast-0.1}}';
           }
         }
         > md-ink-bar {
-          color: '{{primary-600-1}}';
-          background: '{{primary-600-1}}';
+          color: '{{accent-500-contrast}}';
+          background: '{{accent-500-contrast}}';
         }
       }
     }
   }
-
 }
 md-tabs.md-THEME_NAME-theme {
   md-tabs-wrapper {
     background-color: transparent;
     border-color: '{{foreground-4}}';
   }
-  .md-paginator md-icon {
-    color: '{{primary-color}}';
+  md-prev-button md-icon,
+  md-next-button md-icon {
+    color: '{{foreground-2}}';
   }
 
   md-ink-bar {
@@ -92,7 +121,7 @@ md-tabs.md-THEME_NAME-theme {
     }
     &.md-active, &.md-focused {
       &, md-icon {
-        color: '{{primary-color}}';
+        color: '{{accent-color}}';
       }
     }
     &.md-focused {
