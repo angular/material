@@ -35,6 +35,8 @@ angular
  *    contact's image.
  * @param {number=} md-min-length Specifies the minimum length of text before autocomplete will
  *    make suggestions
+ * @param {string=} md-input-class This class will be applied to the child `md-autocomplete` for
+ *    custom styling.
  * @param {string=} input-aria-describedby A space-separated list of element IDs. This should
  *     contain the IDs of any elements that describe this autocomplete. Screen readers will read
  *     the content of these elements at the end of announcing that the chips input has been
@@ -93,6 +95,7 @@ var MD_CONTACT_CHIPS_TEMPLATE = '\
               md-no-cache="true"\
               md-min-length="$mdContactChipsCtrl.minLength"\
               md-autoselect\
+              ng-attr-md-input-class="{{$mdContactChipsCtrl.inputClass}}"\
               ng-keydown="$mdContactChipsCtrl.inputKeydown($event)"\
               placeholder="{{$mdContactChipsCtrl.contacts.length === 0 ?\
                   $mdContactChipsCtrl.placeholder : $mdContactChipsCtrl.secondaryPlaceholder}}">\
@@ -155,6 +158,7 @@ function MdContactChips($mdTheming, $mdUtil) {
       chipAppendDelay: '@?mdChipAppendDelay',
       separatorKeys: '=?mdSeparatorKeys',
       removedMessage: '@?mdRemovedMessage',
+      inputClass: '@?mdInputClass',
       inputAriaDescribedBy: '@?inputAriaDescribedby',
       inputAriaLabelledBy: '@?inputAriaLabelledby',
       inputAriaLabel: '@?',
