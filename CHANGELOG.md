@@ -1,3 +1,28 @@
+# [1.2.0](https://github.com/angular/material/compare/v1.2.0-rc.2...v1.2.0) (2020-08-03)
+
+
+### Bug Fixes
+
+* **autocomplete:** change md-escape-options default to 'clear' ([47106ba](https://github.com/angular/material/commit/47106ba036eac11d4417fd2066b26d2a02283954)), closes [#11767](https://github.com/angular/material/issues/11767)
+* **chips:** placeholder is truncated even though there is room ([6699ae6](https://github.com/angular/material/commit/6699ae6119232023f6abf2176d944438b9f0648b)), closes [#10630](https://github.com/angular/material/issues/10630)
+* **chips:** update to latest Material Design spec (2017) updates ([01351b1](https://github.com/angular/material/commit/01351b11754fdd661f3314b00d94e76a9de1c068)), closes [#9883](https://github.com/angular/material/issues/9883)
+* **radio-button:** when no value selected, first button not announced on focus ([9159384](https://github.com/angular/material/commit/91593844b772db77c81b32461e9c5361689e7733)), closes [#11973](https://github.com/angular/material/issues/11973) [#11923](https://github.com/angular/material/issues/11923) [#11974](https://github.com/angular/material/issues/11974)
+* **tabs:** align theming with spec updates ([d237715](https://github.com/angular/material/commit/d237715ff5cdd9238a36853ed4590c5e2f64e3b6)), closes [#7685](https://github.com/angular/material/issues/7685)
+* **toolbar:** default to 500 hue and contrasts when using accent/warn palettes ([98a94db](https://github.com/angular/material/commit/98a94db8b4ad3ff6ec8c38b7e848574defe4f43f)), closes [#7685](https://github.com/angular/material/issues/7685)
+
+
+### BREAKING CHANGES
+
+* **chips:** Chips have been updated to latest Material Design spec (2017). `$chip-font-size` was reduced to `13px` from `16px`. `$chip-remove-padding-right` was increased to `28px` from `22px`. These changes may cause your chips to have a smaller, denser layout now. In certain scenarios, this may require minor changes to your app's layout. You can change these variables back to their old values if your app consumes Sass. Additionally, the remove chip icon has been changed, but you can use the custom chip template demo as a guide to changing back to the old icon, if desired.
+* **autocomplete:** The default behavior of `md-autocomplete`, when the options panel is visible and the Escape key is pressed, has changed. `md-escape-options` now defaults to `'clear'` instead of `'blur clear'`. This better aligns with the [WAI-ARIA Authoring Practices](https://www.w3.org/TR/wai-aria-practices/examples/combobox/aria1.0pattern/combobox-autocomplete-list.html) as the focus is not sent to another element (like the `<body>`) when the Escape key is pressed.
+
+If you want to restore the previous behavior, add the following to your `md-autocomplete` components:
+```html
+md-escape-options="blur clear"
+```
+
+
+
 <a name="1.2.0-rc.2"></a>
 
 # [1.2.0-rc.2](https://github.com/angular/material/compare/v1.2.0-rc.1...v1.2.0-rc.2) (2020-07-28)
