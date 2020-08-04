@@ -158,7 +158,8 @@ md-select {
     }
     &:focus {
       .md-select-value {
-        border-bottom: $select-border-width-default + 1px solid;
+        border-bottom-style: solid;
+        border-bottom-width: $select-border-width-default + 1px;
         padding-bottom: $select-value-padding-bottom - 1px;
       }
     }
