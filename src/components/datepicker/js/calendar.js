@@ -301,7 +301,7 @@
   /**
    * Sets up the controller's reference to ngModelController.
    * @param {!ngModel.NgModelController} ngModelCtrl Instance of the ngModel controller.
-   * @param {Object} inputDirective Config for Angular's `input` directive.
+   * @param {Object} inputDirective Config for AngularJS's `input` directive.
    */
   CalendarCtrl.prototype.configureNgModel = function(ngModelCtrl, inputDirective) {
     var self = this;
@@ -326,7 +326,7 @@
       // In the case where a conversion is needed, the $viewValue here will be a string like
       // "2020-05-10" instead of a Date object.
       if (!self.dateUtil.isValidDate(value)) {
-        convertedDate = self.dateUtil.removeLocalTzAndReparseDate(new Date(this.$viewValue));
+        convertedDate = self.dateUtil.removeLocalTzAndReparseDate(new Date(value));
         if (self.dateUtil.isValidDate(convertedDate)) {
           value = convertedDate;
         }
@@ -360,7 +360,13 @@
     var value = this.dateUtil.createDateAtMidnight(date);
     this.focusDate(value);
     this.$scope.$emit('md-calendar-change', value);
-    this.ngModelCtrl.$setViewValue(this.ngDateFilter(value, 'yyyy-MM-dd', timezone), 'default');
+    // Using the timezone when the offset is negative (GMT+X) causes the previous day to be
+    // selected here. This check avoids that.
+    if (timezone == null || value.getTimezoneOffset() < 0) {
+      this.ngModelCtrl.$setViewValue(this.ngDateFilter(value, 'yyyy-MM-dd'), 'default');
+    } else {
+      this.ngModelCtrl.$setViewValue(this.ngDateFilter(value, 'yyyy-MM-dd', timezone), 'default');
+    }
     this.ngModelCtrl.$render();
     return value;
   };
