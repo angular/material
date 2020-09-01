@@ -1,3 +1,4 @@
+<a name="1.1.26"></a>
 ## [1.1.26](https://github.com/angular/material/compare/v1.1.25...v1.1.26) (2020-09-01)
 
 
