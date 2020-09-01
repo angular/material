@@ -1,29 +1,53 @@
+// When constructing a Date, the month is zero-based. This can be confusing, since people are
+// used to seeing them one-based. So we create these aliases to make reading the tests easier.
+var JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9,
+  NOV = 10, DEC = 11;
+
+var initialDate = new Date(2015, FEB, 15);
+
+var ngElement, element, scope, pageScope, controller;
+var $compile, $timeout, $$rAF, $animate, $window, keyCodes, dateUtil, dateLocale;
+
+var DATEPICKER_TEMPLATE =
+  '<md-datepicker name="birthday" ' +
+  'md-max-date="maxDate" ' +
+  'md-min-date="minDate" ' +
+  'md-date-filter="dateFilter" ' +
+  'md-month-filter="monthFilter" ' +
+  'ng-model="myDate" ' +
+  'ng-change="dateChangedHandler()" ' +
+  'ng-focus="focusHandler()" ' +
+  'ng-blur="blurHandler()" ' +
+  'ng-required="isRequired" ' +
+  'ng-disabled="isDisabled">' +
+  '</md-datepicker>';
+
+/**
+ * Compile and link the given template and store values for element, scope, and controller.
+ * @param {string} template
+ * @returns {JQLite} The root compiled element.
+ */
+function createDatepickerInstance(template) {
+  var outputElement = $compile(template)(pageScope);
+  pageScope.$apply();
+
+  ngElement = outputElement[0].tagName === 'MD-DATEPICKER' ?
+    outputElement : outputElement.find('md-datepicker');
+  element = ngElement[0];
+  scope = ngElement.isolateScope();
+  controller = ngElement.controller('mdDatepicker');
+
+  return outputElement;
+}
+
+/** Populates the inputElement with a value and triggers the input events. */
+function populateInputElement(inputString) {
+  controller.ngInputElement.val(inputString).triggerHandler('input');
+  $timeout.flush();
+  pageScope.$apply();
+}
 
 describe('md-datepicker', function() {
-  // When constructing a Date, the month is zero-based. This can be confusing, since people are
-  // used to seeing them one-based. So we create these aliases to make reading the tests easier.
-  var JAN = 0, FEB = 1, MAR = 2, APR = 3, MAY = 4, JUN = 5, JUL = 6, AUG = 7, SEP = 8, OCT = 9,
-      NOV = 10, DEC = 11;
-
-  var initialDate = new Date(2015, FEB, 15);
-
-  var ngElement, element, scope, pageScope, controller;
-  var $compile, $timeout, $$rAF, $animate, $window, keyCodes, dateUtil, dateLocale;
-
-  var DATEPICKER_TEMPLATE =
-    '<md-datepicker name="birthday" ' +
-      'md-max-date="maxDate" ' +
-      'md-min-date="minDate" ' +
-      'md-date-filter="dateFilter"' +
-      'md-month-filter="monthFilter"' +
-      'ng-model="myDate" ' +
-      'ng-change="dateChangedHandler()" ' +
-      'ng-focus="focusHandler()" ' +
-      'ng-blur="blurHandler()" ' +
-      'ng-required="isRequired" ' +
-      'ng-disabled="isDisabled">' +
-    '</md-datepicker>';
-
   beforeEach(module('material.components.datepicker', 'material.components.input', 'ngAnimateMock'));
 
   beforeEach(inject(function($rootScope, $injector) {
@@ -50,31 +74,6 @@ describe('md-datepicker', function() {
     pageScope.$destroy();
     ngElement.remove();
   });
-
-  /**
-   * Compile and link the given template and store values for element, scope, and controller.
-   * @param {string} template
-   * @returns {angular.JQLite} The root compiled element.
-   */
-  function createDatepickerInstance(template) {
-    var outputElement = $compile(template)(pageScope);
-    pageScope.$apply();
-
-    ngElement = outputElement[0].tagName == 'MD-DATEPICKER' ?
-        outputElement : outputElement.find('md-datepicker');
-    element = ngElement[0];
-    scope = ngElement.isolateScope();
-    controller = ngElement.controller('mdDatepicker');
-
-    return outputElement;
-  }
-
-  /** Populates the inputElement with a value and triggers the input events. */
-  function populateInputElement(inputString) {
-    controller.ngInputElement.val(inputString).triggerHandler('input');
-    $timeout.flush();
-    pageScope.$apply();
-  }
 
   it('should be the same date object as the initial ng-model', function() {
     expect(pageScope.myDate).toBe(initialDate);
@@ -591,9 +590,9 @@ describe('md-datepicker', function() {
       body.removeChild(element);
     });
 
-    it('should shink the calendar pane when it would otherwise not fit on the screen', function() {
+    it('should shrink the calendar pane when it would otherwise not fit on the screen', function() {
       // Fake the window being very narrow so that the calendar pane won't fit on-screen.
-      controller.$window = {innerWidth: 200, innherHeight: 800};
+      controller.$window = {innerWidth: 200, innerHeight: 800};
 
       // Open the calendar pane.
       controller.openCalendarPane({});
@@ -892,4 +891,58 @@ describe('md-datepicker', function() {
 
   });
 
+});
+
+describe('md-datepicker with MomentJS custom formatting', function() {
+  beforeEach(module('material.components.datepicker', 'material.components.input', 'ngAnimateMock'));
+
+  beforeEach(module(function($mdDateLocaleProvider) {
+    $mdDateLocaleProvider.formatDate = function(date) {
+      return date ? moment(date).format('M/D') : '';
+    };
+    $mdDateLocaleProvider.parseDate = function(dateString) {
+      var m = moment(dateString, 'M/D', true);
+      return m.isValid() ? m.toDate() : new Date(NaN);
+    };
+    $mdDateLocaleProvider.isDateComplete = function(dateString) {
+      dateString = dateString.trim();
+      // Look for two chunks of content (either numbers or text) separated by delimiters.
+      var re = /^(([a-zA-Z]{3,}|[0-9]{1,4})([ .,]+|[/-]))([a-zA-Z]{3,}|[0-9]{1,4})/;
+      return re.test(dateString);
+    };
+  }));
+
+  beforeEach(inject(function($rootScope, $injector) {
+    $compile = $injector.get('$compile');
+    $timeout = $injector.get('$timeout');
+
+    pageScope = $rootScope.$new();
+    pageScope.myDate = initialDate;
+    pageScope.isDisabled = false;
+    pageScope.dateChangedHandler = jasmine.createSpy('ng-change handler');
+
+    createDatepickerInstance(DATEPICKER_TEMPLATE);
+    controller.closeCalendarPane();
+  }));
+
+  afterEach(function() {
+    controller.isAttached && controller.closeCalendarPane();
+    pageScope.$destroy();
+    ngElement.remove();
+  });
+
+  it('should update the model value and close the calendar pane', function() {
+    var date = new Date(2020, SEP, 1);
+    controller.openCalendarPane({
+      target: controller.inputElement
+    });
+    scope.$emit('md-calendar-change', date);
+    scope.$apply();
+    expect(pageScope.myDate).toEqual(date);
+    expect(controller.ngModelCtrl.$modelValue).toEqual(date);
+
+    expect(controller.inputElement.value).toEqual('9/1');
+    expect(controller.calendarPaneOpenedFrom).toBe(null);
+    expect(controller.isCalendarOpen).toBe(false);
+  });
 });
