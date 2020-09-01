@@ -1,4 +1,3 @@
-
 describe('$mdDateLocale', function() {
   var dateLocale, dateUtil;
 
@@ -81,7 +80,7 @@ describe('$mdDateLocale', function() {
 
   describe('with custom values', function() {
     var fakeMonths = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
-    var fakeshortMonths = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'j', 'l'];
+    var fakeShortMonths = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'j', 'l'];
     var fakeDays = ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7'];
     var fakeShortDays = ['1', '2', '3', '4', '5', '6', '7'];
     var fakeDates = [undefined, 'X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10', 'X11',
@@ -90,7 +89,7 @@ describe('$mdDateLocale', function() {
 
     beforeEach(module(function($mdDateLocaleProvider) {
       $mdDateLocaleProvider.months = fakeMonths;
-      $mdDateLocaleProvider.shortMonths = fakeshortMonths;
+      $mdDateLocaleProvider.shortMonths = fakeShortMonths;
       $mdDateLocaleProvider.days = fakeDays;
       $mdDateLocaleProvider.shortDays = fakeShortDays;
       $mdDateLocaleProvider.dates = fakeDates;
@@ -113,7 +112,7 @@ describe('$mdDateLocale', function() {
 
     it('should expose custom settings', function() {
       expect(dateLocale.months).toEqual(fakeMonths);
-      expect(dateLocale.shortMonths).toEqual(fakeshortMonths);
+      expect(dateLocale.shortMonths).toEqual(fakeShortMonths);
       expect(dateLocale.days).toEqual(fakeDays);
       expect(dateLocale.shortDays).toEqual(fakeShortDays);
       expect(dateLocale.dates).toEqual(fakeDates);
@@ -122,6 +121,40 @@ describe('$mdDateLocale', function() {
       expect(dateLocale.parseDate('2020-01-20')).toEqual(new Date(1969, 6, 16));
       expect(dateLocale.isDateComplete('The One True Date')).toBe(true);
       expect(dateLocale.isDateComplete('Anything Else')).toBe(false);
+    });
+  });
+
+  describe('with MomentJS custom formatting', function() {
+    beforeEach(module(function($mdDateLocaleProvider) {
+      $mdDateLocaleProvider.formatDate = function(date) {
+        return date ? moment(date).format('M/D') : '';
+      };
+      $mdDateLocaleProvider.parseDate = function(dateString) {
+        var m = moment(dateString, 'M/D', true);
+        return m.isValid() ? m.toDate() : new Date(NaN);
+      };
+      $mdDateLocaleProvider.isDateComplete = function(dateString) {
+        dateString = dateString.trim();
+        // Look for two chunks of content (either numbers or text) separated by delimiters.
+        var re = /^(([a-zA-Z]{3,}|[0-9]{1,4})([ .,]+|[/-]))([a-zA-Z]{3,}|[0-9]{1,4})/;
+        return re.test(dateString);
+      };
+    }));
+
+    beforeEach(inject(function($mdDateLocale, $$mdDateUtil) {
+      dateLocale = $mdDateLocale;
+      dateUtil = $$mdDateUtil;
+    }));
+
+    it('should respect custom formatting', function() {
+      var now = new Date();
+      expect(dateLocale.formatDate(new Date('2020-08-31T00:00:00-04:00'))).toEqual('8/31');
+      expect(dateLocale.parseDate('8/31')).toEqual(new Date(now.getFullYear(), 7, 31));
+      expect(dateLocale.parseDate('1/1')).toEqual(new Date(now.getFullYear(), 0, 1));
+      expect(dateLocale.isDateComplete('8/31')).toBe(true);
+      expect(dateLocale.isDateComplete('8-31')).toBe(true);
+      expect(dateLocale.isDateComplete('August_31st')).toBe(false);
+      expect(dateLocale.isDateComplete('2020')).toBe(false);
     });
   });
 });
