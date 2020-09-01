@@ -1,3 +1,21 @@
+<a name="1.1.26"></a>
+## [1.1.26](https://github.com/angular/material/compare/v1.1.25...v1.1.26) (2020-09-01)
+
+
+### Bug Fixes
+
+* **calendar, datepicker:** fix MomentJS custom format support ([667a78f](https://github.com/angular/material/commit/667a78f955b0980735aab744eeb5a2b22f6fbfa1)), closes [#12003](https://github.com/angular/material/issues/12003) [#11949](https://github.com/angular/material/issues/11949)
+
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.1.26 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="mmalerba" src="https://avatars0.githubusercontent.com/u/14793288?v=4&s=117" width="117">](https://github.com/mmalerba) |
+:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[mmalerba](https://github.com/mmalerba) |
+
+
 <a name="1.1.25"></a>
 ## [1.1.25](https://github.com/angular/material/compare/v1.1.24...v1.1.25) (2020-08-31)
 
