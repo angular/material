@@ -28,20 +28,20 @@ Quick Links:
 *  [Installing](#installing)
 
 
-Please note that using AngularJS Material requires the use of **[AngularJS](https://angularjs.org/)
-1.4.x** or higher.
+Please note that using the latest version of AngularJS Material requires the use of
+**[AngularJS](https://angularjs.org/) 1.7.2** or higher.
 
-AngularJS Material is targeted for the browser versions defined in the `browserslist` field
-of our [package.json](package.json). Below is a screenshot from 
-[browserl.ist](http://browserl.ist/?q=%3E+0.5%25%2C+last+2+versions%2C+Firefox+ESR%2C+not+ie+%3C%3D+10%2C+not+ie_mob+%3C%3D+10%2C+not+bb+%3C%3D+10%2C+not+op_mob+%3C%3D+12.1)
-that provides a visual representation of this configuration:
+AngularJS Material supports the browser versions defined in the `browserslist` field
+of our [package.json](package.json). Find out more on our
+[docs site](https://material.angularjs.org/latest/#browser-support).
 
-![AngularJS Material Browser Support](https://user-images.githubusercontent.com/3506071/50240047-c7e00780-0391-11e9-9241-6674a412ce94.png)
+AngularJS Material supports the screen reader versions listed
+[here](https://material.angularjs.org/latest/#screen-reader-support).
 
 ## <a name="demos"></a> Online Documentation and Demos
 
 <div style="border: 1px solid #ccc">
-  <img src="https://user-images.githubusercontent.com/3506071/39335179-ef92562e-497f-11e8-9f27-e23dc3a868f9.png" alt="AngularJS Material docs website" style="display:block;">
+  <img src="https://user-images.githubusercontent.com/3506071/93010488-11578980-f55b-11ea-9ea3-c4a7bffd20b9.png" style="display:block;">
 </div><br>
 
 - Visit [material.angularjs.org](https://material.angularjs.org/) online to review the API, see the
@@ -73,8 +73,8 @@ The minor builds (1.1.0, 1.2.0, 1.3.0) can contain breaking changes to CSS, APIs
 Our formal release of `minor` builds is much less frequent. The release process for `minor` builds is currently
 being re-evaluated.
 
-> For the purposes of AngularJS Material, you *could* think of the patch releases as being *minor* changes
-and the 'minor' releases as being *major* changes according to semver.
+> For the purposes of AngularJS Material, you *could* think of the patch releases as being *minor* changes,
+  and the 'minor' releases as being *major* changes according to semver.
 
 ## <a name="contributing"></a> Contributing
 
@@ -95,7 +95,7 @@ It is important to note that for each release, the [ChangeLog](CHANGELOG.md) is 
 itemize all:
 
 - Bug Fixes
-- New Features
+- New Enhancements
 - Breaking Changes
 
 ## <a name="building"></a> Building
@@ -106,6 +106,12 @@ First install or update your local project's **npm** dependencies:
 
 ```bash
 npm install
+```
+
+Install Gulp v3 globally:
+
+```bash
+npm install -g gulp@3
 ```
 
 Then run the **gulp** tasks:
@@ -148,23 +154,22 @@ npm install http://github.com/angular/bower-material#master --save
 #### Other Dependency Managers
 
 Visit our [distribution repository](https://github.com/angular/bower-material/blob/master/README.md)
-for more details on how to install and use the AngularJS Material distribution
-files within your local project.
+for more details on how to install and use the AngularJS Material distribution files within your local
+project.
 
 #### CDN
 
 CDN versions of AngularJS Material are available.
 
-With the Google CDN, you will not need to download local copies of the distribution files. Instead
+With the Google CDN, you will not need to download local copies of the distribution files. Instead,
 simply reference the CDN urls to easily use those remote library files. This is especially useful
-when using online tools such as [CodePen](http://codepen.io/), [Plunker](http://plnkr.co/), or
-[JSFiddle](http://jsfiddle.net/).
+when using online tools such as [CodePen](http://codepen.io/) or [Plunker](http://plnkr.co/).
 
 ```html
   <head>
 
-    <!-- AngularJS Material CSS now available via Google CDN; version 1.1.21 used here -->
-   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.21/angular-material.min.css">
+    <!-- AngularJS Material CSS now available via Google CDN; version 1.2.0 used here -->
+   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.2.0/angular-material.min.css">
 
   </head>
   <body>
@@ -175,8 +180,8 @@ when using online tools such as [CodePen](http://codepen.io/), [Plunker](http://
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-aria.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-messages.min.js"></script>
 
-    <!-- AngularJS Material Javascript now available via Google CDN; version 1.1.21 used here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.22/angular-material.min.js"></script>
+    <!-- AngularJS Material Javascript now available via Google CDN; version 1.2.0 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.2.0/angular-material.min.js"></script>
   </body>
 ```
 
@@ -204,7 +209,8 @@ pull directly from our [distribution repository](https://github.com/angular/bowe
   </body>
 ```
 
-Once you have all the necessary assets installed, add `ngMaterial` and `ngMessages` as dependencies for your app:
+Once you have all the necessary assets installed, add `ngMaterial` and `ngMessages` as dependencies for your
+app:
 
 ```javascript
 angular.module('myApp', ['ngMaterial', 'ngMessages']);
