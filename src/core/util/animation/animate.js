@@ -1,11 +1,9 @@
 // Polyfill angular < 1.4 (provide $animateCss)
 angular
   .module('material.core')
-  .factory('$$mdAnimate', function($q, $timeout, $mdConstant, $animateCss){
-
+  .factory('$$mdAnimate', function($q, $timeout, $mdConstant, $animateCss) {
      // Since $$mdAnimate is injected into $mdUtil... use a wrapper function
      // to subsequently inject $mdUtil as an argument to the AnimateDomUtils
-
      return function($mdUtil) {
        return AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss);
      };
@@ -17,9 +15,6 @@ angular
 function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
   var self;
   return self = {
-    /**
-     *
-     */
     translate3d : function(target, from, to, options) {
       return $animateCss(target, {
         from: from,
@@ -44,7 +39,6 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
            removeClass: options.transitionInClass,
            duration: options.duration
         }).start();
-
       }
     },
 
@@ -80,7 +74,6 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
 
           // Never reject since ngAnimate may cause timeouts due missed transitionEnd events
           resolve();
-
         }
 
         /**
@@ -94,9 +87,9 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
         function noTransitionFound(styles) {
           styles = styles || window.getComputedStyle(element[0]);
 
-          return styles.transitionDuration == '0s' || (!styles.transition && !styles.transitionProperty);
+          return styles.transitionDuration === '0s' ||
+            (!styles.transition && !styles.transitionProperty);
         }
-
       });
     },
 
@@ -121,11 +114,12 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
 
       /**
        * This is a fallback if the origin information is no longer valid, then the
-       * origin bounds simply becomes the current bounds for the dialogContainer's parent
+       * origin bounds simply becomes the current bounds for the dialogContainer's parent.
+       * @returns {null|DOMRect}
        */
       function currentBounds() {
-        var cntr = element ? element.parent() : null;
-        var parent = cntr ? cntr.parent() : null;
+        var container = element ? element.parent() : null;
+        var parent = container ? container.parent() : null;
 
         return parent ? self.clientRect(parent) : null;
       }
@@ -219,7 +213,10 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
     },
 
     /**
-     *  Clone the Rect and calculate the height/width if needed
+     * Clone the Rect and calculate the height/width if needed.
+     * @param {DOMRect} source
+     * @param {DOMRect=} destination
+     * @returns {null|DOMRect}
      */
     copyRect: function (source, destination) {
       if (!source) return null;
@@ -237,7 +234,9 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
     },
 
     /**
-     * Calculate ClientRect of element; return null if hidden or zero size
+     * Calculate ClientRect of element; return null if hidden or zero size.
+     * @param {Element|string} element
+     * @returns {null|DOMRect}
      */
     clientRect: function (element) {
       var bounds = angular.element(element)[0].getBoundingClientRect();
@@ -250,7 +249,9 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
     },
 
     /**
-     *  Calculate 'rounded' center point of Rect
+     * Calculate 'rounded' center point of Rect
+     * @param {DOMRect} targetRect
+     * @returns {{x: number, y: number}}
      */
     centerPointFor: function (targetRect) {
       return targetRect ? {
@@ -258,7 +259,6 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
         y: Math.round(targetRect.top + (targetRect.height / 2))
       } : { x : 0, y : 0 };
     }
-
   };
 }
 

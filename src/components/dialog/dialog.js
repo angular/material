@@ -552,6 +552,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
 function MdDialogProvider($$interimElementProvider) {
   // Elements to capture and redirect focus when the user presses tab at the dialog boundary.
   var topFocusTrap, bottomFocusTrap;
+  var removeFocusTrap;
 
   return $$interimElementProvider('$mdDialog')
     .setDefaults({
@@ -641,9 +642,9 @@ function MdDialogProvider($$interimElementProvider) {
   }
 
   /* @ngInject */
-  function dialogDefaultOptions($mdDialog, $mdAria, $mdUtil, $mdConstant, $animate, $document, $window, $rootElement,
-                                $log, $injector, $mdTheming, $interpolate, $mdInteraction) {
-
+  function dialogDefaultOptions($mdDialog, $mdAria, $mdUtil, $mdConstant, $animate, $document,
+                                $window, $rootElement, $log, $injector, $mdTheming, $interpolate,
+                                $mdInteraction) {
     return {
       hasBackdrop: true,
       isolateScope: true,
@@ -768,12 +769,9 @@ function MdDialogProvider($$interimElementProvider) {
       options.hideBackdrop(options.$destroy);
 
       // Remove the focus traps that we added earlier for keeping focus within the dialog.
-      if (topFocusTrap && topFocusTrap.parentNode) {
-        topFocusTrap.parentNode.removeChild(topFocusTrap);
-      }
-
-      if (bottomFocusTrap && bottomFocusTrap.parentNode) {
-        bottomFocusTrap.parentNode.removeChild(bottomFocusTrap);
+      if (removeFocusTrap) {
+        removeFocusTrap();
+        removeFocusTrap = null;
       }
 
       // For navigation $destroy events, do a quick, non-animated removal,
@@ -936,10 +934,8 @@ function MdDialogProvider($$interimElementProvider) {
 
         // Queue remove listeners function
         removeListeners.push(function() {
-
           element.off('keydown', keyHandlerFn);
           parentTarget.off('keydown', keyHandlerFn);
-
         });
       }
 
@@ -1015,10 +1011,12 @@ function MdDialogProvider($$interimElementProvider) {
        */
       options.hideBackdrop = function hideBackdrop($destroy) {
         if (options.backdrop) {
-          if ($destroy) options.backdrop.remove();
-          else              $animate.leave(options.backdrop);
+          if ($destroy) {
+            options.backdrop.remove();
+          } else {
+            $animate.leave(options.backdrop);
+          }
         }
-
 
         if (options.disableParentScroll) {
           options.restoreScroll && options.restoreScroll();
@@ -1088,15 +1086,27 @@ function MdDialogProvider($$interimElementProvider) {
       topFocusTrap.addEventListener('focus', focusHandler);
       bottomFocusTrap.addEventListener('focus', focusHandler);
 
-      // The top focus trap inserted immeidately before the md-dialog element (as a sibling).
+      removeFocusTrap = function () {
+        topFocusTrap.removeEventListener('focus', focusHandler);
+        bottomFocusTrap.removeEventListener('focus', focusHandler);
+
+        if (topFocusTrap && topFocusTrap.parentNode) {
+          topFocusTrap.parentNode.removeChild(topFocusTrap);
+        }
+
+        if (bottomFocusTrap && bottomFocusTrap.parentNode) {
+          bottomFocusTrap.parentNode.removeChild(bottomFocusTrap);
+        }
+      };
+
+      // The top focus trap inserted immediately before the md-dialog element (as a sibling).
       // The bottom focus trap is inserted at the very end of the md-dialog element (as a child).
       element[0].parentNode.insertBefore(topFocusTrap, element[0]);
       element.after(bottomFocusTrap);
     }
 
     /**
-     * Prevents screen reader interaction behind modal window
-     * on swipe interfaces
+     * Prevents screen reader interaction behind modal window on swipe interfaces.
      */
     function lockScreenReader(element, options) {
       var isHidden = true;
@@ -1112,8 +1122,9 @@ function MdDialogProvider($$interimElementProvider) {
       };
 
       /**
-       * Get all of an element's parent elements up the DOM tree
-       * @return {Array} The parent elements
+       * Get all of an element's parent elements up the DOM tree.
+       * @param {Node & ParentNode} element the element to start from
+       * @return {Element[]} The parent elements
        */
       function getParents(element) {
         var parents = [];
@@ -1137,8 +1148,9 @@ function MdDialogProvider($$interimElementProvider) {
       }
 
       /**
-       * Walk DOM to apply or remove aria-hidden on sibling nodes
-       * and parent sibling nodes
+       * Walk DOM to apply or remove aria-hidden on sibling nodes and parent sibling nodes.
+       * @param {Element} element the element to start from when walking up the DOM
+       * @returns {void}
        */
       function walkDOM(element) {
         var elements = getParents(element);
@@ -1149,12 +1161,17 @@ function MdDialogProvider($$interimElementProvider) {
     }
 
     /**
-     * Ensure the dialog container fill-stretches to the viewport
+     * Ensure the dialog container fill-stretches to the viewport.
+     * @param {JQLite} container dialog container
+     * @param {Object} options
+     * @returns {function(): void} function that reverts the modified styles
      */
     function stretchDialogContainerToViewport(container, options) {
       var isFixed = $window.getComputedStyle($document[0].body).position === 'fixed';
       var backdrop = options.backdrop ? $window.getComputedStyle(options.backdrop[0]) : null;
-      var height = backdrop ? Math.min($document[0].body.clientHeight, Math.ceil(Math.abs(parseInt(backdrop.height, 10)))) : 0;
+      var height = backdrop ?
+        Math.min($document[0].body.clientHeight, Math.ceil(Math.abs(parseInt(backdrop.height, 10))))
+        : 0;
 
       var previousStyles = {
         top: container.css('top'),
@@ -1178,7 +1195,10 @@ function MdDialogProvider($$interimElementProvider) {
     }
 
     /**
-     *  Dialog open and pop-in animation
+     * Dialog open and pop-in animation.
+     * @param {JQLite} container dialog container
+     * @param {Object} options
+     * @returns {*}
      */
     function dialogPopIn(container, options) {
       // Add the `md-dialog-container` to the DOM
@@ -1219,7 +1239,6 @@ function MdDialogProvider($$interimElementProvider) {
                 buildTranslateToOrigin(dialogEl, options.origin)
               )
             );
-
           };
 
           // Function to revert the generated animation styles on the dialog element.
@@ -1243,7 +1262,10 @@ function MdDialogProvider($$interimElementProvider) {
     }
 
     /**
-     * Dialog close and pop-out animation
+     * Dialog close and pop-out animation.
+     * @param {JQLite} container dialog container
+     * @param {Object} options
+     * @returns {*}
      */
     function dialogPopOut(container, options) {
       return options.reverseAnimate().then(function() {
@@ -1256,13 +1278,13 @@ function MdDialogProvider($$interimElementProvider) {
     }
 
     /**
-     * Utility function to filter out raw DOM nodes
+     * Utility function to filter out raw DOM nodes.
+     * @param {Node} elem
+     * @param {string[]} nodeTypeArray
+     * @returns {boolean}
      */
     function isNodeOneOf(elem, nodeTypeArray) {
-      if (nodeTypeArray.indexOf(elem.nodeName) !== -1) {
-        return true;
-      }
+      return nodeTypeArray.indexOf(elem.nodeName) !== -1;
     }
-
   }
 }
