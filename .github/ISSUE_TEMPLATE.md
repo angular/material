@@ -14,7 +14,7 @@ Please submit Angular Material and CDK questions
 [here](https://groups.google.com/forum/#!forum/angular-material2)
 and issues [here](https://github.com/angular/components/issues).
 -->
-## Bug, enhancement request, or proposal
+## Bug, Enhancement Request, or Proposal
 
 <!-- Please note that we are not accepting major feature requests, i.e. requests for new components, at this time. -->
 
@@ -45,6 +45,7 @@ and issues [here](https://github.com/angular/components/issues).
 - AngularJS Material: 1.
 - OS: 
 - Browsers: 
+- Screen Readers: 
  
 ### Add anything else we should know
 
