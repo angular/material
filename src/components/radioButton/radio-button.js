@@ -331,16 +331,17 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
     }
 
     /**
-     *  Add or remove the `.md-checked` class from the RadioButton (and conditionally its parent).
-     *  Update the `aria-activedescendant` attribute.
+     * Add or remove the `.md-checked` class from the RadioButton (and conditionally its parent).
+     * Update the `aria-activedescendant` attribute.
      */
     function render() {
       var checked = radioGroupController.getViewValue() == attr.value;
 
       if (checked === lastChecked) return;
 
-      if (element[0].parentNode.nodeName.toLowerCase() !== 'md-radio-group') {
-        // If the radioButton is inside a div, then add class so highlighting will work
+      if (element[0] && element[0].parentNode &&
+          element[0].parentNode.nodeName.toLowerCase() !== 'md-radio-group') {
+        // If the radioButton is inside a div, then add class so highlighting will work.
         element.parent().toggleClass(CHECKED_CSS, checked);
       }
 
