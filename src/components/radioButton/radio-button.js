@@ -10,6 +10,11 @@ angular.module('material.components.radioButton', [
   .directive('mdRadioButton', mdRadioButtonDirective);
 
 /**
+ * @type {Readonly<{NEXT: number, CURRENT: number, PREVIOUS: number}>}
+ */
+var incrementSelection = Object.freeze({PREVIOUS: -1, CURRENT: 0, NEXT: 1});
+
+/**
  * @ngdoc directive
  * @module material.components.radioButton
  * @name mdRadioGroup
@@ -106,31 +111,36 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
     }
 
     /**
-     * @param {KeyboardEvent} ev
+     * @param {KeyboardEvent} keyboardEvent
      */
-    function keydownListener(ev) {
-      var keyCode = ev.which || ev.keyCode;
+    function keydownListener(keyboardEvent) {
+      var keyCode = keyboardEvent.which || keyboardEvent.keyCode;
 
       // Only listen to events that we originated ourselves
       // so that we don't trigger on things like arrow keys in inputs.
       if (keyCode !== $mdConstant.KEY_CODE.ENTER &&
-          ev.currentTarget !== ev.target) {
+          keyboardEvent.currentTarget !== keyboardEvent.target) {
         return;
       }
 
       switch (keyCode) {
         case $mdConstant.KEY_CODE.LEFT_ARROW:
         case $mdConstant.KEY_CODE.UP_ARROW:
-          ev.preventDefault();
+          keyboardEvent.preventDefault();
           radioGroupController.selectPrevious();
           setFocus();
           break;
 
         case $mdConstant.KEY_CODE.RIGHT_ARROW:
         case $mdConstant.KEY_CODE.DOWN_ARROW:
-          ev.preventDefault();
+          keyboardEvent.preventDefault();
           radioGroupController.selectNext();
           setFocus();
+          break;
+
+        case $mdConstant.KEY_CODE.SPACE:
+          keyboardEvent.preventDefault();
+          radioGroupController.selectCurrent();
           break;
 
         case $mdConstant.KEY_CODE.ENTER:
@@ -180,11 +190,14 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
       getViewValue: function() {
         return this._ngModelCtrl.$viewValue;
       },
+      selectCurrent: function() {
+        return changeSelectedButton(this.$element, incrementSelection.CURRENT);
+      },
       selectNext: function() {
-        return changeSelectedButton(this.$element, 1);
+        return changeSelectedButton(this.$element, incrementSelection.NEXT);
       },
       selectPrevious: function() {
-        return changeSelectedButton(this.$element, -1);
+        return changeSelectedButton(this.$element, incrementSelection.PREVIOUS);
       },
       setActiveDescendant: function (radioId) {
         this.$element.attr('aria-activedescendant', radioId);
@@ -196,9 +209,9 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
   }
 
   /**
-   * Coerce all child radio buttons into an array, then wrap then in an iterator
+   * Coerce all child radio buttons into an array, then wrap them in an iterator.
    * @param parent {!JQLite}
-   * @return {{add: function(*=, *=): *, next: Function, last: function(): *, previous: Function, count: function(): (Array.length|*|number), hasNext: function(*=): (Array.length|*|number|boolean), inRange: function(*): (Array.length|*|number|boolean), remove: function(*=): void, contains: function(*=): boolean, itemAt: function(*=): *, findBy: function(*, *): Array, hasPrevious: function(*=): (Array.length|*|number|boolean), items: function(): (Array|*), indexOf: function(*=): *, first: function(): *}|Object|*|AsyncIterableIterator<OctokitTypes.OctokitResponse<PaginationResults<any>>>}
+   * @return {{add: add, next: (function()), last: (function(): any|null), previous: (function()), count: (function(): number), hasNext: (function(*=): Array.length|*|number|boolean), inRange: (function(*): boolean), remove: remove, contains: (function(*=): *|boolean), itemAt: (function(*=): any|null), findBy: (function(*, *): *[]), hasPrevious: (function(*=): Array.length|*|number|boolean), items: (function(): *[]), indexOf: (function(*=): number), first: (function(): any|null)}}
    */
   function getRadioButtons(parent) {
     return $mdUtil.iterator(parent[0].querySelectorAll('md-radio-button'), true);
@@ -207,12 +220,14 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
   /**
    * Change the radio group's selected button by a given increment.
    * If no button is selected, select the first button.
-   * @param {JQLite} parent
-   * @param {-1|1} increment select previous button if the value is negative; the next button
-   *  otherwise.
+   * @param {JQLite} parent the md-radio-group
+   * @param {incrementSelection} increment enum that determines whether the next or
+   *  previous button is clicked. For current, only the first button is selected, otherwise the
+   *  current selection is maintained (by doing nothing).
    */
   function changeSelectedButton(parent, increment) {
     var buttons = getRadioButtons(parent);
+    var target;
 
     if (buttons.count()) {
       var validate = function (button) {
@@ -221,11 +236,19 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
       };
 
       var selected = parent[0].querySelector('md-radio-button.md-checked');
-      var target = buttons[increment < 0 ? 'previous' : 'next'](selected, validate) ||
-        buttons.first();
+      if (!selected) {
+        target = buttons.first();
+      } else if (increment === incrementSelection.PREVIOUS ||
+                 increment === incrementSelection.NEXT) {
+        target = buttons[
+          increment === incrementSelection.PREVIOUS ? 'previous' : 'next'
+        ](selected, validate);
+      }
 
-      // Activate radioButton's click listener (triggerHandler won't create a real click event)
-      angular.element(target).triggerHandler('click');
+      if (target) {
+        // Activate radioButton's click listener (triggerHandler won't create a real click event)
+        angular.element(target).triggerHandler('click');
+      }
     }
   }
 }
