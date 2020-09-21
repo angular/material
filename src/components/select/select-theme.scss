@@ -153,8 +153,10 @@ md-select-menu.md-THEME_NAME-theme {
       }
 
       &:not([disabled]) {
+        &:hover {
+          background-color: '{{background-500-0.10}}'
+        }
         &:focus,
-        &:hover,
         &.md-focused {
           background-color: '{{background-500-0.18}}'
         }
