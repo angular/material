@@ -21,9 +21,6 @@ angular
       ];
 
       $scope.fonts = [].concat(iconData);
-
-
-
   })
   .config(function($mdThemingProvider){
     // Update the theme colors to use themes on font-icons

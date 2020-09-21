@@ -8,11 +8,11 @@
         <md-icon md-font-icon="{{ font.name }}"
             ng-style="{color: !font.theme && font.color, 'font-size': it.size + 'px', height: it.size + 'px'}"
             ng-class="font.theme"
-            aria-label="{{ font.name + it.size }}"
-            class="step "></md-icon>
+            aria-label="{{ font.name + '-' + it.size }}"
+            class="step"></md-icon>
       </div>
       <div class="preview-scale">
-        <span class="step" style="padding-left:{{ it.padding }}px">{{ it.size }}px</span>
+        <span class="step" style="{{ 'padding-left: ' + it.padding + 'px'}}">{{ it.size }}px</span>
       </div>
     </div>
   </div>
@@ -20,16 +20,16 @@
   <!-- For this demo, include the font-faces needed by mdIcon above -->
   <style>
     @font-face {
-      font-family:"icomoon";
-      src:url("https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.eot");
-      font-weight:normal;
-      font-style:normal;
+      font-family: "icomoon";
+      src: url("https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.eot");
+      font-weight: normal;
+      font-style: normal;
     }
 
     @font-face {
       font-family: 'icomoon';
-      src:url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.eot?-cmq1um');
-      src:url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.eot?#iefix-cmq1um') format('embedded-opentype'),
+      src: url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.eot?-cmq1um');
+      src: url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.eot?#iefix-cmq1um') format('embedded-opentype'),
       url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.woff?-cmq1um') format('woff'),
       url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.ttf?-cmq1um') format('truetype'),
       url('https://cdn.rawgit.com/angular/material/master/docs/app/fonts/icomoon.svg?-cmq1um#icomoon') format('svg');
