@@ -25,7 +25,8 @@ $md-inline-alignment: $input-container-vertical-margin + $input-container-paddin
 
 md-checkbox {
   box-sizing: border-box;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
