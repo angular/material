@@ -107,9 +107,8 @@
    * Controller for the mdCalendar component.
    * @ngInject @constructor
    */
-  function CalendarCtrl($element, $scope, $$mdDateUtil, $mdUtil,
-    $mdConstant, $mdTheming, $$rAF, $attrs, $mdDateLocale, $filter) {
-
+  function CalendarCtrl($element, $scope, $$mdDateUtil, $mdUtil, $mdConstant, $mdTheming, $$rAF,
+                        $attrs, $mdDateLocale, $filter, $document) {
     $mdTheming($element);
 
     /**
@@ -229,6 +228,12 @@
      */
     this.scrollbarWidth = 0;
 
+    /**
+     * @type {boolean} set to true if the calendar is being used "standalone" (outside of a
+     *  md-datepicker).
+     */
+    this.standaloneMode = false;
+
     // Unless the user specifies so, the calendar should not be a tab stop.
     // This is necessary because ngAria might add a tabindex to anything with an ng-model
     // (based on whether or not the user has turned that particular feature on/off).
@@ -245,8 +250,9 @@
 
     var handleKeyElement;
     if ($element.parent().hasClass('md-datepicker-calendar')) {
-      handleKeyElement = angular.element(document.body);
+      handleKeyElement = angular.element($document[0].body);
     } else {
+      this.standaloneMode = true;
       handleKeyElement = $element;
     }
 
@@ -445,8 +451,8 @@
    * Normalizes the key event into an action name. The action will be broadcast
    * to the child controllers.
    * @param {KeyboardEvent} event
-   * @returns {String} The action that should be taken, or null if the key
-   * does not match a calendar shortcut.
+   * @returns {string} The action that should be taken, or null if the key
+   *  does not match a calendar shortcut.
    */
   CalendarCtrl.prototype.getActionFromKeyEvent = function(event) {
     var keyCode = this.keyCode;
@@ -471,8 +477,13 @@
   };
 
   /**
-   * Handles a key event in the calendar with the appropriate action. The action will either
-   * be to select the focused date or to navigate to focus a new date.
+   * Handles a key event in the calendar with the appropriate action.
+   * The action will either
+   *  - select the focused date
+   *  - navigate to focus a new date
+   *  - emit a md-calendar-close event if in a md-datepicker panel
+   *  - emit a md-calendar-parent-action
+   *  - delegate to normal tab order if the TAB key is pressed in standalone mode
    * @param {KeyboardEvent} event
    */
   CalendarCtrl.prototype.handleKeyEvent = function(event) {
@@ -481,13 +492,17 @@
     this.$scope.$apply(function() {
       // Capture escape and emit back up so that a wrapping component
       // (such as a date-picker) can decide to close.
-      if (event.which === self.keyCode.ESCAPE || event.which === self.keyCode.TAB) {
+      if (event.which === self.keyCode.ESCAPE ||
+          (event.which === self.keyCode.TAB && !self.standaloneMode)) {
         self.$scope.$emit('md-calendar-close');
 
         if (event.which === self.keyCode.TAB) {
           event.preventDefault();
         }
 
+        return;
+      } else if (event.which === self.keyCode.TAB && self.standaloneMode) {
+        // delegate to the normal tab order if the TAB key is pressed in standalone mode
         return;
       }
 
