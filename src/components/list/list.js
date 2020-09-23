@@ -343,9 +343,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           );
 
           // Button which shows ripple and executes primary action.
-          var buttonWrap = angular.element(
-            '<md-button class="md-no-style"></md-button>'
-          );
+          var buttonWrap = angular.element('<md-button class="md-no-style"></md-button>');
 
           moveAttributes(tElement[0], buttonWrap[0]);
 
@@ -353,6 +351,13 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           // we determine the label from the content and copy it to the button.
           if (!buttonWrap.attr('aria-label')) {
             buttonWrap.attr('aria-label', $mdAria.getText(tElement));
+
+            // If we set the button's aria-label to the text content, then make the content hidden
+            // from screen readers so that it isn't read/traversed twice.
+            var listItemInner = itemContainer[0].querySelector('.md-list-item-inner');
+            if (listItemInner) {
+              listItemInner.setAttribute('aria-hidden', 'true');
+            }
           }
 
           // We allow developers to specify the `md-no-focus` class, to disable the focus style
@@ -386,7 +391,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
       /**
        * @param {HTMLElement} secondaryItem
-       * @param container
+       * @param {HTMLDivElement} container
        */
       function wrapSecondaryItem(secondaryItem, container) {
         // If the current secondary item is not a button, but contains a ng-click attribute,
@@ -423,9 +428,9 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
        * Moves attributes from a source element to the destination element.
        * By default, the function will copy the most necessary attributes, supported
        * by the button executor for clickable list items.
-       * @param source Element with the specified attributes
-       * @param destination Element which will receive the attributes
-       * @param extraAttrs Additional attributes, which will be moved over
+       * @param {Element} source Element with the specified attributes
+       * @param {Element} destination Element which will receive the attributes
+       * @param {string|string[]} extraAttrs Additional attributes, which will be moved over
        */
       function moveAttributes(source, destination, extraAttrs) {
         var copiedAttrs = $mdUtil.prefixer([

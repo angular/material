@@ -128,9 +128,13 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
     }
   }
 
+  /**
+   * @param {Element|JQLite} element
+   * @returns {string}
+   */
   function getText(element) {
     element = element[0] || element;
-    var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+    var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null);
     var text = '';
 
     var node;
@@ -142,6 +146,10 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
 
     return text.trim() || '';
 
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
     function isAriaHiddenNode(node) {
       while (node.parentNode && (node = node.parentNode) !== element) {
         if (node.getAttribute && node.getAttribute('aria-hidden') === 'true') {

@@ -512,10 +512,12 @@ describe('mdListItem directive', function() {
     it('should copy label to the button executor element', function() {
       var listItem = setup('<md-list-item ng-click="null" aria-label="Test">');
       var buttonEl = listItem.find('button');
+      var listItemInnerElement = listItem[0].querySelector('.md-list-item-inner');
 
       // The aria-label attribute should be moved to the button element.
       expect(buttonEl.attr('aria-label')).toBe('Test');
       expect(listItem.attr('aria-label')).toBeFalsy();
+      expect(listItemInnerElement.getAttribute('aria-hidden')).toBeFalsy();
     });
 
     it('should determine the label from the content if not set', function() {
@@ -527,9 +529,11 @@ describe('mdListItem directive', function() {
       );
 
       var buttonEl = listItem.find('button');
+      var listItemInnerElement = listItem[0].querySelector('.md-list-item-inner');
 
       // The aria-label attribute should be determined from the content.
       expect(buttonEl.attr('aria-label')).toBe('Content');
+      expect(listItemInnerElement.getAttribute('aria-hidden')).toBeTruthy();
     });
 
     it('should determine the label from the bound content if aria-label is not set', function() {
