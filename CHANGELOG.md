@@ -1,39 +1,39 @@
-<a name="1.1.26"></a>
-## [1.1.26](https://github.com/angular/material/compare/v1.1.25...v1.1.26) (2020-09-01)
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/angular/material/compare/v1.2.0...v1.2.1) (2020-09-23)
 
 
 ### Bug Fixes
 
-* **calendar, datepicker:** fix MomentJS custom format support ([667a78f](https://github.com/angular/material/commit/667a78f955b0980735aab744eeb5a2b22f6fbfa1)), closes [#12003](https://github.com/angular/material/issues/12003) [#11949](https://github.com/angular/material/issues/11949)
+* **calendar:** allow tabbing out when in standalone mode ([93518bb](https://github.com/angular/material/commit/93518bb05306e0a9d70c890a150a8c06d0fbad5b)), closes [#9794](https://github.com/angular/material/issues/9794)
+* **calendar, datepicker:** fix issues with GMT+X timezones ([90d24cf](https://github.com/angular/material/commit/90d24cfa2914e78bbbd43e9523400f2755ed0754)), closes [#12000](https://github.com/angular/material/issues/12000)
+* **calendar, datepicker:** fix MomentJS custom format support ([8f9e213](https://github.com/angular/material/commit/8f9e21318f21713f1f47bd35e4742919321a9e99)), closes [#12003](https://github.com/angular/material/issues/12003) [#11949](https://github.com/angular/material/issues/11949)
+* **datepicker:** min-date validation is incorrect in GMT+X timezones ([7395914](https://github.com/angular/material/commit/73959142c9ed327d6218fe90c6335bc88f8c5ddf)), closes [#11963](https://github.com/angular/material/issues/11963)
+* **dialog:** remove focus trap focus listeners onRemove ([33e8bac](https://github.com/angular/material/commit/33e8bac352522bf38b23ff2a4d2c281f2c14dc5f)), closes [#12010](https://github.com/angular/material/issues/12010)
+* **icon:** providing empty alt or aria-label attributes do not hide them from a11y ([37f1535](https://github.com/angular/material/commit/37f15357089a87b0e3f94467a93c6511ff71d481)), closes [#10721](https://github.com/angular/material/issues/10721)
+* **list:** case where list items are read twice by screen readers ([5c455d3](https://github.com/angular/material/commit/5c455d30b8bcf4902add2c1ed0a6e9216147b43c)), closes [#11582](https://github.com/angular/material/issues/11582)
+* **radio-button:** Cannot read property 'nodeName' of null ([f43ff63](https://github.com/angular/material/commit/f43ff639a678edeb387a43b28faa10ca0c8b881f)), closes [#10546](https://github.com/angular/material/issues/10546)
+* **radio-button:** support selection using the space key ([3cf78a7](https://github.com/angular/material/commit/3cf78a7d7ed7ff2682c88eaf9e547144225e41d5)), closes [#11960](https://github.com/angular/material/issues/11960)
+* **select:** respect theme color when select has focus ([4afba57](https://github.com/angular/material/commit/4afba571c8a91e17a354c61a1ab7d711d9f9f3b6))
+* **select:** in popup, hover and focus background colors are the same ([d5863b8](https://github.com/angular/material/commit/d5863b8bc4a3a4666310ea03963d87537a27a69e)), closes [#000](https://github.com/angular/material/issues/000) [#9851](https://github.com/angular/material/issues/9851)
+* **select:** md-select-header closes on mouse click when not using multiple ([f2fca2e](https://github.com/angular/material/commit/f2fca2eea9d01be9f72e1dc2a275f1fdbc40764e)), closes [#11969](https://github.com/angular/material/issues/11969)
+* **typography:** enable iOS long-press context menus ([3d98b6e](https://github.com/angular/material/commit/3d98b6e276ea65417aeba0df398cbd4a6fb8fb58)), closes [#10622](https://github.com/angular/material/issues/10622)
+
+
+### Documentation
+
+* **mdSticky:** update and clarify the usage and behavior ([0d431e0](https://github.com/angular/material/commit/0d431e07330f1ea42c933ae80400adfae79b60d9))
+* **a11y:** add a list of supported screen readers ([8ce0813](https://github.com/angular/material/commit/8ce08134c4f305832a96a2edbe24204802a9d881)), closes [#11449](https://github.com/angular/material/issues/11449)
+* **home:** simplify and clarify that browser support policy is for major versions ([1babe8c](https://github.com/angular/material/commit/1babe8c83b79702a5a980d5c602da659b88db739))
+* **icon:** documentation refinement and cleanup ([c644d6a](https://github.com/angular/material/commit/c644d6a29ce4d05e0bfb4588d62340157a98df52))
 
 
 ### Contributors
 
-Thank you to the contributors who helped with the v1.1.26 release:
+Thank you to the contributors who helped with the v1.2.1 release:
 
-[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="mmalerba" src="https://avatars0.githubusercontent.com/u/14793288?v=4&s=117" width="117">](https://github.com/mmalerba) |
-:---: |:---: |
-[Splaktar](https://github.com/Splaktar) |[mmalerba](https://github.com/mmalerba) |
-
-
-<a name="1.1.25"></a>
-## [1.1.25](https://github.com/angular/material/compare/v1.1.24...v1.1.25) (2020-08-31)
-
-
-### Bug Fixes
-
-* **calendar, datepicker:** fix date selection issues with GMT+X timezones ([a897a67](https://github.com/angular/material/commit/a897a67cf1eee6f524dce91c5e0d31b1ad8601b3)), closes [#12000](https://github.com/angular/material/issues/12000)
-* **datepicker:** min-date validation is incorrect in GMT+X timezones ([dd150fa](https://github.com/angular/material/commit/dd150fa780c78177521c99ed50f9fb0916fab8c8)), closes [#11963](https://github.com/angular/material/issues/11963)
-* **select:** md-select-header closes on mouse click when not using multiple ([b32b473](https://github.com/angular/material/commit/b32b473ffbc645ea921f650cc425c82ba9d42bf0)), closes [#11969](https://github.com/angular/material/issues/11969)
-
-
-### Contributors
-
-Thank you to the contributors who helped with the v1.1.25 release:
-
-[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="jelbourn" src="https://avatars3.githubusercontent.com/u/838736?v=4&s=117" width="117">](https://github.com/jelbourn) |
-:---: |:---: |
-[Splaktar](https://github.com/Splaktar) |[jelbourn](https://github.com/jelbourn) |
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="mmalerba" src="https://avatars1.githubusercontent.com/u/14793288?v=4&s=117" width="117">](https://github.com/mmalerba) |[<img alt="josephperrott" src="https://avatars2.githubusercontent.com/u/10864441?v=4&s=117" width="117">](https://github.com/josephperrott) |[<img alt="cgx" src="https://avatars2.githubusercontent.com/u/1088448?v=4&s=117" width="117">](https://github.com/cgx) |
+:---: |:---: |:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[mmalerba](https://github.com/mmalerba) |[josephperrott](https://github.com/josephperrott) |[cgx](https://github.com/cgx) |
 
 
 <a name="1.2.0"></a>
