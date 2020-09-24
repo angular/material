@@ -36,6 +36,44 @@ Thank you to the contributors who helped with the v1.2.1 release:
 [Splaktar](https://github.com/Splaktar) |[mmalerba](https://github.com/mmalerba) |[josephperrott](https://github.com/josephperrott) |[cgx](https://github.com/cgx) |
 
 
+<a name="1.1.26"></a>
+## [1.1.26](https://github.com/angular/material/compare/v1.1.25...v1.1.26) (2020-09-01)
+
+
+### Bug Fixes
+
+* **calendar, datepicker:** fix MomentJS custom format support ([667a78f](https://github.com/angular/material/commit/667a78f955b0980735aab744eeb5a2b22f6fbfa1)), closes [#12003](https://github.com/angular/material/issues/12003) [#11949](https://github.com/angular/material/issues/11949)
+
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.1.26 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="mmalerba" src="https://avatars0.githubusercontent.com/u/14793288?v=4&s=117" width="117">](https://github.com/mmalerba) |
+:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[mmalerba](https://github.com/mmalerba) |
+
+
+<a name="1.1.25"></a>
+## [1.1.25](https://github.com/angular/material/compare/v1.1.24...v1.1.25) (2020-08-31)
+
+
+### Bug Fixes
+
+* **calendar, datepicker:** fix date selection issues with GMT+X timezones ([a897a67](https://github.com/angular/material/commit/a897a67cf1eee6f524dce91c5e0d31b1ad8601b3)), closes [#12000](https://github.com/angular/material/issues/12000)
+* **datepicker:** min-date validation is incorrect in GMT+X timezones ([dd150fa](https://github.com/angular/material/commit/dd150fa780c78177521c99ed50f9fb0916fab8c8)), closes [#11963](https://github.com/angular/material/issues/11963)
+* **select:** md-select-header closes on mouse click when not using multiple ([b32b473](https://github.com/angular/material/commit/b32b473ffbc645ea921f650cc425c82ba9d42bf0)), closes [#11969](https://github.com/angular/material/issues/11969)
+
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.1.25 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="jelbourn" src="https://avatars3.githubusercontent.com/u/838736?v=4&s=117" width="117">](https://github.com/jelbourn) |
+:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[jelbourn](https://github.com/jelbourn) |
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/angular/material/compare/v1.1.24...v1.2.0) (2020-08-03)
 
