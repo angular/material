@@ -139,13 +139,21 @@ describe('md-datepicker', function() {
     expect(ngElement.attr('type')).toBe('date');
   });
 
+  it('should handle an initial ng-model that is null when timezone is specified', function() {
+    pageScope.modelOptions = {timezone: 'UTC'};
+    pageScope.myDate = null;
+    createDatepickerInstance(
+      '<md-datepicker ng-model="myDate" ng-model-options="modelOptions"></md-datepicker>');
+  });
+
   it('should pass the timezone to the formatting function', function() {
     spyOn(controller.locale, 'formatDate');
+    pageScope.modelOptions = {timezone: 'UTC'};
 
-    createDatepickerInstance('<md-datepicker ng-model="myDate" ' +
-      'ng-model-options="{ timezone: \'utc\' }"></md-datepicker>');
+    createDatepickerInstance(
+      '<md-datepicker ng-model="myDate" ng-model-options="modelOptions"></md-datepicker>');
 
-    expect(controller.locale.formatDate).toHaveBeenCalledWith(pageScope.myDate, 'utc');
+    expect(controller.locale.formatDate).toHaveBeenCalledWith(pageScope.myDate, 'UTC');
   });
 
   it('should allow for the locale to be overwritten on a specific element', function() {
