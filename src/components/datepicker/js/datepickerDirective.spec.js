@@ -153,7 +153,12 @@ describe('md-datepicker', function() {
     createDatepickerInstance(
       '<md-datepicker ng-model="myDate" ng-model-options="modelOptions"></md-datepicker>');
 
-    expect(controller.locale.formatDate).toHaveBeenCalledWith(pageScope.myDate, 'UTC');
+    // If running in a GMT+X timezone, formatDate will not be called with a timezone argument.
+    if (pageScope.myDate.getTimezoneOffset() < 0) {
+      expect(controller.locale.formatDate).toHaveBeenCalledWith(pageScope.myDate);
+    } else {
+      expect(controller.locale.formatDate).toHaveBeenCalledWith(pageScope.myDate, 'UTC');
+    }
   });
 
   it('should allow for the locale to be overwritten on a specific element', function() {

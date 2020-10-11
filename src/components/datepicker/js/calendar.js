@@ -174,7 +174,7 @@
     /**
      * The date that is currently focused or showing in the calendar. This will initially be set
      * to the ng-model value if set, otherwise to today. It will be updated as the user navigates
-     * to other months. The cell corresponding to the displayDate does not necesarily always have
+     * to other months. The cell corresponding to the displayDate does not necessarily always have
      * focus in the document (such as for cases when the user is scrolling the calendar).
      * @type {Date}
      */
