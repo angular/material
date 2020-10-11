@@ -339,7 +339,10 @@
      */
     this.$scope = $scope;
 
-    /** @type {Date} */
+    /**
+     * This holds the model that will be used by the calendar.
+     * @type {Date|null|undefined}
+     */
     this.date = null;
 
     /** @type {boolean} */
@@ -631,7 +634,12 @@
    * @param {Date=} opt_date Date to check. If not given, defaults to the datepicker's model value.
    */
   DatePickerCtrl.prototype.updateErrorState = function(opt_date) {
-    var date = opt_date || this.date;
+    var date;
+    if (opt_date) {
+      date = new Date(opt_date.valueOf());
+    } else {
+      date = angular.copy(this.ngModelCtrl.$modelValue);
+    }
 
     // Clear any existing errors to get rid of anything that's no longer relevant.
     this.clearErrorState();
@@ -840,7 +848,7 @@
 
   /**
    * Open the floating calendar pane.
-   * @param {Event} event
+   * @param {MouseEvent|KeyboardEvent|{target: HTMLInputElement}} event
    */
   DatePickerCtrl.prototype.openCalendarPane = function(event) {
     if (!this.isCalendarOpen && !this.isDisabled && !this.inputFocusedOnWindowBlur) {
@@ -901,7 +909,7 @@
       }
     }
 
-    function reset(){
+    function reset() {
       self.isCalendarOpen = self.isOpen = false;
     }
   };
@@ -916,7 +924,7 @@
     // Use a timeout in order to allow the calendar to be rendered, as it is gated behind an ng-if.
     var self = this;
     this.$mdUtil.nextTick(function() {
-      self.getCalendarCtrl().focusDate();
+      self.getCalendarCtrl().focusDate(self.date);
     }, false);
   };
 
@@ -1007,6 +1015,7 @@
     var self = this;
     var timezone = this.$mdUtil.getModelOption(this.ngModelCtrl, 'timezone');
 
+    // Update the model used by the calendar.
     if (this.dateUtil.isValidDate(value) && timezone != null && value.getTimezoneOffset() >= 0) {
       this.date = this.dateUtil.removeLocalTzAndReparseDate(value);
     } else {
