@@ -16,6 +16,26 @@ For an implementation of the [Material Design Specification (2018+)](https://mat
 please see the [Angular Material](https://github.com/angular/components) project which is built for
 [Angular](https://angular.io) developers.
 
+### <a name="lts"></a> Long Term Support
+
+AngularJS Material has entered a Long Term Support (LTS) period which ends on December 31st, 2021.
+This date aligns with the
+[AngularJS LTS](https://docs.angularjs.org/misc/version-support-status) period.
+
+We now focus exclusively on providing fixes to bugs, in the 1.2.x branch of the library, that
+satisfy at least one of the following criteria:
+  - We receive a report of, or detect, a security weakness which is then verified
+  - A major browser releases a version that will cause current production applications
+    to stop working
+  - The [jQuery library](https://jquery.com/) releases a version that will cause
+    current production applications to stop working
+
+AngularJS Material 1.1.x will get a new version, if and only if, we verify a new severe security
+weakness.
+
+Learn how to report security issues
+[here](https://github.com/angular/material/blob/master/SECURITY.md).
+
 ![venn diagram](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
 
 AngularJS Material includes a rich set of reusable, well-tested, and accessible UI components.
@@ -63,7 +83,7 @@ We have three types of releases:
 
 ##### Patch Releases
 
-The patch builds (1.1.8, 1.1.9, 1.1.10, etc.) are prepared based on commits in the `master` branch;
+The patch builds (1.2.1, 1.2.2, etc.) are prepared based on commits in the `master` branch;
 which contains only non-breaking changes (I.e. bug fixes, new features, API additions, and minimal
 non-breaking CSS changes). We are targeting `patch` releases every 2 weeks.
 
