@@ -355,7 +355,7 @@ if (angular.version.minor >= 4) {
       var rafWaitQueue = [];
       function waitUntilQuiet(callback) {
         if (cancelLastRAFRequest) {
-          cancelLastRAFRequest(); //cancels the request
+          cancelLastRAFRequest(); // cancels the request
         }
         rafWaitQueue.push(callback);
         cancelLastRAFRequest = $$rAF(function() {

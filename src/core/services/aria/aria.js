@@ -73,9 +73,9 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
 
   /**
    * Check if expected attribute has been specified on the target element or child
-   * @param element
-   * @param attrName
-   * @param {optional} defaultValue What to set the attr to if no value is found
+   * @param {string|JQLite} element
+   * @param {string} attrName
+   * @param {string=} defaultValue What to set the attr to if no value is found
    */
   function expect(element, attrName, defaultValue) {
 
@@ -123,14 +123,18 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
     var content = getText(element);
     var hasBinding = content.indexOf($interpolate.startSymbol()) > -1;
 
-    if ( !hasBinding && !content) {
+    if (!hasBinding && !content) {
       expect(element, attrName, content);
     }
   }
 
+  /**
+   * @param {Element|JQLite} element
+   * @returns {string}
+   */
   function getText(element) {
     element = element[0] || element;
-    var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+    var walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null);
     var text = '';
 
     var node;
@@ -142,6 +146,10 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
 
     return text.trim() || '';
 
+    /**
+     * @param {Node} node
+     * @returns {boolean}
+     */
     function isAriaHiddenNode(node) {
       while (node.parentNode && (node = node.parentNode) !== element) {
         if (node.getAttribute && node.getAttribute('aria-hidden') === 'true') {
@@ -192,8 +200,8 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
 
   /**
    * Check if expected element's parent has aria label attribute and has valid role and tagName
-   * @param element
-   * @param {optional} level Number of levels deep search should be performed
+   * @param {string|JQLite|Node & ParentNode} element
+   * @param {number=} level Number of levels deep search should be performed
    */
   function parentHasAriaLabel(element, level) {
     level = level || 1;
@@ -214,9 +222,9 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
       if (!hasAriaLabel(parentNode)) {
         return false;
       }
-      /* Perform role blacklist check */
+      /* Perform role block-list check */
       if (parentNode.hasAttribute('role')) {
-        switch(parentNode.getAttribute('role').toLowerCase()) {
+        switch (parentNode.getAttribute('role').toLowerCase()) {
           case 'command':
           case 'definition':
           case 'directory':
@@ -236,8 +244,8 @@ function MdAriaService($$rAF, $log, $window, $interpolate) {
             return false;
         }
       }
-      /* Perform tagName blacklist check */
-      switch(parentNode.tagName.toLowerCase()) {
+      /* Perform tagName block-list check */
+      switch (parentNode.tagName.toLowerCase()) {
         case 'abbr':
         case 'acronym':
         case 'address':

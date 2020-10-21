@@ -1,6 +1,6 @@
 $dense-baseline-grid: $baseline-grid / 2 !default;
 
-$list-h3-margin: 0 0 0px 0 !default;
+$list-h3-margin: 0 0 0 0 !default;
 $list-h4-margin: 3px 0 1px 0 !default;
 $list-h4-font-weight: 400 !default;
 $list-header-line-height: 1.2em !default;
@@ -28,7 +28,7 @@ $list-item-height: 6 * $baseline-grid !default;
 $list-item-two-line-height: 9 * $baseline-grid !default;
 $list-item-three-line-height: 11 * $baseline-grid !default;
 
-$list-item-dense-height: 12 * $dense-baseline-grid !default;
+$list-item-dense-height: 10 * $dense-baseline-grid !default;
 $list-item-dense-two-line-height: 15 * $dense-baseline-grid !default;
 $list-item-dense-three-line-height: 19 * $dense-baseline-grid !default;
 $list-item-dense-primary-icon-width: $dense-baseline-grid * 5 !default;
@@ -48,7 +48,7 @@ md-list {
     line-height: $list-header-line-height;
   }
 
-  &.md-dense {
+  &.md-dense:not(.md-dense-disabled) {
     md-list-item {
       &,
       .md-list-item-inner {
@@ -56,7 +56,7 @@ md-list {
         @include ie11-min-height-flexbug($list-item-dense-height);
 
 
-        // Layout for controls in primary or secondary divs, or auto-infered first child
+        // Layout for controls in primary or secondary divs, or auto-inferred first child
 
         md-icon:first-child {
           width: $list-item-dense-primary-icon-width;
@@ -65,14 +65,27 @@ md-list {
 
         > md-icon:first-child:not(.md-avatar-icon) {
           @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-dense-primary-icon-width, auto);
+          margin-top: $dense-baseline-grid;
+          margin-bottom: $dense-baseline-grid;
         }
         .md-avatar, .md-avatar-icon {
           @include rtl-prop(margin-right, margin-left, $list-item-primary-width - $list-item-dense-primary-avatar-width, auto);
+          margin-top: $dense-baseline-grid + 2px;
+          margin-bottom: $dense-baseline-grid + 2px;
         }
         .md-avatar {
           flex: none;
           width: $list-item-dense-primary-avatar-width;
           height: $list-item-dense-primary-avatar-width;
+        }
+        .md-secondary-container {
+          .md-secondary.md-button {
+            margin-top: $dense-baseline-grid;
+            margin-bottom: $dense-baseline-grid;
+          }
+          md-checkbox:not(.md-dense-disabled) {
+            min-height: $icon-button-height;
+          }
         }
       }
 
@@ -89,6 +102,7 @@ md-list {
             p {
               line-height: $list-item-dense-line-height;
               font-size: $list-item-dense-font-size;
+              padding-bottom: 4px;
             }
 
             h3 {
@@ -122,6 +136,10 @@ md-list {
         }
       }
     }
+    .md-subheader-inner {
+      padding-top: $dense-baseline-grid * 3;
+      padding-bottom: $dense-baseline-grid * 3;
+    }
   }
 }
 
@@ -142,7 +160,7 @@ md-list-item {
       align-items: center;
       justify-content: flex-start;
 
-      padding: 0 16px;
+      padding: $list-item-padding-vertical $list-item-padding-horizontal;
       margin: 0;
 
       font-weight: 400;
@@ -163,7 +181,7 @@ md-list-item {
       .md-list-item-inner {
         // The list item content should fill the complete width.
         width: 100%;
-        min-height: inherit;
+        @include ie11-min-height-flexbug(inherit);
       }
 
     }
@@ -276,14 +294,17 @@ md-list-item {
 
     & > md-checkbox {
       width: 3 * $baseline-grid;
-      @include rtl(margin-left, 3px, 29px);
-      @include rtl(margin-right, 29px, 3px);
-      margin-top: 16px;
+      min-height: $icon-button-height;
+      @include rtl(margin-left, 0px, 29px);
+      @include rtl(margin-right, 29px, 0px);
     }
 
     .md-secondary-container {
       display: flex;
       align-items: center;
+      // Ensure the secondary button is not behind the primary button if its template is provided by
+      // a directive.
+      position: relative;
 
       // Per W3C: https://www.w3.org/TR/css-flexbox/#flex-common
       // By default, flex items won’t shrink below their minimum content size.
@@ -307,11 +328,12 @@ md-list-item {
       }
 
       md-checkbox {
-        margin-top: 0;
-        margin-bottom: 0;
+        margin: 0 6px;
+        padding: 0 8px;
+        min-height: $icon-button-height;
 
         &:last-child {
-          width: 3 * $baseline-grid;
+          width: $icon-button-width;
           @include rtl-prop(margin-right, margin-left, 0, auto);
         }
       }

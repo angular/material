@@ -7,6 +7,8 @@ describe('$mdPanel', function() {
   var PANEL_WRAPPER_CLASS = 'md-panel-outer-wrapper';
   var PANEL_EL = '.md-panel';
   var PANEL_EL_CLASS = 'md-panel';
+  var INNER_WRAPPER = '.md-panel-inner-wrapper';
+  var INNER_WRAPPER_CLASS = 'md-panel-inner-wrapper';
   var HIDDEN_CLASS = '_md-panel-hidden';
   var FOCUS_TRAPS_CLASS = '._md-panel-focus-trap';
   var FULLSCREEN_CLASS = '_md-panel-fullscreen';
@@ -19,7 +21,7 @@ describe('$mdPanel', function() {
   var VIEWPORT_MARGIN = 8;
 
   /**
-   * @param {!angular.$injector} $injector
+   * @param {!IInjectorService} $injector
    * @ngInject
    */
   var injectLocals = function($injector) {
@@ -737,7 +739,7 @@ describe('$mdPanel', function() {
             return $q.when(this);
           };
 
-          var config = angular.extend( {'onCloseSuccess': onCloseSuccess,
+          var config = angular.extend({'onCloseSuccess': onCloseSuccess,
               clickOutsideToClose: true, }, DEFAULT_CONFIG);
 
           openPanel(config);
@@ -760,7 +762,7 @@ describe('$mdPanel', function() {
             return $q.when(this);
           };
 
-          var config = angular.extend( {'onCloseSuccess': onCloseSuccess,
+          var config = angular.extend({'onCloseSuccess': onCloseSuccess,
               escapeToClose: true }, DEFAULT_CONFIG);
 
           openPanel(config);
@@ -1940,6 +1942,26 @@ describe('$mdPanel', function() {
             .toBeApproximately(middleOfPage + parseInt(offset));
       });
 
+      it('horizontally with an integer value', function() {
+        var left = '50px';
+        var offset = -15;
+
+        var position = mdPanelPosition
+            .absolute()
+            .left(left)
+            .withOffsetX(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.left)
+            .toBeApproximately(parseInt(left) + offset);
+      });
+
       it('vertically', function() {
         var top = '50px';
         var offset = '-15px';
@@ -2009,6 +2031,69 @@ describe('$mdPanel', function() {
         expect(middleOfPanel)
             .toBeApproximately(middleOfPage + parseInt(offset));
       });
+
+      it('vertically with an integer value', function() {
+        var top = '50px';
+        var offset = -15;
+
+        var position = mdPanelPosition
+            .absolute()
+            .top(top)
+            .withOffsetY(offset);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.top)
+            .toBeApproximately(parseInt(top) + offset);
+      });
+
+      it('with a function that does not return units', function() {
+        var left = '50px';
+        var offset = -15;
+        var obj = {
+          getOffsetX: function() {
+            return offset;
+          }
+        };
+
+        var position = mdPanelPosition
+            .absolute()
+            .left(left)
+            .withOffsetX(obj.getOffsetX);
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var panelRect = document.querySelector(PANEL_EL)
+            .getBoundingClientRect();
+
+        expect(panelRect.left).toBeApproximately(parseInt(left) + offset);
+      });
+
+      it('should apply offsets to the panel inner wrapper, instead of directly ' +
+        'on the panel element', function() {
+        var position = mdPanelPosition
+            .absolute()
+            .withOffsetX('-10px');
+
+        config['position'] = position;
+
+        openPanel(config);
+
+        var transform = $mdConstant.CSS.TRANSFORM;
+        var panelEl = document.querySelector(PANEL_EL);
+        var innerWrapper = document.querySelector(INNER_WRAPPER);
+
+        expect(panelEl.style[transform]).toBeFalsy();
+        expect(innerWrapper.style[transform]).toBeTruthy();
+        expect(panelEl.parentNode).toBe(innerWrapper);
+      });
     });
 
     describe('should absolutely position the panel at', function() {
@@ -2019,7 +2104,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.top).toEqual(top);
       });
 
@@ -2029,7 +2114,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.top).toEqual('0px');
       });
 
@@ -2039,7 +2124,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.bottom).toEqual('')
         expect(panelCss.top).toEqual('0px');
       });
@@ -2051,7 +2136,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.bottom).toEqual(bottom);
       });
 
@@ -2061,7 +2146,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.bottom).toEqual('0px');
       });
 
@@ -2071,7 +2156,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.top).toEqual('');
         expect(panelCss.bottom).toEqual('0px');
       });
@@ -2083,7 +2168,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.left).toEqual(left);
       });
 
@@ -2093,7 +2178,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.left).toEqual('0px');
       });
 
@@ -2103,7 +2188,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.right).toEqual('');
         expect(panelCss.left).toEqual('0px');
       });
@@ -2115,7 +2200,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.right).toEqual(right);
       });
 
@@ -2125,7 +2210,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.right).toEqual('0px');
       });
 
@@ -2135,7 +2220,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.left).toEqual('');
         expect(panelCss.right).toEqual('0px');
       });
@@ -2146,7 +2231,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.left).toEqual(start);
       });
 
@@ -2158,7 +2243,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.right).toEqual(start);
       });
 
@@ -2168,7 +2253,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.right).toEqual(end);
       });
 
@@ -2180,7 +2265,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.left).toEqual(end);
       });
 
@@ -2192,7 +2277,7 @@ describe('$mdPanel', function() {
 
         var middleOfPage = 0.5 * window.innerWidth;
 
-        var panelRect = document.querySelector(PANEL_EL)
+        var panelRect = document.querySelector(INNER_WRAPPER)
             .getBoundingClientRect();
         var middleOfPanel = panelRect.left + 0.5 * panelRect.width;
 
@@ -2207,7 +2292,7 @@ describe('$mdPanel', function() {
 
         var middleOfPage = 0.5 * window.innerHeight;
 
-        var panelRect = document.querySelector(PANEL_EL)
+        var panelRect = document.querySelector(INNER_WRAPPER)
             .getBoundingClientRect();
         var middleOfPanel = panelRect.top + 0.5 * panelRect.height;
 
@@ -2223,7 +2308,7 @@ describe('$mdPanel', function() {
         var middleOfPageX = 0.5 * window.innerWidth;
         var middleOfPageY = 0.5 * window.innerHeight;
 
-        var panelRect = document.querySelector(PANEL_EL)
+        var panelRect = document.querySelector(INNER_WRAPPER)
             .getBoundingClientRect();
         var middleOfPanelX = panelRect.left + 0.5 * panelRect.width;
         var middleOfPanelY = panelRect.top + 0.5 * panelRect.height;
@@ -2243,7 +2328,7 @@ describe('$mdPanel', function() {
         myButton = '<button>myButton</button>';
         attachToBody(myButton);
         myButton = angular.element(document.querySelector('button'));
-        myButton.css('margin', '100px');
+        myButton.css('margin', '120px');
         myButtonRect = myButton[0].getBoundingClientRect();
 
         xPosition = $mdPanel.xPosition;
@@ -2259,7 +2344,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.left).toBeApproximately(myButtonRect.left);
         expect(panelCss.top).toBeApproximately(myButtonRect.top);
       });
@@ -2273,7 +2358,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.left).toBeApproximately(myButtonRect.left);
         expect(panelCss.top).toBeApproximately(myButtonRect.top);
       });
@@ -2287,7 +2372,7 @@ describe('$mdPanel', function() {
 
         openPanel(config);
 
-        var panelCss = document.querySelector(PANEL_EL).style;
+        var panelCss = document.querySelector(INNER_WRAPPER).style;
         expect(panelCss.left).toBeApproximately(myButtonRect.left);
         expect(panelCss.top).toBeApproximately(myButtonRect.top);
       });
@@ -2313,7 +2398,7 @@ describe('$mdPanel', function() {
             y: yPosition.ALIGN_TOPS,
           });
 
-          var panelCss = document.querySelector(PANEL_EL).style;
+          var panelCss = document.querySelector(INNER_WRAPPER).style;
           expect(panelCss.left).toBeApproximately(myButtonRect.left);
           expect(panelCss.top).toBeApproximately(myButtonRect.top);
         });
@@ -2504,8 +2589,8 @@ describe('$mdPanel', function() {
           panelRef.open();
           flushPanel();
 
-          expect(panelRef.panelEl[0].offsetLeft).toBe(VIEWPORT_MARGIN);
-          expect(panelRef.panelEl[0]).toHaveClass(ADJUSTED_CLASS);
+          expect(panelRef.innerWrapper[0].offsetLeft).toBe(VIEWPORT_MARGIN);
+          expect(panelRef.innerWrapper).toHaveClass(ADJUSTED_CLASS);
 
           panelRef.close();
           flushPanel();
@@ -2513,8 +2598,8 @@ describe('$mdPanel', function() {
           panelRef.open();
           flushPanel();
 
-          expect(panelRef.panelEl[0].offsetLeft).toBe(VIEWPORT_MARGIN);
-          expect(panelRef.panelEl[0]).toHaveClass(ADJUSTED_CLASS);
+          expect(panelRef.innerWrapper[0].offsetLeft).toBe(VIEWPORT_MARGIN);
+          expect(panelRef.innerWrapper).toHaveClass(ADJUSTED_CLASS);
 
           panelRef.destroy();
         });
@@ -2529,7 +2614,7 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelRect = document.querySelector(PANEL_EL)
+          var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
           expect(panelRect.bottom).toBeApproximately(myButtonRect.top);
         });
@@ -2543,7 +2628,7 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelRect = document.querySelector(PANEL_EL)
+          var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
           expect(panelRect.top).toBeApproximately(myButtonRect.top);
         });
@@ -2558,7 +2643,7 @@ describe('$mdPanel', function() {
           openPanel(config);
 
           var middleOfButton = myButtonRect.top + 0.5 * myButtonRect.height;
-          var panelRect = document.querySelector(PANEL_EL)
+          var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
           var middleOfPanel = panelRect.top + 0.5 * panelRect.height;
 
@@ -2574,7 +2659,7 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelRect = document.querySelector(PANEL_EL)
+          var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
           expect(panelRect.bottom).toBeApproximately(myButtonRect.bottom);
         });
@@ -2588,7 +2673,7 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelRect = document.querySelector(PANEL_EL)
+          var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
           expect(panelRect.top).toBeApproximately(myButtonRect.bottom);
         });
@@ -2608,7 +2693,7 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panel = document.querySelector(PANEL_EL);
+          var panel = document.querySelector(INNER_WRAPPER);
 
           expect(panel.offsetLeft).toBe(VIEWPORT_MARGIN);
           expect(panel).toHaveClass(ADJUSTED_CLASS);
@@ -2629,7 +2714,7 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panel = document.querySelector(PANEL_EL);
+          var panel = document.querySelector(INNER_WRAPPER);
           var panelRect = panel.getBoundingClientRect();
 
           expect(panelRect.left + panelRect.width).toBeLessThan(window.innerWidth);
@@ -2647,7 +2732,7 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelRect = document.querySelector(PANEL_EL)
+          var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
           expect(panelRect.right).toBeApproximately(myButtonRect.left);
         });
@@ -2661,7 +2746,7 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelRect = document.querySelector(PANEL_EL)
+          var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
           expect(panelRect.right).toBeApproximately(myButtonRect.right);
         });
@@ -2676,7 +2761,7 @@ describe('$mdPanel', function() {
           openPanel(config);
 
           var middleOfButton = myButtonRect.left + 0.5 * myButtonRect.width;
-          var panelRect = document.querySelector(PANEL_EL)
+          var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
           var middleOfPanel = panelRect.left + 0.5 * panelRect.width;
 
@@ -2692,7 +2777,7 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelRect = document.querySelector(PANEL_EL)
+          var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
           expect(panelRect.left).toBeApproximately(myButtonRect.left);
         });
@@ -2706,7 +2791,7 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panelRect = document.querySelector(PANEL_EL)
+          var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
           expect(panelRect.left).toBeApproximately(myButtonRect.right);
         });
@@ -2726,7 +2811,7 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panel = document.querySelector(PANEL_EL);
+          var panel = document.querySelector(INNER_WRAPPER);
 
           expect(panel.offsetTop).toBe(VIEWPORT_MARGIN);
           expect(panel).toHaveClass(ADJUSTED_CLASS);
@@ -2747,7 +2832,7 @@ describe('$mdPanel', function() {
 
           openPanel(config);
 
-          var panel = document.querySelector(PANEL_EL);
+          var panel = document.querySelector(INNER_WRAPPER);
           var panelRect = panel.getBoundingClientRect();
 
           expect(panelRect.top + panelRect.height).toBeLessThan(window.innerHeight);
@@ -2768,7 +2853,7 @@ describe('$mdPanel', function() {
 
             openPanel(config);
 
-            var panelRect = document.querySelector(PANEL_EL)
+            var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
             expect(panelRect.left).toBeApproximately(myButtonRect.right);
           });
@@ -2782,7 +2867,7 @@ describe('$mdPanel', function() {
 
             openPanel(config);
 
-            var panelRect = document.querySelector(PANEL_EL)
+            var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
             expect(panelRect.left).toBeApproximately(myButtonRect.left);
           });
@@ -2796,12 +2881,12 @@ describe('$mdPanel', function() {
 
             openPanel(config);
 
-            var panelRect = document.querySelector(PANEL_EL)
+            var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
             expect(panelRect.right).toBeApproximately(myButtonRect.right);
           });
 
-          it('offset to the right of an element', function() {
+          it('offset to the left of an element', function() {
             var position = mdPanelPosition
               .relativeTo(myButton)
               .addPanelPosition(xPosition.OFFSET_END, null);
@@ -2810,7 +2895,7 @@ describe('$mdPanel', function() {
 
             openPanel(config);
 
-            var panelRect = document.querySelector(PANEL_EL)
+            var panelRect = document.querySelector(INNER_WRAPPER)
               .getBoundingClientRect();
             expect(panelRect.right).toBeApproximately(myButtonRect.left);
           });
@@ -2891,6 +2976,49 @@ describe('$mdPanel', function() {
 
       expect(backdropAnimation._openDuration).toBe(mdPanelAnimation._openDuration);
       expect(backdropAnimation._closeDuration).toBe(mdPanelAnimation._closeDuration);
+    });
+
+    describe('should add scale after the existing transform when', function () {
+      var animator;
+      var panelEl;
+
+      beforeEach(function () {
+        animator = mdPanelAnimation._$mdUtil.dom.animator;
+
+        var panelDiv = document.createElement('div');
+        panelDiv.id = 'mockPanel'
+        panelDiv.style.transform = 'translateX(-50%) translateY(-50%)'
+        attachToBody(panelDiv);
+        panelEl = angular.element(panelDiv);
+
+        spyOn(animator, 'translate3d');
+
+        spyOn(animator, 'calculateZoomToOrigin')
+          .and.returnValue('translate3d(0, 0, 0) scale(0.5, 0.5)');
+
+      });
+
+      it('opening with the SCALE animation', function () {
+        var animation = mdPanelAnimation.openFrom('button')
+          .withAnimation('md-panel-animate-scale')
+
+        animation.animateOpen(panelEl);
+
+       expect(animator.translate3d.calls.mostRecent().args[1].transform)
+          .toMatch(/^translateX.*scale\(0\.5, 0\.5\)$/g);
+
+      });
+
+      it('closing with the SCALE animation', function () {
+        var animation = mdPanelAnimation.openFrom('button')
+          .withAnimation('md-panel-animate-scale')
+
+        animation.animateClose(panelEl);
+
+        expect(animator.translate3d.calls.mostRecent().args[2].transform)
+          .toMatch(/^translateX.*scale\(0\.5, 0\.5\)$/g);
+
+      });
     });
 
     describe('should determine openFrom when', function() {
@@ -3243,9 +3371,13 @@ describe('$mdPanel', function() {
         openPanel(config);
 
         expect(panelRef.panelEl.parent())
+          .toHaveClass(INNER_WRAPPER_CLASS);
+
+        expect(panelRef.panelEl.parent().parent())
           .toHaveClass(PANEL_WRAPPER_CLASS);
 
-        expect(panelRef.panelContainer[0]).toBe(config.contentElement.parent()[0]);
+        expect(panelRef.innerWrapper[0]).toBe(config.contentElement.parent()[0]);
+        expect(panelRef.panelContainer[0]).toBe(config.contentElement.parent().parent()[0]);
       });
 
     it('should add the proper class to the panel element and assign ' +
@@ -3273,13 +3405,16 @@ describe('$mdPanel', function() {
 
     it('should clear out any panel-specific inline styles from the element',
       function() {
-        openPanel(config);
 
-        expect(config.contentElement.attr('style')).toBeTruthy();
+        config.contentElement.css('color', 'red');
+
+        var initialStyles = config.contentElement.attr('style');
+
+        openPanel(config);
 
         closePanel();
 
-        expect(config.contentElement.attr('style')).toBeFalsy();
+        expect(config.contentElement.attr('style')).toBe(initialStyles);
       });
 
     it('should clean up the panel via the cleanup function from the compiler',

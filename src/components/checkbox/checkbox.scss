@@ -1,38 +1,38 @@
-//$checkbox-width: 20px !default;
+//$checkbox-width: 18px !default;
 //$checkbox-height: $checkbox-width !default;
 //$checkbox-border-radius: 2px !default;
 //$checkbox-border-width: 2px !default;
 //
-// ^^ defined in variables.scss
+// ^^ defined in _variables.scss
 //
-$checkbox-margin: 16px !default;
-$checkbox-text-margin: 10px !default;
-$checkbox-top: 12px !default;
+$checkbox-text-margin-top: 10px !default;
+$container-checkbox-margin: 3px !default;
+
+$checkbox-min-height: 48px !default;
+$checkbox-min-height-dense: 36px !default;
+$checkbox-text-margin: 36px !default;
+
+$md-inline-alignment: $input-container-vertical-margin + $input-container-padding
+                    + $input-padding-top + $input-padding-bottom + $input-border-width-default
+                    - $checkbox-text-margin-top !default;
 
 .md-inline-form {
   md-checkbox {
-    margin: 19px 0 18px;
+    margin-top: $md-inline-alignment;
+    margin-bottom: auto;
   }
 }
 
 md-checkbox {
   box-sizing: border-box;
   display: inline-block;
-  margin-bottom: $checkbox-margin;
   white-space: nowrap;
   cursor: pointer;
   outline: none;
   user-select: none;
   position: relative;
   min-width: $checkbox-width;
-  min-height: $checkbox-width;
-  @include rtl(margin-left, 0, $checkbox-margin);
-  @include rtl(margin-right, $checkbox-margin, 0);
-
-  &:last-of-type {
-    margin-left: 0;
-    margin-right: 0;
-  }
+  @include dense(min-height, $checkbox-min-height, $checkbox-min-height-dense);
 
   &.md-focused:not([disabled]) {
     .md-container:before {
@@ -49,11 +49,16 @@ md-checkbox {
     }
   }
 
-  &.md-align-top-left > div.md-container {
-    top: $checkbox-top;
-  }
-
   @include checkbox-container;
+
+  .md-container {
+    // Use auto for compatibility with md-checkbox padding
+    top: auto;
+    left: auto;
+    right: auto;
+    margin: $container-checkbox-margin;
+    margin-top: $checkbox-height + $container-checkbox-margin;
+  }
 
   .md-label {
     box-sizing: border-box;
@@ -62,9 +67,32 @@ md-checkbox {
     vertical-align: middle;
     white-space: normal;
     user-select: text;
+    margin-top: $checkbox-text-margin-top;
+    margin-bottom: auto;
 
-    @include rtl(margin-left, $checkbox-text-margin + $checkbox-width, 0);
-    @include rtl(margin-right, 0, $checkbox-text-margin + $checkbox-width);
+    @include rtl-prop(margin-left, margin-right, $checkbox-text-margin, 0);
+
+    &:empty {
+      // clamp to checkbox-container margins
+      @include rtl(margin-left, $checkbox-height + ($container-checkbox-margin * 2), 0);
+      @include rtl(margin-right, 0, $checkbox-height + ($container-checkbox-margin * 2));
+    }
 
   }
+}
+md-input-container .md-checkbox-link-label {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: normal;
+  user-select: text;
+  cursor: pointer;
+  // The span is actually after the checkbox in the DOM, but we need it to line up, so we move it up
+  // while not introducing any breaking changes to existing styles.
+  top: -21px;
+
+  // In this mode, the checkbox's width needs to be factored in as well.
+  @include rtl(margin-left, $checkbox-text-margin - $checkbox-width, 0);
+  @include rtl(margin-right, 0, $checkbox-text-margin - $checkbox-width);
 }

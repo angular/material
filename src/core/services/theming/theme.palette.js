@@ -16,8 +16,8 @@ angular.module('material.core.theming.palette', [])
     'A400': '#ff1744',
     'A700': '#d50000',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 300 A100',
-    'contrastStrongLightColors': '400 500 600 700 A200 A400 A700'
+    'contrastDarkColors': '50 100 200 300 400 500 600 A100 A200 A400',
+    'contrastStrongLightColors': '700 800 900 A700'
   },
   'pink': {
     '50': '#fce4ec',
@@ -35,8 +35,10 @@ angular.module('material.core.theming.palette', [])
     'A400': '#f50057',
     'A700': '#c51162',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '500 600 A200 A400 A700'
+    'contrastDarkColors': '50 100 200 300 400 A100 A200 A400',
+    // White on 500 does not meet the minimum 4.5 contrast ratio (at 4.34),
+    // but it's worse with a dark foreground (3.61).
+    'contrastStrongLightColors': '500 600 700 800 900 A700'
   },
   'purple': {
     '50': '#f3e5f5',
@@ -54,8 +56,8 @@ angular.module('material.core.theming.palette', [])
     'A400': '#d500f9',
     'A700': '#aa00ff',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '300 400 A200 A400 A700'
+    'contrastDarkColors': '50 100 200 300 A100 A200 A400',
+    'contrastStrongLightColors': '400 500 600 700 800 900 A700'
   },
   'deep-purple': {
     '50': '#ede7f6',
@@ -73,8 +75,8 @@ angular.module('material.core.theming.palette', [])
     'A400': '#651fff',
     'A700': '#6200ea',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '300 400 A200'
+    'contrastDarkColors': '50 100 200 300 A100',
+    'contrastStrongLightColors': '400 500 600 700 800 900 A200 A400 A700'
   },
   'indigo': {
     '50': '#e8eaf6',
@@ -92,8 +94,8 @@ angular.module('material.core.theming.palette', [])
     'A400': '#3d5afe',
     'A700': '#304ffe',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '300 400 A200 A400'
+    'contrastDarkColors': '50 100 200 300 A100 A200',
+    'contrastStrongLightColors': '400 500 600 700 800 900 A400 A700'
   },
   'blue': {
     '50': '#e3f2fd',
@@ -111,8 +113,10 @@ angular.module('material.core.theming.palette', [])
     'A400': '#2979ff',
     'A700': '#2962ff',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 300 400 A100',
-    'contrastStrongLightColors': '500 600 700 A200 A400 A700'
+    // White on A400 does not meet the minimum 4.5 contrast ratio (at 3.98),
+    // but it's worse with a dark foreground (3.94).
+    'contrastDarkColors': '50 100 200 300 400 500 600 A100 A200',
+    'contrastStrongLightColors': '700 800 900 A400 A700'
   },
   'light-blue': {
     '50': '#e1f5fe',
@@ -130,8 +134,9 @@ angular.module('material.core.theming.palette', [])
     'A400': '#00b0ff',
     'A700': '#0091ea',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '600 700 800 900 A700',
-    'contrastStrongLightColors': '600 700 800 A700'
+    // Dark on 700 does not meet the minimum 4.5 contrast ratio (at 4.07),
+    // but it's worse with a white foreground (3.85).
+    'contrastStrongLightColors': '800 900 A700'
   },
   'cyan': {
     '50': '#e0f7fa',
@@ -149,8 +154,9 @@ angular.module('material.core.theming.palette', [])
     'A400': '#00e5ff',
     'A700': '#00b8d4',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '700 800 900',
-    'contrastStrongLightColors': '700 800 900'
+    // Dark on 700 does not meet the minimum 4.5 contrast ratio (at 4.47),
+    // but it's worse with a white foreground (3.5).
+    'contrastStrongLightColors': '800 900'
   },
   'teal': {
     '50': '#e0f2f1',
@@ -168,8 +174,11 @@ angular.module('material.core.theming.palette', [])
     'A400': '#1de9b6',
     'A700': '#00bfa5',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '500 600 700 800 900',
-    'contrastStrongLightColors': '500 600 700'
+    // Dark on 500 does not meet the minimum 4.5 contrast ratio (at 4.27),
+    // but it's worse with a white foreground (3.67).
+    // White on 600 does not meet the minimum 4.5 contrast ratio (at 4.31),
+    // but it's worse with a dark foreground (3.64).
+    'contrastStrongLightColors': '600 700 800 900'
   },
   'green': {
     '50': '#e8f5e9',
@@ -187,8 +196,9 @@ angular.module('material.core.theming.palette', [])
     'A400': '#00e676',
     'A700': '#00c853',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '500 600 700 800 900',
-    'contrastStrongLightColors': '500 600 700'
+    // White on 700 does not meet the minimum 4.5 contrast ratio (at 4.11),
+    // but it's worse with a dark foreground (3.81).
+    'contrastStrongLightColors': '700 800 900'
   },
   'light-green': {
     '50': '#f1f8e9',
@@ -206,8 +216,7 @@ angular.module('material.core.theming.palette', [])
     'A400': '#76ff03',
     'A700': '#64dd17',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '700 800 900',
-    'contrastStrongLightColors': '700 800 900'
+    'contrastStrongLightColors': '800 900'
   },
   'lime': {
     '50': '#f9fbe7',
@@ -225,7 +234,6 @@ angular.module('material.core.theming.palette', [])
     'A400': '#c6ff00',
     'A700': '#aeea00',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '900',
     'contrastStrongLightColors': '900'
   },
   'yellow': {
@@ -278,8 +286,7 @@ angular.module('material.core.theming.palette', [])
     'A400': '#ff9100',
     'A700': '#ff6d00',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '800 900',
-    'contrastStrongLightColors': '800 900'
+    'contrastStrongLightColors': '900'
   },
   'deep-orange': {
     '50': '#fbe9e7',
@@ -296,9 +303,12 @@ angular.module('material.core.theming.palette', [])
     'A200': '#ff6e40',
     'A400': '#ff3d00',
     'A700': '#dd2c00',
-    'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 300 400 A100 A200',
-    'contrastStrongLightColors': '500 600 700 800 900 A400 A700'
+    'contrastDefaultColor': 'dark',
+    // Dark on 700 does not meet the minimum 4.5 contrast ratio (at 4.01),
+    // but it's worse with a white foreground (3.91).
+    // White on 800 does not meet the minimum 4.5 contrast ratio (at 4.43),
+    // but it's worse with a dark foreground (3.54).
+    'contrastStrongLightColors': '800 900 A400 A700',
   },
   'brown': {
     '50': '#efebe9',
@@ -316,8 +326,8 @@ angular.module('material.core.theming.palette', [])
     'A400': '#8d6e63',
     'A700': '#5d4037',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 A100 A200',
-    'contrastStrongLightColors': '300 400'
+    'contrastDarkColors': '50 100 200 300 A100 A200',
+    'contrastStrongLightColors': '400 500 600 700 800 900 A400 A700'
   },
   'grey': {
     '50': '#fafafa',
@@ -335,7 +345,8 @@ angular.module('material.core.theming.palette', [])
     'A400': '#303030',
     'A700': '#616161',
     'contrastDefaultColor': 'dark',
-    'contrastLightColors': '600 700 800 900 A200 A400 A700'
+    'contrastLightColors': '700 800 900 A200 A400 A700',
+    'contrastStrongLightColors': '600'
   },
   'blue-grey': {
     '50': '#eceff1',
@@ -353,7 +364,9 @@ angular.module('material.core.theming.palette', [])
     'A400': '#78909c',
     'A700': '#455a64',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 300 A100 A200',
-    'contrastStrongLightColors': '400 500 700'
+    'contrastDarkColors': '50 100 200 300 400 A100 A200 A400',
+    // White on 500 does not meet the minimum 4.5 contrast ratio (at 4.37),
+    // but it's worse with a dark foreground.
+    'contrastStrongLightColors': '500 600 700 800 900 A700'
   }
 });

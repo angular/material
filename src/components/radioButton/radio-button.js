@@ -10,6 +10,11 @@ angular.module('material.components.radioButton', [
   .directive('mdRadioButton', mdRadioButtonDirective);
 
 /**
+ * @type {Readonly<{NEXT: number, CURRENT: number, PREVIOUS: number}>}
+ */
+var incrementSelection = Object.freeze({PREVIOUS: -1, CURRENT: 0, NEXT: 1});
+
+/**
  * @ngdoc directive
  * @module material.components.radioButton
  * @name mdRadioGroup
@@ -19,38 +24,30 @@ angular.module('material.components.radioButton', [
  * @description
  * The `<md-radio-group>` directive identifies a grouping
  * container for the 1..n grouped radio buttons; specified using nested
- * `<md-radio-button>` tags.
+ * `<md-radio-button>` elements.
  *
- * As per the [material design spec](http://www.google.com/design/spec/style/color.html#color-ui-color-application)
- * the radio button is in the accent color by default. The primary color palette may be used with
+ * The radio button uses the accent color by default. The primary color palette may be used with
  * the `md-primary` class.
  *
- * Note: `<md-radio-group>` and `<md-radio-button>` handle tabindex differently
- * than the native `<input type='radio'>` controls. Whereas the native controls
+ * Note: `<md-radio-group>` and `<md-radio-button>` handle `tabindex` differently
+ * than the native `<input type="radio">` controls. Whereas the native controls
  * force the user to tab through all the radio buttons, `<md-radio-group>`
- * is focusable, and by default the `<md-radio-button>`s are not.
+ * is focusable and by default the `<md-radio-button>`s are not.
  *
  * @param {string} ng-model Assignable angular expression to data-bind to.
- * @param {boolean=} md-no-ink Use of attribute indicates flag to disable ink ripple effects.
- * @param {string} ngModel Assignable angular expression to data-bind to.
- * @param {string=} ngChange AngularJS expression to be executed when input changes due to user
- *    interaction with the input element.
+ * @param {string=} ng-change AngularJS expression to be executed when input changes due to user
+ *    interaction.
+ * @param {boolean=} md-no-ink If present, disables ink ripple effects.
  *
  * @usage
  * <hljs lang="html">
  * <md-radio-group ng-model="selected">
- *
- *   <md-radio-button
- *        ng-repeat="d in colorOptions"
- *        ng-value="d.value" aria-label="{{ d.label }}">
- *
- *          {{ d.label }}
- *
+ *   <md-radio-button ng-repeat="item in items"
+ *                    ng-value="item.value" aria-label="{{item.label}}">
+ *     {{ item.label }}
  *   </md-radio-button>
- *
  * </md-radio-group>
  * </hljs>
- *
  */
 function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
   RadioGroupController.prototype = createRadioGroupControllerProto();
@@ -62,14 +59,15 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
     link: { pre: linkRadioGroup }
   };
 
-  function linkRadioGroup(scope, element, attr, ctrls) {
-    element.addClass('_md');     // private md component indicator for styling
+  function linkRadioGroup(scope, element, attr, controllers) {
+    // private md component indicator for styling
+    element.addClass('_md');
     $mdTheming(element);
 
-    var rgCtrl = ctrls[0];
-    var ngModelCtrl = ctrls[1] || $mdUtil.fakeNgModel();
+    var radioGroupController = controllers[0];
+    var ngModelCtrl = controllers[1] || $mdUtil.fakeNgModel();
 
-    rgCtrl.init(ngModelCtrl);
+    radioGroupController.init(ngModelCtrl);
 
     scope.mouseActive = false;
 
@@ -79,56 +77,70 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
         'tabIndex': element.attr('tabindex') || '0'
       })
       .on('keydown', keydownListener)
-      .on('mousedown', function(event) {
+      .on('mousedown', function() {
         scope.mouseActive = true;
         $timeout(function() {
           scope.mouseActive = false;
         }, 100);
       })
       .on('focus', function() {
-        if(scope.mouseActive === false) {
-          rgCtrl.$element.addClass('md-focused');
+        if (scope.mouseActive === false) {
+          radioGroupController.$element.addClass('md-focused');
         }
       })
       .on('blur', function() {
-        rgCtrl.$element.removeClass('md-focused');
+        radioGroupController.$element.removeClass('md-focused');
       });
 
+    // Initially set the first radio button as the aria-activedescendant. This will be overridden
+    // if a 'checked' radio button gets rendered. We need to wait for the nextTick here so that the
+    // radio buttons have their id values assigned.
+    $mdUtil.nextTick(function () {
+      var radioButtons = getRadioButtons(radioGroupController.$element);
+      if (radioButtons.count() &&
+          !radioGroupController.$element[0].hasAttribute('aria-activedescendant')) {
+        radioGroupController.setActiveDescendant(radioButtons.first().id);
+      }
+    });
+
     /**
-     *
+     * Apply the md-focused class if it isn't already applied.
      */
     function setFocus() {
       if (!element.hasClass('md-focused')) { element.addClass('md-focused'); }
     }
 
     /**
-     *
+     * @param {KeyboardEvent} keyboardEvent
      */
-    function keydownListener(ev) {
-      var keyCode = ev.which || ev.keyCode;
+    function keydownListener(keyboardEvent) {
+      var keyCode = keyboardEvent.which || keyboardEvent.keyCode;
 
       // Only listen to events that we originated ourselves
-      // so that we don't trigger on things like arrow keys in
-      // inputs.
-
-      if (keyCode != $mdConstant.KEY_CODE.ENTER &&
-          ev.currentTarget != ev.target) {
+      // so that we don't trigger on things like arrow keys in inputs.
+      if (keyCode !== $mdConstant.KEY_CODE.ENTER &&
+          keyboardEvent.currentTarget !== keyboardEvent.target) {
         return;
       }
 
       switch (keyCode) {
         case $mdConstant.KEY_CODE.LEFT_ARROW:
         case $mdConstant.KEY_CODE.UP_ARROW:
-          ev.preventDefault();
-          rgCtrl.selectPrevious();
+          keyboardEvent.preventDefault();
+          radioGroupController.selectPrevious();
           setFocus();
           break;
 
         case $mdConstant.KEY_CODE.RIGHT_ARROW:
         case $mdConstant.KEY_CODE.DOWN_ARROW:
-          ev.preventDefault();
-          rgCtrl.selectNext();
+          keyboardEvent.preventDefault();
+          radioGroupController.selectNext();
           setFocus();
+          break;
+
+        case $mdConstant.KEY_CODE.SPACE:
+          keyboardEvent.preventDefault();
+          radioGroupController.selectCurrent();
           break;
 
         case $mdConstant.KEY_CODE.ENTER:
@@ -138,10 +150,13 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
           }
           break;
       }
-
     }
   }
 
+  /**
+   * @param {JQLite} $element
+   * @constructor
+   */
   function RadioGroupController($element) {
     this._radioButtonRenderFns = [];
     this.$element = $element;
@@ -175,11 +190,14 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
       getViewValue: function() {
         return this._ngModelCtrl.$viewValue;
       },
+      selectCurrent: function() {
+        return changeSelectedButton(this.$element, incrementSelection.CURRENT);
+      },
       selectNext: function() {
-        return changeSelectedButton(this.$element, 1);
+        return changeSelectedButton(this.$element, incrementSelection.NEXT);
       },
       selectPrevious: function() {
-        return changeSelectedButton(this.$element, -1);
+        return changeSelectedButton(this.$element, incrementSelection.PREVIOUS);
       },
       setActiveDescendant: function (radioId) {
         this.$element.attr('aria-activedescendant', radioId);
@@ -189,13 +207,27 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
       }
     };
   }
+
+  /**
+   * Coerce all child radio buttons into an array, then wrap them in an iterator.
+   * @param parent {!JQLite}
+   * @return {{add: add, next: (function()), last: (function(): any|null), previous: (function()), count: (function(): number), hasNext: (function(*=): Array.length|*|number|boolean), inRange: (function(*): boolean), remove: remove, contains: (function(*=): *|boolean), itemAt: (function(*=): any|null), findBy: (function(*, *): *[]), hasPrevious: (function(*=): Array.length|*|number|boolean), items: (function(): *[]), indexOf: (function(*=): number), first: (function(): any|null)}}
+   */
+  function getRadioButtons(parent) {
+    return $mdUtil.iterator(parent[0].querySelectorAll('md-radio-button'), true);
+  }
+
   /**
    * Change the radio group's selected button by a given increment.
    * If no button is selected, select the first button.
+   * @param {JQLite} parent the md-radio-group
+   * @param {incrementSelection} increment enum that determines whether the next or
+   *  previous button is clicked. For current, only the first button is selected, otherwise the
+   *  current selection is maintained (by doing nothing).
    */
   function changeSelectedButton(parent, increment) {
-    // Coerce all child radio buttons into an array, then wrap then in an iterator
-    var buttons = $mdUtil.iterator(parent[0].querySelectorAll('md-radio-button'), true);
+    var buttons = getRadioButtons(parent);
+    var target;
 
     if (buttons.count()) {
       var validate = function (button) {
@@ -204,13 +236,21 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
       };
 
       var selected = parent[0].querySelector('md-radio-button.md-checked');
-      var target = buttons[increment < 0 ? 'previous' : 'next'](selected, validate) || buttons.first();
+      if (!selected) {
+        target = buttons.first();
+      } else if (increment === incrementSelection.PREVIOUS ||
+                 increment === incrementSelection.NEXT) {
+        target = buttons[
+          increment === incrementSelection.PREVIOUS ? 'previous' : 'next'
+        ](selected, validate);
+      }
 
-      // Activate radioButton's click listener (triggerHandler won't create a real click event)
-      angular.element(target).triggerHandler('click');
+      if (target) {
+        // Activate radioButton's click listener (triggerHandler won't create a real click event)
+        angular.element(target).triggerHandler('click');
+      }
     }
   }
-
 }
 
 /**
@@ -227,12 +267,15 @@ function mdRadioGroupDirective($mdUtil, $mdConstant, $mdTheming, $timeout) {
  * the `<md-radio-button>` directive provides ink effects, ARIA support, and
  * supports use within named radio groups.
  *
- * @param {string} ngValue AngularJS expression which sets the value to which the expression should
+ * One of `value` or `ng-value` must be set so that the `md-radio-group`'s model is set properly when the
+ * `md-radio-button` is selected.
+ *
+ * @param {string} value The value to which the model should be set when selected.
+ * @param {string} ng-value AngularJS expression which sets the value to which the model should
  *    be set when selected.
- * @param {string} value The value to which the expression should be set when selected.
  * @param {string=} name Property name of the form under which the control is published.
  * @param {string=} aria-label Adds label to radio button for accessibility.
- * Defaults to radio button's text. If no text content is available, a warning will be logged.
+ *    Defaults to radio button's text. If no text content is available, a warning will be logged.
  *
  * @usage
  * <hljs lang="html">
@@ -264,11 +307,12 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
     link: link
   };
 
-  function link(scope, element, attr, rgCtrl) {
+  function link(scope, element, attr, radioGroupController) {
     var lastChecked;
 
     $mdTheming(element);
-    configureAria(element, scope);
+    configureAria(element);
+    element.addClass('md-auto-horizontal-margin');
 
     // ngAria overwrites the aria-checked inside a $watch for ngValue.
     // We should defer the initialization until all the watches have fired.
@@ -284,17 +328,17 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
      * Initializes the component.
      */
     function initialize() {
-      if (!rgCtrl) {
+      if (!radioGroupController) {
         throw 'RadioButton: No RadioGroupController could be found.';
       }
 
-      rgCtrl.add(render);
+      radioGroupController.add(render);
       attr.$observe('value', render);
 
       element
         .on('click', listener)
         .on('$destroy', function() {
-          rgCtrl.remove(render);
+          radioGroupController.remove(render);
         });
     }
 
@@ -302,29 +346,30 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
      * On click functionality.
      */
     function listener(ev) {
-      if (element[0].hasAttribute('disabled') || rgCtrl.isDisabled()) return;
+      if (element[0].hasAttribute('disabled') || radioGroupController.isDisabled()) return;
 
       scope.$apply(function() {
-        rgCtrl.setViewValue(attr.value, ev && ev.type);
+        radioGroupController.setViewValue(attr.value, ev && ev.type);
       });
     }
 
     /**
-     *  Add or remove the `.md-checked` class from the RadioButton (and conditionally its parent).
-     *  Update the `aria-activedescendant` attribute.
+     * Add or remove the `.md-checked` class from the RadioButton (and conditionally its parent).
+     * Update the `aria-activedescendant` attribute.
      */
     function render() {
-      var checked = rgCtrl.getViewValue() == attr.value;
+      var checked = radioGroupController.getViewValue() == attr.value;
 
       if (checked === lastChecked) return;
 
-      if (element[0].parentNode.nodeName.toLowerCase() !== 'md-radio-group') {
-        // If the radioButton is inside a div, then add class so highlighting will work
+      if (element[0] && element[0].parentNode &&
+          element[0].parentNode.nodeName.toLowerCase() !== 'md-radio-group') {
+        // If the radioButton is inside a div, then add class so highlighting will work.
         element.parent().toggleClass(CHECKED_CSS, checked);
       }
 
       if (checked) {
-        rgCtrl.setActiveDescendant(element.attr('id'));
+        radioGroupController.setActiveDescendant(element.attr('id'));
       }
 
       lastChecked = checked;
@@ -337,7 +382,7 @@ function mdRadioButtonDirective($mdAria, $mdUtil, $mdTheming) {
     /**
      * Inject ARIA-specific attributes appropriate for each radio button
      */
-    function configureAria(element, scope){
+    function configureAria(element) {
       element.attr({
         id: attr.id || 'radio_' + $mdUtil.nextUid(),
         role: 'radio',

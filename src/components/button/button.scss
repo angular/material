@@ -1,5 +1,4 @@
-// Material Design Button
-// https://material.google.com/components/buttons.html
+// Material Design Button: https://material.io/archive/guidelines/components/buttons.html
 
 $button-border-radius: 2px !default;
 $button-fab-border-radius: 50% !default;
@@ -23,8 +22,6 @@ $button-fab-mini-line-height: rem(4.00) !default;
 
 $button-fab-toast-offset: $button-fab-height * 0.75 !default;
 
-$icon-button-height: rem(4.000) !default;
-$icon-button-width: rem(4.000) !default;
 $icon-button-margin: rem(0.600) !default;
 
 // Fix issue causing buttons in Firefox to be 2px bigger than they should
@@ -115,13 +112,6 @@ button.md-button::-moz-focus-inner {
     padding: $baseline-grid;
     width: $icon-button-width;
     border-radius: $button-icon-border-radius;
-    .md-ripple-container {
-      border-radius: $button-icon-border-radius;
-      background-clip: padding-box;
-      overflow: hidden;
-      // The following hack causes Safari/Chrome to respect overflow hidden for ripples
-      -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
-    }
   }
 
   &.md-fab {
@@ -145,13 +135,6 @@ button.md-button::-moz-focus-inner {
 
     transition: $swift-ease-in;
     transition-property: background-color, box-shadow, transform;
-    .md-ripple-container {
-      border-radius: $button-fab-border-radius;
-      background-clip: padding-box;
-      overflow: hidden;
-      // The following hack causes Safari/Chrome to respect overflow hidden for ripples
-      -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
-    }
 
     &.md-mini {
       line-height: $button-fab-mini-line-height;
@@ -177,11 +160,13 @@ button.md-button::-moz-focus-inner {
   }
 
   .md-ripple-container {
-    border-radius: $button-border-radius;
+    border-radius: inherit;
     background-clip: padding-box;
     overflow: hidden;
-    // The following hack causes Safari/Chrome to respect overflow hidden for ripples
-    -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
+
+    // Workaround for rounded corner overflow bug
+    // Force Safari and Chrome to use a compositing layer
+    -webkit-transform:translateZ(0);
   }
 }
 

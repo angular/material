@@ -1,6 +1,5 @@
+angular.module('toolbarDemoBasic', ['ngMaterial'])
 
-angular.module('toolbarDemo1', ['ngMaterial'])
-
-.controller('AppCtrl', function($scope) {
+.controller('BasicDemoCtrl', function($scope) {
 
 });

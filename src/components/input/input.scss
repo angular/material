@@ -1,37 +1,9 @@
-$input-container-padding: 2px !default;
-
-$input-label-default-offset: 24px !default;
-$input-label-default-scale: 1.0 !default;
-$input-label-float-offset: 6px !default;
-$input-label-float-scale: 0.75 !default;
-$input-label-float-width: $input-container-padding + 16px !default;
-
-$input-placeholder-offset: $input-label-default-offset !default;
-
-$input-border-width-default: 1px !default;
-$input-border-width-focused: 2px !default;
-$input-line-height: 26px !default;
-$input-padding-top: 2px !default;
-
-$input-error-font-size: 12px !default;
-$input-error-height: 24px !default;
-$input-error-line-height: $input-error-font-size + 2px !default;
-$error-padding-top: ($input-error-height - $input-error-line-height) / 2 !default;
-
-$icon-offset: 36px !default;
-
-$icon-top-offset: ($icon-offset - $input-padding-top - $input-border-width-focused) / 4 !default;
-
-$icon-float-focused-top: -8px !default;
-
-$input-resize-handle-height: 10px !default;
-
 md-input-container {
   @include pie-clearfix();
   display: inline-block;
   position: relative;
   padding: $input-container-padding;
-  margin: 18px 0;
+  margin: $input-container-vertical-margin $input-container-horizontal-margin;
   vertical-align: middle;
 
   &.md-block {
@@ -79,15 +51,15 @@ md-input-container {
   input[type="month"],
   input[type="time"],
   input[type="week"] {
-    min-height: $input-line-height;
+    min-height: $input-line-height + $input-padding-top * 2;
   }
   textarea {
     resize: none;
     overflow: hidden;
 
     &.md-input {
-      min-height: $input-line-height;
-      -ms-flex-preferred-size: auto; //IE fix
+      min-height: $input-line-height + $input-padding-top * 2;
+      -ms-flex-preferred-size: auto; // IE fix
     }
 
     // The height usually gets set to 1 line by `.md-input`.
@@ -119,8 +91,8 @@ md-input-container {
     order: 1;
     pointer-events: none;
     -webkit-font-smoothing: antialiased;
-    @include rtl(padding-left, $input-container-padding + 1px, 0);
-    @include rtl(padding-right, 0, $input-container-padding + 1px);
+    @include rtl(padding-left, $input-container-padding, 0);
+    @include rtl(padding-right, 0, $input-container-padding);
     z-index: 1;
     transform: translate3d(0, $input-label-default-offset + 4, 0) scale($input-label-default-scale);
     transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
@@ -130,6 +102,13 @@ md-input-container {
     max-width: 100%;
 
     @include rtl(transform-origin, left top, right top);
+  }
+  &.md-input-has-value {
+    label:not(.md-no-float):not(.md-container-ignore),
+    .md-placeholder {
+      @include rtl(padding-left, $input-container-padding + 1px, 0);
+      @include rtl(padding-right, 0, $input-container-padding + 1px);
+    }
   }
   .md-placeholder {
     position: absolute;
@@ -148,7 +127,9 @@ md-input-container {
     opacity: 0;
   }
 
-  &:not( .md-input-has-value ) input:not( :focus ),
+  &:not( .md-input-has-value ):not( .md-input-has-placeholder ) input:not( :focus ) {
+    color: transparent;
+  }
   &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-ampm-field,
   &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-day-field,
   &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-hour-field,
@@ -172,15 +153,16 @@ md-input-container {
 
     background: none;
     padding-top: $input-padding-top;
-    padding-bottom: $input-border-width-focused - $input-border-width-default;
-    padding-left: 2px;
-    padding-right: 2px;
+    padding-bottom: $input-padding-bottom;
+    @include rtl(padding-left, 0, $input-container-padding);
+    @include rtl(padding-right, $input-container-padding, 0);
     border-width: 0 0 $input-border-width-default 0;
     line-height: $input-line-height;
-    height: $input-line-height + ($input-padding-top * 2);
+    height: $input-line-height + $input-padding-top * 2;
     -ms-flex-preferred-size: $input-line-height; //IE fix
     border-radius: 0;
     border-style: solid; // Firefox fix
+    transition: border-color $swift-ease-out-duration $swift-ease-out-timing-function;
 
     // Fix number inputs in Firefox to be full-width
     width: 100%;
@@ -218,7 +200,6 @@ md-input-container {
     order: 4;
     overflow: hidden;
     @include rtl(clear, left, right);
-
   }
 
   .md-input-message-animation, .md-char-counter {
@@ -231,9 +212,6 @@ md-input-container {
     // Default state for messages is to be visible
     opacity: 1;
     margin-top: 0;
-
-    // Add some top padding which is equal to half the difference between the expected height
-    // and the actual height
     padding-top: $error-padding-top;
 
     &:not(.md-char-counter) {
@@ -328,7 +306,8 @@ md-input-container {
     > label {
       &:not(.md-no-float):not(.md-container-ignore),
       .md-placeholder {
-        width: calc(100% - #{$icon-offset} - #{$input-label-float-width});
+        width: calc(100% - #{$icon-offset});
+        padding: 0;
       }
     }
   }

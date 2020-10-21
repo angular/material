@@ -1,20 +1,20 @@
-var fs = require('fs');
-var changelog = require('conventional-changelog');
-var ROOT = require('../const').ROOT;
-var SHA = require('../const').SHA;
-var VERSION = require('../const').VERSION;
-var addStream = require('add-stream');
-var path = require('path');
-var spawnSync = require('child_process').spawnSync;
-var chalk = require('gulp-util').colors;
-var log = require('gulp-util').log;
+const fs = require('fs');
+const changelog = require('conventional-changelog');
+const ROOT = require('../const').ROOT;
+const SHA = require('../const').SHA;
+const VERSION = require('../const').VERSION;
+const addStream = require('add-stream');
+const path = require('path');
+const spawnSync = require('child_process').spawnSync;
+const chalk = require('gulp-util').colors;
+const log = require('gulp-util').log;
 
 exports.task = function () {
 
-  var changelogPath = path.join(ROOT, 'CHANGELOG.md');
-  var inputStream = fs.createReadStream(changelogPath);
-  var previousTag = getLatestTag();
-  var currentTag = 'v' + VERSION;
+  const changelogPath = path.join(ROOT, 'CHANGELOG.md');
+  const inputStream = fs.createReadStream(changelogPath);
+  const previousTag = getLatestTag();
+  const currentTag = 'v' + VERSION;
 
   /* Validate different fork points for the changelog generation */
   if (previousTag.name === currentTag && !SHA) {
@@ -22,18 +22,18 @@ exports.task = function () {
   } else if (SHA) {
     log('Generating changelog from commit ' + getShortSha(SHA) + '...');
   } else {
-    var shortSha = getShortSha(previousTag.sha);
+    const shortSha = getShortSha(previousTag.sha);
     log('Generating changelog from tag ' + previousTag.name + ' (' + shortSha + ')');
   }
 
-  var contextOptions = {
+  const contextOptions = {
     version: VERSION,
     previousTag: previousTag.name,
     currentTag: currentTag
   };
 
   /* Create our changelog and append the current changelog stream. */
-  var changelogStream = changelog({ preset: 'angular' }, contextOptions, {
+  const changelogStream = changelog({ preset: 'angular' }, contextOptions, {
     from: SHA || previousTag.sha
   }).pipe(addStream(inputStream));
 
@@ -50,13 +50,13 @@ exports.task = function () {
  * @returns {{sha: string, name: string}}
  */
 function getLatestTag() {
-  var tagSha = spawnSync('git', ['rev-list', '--tags', '--max-count=1']).stdout.toString().trim();
-  var tagName =  spawnSync('git', ['describe', '--tags', tagSha]).stdout.toString().trim();
+  const tagSha = spawnSync('git', ['rev-list', '--tags', '--max-count=1']).stdout.toString().trim();
+  const tagName =  spawnSync('git', ['describe', '--tags', tagSha]).stdout.toString().trim();
 
   return {
     sha: tagSha,
     name: tagName
-  }
+  };
 }
 
 /**

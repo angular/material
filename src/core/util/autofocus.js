@@ -1,9 +1,5 @@
 angular.module('material.core')
-  .directive('mdAutofocus', MdAutofocusDirective)
-
-  // Support the deprecated md-auto-focus and md-sidenav-focus as well
-  .directive('mdAutoFocus', MdAutofocusDirective)
-  .directive('mdSidenavFocus', MdAutofocusDirective);
+  .directive('mdAutofocus', MdAutofocusDirective);
 
 /**
  * @ngdoc directive

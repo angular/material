@@ -1,0 +1,30 @@
+$input-container-padding: 2px !default;
+$input-container-vertical-margin: 18px !default;
+$input-container-horizontal-margin: 0px !default;
+
+$input-label-default-offset: 24px !default;
+$input-label-default-scale: 1.0 !default;
+$input-label-float-offset: 6px !default;
+$input-label-float-scale: 0.75 !default;
+
+$input-placeholder-offset: $input-label-default-offset !default;
+
+$input-border-width-default: 1px !default;
+$input-border-width-focused: 2px !default;
+$input-line-height: 26px !default;
+$input-padding-top: 2px !default;
+$input-padding-bottom: $input-border-width-focused - $input-border-width-default !default;
+
+$input-error-font-size: 12px !default;
+$input-error-height: 24px !default;
+$input-error-line-height: $input-error-font-size + 2px !default;
+// From Text field spec
+$error-padding-top: $baseline-grid !default;
+
+$icon-offset: 36px !default;
+
+$icon-top-offset: ($icon-offset - $input-padding-top - $input-border-width-focused) / 4 !default;
+
+$icon-float-focused-top: -8px !default;
+
+$input-resize-handle-height: 10px !default;

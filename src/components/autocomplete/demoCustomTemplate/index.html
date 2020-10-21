@@ -1,8 +1,9 @@
-<div ng-controller="DemoCtrl as ctrl" layout="column" ng-cloak>
+<div ng-controller="DemoCtrl as ctrl" ng-cloak>
   <md-content layout-padding layout="column">
     <form ng-submit="$event.preventDefault()">
       <p>Use <code>&lt;md-autocomplete&gt;</code> with custom templates to show styled autocomplete results.</p>
       <md-autocomplete
+          id="custom-template"
           ng-disabled="ctrl.isDisabled"
           md-no-cache="ctrl.noCache"
           md-selected-item="ctrl.selectedItem"
@@ -12,11 +13,14 @@
           md-items="item in ctrl.querySearch(ctrl.searchText)"
           md-item-text="item.name"
           md-min-length="0"
+          md-escape-options="clear"
+          input-aria-label="Current Repository"
           placeholder="Pick an Angular repository"
-          md-menu-class="autocomplete-custom-template">
+          md-menu-class="autocomplete-custom-template"
+          md-menu-container-class="custom-container">
         <md-item-template>
           <span class="item-title">
-            <md-icon md-svg-icon="img/icons/octicon-repo.svg"></md-icon>
+            <md-icon md-svg-icon="img/icons/octicon-repo.svg" aria-hidden="true"></md-icon>
             <span> {{item.name}} </span>
           </span>
           <span class="item-metadata">
@@ -32,4 +36,3 @@
     </form>
   </md-content>
 </div>
-

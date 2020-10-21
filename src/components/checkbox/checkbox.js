@@ -14,28 +14,31 @@ angular
  * @restrict E
  *
  * @description
- * The checkbox directive is used like the normal [angular checkbox](https://docs.angularjs.org/api/ng/input/input%5Bcheckbox%5D).
+ * The checkbox directive is used like the normal
+ * [angular checkbox](https://docs.angularjs.org/api/ng/input/input%5Bcheckbox%5D).
  *
- * As per the [material design spec](http://www.google.com/design/spec/style/color.html#color-color-schemes)
+ * As per the [Material Design spec](https://material.io/archive/guidelines/style/color.html#color-color-palette)
  * the checkbox is in the accent color by default. The primary color palette may be used with
  * the `md-primary` class.
  *
- * @param {string} ng-model Assignable angular expression to data-bind to.
+ * @param {expression} ng-model Assignable angular expression to data-bind to.
  * @param {string=} name Property name of the form under which the control is published.
  * @param {expression=} ng-true-value The value to which the expression should be set when selected.
- * @param {expression=} ng-false-value The value to which the expression should be set when not selected.
- * @param {string=} ng-change AngularJS expression to be executed when input changes due to user interaction with the input element.
- * @param {boolean=} md-no-ink Use of attribute indicates use of ripple ink effects
+ * @param {expression=} ng-false-value The value to which the expression should be set when not
+ *    selected.
+ * @param {expression=} ng-change Expression to be executed when the model value changes.
+ * @param {boolean=} md-no-ink If present, disable ink ripple effects.
  * @param {string=} aria-label Adds label to checkbox for accessibility.
- *     Defaults to checkbox's text. If no default text is found, a warning will be logged.
- * @param {expression=} md-indeterminate This determines when the checkbox should be rendered as 'indeterminate'.
- *     If a truthy expression or no value is passed in the checkbox renders in the md-indeterminate state.
- *     If falsy expression is passed in it just looks like a normal unchecked checkbox.
- *     The indeterminate, checked, and unchecked states are mutually exclusive. A box cannot be in any two states at the same time.
- *     Adding the 'md-indeterminate' attribute overrides any checked/unchecked rendering logic.
- *     When using the 'md-indeterminate' attribute use 'ng-checked' to define rendering logic instead of using 'ng-model'.
- * @param {expression=} ng-checked If this expression evaluates as truthy, the 'md-checked' css class is added to the checkbox and it
- *     will appear checked.
+ *    Defaults to checkbox's text. If no default text is found, a warning will be logged.
+ * @param {expression=} md-indeterminate This determines when the checkbox should be rendered as
+ *    'indeterminate'. If a truthy expression or no value is passed in the checkbox renders in the
+ *    md-indeterminate state. If falsy expression is passed in it just looks like a normal unchecked
+ *    checkbox. The indeterminate, checked, and unchecked states are mutually exclusive. A box
+ *    cannot be in any two states at the same time. Adding the 'md-indeterminate' attribute
+ *    overrides any checked/unchecked rendering logic. When using the 'md-indeterminate' attribute
+ *    use 'ng-checked' to define rendering logic instead of using 'ng-model'.
+ * @param {expression=} ng-checked If this expression evaluates as truthy, the 'md-checked' css
+ *    class is added to the checkbox and it will appear checked.
  *
  * @usage
  * <hljs lang="html">
@@ -78,6 +81,7 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
     tAttrs.$set('tabindex', tAttrs.tabindex || '0');
     tAttrs.$set('type', 'checkbox');
     tAttrs.$set('role', tAttrs.type);
+    tElement.addClass('md-auto-horizontal-margin');
 
     return  {
       pre: function(scope, element) {
@@ -97,6 +101,27 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
       var containerCtrl = ctrls[0];
       var ngModelCtrl = ctrls[1] || $mdUtil.fakeNgModel();
       var formCtrl = ctrls[2];
+      var labelHasLink = element.find('a').length > 0;
+
+      // The original component structure is not accessible when the checkbox's label contains a link.
+      // In order to keep backwards compatibility, we're only changing the structure of the component
+      // when we detect a link within the label. Using a span after the md-checkbox and attaching it
+      // via aria-labelledby allows screen readers to find and work with the link within the label.
+      if (labelHasLink) {
+        var labelId = 'label-' + $mdUtil.nextUid();
+        attr.$set('aria-labelledby', labelId);
+
+        var label = element.children()[1];
+        // Use jQLite here since ChildNode.remove() is not supported in IE11.
+        angular.element(label).remove();
+        label.removeAttribute('ng-transclude');
+        label.className = 'md-checkbox-link-label';
+        label.setAttribute('id', labelId);
+        element.after(label);
+        // Make sure that clicking on the label still causes the checkbox to be toggled, when appropriate.
+        var externalLabel = element.next();
+        externalLabel.on('click', listener);
+      }
 
       if (containerCtrl) {
         var isErrorGetter = containerCtrl.isErrorGetter || function() {
@@ -133,7 +158,11 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
         false: attr.tabindex
       });
 
-      $mdAria.expectWithText(element, 'aria-label');
+      // Don't emit a warning when the label has a link within it. In that case we'll use
+      // aria-labelledby to point to another span that should be read as the label.
+      if (!labelHasLink) {
+        $mdAria.expectWithText(element, 'aria-label');
+      }
 
       // Reuse the original input[type=checkbox] directive from AngularJS core.
       // This is a bit hacky as we need our own event listener and own render
@@ -166,19 +195,42 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
         }
       }
 
+      /**
+       * @param {KeyboardEvent} ev 'keypress' event to handle
+       */
       function keypressHandler(ev) {
         var keyCode = ev.which || ev.keyCode;
-        if (keyCode === $mdConstant.KEY_CODE.SPACE || keyCode === $mdConstant.KEY_CODE.ENTER) {
-          ev.preventDefault();
-          element.addClass('md-focused');
-          listener(ev);
+        var submit, form;
+
+        ev.preventDefault();
+        switch (keyCode) {
+          case $mdConstant.KEY_CODE.SPACE:
+            element.addClass('md-focused');
+            listener(ev);
+            break;
+          case $mdConstant.KEY_CODE.ENTER:
+            // Match the behavior of the native <input type="checkbox">.
+            // When the enter key is pressed while focusing a native checkbox inside a form,
+            // the browser will trigger a `click` on the first non-disabled submit button/input
+            // in the form. Note that this is different from text inputs, which
+            // will directly submit the form without needing a submit button/input to be present.
+            form = $mdUtil.getClosest(ev.target, 'form');
+            if (form) {
+              submit = form.querySelector('button[type="submit"]:enabled, input[type="submit"]:enabled');
+              if (submit) {
+                submit.click();
+              }
+            }
+            break;
         }
       }
 
       function listener(ev) {
         // skipToggle boolean is used by the switch directive to prevent the click event
-        // when releasing the drag. There will be always a click if releasing the drag over the checkbox
-        if (element[0].hasAttribute('disabled') || scope.skipToggle) {
+        // when releasing the drag. There will be always a click if releasing the drag over the checkbox.
+        // If the click came from a link in the checkbox, don't toggle the value.
+        // We want the link to be opened without changing the value in this case.
+        if (element[0].hasAttribute('disabled') || scope.skipToggle || ev.target.tagName === 'A') {
           return;
         }
 

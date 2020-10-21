@@ -37,11 +37,13 @@ md-chips.md-THEME_NAME-theme {
       color: '{{background-800}}';
     }
   }
-  md-chip-remove {
-    .md-button {
-      md-icon {
-        path {
-          fill: '{{background-500}}';
+  .md-chip-remove-container {
+    button {
+      &md-chip-remove,
+      &.md-chip-remove {
+        md-icon {
+          color: '{{foreground-2}}';
+          fill: '{{foreground-2}}';
         }
       }
     }

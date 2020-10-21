@@ -82,7 +82,7 @@ angular.module('material.components.toolbar', [
  *
  */
 
-function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
+function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate, $timeout) {
   var translateY = angular.bind(null, $mdUtil.supplant, 'translate3d(0,{0}px,0)');
 
   return {
@@ -141,16 +141,15 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
         scope.$on('$destroy', disableScrollShrink);
 
         /**
-         *
+         * @param {string} shrinkWithScroll value of md-scroll-shrink attribute
          */
         function onChangeScrollShrink(shrinkWithScroll) {
-          var closestContent = element.parent().find('md-content');
+          var closestContent = $mdUtil.getSiblings(element, 'md-content');
 
-          // If we have a content element, fake the call; this might still fail
-          // if the content element isn't a sibling of the toolbar
-
+          // If there are content elements, fake the call using the first content element.
+          // This might still fail if the content element isn't a sibling of the toolbar.
           if (!contentElement && closestContent.length) {
-            onMdContentLoad(null, closestContent);
+            onMdContentLoad(null, closestContent[0]);
           }
 
           // Evaluate the expression
@@ -165,7 +164,8 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
         }
 
         /**
-         *
+         * @param {null} $event $mdContentLoaded always has a null event
+         * @param {JQLite} newContentEl JQLite object containing an md-content
          */
         function onMdContentLoad($event, newContentEl) {
           // Toolbar and content must be siblings
@@ -219,7 +219,7 @@ function mdToolbarDirective($$rAF, $mdConstant, $mdUtil, $mdTheming, $animate) {
           contentElement.on('scroll', debouncedContentScroll);
           contentElement.attr('scroll-shrink', 'true');
 
-          $mdUtil.nextTick(updateToolbarHeight, false);
+          $timeout(updateToolbarHeight);
 
           return function disableScrollShrink() {
             contentElement.off('scroll', debouncedContentScroll);

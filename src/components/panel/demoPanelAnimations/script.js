@@ -29,7 +29,7 @@ AnimationCtrl.prototype.showDialog = function() {
 
   animation.duration(this.duration || this.separateDurations);
 
-  switch(this.openFrom) {
+  switch (this.openFrom) {
     case 'button':
       animation.openFrom('.animation-target');
       break;
@@ -42,7 +42,7 @@ AnimationCtrl.prototype.showDialog = function() {
         left: document.documentElement.clientWidth / 2 - 250
       });
   }
-  switch(this.closeTo) {
+  switch (this.closeTo) {
     case 'button':
       animation.closeTo('.animation-target');
       break;
@@ -56,7 +56,7 @@ AnimationCtrl.prototype.showDialog = function() {
       });
   }
 
-  switch(this.animationType) {
+  switch (this.animationType) {
     case 'custom':
       animation.withAnimation({
         open: 'demo-dialog-custom-animation-open',
@@ -95,8 +95,6 @@ AnimationCtrl.prototype.showDialog = function() {
   this._mdPanel.open(config);
 };
 
-
-// Necessary to pass locals to the dialog template.
 function DialogCtrl(mdPanelRef) {
   this._mdPanelRef = mdPanelRef;
 }

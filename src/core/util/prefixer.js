@@ -1,6 +1,6 @@
 angular
   .module('material.core')
-  .config( function($provide) {
+  .config(function($provide) {
     $provide.decorator('$mdUtil', ['$delegate', function ($delegate) {
 
       // Inject the prefixer into our original $mdUtil service.
@@ -10,6 +10,15 @@ angular
     }]);
   });
 
+/**
+ * @param {string|string[]} initialAttributes
+ * @param {boolean} buildSelector
+ * @return {string|string[]|{buildSelector: (function(string|string[]): string),
+ *   buildList: (function(string|string[]): string[]),
+ *   hasAttribute: (function(JQLite|Element, string): HTMLElement),
+ *   removeAttribute: (function(JQLite|Element, string): void)}}
+ * @constructor
+ */
 function MdPrefixer(initialAttributes, buildSelector) {
   var PREFIXES = ['data', 'x'];
 

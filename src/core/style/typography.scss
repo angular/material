@@ -7,7 +7,7 @@
 
 html, body {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
-  -webkit-touch-callout: none;
+  -webkit-touch-callout: default;
 
   min-height: 100%; // [2]
 
@@ -16,11 +16,6 @@ html, body {
 
   -webkit-font-smoothing: antialiased; // [4]
   -moz-osx-font-smoothing: grayscale; // [4]
-}
-
-md-select, md-card, md-list, md-toolbar,
-ul, ol, p, h1, h2, h3, h4, h5, h6 {
-  //text-rendering: optimizeLegibility;
 }
 
 /************

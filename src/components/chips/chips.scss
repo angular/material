@@ -1,8 +1,8 @@
-$chip-font-size: rem(1.6) !default;
+$chip-font-size: rem(1.3) !default;
 $chip-height: rem(3.2) !default;
 $chip-padding: 0 rem(1.2) 0 rem(1.2) !default;
 $chip-input-padding: 0 !default;
-$chip-remove-padding-right: rem(2.2) !default;
+$chip-remove-padding-right: rem(2.8) !default;
 $chip-remove-line-height: rem(2.2) !default;
 $chip-margin: rem(0.8) rem(0.8) 0 0 !default;
 $chip-wrap-padding: 0 0 rem(0.8) rem(0.3) !default;
@@ -51,10 +51,15 @@ $contact-chip-name-width: rem(12) !default;
 .md-contact-chips-suggestions li {
   height: 100%;
 }
+md-chips {
+  display: flex;
+}
 .md-chips {
   @include pie-clearfix();
 
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
   font-family: $font-family;
   font-size: $chip-font-size;
   @include rtl(padding, $chip-wrap-padding, rtl-value($chip-wrap-padding));
@@ -129,6 +134,8 @@ $contact-chip-name-width: rem(12) !default;
       md-icon {
         height: $chip-delete-icon-size;
         width: $chip-delete-icon-size;
+        min-height: $chip-delete-icon-size;
+        min-width: $chip-delete-icon-size;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -141,9 +148,17 @@ $contact-chip-name-width: rem(12) !default;
     line-height: $chip-height;
     @include rtl(margin, $chip-margin, rtl-value($chip-margin));
     padding: $chip-input-padding;
+    flex-grow: 1;
     @include rtl(float, left, right);
     input {
-      &:not([type]),&[type="email"],&[type="number"],&[type="tel"],&[type="url"],&[type="text"] {
+      width: 100%;
+
+      &:not([type]),
+      &[type="email"],
+      &[type="number"],
+      &[type="tel"],
+      &[type="url"],
+      &[type="text"] {
         border: 0;
         height: $chip-height;
         line-height: $chip-height;

@@ -21,7 +21,7 @@ angular
  * @ngInject
  */
 function DetectNgTouch($log, $injector) {
-  if ( $injector.has('$swipe') ) {
+  if ($injector.has('$swipe')) {
     var msg = "" +
       "You are using the ngTouch module. \n" +
       "AngularJS Material already has mobile click, tap, and swipe support... \n" +
@@ -59,7 +59,7 @@ function rAFDecorator($delegate) {
    * our callback will only be fired once per frame, with the last resize
    * event that happened before that frame.
    *
-   * @param {function} callback function to debounce
+   * @param {function} cb function to debounce
    */
   $delegate.throttle = function(cb) {
     var queuedArgs, alreadyQueued, queueCb, context;

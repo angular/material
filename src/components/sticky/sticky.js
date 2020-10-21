@@ -2,8 +2,7 @@
  * @ngdoc module
  * @name material.components.sticky
  * @description
- * Sticky effects for md
- *
+ * Sticky effects for md.
  */
 angular
   .module('material.components.sticky', [
@@ -18,65 +17,69 @@ angular
  * @module material.components.sticky
  *
  * @description
- * The `$mdSticky`service provides a mixin to make elements sticky.
+ * The `$mdSticky` service provides the capability to make elements sticky, even when the browser
+ * does not support `position: sticky`.
  *
- * Whenever the current browser supports stickiness natively, the `$mdSticky` service will just
- * use the native browser stickiness.
+ * Whenever the current browser supports stickiness natively, the `$mdSticky` service will leverage
+ * the native browser's sticky functionality.
  *
- * By default the `$mdSticky` service compiles the cloned element, when not specified through the `elementClone`
- * parameter, in the same scope as the actual element lives.
- *
- *
- * <h3>Notes</h3>
- * When using an element which is containing a compiled directive, which changed its DOM structure during compilation,
- * you should compile the clone yourself using the plain template.<br/><br/>
- * See the right usage below:
- * <hljs lang="js">
- *   angular.module('myModule')
- *     .directive('stickySelect', function($mdSticky, $compile) {
- *       var SELECT_TEMPLATE =
- *         '<md-select ng-model="selected">' +
- *           '<md-option>Option 1</md-option>' +
- *         '</md-select>';
- *
- *       return {
- *         restrict: 'E',
- *         replace: true,
- *         template: SELECT_TEMPLATE,
- *         link: function(scope,element) {
- *           $mdSticky(scope, element, $compile(SELECT_TEMPLATE)(scope));
- *         }
- *       };
- *     });
- * </hljs>
+ * By default the `$mdSticky` service compiles the cloned element, when not specified through the
+ * `stickyClone` parameter, in the same scope as the actual element lives.
  *
  * @usage
  * <hljs lang="js">
  *   angular.module('myModule')
- *     .directive('stickyText', function($mdSticky, $compile) {
+ *     .directive('stickyText', function($mdSticky) {
  *       return {
  *         restrict: 'E',
  *         template: '<span>Sticky Text</span>',
- *         link: function(scope,element) {
+ *         link: function(scope, element) {
  *           $mdSticky(scope, element);
  *         }
  *       };
  *     });
  * </hljs>
  *
- * @returns A `$mdSticky` function that takes three arguments:
- *   - `scope`
- *   - `element`: The element that will be 'sticky'
- *   - `elementClone`: A clone of the element, that will be shown
- *     when the user starts scrolling past the original element.
- *     If not provided, it will use the result of `element.clone()` and compiles it in the given scope.
+ * <h3>Notes</h3>
+ * When using an element which contains a compiled directive that changes the DOM structure
+ * during compilation, you should compile the clone yourself.
+ *
+ * An example of this usage can be found below:
+ * <hljs lang="js">
+ *   angular.module('myModule')
+ *     .directive('stickySelect', function($mdSticky, $compile) {
+ *       var SELECT_TEMPLATE =
+ *         '<md-select ng-model="selected">' +
+ *         '  <md-option>Option 1</md-option>' +
+ *         '</md-select>';
+ *
+ *       return {
+ *         restrict: 'E',
+ *         replace: true,
+ *         template: SELECT_TEMPLATE,
+ *         link: function(scope, element) {
+ *           $mdSticky(scope, element, $compile(SELECT_TEMPLATE)(scope));
+ *         }
+ *       };
+ *     });
+ * </hljs>
+ *
+ * @returns {function(IScope, JQLite, ITemplateLinkingFunction=): void} `$mdSticky` returns a
+ *   function that takes three arguments:
+ *   - `scope`: the scope to use when compiling the clone and listening for the `$destroy` event,
+ *      which triggers removal of the clone
+ *   - `element`: the element that will be 'sticky'
+ *   - `stickyClone`: An optional clone of the element (returned from AngularJS'
+ *      [$compile service](https://docs.angularjs.org/api/ng/service/$compile#usage)),
+ *      that will be shown when the user starts scrolling past the original element. If not
+ *      provided, the result of `element.clone()` will be used and compiled in the given scope.
  */
 function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
 
   var browserStickySupport = $mdUtil.checkStickySupport();
 
   /**
-   * Registers an element as sticky, used internally by directives to register themselves
+   * Registers an element as sticky, used internally by directives to register themselves.
    */
   return function registerStickyElement(scope, element, stickyClone) {
     var contentCtrl = element.controller('mdContent');
@@ -119,7 +122,7 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
     var self;
     return self = {
       prev: null,
-      current: null, //the currently stickied item
+      current: null, // the currently stickied item
       next: null,
       items: [],
       add: add,
@@ -165,7 +168,7 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
         return a.top < b.top ? -1 : 1;
       });
 
-      // Find which item in the list should be active, 
+      // Find which item in the list should be active,
       // based upon the content's current scroll position
       var item;
       var currentScrollTop = contentEl.prop('scrollTop');
@@ -185,7 +188,7 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
     // Find the `top` of an item relative to the content element,
     // and also the height.
     function refreshPosition(item) {
-      // Find the top of an item by adding to the offsetHeight until we reach the 
+      // Find the top of an item by adding to the offsetHeight until we reach the
       // content element.
       var current = item.element[0];
       item.top = 0;
@@ -194,8 +197,9 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
       while (current && current !== contentEl[0]) {
         item.top += current.offsetTop;
         item.left += current.offsetLeft;
-        if ( current.offsetParent ){
-          item.right += current.offsetParent.offsetWidth - current.offsetWidth - current.offsetLeft; //Compute offsetRight
+        if (current.offsetParent) {
+          // Compute offsetRight
+          item.right += current.offsetParent.offsetWidth - current.offsetWidth - current.offsetLeft;
         }
         current = current.offsetParent;
       }
@@ -310,7 +314,7 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
       } else {
         item.translateY = amount;
 
-        $mdUtil.bidi( item.clone, $mdConstant.CSS.TRANSFORM,
+        $mdUtil.bidi(item.clone, $mdConstant.CSS.TRANSFORM,
           'translate3d(' + item.left + 'px,' + amount + 'px,0)',
           'translateY(' + amount + 'px)'
         );
@@ -321,7 +325,7 @@ function MdSticky($mdConstant, $$rAF, $mdUtil, $compile) {
 
   // Android 4.4 don't accurately give scroll events.
   // To fix this problem, we setup a fake scroll event. We say:
-  // > If a scroll or touchmove event has happened in the last DELAY milliseconds, 
+  // > If a scroll or touchmove event has happened in the last DELAY milliseconds,
   //   then send a `$scroll` event every animationFrame.
   // Additionally, we add $scrollstart and $scrollend events.
   function setupAugmentedScrollEvents(element) {

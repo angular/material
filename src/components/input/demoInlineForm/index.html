@@ -1,0 +1,83 @@
+<div ng-controller="DemoCtrl" layout="column" ng-cloak class="demo-inline-form-container">
+  <form class="md-inline-form">
+    <div layout="row" layout-wrap>
+      <md-input-container>
+        <label>First name</label>
+        <input type="text" ng-model="user.firstName">
+      </md-input-container>
+
+      <md-input-container>
+        <label>Last name</label>
+        <input type="text" ng-model="user.lastName">
+      </md-input-container>
+
+      <md-input-container>
+        <label>State</label>
+        <md-select ng-model="user.state">
+          <md-option ng-repeat="state in states" value="{{state.abbrev}}">
+            {{state.abbrev}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+
+      <md-input-container>
+        <label>Enter date</label>
+        <md-datepicker ng-model="user.submissionDate"></md-datepicker>
+      </md-input-container>
+    </div>
+    <div layout="row" layout-wrap>
+      <md-input-container>
+        <label>Postal Code</label>
+        <input type="text" ng-model="user.postalCode">
+      </md-input-container>
+
+      <md-input-container>
+        <label>State of Birth</label>
+        <md-select ng-model="user.stateOfBirth">
+          <md-option ng-repeat="state in states" value="{{state.abbrev}}">
+            {{state.abbrev}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+
+      <md-input-container>
+        <label>Description</label>
+        <textarea ng-model="user.description"></textarea>
+      </md-input-container>
+
+      <md-checkbox ng-model="user.licenseAccepted">
+        I agree to the license terms.
+      </md-checkbox>
+    </div>
+    <div layout="row" layout-wrap>
+      <md-input-container>
+        <label>Company</label>
+        <input type="text" ng-model="user.company">
+      </md-input-container>
+
+      <md-input-container>
+        <label>City</label>
+        <input type="text" ng-model="user.city">
+      </md-input-container>
+
+      <md-switch ng-model="user.marketingOptIn" aria-label="Opt-in to emails">
+        Opt-in to emails
+      </md-switch>
+    </div>
+    <div layout="row" layout-wrap>
+      <md-input-container>
+        <label>Title</label>
+        <input type="text" ng-model="user.title">
+      </md-input-container>
+
+      <label class="demo-radio-button-label">Primary Language:</label>
+      <md-radio-group ng-model="data.group1">
+        <md-radio-button value="TypeScript">TypeScript</md-radio-button>
+        <md-radio-button value="JavaScript">JavaScript</md-radio-button>
+        <md-radio-button value="Java">Java</md-radio-button>
+        <md-radio-button value="C#">C#</md-radio-button>
+      </md-radio-group>
+    </div>
+  </form>
+
+</div>

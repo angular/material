@@ -1,28 +1,28 @@
 angular.module('material.core')
   .provider('$$interimElement', InterimElementProvider);
 
-/*
+/**
  * @ngdoc service
- * @name $$interimElement
- * @module material.core
+ * @name $$interimElementProvider
+ * @module material.core.interimElement
  *
  * @description
  *
- * Factory that contructs `$$interimElement.$service` services.
+ * Factory that constructs `$$interimElement.$service` services.
  * Used internally in material design for elements that appear on screen temporarily.
  * The service provides a promise-like API for interacting with the temporary
  * elements.
  *
- * ```js
- * app.service('$mdToast', function($$interimElement) {
- *   var $mdToast = $$interimElement(toastDefaultOptions);
- *   return $mdToast;
- * });
- * ```
+ * <hljs lang="js">
+ *   app.service('$mdToast', function($$interimElement) {
+ *     var $mdToast = $$interimElement(toastDefaultOptions);
+ *     return $mdToast;
+ *   });
+ * </hljs>
+ *
  * @param {object=} defaultOptions Options used by default for the `show` method on the service.
  *
  * @returns {$$interimElement.$service}
- *
  */
 
 function InterimElementProvider() {
@@ -71,7 +71,6 @@ function InterimElementProvider() {
     /**
      * Add a method to the factory that isn't specific to any interim element operations
      */
-
     function addMethod(name, fn) {
       customMethods[name] = fn;
       return provider;
@@ -238,9 +237,7 @@ function InterimElementProvider() {
         locals[interimFactoryName] = publicService;
         return $injector.invoke(factory || function() { return defaultVal; }, {}, locals);
       }
-
     }
-
   }
 
   /* @ngInject */
@@ -249,15 +246,14 @@ function InterimElementProvider() {
     return function createInterimElementService() {
       var SHOW_CANCELLED = false;
 
-      /*
+      /**
        * @ngdoc service
-       * @name $$interimElement.$service
+       * @name $$interimElementProvider.$service
        *
        * @description
-       * A service used to control inserting and removing an element into the DOM.
-       *
+       * A service used to control inserting and removing of an element from the DOM.
+       * It is used by $mdBottomSheet, $mdDialog, $mdToast, $mdMenu, $mdPanel, and $mdSelect.
        */
-
       var service;
 
       var showPromises = []; // Promises for the interim's which are currently opening.
@@ -265,8 +261,6 @@ function InterimElementProvider() {
       var showingInterims = []; // Interim elements which are currently showing up.
 
       // Publish instance $$interimElement service;
-      // ... used as $mdDialog, $mdToast, $mdMenu, and $mdSelect
-
       return service = {
         show: show,
         hide: waitForInterim(hide),
@@ -275,18 +269,18 @@ function InterimElementProvider() {
         $injector_: $injector
       };
 
-      /*
+      /**
        * @ngdoc method
-       * @name $$interimElement.$service#show
+       * @name $$interimElementProvider.$service#show
        * @kind function
        *
        * @description
-       * Adds the `$interimElement` to the DOM and returns a special promise that will be resolved or rejected
-       * with hide or cancel, respectively. To external cancel/hide, developers should use the
+       * Adds the `$interimElement` to the DOM and returns a special promise that will be resolved
+       * or rejected with hide or cancel, respectively.
        *
-       * @param {*} options is hashMap of settings
-       * @returns a Promise
-       *
+       * @param {Object} options map of options and values
+       * @returns {Promise} a Promise that will be resolved when hide() is called or rejected when
+       *  cancel() is called.
        */
       function show(options) {
         options = options || {};
@@ -310,10 +304,14 @@ function InterimElementProvider() {
 
           return interimElement
             .show()
-            .catch(function(reason) { return reason; })
+            .then(function () {
+              showingInterims.push(interimElement);
+            })
+            .catch(function (reason) {
+              return reason;
+            })
             .finally(function() {
               showPromises.splice(showPromises.indexOf(showAction), 1);
-              showingInterims.push(interimElement);
             });
 
         });
@@ -335,17 +333,18 @@ function InterimElementProvider() {
         return interimElement.deferred.promise;
       }
 
-      /*
+      /**
        * @ngdoc method
-       * @name $$interimElement.$service#hide
+       * @name $$interimElementProvider.$service#hide
        * @kind function
        *
        * @description
-       * Removes the `$interimElement` from the DOM and resolves the promise returned from `show`
+       * Removes the `$interimElement` from the DOM and resolves the Promise returned from `show()`.
        *
-       * @param {*} resolveParam Data to resolve the promise with
-       * @returns a Promise that will be resolved after the element has been removed.
-       *
+       * @param {*} reason Data used to resolve the Promise
+       * @param {object} options map of options and values
+       * @returns {Promise} a Promise that will be resolved after the element has been removed
+       *  from the DOM.
        */
       function hide(reason, options) {
         options = options || {};
@@ -360,7 +359,14 @@ function InterimElementProvider() {
         // Hide the latest showing interim element.
         return closeElement(showingInterims[showingInterims.length - 1]);
 
+        /**
+         * @param {InterimElement} interim element to close
+         * @returns {Promise<InterimElement>}
+         */
         function closeElement(interim) {
+          if (!interim) {
+            return $q.when(reason);
+          }
 
           var hideAction = interim
             .remove(reason, false, options || { })
@@ -376,17 +382,18 @@ function InterimElementProvider() {
         }
       }
 
-      /*
+      /**
        * @ngdoc method
-       * @name $$interimElement.$service#cancel
+       * @name $$interimElementProvider.$service#cancel
        * @kind function
        *
        * @description
-       * Removes the `$interimElement` from the DOM and rejects the promise returned from `show`
+       * Removes the `$interimElement` from the DOM and rejects the Promise returned from `show()`.
        *
-       * @param {*} reason Data to reject the promise with
-       * @returns Promise that will be resolved after the element has been removed.
-       *
+       * @param {*} reason Data used to resolve the Promise
+       * @param {object} options map of options and values
+       * @returns {Promise} Promise that will be resolved after the element has been removed
+       *  from the DOM.
        */
       function cancel(reason, options) {
         var interim = showingInterims.pop();
@@ -434,9 +441,15 @@ function InterimElementProvider() {
         };
       }
 
-      /*
-       * Special method to quick-remove the interim element without animations
-       * Note: interim elements are in "interim containers"
+      /**
+       * @ngdoc method
+       * @name $$interimElementProvider.$service#destroy
+       * @kind function
+       *
+       * Special method to quick-remove the interim element without running animations. This is
+       * useful when the parent component has been or is being destroyed.
+       *
+       * Note: interim elements are in "interim containers".
        */
       function destroy(targetEl) {
         var interim = !targetEl ? showingInterims.shift() : null;
@@ -478,8 +491,9 @@ function InterimElementProvider() {
         };
 
         /**
-         * Compile, link, and show this interim element
-         * Use optional autoHided and transition-in effects
+         * Compile, link, and show this interim element. Use optional autoHide and transition-in
+         * effects.
+         * @return {Q.Promise}
          */
         function createAndTransitionIn() {
           return $q(function(resolve, reject) {
@@ -489,8 +503,8 @@ function InterimElementProvider() {
             options.onCompiling && options.onCompiling(options);
 
             compileElement(options)
-              .then(function( compiledData ) {
-                element = linkElement( compiledData, options );
+              .then(function(compiledData) {
+                element = linkElement(compiledData, options);
 
                 // Expose the cleanup function from the compiler.
                 options.cleanupElement = compiledData.cleanup;
@@ -518,13 +532,13 @@ function InterimElementProvider() {
         function transitionOutAndRemove(response, isCancelled, opts) {
 
           // abort if the show() and compile failed
-          if ( !element ) return $q.when(false);
+          if (!element) return $q.when(false);
 
           options = angular.extend(options || {}, opts || {});
           options.cancelAutoHide && options.cancelAutoHide();
           options.element.triggerHandler('$mdInterimElementRemove');
 
-          if ( options.$destroy === true ) {
+          if (options.$destroy === true) {
 
             return hideElement(options.element, options).then(function(){
               (isCancelled && rejectAll(response)) || resolveAll(response);
@@ -563,7 +577,7 @@ function InterimElementProvider() {
          */
         function configureScopeAndTransitions(options) {
           options = options || { };
-          if ( options.template ) {
+          if (options.template) {
             options.template = $mdUtil.processTemplate(options.template);
           }
 
@@ -587,12 +601,15 @@ function InterimElementProvider() {
               // the old one finishes compiling.
               return element && $animate.leave(element) || $q.when();
             }
-          }, options );
+          }, options);
 
         }
 
         /**
          * Compile an element with a templateUrl, controller, and locals
+         * @param {Object} options
+         * @return {Q.Promise<{element: JQLite=, link: Function, locals: Object, cleanup: any=,
+         *  controller: Object=}>}
          */
         function compileElement(options) {
 
@@ -609,9 +626,12 @@ function InterimElementProvider() {
         }
 
         /**
-         *  Link an element with compiled configuration
+         * Link an element with compiled configuration
+         * @param {{element: JQLite=, link: Function, locals: Object, controller: Object=}} compileData
+         * @param {Object} options
+         * @return {JQLite}
          */
-        function linkElement(compileData, options){
+        function linkElement(compileData, options) {
           angular.extend(compileData.locals, options);
 
           var element = compileData.link(options.scope);
@@ -625,7 +645,10 @@ function InterimElementProvider() {
         }
 
         /**
-         * Search for parent at insertion time, if not specified
+         * Search for parent at insertion time, if not specified.
+         * @param {JQLite} element
+         * @param {Object} options
+         * @return {JQLite}
          */
         function findParent(element, options) {
           var parent = options.parent;
@@ -647,7 +670,7 @@ function InterimElementProvider() {
               el = $rootElement[0].querySelector(':not(svg) > body');
             }
             if (!el) el = $rootElement[0];
-            if (el.nodeName == '#comment') {
+            if (el.nodeName === '#comment') {
               el = $document[0].body;
             }
             return angular.element(el);
@@ -677,8 +700,12 @@ function InterimElementProvider() {
         }
 
         /**
-         * Show the element ( with transitions), notify complete and start
-         * optional auto-Hide
+         * Show the element (with transitions), notify complete and start optional auto hiding
+         * timer.
+         * @param {JQLite} element
+         * @param {Object} options
+         * @param {Object} controller
+         * @return {Q.Promise<JQLite>}
          */
         function showElement(element, options, controller) {
           // Trigger onShowing callback before the `show()` starts
@@ -688,6 +715,7 @@ function InterimElementProvider() {
 
           // Necessary for consistency between AngularJS 1.5 and 1.6.
           try {
+            // This fourth controller parameter is used by $mdDialog in beforeShow().
             notifyShowing(options.scope, element, options, controller);
           } catch (e) {
             return $q.reject(e);
@@ -696,7 +724,7 @@ function InterimElementProvider() {
           return $q(function (resolve, reject) {
             try {
               // Start transitionIn
-              $q.when(options.onShow(options.scope, element, options, controller))
+              $q.when(options.onShow(options.scope, element, options))
                 .then(function () {
                   notifyComplete(options.scope, element, options);
                   startAutoHide();
@@ -716,7 +744,7 @@ function InterimElementProvider() {
           return $q(function (resolve, reject) {
             try {
               // Start transitionIn
-              var action = $q.when( options.onRemove(options.scope, element, options) || true );
+              var action = $q.when(options.onRemove(options.scope, element, options) || true);
 
               // Trigger callback *before* the remove operation starts
               announceRemoving(element, action);
@@ -725,14 +753,14 @@ function InterimElementProvider() {
                 // For $destroy, onRemove should be synchronous
                 resolve(element);
 
-                if (!options.preserveScope && options.scope ) {
+                if (!options.preserveScope && options.scope) {
                   // scope destroy should still be be done after the current digest is done
-                  action.then( function() { options.scope.$destroy(); });
+                  action.then(function() { options.scope.$destroy(); });
                 }
               } else {
                 // Wait until transition-out is done
                 action.then(function () {
-                  if (!options.preserveScope && options.scope ) {
+                  if (!options.preserveScope && options.scope) {
                     options.scope.$destroy();
                   }
 
@@ -747,7 +775,5 @@ function InterimElementProvider() {
 
       }
     };
-
   }
-
 }

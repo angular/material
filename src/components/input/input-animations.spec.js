@@ -1,6 +1,6 @@
 describe('md-input-container animations', function() {
   var $rootScope, $compile, $material, $$mdInput, $window, $animate, $rootElement, $document, $timeout,
-    el, root, body, pageScope, computedStyle;
+    el, root, body, pageScope, computedStyle, invalidAnimation, messagesAnimation, messageAnimation;
 
   // Load our modules
   beforeEach(module('ngAnimate', 'ngMessages', 'material.components.input', 'material.components.checkbox'));
@@ -35,7 +35,7 @@ describe('md-input-container animations', function() {
     var container = el.find('md-input-container'),
       input = el.find('input'),
       errors;
-      
+
 
     // Mimic the real validations/animations that fire
 
@@ -89,58 +89,6 @@ describe('md-input-container animations', function() {
   }
 
   describe('method tests', function() {
-
-    describe('#showInputMessages', function() {
-      it('logs a warning with no messages element', inject(function($log) {
-        // Note that the element does NOT have a parent md-input-messages-animation class
-        var element = angular.element('<div><div class="md-input-message-animation"></div></div>');
-        var done = jasmine.createSpy('done');
-        var warnSpy = spyOn($log, 'warn');
-
-        $$mdInput.messages.show(element, done);
-
-        expect(done).toHaveBeenCalled();
-        expect(warnSpy).toHaveBeenCalled();
-      }));
-
-      it('logs a warning with no messages children', inject(function($log) {
-        // Note that the element does NOT have any child md-input-message-animation divs
-        var element = angular.element('<div class="md-input-messages-animation"></div>');
-        var done = jasmine.createSpy('done');
-        var warnSpy = spyOn($log, 'warn');
-
-        $$mdInput.messages.show(element, done);
-
-        expect(done).toHaveBeenCalled();
-        expect(warnSpy).toHaveBeenCalled();
-      }));
-    });
-
-    describe('#hideInputMessages', function() {
-      it('logs a warning with no messages element', inject(function($log) {
-        // Note that the element does NOT have a parent md-input-messages-animation class
-        var element = angular.element('<div><div class="md-input-message-animation"></div></div>');
-        var done = jasmine.createSpy('done');
-        var warnSpy = spyOn($log, 'warn');
-
-        $$mdInput.messages.hide(element, done);
-
-        expect(done).toHaveBeenCalled();
-        expect(warnSpy).toHaveBeenCalled();
-      }));
-
-      it('logs a warning with no messages children', inject(function($log) {
-        // Note that the element does NOT have any child md-input-message-animation divs
-        var element = angular.element('<div class="md-input-messages-animation"></div>');
-        var done = jasmine.createSpy('done');
-        var warnSpy = spyOn($log, 'warn');
-
-        $$mdInput.messages.hide(element, done);
-
-        expect(done).toHaveBeenCalled();
-        expect(warnSpy).toHaveBeenCalled();
-      }));
-    });
 
     describe('#getMessagesElement', function() {
 

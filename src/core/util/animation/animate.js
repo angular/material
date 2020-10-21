@@ -1,13 +1,11 @@
 // Polyfill angular < 1.4 (provide $animateCss)
 angular
   .module('material.core')
-  .factory('$$mdAnimate', function($q, $timeout, $mdConstant, $animateCss){
-
+  .factory('$$mdAnimate', function($q, $timeout, $mdConstant, $animateCss) {
      // Since $$mdAnimate is injected into $mdUtil... use a wrapper function
      // to subsequently inject $mdUtil as an argument to the AnimateDomUtils
-
      return function($mdUtil) {
-       return AnimateDomUtils( $mdUtil, $q, $timeout, $mdConstant, $animateCss);
+       return AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss);
      };
    });
 
@@ -17,10 +15,7 @@ angular
 function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
   var self;
   return self = {
-    /**
-     *
-     */
-    translate3d : function( target, from, to, options ) {
+    translate3d : function(target, from, to, options) {
       return $animateCss(target, {
         from: from,
         to: to,
@@ -29,7 +24,7 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
         duration: options.duration
       })
       .start()
-      .then(function(){
+      .then(function() {
           // Resolve with reverser function...
           return reverseTranslate;
       });
@@ -44,7 +39,6 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
            removeClass: options.transitionInClass,
            duration: options.duration
         }).start();
-
       }
     },
 
@@ -73,14 +67,13 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
          * NOTE: Make sure this transitionEnd didn't bubble up from a child
          */
         function finished(ev) {
-          if ( ev && ev.target !== element[0]) return;
+          if (ev && ev.target !== element[0]) return;
 
-          if ( ev  ) $timeout.cancel(timer);
+          if (ev) $timeout.cancel(timer);
           element.off($mdConstant.CSS.TRANSITIONEND, finished);
 
           // Never reject since ngAnimate may cause timeouts due missed transitionEnd events
           resolve();
-
         }
 
         /**
@@ -94,9 +87,9 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
         function noTransitionFound(styles) {
           styles = styles || window.getComputedStyle(element[0]);
 
-          return styles.transitionDuration == '0s' || (!styles.transition && !styles.transitionProperty);
+          return styles.transitionDuration === '0s' ||
+            (!styles.transition && !styles.transitionProperty);
         }
-
       });
     },
 
@@ -121,11 +114,12 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
 
       /**
        * This is a fallback if the origin information is no longer valid, then the
-       * origin bounds simply becomes the current bounds for the dialogContainer's parent
+       * origin bounds simply becomes the current bounds for the dialogContainer's parent.
+       * @returns {null|DOMRect}
        */
       function currentBounds() {
-        var cntr = element ? element.parent() : null;
-        var parent = cntr ? cntr.parent() : null;
+        var container = element ? element.parent() : null;
+        var parent = container ? container.parent() : null;
 
         return parent ? self.clientRect(parent) : null;
       }
@@ -161,14 +155,14 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
     /**
      * Enhance raw values to represent valid css stylings...
      */
-    toCss : function( raw ) {
+    toCss : function(raw) {
       var css = { };
       var lookups = 'left top right bottom width height x y min-width min-height max-width max-height';
 
       angular.forEach(raw, function(value,key) {
-        if ( angular.isUndefined(value) ) return;
+        if (angular.isUndefined(value)) return;
 
-        if ( lookups.indexOf(key) >= 0 ) {
+        if (lookups.indexOf(key) >= 0) {
           css[key] = value + 'px';
         } else {
           switch (key) {
@@ -199,6 +193,10 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
 
     /**
      * Convert the translate CSS value to key/value pair(s).
+     * @param {string} transform
+     * @param {boolean=} addTransition
+     * @param {string=} transition
+     * @return {Object} object containing CSS translate key/value pair(s)
      */
     toTransformCss: function (transform, addTransition, transition) {
       var css = {};
@@ -215,7 +213,10 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
     },
 
     /**
-     *  Clone the Rect and calculate the height/width if needed
+     * Clone the Rect and calculate the height/width if needed.
+     * @param {DOMRect} source
+     * @param {DOMRect=} destination
+     * @returns {null|DOMRect}
      */
     copyRect: function (source, destination) {
       if (!source) return null;
@@ -233,7 +234,9 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
     },
 
     /**
-     * Calculate ClientRect of element; return null if hidden or zero size
+     * Calculate ClientRect of element; return null if hidden or zero size.
+     * @param {Element|string} element
+     * @returns {null|DOMRect}
      */
     clientRect: function (element) {
       var bounds = angular.element(element)[0].getBoundingClientRect();
@@ -246,7 +249,9 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
     },
 
     /**
-     *  Calculate 'rounded' center point of Rect
+     * Calculate 'rounded' center point of Rect
+     * @param {DOMRect} targetRect
+     * @returns {{x: number, y: number}}
      */
     centerPointFor: function (targetRect) {
       return targetRect ? {
@@ -254,7 +259,6 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
         y: Math.round(targetRect.top + (targetRect.height / 2))
       } : { x : 0, y : 0 };
     }
-
   };
 }
 

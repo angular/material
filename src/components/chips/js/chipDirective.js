@@ -8,34 +8,29 @@ angular
  * @module material.components.chips
  *
  * @description
- * `<md-chip>` is a component used within `<md-chips>` and is responsible for rendering individual
- * chips.
+ * `<md-chip>` is a component used within `<md-chips>`. It is responsible for rendering an
+ * individual chip.
  *
  *
  * @usage
  * <hljs lang="html">
- *   <md-chip>{{$chip}}</md-chip>
+ *   <md-chips>
+ *     <md-chip>{{$chip}}</md-chip>
+ *   </md-chips>
  * </hljs>
  *
  */
-
-// This hint text is hidden within a chip but used by screen readers to
-// inform the user how they can interact with a chip.
-var DELETE_HINT_TEMPLATE = '\
-    <span ng-if="!$mdChipsCtrl.readonly" class="md-visually-hidden">\
-      {{$mdChipsCtrl.deleteHint}}\
-    </span>';
 
 /**
  * MDChip Directive Definition
  *
  * @param $mdTheming
  * @param $mdUtil
+ * @param $compile
+ * @param $timeout
  * @ngInject
  */
 function MdChip($mdTheming, $mdUtil, $compile, $timeout) {
-  var deleteHintTemplate = $mdUtil.processTemplate(DELETE_HINT_TEMPLATE);
-
   return {
     restrict: 'E',
     require: ['^?mdChips', 'mdChip'],
@@ -52,9 +47,6 @@ function MdChip($mdTheming, $mdUtil, $compile, $timeout) {
 
     if (chipsController) {
       chipController.init(chipsController);
-
-      // Append our delete hint to the div.md-chip-content (which does not exist at compile time)
-      chipContentElement.append($compile(deleteHintTemplate)(scope));
 
       // When a chip is blurred, make sure to unset (or reset) the selected chip so that tabbing
       // through elements works properly

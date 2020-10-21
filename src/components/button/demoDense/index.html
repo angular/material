@@ -1,0 +1,39 @@
+<div ng-controller="AppCtrl" ng-cloak>
+  <md-content class="md-dense">
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+      <md-button>Button</md-button>
+      <md-button md-no-ink class="md-primary">Primary (md-noink)</md-button>
+      <md-button ng-disabled="true" class="md-primary">Disabled</md-button>
+      <md-button class="md-warn">Warn</md-button>
+      <div class="label">Flat</div>
+    </section>
+    <md-divider></md-divider>
+
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+      <md-button class="md-raised">Button</md-button>
+      <md-button class="md-raised md-primary">Primary</md-button>
+      <md-button ng-disabled="true" class="md-raised md-primary">Disabled</md-button>
+      <md-button class="md-raised md-accent">Accent</md-button>
+      <div class="label">Raised</div>
+    </section>
+    <md-divider></md-divider>
+
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+        <md-button ng-href="{{googleUrl}}" target="_blank">Default Link</md-button>
+        <md-button class="md-primary" ng-href="{{googleUrl}}" target="_blank">
+          Primary Link
+        </md-button>
+        <md-button>Default Button</md-button>
+      <div class="label">Link vs. Button</div>
+    </section>
+    <md-divider></md-divider>
+
+    <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+      <md-button class="md-primary md-hue-2">Primary Hue 2</md-button>
+      <md-button class="md-warn md-raised md-hue-1">Warn Hue 1</md-button>
+      <md-button class="md-accent md-raised md-hue-2">Accent Hue 2</md-button>
+      <md-button class="md-accent md-hue-3">Accent Hue 3</md-button>
+      <div class="label">Themed</div>
+    </section>
+  </md-content>
+</div>

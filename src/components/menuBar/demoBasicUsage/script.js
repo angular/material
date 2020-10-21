@@ -10,7 +10,7 @@ angular
       var keys = str.split('-');
       var isOSX = /Mac OS X/.test($window.navigator.userAgent);
 
-      var seperator = (!isOSX || keys.length > 2) ? '+' : '';
+      var separator = (!isOSX || keys.length > 2) ? '+' : '';
 
       var abbreviations = {
         M: isOSX ? '⌘' : 'Ctrl',
@@ -19,9 +19,9 @@ angular
       };
 
       return keys.map(function(key, index) {
-        var last = index == keys.length - 1;
+        var last = index === keys.length - 1;
         return last ? key : abbreviations[key];
-      }).join(seperator);
+      }).join(separator);
     };
   })
   .controller('DemoBasicCtrl', function DemoCtrl($mdDialog) {

@@ -382,7 +382,7 @@ describe('<md-tabs>', function () {
       expect(tabContent.attr('role')).toBe('tabpanel');
       expect(tabContent.attr('aria-labelledby')).toBe(tabItem.attr('id'));
 
-      //Unique ids check
+      // Unique ids check
       expect(tabContent.attr('id')).not.toEqual(tabItem.attr('id'));
     });
 
@@ -449,6 +449,16 @@ describe('<md-tabs>', function () {
       expect(tab.find('md-tab-label').length).toBe(1);
       expect(tab.find('md-tab-label').text()).toBe('test');
       expect(tab.find('md-tab-body').length).toBe(0);
+    });
+    it('should apply tab class on the associated md-tab-item', function () {
+      var template = '\
+        <md-tabs md-selected="selectedTab">\
+          <md-tab label="a" md-tab-class="tester-class"></md-tab>\
+        </md-tabs>';
+      var element  = setup(template);
+      var tab      = element.find('md-tab-item');
+
+      expect(tab[ 0 ].className.indexOf('tester-class')).toBeGreaterThan(-1);
     });
   });
 

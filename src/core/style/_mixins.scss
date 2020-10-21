@@ -1,0 +1,403 @@
+@mixin margin-selectors($before:1em, $after:1em, $start:0px, $end:0px) {
+  -webkit-margin-before: $before;
+  -webkit-margin-after: $after;
+  -webkit-margin-start: $start;
+  -webkit-margin-end: $end;
+}
+
+@mixin not-selectable($value:none) {
+  -webkit-touch-callout: $value;
+  -webkit-user-select: $value;
+  -khtml-user-select: $value;
+  -moz-user-select: $value;
+  -ms-user-select: $value;
+  user-select: $value;
+}
+
+@mixin input-placeholder-color($color) {
+  $pseudos: '::-webkit-input-placeholder', // For QQ Browser
+            ':-ms-input-placeholder', // For IE
+            '::-ms-input-placeholder', // For Edge
+            '::placeholder';
+  $firefox-pseudos: ':-moz-placeholder', '::-moz-placeholder';
+
+  // It is important to export every pseudo within its own block, because otherwise the placeholder
+  // won't be set on the most browsers.
+  @each $pseudo in $pseudos {
+    &#{$pseudo} {
+      color: unquote($color);
+    }
+  }
+  // Firefox reduces the opacity of placeholders so we need to keep them opaque to avoid applying
+  // double the transparency and causing a11y failures due to text contrast.
+  @each $pseudo in $firefox-pseudos {
+    &#{$pseudo} {
+      color: unquote($color);
+      opacity: 1;
+    }
+  }
+}
+
+@mixin pie-clearfix {
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin md-shadow-bottom-z-1() {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+
+@mixin md-shadow-bottom-z-2() {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+// Mixin for a "flat" input that can be used for components that contain an input
+// (datepicker, autocomplete).
+@mixin md-flat-input() {
+  font-size: 14px;
+
+  box-sizing: border-box;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  background: transparent;
+
+  // The "clear X" that IE adds to input[type="search"]
+  &::-ms-clear {
+    display: none;
+  }
+}
+
+// Typography mixins
+
+@mixin md-title() {
+  font-size: $title-font-size-base;
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+
+@mixin md-body-1() {
+  font-size: $body-font-size-base;
+  font-weight: 400;
+  letter-spacing: 0.010em;
+  line-height: rem(2);
+}
+
+@mixin md-body-2() {
+  font-size: $body-font-size-base;
+  font-weight: 500;
+  letter-spacing: 0.010em;
+  line-height: rem(2.4);
+}
+
+@mixin md-subhead() {
+  font-size: $subhead-font-size-base;
+  font-weight: 400;
+  letter-spacing: 0.010em;
+  line-height: rem(2.4);
+}
+
+@function map-to-string($map) {
+  $map-str: '{';
+  $keys: map-keys($map);
+  $len: length($keys);
+  @for $i from 1 through $len {
+    $key: nth($keys, $i);
+    $value: map-get($map, $key);
+    $map-str: $map-str + '_' + $key + '_: _' + map-get($map, $key) + '_';
+    @if $i != $len {
+      $map-str: $map-str + ',';
+    }
+  }
+  @return $map-str + '}';
+}
+
+// This is a mixin, which fixes IE11's vertical alignment issue, when using `min-height`.
+// See https://connect.microsoft.com/IE/feedback/details/816293/
+@mixin ie11-min-height-flexbug($min-height) {
+  &::before {
+    content: '';
+    min-height: $min-height;
+    visibility: hidden;
+    display: inline-block;
+  }
+}
+
+// mixin definition ; sets LTR and RTL within the same style call
+// @see https://css-tricks.com/almanac/properties/d/direction/
+
+@mixin rtl($prop, $ltr-value, $rtl-value) {
+  #{$prop}: $ltr-value;
+  [dir=rtl] & {
+    #{$prop}: $rtl-value;
+  }
+}
+
+@mixin rtl-prop($ltr-prop, $rtl-prop, $value, $reset-value) {
+  #{$ltr-prop}: $value;
+  [dir=rtl] & {
+    #{$ltr-prop}: $reset-value;
+    #{$rtl-prop}: $value;
+  }
+}
+
+// To reverse padding (top left bottom right) -> (top right bottom left)
+@function rtl-value($list) {
+  @if length($list) == 4 {
+    @return nth($list, 1) nth($list, 4) nth($list, 3) nth($list, 2)
+  }
+  @if length($list) == 5 {
+    @return nth($list, 1) nth($list, 4) nth($list, 3) nth($list, 2) nth($list, 5)
+  }
+  @return $list;
+}
+
+// Position a FAB button.
+@mixin fab-position($spot, $top: auto, $right: auto, $bottom: auto, $left: auto) {
+  &.md-fab-#{$spot} {
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+    position: absolute;
+  }
+}
+
+@mixin fab-all-positions() {
+  @include fab-position(bottom-right, auto, ($button-fab-width - $button-fab-padding)/2, ($button-fab-height - $button-fab-padding)/2, auto);
+  @include fab-position(bottom-left, auto, auto, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2);
+  @include fab-position(top-right, ($button-fab-height - $button-fab-padding)/2, ($button-fab-width - $button-fab-padding)/2, auto, auto);
+  @include fab-position(top-left, ($button-fab-height - $button-fab-padding)/2, auto, auto, ($button-fab-width - $button-fab-padding)/2);
+}
+
+// This mixin allows a user to use the md-checkbox css outside of the
+// md-checkbox directive.
+// See src/components/select/select.scss for an example.
+@mixin checkbox-container(
+  $checkedSelector: '.md-checked',
+  $width: $checkbox-width,
+  $height: $checkbox-height,
+  $border-width: $checkbox-border-width,
+  $border-radius: $checkbox-border-radius) {
+  .md-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    box-sizing: border-box;
+    display: inline-block;
+
+    width: $width;
+    height: $height;
+    @include rtl(left, 0, auto);
+    @include rtl(right, auto, 0);
+
+    &:before {
+      box-sizing: border-box;
+      background-color: transparent;
+      border-radius: 50%;
+      content: '';
+      position: absolute;
+      display: block;
+      height: auto;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      transition: all 0.5s;
+      width: auto;
+    }
+
+    &:after {
+      box-sizing: border-box;
+      content: '';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      bottom: -10px;
+      left: -10px;
+    }
+
+    .md-ripple-container {
+      position: absolute;
+      display: block;
+      width: auto;
+      height: auto;
+      left: -15px;
+      top: -15px;
+      right: -15px;
+      bottom: -15px;
+    }
+  }
+
+  // unchecked
+  .md-icon {
+    box-sizing: border-box;
+    transition: 240ms;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: $width;
+    height: $height;
+    border-width: $border-width;
+    border-style: solid;
+    border-radius: $border-radius;
+  }
+
+  &#{$checkedSelector} .md-icon {
+    border-color: transparent;
+
+    &:after {
+      box-sizing: border-box;
+      transform: rotate(45deg);
+      position: absolute;
+      left: $width / 3 - $border-width;
+      top: $width / 9 - $border-width;
+      display: table;
+      width: $width / 3;
+      height: $width * 2 / 3;
+      border-width: $border-width;
+      border-style: solid;
+      border-top: 0;
+      border-left: 0;
+      content: '';
+    }
+  }
+
+  // disabled
+  &[disabled] {
+    cursor: default;
+  }
+
+  &.md-indeterminate .md-icon {
+    &:after {
+      box-sizing: border-box;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: table;
+      width: $width * 0.6;
+      height: $border-width;
+      border-width: $border-width;
+      border-style: solid;
+      border-top: 0;
+      border-left: 0;
+      content: '';
+    }
+  }
+}
+
+// Mixin to create a primary checkbox.
+// Used by the checkbox and select component.
+@mixin checkbox-primary($checkedSelector: '.md-checked') {
+  .md-ripple {
+    color: '{{primary-600}}';
+  }
+
+  &#{$checkedSelector} .md-ripple {
+    color: '{{background-600}}';
+  }
+
+  .md-ink-ripple {
+    color: '{{foreground-2}}';
+  }
+
+  &#{$checkedSelector} .md-ink-ripple {
+    color: '{{primary-color-0.87}}';
+  }
+
+  &:not(.md-checked) .md-icon {
+    border-color: '{{foreground-2}}';
+  }
+
+  &#{$checkedSelector} .md-icon {
+    background-color: '{{primary-color-0.87}}';
+  }
+
+  &#{$checkedSelector}.md-focused .md-container:before {
+    background-color: '{{primary-color-0.26}}';
+  }
+
+  &#{$checkedSelector} .md-icon:after {
+    border-color: '{{primary-contrast-0.87}}';
+  }
+
+  & .md-indeterminate[disabled] {
+    .md-container {
+      color: '{{foreground-3}}';
+    }
+  }
+}
+
+@mixin dense($prop, $normal, $dense) {
+  #{$prop}: $normal;
+  .md-dense > &:not(.md-dense-disabled),
+  .md-dense :not(.md-dense-disabled) &:not(.md-dense-disabled) {
+    #{$prop}: $dense;
+  }
+}
+
+@mixin dense-rtl($prop, $ltr-normal, $rtl-normal, $ltr-dense, $rtl-dense) {
+  @include rtl($prop, $ltr-normal, $rtl-normal);
+  .md-dense > &:not(.md-dense-disabled),
+  .md-dense :not(.md-dense-disabled) &:not(.md-dense-disabled) {
+    @include rtl($prop, $ltr-dense, $rtl-dense);
+  }
+}
+
+// Only use when in row layout
+@mixin when-layout-row($element) {
+  @media (max-width: $layout-breakpoint-xs - 1) {
+    .layout-row:not(.layout-xs-column),
+    .layout-xs-row {
+      & > #{$element} { @content; }
+    }
+  }
+  @media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
+    .layout-row:not(.layout-gt-xs-column),
+    .layout-gt-xs-row,
+    .layout-sm-row {
+      &:not(.layout-sm-column) > #{$element} { @content; }
+    }
+  }
+  @media (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md - 1) {
+    .layout-row:not(.layout-gt-xs-column):not(.layout-gt-sm-column),
+    .layout-gt-xs-row:not(.layout-gt-sm-column),
+    .layout-gt-sm-row,
+    .layout-md-row {
+      &:not(.layout-md-column) > #{$element} { @content; }
+    }
+  }
+  @media (min-width: $layout-breakpoint-md) and (max-width: $layout-breakpoint-lg - 1) {
+    .layout-row:not(.layout-gt-xs-column):not(.layout-gt-sm-column):not(.layout-gt-md-column),
+    .layout-gt-xs-row:not(.layout-gt-sm-column):not(.layout-gt-md-column),
+    .layout-gt-sm-row:not(.layout-gt-md-column),
+    .layout-gt-md-row,
+    .layout-lg-row {
+      &:not(.layout-lg-column) > #{$element} { @content; }
+    }
+  }
+  @media (min-width: $layout-breakpoint-lg) {
+    .layout-row:not(.layout-gt-xs-column):not(.layout-gt-sm-column):not(.layout-gt-md-column),
+    .layout-gt-xs-row:not(.layout-gt-sm-column):not(.layout-gt-md-column),
+    .layout-gt-sm-row:not(.layout-gt-md-column),
+    .layout-gt-md-row,
+    .layout-gt-lg-row,
+    .layout-xl-row {
+      &:not(.layout-gt-lg-column):not(.layout-xl-column) > #{$element} { @content; }
+    }
+  }
+}
+
+// Auto insert object margin
+@mixin auto-horizontal-margin($selector) {
+  @include when-layout-row($selector) {
+    &:not(:first-child) {
+      @include rtl-prop(margin-left, margin-right, $default-horizontal-margin, 0);
+    }
+  }
+}

@@ -4,7 +4,7 @@
 
 ## Configuring a theme
 
-By default your AngularJS Material application will use the default theme, a theme
+By default, your AngularJS Material application will use the default theme, a theme
 that is pre-configured with the following palettes for intention groups:
 
 - *primary* - indigo
@@ -72,16 +72,24 @@ angular.module('myApp', ['ngMaterial'])
 
 ### Defining Custom Palettes
 
-As mentioned before, AngularJS Material ships with the Material Design
-Spec's color palettes built in. In the event that you need to define a custom color palette, you can use `$mdThemingProvider` to define it, thereby making 
-it available to your theme for use in its intention groups. Note that you must
-specify all hues in the definition map.
+As mentioned before, AngularJS Material ships with the Material Design Spec's color palettes built
+in. In the event that you need to define a custom color palette, you can use `$mdThemingProvider`
+to define it. This makes the palette available to your theme for use in its intention groups.
+Note that you must specify all hues in the definition map. If you only want to override a few hues,
+please extend a palette (above).
+
+For a dark colored, custom palette, you should specify the default contrast color as  `light`.
+For lighter hues in the palette, you may need to add them to the list of `contrastDarkColors` to
+meet contrast guidelines. Similarly, you may need to add darker hues to `contrastStrongLightColors`,
+which has been updated to the latest Material Design guidelines for
+[Color Usability](https://material.io/archive/guidelines/style/color.html#color-usability).
+The update to the guidelines changed primary text on dark backgrounds from 87% to 100% opacity.
 
 <hljs lang="js">
 angular.module('myApp', ['ngMaterial'])
 .config(function($mdThemingProvider) {
 
-  $mdThemingProvider.definePalette('amazingPaletteName', {
+  $mdThemingProvider.definePalette('amazingDarkPaletteName', {
     '50': 'ffebee',
     '100': 'ffcdd2',
     '200': 'ef9a9a',
@@ -96,17 +104,49 @@ angular.module('myApp', ['ngMaterial'])
     'A200': 'ff5252',
     'A400': 'ff1744',
     'A700': 'd50000',
-    'contrastDefaultColor': 'light',    // whether, by default, text (contrast) 
-                                        // on this palette should be dark or light
-
-    'contrastDarkColors': ['50', '100', //hues which contrast should be 'dark' by default
-     '200', '300', '400', 'A100'],
-    'contrastLightColors': undefined    // could also specify this if default was 'dark'
+    // By default, text (contrast) on this palette should be white with 87% opacity.
+    'contrastDefaultColor': 'light',
+    // By default, for these lighter hues, text (contrast) should be 'dark'.
+    'contrastDarkColors': '50 100 200 300 400 500 600 A100 A200 A400',
+    // By default, for these darker hues, text (contrast) should be white with 100% opacity.
+    'contrastStrongLightColors': '700 800 900 A700'
   });
 
   $mdThemingProvider.theme('default')
-    .primaryPalette('amazingPaletteName')
+    .primaryPalette('amazingDarkPaletteName')
+});
+</hljs>
 
+For a light colored, custom palette, you should specify the default contrast color as `dark`.
+Then `contrastStrongLightColors` can be used if any hues are too dark for dark text.
+
+<hljs lang="js">
+angular.module('myApp', ['ngMaterial'])
+.config(function($mdThemingProvider) {
+
+  $mdThemingProvider.definePalette('amazingLightPaletteName', {
+    '50': '#f1f8e9',
+    '100': '#dcedc8',
+    '200': '#c5e1a5',
+    '300': '#aed581',
+    '400': '#9ccc65',
+    '500': '#8bc34a',
+    '600': '#7cb342',
+    '700': '#689f38',
+    '800': '#558b2f',
+    '900': '#33691e',
+    'A100': '#ccff90',
+    'A200': '#b2ff59',
+    'A400': '#76ff03',
+    'A700': '#64dd17',
+    // By default, text (contrast) on this palette should be dark with 87% opacity.
+    'contrastDefaultColor': 'dark',
+    // By default, for these darker hues, text (contrast) should be white with 100% opacity.
+    'contrastStrongLightColors': '800 900'
+  });
+
+  $mdThemingProvider.theme('default')
+    .accentPalette('amazingLightPaletteName')
 });
 </hljs>
 

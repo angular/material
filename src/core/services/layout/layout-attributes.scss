@@ -1,5 +1,4 @@
 /*
-*
 *  Responsive attributes
 *
 *  References:
@@ -8,7 +7,6 @@
 *  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 *  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
 *  5) http://godban.com.ua/projects/flexgrid
-*
 */
 
 // Layout
@@ -170,7 +168,7 @@ $layout-breakpoint-lg:     1920px !default;
 	    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33.33%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
 	    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66.66%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
 	  }
-	  
+
 	  [layout="column"] {
 	    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33.33%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
 	    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66.66%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
@@ -214,7 +212,7 @@ $layout-breakpoint-lg:     1920px !default;
   @if $suffix != null {
     $name: 'layout-align-#{$suffix}';
   }
-  
+
   [#{$name}],
   [#{$name}="start stretch"] // defaults
   {
@@ -336,14 +334,13 @@ $layout-breakpoint-lg:     1920px !default;
 }
 @mixin layout-padding-margin() {
 
-  [layout-padding] > [flex-sm],   [layout-padding] > [flex-lt-md] {
+  [layout-padding] > [flex-sm] {
     padding: $layout-gutter-width / 4;
   }
   [layout-padding],
   [layout-padding] > [flex],
   [layout-padding] > [flex-gt-sm],
-  [layout-padding] > [flex-md],
-  [layout-padding] > [flex-lt-lg]
+  [layout-padding] > [flex-md]
   {
     padding: $layout-gutter-width / 2;
   }
@@ -353,8 +350,7 @@ $layout-breakpoint-lg:     1920px !default;
     padding: $layout-gutter-width / 1;
   }
 
-  [layout-margin] > [flex-sm],
-  [layout-margin] > [flex-lt-md]
+  [layout-margin] > [flex-sm]
   {
     margin: $layout-gutter-width / 4;
   }
@@ -362,8 +358,7 @@ $layout-breakpoint-lg:     1920px !default;
   [layout-margin],
   [layout-margin]  > [flex],
   [layout-margin]  > [flex-gt-sm],
-  [layout-margin]  > [flex-md],
-  [layout-margin]  > [flex-lt-lg]
+  [layout-margin]  > [flex-md]
   {
     margin: $layout-gutter-width / 2;
   }
@@ -509,7 +504,7 @@ $layout-breakpoint-lg:     1920px !default;
 @media print {
   // PRINT
   @include layouts_for_breakpoint(print);
-  
+
   [hide-print]:not([show-print]):not([show]) {
     display: none;
   }

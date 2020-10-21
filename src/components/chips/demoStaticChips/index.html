@@ -1,17 +1,15 @@
 <div ng-controller="DemoCtrl as ctrl" layout="column" ng-cloak>
-
   <md-content class="md-padding" layout="column">
-    <h2 class="md-title">Display a set of items as chips.</h2>
+    <h2 id="staticChipsTitle" class="md-title">Display a set of items as chips.</h2>
 
-    <md-chips>
+    <md-chips input-aria-label="Favorite Sports" input-aria-describedby="staticChipsNote">
+      <md-chip>Baseball</md-chip>
       <md-chip>Hockey</md-chip>
       <md-chip>Lacrosse</md-chip>
-      <md-chip>Baseball</md-chip>
-
       <!-- Static chips are transcluded -->
       <md-chip>{{ctrl.chipText}}</md-chip>
     </md-chips>
-    <p class="note">
+    <p id="staticChipsNote" class="note">
       Static chips cannot be selected, removed or edited, and are not part of any model.<br/>
       If no <code>ng-model</code> is provided, there are no input elements in <code>md-chips</code>.
     </p>

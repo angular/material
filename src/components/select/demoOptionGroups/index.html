@@ -5,17 +5,26 @@
       <md-input-container style="margin-right: 10px;">
         <label>Size</label>
         <md-select ng-model="size">
-          <md-option ng-repeat="size in sizes" value="{{size}}">{{size}}</md-option>
+          <md-optgroup label="No Surcharge">
+            <md-option ng-repeat="size in sizes | filter: {surcharge: 'none'}"
+                       value="{{size.name}}">{{size.name}}</md-option>
+          </md-optgroup>
+          <md-optgroup label="Additional Surcharge">
+            <md-option ng-repeat="size in sizes | filter: {surcharge: 'extra'}"
+                       value="{{size.name}}">{{size.name}}</md-option>
+          </md-optgroup>
         </md-select>
       </md-input-container>
       <md-input-container>
-        <label>Topping</label>
+        <label>Toppings</label>
         <md-select ng-model="selectedToppings" multiple>
           <md-optgroup label="Meats">
-            <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'meat' }">{{topping.name}}</md-option>
+            <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'meat'}">
+              {{topping.name}}</md-option>
           </md-optgroup>
           <md-optgroup label="Veggies">
-            <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'veg' }">{{topping.name}}</md-option>
+            <md-option ng-value="topping.name" ng-repeat="topping in toppings | filter: {category: 'veg'}">
+              {{topping.name}}</md-option>
           </md-optgroup>
         </md-select>
       </md-input-container>

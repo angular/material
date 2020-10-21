@@ -12,27 +12,140 @@ md-toolbar.md-THEME_NAME-theme:not(.md-menu-toolbar) {
     fill: '{{primary-contrast-0.26}}';
   }
 
+  md-input-container[md-no-float] {
+    .md-input {
+      @include input-placeholder-color('\'{{primary-default-contrast-hint}}\'');
+      color: '{{primary-default-contrast}}';
+      border-color: '{{primary-default-contrast-divider}}';
+    }
+
+    &.md-input-focused {
+      .md-input {
+        @include input-placeholder-color('\'{{primary-default-contrast-secondary}}\'');
+      }
+    }
+
+    &:not(.md-input-invalid) {
+      &.md-input-focused,
+      &.md-input-resized {
+        .md-input {
+          border-color: '{{primary-contrast}}';
+        }
+      }
+
+      &.md-input-focused {
+        &.md-accent {
+          .md-input {
+            border-color: '{{accent-color}}';
+          }
+        }
+        &.md-warn {
+          .md-input {
+            border-color: '{{warn-A700}}';
+          }
+        }
+      }
+    }
+  }
+
   &.md-accent {
-    background-color: '{{accent-color}}';
-    color: '{{accent-contrast}}';
+    background-color: '{{accent-500}}';
+    color: '{{accent-500-contrast}}';
 
     .md-ink-ripple {
-      color: '{{accent-contrast}}';
+      color: '{{accent-500-contrast}}';
     }
 
     md-icon {
-      color: '{{accent-contrast}}';
-      fill: '{{accent-contrast}}';
+      color: '{{accent-500-contrast}}';
+      fill: '{{accent-500-contrast}}';
     }
 
     .md-button[disabled] md-icon {
-      color: '{{accent-contrast-0.26}}';
-      fill: '{{accent-contrast-0.26}}';
+      color: '{{accent-500-contrast-0.26}}';
+      fill: '{{accent-500-contrast-0.26}}';
+    }
+
+    md-input-container[md-no-float] {
+      .md-input {
+        @include input-placeholder-color('\'{{accent-500-contrast-hint}}\'');
+        color: '{{accent-500-contrast}}';
+        border-color: '{{accent-500-contrast-divider}}';
+      }
+
+      &.md-input-focused {
+        .md-input {
+          @include input-placeholder-color('\'{{accent-500-contrast-secondary}}\'');
+        }
+      }
+
+      &:not(.md-input-invalid) {
+        &.md-input-focused,
+        &.md-input-resized {
+          .md-input {
+            border-color: '{{primary-color}}';
+          }
+        }
+
+        &.md-input-focused {
+          &.md-accent {
+            .md-input {
+              border-color: '{{accent-500-contrast}}';
+            }
+          }
+          &.md-warn {
+            .md-input {
+              border-color: '{{warn-A700}}';
+            }
+          }
+        }
+      }
     }
   }
 
   &.md-warn {
-    background-color: '{{warn-color}}';
-    color: '{{warn-contrast}}';
+    background-color: '{{warn-500}}';
+    color: '{{warn-500-contrast}}';
+
+    md-icon {
+      color: '{{warn-500-contrast}}';
+      fill: '{{warn-500-contrast}}';
+    }
+
+    md-input-container[md-no-float] {
+      .md-input {
+        @include input-placeholder-color('\'{{warn-500-contrast-hint}}\'');
+        color: '{{warn-500-contrast}}';
+        border-color: '{{warn-500-contrast-divider}}';
+      }
+
+      &.md-input-focused {
+        .md-input {
+          @include input-placeholder-color('\'{{warn-500-contrast-secondary}}\'');
+        }
+      }
+
+      &:not(.md-input-invalid) {
+        &.md-input-focused,
+        &.md-input-resized {
+          .md-input {
+            border-color: '{{primary-color}}';
+          }
+        }
+
+        &.md-input-focused {
+          &.md-accent {
+            .md-input {
+              border-color: '{{accent-color}}';
+            }
+          }
+          &.md-warn {
+            .md-input {
+              border-color: '{{warn-500-contrast}}';
+            }
+          }
+        }
+      }
+    }
   }
 }

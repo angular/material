@@ -27,6 +27,9 @@
             <md-option value="app">Application</md-option>
             <md-option value="web">Website</md-option>
           </md-select>
+          <div ng-messages="projectForm.type.$error">
+            <div ng-message="required">This is required.</div>
+          </div>
         </md-input-container>
       </div>
 

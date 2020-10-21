@@ -29,7 +29,8 @@ body.docs-body {
   height: auto;
 }
 
-.docs-anchor {
+.docs-anchor,
+.docs-anchor:visited {
   color: inherit;
 }
 
@@ -54,9 +55,8 @@ body.docs-body {
   border-top: 1px solid #ddd;
 }
 
-
 .training_link {
-  color: rgb(255,82,82);
+  color: #D32F2F;
   text-transform: none;
 }
 
@@ -65,7 +65,6 @@ body.docs-body {
 }
 
 .training_info {
-  opacity: 0.4;
   text-transform: none;
 }
 /***************
@@ -75,6 +74,10 @@ a {
   text-decoration: none;
   font-weight: 400;
   transition: border-bottom 0.35s;
+  color: #1565C0;
+}
+a:visited {
+  color: #7e57c2;
 }
 h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
@@ -134,8 +137,12 @@ strong {
   background-color: #D1DEEC;
 }
 .md-api-table th {
-  background-color: #4C9EF0;
+  background-color: #1976D2;
   color: white;
+}
+.md-api-table code,
+.md-api-table a {
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 blockquote {
@@ -148,13 +155,13 @@ ul {
   margin: 0;
   padding: 0;
 }
-ul li {
+main ul:not(.md-autocomplete-suggestions) li:not(.md-nav-item) {
   margin-left: 16px;
   padding: 0;
   margin-top: 3px;
   list-style-position: inside;
 }
-ul li:first-child {
+main ul:not(.md-autocomplete-suggestions) li:not(.md-nav-item):first-child {
   margin-top: 0;
 }
 /************
@@ -166,21 +173,18 @@ ul.skip-links li {
   padding: 0;
 }
 ul.skip-links li a {
-  background-color: #fff;
-  display: block;
-  margin: 0.5em 0 0.5em 0.5em;
-  opacity: 0;
-  left: 0;
+  color: white;
+  margin: 0.9em 0 0.5em 0.5em !important;
+  right: 0;
   position: absolute;
-  text-decoration: none;
   top: 0;
-  width: 92%;
-  transition: opacity   0.15s linear;
-}
-ul.skip-links li a:focus {
-  background-color: #fff !important;
-  opacity: 1;
   z-index: 2;
+}
+ul.skip-links li a md-icon {
+  color: white;
+}
+.md-breadcrumb:focus {
+  outline: #BDBDC0 solid 2px;
 }
 /*******************
  * CODE HIGHLIGHTING
@@ -212,7 +216,7 @@ pre > code.highlight {
 
 code {
   font-size: 1.4rem;
-  background: rgba(0, 0, 0, 0.065);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 code.highlight {
@@ -221,10 +225,9 @@ code.highlight {
 }
 
 code:not(.highlight) {
-  color: #106CC8;
+  color: #1565C0;
   margin-left: 1px;
   margin-right: 1px;
-  -webkit-font-smoothing: auto;
   padding: 0.125em 0.35em;
   border-radius: 2px;
 }
@@ -258,16 +261,16 @@ code:not(.highlight) {
   max-width: 100%;
   overflow-x: hidden;
 }
-.docs-menu li {
+ul.docs-menu li {
   margin: 0;
 }
 .docs-menu > li:nth-child(1) {
   border-top: none;
 }
 .md-whiteframe-glow-z1 {
-  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.14),
-              0px 0px 2px 2px rgba(0, 0, 0, 0.098),
-              0px 0px 5px 1px rgba(0, 0, 0, 0.084);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.14),
+              0 0 2px 2px rgba(0, 0, 0, 0.098),
+              0 0 5px 1px rgba(0, 0, 0, 0.084);
 }
 .docs-menu > li {
   border-bottom: 1px solid #267ED5;
@@ -283,7 +286,7 @@ code:not(.highlight) {
   margin: 0;
   max-height: 40px;
   overflow: hidden;
-  padding: 0px 16px;
+  padding: 0 16px;
   text-align: left;
   text-decoration: none;
   white-space: normal;
@@ -299,14 +302,13 @@ body[dir=rtl] .docs-menu .md-button {
 
 .docs-menu .md-button:hover,
 .docs-menu .md-button:focus {
-  background: #267ED5 !important;
+  background: #1D77D5 !important;
 }
 .docs-menu .md-button md-icon {
   color: white;
 }
 
 .docs-menu md-select {
-
  /* Override md-select margins.  With margins the menu will look incorrect and causes mobile list
     to not be scrollable.
   */
@@ -332,7 +334,7 @@ body[dir=rtl] .docs-menu .md-button {
   padding: 0;
 }
 .docs-menu .md-button.active {
-  background: #267ED5;
+  background: #1D77D5;
 }
 .menu-heading {
   display: block;
@@ -341,9 +343,10 @@ body[dir=rtl] .docs-menu .md-button {
   padding: 8px 16px 0;
   text-align: left;
   width: 100%;
-  color: rgba(255, 255, 255, 0.54)
+  color: white;
+  font-weight: 700;
+  font-size: 12px;
 }
-
 
 html[dir=rtl] .menu-heading,
 body[dir=rtl] .menu-heading {
@@ -397,7 +400,8 @@ body[dir=rtl] .menu-heading {
   outline: none;
 }
 .docs-logo > img {
-  height: 150px;
+  margin-top: 19px;
+  height: 120px;
   width: auto;
   display: block;
   transform-origin: 50% 0;
@@ -406,7 +410,7 @@ body[dir=rtl] .menu-heading {
 .nav-header {
   background-color: #106CC8;
   background: linear-gradient(#185694, #106cc8);
-  border-bottom: 1px solid #267ED5;
+  border-bottom: 1px solid #1D77D5;
   flex-shrink: 0;
   z-index: 2;
 }
@@ -418,6 +422,8 @@ a.docs-logo {
   text-align: center;
   font-weight: 400;
   font-size: 26px;
+  margin-bottom: 1rem;
+  margin-top: 21px;
 }
 .docs-menu-separator-icon {
   margin: 0;
@@ -428,10 +434,6 @@ a.docs-logo {
 .md-breadcrumb {
   font-size: 24px !important;
   font-weight: 400 !important;
-}
-.md-breadcrumb md-icon {
-  color: #666 !important;
-  fill: #666 !important;
 }
 .md-breadcrumb-page {
   display: inline-block;
@@ -446,10 +448,6 @@ a.docs-logo {
 .docs-tools .md-button,
 .docs-tools .md-button md-icon {
   color: #666 !important;
-}
-.docs-toolbar-tools .md-button md-icon {
-  color: #666 !important;
-  fill: #666 !important;
 }
 @media (max-width: 400px) {
   .docs-tools {
@@ -521,14 +519,12 @@ md-tabs.demo-source-tabs .active md-tab-label {
 .small-demo .demo-content {
   min-height: 128px;
 }
-
 .doc-content > * {
   flex: 1 1 auto;
 }
 .demo-content > * {
-  flex: 1 1 0%;
+  flex: 1 1 100%;
 }
-
 .demo-content > div[layout-fill] {
   min-height: 448px;
 }
@@ -558,7 +554,7 @@ md-toolbar.demo-toolbar {
   box-shadow: 0 1px rgba(255, 255, 255, 0.1);
 }
 md-toolbar.demo-toolbar md-tab-label {
-  color: #99E4EE
+  color: #99E4EE;
 }
 md-toolbar.demo-toolbar .md-button:hover {
   background: rgba(0,0,0,0.1);
@@ -604,20 +600,20 @@ md-toolbar.demo-toolbar .md-button {
 /***************
  * Landing Page
  ***************/
-ul.buckets {
+main .doc-content ul.buckets {
   margin: 24px 0 24px -8px;
   padding: 0;
   position: relative;
 }
-ul.buckets li {
+main .doc-content ul.buckets li {
   list-style: none;
   margin: 0;
   text-align: center;
 }
-ul.buckets li md-card md-card-content {
+main .doc-content ul.buckets li md-card md-card-content {
   padding: 0;
 }
-ul.buckets li a {
+main .doc-content ul.buckets li a {
   display: block;
   font-weight: 500;
   padding: 16px 0;
@@ -627,15 +623,15 @@ ul.buckets li a {
   margin-right: 0;
   margin-top: 0;
 }
-ul.buckets li a,
-ul.buckets li a md-icon {
+main .doc-content ul.buckets li a,
+main .doc-content ul.buckets li a md-icon {
   color: #666 !important;
   transition: all 0.15s cubic-bezier(0.35, 0, 0.25, 1);
 }
-ul.buckets li a:hover,
-ul.buckets li a:focus,
-ul.buckets li a:hover md-icon,
-ul.buckets li a:focus md-icon {
+main .doc-content ul.buckets li a:hover,
+main .doc-content ul.buckets li a:focus,
+main .doc-content ul.buckets li a:hover md-icon,
+main .doc-content ul.buckets li a:focus md-icon {
   color: #106CC8 !important;
   background-color: #ebebeb !important;
 }
@@ -776,7 +772,7 @@ ul.methods > li:first-child > *:first-child {
 }
 
 .version-picker {
-  background: #267ED5 !important;
+  background: #1D77D5 !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   margin-bottom: 1px !important;
 }
@@ -796,13 +792,6 @@ docs-demo .doc-demo-content {
   margin: 16px;
 }
 .site-content-toolbar {
-  background: #f6f6f6 !important;
-  color: #666 !important;
-  z-index: 3;
-}
-.site-content-toolbar {
-  background: #f6f6f6 !important;
-  color: #202020 !important;
   z-index: 3;
 }
 .service-desc {
@@ -816,6 +805,9 @@ docs-demo .doc-demo-content {
 }
 .service-desc > p:last-child {
   margin-bottom: 0;
+}
+.service-desc code {
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 /* Styles for Windows High Contrast mode */
@@ -866,10 +858,10 @@ table.md-css-table td p {
 
 .layout_note {
   font-size: 0.9em;
-    margin: -5px 40px 0px 20px;
-    color: rgb(1, 57, 114);
-    background-color: rgba(156, 204, 101,0.4);
-    padding: 20px;
+  margin: -5px 40px 0 20px;
+  color: rgb(1, 57, 114);
+  background-color: rgba(156, 204, 101,0.4);
+  padding: 20px;
 }
 
 .contributor_tables {
@@ -879,6 +871,67 @@ table.md-css-table td p {
 .contributor_tables > table {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+table.custom-table {
+  margin: 24px 2px;
+  box-shadow: 0 1px 2px rgba(10, 16, 20, 0.24), 0 0 2px rgba(10, 16, 20, 0.12);
+  border-radius: 2px;
+  background: #fafafa;
+  color: rgba(0,0,0,0.87);
+  border-spacing: 0;
+}
+table.custom-table thead > {
+  vertical-align: middle;
+  border-color: inherit;
+}
+table.custom-table thead > tr {
+  vertical-align: inherit;
+  border-color: inherit;
+}
+table.custom-table thead > tr > th {
+  background: rgba(219, 219, 219, 0.2);
+  border-bottom: 1px solid #dbdbdb;
+  color: #333;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 24px;
+  text-align: left;
+  text-transform: uppercase;
+  line-height: 28px;
+}
+table.custom-table tbody > tr > th,
+table.custom-table tbody > tr > td {
+  border-bottom: 1px solid #dbdbdb;
+  padding: 16px;
+  text-align: left;
+  line-height: 24px;
+  vertical-align: top;
+}
+@media (max-width: 480px) {
+  table.custom-table tbody > tr > th:before,
+  table.custom-table tbody > tr > td:before {
+    display: inline-block;
+  }
+}
+table.custom-table tbody > tr > td {
+  letter-spacing: 0.3px;
+}
+@media (max-width: 480px) {
+  table.custom-table tbody > tr > td tr td:first-child {
+    background-color: #dbdbdb;
+  }
+}
+table.custom-table tbody > tr > th:first-child {
+  border-right: 1px solid #dbdbdb;
+}
+table.custom-table tbody > tr > th {
+  background: rgba(219, 219, 219, 0.2);
+  font-weight: 600;
+  max-width: 100px;
+}
+table.custom-table tbody > tr >:last-child td {
+  border: none;
 }
 
 /* Provide some layout/padding enhancements for mobile/small devices */

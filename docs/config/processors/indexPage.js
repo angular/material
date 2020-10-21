@@ -1,6 +1,6 @@
-var buildConfig = require('../../../config/build.config');
+const buildConfig = require('../../../config/build.config');
 
-module.exports = function indexPageProcessor(log) {
+module.exports = function indexPageProcessor() {
   return {
     $runAfter: ['componentsGenerateProcessor'],
     $runBefore: ['rendering-docs'],

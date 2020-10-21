@@ -1,3 +1,5 @@
+{% import "./macros.html" as macros %}
+
 {%- if doc.properties %}
 <section class="api-section">
   <h2>Properties</h2>
@@ -13,7 +15,7 @@
       <div class="method-param-table">
 
         {% if property.params %}
-        {$ paramTable(property.params) $}
+        {$ macros.paramTable(property.params) $}
         {% endif %}
 
         {% if method.this %}
@@ -22,7 +24,7 @@
         {% endif %}
 
         {% if property.returns %}
-        {$ returnTable(property.returns) $}
+        {$ macros.returnTable(property.returns) $}
         {% endif %}
 
       </div>

@@ -168,7 +168,7 @@ describe('$mdGesture', function() {
     // Click tests should only be enabled when `$$hijackClicks == true` (for mobile)
 
     it('should click if distance < options.maxDistance', inject(function($document, $mdGesture) {
-      if ( $mdGesture.$$hijackClicks ) {
+      if ($mdGesture.$$hijackClicks) {
         var spy = jasmine.createSpy('click');
         var el = angular.element('<div>');
 
@@ -192,7 +192,7 @@ describe('$mdGesture', function() {
     }));
 
     it('should not click if distance > options.maxDistance', inject(function($mdGesture, $document) {
-      if ( $mdGesture.$$hijackClicks ) {
+      if ($mdGesture.$$hijackClicks) {
         var spy = jasmine.createSpy('click');
         var el = angular.element('<div>');
 
@@ -364,17 +364,18 @@ describe('$mdGesture', function() {
 
   describe('drag', function() {
 
-    var startDragSpy, el, dragSpy, endDragSpy, doc;
+    var startDragSpy, el, dragSpy, endDragSpy, doc, deRegisterEvents, touchAction;
 
     beforeEach(function() {
-      inject(function($mdGesture, $document) {
+      inject(function($mdGesture, $document, $mdUtil) {
         doc = $document;
         startDragSpy = jasmine.createSpy('dragstart');
         dragSpy = jasmine.createSpy('drag');
         endDragSpy = jasmine.createSpy('dragend');
         el = angular.element('<div>');
 
-        $mdGesture.register(el, 'drag');
+        touchAction = $mdUtil.getTouchAction();
+        deRegisterEvents = $mdGesture.register(el, 'drag');
         el.on('$md.dragstart', startDragSpy)
           .on('$md.drag'     , dragSpy)
           .on('$md.dragend'  , endDragSpy);
@@ -448,6 +449,12 @@ describe('$mdGesture', function() {
       });
     }));
 
+
+    it('should clean up styles when de-registered', inject(function($mdGesture, $document) {
+      deRegisterEvents();
+      // Ensure that no 'pan-x' or 'pan-y' values are left behind.
+      expect(el[0].style[touchAction]).toBe('');
+    }));
   });
 
   describe('swipe', function() {
@@ -606,7 +613,7 @@ describe('$mdGesture', function() {
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
       now = 1;
-      //10 distance = boundary. no swipe.
+      // 10 distance = boundary. no swipe.
       $document.triggerHandler({
         type: 'touchend', target: el[0], pageX: 10, pageY: 0
       });
@@ -618,7 +625,7 @@ describe('$mdGesture', function() {
       $document.triggerHandler({
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
-      //11 distance = enough. swipe.
+      // 11 distance = enough. swipe.
       $document.triggerHandler({
         type: 'touchend', target: el[0], pageX: 11, pageY: 0
       });

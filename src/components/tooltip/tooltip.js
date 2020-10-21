@@ -271,7 +271,7 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
         var attributeObserver = new MutationObserver(function(mutations) {
           mutations.forEach(function(mutation) {
             if (mutation.attributeName === 'md-visible' &&
-                !scope.visibleWatcher ) {
+                !scope.visibleWatcher) {
               scope.visibleWatcher = scope.$watch('mdVisible',
                   onVisibleChanged);
             }
@@ -387,11 +387,14 @@ function MdTooltipDirective($timeout, $window, $$rAF, $document, $interpolate,
           attachTo: attachTo,
           contentElement: element,
           propagateContainerEvents: true,
-          panelClass: 'md-tooltip ' + origin,
+          panelClass: 'md-tooltip',
           animation: panelAnimation,
           position: panelPosition,
           zIndex: scope.mdZIndex,
-          focusOnOpen: false
+          focusOnOpen: false,
+          onDomAdded: function() {
+            panelRef.panelEl.addClass(origin);
+          }
         };
 
         panelRef = $mdPanel.create(panelConfig);

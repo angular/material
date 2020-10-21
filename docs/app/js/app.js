@@ -1,4 +1,4 @@
-angular.module('docsApp', [ 'angularytics', 'ngRoute', 'ngMessages', 'ngMaterial' ], [
+angular.module('docsApp', ['angularytics', 'ngRoute', 'ngMessages', 'ngMaterial'], [
   'SERVICES',
   'COMPONENTS',
   'DEMOS',
@@ -51,25 +51,41 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     '800': '#014AB6',
     '900': '#013583',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '300 400 A200 A400'
+    'contrastDarkColors': '50 100 200 300 400 A100 A200',
+    'contrastStrongLightColors': '500 600 700 800 900 A400 A700'
   }));
+
   $mdThemingProvider.definePalette('docs-red', $mdThemingProvider.extendPalette('red', {
     'A100': '#DE3641'
+  }));
+
+  $mdThemingProvider.definePalette('docs-warn', $mdThemingProvider.extendPalette('deep-orange', {
+    '500': '#d32f2f' // Override 500 with 700 hue for improved contrast on flat buttons
   }));
 
   $mdThemingProvider.theme('docs-dark', 'default')
     .primaryPalette('yellow')
     .dark();
 
+  $mdThemingProvider.theme('site-toolbar')
+    .primaryPalette('grey', {
+      'default': '100'
+    });
+
   $mdIconProvider.icon('md-toggle-arrow', 'img/icons/toggle-arrow.svg', 48);
+  $mdIconProvider
+    .iconSet('communication', 'img/icons/sets/communication-icons.svg', 24)
+    .iconSet('device', 'img/icons/sets/device-icons.svg', 24)
+    .iconSet('social', 'img/icons/sets/social-icons.svg', 24)
+    .iconSet('symbol', 'img/icons/sets/symbol-icons.svg', 24)
+    .defaultIconSet('img/icons/sets/core-icons.svg', 24);
 
   $mdThemingProvider.theme('default')
-      .primaryPalette('docs-blue')
-      .accentPalette('docs-red');
+    .primaryPalette('docs-blue')
+    .accentPalette('docs-red')
+    .warnPalette('docs-warn');
 
-  $mdThemingProvider
-      .enableBrowserColor();
+  $mdThemingProvider.enableBrowserColor();
 
   angular.forEach(PAGES, function(pages, area) {
     angular.forEach(pages, function(page) {
@@ -134,12 +150,14 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
 
 }])
 
-.config(['AngularyticsProvider', function(AngularyticsProvider) {
-   AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
+.config(['$mdGestureProvider', 'AngularyticsProvider', function($mdGestureProvider, AngularyticsProvider) {
+  $mdGestureProvider.skipClickHijack();
+  AngularyticsProvider.setEventHandlers(['GoogleUniversal']);
 }])
 
-.run(['Angularytics', function(Angularytics) {
+.run(['$rootScope', '$window', 'Angularytics', function($rootScope, $window, Angularytics) {
   Angularytics.init();
+  $rootScope.$window = $window;
 }])
 
 .factory('menu', [
@@ -235,6 +253,15 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
             type: 'link'
           }
         ]
+      },
+      {
+        name: 'Performance',
+        type: 'toggle',
+        pages: [{
+            name: 'Internet Explorer',
+            url: 'performance/internet-explorer',
+            type: 'link'
+          }]
       }
     ]
   });
@@ -272,28 +299,28 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         name: 'Introduction',
         id: 'layoutIntro',
         url: 'layout/introduction'
-      }
-        ,{
+      },
+      {
         name: 'Layout Containers',
         id: 'layoutContainers',
         url: 'layout/container'
-        }
-      ,{
+      },
+      {
         name: 'Layout Children',
         id: 'layoutGrid',
         url: 'layout/children'
-      }
-      ,{
+      },
+      {
         name: 'Child Alignment',
         id: 'layoutAlign',
         url: 'layout/alignment'
-      }
-      ,{
+      },
+      {
         name: 'Extra Options',
         id: 'layoutOptions',
         url: 'layout/options'
-      }
-      ,{
+      },
+      {
         name: 'Troubleshooting',
         id: 'layoutTips',
         url: 'layout/tips'
@@ -314,11 +341,17 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
     }]
   });
 
-  sections.push( {
-        name: 'Contributors',
-        url: 'contributors',
-        type: 'link'
-      } );
+  sections.push({
+    name: 'Migration to Angular',
+    url: 'migration',
+    type: 'link'
+  });
+
+  sections.push({
+    name: 'Contributors',
+    url: 'contributors',
+    type: 'link'
+  });
 
   sections.push({
     name: 'License',
@@ -342,7 +375,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         response = response.data;
         var versionId = getVersionIdFromPath();
         var head = { type: 'version', url: '/HEAD', id: 'head', name: 'HEAD (master)', github: '' };
-        var commonVersions = versionId === 'head' ? [] : [ head ];
+        var commonVersions = versionId === 'head' ? [] : [head];
         var knownVersions = getAllVersions();
         var listVersions = knownVersions.filter(removeCurrentVersion);
         var currentVersion = getCurrentVersion() || {name: 'local'};
@@ -351,11 +384,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
           name: 'Documentation Version',
           type: 'heading',
           className: 'version-picker',
-          children: [ {
+          children: [{
             name: currentVersion.name,
             type: 'toggle',
             pages: commonVersions.concat(listVersions)
-          } ]
+          }]
         });
         function removeCurrentVersion (version) {
           switch (versionId) {
@@ -398,7 +431,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         function getVersionIdFromPath () {
           var path = $window.location.pathname;
           if (path.length < 2) path = 'HEAD';
-          return path.match(/[^\/]+/)[0].toLowerCase();
+          return path.match(/[^/]+/)[0].toLowerCase();
         }
       });
 
@@ -433,7 +466,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       type: "link"
     };
 
-    if (path == '/') {
+    if (path === '/') {
       self.selectSection(introLink);
       self.selectPage(introLink, introLink);
       return;
@@ -450,7 +483,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       if (section.children) {
         // matches nested section toggles, such as API or Customization
         section.children.forEach(function(childSection){
-          if(childSection.pages){
+          if (childSection.pages){
             childSection.pages.forEach(function(page){
               matchPage(childSection, page);
             });
@@ -471,7 +504,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   }
 }])
 
-.directive('menuLink', function() {
+.directive('menuLink', ['scrollCache', function(scrollCache) {
   return {
     scope: {
       section: '='
@@ -488,10 +521,12 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         // set flag to be used later when
         // $locationChangeSuccess calls openPage()
         controller.autoFocusContent = true;
+        // set flag to be used later when $routeChangeStart saves scroll position
+        scrollCache.linkClicked = true;
       };
     }
   };
-})
+}])
 
 .directive('menuToggle', ['$mdUtil', '$animateCss', '$$rAF', function($mdUtil, $animateCss, $$rAF) {
   return {
@@ -556,7 +591,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       });
 
       var parentNode = $element[0].parentNode.parentNode.parentNode;
-      if(parentNode.classList.contains('parent-list-item')) {
+      if (parentNode.classList.contains('parent-list-item')) {
         var heading = parentNode.querySelector('h2');
         $element[0].firstChild.setAttribute('aria-describedby', heading.id);
       }
@@ -595,7 +630,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   $rootScope.$on('$locationChangeSuccess', openPage);
   $scope.focusMainContent = focusMainContent;
 
-  //-- Define a fake model for the related page selector
+  // Define a fake model for the related page selector
   Object.defineProperty($rootScope, "relatedPage", {
     get: function () { return null; },
     set: angular.noop,
@@ -615,7 +650,8 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   this.autoFocusContent = false;
 
 
-  var mainContentArea = document.querySelector("[role='main']");
+  var mainContentArea = document.querySelector("main");
+  var mainContentHeader = mainContentArea.querySelector(".md-breadcrumb");
   var scrollContentEl = mainContentArea.querySelector('md-content[md-scroll-y]');
 
 
@@ -641,7 +677,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
 
   function goHome($event) {
     menu.selectPage(null, null);
-    $location.path( '/' );
+    $location.path('/');
   }
 
   function openPage() {
@@ -654,12 +690,13 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   }
 
   function focusMainContent($event) {
+    $scope.closeMenu();
     // prevent skip link from redirecting
     if ($event) { $event.preventDefault(); }
 
     $timeout(function(){
-      mainContentArea.focus();
-    },90);
+      mainContentHeader.focus();
+    }, 90);
 
   }
 
@@ -670,12 +707,12 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   function isSectionSelected(section) {
     var selected = false;
     var openedSection = menu.openedSection;
-    if(openedSection === section){
+    if (openedSection === section){
       selected = true;
     }
-    else if(section.children) {
+    else if (section.children) {
       section.children.forEach(function(childSection) {
-        if(childSection === openedSection){
+        if (childSection === openedSection){
           selected = true;
         }
       });
@@ -704,7 +741,7 @@ function($scope, $rootScope) {
   '$rootScope', '$http',
 function($rootScope, $http) {
   $rootScope.currentComponent = $rootScope.currentDoc = null;
-  if ( !$rootScope.contributors ) {
+  if (!$rootScope.contributors) {
     $http
       .get('./contributors.json')
       .then(function(response) {
@@ -861,4 +898,78 @@ function($rootScope, $scope, component, demos, $templateRequest) {
       }
     }
   };
-});
+})
+
+.factory('scrollCache', function() {
+  var cache = {};
+  var linkClicked = false;
+
+  function setScroll(key, scrollPostion) {
+    cache[key] = scrollPostion;
+  }
+
+  function getScroll(key) {
+    return cache[key] || 0;
+  }
+
+  return {
+    getScroll: getScroll,
+    setScroll: setScroll,
+    linkClicked: linkClicked
+  };
+})
+
+/**
+ * This directive caches the scroll position for each route + templateUrl combination.
+ * This helps in restoring the scroll when the user uses back or forward navigation to return
+ * to a page.
+ */
+.directive('cacheScrollPosition', ['$route', '$mdUtil', '$timeout', '$location', '$anchorScroll',
+  'scrollCache',
+function($route, $mdUtil, $timeout, $location, $anchorScroll, scrollCache) {
+  var mainContentArea = document.querySelector("main");
+  var scrollContentEl = mainContentArea.querySelector('md-content[md-scroll-y]');
+
+  /**
+   * @param {Object} event Synthetic event object
+   * @param {Object} next Future route information
+   * @param {Object} current Current route information
+   */
+  var handleRouteChangeStart = function (event, next, current) {
+    // store scroll position for the current path + template
+    if ($route.current) {
+      scrollCache.setScroll(current.loadedTemplateUrl + ":" + current.$$route.originalPath,
+        scrollContentEl.scrollTop);
+    }
+
+    // set scroll to 0 for next route, if explicitly clicked on link.
+    if (scrollCache.linkClicked) {
+      scrollCache.setScroll(next.$$route.templateUrl + ":" + next.$$route.originalPath, 0);
+      scrollCache.linkClicked = false;
+    }
+  };
+
+  /**
+   * @param {Object} event Synthetic event object
+   * @param {Object} current Current route information
+   */
+  var handleRouteChangeSuccess = function (event, current) {
+    // if hash is specified explicitly, it trumps previously stored scroll position
+    if ($location.hash()) {
+      $anchorScroll();
+    } else {
+      // Get previous scroll position; if none, scroll to the top of the page
+      var prevScrollPos = scrollCache.getScroll(current.loadedTemplateUrl + ":" +
+        current.$$route.originalPath);
+
+      $timeout(function() {
+        $mdUtil.animateScrollTo(scrollContentEl, prevScrollPos);
+      }, 0);
+    }
+  };
+
+  return function(scope) {
+    scope.$on('$routeChangeStart', handleRouteChangeStart);
+    scope.$on('$routeChangeSuccess', handleRouteChangeSuccess);
+  }
+}]);

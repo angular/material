@@ -6,7 +6,7 @@
 
   function AppCtrl ($scope, $log) {
     var tabs = [
-        { title: 'Zero (AKA 0, Cero, One - One, -Nineteen + 19, and so forth and so on and continuing into what seems like infinity.)', content: 'Woah...that is a really long title!' },
+        { title: 'Zero (AKA 0, Cero, One - One, -Nineteen + 19, and so forth and so on and continuing into what seems like infinity)', content: 'Whoa...that is a really long title!' },
         { title: 'One', content: "Tabs will become paginated if there isn't enough room for them."},
         { title: 'Two', content: "You can swipe left and right on a mobile device to change tabs."},
         { title: 'Three', content: "You can bind the selected tab via the selected attribute on the md-tabs element."},
@@ -32,20 +32,23 @@
       previous = null;
     $scope.tabs = tabs;
     $scope.selectedIndex = 0;
-    $scope.$watch('selectedIndex', function(current, old){
+    $scope.$watch('selectedIndex', function(newVal, oldVal) {
       previous = selected;
-      selected = tabs[current];
-      if ( old + 1 && (old != current)) $log.debug('Goodbye ' + previous.title + '!');
-      if ( current + 1 )                $log.debug('Hello ' + selected.title + '!');
+      selected = tabs[newVal];
+      if (oldVal + 1 && !angular.equals(oldVal, newVal)) {
+        $log.log('Goodbye ' + previous.title + '!');
+      }
+      if (newVal + 1 > 0) {
+        $log.log('Hello ' + selected.title + '!');
+      }
     });
-    $scope.addTab = function (title, view) {
+    $scope.addTab = function(title, view) {
       view = view || title + " Content View";
-      tabs.push({ title: title, content: view, disabled: false});
+      tabs.push({title: title, content: view, disabled: false});
     };
-    $scope.removeTab = function (tab) {
+    $scope.removeTab = function(tab) {
       var index = tabs.indexOf(tab);
       tabs.splice(index, 1);
     };
   }
 })();
-

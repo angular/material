@@ -24,28 +24,11 @@ angular
  * `md-icon` lets you consume an icon font by letting you reference specific icons in that font
  * by name rather than character code.
  *
- * ### SVG
- * For SVGs, the problem with using `<img>` or a CSS `background-image` is that you can't take
- * advantage of some SVG features, such as styling specific parts of the icon with CSS or SVG
- * animation.
- *
- * `md-icon` makes it easier to use SVG icons by *inlining* the SVG into an `<svg>` element in the
- * document. The most straightforward way of referencing an SVG icon is via URL, just like a
- * traditional `<img>`. `$mdIconProvider`, as a convenience, lets you _name_ an icon so you can
- * reference it by name instead of URL throughout your templates.
- *
- * Additionally, you may not want to make separate HTTP requests for every icon, so you can bundle
- * your SVG icons together and pre-load them with $mdIconProvider as an icon set. An icon set can
- * also be given a name, which acts as a namespace for individual icons, so you can reference them
- * like `"social:cake"`.
- *
- * When using SVGs, both external SVGs (via URLs) or sets of SVGs [from icon sets] can be
- * easily loaded and used. When using font-icons, developers must follow three (3) simple steps:
+ * When using font-icons, developers must follow three (3) simple steps:
  *
  * <ol>
  * <li>Load the font library. e.g.<br/>
- *    `<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
- *    rel="stylesheet">`
+ *    `<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">`
  * </li>
  * <li>
  *   Use either (a) font-icon class names or (b) a fontset and a font ligature to render the font glyph by
@@ -63,26 +46,36 @@ angular
  * </li>
  * </ol>
  *
- * Full details for these steps can be found:
+ * Full details for these steps can be found in the
+ * <a href="http://google.github.io/material-design-icons/#icon-font-for-the-web" target="_blank">
+ * Material Design Icon font for the web docs</a>.
  *
- * <ul>
- * <li>http://google.github.io/material-design-icons/</li>
- * <li>http://google.github.io/material-design-icons/#icon-font-for-the-web</li>
- * </ul>
+ * You can browse and search the Material Design icon style <code>.material-icons</code>
+ * in the <a href="https://material.io/tools/icons/" target="_blank">Material Design Icons tool</a>.
  *
- * The Material Design icon style <code>.material-icons</code> and the icon font references are published in
- * Material Design Icons:
+ * ### SVG
+ * For SVGs, the problem with using `<img>` or a CSS `background-image` is that you can't take
+ * advantage of some SVG features, such as styling specific parts of the icon with CSS or SVG
+ * animation.
  *
- * <ul>
- * <li>https://design.google.com/icons/</li>
- * <li>https://design.google.com/icons/#ic_accessibility</li>
- * </ul>
+ * `md-icon` makes it easier to use SVG icons by *inlining* the SVG into an `<svg>` element in the
+ * document. The most straightforward way of referencing an SVG icon is via URL, just like a
+ * traditional `<img>`. `$mdIconProvider`, as a convenience, lets you _name_ an icon so you can
+ * reference it by name instead of URL throughout your templates.
+ *
+ * Additionally, you may not want to make separate HTTP requests for every icon, so you can bundle
+ * your SVG icons together and pre-load them with `$mdIconProvider` as an icon set. An icon set can
+ * also be given a name, which acts as a namespace for individual icons, so you can reference them
+ * like `"social:cake"`.
+ *
+ * When using SVGs, both external SVGs (via URLs) or sets of SVGs (from icon sets) can be
+ * easily loaded and used.
  *
  * ### Localization
  *
- * Because an `md-icon` element's text content is not intended to translated, it is recommended to declare the text
- * content for an `md-icon` element in its start tag. Instead of using the HTML text content, consider using `ng-bind`
- * with a scope variable or literal string.
+ * Because an `md-icon` element's text content is not intended to be translated, it is recommended
+ * to declare the text content for an `md-icon` element in its start tag. Instead of using the HTML
+ * text content, consider using `ng-bind` with a scope variable or literal string.
  *
  * Examples:
  *
@@ -91,71 +84,80 @@ angular
  *   <li>`<md-icon ng-bind="'menu'"></md-icon>`
  * </ul>
  *
- * <h2 id="material_design_icons">Material Design Icons</h2>
- * Using the Material Design Icon-Selector, developers can easily and quickly search for a Material Design font-icon and
- * determine its textual name and character reference code. Click on any icon to see the slide-up information
- * panel with details regarding a SVG download or information on the font-icon usage.
+ * <h2 id="material_design_icons">Material Design Icons tool</h2>
+ * Using the Material Design Icons tool, developers can easily and quickly search for a specific
+ * open source Material Design icon. The search is in the top left. Below search, you can select
+ * from the new icon themes or filter by icon category.
  *
- * <a href="https://www.google.com/design/icons/#ic_accessibility" target="_blank" style="border-bottom:none;">
- * <img src="https://cloud.githubusercontent.com/assets/210413/7902490/fe8dd14c-0780-11e5-98fb-c821cc6475e6.png"
- *      aria-label="Material Design Icon-Selector" style="max-width:75%;padding-left:10%">
+ * <a href="https://material.io/tools/icons/" target="_blank" style="border-bottom:none;">
+ * <img src="https://user-images.githubusercontent.com/3506071/41942584-ef0695d0-796d-11e8-9436-44f25023a111.png"
+ *      aria-label="Material Design Icons tool" style="max-width:95%">
  * </a>
  *
- * <span class="image_caption">
- *  Click on the image above to link to the
- *  <a href="https://design.google.com/icons/#ic_accessibility" target="_blank">Material Design Icon-Selector</a>.
- * </span>
+ * <div class="md-caption" style="text-align: center; margin-bottom: 24px">
+ *  Click on the image above to open the
+ *  <a href="https://material.io/tools/icons/" target="_blank">Material Design Icons tool</a>.
+ * </div>
+ *
+ * Click on any icon, then click on the "Selected Icon" chevron to see the slide-up
+ * information panel with details regarding a SVG download and information on the font-icon's
+ * textual name. This panel also allows you to select a black on transparent or white on transparent
+ * icon and to change the icon size. These settings only affect the downloaded icons.
  *
  * @param {string} md-font-icon String name of CSS icon associated with the font-face will be used
- * to render the icon. Requires the fonts and the named CSS styles to be preloaded.
+ *  to render the icon. Requires the fonts and the named CSS styles to be preloaded.
  * @param {string} md-font-set CSS style name associated with the font library; which will be assigned as
- * the class for the font-icon ligature. This value may also be an alias that is used to lookup the classname;
- * internally use `$mdIconProvider.fontSet(<alias>)` to determine the style name.
+ *  the class for the font-icon ligature. This value may also be an alias that is used to lookup the classname;
+ *  internally use `$mdIconProvider.fontSet(<alias>)` to determine the style name.
  * @param {string} md-svg-src String URL (or expression) used to load, cache, and display an
- *     external SVG.
+ *  external SVG.
  * @param {string} md-svg-icon md-svg-icon String name used for lookup of the icon from the internal cache;
- *     interpolated strings or expressions may also be used. Specific set names can be used with
- *     the syntax `<set name>:<icon name>`.<br/><br/>
- * To use icon sets, developers are required to pre-register the sets using the `$mdIconProvider` service.
- * @param {string=} aria-label Labels icon for accessibility. If an empty string is provided, icon
- * will be hidden from accessibility layer with `aria-hidden="true"`. If there's no aria-label on the icon
- * nor a label on the parent element, a warning will be logged to the console.
- * @param {string=} alt Labels icon for accessibility. If an empty string is provided, icon
- * will be hidden from accessibility layer with `aria-hidden="true"`. If there's no alt on the icon
- * nor a label on the parent element, a warning will be logged to the console.
+ *  interpolated strings or expressions may also be used. Specific set names can be used with
+ *  the syntax `<set name>:<icon name>`.<br/><br/>
+ *  To use icon sets, developers are required to pre-register the sets using the `$mdIconProvider` service.
+ * @param {string=} aria-label Labels the icon for accessibility. If an empty string is provided,
+ *  the icon will be hidden from the accessibility layer with `aria-hidden="true"`. If there is no
+ *  `aria-label` attribute on the icon, we check the following, in order: the `alt` attribute, the
+ *  `aria-label` from the parent element, the icon's `md-font-icon` or `md-svg-icon` string, and the
+ *  text content inside `<md-icon></md-icon>`. If none of these have any text, the icon is hidden
+ *  from the accessibility layer with `aria-hidden="true"`.
+ * @param {string=} alt Labels the icon for accessibility. If an empty string is provided and the
+ *  icon has no `aria-label`, then the icon will be hidden from accessibility layer with
+ *  `aria-hidden="true"`.
  *
  * @usage
  * When using SVGs:
  * <hljs lang="html">
  *
- *  <!-- Icon ID; may contain optional icon set prefix; icons must registered using $mdIconProvider -->
- *  <md-icon md-svg-icon="social:android"    aria-label="android " ></md-icon>
+ *<!-- Icon ID; may contain optional icon set prefix.
+ *     Icons must be registered using $mdIconProvider. -->
+ *<md-icon md-svg-icon="social:android"    aria-label="android " ></md-icon>
  *
- *  <!-- Icon urls; may be preloaded in templateCache -->
- *  <md-icon md-svg-src="/android.svg"       aria-label="android " ></md-icon>
- *  <md-icon md-svg-src="{{ getAndroid() }}" aria-label="android " ></md-icon>
+ *<!-- Icon urls; may be preloaded in templateCache -->
+ *<md-icon md-svg-src="/android.svg"       aria-label="android " ></md-icon>
+ *<md-icon md-svg-src="{{ getAndroid() }}" aria-label="android " ></md-icon>
  *
  * </hljs>
  *
  * Use the <code>$mdIconProvider</code> to configure your application with
- * svg iconsets.
+ * SVG icon sets.
  *
  * <hljs lang="js">
- *  angular.module('appSvgIconSets', ['ngMaterial'])
- *    .controller('DemoCtrl', function($scope) {})
- *    .config(function($mdIconProvider) {
- *      $mdIconProvider
- *         .iconSet('social', 'img/icons/sets/social-icons.svg', 24)
- *         .defaultIconSet('img/icons/sets/core-icons.svg', 24);
- *     });
+ * angular.module('appSvgIconSets', ['ngMaterial'])
+ *   .controller('DemoCtrl', function($scope) {})
+ *   .config(function($mdIconProvider) {
+ *     $mdIconProvider
+ *       .iconSet('social', 'img/icons/sets/social-icons.svg', 24)
+ *       .defaultIconSet('img/icons/sets/core-icons.svg', 24);
+ *    });
  * </hljs>
  *
  *
  * When using Font Icons with classnames:
  * <hljs lang="html">
  *
- *  <md-icon md-font-icon="android" aria-label="android" ></md-icon>
- *  <md-icon class="icon_home"      aria-label="Home"    ></md-icon>
+ * <md-icon md-font-icon="android" aria-label="android" ></md-icon>
+ * <md-icon class="icon_home" aria-label="Home"></md-icon>
  *
  * </hljs>
  *
@@ -199,7 +201,10 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
 
   /**
    * Directive postLink
-   * Supports embedded SVGs, font-icons, & external SVGs
+   * Supports embedded SVGs, font-icons, & external SVGs.
+   * @param {IScope} scope
+   * @param {JQLite} element
+   * @param {IAttributes} attr
    */
   function postLink(scope, element, attr) {
     $mdTheming(element);
@@ -211,15 +216,6 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
     attr.$observe('mdFontIcon', fontIconChanged);
     attr.$observe('mdFontSet', fontIconChanged);
 
-    // Keep track of the content of the svg src so we can compare against it later to see if the
-    // attribute is static (and thus safe).
-    var originalSvgSrc = element[0].getAttribute(attr.$attr.mdSvgSrc);
-
-    // If using a font-icon, then the textual name of the icon itself
-    // provides the aria-label.
-
-    var attrName = attr.$normalize(attr.$attr.mdSvgIcon || attr.$attr.mdSvgSrc || '');
-
     /* Provide a default accessibility role of img */
     if (!attr.role) {
       $mdAria.expect(element, 'role', 'img');
@@ -227,24 +223,33 @@ function mdIconDirective($mdIcon, $mdTheming, $mdAria, $sce) {
       attr.role = 'img';
     }
 
+    // If the aria-label is explicitly set to the empty string, then hide this element from the
+    // accessibility layer.
+    if (element[0].hasAttribute('aria-label') && attr.ariaLabel === '') {
+      element.attr('aria-hidden', true);
+    }
+
     /* Don't process ARIA if already valid */
-    if ( attr.role === "img" && !attr.ariaHidden && !$mdAria.hasAriaLabel(element) ) {
-      var iconName;
-      if (attr.alt) {
-        /* Use alt text by default if available */
+    if (attr.role === "img" && !attr.ariaHidden && !$mdAria.hasAriaLabel(element)) {
+      // If the developer signals to hide this icon from the accessibility layer, do so.
+      if (element[0].hasAttribute('alt') && attr.alt === '') {
+        element.attr('aria-hidden', true);
+      } else if (attr.alt) {
+        /* Use the alt text for the aria-label by default, if available. */
         $mdAria.expect(element, 'aria-label', attr.alt);
       } else if ($mdAria.parentHasAriaLabel(element, 2)) {
-        /* Parent has ARIA so we will assume it will describe the image */
+        /* Parent has ARIA so we will assume it will describe the icon. */
         $mdAria.expect(element, 'aria-hidden', 'true');
-      } else if (iconName = (attr.mdFontIcon || attr.mdSvgIcon || element.text())) {
-        /* Use icon name as aria-label */
-        $mdAria.expect(element, 'aria-label', iconName);
+      } else if (attr.mdFontIcon || attr.mdSvgIcon || element.text()) {
+        /* Use icon name or node's text content as the aria-label */
+        $mdAria.expect(element, 'aria-label', attr.mdFontIcon || attr.mdSvgIcon || element.text());
       } else {
-        /* No label found */
+        /* No label found, hide this icon from the accessibility layer */
         $mdAria.expect(element, 'aria-hidden', 'true');
       }
     }
 
+    var attrName = attr.$normalize(attr.$attr.mdSvgIcon || attr.$attr.mdSvgSrc || '');
     if (attrName) {
       // Use either pre-configured SVG or URL source, respectively.
       attr.$observe(attrName, function(attrVal) {

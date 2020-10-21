@@ -8,7 +8,7 @@ md-dialog.md-THEME_NAME-theme {
 
 
   &.md-content-overflow {
-    .md-actions, md-dialog-actions {
+    md-dialog-actions {
       border-top-color: '{{foreground-4}}';
     }
   }

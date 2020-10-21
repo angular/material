@@ -136,7 +136,13 @@ function mdListDirective($mdTheming) {
  *   </md-list-item>
  * </hljs>
  *
- * The `md-checkbox` element will be automatically detected as a proxy element and will toggle on click.
+ * The `md-checkbox` element will be automatically detected as a proxy element and will toggle on
+ * click.
+ *
+ * If not provided, an `aria-label` will be applied using the text of the list item.
+ * In this case, the following will be applied to the `md-checkbox`:
+ * `aria-label="Toggle First Line"`.
+ * When localizing your application, you should supply a localized `aria-label`.
  *
  * <hljs lang="html">
  *   <md-list-item>
@@ -148,6 +154,7 @@ function mdListDirective($mdTheming) {
  * The recognized `md-switch` will toggle its state, when the user clicks on the `md-list-item`.
  *
  * It is also possible to have a `md-menu` inside of a `md-list-item`.
+ *
  * <hljs lang="html">
  *   <md-list-item>
  *     <p>Click anywhere to fire the secondary action</p>
@@ -179,12 +186,13 @@ function mdListDirective($mdTheming) {
  *
  * The menu will automatically open, when the users clicks on the `md-list-item`.<br/>
  *
- * If the developer didn't specify any position mode on the menu, the `md-list-item` will automatically detect the
- * position mode and applies it to the `md-menu`.
+ * If the developer didn't specify any position mode on the menu, the `md-list-item` will
+ * automatically detect the position mode and apply it to the `md-menu`.
  *
  * ### Avatars
- * Sometimes you may want to have some avatars inside of the `md-list-item `.<br/>
- * You are able to create a optimized icon for the list item, by applying the `.md-avatar` class on the `<img>` element.
+ * Sometimes you may want to have avatars inside of the `md-list-item `.<br/>
+ * You are able to create an optimized icon for the list item, by applying the `.md-avatar` class on
+ * the `<img>` element.
  *
  * <hljs lang="html">
  *   <md-list-item>
@@ -193,15 +201,16 @@ function mdListDirective($mdTheming) {
  * </hljs>
  *
  * When using `<md-icon>` for an avatar, you have to use the `.md-avatar-icon` class.
+ *
  * <hljs lang="html">
  *   <md-list-item>
- *     <md-icon class="md-avatar-icon" md-svg-icon="avatars:timothy"></md-icon>
+ *     <md-icon class="md-avatar-icon" md-svg-icon="social:person"></md-icon>
  *     <span>Timothy Kopra</span>
  *   </md-list-item>
  * </hljs>
  *
- * In cases, you have a `md-list-item`, which doesn't have any avatar,
- * but you want to align it with the other avatar items, you have to use the `.md-offset` class.
+ * In cases where you have a `md-list-item`, which doesn't have an avatar,
+ * but you want to align it with the other avatar items, you need to use the `.md-offset` class.
  *
  * <hljs lang="html">
  *   <md-list-item class="md-offset">
@@ -214,40 +223,42 @@ function mdListDirective($mdTheming) {
  *
  * ---
  * If the `md-list-item` is clickable, we wrap all content inside of a `<div>` and create
- * an overlaying button, which will will execute the given actions (like `ng-href`, `ng-click`)
+ * an overlaying button, which will will execute the given actions (like `ng-href`, `ng-click`).
  *
  * We create an overlaying button, instead of wrapping all content inside of the button,
  * because otherwise some elements may not be clickable inside of the button.
  *
  * ---
- * When using a secondary item inside of your list item, the `md-list-item` component will automatically create
- * a secondary container at the end of the `md-list-item`, which contains all secondary items.
+ * When using a secondary item inside of your list item, the `md-list-item` component will
+ * automatically create a secondary container at the end of the `md-list-item`, which contains all
+ * secondary items.
  *
- * The secondary item container is not static, because otherwise the overflow will not work properly on the
- * list item.
- *
+ * The secondary item container is not static, because that would cause issues with the overflow
+ * of the list item.
  */
 function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
   var proxiedTypes = ['md-checkbox', 'md-switch', 'md-menu'];
   return {
     restrict: 'E',
     controller: 'MdListController',
-    compile: function(tEl, tAttrs) {
+
+    compile: function(tElement, tAttrs) {
 
       // Check for proxy controls (no ng-click on parent, and a control inside)
-      var secondaryItems = tEl[0].querySelectorAll('.md-secondary');
+      var secondaryItems = tElement[0].querySelectorAll('.md-secondary');
       var hasProxiedElement;
       var proxyElement;
-      var itemContainer = tEl;
+      var itemContainer = tElement;
 
-      tEl[0].setAttribute('role', 'listitem');
+      tElement[0].setAttribute('role', 'listitem');
 
       if (tAttrs.ngClick || tAttrs.ngDblclick ||  tAttrs.ngHref || tAttrs.href || tAttrs.uiSref || tAttrs.ngAttrUiSref) {
         wrapIn('button');
-      } else if (!tEl.hasClass('md-no-proxy')) {
+      } else if (!tElement.hasClass('md-no-proxy')) {
 
-        for (var i = 0, type; type = proxiedTypes[i]; ++i) {
-          if (proxyElement = tEl[0].querySelector(type)) {
+        for (var i = 0, type; i < proxiedTypes.length; ++i) {
+          proxyElement = tElement[0].querySelector(proxiedTypes[i]);
+          if (proxyElement !== null) {
             hasProxiedElement = true;
             break;
           }
@@ -256,9 +267,8 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         if (hasProxiedElement) {
           wrapIn('div');
         } else {
-          tEl.addClass('md-no-proxy');
+          tElement.addClass('md-no-proxy');
         }
-
       }
 
       wrapSecondaryItems();
@@ -272,12 +282,16 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         var toggleTypes = ['md-switch', 'md-checkbox'];
         var toggle;
 
-        for (var i = 0, toggleType; toggleType = toggleTypes[i]; ++i) {
-          if (toggle = tEl.find(toggleType)[0]) {
+        for (var i = 0, toggleType; i < toggleTypes.length; ++i) {
+          toggle = tElement.find(toggleTypes[i])[0];
+          if (toggle) {
             if (!toggle.hasAttribute('aria-label')) {
-              var p = tEl.find('p')[0];
-              if (!p) return;
-              toggle.setAttribute('aria-label', 'Toggle ' + p.textContent);
+              var labelElement = tElement.find('p')[0];
+              if (!labelElement) {
+                labelElement = tElement.find('span')[0];
+              }
+              if (!labelElement) return;
+              toggle.setAttribute('aria-label', 'Toggle ' + labelElement.textContent);
             }
           }
         }
@@ -312,48 +326,57 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         }
       }
 
+      /**
+       * @param {'div'|'button'} type
+       */
       function wrapIn(type) {
-        if (type == 'div') {
+        if (type === 'div') {
           itemContainer = angular.element('<div class="md-no-style md-list-item-inner">');
-          itemContainer.append(tEl.contents());
-          tEl.addClass('md-proxy-focus');
+          itemContainer.append(tElement.contents());
+          tElement.addClass('md-proxy-focus');
         } else {
           // Element which holds the default list-item content.
           itemContainer = angular.element(
-            '<div class="md-button md-no-style">'+
-            '   <div class="md-list-item-inner"></div>'+
+            '<div class="md-button md-no-style">' +
+            '   <div class="md-list-item-inner"></div>' +
             '</div>'
           );
 
           // Button which shows ripple and executes primary action.
-          var buttonWrap = angular.element(
-            '<md-button class="md-no-style"></md-button>'
-          );
+          var buttonWrap = angular.element('<md-button class="md-no-style"></md-button>');
 
-          copyAttributes(tEl[0], buttonWrap[0]);
+          moveAttributes(tElement[0], buttonWrap[0]);
 
           // If there is no aria-label set on the button (previously copied over if present)
           // we determine the label from the content and copy it to the button.
           if (!buttonWrap.attr('aria-label')) {
-            buttonWrap.attr('aria-label', $mdAria.getText(tEl));
+            buttonWrap.attr('aria-label', $mdAria.getText(tElement));
+
+            // If we set the button's aria-label to the text content, then make the content hidden
+            // from screen readers so that it isn't read/traversed twice.
+            var listItemInner = itemContainer[0].querySelector('.md-list-item-inner');
+            if (listItemInner) {
+              listItemInner.setAttribute('aria-hidden', 'true');
+            }
           }
 
           // We allow developers to specify the `md-no-focus` class, to disable the focus style
-          // on the button executor. Once more classes should be forwarded, we should probably make the
-          // class forward more generic.
-          if (tEl.hasClass('md-no-focus')) {
+          // on the button executor. Once more classes should be forwarded, we should probably make
+          // the class forward more generic.
+          if (tElement.hasClass('md-no-focus')) {
             buttonWrap.addClass('md-no-focus');
           }
 
-          // Append the button wrap before our list-item content, because it will overlay in relative.
+          // Append the button wrap before our list-item content, because it will overlay in
+          // relative.
           itemContainer.prepend(buttonWrap);
-          itemContainer.children().eq(1).append(tEl.contents());
+          itemContainer.children().eq(1).append(tElement.contents());
 
-          tEl.addClass('_md-button-wrap');
+          tElement.addClass('_md-button-wrap');
         }
 
-        tEl[0].setAttribute('tabindex', '-1');
-        tEl.append(itemContainer);
+        tElement[0].setAttribute('tabindex', '-1');
+        tElement.append(itemContainer);
       }
 
       function wrapSecondaryItems() {
@@ -366,6 +389,10 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         itemContainer.append(secondaryItemsWrapper);
       }
 
+      /**
+       * @param {HTMLElement} secondaryItem
+       * @param {HTMLDivElement} container
+       */
       function wrapSecondaryItem(secondaryItem, container) {
         // If the current secondary item is not a button, but contains a ng-click attribute,
         // the secondary item will be automatically wrapped inside of a button.
@@ -374,10 +401,10 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           $mdAria.expect(secondaryItem, 'aria-label');
           var buttonWrapper = angular.element('<md-button class="md-secondary md-icon-button">');
 
-          // Copy the attributes from the secondary item to the generated button.
+          // Move the attributes from the secondary item to the generated button.
           // We also support some additional attributes from the secondary item,
           // because some developers may use a ngIf, ngHide, ngShow on their item.
-          copyAttributes(secondaryItem, buttonWrapper[0], ['ng-if', 'ng-hide', 'ng-show']);
+          moveAttributes(secondaryItem, buttonWrapper[0], ['ng-if', 'ng-hide', 'ng-show']);
 
           secondaryItem.setAttribute('tabindex', '-1');
           buttonWrapper.append(secondaryItem);
@@ -385,28 +412,30 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           secondaryItem = buttonWrapper[0];
         }
 
-        if (secondaryItem && (!hasClickEvent(secondaryItem) || (!tAttrs.ngClick && isProxiedElement(secondaryItem)))) {
-          // In this case we remove the secondary class, so we can identify it later, when we searching for the
-          // proxy items.
+        if (secondaryItem &&
+            (!hasClickEvent(secondaryItem) ||
+              (!tAttrs.ngClick && isProxiedElement(secondaryItem)))) {
+          // In this case we remove the secondary class, so we can identify it later, when searching
+          // for the proxy items.
           angular.element(secondaryItem).removeClass('md-secondary');
         }
 
-        tEl.addClass('md-with-secondary');
+        tElement.addClass('md-with-secondary');
         container.append(secondaryItem);
       }
 
       /**
-       * Copies attributes from a source element to the destination element
-       * By default the function will copy the most necessary attributes, supported
+       * Moves attributes from a source element to the destination element.
+       * By default, the function will copy the most necessary attributes, supported
        * by the button executor for clickable list items.
-       * @param source Element with the specified attributes
-       * @param destination Element which will retrieve the attributes
-       * @param extraAttrs Additional attributes, which will be copied over.
+       * @param {Element} source Element with the specified attributes
+       * @param {Element} destination Element which will receive the attributes
+       * @param {string|string[]} extraAttrs Additional attributes, which will be moved over
        */
-      function copyAttributes(source, destination, extraAttrs) {
+      function moveAttributes(source, destination, extraAttrs) {
         var copiedAttrs = $mdUtil.prefixer([
           'ng-if', 'ng-click', 'ng-dblclick', 'aria-label', 'ng-disabled', 'ui-sref',
-          'href', 'ng-href', 'rel', 'target', 'ng-attr-ui-sref', 'ui-sref-opts'
+          'href', 'ng-href', 'rel', 'target', 'ng-attr-ui-sref', 'ui-sref-opts', 'download'
         ]);
 
         if (extraAttrs) {
@@ -421,20 +450,34 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
         });
       }
 
-      function isProxiedElement(el) {
-        return proxiedTypes.indexOf(el.nodeName.toLowerCase()) != -1;
+      /**
+       * @param {HTMLElement} element
+       * @return {boolean} true if the element has one of the proxied tags, false otherwise
+       */
+      function isProxiedElement(element) {
+        return proxiedTypes.indexOf(element.nodeName.toLowerCase()) !== -1;
       }
 
-      function isButton(el) {
-        var nodeName = el.nodeName.toUpperCase();
+      /**
+       * @param {HTMLElement} element
+       * @return {boolean} true if the element is a button or md-button, false otherwise
+       */
+      function isButton(element) {
+        var nodeName = element.nodeName.toUpperCase();
 
-        return nodeName == "MD-BUTTON" || nodeName == "BUTTON";
+        return nodeName === "MD-BUTTON" || nodeName === "BUTTON";
       }
 
-      function hasClickEvent (element) {
+      /**
+       * @param {Element} element
+       * @return {boolean} true if the element has an ng-click attribute, false otherwise
+       */
+      function hasClickEvent(element) {
         var attr = element.attributes;
         for (var i = 0; i < attr.length; i++) {
-          if (tAttrs.$normalize(attr[i].name) === 'ngClick') return true;
+          if (tAttrs.$normalize(attr[i].name) === 'ngClick') {
+            return true;
+          }
         }
         return false;
       }
@@ -461,7 +504,7 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
             $scope.mouseActive = false;
             proxy.on('mousedown', function() {
               $scope.mouseActive = true;
-              $timeout(function(){
+              $timeout(function() {
                 $scope.mouseActive = false;
               }, 100);
             })
@@ -475,25 +518,21 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           });
         }
 
-
         function computeProxies() {
-
           if (firstElement && firstElement.children && !hasClick && !noProxies) {
 
             angular.forEach(proxiedTypes, function(type) {
-
-              // All elements which are not capable for being used a proxy have the .md-secondary class
-              // applied. These items had been sorted out in the secondary wrap function.
+              // All elements which are not capable of being used as a proxy have the .md-secondary
+              // class applied. These items were identified in the secondary wrap function.
               angular.forEach(firstElement.querySelectorAll(type + ':not(.md-secondary)'), function(child) {
                 proxies.push(child);
               });
             });
-
           }
         }
 
         function computeClickable() {
-          if (proxies.length == 1 || hasClick) {
+          if (proxies.length === 1 || hasClick) {
             $element.addClass('md-clickable');
 
             if (!hasClick) {
@@ -502,33 +541,44 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
           }
         }
 
+        /**
+         * @param {MouseEvent} event
+         * @return {boolean}
+         */
         function isEventFromControl(event) {
           var forbiddenControls = ['md-slider'];
+          var eventBubblePath = $mdUtil.getEventPath(event);
 
-          // If there is no path property in the event, then we can assume that the event was not bubbled.
-          if (!event.path) {
+          // If there is no bubble path, then the event was not bubbled.
+          if (!eventBubblePath || eventBubblePath.length === 0) {
             return forbiddenControls.indexOf(event.target.tagName.toLowerCase()) !== -1;
           }
 
-          // We iterate the event path up and check for a possible component.
+          // We iterate the event bubble path up and check for a possible component.
           // Our maximum index to search, is the list item root.
-          var maxPath = event.path.indexOf($element.children()[0]);
+          var maxPath = eventBubblePath.indexOf($element.children()[0]);
 
           for (var i = 0; i < maxPath; i++) {
-            if (forbiddenControls.indexOf(event.path[i].tagName.toLowerCase()) !== -1) {
+            if (forbiddenControls.indexOf(eventBubblePath[i].tagName.toLowerCase()) !== -1) {
               return true;
             }
           }
+          return false;
         }
 
-        var clickChildKeypressListener = function(e) {
-          if (e.target.nodeName != 'INPUT' && e.target.nodeName != 'TEXTAREA' && !e.target.isContentEditable) {
-            var keyCode = e.which || e.keyCode;
-            if (keyCode == $mdConstant.KEY_CODE.SPACE) {
+        /**
+         * @param {KeyboardEvent} keypressEvent
+         */
+        var clickChildKeypressListener = function(keypressEvent) {
+          if (keypressEvent.target.nodeName !== 'INPUT' &&
+              keypressEvent.target.nodeName !== 'TEXTAREA' &&
+              !keypressEvent.target.isContentEditable) {
+            var keyCode = keypressEvent.which || keypressEvent.keyCode;
+            if (keyCode === $mdConstant.KEY_CODE.SPACE) {
               if (clickChild) {
                 clickChild.click();
-                e.preventDefault();
-                e.stopPropagation();
+                keypressEvent.preventDefault();
+                keypressEvent.stopPropagation();
               }
             }
           }
@@ -540,17 +590,20 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
 
         $element.off('click');
         $element.off('keypress');
+        // Disable ng-aria's "helpful" keydown event that causes our ng-click handlers to be called
+        // twice.
+        $element.off('keydown');
 
-        if (proxies.length == 1 && clickChild) {
-          $element.children().eq(0).on('click', function(e) {
-            // When the event is coming from an control and it should not trigger the proxied element
+        if (proxies.length === 1 && clickChild) {
+          $element.children().eq(0).on('click', function(clickEvent) {
+            // When the event is coming from a control and it should not trigger the proxied element
             // then we are skipping.
-            if (isEventFromControl(e)) return;
+            if (isEventFromControl(clickEvent)) return;
 
-            var parentButton = $mdUtil.getClosest(e.target, 'BUTTON');
-            if (!parentButton && clickChild.contains(e.target)) {
+            var parentButton = $mdUtil.getClosest(clickEvent.target, 'BUTTON');
+            if (!parentButton && clickChild.contains(clickEvent.target)) {
               angular.forEach(proxies, function(proxy) {
-                if (e.target !== proxy && !proxy.contains(e.target)) {
+                if (clickEvent.target !== proxy && !proxy.contains(clickEvent.target)) {
                   if (proxy.nodeName === 'MD-MENU') {
                     proxy = proxy.children[0];
                   }
@@ -574,7 +627,6 @@ function mdListItemDirective($mdAria, $mdConstant, $mdUtil, $timeout) {
  * @ngdoc controller
  * @name MdListController
  * @module material.components.list
- *
  */
 function MdListController($scope, $element, $mdListInkRipple) {
   var ctrl = this;

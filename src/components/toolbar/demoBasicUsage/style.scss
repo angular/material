@@ -1,0 +1,15 @@
+md-toolbar {
+  .md-button.md-icon-button {
+    .favorite-icon {
+      fill: #DE3641; // docs-red A100
+    }
+  }
+  md-toolbar-filler {
+    display: flex;
+    background-color: #e0e0e0; // grey 200
+
+    #filler-icon {
+      fill: #4C9EF1; // docs-blue 300 - hue-1
+    }
+  }
+}

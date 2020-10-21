@@ -60,8 +60,13 @@ md-nav-bar.md-THEME_NAME-theme {
     border-color: '{{foreground-4}}';
   }
 
-  .md-button._md-nav-button.md-unselected {
-    color: '{{foreground-2}}';
+  .md-button._md-nav-button {
+    &.md-unselected {
+      color: '{{foreground-2}}';
+    }
+    &[disabled] {
+      color: '{{foreground-3}}';
+    }
   }
 
   md-nav-ink-bar {

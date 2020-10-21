@@ -6,5 +6,5 @@ describe('mdContent directive', function() {
     var element = $compile('<md-content></md-content>')($rootScope.$new());
     expect(element.hasClass('_md')).toBe(true);
   }));
-  
+
 });

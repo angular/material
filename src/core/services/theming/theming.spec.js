@@ -171,12 +171,12 @@ describe('$mdThemingProvider', function() {
     function parse(str) {
       return themingProvider._parseRules(testTheme, 'primary', str)
         .join('')
-        .split(/\}(?!(\}|'|"|;))/)
+        .split(/}(?!(}|'|"|;))/)
         .filter(function(val) { return !!val; })
         .map(function(rule) {
           rule += '}';
           return {
-            content: (rule.match(/\{\s*(.*?)\s*\}/) || [])[1] || null,
+            content: (rule.match(/{\s*(.*?)\s*}/) || [])[1] || null,
             hue: (rule.match(/md-(hue-\d)/) || [])[1] || null,
             type: (rule.match(/(primary)/) || [])[1] || null
           };
@@ -249,11 +249,30 @@ describe('$mdThemingProvider', function() {
           .toEqual('color: rgba(0,0,0,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
           .toEqual('color: ;');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.54);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.54);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-disabled}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.38);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-hint}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.38);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-divider}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.12);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-0.05}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.05);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
       });
+
       it('for a dark theme', function() {
         testTheme.dark();
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-1}}"; }')[0].content)
-          .toEqual('color: rgba(255,255,255,1.0);');
+          .toEqual('color: rgba(255,255,255,0.87);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.7);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
@@ -262,8 +281,80 @@ describe('$mdThemingProvider', function() {
           .toEqual('color: rgba(255,255,255,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
           .toEqual('color: 1px 1px 0px rgba(0,0,0,0.4), -1px -1px 0px rgba(0,0,0,0.4);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-disabled}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.5);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-hint}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.5);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-divider}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.12);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-0.05}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.05);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-900-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-900-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,1);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
+      });
+      it('override foreground color', function() {
+        testTheme.dark(false);
+        testTheme.foregroundPalette = {
+          '1': 'ff0000',
+          '2': '00ff00',
+          '3': '0000ff',
+          '4': 'ffff00'
+        };
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-1}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
+          .toEqual('color: rgb(0,255,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
+          .toEqual('color: rgb(0,0,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
+          .toEqual('color: ;');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgb(0,255,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgb(0,255,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-disabled}}"; }')[0].content)
+          .toEqual('color: rgb(0,0,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-hint}}"; }')[0].content)
+          .toEqual('color: rgb(0,0,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-divider}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,0);');
+
+        // override colors of same contrast type
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-50-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-100-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-200-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+
+        // should not override the following
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-900-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
       });
     });
+
     it('parses contrast colors', function() {
       testTheme.primaryPalette('testPalette', {
         'default': '50'
@@ -283,6 +374,7 @@ describe('$mdThemingProvider', function() {
       expect(parse('{ color: "{{primary-contrast}}"; }')[0].content)
         .toEqual('color: rgb(255,255,255);');
     });
+
     it('generates base, non-colorType-specific, rules', function() {
       var accent100 = themingProvider._rgba(themingProvider._PALETTES.testPalette['100'].value);
       var result = parse('.md-THEME_NAME-theme { color: "{{accent-100}}"; }');
@@ -296,6 +388,7 @@ describe('$mdThemingProvider', function() {
       expect(result[3].hue).toBe('hue-3');
       expect(result.length).toBe(4);
     });
+
     it('generates colorType-specific rules for each hue', function() {
       var primary = themingProvider._rgba(themingProvider._PALETTES.testPalette['500'].value);
       var hue1 = themingProvider._rgba(themingProvider._PALETTES.testPalette['300'].value);
@@ -307,6 +400,14 @@ describe('$mdThemingProvider', function() {
       expect(result[2]).toEqual({content: 'color: ' + hue2 + ';', hue: 'hue-2', type: 'primary'});
       expect(result[3]).toEqual({content: 'color: ' + hue3 + ';', hue: 'hue-3', type: 'primary'});
       expect(result.length).toEqual(4);
+    });
+
+    it('should generate styles when a md-something selector has an expression for a different palette', function() {
+      // The selector has `md-primary` in the name, but the expression is for md-warn.
+      var result = parse('.md-THEME_NAME-theme.md-primary { color: "{{warn-color}}"; }');
+
+      // This should not leave an unevaluated expression in the output.
+      expect(result.join(' ')).not.toContain('{{');
     });
 
     it('generates colorType-specific rules for each hue with opacity', function() {
@@ -351,7 +452,7 @@ describe('$mdThemingProvider', function() {
 
     it('should use default primary color at the meta tag', function () {
       var name = 'theme-color';
-      var content = themingProvider._PALETTES.testPalette['800'].hex;
+      var content = '#' + themingProvider._PALETTES.testPalette['800'].hex;
 
       expect(document.getElementsByName(name).length).toBe(0);
 
@@ -366,7 +467,7 @@ describe('$mdThemingProvider', function() {
 
       var hue = '200';
 
-      var content = themingProvider._PALETTES.testPalette[hue].hex;
+      var content = '#' + themingProvider._PALETTES.testPalette[hue].hex;
 
       expect(document.getElementsByName(name).length).toBe(0);
 
@@ -392,7 +493,7 @@ describe('$mdThemingProvider', function() {
     it('should use test theme', function () {
       var name = 'theme-color';
 
-      var content = themingProvider._PALETTES.testPalette['800'].hex;
+      var content = '#' + themingProvider._PALETTES.testPalette['800'].hex;
 
       expect(document.getElementsByName(name).length).toBe(0);
 
@@ -593,7 +694,7 @@ describe('$mdThemeProvider with disabled themes', function() {
 
     it('should not set any classnames', function() {
       inject(function($rootScope, $compile, $mdTheming) {
-        el = $compile('<h1>Test</h1>')($rootScope);
+        var el = $compile('<h1>Test</h1>')($rootScope);
         $mdTheming(el);
         expect(el.hasClass('md-default-theme')).toBe(false);
       });
@@ -601,7 +702,7 @@ describe('$mdThemeProvider with disabled themes', function() {
 
     it('should not inject any styles', function() {
       inject(function($rootScope, $compile, $mdTheming) {
-        el = $compile('<h1>Test</h1>')($rootScope);
+        var el = $compile('<h1>Test</h1>')($rootScope);
         $mdTheming(el);
 
         var styles = getThemeStyleElements();
@@ -746,6 +847,35 @@ describe('$mdTheming service', function() {
     });
 
     expect($mdTheming.THEMES.hasOwnProperty('test')).toBeTruthy();
+  }));
+
+  it('supports setting palette options when registering theme on the fly', inject(function ($mdTheming) {
+    expect($mdTheming.THEMES.hasOwnProperty('testHues')).toBeFalsy();
+
+    $mdTheming.defineTheme('testHues', {
+      primary: 'red',
+      primaryHues: {
+        default: '300'
+      },
+      accent: 'blue',
+      accentHues: {
+        default: '600'
+      },
+      warn: 'yellow',
+      warnHues: {
+        default: '200'
+      },
+      background: 'amber',
+      backgroundHues: {
+        default: '800'
+      },
+    });
+
+    expect($mdTheming.THEMES.hasOwnProperty('testHues')).toBeTruthy();
+    expect($mdTheming.THEMES.testHues.colors.primary.hues.default).toBe('300');
+    expect($mdTheming.THEMES.testHues.colors.accent.hues.default).toBe('600');
+    expect($mdTheming.THEMES.testHues.colors.warn.hues.default).toBe('200');
+    expect($mdTheming.THEMES.testHues.colors.background.hues.default).toBe('800');
   }));
 
   it('supports changing browser color on the fly', function() {

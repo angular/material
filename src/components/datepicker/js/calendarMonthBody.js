@@ -47,7 +47,10 @@
    * @ngInject @constructor
    */
   function CalendarMonthBodyCtrl($element, $$mdDateUtil, $mdDateLocale) {
-    /** @final {!angular.JQLite} */
+    /**
+     * @final
+     * @type {!JQLite}
+     */
     this.$element = $element;
 
     /** @final */
@@ -65,7 +68,7 @@
     /**
      * Number of months from the start of the month "items" that the currently rendered month
      * occurs. Set via angular data binding.
-     * @type {number}
+     * @type {number|null}
      */
     this.offset = null;
 
@@ -86,7 +89,6 @@
 
     if (this.focusAfterAppend) {
       this.focusAfterAppend.classList.add(this.calendarCtrl.FOCUSED_DATE_CLASS);
-      this.focusAfterAppend.focus();
       this.focusAfterAppend = null;
     }
   };
@@ -209,17 +211,21 @@
     var blankCellOffset = 0;
     var monthLabelCell = document.createElement('td');
     var monthLabelCellContent = document.createElement('span');
+    var calendarCtrl = this.calendarCtrl;
 
     monthLabelCellContent.textContent = this.dateLocale.monthHeaderFormatter(date);
     monthLabelCell.appendChild(monthLabelCellContent);
     monthLabelCell.classList.add('md-calendar-month-label');
     // If the entire month is after the max date, render the label as a disabled state.
-    if (this.calendarCtrl.maxDate && firstDayOfMonth > this.calendarCtrl.maxDate) {
+    if (calendarCtrl.maxDate && firstDayOfMonth > calendarCtrl.maxDate) {
       monthLabelCell.classList.add('md-calendar-month-label-disabled');
-    } else {
+    // If the user isn't supposed to be able to change views, render the
+    // label as usual, but disable the clicking functionality.
+    } else if (!calendarCtrl.mode) {
       monthLabelCell.addEventListener('click', this.monthCtrl.headerClickHandler);
       monthLabelCell.setAttribute('data-timestamp', firstDayOfMonth.getTime());
       monthLabelCell.setAttribute('aria-label', this.dateLocale.monthFormatter(date));
+      monthLabelCell.classList.add('md-calendar-label-clickable');
       monthLabelCell.appendChild(this.arrowIcon.cloneNode(true));
     }
 

@@ -1,17 +1,17 @@
 angular
-  .module('radioDemo2', ['ngMaterial'])
+  .module('radioMultiColumnDemo', ['ngMaterial'])
   .controller('ContactController', function($scope, $filter) {
     var self = this;
 
     self.contacts = [{
       'id': 1,
-      'fullName': 'Maria Guadalupe',
+      'fullName': 'María Guadalupe',
       'lastName': 'Guadalupe',
       'title': "CEO, Found"
     }, {
       'id': 2,
-      'fullName': 'Gabriel García Marquéz',
-      'lastName': 'Marquéz',
+      'fullName': 'Gabriel García Márquez',
+      'lastName': 'Márquez',
       'title': "VP Sales & Marketing"
     }, {
       'id': 3,

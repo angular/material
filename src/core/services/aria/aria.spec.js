@@ -141,14 +141,14 @@ describe('$mdAria service', function() {
       expect($mdAria.parentHasAriaLabel(imgElement)).toBe(true);
     }));
 
-    it('should blacklist parent of element based on role', inject(function($compile, $rootScope, $log, $mdAria) {
+    it('should prevent aria-label on a parent of element based on role', inject(function($compile, $rootScope, $log, $mdAria) {
       var container = $compile('<button role="log" aria-label="hello"><img></img></button>')($rootScope);
       var imgElement = container.find('img');
       expect($mdAria.hasAriaLabel(imgElement)).toBe(false);
       expect($mdAria.parentHasAriaLabel(imgElement)).toBe(false);
     }));
 
-    it('should blacklist parent of element based on tagName', inject(function($compile, $rootScope, $log, $mdAria) {
+    it('should prevent aria-label on a parent of element based on tagName', inject(function($compile, $rootScope, $log, $mdAria) {
       var container = $compile('<span aria-label="hello"><img></img></span>')($rootScope);
       var imgElement = container.find('img');
       expect($mdAria.hasAriaLabel(imgElement)).toBe(false);

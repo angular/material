@@ -1,10 +1,6 @@
-
-<div ng-controller="AppCtrl" ng-cloak>
-
+<div ng-controller="BasicDemoCtrl" ng-cloak>
   <md-content>
-
     <br>
-
     <md-toolbar class="md-hue-2">
       <div class="md-toolbar-tools">
         <md-button class="md-icon-button" aria-label="Settings" ng-disabled="true">
@@ -14,7 +10,7 @@
         <h2 flex md-truncate>Toolbar with Disabled/Enabled Icon Buttons</h2>
 
         <md-button class="md-icon-button" aria-label="Favorite">
-          <md-icon md-svg-icon="img/icons/favorite.svg" style="color: greenyellow;"></md-icon>
+          <md-icon md-svg-icon="img/icons/favorite.svg" class="favorite-icon"></md-icon>
         </md-button>
 
         <md-button class="md-icon-button" aria-label="More">
@@ -22,27 +18,35 @@
         </md-button>
       </div>
     </md-toolbar>
-
     <br>
 
     <md-toolbar>
       <div class="md-toolbar-tools">
         <md-button aria-label="Go Back">
-          Go Back
+          Back
         </md-button>
 
-        <md-truncate style="position: absolute; left: 90px; right: 170px; top: 13px; bottom: 13px;">Toolbar with Standard Buttons</md-truncate>
-
-        <span flex></span>
-        <md-button class="md-raised" aria-label="Learn More">
+        <h2 flex md-truncate>Toolbar with Standard Buttons and a Mini FAB</h2>
+        <md-button class="md-raised md-accent md-hue-3" aria-label="Learn More">
           Learn More
         </md-button>
-        <md-button class="md-fab md-mini" aria-label="Favorite">
+        <md-button class="md-fab md-mini md-hue-3" aria-label="Favorite">
           <md-icon md-svg-icon="img/icons/favorite.svg"></md-icon>
         </md-button>
       </div>
     </md-toolbar>
+    <br>
 
+    <md-toolbar class="md-hue-1">
+      <div layout="row">
+        <md-toolbar-filler>
+          <md-icon id="filler-icon" md-svg-icon="img/icons/octicon-repo.svg"></md-icon>
+        </md-toolbar-filler>
+        <h2 class="md-toolbar-tools">
+          <span>Toolbar: with filler and icon (md-hue-1)</span>
+        </h2>
+      </div>
+    </md-toolbar>
     <br>
 
     <md-toolbar class="md-tall md-accent">
@@ -50,13 +54,12 @@
         <span>Toolbar: tall (md-accent)</span>
       </h2>
     </md-toolbar>
-
     <br>
 
     <md-toolbar class="md-tall md-warn md-hue-3">
       <span flex></span>
       <h2 class="md-toolbar-tools">
-        <span class="md-flex">Toolbar: tall with actions pin to the bottom (md-warn md-hue-3)</span>
+        <span class="md-flex">Toolbar: tall with actions pinned to the bottom (md-warn md-hue-3)</span>
       </h2>
     </md-toolbar>
   </md-content>

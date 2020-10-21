@@ -9,6 +9,7 @@ $tooltip-lr-padding-sm: 16px !default;
 $tooltip-max-width: 32px !default;
 
 .md-tooltip {
+  display: inline-block;
   pointer-events: none;
   border-radius: 4px;
   overflow: hidden;

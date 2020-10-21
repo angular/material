@@ -67,7 +67,7 @@ describe('md-colors', function () {
       var element = compile(markup);
 
       scope.$apply(function() {
-        angular.element(document.body).append( element );
+        angular.element(document.body).append(element);
       });
 
       return element;
@@ -120,7 +120,7 @@ describe('md-colors', function () {
         var color = $mdColorPalette['blue-grey']['200'].value;
         var expectedRGBa = buildColor(color[0], color[1], color[2], 0.8);
 
-        expect(element[0].style.background).toContain( expectedRGBa );
+        expect(element[0].style.background).toContain(expectedRGBa);
       });
     });
 
@@ -142,7 +142,7 @@ describe('md-colors', function () {
 
     /**
      * md-colors applies smart foreground colors (in case 'background' property is used) according the palettes from
-     * https://www.google.com/design/spec/style/color.html#color-color-palette
+     * https://material.io/archive/guidelines/style/color.html#color-color-palette
      */
     describe('foreground color', function () {
       /**
@@ -187,7 +187,7 @@ describe('md-colors', function () {
         var expectedRGB = buildColor(color[0], color[1], color[2]);
         var element = createElement(scope, { palette: type });
 
-        expect(element[0].style.background).toContain( expectedRGB );
+        expect(element[0].style.background).toContain(expectedRGB);
       });
 
       /**
@@ -200,7 +200,7 @@ describe('md-colors', function () {
         var expectedRGB = buildColor(color[0], color[1], color[2]);
         var element = createElement(scope, { palette: type });
 
-        expect(element[0].style.background).toContain( expectedRGB );
+        expect(element[0].style.background).toContain(expectedRGB);
       });
 
       /**
@@ -213,7 +213,7 @@ describe('md-colors', function () {
         var expectedRGB = buildColor(color[0], color[1], color[2]);
         var element = createElement(scope, { palette: type });
 
-        expect(element[0].style.background).toContain( expectedRGB );
+        expect(element[0].style.background).toContain(expectedRGB);
       });
 
       describe('hues', function () {
@@ -230,7 +230,7 @@ describe('md-colors', function () {
           var expectedRGB = buildColor(color[0], color[1], color[2]);
           var element = createElement(scope, { palette: type, hue: hue });
 
-          expect( element[0].style.background ).toContain( expectedRGB );
+          expect(element[0].style.background).toContain(expectedRGB);
         });
 
         /**
@@ -246,7 +246,7 @@ describe('md-colors', function () {
           var expectedRGB = buildColor(color[0], color[1], color[2]);
           var element = createElement(scope, { palette: type, hue: hue });
 
-          expect( element[0].style.background ).toContain(expectedRGB);
+          expect(element[0].style.background).toContain(expectedRGB);
         });
 
         /**
@@ -296,7 +296,7 @@ describe('md-colors', function () {
           var expectedRGB = buildColor(color[0], color[1], color[2]);
           var element = createElement(scope, { theme: 'myTheme',  palette: type, hue: '500' });
 
-          expect(element[0].style.background).toContain( expectedRGB );
+          expect(element[0].style.background).toContain(expectedRGB);
         });
       });
 
@@ -317,7 +317,7 @@ describe('md-colors', function () {
           var markup = '<div md-theme="myTheme"><div md-colors="{background: \'primary\'}" ></div></div>';
           var element = compile(markup);
 
-          expect(element.children()[0].style.background).toContain( expectedRGB );
+          expect(element.children()[0].style.background).toContain(expectedRGB);
         });
 
         /**
@@ -336,7 +336,7 @@ describe('md-colors', function () {
           var markup = '<div md-theme="{{theme}}"><div md-colors="{background: \'primary\'}" ></div></div>';
           var element = compile(markup);
 
-          expect(element.children()[0].style.background).toContain( expectedRGB );
+          expect(element.children()[0].style.background).toContain(expectedRGB);
 
           paletteName = $mdTheming.THEMES['default'].colors[type].name;
           color = $mdColorPalette[paletteName]['500'].value;
@@ -345,7 +345,7 @@ describe('md-colors', function () {
           scope.theme = 'default';
           scope.$apply();
 
-          expect(element.children()[0].style.background).toContain( expectedRGB );
+          expect(element.children()[0].style.background).toContain(expectedRGB);
         });
       })
     });
@@ -362,7 +362,7 @@ describe('md-colors', function () {
         scope.color = 'red';
         var element = createElement(scope, { palette: '{{color}}' });
 
-        expect(element[0].style.background).toContain( expectedRGB );
+        expect(element[0].style.background).toContain(expectedRGB);
 
         scope.color = 'lightBlue-200-0.8';
         scope.$apply();
@@ -370,7 +370,7 @@ describe('md-colors', function () {
         color = $mdColorPalette['light-blue']['200'].value;
         var expectedRGBa = buildColor(color[0], color[1], color[2], 0.8);
 
-        expect(element[0].style.background).toContain( expectedRGBa );
+        expect(element[0].style.background).toContain(expectedRGBa);
       });
 
       /**
@@ -386,7 +386,7 @@ describe('md-colors', function () {
         };
         scope.$apply();
 
-        expect(element[0].style.background).toContain( expectedRGBa );
+        expect(element[0].style.background).toContain(expectedRGBa);
       });
 
       /**
@@ -402,7 +402,7 @@ describe('md-colors', function () {
           scope.test = false;
         });
 
-        expect(element[0].style.background).toContain( expectedRGB );
+        expect(element[0].style.background).toContain(expectedRGB);
 
         scope.$apply(function() {
           scope.test = true;
@@ -410,7 +410,7 @@ describe('md-colors', function () {
         $timeout.flush();
 
         expectedRGB = buildColor(red[0], red[1], red[2]);
-        expect(element[0].style.background).toContain( expectedRGB );
+        expect(element[0].style.background).toContain(expectedRGB);
       }));
 
       describe('md-colors-watch', function () {
@@ -421,7 +421,7 @@ describe('md-colors', function () {
           var expectedRGB = buildColor(color[0], color[1], color[2]);
           var element = createElement(scope, { palette: '{{color}}',  attrs: 'md-colors-watch' });
 
-          expect(element[0].style.background).toContain( expectedRGB );
+          expect(element[0].style.background).toContain(expectedRGB);
 
           scope.$apply(function() {
             scope.color = 'lightBlue-200-0.8';
@@ -429,7 +429,7 @@ describe('md-colors', function () {
 
           color = $mdColorPalette['light-blue']['200'].value;
           var expectedRGBa = buildColor(color[0], color[1], color[2], 0.8);
-          expect(element[0].style.background).toContain( expectedRGBa )
+          expect(element[0].style.background).toContain(expectedRGBa)
         });
 
         it('should not watch if mdColorsWatch attribute is set to false', function () {
@@ -439,13 +439,13 @@ describe('md-colors', function () {
           var expectedRGB = buildColor(color[0], color[1], color[2]);
           var element = createElement(scope, { palette: '{{color}}',  attrs: 'md-colors-watch="false"' });
 
-          expect(element[0].style.background).toContain( expectedRGB );
+          expect(element[0].style.background).toContain(expectedRGB);
 
           scope.$apply(function() {
             scope.color = 'lightBlue-200-0.8';
           });
 
-          expect(element[0].style.background).toContain( expectedRGB )
+          expect(element[0].style.background).toContain(expectedRGB)
         });
 
         it('should watch if mdColorsWatch attribute is set to true', function () {
@@ -461,7 +461,7 @@ describe('md-colors', function () {
           var expectedRGB = buildColor(color[0], color[1], color[2]);
 
 
-          expect(element[0].style.background).toContain( expectedRGB );
+          expect(element[0].style.background).toContain(expectedRGB);
 
           scope.$apply(function() {
             scope.color = 'lightBlue-200-0.8';
@@ -470,7 +470,7 @@ describe('md-colors', function () {
           color = $mdColorPalette['light-blue']['200'].value;
           var expectedRGBa = buildColor(color[0], color[1], color[2], '0.8');
 
-          expect(element[0].style.background).toContain( expectedRGBa );
+          expect(element[0].style.background).toContain(expectedRGBa);
         });
       });
 
@@ -487,20 +487,20 @@ describe('md-colors', function () {
           var color = $mdColorPalette['red']['500'].value;
           var expectedRGB = buildColor(color[0], color[1], color[2]);
 
-          expect(element[0].style.background).toContain( expectedRGB );
-          expect(element[0].style.color).not.toBe( '' );
+          expect(element[0].style.background).toContain(expectedRGB);
+          expect(element[0].style.color).not.toBe('');
 
           scope.color = '{}';
           scope.$apply();
 
-          expect(element[0].style.background).toBe( '' );
+          expect(element[0].style.background).toBe('');
 
           /**
            * mdColors automatically sets the foreground colors according the material palette
            * we make sure that even if the background was set (and the foreground automatically)
            * we delete it.
            */
-          expect(element[0].style.color).toBe( '' );
+          expect(element[0].style.color).toBe('');
 
         });
       })
@@ -513,7 +513,7 @@ describe('md-colors', function () {
       it('should accept empty value and not color the element', function() {
         var element = compile('<div md-colors=""></div>');
 
-        expect(element[0].style.background).toBe( '' );
+        expect(element[0].style.background).toBe('');
       });
 
       /**
@@ -522,7 +522,7 @@ describe('md-colors', function () {
       it('should accept empty object and not color the element', function() {
         var element = compile('<div md-colors="{}"></div>');
 
-        expect(element[0].style.background).toBe( '' );
+        expect(element[0].style.background).toBe('');
       });
     });
   });
@@ -534,7 +534,7 @@ describe('md-colors', function () {
       var expectedRGB = buildColor(color[0], color[1], color[2]);
 
       $mdColors.applyThemeColors(element, { background: 'red-200' });
-      expect(element[0].style.background).toContain( expectedRGB );
+      expect(element[0].style.background).toContain(expectedRGB);
     }));
 
     it('should return the parsed color', inject(function ($mdColors) {
@@ -542,7 +542,7 @@ describe('md-colors', function () {
       var expectedRGB = buildColor(color[0], color[1], color[2], 1);
 
       var themeColor = $mdColors.getThemeColor('red-200');
-      expect(themeColor).toBe( expectedRGB );
+      expect(themeColor).toBe(expectedRGB);
     }));
 
     describe('palette hues', function () {

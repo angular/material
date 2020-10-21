@@ -1,0 +1,5 @@
+<md-content ng-app="MyApp" ng-controller="AppCtrl as ctrl" layout-padding layout-margin>
+  <md-datepicker ng-model="ctrl.myDate" ng-change="ctrl.onDateChanged()"
+                 md-placeholder="Enter date"></md-datepicker>
+  Date: {{ctrl.myDate | date:shortDate}}
+</md-content>

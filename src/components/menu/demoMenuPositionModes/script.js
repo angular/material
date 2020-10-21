@@ -8,8 +8,6 @@ angular
   .controller('PositionDemoCtrl', function DemoCtrl($mdDialog) {
     var originatorEv;
 
-    this.menuHref = "http://www.google.com/design/spec/components/menus.html#menus-specs";
-
     this.openMenu = function($mdMenu, ev) {
       originatorEv = ev;
       $mdMenu.open(ev);

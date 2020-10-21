@@ -1,9 +1,8 @@
-
 <div ng-controller="AppCtrl" class="md-padding" ng-cloak>
   <div>
     <fieldset class="standard">
       <legend>Using &lt;ng-model&gt;</legend>
-      <div layout-wrap layout-gt-sm="row" >
+      <div layout-wrap layout-gt-sm="row">
         <div flex-gt-sm="50">
           <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
             Checkbox 1: {{ data.cb1 }}
@@ -57,6 +56,64 @@
         </div>
       </div>
     </fieldset>
-
+  </div>
+  <br/>
+  <div layout='row'>
+    <fieldset class="standard">
+      <legend>Default Spacing</legend>
+      <div>
+        <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+          Checkbox 1: {{ data.cb1 }}
+        </md-checkbox>
+        <div>
+          <md-checkbox
+            ng-model="data.cb2"
+            aria-label="Checkbox 2"
+            ng-true-value="'yup'"
+            ng-false-value="'nope'"
+            class="md-warn md-align-top-left" flex>
+            Checkbox 2 (md-warn)  <br/>
+            <span class="ipsum">
+              Duis placerat lectus et justo mollis, nec sodales orci congue. Vestibulum semper non urna ac suscipit.
+              Vestibulum tempor, ligula id laoreet hendrerit, massa augue iaculis magna,
+              sit amet dapibus tortor ligula non nibh.
+            </span>
+            <br/>
+            {{ data.cb2 }}
+          </md-checkbox>
+        </div>
+          <md-checkbox ng-disabled="true" aria-label="Disabled checkbox" ng-model="data.cb3">
+            Checkbox: Disabled
+          </md-checkbox>
+      </div>
+    </fieldset>
+    <fieldset class="standard md-dense">
+      <legend>Dense Spacing with "md-dense"</legend>
+      <div>
+        <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+          Checkbox 1: {{ data.cb1 }}
+        </md-checkbox>
+        <div>
+          <md-checkbox
+            ng-model="data.cb2"
+            aria-label="Checkbox 2"
+            ng-true-value="'yup'"
+            ng-false-value="'nope'"
+            class="md-warn md-align-top-left" flex>
+            Checkbox 2 (md-warn)  <br/>
+            <span class="ipsum">
+              Duis placerat lectus et justo mollis, nec sodales orci congue. Vestibulum semper non urna ac suscipit.
+              Vestibulum tempor, ligula id laoreet hendrerit, massa augue iaculis magna,
+              sit amet dapibus tortor ligula non nibh.
+            </span>
+            <br/>
+            {{ data.cb2 }}
+          </md-checkbox>
+        </div>
+          <md-checkbox ng-disabled="true" aria-label="Disabled checkbox" ng-model="data.cb3">
+            Checkbox: Disabled
+          </md-checkbox>
+      </div>
+    </fieldset>
   </div>
 </div>
