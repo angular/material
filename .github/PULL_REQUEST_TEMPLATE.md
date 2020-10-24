@@ -1,8 +1,9 @@
 <!-- 
-Filling out this template is required! Do not delete it when submitting a Pull Request! Without this information, your Pull Request may be auto-closed.
+Filling out this template is required! Do not delete it when submitting a Pull Request!
+Without this information, your Pull Request may be auto-closed.
 -->
 ## PR Checklist
-Please check that your PR fulfills the following requirements:
+Please check your PR fulfills the following requirements:
 - [ ] The commit message follows [our guidelines](https://github.com/angular/material/blob/master/.github/CONTRIBUTING.md#-commit-message-format)
 - [ ] Tests for the changes have been added or this is not a bug fix / enhancement
 - [ ] Docs have been added, updated, or were not required
@@ -23,10 +24,10 @@ What kind of change does this PR introduce?
 ```
 
 ## What is the current behavior?
-
 <!-- Please describe the current behavior that you are modifying and link to one or more relevant issues. -->
-Issue Number: 
 
+
+Fixes #
 
 ## What is the new behavior?
 

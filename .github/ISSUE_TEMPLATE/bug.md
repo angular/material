@@ -1,3 +1,8 @@
+---
+name: Bug Report
+about: Report a bug in AngularJS Material
+labels: type: docs, needs triage
+---
 <!-- 
 Filling out this template is required! Do not delete it when submitting your issue!
 Without this information, your issue may be auto-closed. 
@@ -48,6 +53,7 @@ and issues [here](https://github.com/angular/components/issues).
 - Screen Readers: 
  
 ### Add anything else we should know
+
 
 #### Stack Trace
 ```
