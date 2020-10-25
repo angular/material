@@ -30,7 +30,8 @@ md-tabs {
   }
   &[md-align-tabs="bottom"] {
     padding-bottom: $tabs-header-height;
-    md-tabs-wrapper {
+
+    > md-tabs-wrapper {
       position: absolute;
       bottom: 0;
       left: 0;
@@ -38,7 +39,7 @@ md-tabs {
       height: $tabs-header-height;
       z-index: 2;
     }
-    md-tabs-content-wrapper {
+    > md-tabs-content-wrapper {
       top: 0;
       bottom: $tabs-header-height;
     }
