@@ -1,7 +1,7 @@
 ---
 name: Documentation
 about: Suggest an improvement to our documentation at material.angularjs.org
-labels: type: docs, needs triage
+labels: "type: docs, needs triage"
 ---
 
 #### Documentation Feedback

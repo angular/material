@@ -1,7 +1,7 @@
 ---
 name: Bug Report
 about: Report a bug in AngularJS Material
-labels: type: docs, needs triage
+labels: "type: docs, needs triage"
 ---
 <!-- 
 Filling out this template is required! Do not delete it when submitting your issue!

@@ -10,5 +10,5 @@ contact_links:
     url: https://groups.google.com/forum/?pli=1#!forum/ngmaterial
     about: Please ask questions about the library, roadmap, and releases here.
   - name: Security bugs or weaknesses
-    url: mailto:security@angularjs.org
+    url: https://github.com/angular/material/blob/master/SECURITY.md
     about: Please report security vulnerabilities here.
