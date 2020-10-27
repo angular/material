@@ -5,10 +5,7 @@ contact_links:
     about: Please ask and answer questions about your app or usage here.
   - name: AngularJS Material Gitter
     url: https://gitter.im/angular/material
-    about: Please ask and answer questions about your app or usage here.
-  - name: AngularJS Material forums
+    about: Please contribute to the community discussion about AngularJS Material usage here.
+  - name: AngularJS Material Forum
     url: https://groups.google.com/forum/?pli=1#!forum/ngmaterial
     about: Please ask questions about the library, roadmap, and releases here.
-  - name: Security bugs or weaknesses
-    url: https://github.com/angular/material/blob/master/SECURITY.md
-    about: Please report security vulnerabilities here.
