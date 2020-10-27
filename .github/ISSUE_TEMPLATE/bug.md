@@ -19,11 +19,11 @@ Please submit Angular Material and CDK questions
 [here](https://groups.google.com/forum/#!forum/angular-material2)
 and issues [here](https://github.com/angular/components/issues).
 -->
-## Bug, Enhancement Request, or Proposal
+## Bug Report
 
 <!-- Please note that we are not accepting major feature requests, i.e. requests for new components, at this time. -->
 
-# Demo and steps to reproduce the issue
+## Demo and steps to reproduce the issue
 [This blank StackBlitz demo](https://stackblitz.com/edit/angularjs-material-blank?file=app%2Fapp.template.html) can be used to create a reproduction that demonstrates your issue.
 
 **Demo URL (required)***:  
