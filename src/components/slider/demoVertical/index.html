@@ -20,12 +20,12 @@
     <div flex layout="column" layout-align="center center">
       <md-slider-container ng-disabled="readonly">
         <md-input-container>
-          <input flex type="number" ng-model="master" aria-label="Master" step="10"
-                 aria-controls="master-slider">
+          <input flex type="number" ng-model="treble" aria-label="Treble" step="10"
+                 aria-controls="treble-slider">
         </md-input-container>
-        <md-slider flex ng-model="master" md-discrete aria-label="Master" md-vertical step="10"
-                   ng-readonly="readonly" id="master-slider"></md-slider>
-        <h5>Master</h5>
+        <md-slider flex ng-model="treble" md-discrete aria-label="Treble" md-vertical step="10"
+                   ng-readonly="readonly" id="treble-slider"></md-slider>
+        <h5>Treble</h5>
       </md-slider-container>
       <md-checkbox ng-model="readonly">Read only</md-checkbox>
     </div>

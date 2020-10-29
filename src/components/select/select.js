@@ -1710,7 +1710,7 @@ function SelectProvider($$interimElementProvider) {
       }
 
       /**
-       * Check for valid opts and set some sane defaults
+       * Check for valid opts and set some useful defaults
        */
       function sanitizeAndConfigure(scope, options) {
         var selectMenuElement = element.find('md-select-menu');

@@ -168,20 +168,20 @@ when using online tools such as [CodePen](http://codepen.io/) or [Plunker](http:
 ```html
   <head>
 
-    <!-- AngularJS Material CSS now available via Google CDN; version 1.2.0 used here -->
-   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.2.0/angular-material.min.css">
+    <!-- AngularJS Material CSS now available via Google CDN; version 1.2.1 used here -->
+   <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.2.1/angular-material.min.css">
 
   </head>
   <body>
 
     <!-- AngularJS Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-aria.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-messages.min.js"></script>
 
-    <!-- AngularJS Material Javascript now available via Google CDN; version 1.2.0 used here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.2.0/angular-material.min.js"></script>
+    <!-- AngularJS Material Javascript now available via Google CDN; version 1.2.1 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.2.1/angular-material.min.js"></script>
   </body>
 ```
 
@@ -198,10 +198,10 @@ pull directly from our [distribution repository](https://github.com/angular/bowe
   <body>
 
     <!-- AngularJS Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-animate.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-aria.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-animate.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-aria.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-messages.min.js"></script>
 
     <!-- AngularJS Material Javascript using GitCDN to load directly from `bower-material/master` -->
     <script src="https://gitcdn.xyz/cdn/angular/bower-material/master/angular-material.js"></script>

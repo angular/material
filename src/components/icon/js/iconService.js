@@ -34,7 +34,7 @@
  *
  * <hljs lang="js">
  *   app.config(function($sceDelegateProvider) {
- *     $sceDelegateProvider.resourceUrlWhitelist([
+ *     $sceDelegateProvider.trustedResourceUrlList([
  *       // Adding 'self' to the allow-list, will allow requests from the current origin.
  *       'self',
  *       // Using double asterisks here, will allow all URLs to load.
