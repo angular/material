@@ -169,7 +169,7 @@ function MenuProvider($$interimElementProvider) {
       }
 
       /**
-       * Check for valid opts and set some sane defaults
+       * Check for valid opts and set some useful defaults
        */
       function sanitizeAndConfigure() {
         if (!opts.target) {

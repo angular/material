@@ -502,7 +502,7 @@ describe('$mdThemingProvider', function() {
       expect(document.getElementsByName(name).length).toBe(1);
       expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
     });
-  })
+  });
 
   describe('configuration', function () {
     beforeEach(function () {
@@ -530,17 +530,14 @@ describe('$mdThemingProvider', function() {
 
       var config2 = themingProvider.configuration();
 
-      // Confirm master versions are not altered
+      // Confirm provider returned values are not altered
       expect(config2.disableTheming).toBe(false);
       expect(config2.generateOnDemand).toBe(false);
       expect(config2.registeredStyles.length).toBe(0);
       expect(config2.nonce).toBe(null);
       expect(config2.alwaysWatchTheme).toBe(false);
-
     });
-
-
-  })
+  });
 });
 
 describe('$mdThemeProvider with custom styles', function() {
