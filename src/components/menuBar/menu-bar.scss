@@ -1,9 +1,18 @@
-md-toolbar.md-menu-toolbar {
-  h2.md-toolbar-tools {
-    line-height: 1rem;
-    height: auto;
-    padding: 3.5 * $baseline-grid;
-    padding-bottom: 1.5 * $baseline-grid;
+md-toolbar {
+  &.md-menu-toolbar {
+    h2.md-toolbar-tools {
+      line-height: 1rem;
+      height: auto;
+      padding: 3.5 * $baseline-grid;
+      padding-bottom: 1.5 * $baseline-grid;
+    }
+  }
+
+  // Used to allow hovering from one menu to the
+  // next when inside of a toolbar.
+  &.md-has-open-menu {
+    position: relative;
+    z-index: $z-index-menu;
   }
 }
 
@@ -26,12 +35,12 @@ md-menu-bar {
     height: 5 * $baseline-grid;
   }
 
-  md-backdrop._md-menu-backdrop {
+  md-backdrop.md-menu-backdrop {
     z-index: -2;
   }
 }
 
-md-menu-content._md-menu-bar-menu.md-dense {
+md-menu-content.md-menu-bar-menu.md-dense {
   max-height: none;
   padding: 2 * $baseline-grid 0;
   md-menu-item.md-indent {
@@ -41,7 +50,7 @@ md-menu-content._md-menu-bar-menu.md-dense {
       padding: 0;
       width: 24px;
       top: 0.75 * $baseline-grid;
-      @include rtl-prop(left, right, 3 * $baseline-grid);
+      @include rtl-prop(left, right, 3 * $baseline-grid, auto);
     }
     > .md-button, .md-menu > .md-button {
       @include rtl(padding, 0 4 * $baseline-grid 0 8 * $baseline-grid, 0 8 * $baseline-grid 0 4 * $baseline-grid);
@@ -50,13 +59,11 @@ md-menu-content._md-menu-bar-menu.md-dense {
   .md-button {
     min-height: 0;
     height: 4 * $baseline-grid;
-    display: flex;
     span {
-      flex-grow: 1;
+      @include rtl(float, left, right);
     }
     span.md-alt-text {
-      flex-grow: 0;
-      align-self: flex-end;
+      @include rtl(float, right, left);
       margin: 0 $baseline-grid;
     }
   }
@@ -66,7 +73,6 @@ md-menu-content._md-menu-bar-menu.md-dense {
 
   md-menu-item > .md-button, .md-menu > .md-button {
     @include rtl(text-align, left, right);
-    text-align: start;
   }
 
   .md-menu {
@@ -78,7 +84,7 @@ md-menu-content._md-menu-bar-menu.md-dense {
       text-transform: none;
       font-weight: normal;
       border-radius: 0px;
-      @include rtl-prop(padding-left, padding-right, 2 * $baseline-grid);
+      @include rtl-prop(padding-left, padding-right, 2 * $baseline-grid, 0);
       &:after {
         display: block;
         content: '\25BC';
@@ -86,7 +92,7 @@ md-menu-content._md-menu-bar-menu.md-dense {
         top: 0px;
         speak: none;
         @include rtl(transform, rotate(270deg) scaleY(0.45) scaleX(0.9), rotate(90deg) scaleY(0.45) scaleX(0.9));
-        @include rtl-prop(right, left, 3.5 * $baseline-grid);
+        @include rtl-prop(right, left, 3.5 * $baseline-grid, auto);
       }
     }
   }

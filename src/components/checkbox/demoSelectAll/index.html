@@ -1,0 +1,20 @@
+<div ng-controller="AppCtrl" class="md-padding">
+  <!--
+    In IE, we cannot apply flex directly to <fieldset>
+    @see https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers
+  -->
+  <fieldset>
+    <legend>Using &lt;md-checkbox&gt; with the 'indeterminate' attribute</legend>
+      <md-checkbox aria-label="Select All"
+                   ng-checked="isChecked()"
+                   md-indeterminate="isIndeterminate()"
+                   ng-click="toggleAll()">
+        <span ng-if="isChecked()">Un-</span>Select All
+      </md-checkbox>
+      <div class="demo-select-all-checkboxes" ng-repeat="item in items">
+        <md-checkbox ng-checked="exists(item, selected)" ng-click="toggle(item, selected)">
+          {{ item }}
+        </md-checkbox>
+      </div>
+  </fieldset>
+</div>

@@ -36,8 +36,8 @@ MenuBarController.prototype.init = function() {
 
   deregisterFns.push(this.$rootScope.$on('$mdMenuOpen', function(event, el) {
     if (self.getMenus().indexOf(el[0]) != -1) {
-      $element[0].classList.add('_md-open');
-      el[0].classList.add('_md-open');
+      $element[0].classList.add('md-open');
+      el[0].classList.add('md-open');
       self.currentlyOpenMenu = el.controller('mdMenu');
       self.currentlyOpenMenu.registerContainerProxy(self.handleKeyDown);
       self.enableOpenOnHover();
@@ -47,11 +47,12 @@ MenuBarController.prototype.init = function() {
   deregisterFns.push(this.$rootScope.$on('$mdMenuClose', function(event, el, opts) {
     var rootMenus = self.getMenus();
     if (rootMenus.indexOf(el[0]) != -1) {
-      $element[0].classList.remove('_md-open');
-      el[0].classList.remove('_md-open');
+      $element[0].classList.remove('md-open');
+      el[0].classList.remove('md-open');
     }
 
-    if ($element[0].contains(el[0])) {
+    var ctrl = angular.element(el[0]).controller('mdMenu');
+    if (ctrl.isInMenuBar && ctrl.mdMenuBarCtrl === self) {
       var parentMenu = el[0];
       while (parentMenu && rootMenus.indexOf(parentMenu) == -1) {
         parentMenu = $mdUtil.getClosest(parentMenu, 'MD-MENU', true);
@@ -59,13 +60,14 @@ MenuBarController.prototype.init = function() {
       if (parentMenu) {
         if (!opts.skipFocus) parentMenu.querySelector('button:not([disabled])').focus();
         self.currentlyOpenMenu = undefined;
-        self.disableOpenOnHover();
-        self.setKeyboardMode(true);
       }
+      self.disableOpenOnHover();
+      self.setKeyboardMode(true);
     }
   }));
 
   $scope.$on('$destroy', function() {
+    self.disableOpenOnHover();
     while (deregisterFns.length) {
       deregisterFns.shift()();
     }
@@ -76,23 +78,29 @@ MenuBarController.prototype.init = function() {
 };
 
 MenuBarController.prototype.setKeyboardMode = function(enabled) {
-  if (enabled) this.$element[0].classList.add('_md-keyboard-mode');
-  else this.$element[0].classList.remove('_md-keyboard-mode');
+  if (enabled) this.$element[0].classList.add('md-keyboard-mode');
+  else this.$element[0].classList.remove('md-keyboard-mode');
 };
 
 MenuBarController.prototype.enableOpenOnHover = function() {
   if (this.openOnHoverEnabled) return;
-  this.openOnHoverEnabled = true;
 
-  var parentToolbar;
-  if (parentToolbar = this.parentToolbar) {
-    parentToolbar.dataset.mdRestoreStyle = parentToolbar.getAttribute('style');
-    parentToolbar.style.position = 'relative';
-    parentToolbar.style.zIndex = 100;
+  var self = this;
+
+  self.openOnHoverEnabled = true;
+
+  if (self.parentToolbar) {
+    self.parentToolbar.classList.add('md-has-open-menu');
+
+    // Needs to be on the next tick so it doesn't close immediately.
+    self.$mdUtil.nextTick(function() {
+      angular.element(self.parentToolbar).on('click', self.handleParentClick);
+    }, false);
   }
+
   angular
-    .element(this.getMenus())
-    .on('mouseenter', this.handleMenuHover);
+    .element(self.getMenus())
+    .on('mouseenter', self.handleMenuHover);
 };
 
 MenuBarController.prototype.handleMenuHover = function(e) {
@@ -102,14 +110,16 @@ MenuBarController.prototype.handleMenuHover = function(e) {
   }
 };
 
-
 MenuBarController.prototype.disableOpenOnHover = function() {
   if (!this.openOnHoverEnabled) return;
+
   this.openOnHoverEnabled = false;
-  var parentToolbar;
-  if (parentToolbar = this.parentToolbar) {
-    parentToolbar.style.cssText = parentToolbar.dataset.mdRestoreStyle || '';
+
+  if (this.parentToolbar) {
+    this.parentToolbar.classList.remove('md-has-open-menu');
+    angular.element(this.parentToolbar).off('click', this.handleParentClick);
   }
+
   angular
     .element(this.getMenus())
     .off('mouseenter', this.handleMenuHover);
@@ -187,7 +197,7 @@ MenuBarController.prototype.focusMenu = function(direction) {
 
   var changed = false;
 
-  if (focusedIndex == -1) { focusedIndex = 0; }
+  if (focusedIndex == -1) { focusedIndex = 0; changed = true; }
   else if (
     direction < 0 && focusedIndex > 0 ||
     direction > 0 && focusedIndex < menus.length - direction
@@ -226,21 +236,22 @@ MenuBarController.prototype.getFocusedMenuIndex = function() {
 
   var focusedIndex = this.getMenus().indexOf(focusedEl);
   return focusedIndex;
-
 };
 
 MenuBarController.prototype.getOpenMenuIndex = function() {
   var menus = this.getMenus();
   for (var i = 0; i < menus.length; ++i) {
-    if (menus[i].classList.contains('_md-open')) return i;
+    if (menus[i].classList.contains('md-open')) return i;
   }
   return -1;
 };
 
+MenuBarController.prototype.handleParentClick = function(event) {
+  var openMenu = this.querySelector('md-menu.md-open');
 
-
-
-
-
-
-
+  if (openMenu && !openMenu.contains(event.target)) {
+    angular.element(openMenu).controller('mdMenu').close(true, {
+      closeAll: true
+    });
+  }
+};

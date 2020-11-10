@@ -1,12 +1,8 @@
 div.flex-xs {
   min-height:40px;
-
 }
 .checkboxDemo1 div {
   clear: both;
-}
-.checkboxDemo1 md-checkbox {
-  float: left;
 }
 p {
   padding-left: 8px;
@@ -18,11 +14,6 @@ fieldset.standard {
 legend {
   color: #3F51B5;
 }
-legend code {
-  color: #3F51B5;
-  font-weight: normal;
-}
-
 .ipsum {
   color: saddlebrown;
 }

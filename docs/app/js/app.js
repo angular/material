@@ -1,6 +1,4 @@
-var DocsApp = angular.module('docsApp', [ 'angularytics', 'ngRoute', 'ngMessages', 'ngMaterial' ])
-
-.config([
+angular.module('docsApp', ['angularytics', 'ngRoute', 'ngMessages', 'ngMaterial'], [
   'SERVICES',
   'COMPONENTS',
   'DEMOS',
@@ -8,8 +6,10 @@ var DocsApp = angular.module('docsApp', [ 'angularytics', 'ngRoute', 'ngMessages
   '$routeProvider',
   '$locationProvider',
   '$mdThemingProvider',
+  '$mdIconProvider',
 function(SERVICES, COMPONENTS, DEMOS, PAGES,
-    $routeProvider, $locationProvider, $mdThemingProvider) {
+    $routeProvider, $locationProvider, $mdThemingProvider, $mdIconProvider) {
+
   $locationProvider.html5Mode(true);
 
   $routeProvider
@@ -33,6 +33,9 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     .when('/getting-started', {
       templateUrl: 'partials/getting-started.tmpl.html'
     })
+    .when('/contributors', {
+      templateUrl: 'partials/contributors.tmpl.html'
+    })
     .when('/license', {
       templateUrl: 'partials/license.tmpl.html'
     });
@@ -48,20 +51,41 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     '800': '#014AB6',
     '900': '#013583',
     'contrastDefaultColor': 'light',
-    'contrastDarkColors': '50 100 200 A100',
-    'contrastStrongLightColors': '300 400 A200 A400'
+    'contrastDarkColors': '50 100 200 300 400 A100 A200',
+    'contrastStrongLightColors': '500 600 700 800 900 A400 A700'
   }));
+
   $mdThemingProvider.definePalette('docs-red', $mdThemingProvider.extendPalette('red', {
     'A100': '#DE3641'
+  }));
+
+  $mdThemingProvider.definePalette('docs-warn', $mdThemingProvider.extendPalette('deep-orange', {
+    '500': '#d32f2f' // Override 500 with 700 hue for improved contrast on flat buttons
   }));
 
   $mdThemingProvider.theme('docs-dark', 'default')
     .primaryPalette('yellow')
     .dark();
 
+  $mdThemingProvider.theme('site-toolbar')
+    .primaryPalette('grey', {
+      'default': '100'
+    });
+
+  $mdIconProvider.icon('md-toggle-arrow', 'img/icons/toggle-arrow.svg', 48);
+  $mdIconProvider
+    .iconSet('communication', 'img/icons/sets/communication-icons.svg', 24)
+    .iconSet('device', 'img/icons/sets/device-icons.svg', 24)
+    .iconSet('social', 'img/icons/sets/social-icons.svg', 24)
+    .iconSet('symbol', 'img/icons/sets/symbol-icons.svg', 24)
+    .defaultIconSet('img/icons/sets/core-icons.svg', 24);
+
   $mdThemingProvider.theme('default')
-      .primaryPalette('docs-blue')
-      .accentPalette('docs-red');
+    .primaryPalette('docs-blue')
+    .accentPalette('docs-red')
+    .warnPalette('docs-warn');
+
+  $mdThemingProvider.enableBrowserColor();
 
   angular.forEach(PAGES, function(pages, area) {
     angular.forEach(pages, function(page) {
@@ -90,7 +114,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
     $routeProvider.when('/' + service.url, {
       templateUrl: service.outputPath,
       resolve: {
-        component: angular.noop,
+        component: function() { return { isService: true } },
         doc: function() { return service; }
       },
       controller: 'ComponentDocCtrl'
@@ -119,14 +143,21 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES,
   });
 
   $routeProvider.otherwise('/');
+
+  // Change hash prefix of the AngularJS router, because we use the hash symbol for anchor links.
+  // The hash will be not used by the docs, because we use the HTML5 mode for our links.
+  $locationProvider.hashPrefix('!');
+
 }])
 
-.config(['AngularyticsProvider', function(AngularyticsProvider) {
-   AngularyticsProvider.setEventHandlers(['Console', 'GoogleUniversal']);
+.config(['$mdGestureProvider', 'AngularyticsProvider', function($mdGestureProvider, AngularyticsProvider) {
+  $mdGestureProvider.skipClickHijack();
+  AngularyticsProvider.setEventHandlers(['GoogleUniversal']);
 }])
 
-.run(['Angularytics', function(Angularytics) {
+.run(['$rootScope', '$window', 'Angularytics', function($rootScope, $window, Angularytics) {
   Angularytics.init();
+  $rootScope.$window = $window;
 }])
 
 .factory('menu', [
@@ -215,8 +246,22 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
             name: 'Under the Hood',
             url: 'Theming/05_under_the_hood',
             type: 'link'
+          },
+          {
+            name: 'Browser Color',
+            url: 'Theming/06_browser_color',
+            type: 'link'
           }
         ]
+      },
+      {
+        name: 'Performance',
+        type: 'toggle',
+        pages: [{
+            name: 'Internet Explorer',
+            url: 'performance/internet-explorer',
+            type: 'link'
+          }]
       }
     ]
   });
@@ -254,28 +299,28 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         name: 'Introduction',
         id: 'layoutIntro',
         url: 'layout/introduction'
-      }
-        ,{
+      },
+      {
         name: 'Layout Containers',
         id: 'layoutContainers',
         url: 'layout/container'
-        }
-      ,{
+      },
+      {
         name: 'Layout Children',
         id: 'layoutGrid',
         url: 'layout/children'
-      }
-      ,{
+      },
+      {
         name: 'Child Alignment',
         id: 'layoutAlign',
         url: 'layout/alignment'
-      }
-      ,{
+      },
+      {
         name: 'Extra Options',
         id: 'layoutOptions',
         url: 'layout/options'
-      }
-      ,{
+      },
+      {
         name: 'Troubleshooting',
         id: 'layoutTips',
         url: 'layout/tips'
@@ -286,10 +331,26 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       pages: apiDocs.service.sort(sortByName),
       type: 'toggle'
     },{
+      name: 'Types',
+      pages: apiDocs.type.sort(sortByName),
+      type: 'toggle'
+    },{
       name: 'Directives',
       pages: apiDocs.directive.sort(sortByName),
       type: 'toggle'
     }]
+  });
+
+  sections.push({
+    name: 'Migration to Angular',
+    url: 'migration',
+    type: 'link'
+  });
+
+  sections.push({
+    name: 'Contributors',
+    url: 'contributors',
+    type: 'link'
   });
 
   sections.push({
@@ -310,10 +371,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   $rootScope.$on('$locationChangeSuccess', onLocationChange);
 
   $http.get("/docs.json")
-      .success(function(response) {
+      .then(function(response) {
+        response = response.data;
         var versionId = getVersionIdFromPath();
         var head = { type: 'version', url: '/HEAD', id: 'head', name: 'HEAD (master)', github: '' };
-        var commonVersions = versionId === 'head' ? [] : [ head ];
+        var commonVersions = versionId === 'head' ? [] : [head];
         var knownVersions = getAllVersions();
         var listVersions = knownVersions.filter(removeCurrentVersion);
         var currentVersion = getCurrentVersion() || {name: 'local'};
@@ -322,11 +384,11 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
           name: 'Documentation Version',
           type: 'heading',
           className: 'version-picker',
-          children: [ {
+          children: [{
             name: currentVersion.name,
             type: 'toggle',
             pages: commonVersions.concat(listVersions)
-          } ]
+          }]
         });
         function removeCurrentVersion (version) {
           switch (versionId) {
@@ -369,7 +431,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         function getVersionIdFromPath () {
           var path = $window.location.pathname;
           if (path.length < 2) path = 'HEAD';
-          return path.match(/[^\/]+/)[0].toLowerCase();
+          return path.match(/[^/]+/)[0].toLowerCase();
         }
       });
 
@@ -404,7 +466,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       type: "link"
     };
 
-    if (path == '/') {
+    if (path === '/') {
       self.selectSection(introLink);
       self.selectPage(introLink, introLink);
       return;
@@ -421,7 +483,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
       if (section.children) {
         // matches nested section toggles, such as API or Customization
         section.children.forEach(function(childSection){
-          if(childSection.pages){
+          if (childSection.pages){
             childSection.pages.forEach(function(page){
               matchPage(childSection, page);
             });
@@ -442,7 +504,7 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   }
 }])
 
-.directive('menuLink', function() {
+.directive('menuLink', ['scrollCache', function(scrollCache) {
   return {
     scope: {
       section: '='
@@ -459,12 +521,14 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
         // set flag to be used later when
         // $locationChangeSuccess calls openPage()
         controller.autoFocusContent = true;
+        // set flag to be used later when $routeChangeStart saves scroll position
+        scrollCache.linkClicked = true;
       };
     }
   };
-})
+}])
 
-.directive('menuToggle', [ '$timeout', '$mdUtil', function($timeout, $mdUtil) {
+.directive('menuToggle', ['$mdUtil', '$animateCss', '$$rAF', function($mdUtil, $animateCss, $$rAF) {
   return {
     scope: {
       section: '='
@@ -473,41 +537,61 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
     link: function($scope, $element) {
       var controller = $element.parent().controller();
 
+      // Used for toggling the visibility of the accordion's content, after
+      // all of the animations are completed. This prevents users from being
+      // allowed to tab through to the hidden content.
+      $scope.renderContent = false;
+
       $scope.isOpen = function() {
         return controller.isOpen($scope.section);
       };
+
       $scope.toggle = function() {
         controller.toggleOpen($scope.section);
       };
 
       $mdUtil.nextTick(function() {
-        $scope.$watch(
-          function () {
-            return controller.isOpen($scope.section);
-          },
-          function (open) {
-            var $ul = $element.find('ul');
+        $scope.$watch(function () {
+          return controller.isOpen($scope.section);
+        }, function (open) {
+          var $ul = $element.find('ul');
+          var $li = $ul[0].querySelector('a.active');
 
-            var targetHeight = open ? getTargetHeight() : 0;
-            $timeout(function () {
-              $ul.css({height: targetHeight + 'px'});
-            }, 0, false);
-
-            function getTargetHeight() {
-              var targetHeight;
-              $ul.addClass('no-transition');
-              $ul.css('height', '');
-              targetHeight = $ul.prop('clientHeight');
-              $ul.css('height', 0);
-              $ul.removeClass('no-transition');
-              return targetHeight;
-            }
+          if (open) {
+            $scope.renderContent = true;
           }
-        );
+
+          $$rAF(function() {
+            var targetHeight = open ? $ul[0].scrollHeight : 0;
+
+            $animateCss($ul, {
+              easing: 'cubic-bezier(0.35, 0, 0.25, 1)',
+              to: { height: targetHeight + 'px' },
+              duration: 0.75 // seconds
+            }).start().then(function() {
+              var $li = $ul[0].querySelector('a.active');
+
+              $scope.renderContent = open;
+
+              if (open && $li && $ul[0].scrollTop === 0) {
+                var activeHeight = $li.scrollHeight;
+                var activeOffset = $li.offsetTop;
+                var offsetParent = $li.offsetParent;
+                var parentScrollPosition = offsetParent ? offsetParent.offsetTop : 0;
+
+                // Reduce it a bit (2 list items' height worth) so it doesn't touch the nav
+                var negativeOffset = activeHeight * 2;
+                var newScrollTop = activeOffset + parentScrollPosition - negativeOffset;
+
+                $mdUtil.animateScrollTo(document.querySelector('.docs-menu').parentNode, newScrollTop);
+              }
+            });
+          });
+        });
       });
 
       var parentNode = $element[0].parentNode.parentNode.parentNode;
-      if(parentNode.classList.contains('parent-list-item')) {
+      if (parentNode.classList.contains('parent-list-item')) {
         var heading = parentNode.querySelector('h2');
         $element[0].firstChild.setAttribute('aria-describedby', heading.id);
       }
@@ -525,7 +609,8 @@ function(SERVICES, COMPONENTS, DEMOS, PAGES, $location, $rootScope, $http, $wind
   'menu',
   '$location',
   '$rootScope',
-function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope) {
+  '$mdUtil',
+function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu, $location, $rootScope, $mdUtil) {
   var self = this;
 
   $scope.COMPONENTS = COMPONENTS;
@@ -537,6 +622,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   $scope.openMenu = openMenu;
   $scope.closeMenu = closeMenu;
   $scope.isSectionSelected = isSectionSelected;
+  $scope.scrollTop = scrollTop;
 
   // Grab the current year so we don't have to update the license every year
   $scope.thisYear = (new Date()).getFullYear();
@@ -544,7 +630,7 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   $rootScope.$on('$locationChangeSuccess', openPage);
   $scope.focusMainContent = focusMainContent;
 
-  //-- Define a fake model for the related page selector
+  // Define a fake model for the related page selector
   Object.defineProperty($rootScope, "relatedPage", {
     get: function () { return null; },
     set: angular.noop,
@@ -564,7 +650,10 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   this.autoFocusContent = false;
 
 
-  var mainContentArea = document.querySelector("[role='main']");
+  var mainContentArea = document.querySelector("main");
+  var mainContentHeader = mainContentArea.querySelector(".md-breadcrumb");
+  var scrollContentEl = mainContentArea.querySelector('md-content[md-scroll-y]');
+
 
   // *********************
   // Internal methods
@@ -582,9 +671,13 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
     return $location.path();
   }
 
+  function scrollTop() {
+    $mdUtil.animateScrollTo(scrollContentEl, 0, 200);
+  }
+
   function goHome($event) {
     menu.selectPage(null, null);
-    $location.path( '/' );
+    $location.path('/');
   }
 
   function openPage() {
@@ -597,12 +690,13 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   }
 
   function focusMainContent($event) {
+    $scope.closeMenu();
     // prevent skip link from redirecting
     if ($event) { $event.preventDefault(); }
 
     $timeout(function(){
-      mainContentArea.focus();
-    },90);
+      mainContentHeader.focus();
+    }, 90);
 
   }
 
@@ -613,12 +707,12 @@ function($scope, COMPONENTS, BUILDCONFIG, $mdSidenav, $timeout, $mdDialog, menu,
   function isSectionSelected(section) {
     var selected = false;
     var openedSection = menu.openedSection;
-    if(openedSection === section){
+    if (openedSection === section){
       selected = true;
     }
-    else if(section.children) {
+    else if (section.children) {
       section.children.forEach(function(childSection) {
-        if(childSection === openedSection){
+        if (childSection === openedSection){
           selected = true;
         }
       });
@@ -644,9 +738,16 @@ function($scope, $rootScope) {
 
 
 .controller('GuideCtrl', [
-  '$rootScope',
-function($rootScope) {
+  '$rootScope', '$http',
+function($rootScope, $http) {
   $rootScope.currentComponent = $rootScope.currentDoc = null;
+  if (!$rootScope.contributors) {
+    $http
+      .get('./contributors.json')
+      .then(function(response) {
+        $rootScope.github = response.data;
+      })
+  }
 }])
 
 .controller('LayoutCtrl', [
@@ -702,9 +803,8 @@ function($scope, doc, component, $rootScope) {
   '$scope',
   'component',
   'demos',
-  '$http',
-  '$templateCache',
-function($rootScope, $scope, component, demos, $http, $templateCache) {
+  '$templateRequest',
+function($rootScope, $scope, component, demos, $templateRequest) {
   $rootScope.currentComponent = component;
   $rootScope.currentDoc = null;
 
@@ -717,9 +817,9 @@ function($rootScope, $scope, component, demos, $http, $templateCache) {
       .concat(demo.css || [])
       .concat(demo.html || []);
     files.forEach(function(file) {
-      file.httpPromise =$http.get(file.outputPath, {cache: $templateCache})
+      file.httpPromise = $templateRequest(file.outputPath)
         .then(function(response) {
-          file.contents = response.data
+          file.contents = response
             .replace('<head/>', '');
           return file.contents;
         });
@@ -752,10 +852,124 @@ function($rootScope, $scope, component, demos, $http, $templateCache) {
 })
 
 .filter('directiveBrackets', function() {
-  return function(str) {
-    if (str.indexOf('-') > -1) {
-      return '<' + str + '>';
+  return function(str, restrict) {
+    if (restrict) {
+      // If it is restricted to only attributes
+      if (!restrict.element && restrict.attribute) {
+        return '[' + str + ']';
+      }
+
+      // If it is restricted to elements and isn't a service
+      if (restrict.element && str.indexOf('-') > -1) {
+        return '<' + str + '>';
+      }
+
+      // TODO: Handle class/comment restrictions if we ever have any to document
     }
+
+    // Just return the original string if we don't know what to do with it
     return str;
   };
-});
+})
+
+/** Directive which applies a specified class to the element when being scrolled */
+.directive('docsScrollClass', function() {
+  return {
+    restrict: 'A',
+    link: function(scope, element, attr) {
+
+      var scrollParent = element.parent();
+      var isScrolling = false;
+
+      // Initial update of the state.
+      updateState();
+
+      // Register a scroll listener, which updates the state.
+      scrollParent.on('scroll', updateState);
+
+      function updateState() {
+        var newState = scrollParent[0].scrollTop !== 0;
+
+        if (newState !== isScrolling) {
+          element.toggleClass(attr.docsScrollClass, newState);
+        }
+
+        isScrolling = newState;
+      }
+    }
+  };
+})
+
+.factory('scrollCache', function() {
+  var cache = {};
+  var linkClicked = false;
+
+  function setScroll(key, scrollPostion) {
+    cache[key] = scrollPostion;
+  }
+
+  function getScroll(key) {
+    return cache[key] || 0;
+  }
+
+  return {
+    getScroll: getScroll,
+    setScroll: setScroll,
+    linkClicked: linkClicked
+  };
+})
+
+/**
+ * This directive caches the scroll position for each route + templateUrl combination.
+ * This helps in restoring the scroll when the user uses back or forward navigation to return
+ * to a page.
+ */
+.directive('cacheScrollPosition', ['$route', '$mdUtil', '$timeout', '$location', '$anchorScroll',
+  'scrollCache',
+function($route, $mdUtil, $timeout, $location, $anchorScroll, scrollCache) {
+  var mainContentArea = document.querySelector("main");
+  var scrollContentEl = mainContentArea.querySelector('md-content[md-scroll-y]');
+
+  /**
+   * @param {Object} event Synthetic event object
+   * @param {Object} next Future route information
+   * @param {Object} current Current route information
+   */
+  var handleRouteChangeStart = function (event, next, current) {
+    // store scroll position for the current path + template
+    if ($route.current) {
+      scrollCache.setScroll(current.loadedTemplateUrl + ":" + current.$$route.originalPath,
+        scrollContentEl.scrollTop);
+    }
+
+    // set scroll to 0 for next route, if explicitly clicked on link.
+    if (scrollCache.linkClicked) {
+      scrollCache.setScroll(next.$$route.templateUrl + ":" + next.$$route.originalPath, 0);
+      scrollCache.linkClicked = false;
+    }
+  };
+
+  /**
+   * @param {Object} event Synthetic event object
+   * @param {Object} current Current route information
+   */
+  var handleRouteChangeSuccess = function (event, current) {
+    // if hash is specified explicitly, it trumps previously stored scroll position
+    if ($location.hash()) {
+      $anchorScroll();
+    } else {
+      // Get previous scroll position; if none, scroll to the top of the page
+      var prevScrollPos = scrollCache.getScroll(current.loadedTemplateUrl + ":" +
+        current.$$route.originalPath);
+
+      $timeout(function() {
+        $mdUtil.animateScrollTo(scrollContentEl, prevScrollPos);
+      }, 0);
+    }
+  };
+
+  return function(scope) {
+    scope.$on('$routeChangeStart', handleRouteChangeStart);
+    scope.$on('$routeChangeSuccess', handleRouteChangeSuccess);
+  }
+}]);

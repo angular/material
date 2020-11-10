@@ -1,71 +1,189 @@
+md-input-container {
+
+  // The asterisk of the select should always use the warn color.
+  md-select.md-THEME_NAME-theme .md-select-value {
+    span:first-child:after {
+      color: '{{warn-A700}}'
+    }
+  }
+
+  // When the select is blurred and not invalid then the asterisk should use the foreground color.
+  &:not(.md-input-focused):not(.md-input-invalid) {
+    md-select.md-THEME_NAME-theme .md-select-value {
+      span:first-child:after {
+        color: '{{foreground-3}}';
+      }
+    }
+  }
+
+  &.md-input-focused:not(.md-input-has-value) {
+    md-select.md-THEME_NAME-theme .md-select-value {
+      color: '{{primary-color}}';
+
+      &.md-select-placeholder {
+        color: '{{primary-color}}';
+      }
+    }
+  }
+
+  &.md-input-invalid {
+    md-select.md-THEME_NAME-theme .md-select-value {
+      color: '{{warn-A700}}' !important;
+      border-bottom-color: '{{warn-A700}}' !important;
+    }
+
+    md-select.md-THEME_NAME-theme.md-no-underline .md-select-value {
+      border-bottom-color: transparent !important;
+    }
+  }
+
+  &:not(.md-input-invalid) {
+    &.md-input-focused {
+      &.md-accent {
+        .md-select-value {
+          border-color: '{{accent-color}}';
+          span {
+            color: '{{accent-color}}';
+          }
+        }
+      }
+      &.md-warn {
+        .md-select-value {
+          border-color: '{{warn-A700}}';
+          span {
+            color: '{{warn-A700}}';
+          }
+        }
+      }
+    }
+  }
+
+}
+
 md-select.md-THEME_NAME-theme {
-  &[disabled] ._md-select-value {
+  &[disabled] .md-select-value {
     border-bottom-color: transparent;
     background-image: linear-gradient(to right, '{{foreground-3}}' 0%, '{{foreground-3}}' 33%, transparent 0%);
     background-image: -ms-linear-gradient(left, transparent 0%, '{{foreground-3}}' 100%);
   }
-  ._md-select-value {
-    &._md-select-placeholder {
+
+  .md-select-value {
+    border-bottom-color: '{{foreground-4}}';
+
+    &.md-select-placeholder {
       color: '{{foreground-3}}';
     }
-    border-bottom-color: '{{foreground-4}}';
+
+    span:first-child:after {
+      color: '{{warn-A700}}'
+    }
   }
-  &.ng-invalid.ng-dirty {
-    ._md-select-value {
+
+  &.md-no-underline .md-select-value {
+    border-bottom-color: transparent !important;
+  }
+
+  &.ng-invalid.ng-touched {
+    .md-select-value {
       color: '{{warn-A700}}' !important;
       border-bottom-color: '{{warn-A700}}' !important;
     }
+
+    &.md-no-underline .md-select-value {
+      border-bottom-color: transparent !important;
+    }
   }
+
   &:not([disabled]):focus {
-    ._md-select-value {
+    .md-select-value {
       border-bottom-color: '{{primary-color}}';
       color: '{{ foreground-1 }}';
-      &._md-select-placeholder {
+      &.md-select-placeholder {
         color: '{{ foreground-1 }}';
       }
     }
-    &.md-accent ._md-select-value {
+
+    &.md-no-underline .md-select-value {
+      border-bottom-color: transparent !important;
+    }
+
+    &.md-accent .md-select-value {
       border-bottom-color: '{{accent-color}}';
     }
-    &.md-warn ._md-select-value {
+
+    &.md-warn .md-select-value {
       border-bottom-color: '{{warn-color}}';
     }
   }
+
   &[disabled] {
-    ._md-select-value {
+    .md-select-value {
       color: '{{foreground-3}}';
-      &._md-select-placeholder {
+
+      &.md-select-placeholder {
         color: '{{foreground-3}}';
+      }
+    }
+
+    .md-select-icon {
+      color: '{{foreground-3}}';
+    }
+  }
+
+  .md-select-icon {
+    color: '{{foreground-2}}';
+  }
+}
+
+md-select-menu.md-THEME_NAME-theme {
+  md-content {
+    background-color: '{{background-hue-1}}';
+
+    md-optgroup {
+      color: '{{foreground-2}}';
+    }
+
+    md-option {
+      color: '{{foreground-1}}';
+
+      &[disabled] {
+        .md-text {
+          color: '{{foreground-3}}';
+        }
+      }
+
+      &:not([disabled]) {
+        &:hover {
+          background-color: '{{background-500-0.10}}'
+        }
+        &:focus,
+        &.md-focused {
+          background-color: '{{background-500-0.18}}'
+        }
+      }
+
+      &[selected] {
+        color: '{{primary-500}}';
+        &:focus,
+        &.md-focused {
+          color: '{{primary-600}}';
+        }
+        &.md-accent {
+          color: '{{accent-color}}';
+          &:focus,
+          &.md-focused {
+            color: '{{accent-A700}}';
+          }
+        }
       }
     }
   }
 }
 
-md-select-menu.md-THEME_NAME-theme {
-  md-option[disabled] {
-    color: '{{foreground-3}}';
-  }
+.md-checkbox-enabled.md-THEME_NAME-theme {
+  @include checkbox-primary('[selected]');
 
-  md-optgroup {
-    color: '{{foreground-2}}';
-    md-option {
-      color: '{{foreground-1}}';
-    }
+  md-option .md-text {
+    color: '{{foreground-1}}';
   }
-  md-option[selected] {
-    color: '{{primary-500}}';
-    &:focus {
-      color: '{{primary-600}}';
-    }
-    &.md-accent {
-      color: '{{accent-500}}';
-      &:focus {
-        color: '{{accent-600}}';
-      }
-    }
-  }
-  md-option:focus:not([disabled]):not([selected]) {
-    background: '{{background-200}}';
-  }
-
 }

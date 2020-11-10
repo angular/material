@@ -1,4 +1,4 @@
-DocsApp
+angular.module('docsApp')
 .directive('layoutAlign', function() { return angular.noop; })
 .directive('layout', function() { return angular.noop; })
 .directive('docsDemo', ['$mdUtil', function($mdUtil) {
@@ -65,10 +65,11 @@ DocsApp
     };
 
     function convertName(name) {
-      switch(name) {
+      switch (name) {
         case "index.html" : return "HTML";
         case "script.js" : return "JS";
         case "style.css" : return "CSS";
+        case "style.global.css" : return "CSS";
         default : return name;
       }
     }

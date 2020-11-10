@@ -1,0 +1,30 @@
+<div class="md-padding" ng-controller="ReuseDemoCtrl as ctrl">
+  <p>
+    Panels can be reused to avoid re-creating resources.
+  </p>
+
+  <div flex="25">
+    <h3>AnimationType:</h3>
+    <md-radio-group ng-model="ctrl.animationType">
+      <md-radio-button value="slide">Slide</md-radio-button>
+      <md-radio-button value="scale">Scale</md-radio-button>
+      <md-radio-button value="fade">Fade</md-radio-button>
+      <md-radio-button value="custom">Custom</md-radio-button>
+    </md-radio-group>
+  </div>
+
+  <div>
+    <md-button class="md-primary md-raised demo-dialog-reuse-button"
+               ng-click="ctrl.showDialog($event, 'Ahoi')">
+      Open Dialog
+    </md-button>
+    <md-button class="md-accent md-raised demo-dialog-reuse-button"
+               ng-click="ctrl.showDialog($event, 'Hello')">
+      Also open Dialog
+    </md-button>
+    <md-button class="md-warning md-raised demo-dialog-reuse-button"
+               ng-click="ctrl.showDialog($event, 'Greetings')">
+      Open Here
+    </md-button>
+  </div>
+</div>

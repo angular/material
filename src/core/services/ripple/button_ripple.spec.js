@@ -12,16 +12,6 @@ describe('MdButtonInkRipple', function() {
     spyOn($mdInkRipple, 'attach');
   }));
 
-  xit('attaches button ripple effects', inject(function($mdButtonInkRipple, $compile, $rootScope) {
-    spyOn($mdButtonInkRipple, 'attach');
-
-    var button = $compile("<md-button class='md-fab'><md-icon><md-icon></md-button>")($rootScope);
-    $rootScope.$apply();
-
-    expect($mdButtonInkRipple.attach).toHaveBeenCalledWith($rootScope, button);
-  }));
-
-
   it('applies the correct ripple configuration for a md-icon-button', function() {
     $element.addClass('md-icon-button');
 

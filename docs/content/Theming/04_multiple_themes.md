@@ -4,7 +4,7 @@
 
 In most applications, declaring multiple themes is **not** necessary. Instead,
 you should configure the `default` theme for your needs. If you need multiple
-themes in a single application, Angular Material does provide tools
+themes in a single application, AngularJS Material does provide tools
 to make this possible.
 
 ### Registering another theme
@@ -37,7 +37,7 @@ $mdThemingProvider.setDefaultTheme('altTheme');
 
 #### Via a Directive
 
-Angular Material also exposes the `md-theme` directive which will set the theme
+AngularJS Material also exposes the `md-theme` directive which will set the theme
 on an element and all child elements.
 
 In the following example, the application will use the `default` theme, while
@@ -75,3 +75,31 @@ directives) you can use the `$mdThemingProvider` to enable it.
 <hljs lang="js">
 $mdThemingProvider.alwaysWatchTheme(true);
 </hljs>
+
+#### Lazy Generate Themes
+
+By default, every theme is generated when defined. You can disable this in the
+configuration section using the `$mdThemingProvider`.
+
+<hljs lang="js">
+angular.module('myApp', ['ngMaterial'])
+.config(function($mdThemingProvider) {
+  //disable theme generation
+  $mdThemingProvider.generateThemesOnDemand(true);
+
+  //themes are still defined in config, but the css is not generated
+  $mdThemingProvider.theme('altTheme')
+    .primaryPalette('purple')
+    .accentPalette('green');
+});
+</hljs>
+
+If you do this, you must generate the theme before using it using `$mdTheming`.
+
+<hljs lang="js">
+//generate the predefined theme named altTheme
+$mdTheming.generateTheme('altTheme');
+</hljs>
+
+The theme name that is passed in must match the name of the theme that was
+defined as part of the configuration block.

@@ -1,8 +1,14 @@
-$button-border-radius: 3px !default;
+// Material Design Button: https://material.io/archive/guidelines/components/buttons.html
+
+$button-border-radius: 2px !default;
 $button-fab-border-radius: 50% !default;
-$button-icon-border-radius: $button-fab-border-radius;
+$button-icon-border-radius: $button-fab-border-radius !default;
+
+$button-font-size: $body-font-size-base !default;
+$button-font-size-dense: $body-font-size-base * 13/14 !default;
 
 $button-line-height: rem(3.60) !default;
+$button-line-height-dense: rem(3.20) !default;
 $button-margin: rem(0.600) rem(0.800) !default;
 $button-min-width: rem(8.800) !default;
 $button-padding: 0 $button-left-right-padding !default;
@@ -16,8 +22,6 @@ $button-fab-mini-line-height: rem(4.00) !default;
 
 $button-fab-toast-offset: $button-fab-height * 0.75 !default;
 
-$icon-button-height: rem(4.000) !default;
-$icon-button-width: rem(4.000) !default;
 $icon-button-margin: rem(0.600) !default;
 
 // Fix issue causing buttons in Firefox to be 2px bigger than they should
@@ -26,39 +30,46 @@ button.md-button::-moz-focus-inner {
 }
 
 .md-button {
-  border-radius: $button-border-radius;
-  box-sizing: border-box;
-  color: currentColor;
-
-  user-select: none;
-  position: relative; //for child absolute-positioned <canvas>
-
-  outline: none;
-  border: 0;
   display: inline-block;
-  align-items: center;
-  padding: $button-padding;
-  margin: $button-margin;
-  line-height: $button-line-height;
-  min-height: $button-line-height;
-  background: transparent;
-  white-space: nowrap;
-  // override for FAB, icon buttons, etc.
-  min-width: $button-min-width;
+  position: relative; // Required for absolute canvas child elements.
+  cursor: pointer;
 
+  /** Alignment adjustments */
+  @include dense(min-height, $button-line-height, $button-line-height-dense);
+  min-width: $button-min-width;
+  @include dense(line-height, $button-line-height, $button-line-height-dense);
+
+  vertical-align: middle;
+  align-items: center;
   text-align: center;
 
-  // Always uppercase buttons
+  border-radius: $button-border-radius;
+  box-sizing: border-box;
+
+  /* Reset default button appearance */
+  user-select: none;
+  outline: none;
+  border: 0;
+
+  /** Custom styling for button */
+  padding: $button-padding;
+  margin: $button-margin;
+
+  background: transparent;
+  color: currentColor;
+  white-space: nowrap;
+
+  /* Uppercase text content */
   text-transform: uppercase;
   font-weight: 500;
-  font-size: $body-font-size-base;
+  @include dense(font-size, $button-font-size, $button-font-size-dense);
   font-style: inherit;
   font-variant: inherit;
   font-family: inherit;
   text-decoration: none;
 
-  cursor: pointer;
-  overflow: hidden;   // for ink containment
+  // Ink Ripple should not create any overflow.
+  overflow: hidden;
 
   transition: box-shadow $swift-ease-out-duration $swift-ease-out-timing-function,
               background-color $swift-ease-out-duration $swift-ease-out-timing-function;
@@ -71,6 +82,9 @@ button.md-button::-moz-focus-inner {
     text-decoration: none;
   }
 
+  // By default $ngAnimate looks for transition durations on the element, when using ng-hide, ng-if, ng-show.
+  // The .md-button has a transition duration applied, which means, that $ngAnimate delays the hide process.
+  // To avoid this, we need to reset the transition, when $ngAnimate looks for the duration.
   &.ng-hide, &.ng-leave {
     transition: none;
   }
@@ -98,13 +112,6 @@ button.md-button::-moz-focus-inner {
     padding: $baseline-grid;
     width: $icon-button-width;
     border-radius: $button-icon-border-radius;
-    .md-ripple-container {
-      border-radius: $button-icon-border-radius;
-      background-clip: padding-box;
-      overflow: hidden;
-      // The following hack causes Safari/Chrome to respect overflow hidden for ripples
-      -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
-    }
   }
 
   &.md-fab {
@@ -128,13 +135,6 @@ button.md-button::-moz-focus-inner {
 
     transition: $swift-ease-in;
     transition-property: background-color, box-shadow, transform;
-    .md-ripple-container {
-      border-radius: $button-fab-border-radius;
-      background-clip: padding-box;
-      overflow: hidden;
-      // The following hack causes Safari/Chrome to respect overflow hidden for ripples
-      -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
-    }
 
     &.md-mini {
       line-height: $button-fab-mini-line-height;
@@ -160,15 +160,26 @@ button.md-button::-moz-focus-inner {
   }
 
   .md-ripple-container {
-    border-radius: $button-border-radius;
+    border-radius: inherit;
     background-clip: padding-box;
     overflow: hidden;
-    // The following hack causes Safari/Chrome to respect overflow hidden for ripples
-    -webkit-mask-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA5JREFUeNpiYGBgAAgwAAAEAAGbA+oJAAAAAElFTkSuQmCC');
+
+    // Workaround for rounded corner overflow bug
+    // Force Safari and Chrome to use a compositing layer
+    -webkit-transform:translateZ(0);
   }
 }
 
-._md-toast-open-top {
+// Using `display:block;` is required for correct vertical alignment
+// because '.md-button' uses `display:inline-block;`.
+.md-button.md-icon-button,
+button.md-button.md-fab {
+  md-icon {
+    display: block;
+  }
+}
+
+.md-toast-open-top {
   .md-button.md-fab-top-left,
   .md-button.md-fab-top-right {
     transition: $swift-ease-out;
@@ -182,7 +193,7 @@ button.md-button::-moz-focus-inner {
   }
 }
 
-._md-toast-open-bottom {
+.md-toast-open-bottom {
   .md-button.md-fab-bottom-left,
   .md-button.md-fab-bottom-right {
     transition: $swift-ease-out;

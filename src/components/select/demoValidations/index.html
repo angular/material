@@ -1,19 +1,39 @@
-<div ng-controller="AppCtrl" layout="column" layout-align="center center" style="min-height: 300px;" ng-cloak>
+<div ng-controller="AppCtrl" ng-cloak layout="column" layout-align="center center" layout-padding>
   <form name="myForm">
-    <p>Note that invalid styling only applies if invalid and dirty</p>
-    <md-input-container class="md-block">
-      <label>Favorite Number</label>
-      <md-select name="myModel" ng-model="myModel" required>
-        <md-option value="1">One</md-option>
-        <md-option value="2">Two</md-option>
-      </md-select>
-      <div class="errors" ng-messages="myForm.myModel.$error" ng-if="myForm.$dirty">
-        <div ng-message="required">Required</div>
-      </div>
-    </md-input-container>
-    <div layout="row">
-      <md-button ng-click="clearValue()" ng-disabled="!myModel" style="margin-right: 20px;">Clear</md-button>
-      <md-button ng-click="save()" ng-disabled="myForm.$invalid" class="md-primary" layout layout-align="center end">Save</md-button>
+    <p>
+      Note that, similar to regular inputs, the invalid styling only applies if the select is both
+      invalid <em>and</em> touched, or the form has been submitted.
+    </p>
+
+    <div layout="row" layout-align="start" flex>
+      <md-input-container flex="50">
+        <label>Quest</label>
+        <input type="text" name="quest" ng-model="quest" required />
+      </md-input-container>
+
+      <md-input-container flex="50">
+        <label>Favorite Color</label>
+        <md-select name="favoriteColor" ng-model="favoriteColor" required>
+          <md-option value="red">Red</md-option>
+          <md-option value="blue">Blue</md-option>
+          <md-option value="green">Green</md-option>
+        </md-select>
+        <div class="errors" ng-messages="myForm.favoriteColor.$error">
+          <div ng-message="required">Required</div>
+        </div>
+      </md-input-container>
+    </div>
+
+    <div layout="row" layout-align="start">
+      <md-checkbox ng-model="myForm.$invalid" disabled>Form Invalid</md-checkbox>
+      <md-checkbox ng-model="myForm.$dirty" disabled>Form Dirty</md-checkbox>
+      <md-checkbox ng-model="myForm.$submitted" disabled>Form Submitted</md-checkbox>
+      <md-checkbox ng-model="myForm.favoriteColor.$touched" disabled>Select Touched</md-checkbox>
+    </div>
+
+    <div layout="row" layout-align="end" flex>
+      <md-button ng-click="clearValue()" ng-disabled="!(quest || favoriteColor)">Clear</md-button>
+      <md-button ng-click="save()" class="md-primary">Save</md-button>
     </div>
   </form>
 </div>

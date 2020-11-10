@@ -37,8 +37,8 @@
         return {
           isMenuItem: element.hasClass('md-menu-item'),
           dimBackground: true
-        }
+        };
       }
-    };
-  };
+    }
+  }
 })();

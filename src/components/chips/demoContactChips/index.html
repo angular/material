@@ -1,16 +1,20 @@
 <div ng-controller="ContactChipDemoCtrl as ctrl" layout="column" ng-cloak>
 
   <md-content class="md-padding autocomplete" layout="column">
+    <label id="toLabel">To:</label>
     <md-contact-chips
         ng-model="ctrl.contacts"
+        ng-change="ctrl.onModelChange(ctrl.contacts)"
         md-contacts="ctrl.querySearch($query)"
         md-contact-name="name"
         md-contact-image="image"
         md-contact-email="email"
         md-require-match="true"
+        md-separator-keys="ctrl.keys"
         md-highlight-flags="i"
-        filter-selected="ctrl.filterSelected"
-        placeholder="To">
+        placeholder="Type name to see matches"
+        secondary-placeholder="Add another contact"
+        input-aria-label="Intended Recipients">
     </md-contact-chips>
 
     <md-list class="fixedRows">
@@ -23,7 +27,8 @@
           <p>{{contact.email}}</p>
         </div>
       </md-list-item>
-      <md-list-item class="md-2-line contact-item selected" ng-repeat="(index, contact) in ctrl.contacts">
+      <md-list-item class="md-2-line contact-item selected"
+                    ng-repeat="(index, contact) in ctrl.contacts">
         <img ng-src="{{contact.image}}" class="md-avatar" alt="{{contact.name}}" />
         <div class="md-list-item-text compact">
           <h3>{{contact.name}}</h3>
@@ -34,6 +39,7 @@
 
     <br>
     <h2 class="md-title">Searching asynchronously.</h2>
+    <label id="fromLabel">From:</label>
     <md-contact-chips
         ng-model="ctrl.asyncContacts"
         md-contacts="ctrl.delayedQuerySearch($query)"
@@ -42,8 +48,9 @@
         md-contact-email="email"
         md-require-match="true"
         md-highlight-flags="i"
-        filter-selected="ctrl.filterSelected"
-        placeholder="To">
+        placeholder="Type name to see matches"
+        secondary-placeholder="Add another contact"
+        input-aria-label="Senders">
     </md-contact-chips>
   </md-content>
 </div>

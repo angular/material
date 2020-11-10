@@ -1,0 +1,11 @@
+section {
+  text-align: center;
+  margin: 8px;
+  position: relative !important;
+}
+.label {
+  position: absolute;
+  bottom: 5px;
+  left: 7px;
+  font-size: 12px;
+}

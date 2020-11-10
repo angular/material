@@ -16,7 +16,7 @@ describe('$$interimElement service', function() {
         expect(interimTest.show).toBeOfType('function');
 
         var builder = interimTest.build();
-        [ 'controller', 'controllerAs', 'onRemove', 'onShow', 'resolve', 
+        ['controller', 'controllerAs', 'onRemove', 'onShow', 'resolve',
           'template', 'templateUrl', 'themable', 'transformTemplate', 'parent'
         ].forEach(function(methodName) {
           expect(builder[methodName]).toBeOfType('function');
@@ -234,7 +234,7 @@ describe('$$interimElement service', function() {
         flush();
         expect($compilerSpy.calls.mostRecent().args[0].key).toBe('newValue');
         expect($compilerSpy.calls.mostRecent().args[0].key2).toBe('newValue2');
-        
+
         $compilerSpy.calls.reset();
         flush();
         flush();
@@ -250,10 +250,57 @@ describe('$$interimElement service', function() {
       });
     });
 
+    it('should support multiple interims as a preset method', function() {
+
+      var showCount = 0;
+
+      createInterimProvider('interimTest');
+
+      inject(function(interimTest) {
+
+        showInterim(interimTest);
+        expect(showCount).toBe(1);
+
+        showInterim(interimTest);
+        expect(showCount).toBe(2);
+
+        interimTest.hide();
+        flush();
+
+        expect(showCount).toBe(1);
+
+        interimTest.hide();
+        flush();
+
+        expect(showCount).toBe(0);
+
+      });
+
+      function showInterim(service) {
+
+        var preset = service
+          .build()
+          .template('<div>Interim Element</div>')
+          .multiple(true);
+
+        preset._options.onShow = function() {
+          showCount++;
+        };
+
+        preset._options.onRemove = function() {
+          showCount--;
+        };
+
+        service.show(preset);
+        flush();
+      }
+
+    });
+
   });
 
   describe('a service', function() {
-    var Service;
+    var Service, ieShow;
 
     beforeEach(function() {
       setup();
@@ -262,6 +309,8 @@ describe('$$interimElement service', function() {
         $timeout = _$timeout_;
 
         Service = $$interimElement();
+
+        ieShow = Service.show;
 
         Service.show = tailHook(Service.show, flush);
         Service.hide = tailHook(Service.hide, flush);
@@ -288,11 +337,14 @@ describe('$$interimElement service', function() {
          };
 
          // `templateUrl` is invalid; element will not be created
-         Service.show({
+
+         // We use the original $$interimElement.show so that we ignore the tailhook and manually
+         // run it
+         ieShow({
            templateUrl: 'testing.html',
-           onShow : function() {   return $q.reject("failed"); }
+           onShow : function() { return $q.reject("failed"); }
          })
-         .catch( onShowFail );
+         .catch(onShowFail);
          $timeout.flush();
 
          expect(showFailed).toBe(true);
@@ -303,11 +355,13 @@ describe('$$interimElement service', function() {
            showFailed = reason;
          };
 
-         Service.show({
+         // We use the original $$interimElement.show so that we ignore the tailhook and manually
+         // run it
+         ieShow({
            templateUrl: 'testing.html',
            onShow : function() {   throw new Error("exception"); }
          })
-         .catch( onShowFail );
+         .catch(onShowFail);
          $timeout.flush();
 
          expect(showFailed).toBe('exception');
@@ -324,7 +378,7 @@ describe('$$interimElement service', function() {
             return $q.when(true);
           }
         })
-        .then( function() {
+        .then(function() {
           showFinished = true;
         });
 
@@ -333,6 +387,127 @@ describe('$$interimElement service', function() {
 
         expect(showFinished).toBe(true);
 
+      }));
+
+      it('should show multiple interim elements', function() {
+        var showCount = 0;
+
+        showInterim();
+        expect(showCount).toBe(1);
+
+        showInterim();
+        expect(showCount).toBe(2);
+
+        function showInterim() {
+          Service.show({
+            template: '<div>First Interim</div>',
+            onShow: function() {
+              showCount++;
+            },
+            onRemove: function() {
+              showCount--;
+            },
+            multiple: true
+          });
+        }
+      });
+
+      it('should hide multiple elements', function() {
+        var showCount = 0;
+
+        showInterim();
+        expect(showCount).toBe(1);
+
+        showInterim();
+        expect(showCount).toBe(2);
+
+        Service.hide();
+        expect(showCount).toBe(1);
+
+        Service.hide();
+        expect(showCount).toBe(0);
+
+        function showInterim() {
+          Service.show({
+            template: '<div>Interim Element</div>',
+            onShow: function() {
+              showCount++;
+            },
+            onRemove: function() {
+              showCount--;
+            },
+            multiple: true
+          });
+        }
+
+      });
+
+      it('should not show multiple interim elements by default', function() {
+        var showCount = 0;
+
+        showInterim();
+        expect(showCount).toBe(1);
+
+        showInterim();
+        expect(showCount).toBe(1);
+
+        function showInterim() {
+          Service.show({
+            template: '<div>First Interim</div>',
+            onShow: function() {
+              showCount++;
+            },
+            onRemove: function() {
+              showCount--;
+            }
+          });
+        }
+      });
+
+      it('should cancel a previous interim after a second shows up', inject(function($q, $timeout) {
+        var hidePromise = $q.defer();
+        var isShown = false;
+
+        Service.show({
+          template: '<div>First Interim</div>',
+          onRemove: function() {
+            return hidePromise.promise;
+          }
+        });
+
+        // Once we show the second interim, the first interim should be cancelled and new interim
+        // will successfully show up after the first interim hides completely.
+        Service.show({
+          template: '<div>Second Interim</div>',
+          onShow: function() {
+            isShown = true;
+          }
+        });
+
+        expect(isShown).toBe(false);
+
+        hidePromise.resolve();
+        $timeout.flush();
+
+        expect(isShown).toBe(true);
+      }));
+
+      it('should cancel a previous shown interim element', inject(function() {
+        var isCancelled = false;
+
+        Service.show({
+          template: '<div>First Interim</div>'
+        }).catch(function() {
+          isCancelled = true;
+        });
+
+        // Once we show the second interim, the first interim should be cancelled and the promise
+        // should be rejected with no reason.
+        Service.show({
+          template: '<div>Second Interim</div>'
+        });
+
+        expect(isCancelled).toBe(true);
       }));
 
       it('forwards options to $mdCompiler', inject(function() {
@@ -360,6 +535,25 @@ describe('$$interimElement service', function() {
         flush();
         $timeout.flush();
         expect(autoClosed).toBe(true);
+      }));
+
+      it('calls onCompiling before onShowing', inject(function() {
+        var onCompilingCalled = false;
+
+        Service.show({
+          template: '<div>My Element</div>',
+          onCompiling: beforeCompile,
+          onShowing: beforeShow
+        });
+
+        function beforeCompile() {
+          onCompilingCalled = true;
+        }
+
+        function beforeShow() {
+          expect(onCompilingCalled).toBe(true);
+        }
+
       }));
 
       it('calls onShowing before onShow', inject(function() {
@@ -533,7 +727,7 @@ describe('$$interimElement service', function() {
         }
       }));
 
-      it('resolves the show promise with string', inject(function( ) {
+      it('resolves the show promise with string', inject(function() {
         var resolved = false;
 
         Service.show().then(function(arg) {
@@ -546,7 +740,7 @@ describe('$$interimElement service', function() {
         expect(resolved).toBe(true);
       }));
 
-      it('resolves the show promise with false', inject(function( ) {
+      it('resolves the show promise with false', inject(function() {
         var resolved = false;
 
         Service.show().then(function(arg) {
@@ -559,7 +753,7 @@ describe('$$interimElement service', function() {
         expect(resolved).toBe(true);
       }));
 
-      it('resolves the show promise with undefined', inject(function( ) {
+      it('resolves the show promise with undefined', inject(function() {
         var resolved = false;
 
         Service.show().then(function(arg) {
@@ -586,13 +780,13 @@ describe('$$interimElement service', function() {
                onRemove : function() {  throw new Error("exception"); }
              };
 
-         Service.show(options).then( onShowHandler, onHideHandler );
+         Service.show(options).then(onShowHandler, onHideHandler);
          $timeout.flush();
 
          expect(showGood).toBeUndefined();
          expect(hideFail).toBeUndefined();
 
-         Service.hide().then( onShowHandler, onHideHandler );
+         Service.hide().then(onShowHandler, onHideHandler);
          $timeout.flush();
 
          expect(showGood).toBeUndefined();
@@ -611,13 +805,13 @@ describe('$$interimElement service', function() {
                 onRemove : function() {  return $q.reject("failed");  }
               };
 
-          Service.show(options).then( onShowHandler, onHideHandler );
+          Service.show(options).then(onShowHandler, onHideHandler);
           $timeout.flush();
 
           expect(showGood).toBeUndefined();
           expect(hideFail).toBeUndefined();
 
-          Service.hide().then( onShowHandler, onHideHandler );
+          Service.hide().then(onShowHandler, onHideHandler);
           $timeout.flush();
 
           expect(showGood).toBeUndefined();
@@ -710,15 +904,15 @@ describe('$$interimElement service', function() {
     $material.flushInterimElement();
   }
 
-  function tailHook( sourceFn, hookFn ) {
+  function tailHook(sourceFn, hookFn) {
     return function() {
       var args = Array.prototype.slice.call(arguments);
       var results = sourceFn.apply(null, args);
+
       hookFn();
 
       return results;
     }
   }
-
 });
 

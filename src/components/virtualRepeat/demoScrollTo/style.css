@@ -1,10 +1,12 @@
 .wrapper {
-    width: 400px;
+  width: 100%;
+  max-width: 400px;
 }
 
 #vertical-container {
   height: 292px;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
 }
 
 #vertical-container .repeated-item {

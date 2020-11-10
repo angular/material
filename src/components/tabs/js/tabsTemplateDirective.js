@@ -15,13 +15,12 @@ function MdTabsTemplate ($compile, $mdUtil) {
   };
   function link (scope, element, attr, ctrl) {
     if (!ctrl) return;
+
     var compileScope = ctrl.enableDisconnect ? scope.compileScope.$new() : scope.compileScope;
+
     element.html(scope.template);
     $compile(element.contents())(compileScope);
-    element.on('DOMSubtreeModified', function () {
-      ctrl.updatePagination();
-      ctrl.updateInkBarStyles();
-    });
+
     return $mdUtil.nextTick(handleScope);
 
     function handleScope () {

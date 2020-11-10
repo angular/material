@@ -7,6 +7,7 @@ angular
     'ngAnimate',
     'material.core.animate',
     'material.core.layout',
+    'material.core.interaction',
     'material.core.gestures',
     'material.core.theming'
   ])
@@ -17,21 +18,25 @@ angular
 /**
  * Detect if the ng-Touch module is also being used.
  * Warn if detected.
+ * @ngInject
  */
 function DetectNgTouch($log, $injector) {
-  if ( $injector.has('$swipe') ) {
+  if ($injector.has('$swipe')) {
     var msg = "" +
       "You are using the ngTouch module. \n" +
-      "Angular Material already has mobile click, tap, and swipe support... \n" +
-      "ngTouch is not supported with Angular Material!";
+      "AngularJS Material already has mobile click, tap, and swipe support... \n" +
+      "ngTouch is not supported with AngularJS Material!";
     $log.warn(msg);
   }
 }
 
-
+/**
+ * @ngInject
+ */
 function MdCoreConfigure($provide, $mdThemingProvider) {
 
-  $provide.decorator('$$rAF', ["$delegate", rAFDecorator]);
+  $provide.decorator('$$rAF', ['$delegate', rAFDecorator]);
+  $provide.decorator('$q', ['$delegate', qDecorator]);
 
   $mdThemingProvider.theme('default')
     .primaryPalette('indigo')
@@ -40,6 +45,9 @@ function MdCoreConfigure($provide, $mdThemingProvider) {
     .backgroundPalette('grey');
 }
 
+/**
+ * @ngInject
+ */
 function rAFDecorator($delegate) {
   /**
    * Use this to throttle events that come in often.
@@ -51,7 +59,7 @@ function rAFDecorator($delegate) {
    * our callback will only be fired once per frame, with the last resize
    * event that happened before that frame.
    *
-   * @param {function} callback function to debounce
+   * @param {function} cb function to debounce
    */
   $delegate.throttle = function(cb) {
     var queuedArgs, alreadyQueued, queueCb, context;
@@ -68,5 +76,23 @@ function rAFDecorator($delegate) {
       }
     };
   };
+  return $delegate;
+}
+
+/**
+ * @ngInject
+ */
+function qDecorator($delegate) {
+  /**
+   * Adds a shim for $q.resolve for AngularJS version that don't have it,
+   * so we don't have to think about it.
+   *
+   * via https://github.com/angular/angular.js/pull/11987
+   */
+
+  // TODO(crisbeto): this won't be necessary once we drop AngularJS 1.3
+  if (!$delegate.resolve) {
+    $delegate.resolve = $delegate.when;
+  }
   return $delegate;
 }

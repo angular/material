@@ -125,7 +125,7 @@ md-fab-speed-dial {
   }
 
   // For the initial animation, set the duration to be instant
-  &.md-fling._md-animations-waiting {
+  &.md-fling.md-animations-waiting {
     .md-fab-action-item {
       opacity: 0;
       transition-duration: 0s;

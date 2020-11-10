@@ -1,4 +1,3 @@
-
 angular
   .module('radioDemo1', ['ngMaterial'])
   .controller('AppCtrl', function($scope) {
@@ -29,7 +28,6 @@ angular
       { label: '3', value: '3', isDisabled: true },
       { label: '4', value: '4' }
     ];
-
 
     $scope.submit = function() {
       alert('submit');

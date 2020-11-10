@@ -1,0 +1,32 @@
+{
+  "editor.tabCompletion": "on",
+  "files.eol": "\n",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true
+  },
+  // Exclude third-party modules and generated artifacts from watcher/editor searches.
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/dist/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/dist": true
+  },
+  "git.ignoreLimitWarning": true,
+  // Wrap attributes.
+  //  - auto: Wrap attributes only when line length is exceeded.
+  //  - force: Wrap each attribute except first.
+  //  - force-aligned: Wrap each attribute except first and keep aligned.
+  //  - force-expand-multiline: Wrap each attribute.
+  //  - aligned-multiple: Wrap when line length is exceeded, align attributes vertically.
+  //  - preserve: Preserve wrapping of attributes
+  //  - preserve-aligned: Preserve wrapping of attributes but align.
+  "html.format.wrapAttributes": "auto",
+  // Maximum amount of characters per line (0 = disable).
+  "html.format.wrapLineLength": 100
+}

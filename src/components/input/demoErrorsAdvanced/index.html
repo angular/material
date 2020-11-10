@@ -79,7 +79,7 @@
 
         <md-input-container class="md-block" flex-gt-sm>
           <label>Phone Number</label>
-          <input name="phone" ng-model="user.phone" ng-pattern="/^([0-9]{3}) [0-9]{3}-[0-9]{4}$/" />
+          <input name="phone" ng-model="user.phone" ng-pattern="/^[(][0-9]{3}[)] [0-9]{3}-[0-9]{4}$/" />
 
           <div class="hint" ng-show="showHints">(###) ###-####</div>
 

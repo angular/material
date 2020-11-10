@@ -58,15 +58,23 @@ angular.module('material.core')
  *      <td>(min-width: 1920px)</td>
  *    </tr>
  *    <tr>
+ *      <td>landscape</td>
+ *      <td>landscape</td>
+ *    </tr>
+ *    <tr>
+ *      <td>portrait</td>
+ *      <td>portrait</td>
+ *    </tr>
+ *    <tr>
  *      <td>print</td>
  *      <td>print</td>
  *    </tr>
  *    </tbody>
  *  </table>
  *
- *  See Material Design's <a href="https://www.google.com/design/spec/layout/adaptive-ui.html">Layout - Adaptive UI</a> for more details.
+ *  See Material Design's <a href="https://material.google.com/layout/responsive-ui.html">Layout - Adaptive UI</a> for more details.
  *
- *  <a href="https://www.google.com/design/spec/layout/adaptive-ui.html">
+ *  <a href="https://material.io/archive/guidelines/layout/responsive-ui.html#">
  *  <img src="https://material-design.storage.googleapis.com/publish/material_v_4/material_ext_publish/0B8olV15J7abPSGFxemFiQVRtb1k/layout_adaptive_breakpoints_01.png" width="100%" height="100%"></img>
  *  </a>
  *
@@ -86,6 +94,7 @@ angular.module('material.core')
  * </hljs>
  */
 
+/* @ngInject */
 function mdMediaFactory($mdConstant, $rootScope, $window) {
   var queries = {};
   var mqls = {};
@@ -119,7 +128,7 @@ function mdMediaFactory($mdConstant, $rootScope, $window) {
 
   function add(query) {
     var result = mqls[query];
-    if ( !result ) {
+    if (!result) {
       result = mqls[query] = $window.matchMedia(query);
     }
 
@@ -173,7 +182,7 @@ function mdMediaFactory($mdConstant, $rootScope, $window) {
     });
 
     return function unwatch() {
-      unwatchFns.forEach(function(fn) { fn(); })
+      unwatchFns.forEach(function(fn) { fn(); });
     };
   }
 

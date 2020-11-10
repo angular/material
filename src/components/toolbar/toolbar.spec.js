@@ -13,7 +13,8 @@ describe('<md-toolbar>', function() {
     $timeout = _$timeout_;
   }));
 
-  it('with scrollShrink, it should shrink scrollbar when going to bottom', inject(function($compile, $rootScope, $mdConstant, mdToolbarDirective, $$rAF) {
+  it('with scrollShrink, it should shrink scrollbar when going to bottom',
+    inject(function($compile, $rootScope, $mdConstant, mdToolbarDirective) {
 
     var parent = angular.element('<div>');
     var toolbar = angular.element('<md-toolbar>');
@@ -21,7 +22,7 @@ describe('<md-toolbar>', function() {
     // Make content and toolbar siblings
     parent.append(toolbar).append(contentEl);
 
-    //Prop will be used for offsetHeight, give a fake offsetHeight
+    // Prop will be used for offsetHeight, give a fake offsetHeight
     spyOn(toolbar, 'prop').and.callFake(function() {
       return 100;
     });
@@ -35,6 +36,7 @@ describe('<md-toolbar>', function() {
     });
     var contentCss = {};
     spyOn(contentEl, 'css').and.callFake(function(properties, value) {
+      var k;
       if (angular.isObject(properties)) {
         for (k in properties) {
           if (properties.hasOwnProperty(k)) {
@@ -55,10 +57,10 @@ describe('<md-toolbar>', function() {
 
     $rootScope.$apply();
     $rootScope.$broadcast('$mdContentLoaded', contentEl);
-    $$rAF.flush();
+    $timeout.flush();
 
 
-    //Expect everything to be in its proper initial state.
+    // Expect everything to be in its proper initial state.
     expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
     expect(contentCss['margin-top']).toEqual('-100px');
     expect(contentCss['margin-bottom']).toEqual('-100px');
@@ -69,7 +71,6 @@ describe('<md-toolbar>', function() {
       type: 'scroll',
       target: {scrollTop: 500}
     });
-    $$rAF.flush();
 
     expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,-100px,0)');
     expect(contentCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
@@ -79,7 +80,6 @@ describe('<md-toolbar>', function() {
       type: 'scroll',
       target: {scrollTop: 0}
     });
-    $$rAF.flush();
 
     expect(toolbarCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,0px,0)');
     expect(contentCss[$mdConstant.CSS.TRANSFORM]).toEqual('translate3d(0,100px,0)');
@@ -118,7 +118,7 @@ describe('<md-toolbar>', function() {
     expect(element.find('md-toolbar').length).toBe(0);
   }));
 
-  it('works with ng-show', inject(function($$rAF, $timeout) {
+  it('works with ng-show', inject(function($timeout) {
     var template =
       '<div layout="column" style="height: 600px;">' +
       '  <md-toolbar md-scroll-shrink="true" ng-show="shouldShowToolbar">test</md-toolbar>' +
@@ -128,9 +128,6 @@ describe('<md-toolbar>', function() {
     // Build/append the element
     build(template);
     document.body.appendChild(element[0]);
-
-    // Flushing to get the actual height of toolbar
-    $$rAF.flush();
 
     //
     // Initial tests
@@ -171,7 +168,7 @@ describe('<md-toolbar>', function() {
     document.body.removeChild(element[0]);
   }));
 
-  it('works with ng-hide', inject(function($$rAF, $timeout) {
+  it('works with ng-hide', inject(function($timeout) {
     var template =
       '<div layout="column" style="height: 600px;">' +
       '  <md-toolbar md-scroll-shrink="true" ng-hide="shouldNotShowToolbar">test</md-toolbar>' +
@@ -183,7 +180,7 @@ describe('<md-toolbar>', function() {
     document.body.appendChild(element[0]);
 
     // Flushing to get the actual height of toolbar
-    $$rAF.flush();
+    $timeout.flush();
 
     //
     // Initial tests
@@ -235,6 +232,17 @@ describe('<md-toolbar>', function() {
 
     // Expect no errors
     expect($exceptionHandler.errors).toEqual([]);
+  }));
+
+  it('should have `._md` class indicator', inject(function() {
+    build(
+      '<div>' +
+      '  <md-toolbar></md-toolbar>' +
+      '  <md-content></md-content>' +
+      '</div>'
+    );
+
+    expect(element.find('md-toolbar').hasClass('_md')).toBe(true);
   }));
 
   it('disables scroll shrink when the attribute is not provided', inject(function() {

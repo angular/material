@@ -1,5 +1,5 @@
 // !!Important - Theme-based Background-color can be configured in backdrop-theme.scss
-//             - Animate background-color opacityy only for `.md-opaque` styles
+//             - Animate background-color opacity only for `.md-opaque` styles
 
 md-backdrop {
   transition: opacity 450ms;
@@ -12,26 +12,26 @@ md-backdrop {
 
   z-index: $z-index-backdrop;
 
-  &._md-menu-backdrop {
+  &.md-menu-backdrop {
     position: fixed !important;
     z-index: $z-index-menu - 1;
   }
-  &._md-select-backdrop {
+  &.md-select-backdrop {
     z-index: $z-index-dialog + 1;
     transition-duration: 0;
   }
-  &._md-dialog-backdrop {
+  &.md-dialog-backdrop {
     z-index: $z-index-dialog - 1;
   }
-  &._md-bottom-sheet-backdrop {
+  &.md-bottom-sheet-backdrop {
     z-index: $z-index-bottom-sheet - 1;
   }
-  &._md-sidenav-backdrop {
+  &.md-sidenav-backdrop {
     z-index: $z-index-sidenav - 1;
   }
 
 
-  &._md-click-catcher {
+  &.md-click-catcher {
     position: absolute;
   }
 

@@ -65,4 +65,34 @@ describe('<md-switch>', function() {
     parentScope.$apply();
     expect(element.attr('tabindex')).toEqual('-1');
   });
+
+  it('should skip click event if releasing drag over element', function() {
+    var checkbox = $compile('<md-switch></md-switch>')(parentScope);
+    var scope = checkbox.scope();
+
+    // skipToggle is used here to imitate an ending drag, same behavior as in the component.
+    scope.skipToggle = true;
+    scope.$apply();
+
+    checkbox.triggerHandler('click');
+
+    expect(checkbox[0]).not.toHaveClass('md-checked');
+
+  });
+
+  it('should correctly invert the switch through attribute', function() {
+    var element = $compile('<md-switch md-invert="{{ isInverted }}">')(parentScope);
+
+    parentScope.$apply('isInverted = true');
+
+    expect(element).toHaveClass('md-inverted');
+    expect(element.children()[0]).toHaveClass('md-label');
+    expect(element.children()[1]).toHaveClass('md-container');
+
+    parentScope.$apply('isInverted = false');
+
+    expect(element).not.toHaveClass('md-inverted');
+    expect(element.children()[0]).toHaveClass('md-container');
+    expect(element.children()[1]).toHaveClass('md-label');
+  });
 });

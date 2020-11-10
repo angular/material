@@ -1,15 +1,14 @@
 <div ng-controller="DemoBasicCtrl as ctrl" ng-cloak>
   <md-toolbar class="md-menu-toolbar">
     <div layout="row">
-      <md-toolbar-filler layout layout-align="center center">
-        <md-icon md-svg-icon="call:chat"></md-icon>
+      <md-toolbar-filler>
+        <md-icon md-svg-icon="content-paste"></md-icon>
       </md-toolbar-filler>
-
       <div>
         <h2 class="md-toolbar-tools">Untitled document</h2>
         <md-menu-bar>
           <md-menu>
-            <button ng-click="$mdOpenMenu()">
+            <button ng-click="$mdMenu.open()">
               File
             </button>
             <md-menu-content>
@@ -21,7 +20,7 @@
               <md-menu-divider></md-menu-divider>
               <md-menu-item>
                 <md-menu>
-                  <md-button ng-click="$mdOpenMenu()">New</md-button>
+                  <md-button ng-click="$mdMenu.open()">New</md-button>
                   <md-menu-content>
                     <md-menu-item><md-button ng-click="ctrl.sampleAction('New Document', $event)">Document</md-button></md-menu-item>
                     <md-menu-item><md-button ng-click="ctrl.sampleAction('New Spreadsheet', $event)">Spreadsheet</md-button></md-menu-item>
@@ -52,7 +51,7 @@
             </md-menu-content>
           </md-menu>
           <md-menu>
-            <button ng-click="$mdOpenMenu()">
+            <button ng-click="$mdMenu.open()">
               Edit
             </button>
             <md-menu-content>
@@ -102,14 +101,14 @@
             </md-menu-content>
           </md-menu>
           <md-menu>
-            <button ng-click="$mdOpenMenu()">
+            <button ng-click="$mdMenu.open()">
               View
             </button>
             <md-menu-content>
               <md-menu-item type="checkbox" ng-model="ctrl.settings.printLayout">Print layout</md-menu-item>
               <md-menu-item class="md-indent">
                 <md-menu>
-                  <md-button ng-click="$mdOpenMenu()">Mode</md-button>
+                  <md-button ng-click="$mdMenu.open()">Mode</md-button>
                   <md-menu-content width="3">
                     <md-menu-item type="radio" ng-model="ctrl.settings.presentationMode" value="'presentation'">Presentation</md-menu-item>
                     <md-menu-item type="radio" ng-model="ctrl.settings.presentationMode" value="'edit'">Edit</md-menu-item>
@@ -127,7 +126,7 @@
             </md-menu-content>
           </md-menu>
           <md-menu>
-            <button ng-click="$mdOpenMenu()">
+            <button ng-click="$mdMenu.open()">
               Format
             </button>
             <md-menu-content>
@@ -176,12 +175,12 @@
     </div>
   </md-toolbar>
 
-  <div class="page-container">
-    <div class="page">
+  <md-content class="page-container">
+    <md-card class="page">
       <h1>Untitled document</h1>
       <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras mattis consectetur purus sit amet fermentum. Nulla vitae elit libero, a pharetra augue. Nullam id dolor id nibh ultricies vehicula ut id elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.</p>
       <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Vestibulum id ligula porta felis euismod semper. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Nulla vitae elit libero, a pharetra augue. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum.</p>
       <p>Etiam porta sem malesuada magna mollis euismod. Maecenas faucibus mollis interdum. Maecenas sed diam eget risus varius blandit sit amet non magna. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
-    </div>
-  </div>
+    </md-card>
+  </md-content>
 </div>

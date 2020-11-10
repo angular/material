@@ -4,6 +4,4 @@
  * @description
  * Icon
  */
-angular.module('material.components.icon', [
-    'material.core'
-  ]);
+angular.module('material.components.icon', ['material.core']);

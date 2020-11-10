@@ -2,7 +2,7 @@ describe('animate', function() {
   beforeEach(module('material.core'));
 
   var $material, $rootScope, $timeout, $$mdAnimate;
-  beforeEach( inject(function(_$material_,_$rootScope_,_$timeout_, _$$mdAnimate_, $mdUtil) {
+  beforeEach(inject(function(_$material_,_$rootScope_,_$timeout_, _$$mdAnimate_, $mdUtil) {
       $$mdAnimate = _$$mdAnimate_($mdUtil);
       $material = _$material_;
       $rootScope = _$rootScope_;
@@ -32,7 +32,7 @@ describe('animate', function() {
         var expired = false;
 
         $$mdAnimate
-          .waitTransitionEnd(element, {timeout:200} )
+          .waitTransitionEnd(element, {timeout:200})
           .catch(function() {
             expired = true;
           });

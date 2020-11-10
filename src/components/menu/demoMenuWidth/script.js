@@ -1,13 +1,10 @@
-angular.module('menuDemoWidth', ['ngMaterial'])
-.config(function($mdIconProvider) {
+angular.module('menuDemoWidth', ['ngMaterial']).config(function($mdIconProvider) {
   $mdIconProvider
     .iconSet("call", 'img/icons/sets/communication-icons.svg', 24)
     .iconSet("social", 'img/icons/sets/social-icons.svg', 24);
-})
-.controller('WidthDemoCtrl', DemoCtrl);
-
-function DemoCtrl($mdDialog) {
-  var vm = this;
+}).controller('WidthDemoCtrl', function($mdDialog) {
+  var ctrl = this;
+  ctrl.menuHref = "https://material.io/archive/guidelines/components/menus.html#menus-specs";
 
   this.announceClick = function(index) {
     $mdDialog.show(
@@ -17,5 +14,4 @@ function DemoCtrl($mdDialog) {
         .ok('Nice')
     );
   };
-}
-
+});

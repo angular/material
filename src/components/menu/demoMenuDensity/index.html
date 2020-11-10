@@ -1,0 +1,47 @@
+<div class="md-menu-demo" ng-controller="DensityDemoCtrl as ctrl" style="min-height: 350px" ng-cloak>
+  <div class="menu-demo-container" layout-align="start center" layout="column">
+    <div layout-align="start center" layout="column" style="min-height: 70px;">
+      <h2 class="md-title">Different Densities</h2>
+      <p>
+        You can add the <code>md-dense</code> class to the <code>md-menu-content</code> element
+        in order to reduce the size of menu items as described in the
+        <a ng-href="{{ctrl.menuHref}}" target="_blank">Menu Specs</a>.
+      </p>
+    </div>
+    <div layout-wrap layout="row" layout-fill layout-align="space-between center"
+         style="min-height: 100px;">
+      <div layout="column" flex="50" flex-sm="100" flex-xs="100" layout-align="center center">
+        <p>Normal density menu</p>
+        <md-menu>
+          <md-button aria-label="Open demo menu" class="md-icon-button"
+                     ng-click="$mdMenu.open($event)">
+            <md-icon md-menu-origin md-svg-icon="call:phone"></md-icon>
+          </md-button>
+          <md-menu-content>
+            <md-menu-item ng-repeat="item in [1, 2, 3]">
+              <md-button ng-click="ctrl.announceClick($index)"><span
+                  md-menu-align-target>Option</span> {{item}}
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
+      <div layout="column" flex="50" flex-sm="100" flex-xs="100" layout-align="center center">
+        <p>Dense menu</p>
+        <md-menu>
+          <md-button aria-label="Open demo menu" class="md-icon-button"
+                     ng-click="$mdMenu.open($event)">
+            <md-icon md-menu-origin md-svg-icon="call:email"></md-icon>
+          </md-button>
+          <md-menu-content class="md-dense">
+            <md-menu-item ng-repeat="item in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]">
+              <md-button ng-click="ctrl.announceClick($index)"><span
+                  md-menu-align-target>Option</span> {{item}}
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
+    </div>
+  </div>
+</div>

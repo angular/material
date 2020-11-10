@@ -1,11 +1,114 @@
-  /**
-   * @ngdoc module
-   * @name material.components.slider
-   */
-  angular.module('material.components.slider', [
-    'material.core'
-  ])
-  .directive('mdSlider', SliderDirective);
+/**
+ * @ngdoc module
+ * @name material.components.slider
+ */
+angular.module('material.components.slider', [
+  'material.core'
+])
+.directive('mdSlider', SliderDirective)
+.directive('mdSliderContainer', SliderContainerDirective);
+
+/**
+ * @type {number} the page size used for stepping when page up/down keys are pressed.
+ */
+var stepPageSize = 10;
+/**
+ * @type {number} the multiplier applied to a step when the arrow key is pressed along with
+ *  alt, meta, or ctrl.
+ */
+var modifierMultiplier = 4;
+
+/**
+ * @ngdoc directive
+ * @name mdSliderContainer
+ * @module material.components.slider
+ * @restrict E
+ * @description
+ * The `<md-slider-container>` can hold the slider with two other elements.
+ * In this case, the other elements are a `span` for the label and an `input` for displaying
+ * the model value.
+ *
+ * @usage
+ * <hljs lang="html">
+ *  <md-slider-container>
+ *    <span>Red</span>
+ *    <md-slider min="0" max="255" ng-model="color.red" aria-label="red" id="red-slider">
+ *    </md-slider>
+ *    <md-input-container>
+ *      <input type="number" ng-model="color.red" aria-label="Red" aria-controls="red-slider">
+ *    </md-input-container>
+ *  </md-slider-container>
+ * </hljs>
+ */
+function SliderContainerDirective() {
+  return {
+    controller: function () {},
+    compile: function (elem) {
+      var slider = elem.find('md-slider');
+
+      if (!slider) {
+        return;
+      }
+
+      var vertical = slider.attr('md-vertical');
+
+      if (vertical !== undefined) {
+        elem.attr('md-vertical', '');
+      }
+
+      if (!slider.attr('flex')) {
+        slider.attr('flex', '');
+      }
+
+      return function postLink(scope, element, attr, ctrl) {
+        element.addClass('_md');     // private md component indicator for styling
+
+        // We have to manually stop the $watch on ngDisabled because it exists
+        // on the parent scope, and won't be automatically destroyed when
+        // the component is destroyed.
+        function setDisable(value) {
+          element.children().attr('disabled', value);
+          element.find('input').attr('disabled', value);
+        }
+
+        var stopDisabledWatch = angular.noop;
+
+        if (attr.disabled) {
+          setDisable(true);
+        }
+        else if (attr.ngDisabled) {
+          stopDisabledWatch = scope.$watch(attr.ngDisabled, function (value) {
+            setDisable(value);
+          });
+        }
+
+        scope.$on('$destroy', function () {
+          stopDisabledWatch();
+        });
+
+        var initialMaxWidth;
+
+        /**
+         * @param {number} length of the input's string value
+         */
+        ctrl.fitInputWidthToTextLength = function (length) {
+          var input = element[0].querySelector('md-input-container');
+
+          if (input) {
+            var computedStyle = getComputedStyle(input);
+            var minWidth = parseInt(computedStyle.minWidth);
+            var padding = parseInt(computedStyle.paddingLeft) + parseInt(computedStyle.paddingRight);
+
+            initialMaxWidth = initialMaxWidth || parseInt(computedStyle.maxWidth);
+            var newMaxWidth = Math.max(initialMaxWidth, minWidth + padding + (minWidth / 2 * length));
+
+            input.style.maxWidth = newMaxWidth + 'px';
+          }
+        };
+      };
+    }
+  };
+}
 
 /**
  * @ngdoc directive
@@ -13,20 +116,28 @@
  * @module material.components.slider
  * @restrict E
  * @description
- * The `<md-slider>` component allows the user to choose from a range of
- * values.
+ * The `<md-slider>` component allows the user to choose from a range of values.
  *
- * As per the [material design spec](http://www.google.com/design/spec/style/color.html#color-ui-color-application)
+ * As per the [Material Design spec](https://material.io/archive/guidelines/style/color.html#color-color-system)
  * the slider is in the accent color by default. The primary color palette may be used with
  * the `md-primary` class.
  *
- * It has two modes: 'normal' mode, where the user slides between a wide range
- * of values, and 'discrete' mode, where the user slides between only a few
- * select values.
+ * The slider has two modes:
+ * - "normal" mode where the user slides between a wide range of values
+ * - "discrete" mode where the user slides between only a few select values
  *
- * To enable discrete mode, add the `md-discrete` attribute to a slider,
+ * To enable discrete mode, add the `md-discrete` attribute to a slider
  * and use the `step` attribute to change the distance between
  * values the user is allowed to pick.
+ *
+ * When using the keyboard:
+ * - pressing the arrow keys will increase or decrease the slider's value by one step
+ * - holding the Meta, Control, or Alt key while pressing the arrow keys will
+ *   move the slider four steps at a time
+ * - pressing the Home key will move the slider to the first allowed value
+ * - pressing the End key will move the slider to the last allowed value
+ * - pressing the Page Up key will increase the slider value by ten
+ * - pressing the Page Down key will decrease the slider value by ten
  *
  * @usage
  * <h4>Normal Mode</h4>
@@ -39,31 +150,52 @@
  * <md-slider md-discrete ng-model="myDiscreteValue" step="10" min="10" max="130">
  * </md-slider>
  * </hljs>
+ * <h4>Invert Mode</h4>
+ * <hljs lang="html">
+ * <md-slider md-invert ng-model="myValue" step="10" min="10" max="130">
+ * </md-slider>
+ * </hljs>
  *
- * @param {boolean=} md-discrete Whether to enable discrete mode.
- * @param {number=} step The distance between values the user is allowed to pick. Default 1.
- * @param {number=} min The minimum value the user is allowed to pick. Default 0.
- * @param {number=} max The maximum value the user is allowed to pick. Default 100.
+ * @param {expression} ng-model Assignable angular expression to be data-bound.
+ *  The expression should evaluate to a `number`.
+ * @param {expression=} ng-disabled If this expression evaluates as truthy, the slider will be
+ *  disabled.
+ * @param {expression=} ng-readonly If this expression evaluates as truthy, the slider will be in
+ *  read only mode.
+ * @param {boolean=} md-discrete If this attribute exists during initialization, enable discrete
+ *  mode. Defaults to `false`.
+ * @param {boolean=} md-vertical If this attribute exists during initialization, enable vertical
+ *  orientation mode. Defaults to `false`.
+ * @param {boolean=} md-invert If this attribute exists during initialization, enable inverted mode.
+ *  Defaults to `false`.
+ * @param {number=} step The distance between values the user is allowed to pick. Defaults to `1`.
+ * @param {number=} min The minimum value the user is allowed to pick. Defaults to `0`.
+ * @param {number=} max The maximum value the user is allowed to pick. Defaults to `100`.
+ * @param {number=} round The amount of numbers after the decimal point. The maximum is 6 to
+ *  prevent scientific notation. Defaults to `3`.
  */
-function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdTheming, $mdGesture, $parse, $log) {
+function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdTheming, $mdGesture,
+                         $parse, $log, $timeout) {
   return {
     scope: {},
-    require: '?ngModel',
+    require: ['?ngModel', '?^mdSliderContainer'],
     template:
-      '<div class="_md-slider-wrapper">' +
-        '<div class="_md-track-container">' +
-          '<div class="_md-track"></div>' +
-          '<div class="_md-track _md-track-fill"></div>' +
-          '<div class="_md-track-ticks"></div>' +
-        '</div>' +
-        '<div class="_md-thumb-container">' +
-          '<div class="_md-thumb"></div>' +
-          '<div class="_md-focus-thumb"></div>' +
-          '<div class="_md-focus-ring"></div>' +
-          '<div class="_md-sign">' +
-            '<span class="_md-thumb-text"></span>' +
+      '<div class="md-slider-wrapper">' +
+        '<div class="md-slider-content">' +
+          '<div class="md-track-container">' +
+            '<div class="md-track"></div>' +
+            '<div class="md-track md-track-fill"></div>' +
+            '<div class="md-track-ticks"></div>' +
           '</div>' +
-          '<div class="_md-disabled-thumb"></div>' +
+          '<div class="md-thumb-container">' +
+            '<div class="md-thumb"></div>' +
+            '<div class="md-focus-thumb"></div>' +
+            '<div class="md-focus-ring"></div>' +
+            '<div class="md-sign">' +
+              '<span class="md-thumb-text"></span>' +
+            '</div>' +
+            '<div class="md-disabled-thumb"></div>' +
+          '</div>' +
         '</div>' +
       '</div>',
     compile: compile
@@ -74,17 +206,23 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
   // **********************************************************
 
   function compile (tElement, tAttrs) {
-    if (!tAttrs.tabindex) tElement.attr('tabindex', 0);
-    tElement.attr('role', 'slider');
+    var wrapper = angular.element(tElement[0].getElementsByClassName('md-slider-wrapper'));
+
+    var tabIndex = tAttrs.tabindex || 0;
+    wrapper.attr('tabindex', tabIndex);
+
+    if (tAttrs.disabled || tAttrs.ngDisabled) wrapper.attr('tabindex', -1);
+
+    wrapper.attr('role', 'slider');
 
     $mdAria.expect(tElement, 'aria-label');
 
     return postLink;
   }
 
-  function postLink(scope, element, attr, ngModelCtrl) {
+  function postLink(scope, element, attr, ctrls) {
     $mdTheming(element);
-    ngModelCtrl = ngModelCtrl || {
+    var ngModelCtrl = ctrls[0] || {
       // Mock ngModelController if it doesn't exist to give us
       // the minimum functionality needed
       $setViewValue: function(val) {
@@ -96,30 +234,49 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
       $viewChangeListeners: []
     };
 
-    var isDisabled = false;
+    var containerCtrl = ctrls[1];
+    var container = angular.element($mdUtil.getClosest(element, '_md-slider-container', true));
+    var isDisabled = attr.ngDisabled ? angular.bind(null, $parse(attr.ngDisabled), scope.$parent) : function () {
+          return element[0].hasAttribute('disabled');
+        };
 
-    attr.$observe('disabled', function (value) {
-      isDisabled = $mdUtil.parseAttributeBoolean(value, false);
-      updateAriaDisabled();
-    });
-
-    var thumb = angular.element(element[0].querySelector('._md-thumb'));
-    var thumbText = angular.element(element[0].querySelector('._md-thumb-text'));
+    var thumb = angular.element(element[0].querySelector('.md-thumb'));
+    var thumbText = angular.element(element[0].querySelector('.md-thumb-text'));
     var thumbContainer = thumb.parent();
-    var trackContainer = angular.element(element[0].querySelector('._md-track-container'));
-    var activeTrack = angular.element(element[0].querySelector('._md-track-fill'));
-    var tickContainer = angular.element(element[0].querySelector('._md-track-ticks'));
+    var trackContainer = angular.element(element[0].querySelector('.md-track-container'));
+    var activeTrack = angular.element(element[0].querySelector('.md-track-fill'));
+    var tickContainer = angular.element(element[0].querySelector('.md-track-ticks'));
+    var wrapper = angular.element(element[0].getElementsByClassName('md-slider-wrapper'));
+    var content = angular.element(element[0].getElementsByClassName('md-slider-content'));
     var throttledRefreshDimensions = $mdUtil.throttle(refreshSliderDimensions, 5000);
 
     // Default values, overridable by attrs
+    var DEFAULT_ROUND = 3;
+    var vertical = angular.isDefined(attr.mdVertical);
+    var discrete = angular.isDefined(attr.mdDiscrete);
+    var invert = angular.isDefined(attr.mdInvert);
     angular.isDefined(attr.min) ? attr.$observe('min', updateMin) : updateMin(0);
     angular.isDefined(attr.max) ? attr.$observe('max', updateMax) : updateMax(100);
     angular.isDefined(attr.step)? attr.$observe('step', updateStep) : updateStep(1);
+    angular.isDefined(attr.round)? attr.$observe('round', updateRound) : updateRound(DEFAULT_ROUND);
 
-    $mdGesture.register(element, 'drag');
+    // We have to manually stop the $watch on ngDisabled because it exists
+    // on the parent scope, and won't be automatically destroyed when
+    // the component is destroyed.
+    var stopDisabledWatch = angular.noop;
+    if (attr.ngDisabled) {
+      stopDisabledWatch = scope.$parent.$watch(attr.ngDisabled, updateAriaDisabled);
+    }
 
-    element
+    $mdGesture.register(wrapper, 'drag', { horizontal: !vertical });
+
+    scope.mouseActive = false;
+
+    wrapper
       .on('keydown', keydownListener)
+      .on('mousedown', mouseDownListener)
+      .on('focus', focusListener)
+      .on('blur', blurListener)
       .on('$md.pressdown', onPressDown)
       .on('$md.pressup', onPressUp)
       .on('$md.dragstart', onDragStart)
@@ -130,7 +287,6 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     function updateAll() {
       refreshSliderDimensions();
       ngModelRender();
-      redrawTicks();
     }
     setTimeout(updateAll, 0);
 
@@ -152,22 +308,28 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     var min;
     var max;
     var step;
+    var round;
     function updateMin(value) {
       min = parseFloat(value);
-      element.attr('aria-valuemin', value);
+      ngModelCtrl.$viewValue = minMaxValidator(ngModelCtrl.$modelValue, min, max);
+      wrapper.attr('aria-valuemin', value);
       updateAll();
     }
     function updateMax(value) {
       max = parseFloat(value);
-      element.attr('aria-valuemax', value);
+      ngModelCtrl.$viewValue = minMaxValidator(ngModelCtrl.$modelValue, min, max);
+      wrapper.attr('aria-valuemax', value);
       updateAll();
     }
     function updateStep(value) {
       step = parseFloat(value);
-      redrawTicks();
+    }
+    function updateRound(value) {
+      // Set max round digits to 6, after 6 the input uses scientific notation
+      round = minMaxValidator(parseInt(value), 0, 6);
     }
     function updateAriaDisabled() {
-      element.attr('aria-disabled', !!isDisabled);
+      element.attr('aria-disabled', !!isDisabled());
     }
 
     // Draw the ticks with canvas.
@@ -175,36 +337,54 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     // which could quickly become a performance bottleneck.
     var tickCanvas, tickCtx;
     function redrawTicks() {
-      if (!angular.isDefined(attr.mdDiscrete)) return;
-      if ( angular.isUndefined(step) )         return;
+      if (!discrete || isDisabled()) return;
+      if (angular.isUndefined(step))         return;
 
-      if ( step <= 0 ) {
+      if (step <= 0) {
         var msg = 'Slider step value must be greater than zero when in discrete mode';
         $log.error(msg);
         throw new Error(msg);
       }
 
-      var numSteps = Math.floor( (max - min) / step );
+      var numSteps = Math.floor((max - min) / step);
       if (!tickCanvas) {
         tickCanvas = angular.element('<canvas>').css('position', 'absolute');
         tickContainer.append(tickCanvas);
 
-        var trackTicksStyle = $window.getComputedStyle(tickContainer[0]);
         tickCtx = tickCanvas[0].getContext('2d');
-        tickCtx.fillStyle = trackTicksStyle.backgroundColor || 'black';
       }
 
       var dimensions = getSliderDimensions();
+
+      // If `dimensions` doesn't have height and width it might be the first attempt so we will refresh dimensions
+      if (dimensions && !dimensions.height && !dimensions.width) {
+        refreshSliderDimensions();
+        dimensions = sliderDimensions;
+      }
+
       tickCanvas[0].width = dimensions.width;
       tickCanvas[0].height = dimensions.height;
 
       var distance;
       for (var i = 0; i <= numSteps; i++) {
-        distance = Math.floor(dimensions.width * (i / numSteps));
-        tickCtx.fillRect(distance - 1, 0, 2, dimensions.height);
+        var trackTicksStyle = $window.getComputedStyle(tickContainer[0]);
+        tickCtx.fillStyle = trackTicksStyle.color || 'black';
+
+        distance = Math.floor((vertical ? dimensions.height : dimensions.width) * (i / numSteps));
+
+        tickCtx.fillRect(vertical ? 0 : distance - 1,
+          vertical ? distance - 1 : 0,
+          vertical ? dimensions.width : 2,
+          vertical ? 2 : dimensions.height);
       }
     }
 
+    function clearTicks() {
+      if (tickCanvas && tickCtx) {
+        var dimensions = getSliderDimensions();
+        tickCtx.clearRect(0, 0, dimensions.width, dimensions.height);
+      }
+    }
 
     /**
      * Refreshing Dimensions
@@ -220,115 +400,193 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     }
 
     /**
-     * left/right arrow listener
+     * left/right/up/down arrow listener
+     * @param {!KeyboardEvent} ev
      */
     function keydownListener(ev) {
-      if (isDisabled) return;
+      if (isDisabled()) return;
+      var keyCodes = $mdConstant.KEY_CODE;
 
       var changeAmount;
-      if (ev.keyCode === $mdConstant.KEY_CODE.LEFT_ARROW) {
-        changeAmount = -step;
-      } else if (ev.keyCode === $mdConstant.KEY_CODE.RIGHT_ARROW) {
-        changeAmount = step;
+      switch (ev.keyCode) {
+        case keyCodes.DOWN_ARROW:
+        case keyCodes.LEFT_ARROW:
+          ev.preventDefault();
+          changeAmount = -step;
+          break;
+        case keyCodes.UP_ARROW:
+        case keyCodes.RIGHT_ARROW:
+          ev.preventDefault();
+          changeAmount = step;
+          break;
+        case keyCodes.PAGE_DOWN:
+          ev.preventDefault();
+          changeAmount = -step * stepPageSize;
+          break;
+        case keyCodes.PAGE_UP:
+          ev.preventDefault();
+          changeAmount = step * stepPageSize;
+          break;
+        case keyCodes.HOME:
+          ev.preventDefault();
+          ev.stopPropagation();
+          updateValue(min);
+          break;
+        case keyCodes.END:
+          ev.preventDefault();
+          ev.stopPropagation();
+          updateValue(max);
+          break;
       }
       if (changeAmount) {
+        changeAmount = invert ? -changeAmount : changeAmount;
         if (ev.metaKey || ev.ctrlKey || ev.altKey) {
-          changeAmount *= 4;
+          changeAmount *= modifierMultiplier;
         }
         ev.preventDefault();
         ev.stopPropagation();
-        scope.$evalAsync(function() {
-          setModelValue(ngModelCtrl.$viewValue + changeAmount);
-        });
+        updateValue(ngModelCtrl.$viewValue + changeAmount);
       }
+    }
+
+    /**
+     * @param value new slider value used for setting the model value
+     */
+    function updateValue(value) {
+      scope.$evalAsync(function() {
+        setModelValue(value);
+      });
+    }
+
+    function mouseDownListener() {
+      redrawTicks();
+
+      scope.mouseActive = true;
+      wrapper.removeClass('md-focused');
+
+      $timeout(function() {
+        scope.mouseActive = false;
+      }, 100);
+    }
+
+    function focusListener() {
+      if (scope.mouseActive === false) {
+        wrapper.addClass('md-focused');
+      }
+    }
+
+    function blurListener() {
+      wrapper.removeClass('md-focused');
+      element.removeClass('md-active');
+      clearTicks();
     }
 
     /**
      * ngModel setters and validators
      */
     function setModelValue(value) {
-      ngModelCtrl.$setViewValue( minMaxValidator(stepValidator(value)) );
+      ngModelCtrl.$setViewValue(minMaxValidator(stepValidator(value)));
     }
     function ngModelRender() {
       if (isNaN(ngModelCtrl.$viewValue)) {
         ngModelCtrl.$viewValue = ngModelCtrl.$modelValue;
       }
 
-      var percent = (ngModelCtrl.$viewValue - min) / (max - min);
+      ngModelCtrl.$viewValue = minMaxValidator(ngModelCtrl.$viewValue);
+
+      var percent = valueToPercent(ngModelCtrl.$viewValue);
       scope.modelValue = ngModelCtrl.$viewValue;
-      element.attr('aria-valuenow', ngModelCtrl.$viewValue);
+      wrapper.attr('aria-valuenow', ngModelCtrl.$viewValue);
       setSliderPercent(percent);
-      thumbText.text( ngModelCtrl.$viewValue );
+      thumbText.text(ngModelCtrl.$viewValue);
     }
 
-    function minMaxValidator(value) {
+    function minMaxValidator(value, minValue, maxValue) {
       if (angular.isNumber(value)) {
-        return Math.max(min, Math.min(max, value));
+        minValue = angular.isNumber(minValue) ? minValue : min;
+        maxValue = angular.isNumber(maxValue) ? maxValue : max;
+
+        return Math.max(minValue, Math.min(maxValue, value));
       }
     }
+
     function stepValidator(value) {
       if (angular.isNumber(value)) {
         var formattedValue = (Math.round((value - min) / step) * step + min);
-        // Format to 3 digits after the decimal point - fixes #2015.
-        return (Math.round(formattedValue * 1000) / 1000);
+        formattedValue = (Math.round(formattedValue * Math.pow(10, round)) / Math.pow(10, round));
+
+        if (containerCtrl && containerCtrl.fitInputWidthToTextLength) {
+          $mdUtil.debounce(function () {
+            containerCtrl.fitInputWidthToTextLength(formattedValue.toString().length);
+          }, 100)();
+        }
+
+        return formattedValue;
       }
     }
 
     /**
-     * @param percent 0-1
+     * @param {number} percent 0-1
      */
     function setSliderPercent(percent) {
 
-        percent = clamp(percent);
+      percent = clamp(percent);
 
-        var percentStr = (percent * 100) + '%';
+      var thumbPosition = (percent * 100) + '%';
+      var activeTrackPercent = invert ? (1 - percent) * 100 + '%' : thumbPosition;
 
-        activeTrack.css('width', percentStr);
-        thumbContainer.css('left',percentStr);
+      if (vertical) {
+        thumbContainer.css('bottom', thumbPosition);
+      }
+      else {
+        $mdUtil.bidiProperty(thumbContainer, 'left', 'right', thumbPosition);
+      }
 
-        element.toggleClass('_md-min', percent === 0);
-        element.toggleClass('_md-max', percent === 1);
+
+      activeTrack.css(vertical ? 'height' : 'width', activeTrackPercent);
+
+      element.toggleClass((invert ? 'md-max' : 'md-min'), percent === 0);
+      element.toggleClass((invert ? 'md-min' : 'md-max'), percent === 1);
     }
-
 
     /**
      * Slide listeners
      */
     var isDragging = false;
-    var isDiscrete = angular.isDefined(attr.mdDiscrete);
 
     function onPressDown(ev) {
-      if (isDisabled) return;
+      if (isDisabled()) return;
 
-      element.addClass('_md-active');
+      element.addClass('md-active');
       element[0].focus();
       refreshSliderDimensions();
 
-      var exactVal = percentToValue( positionToPercent( ev.pointer.x ));
-      var closestVal = minMaxValidator( stepValidator(exactVal) );
+      var exactVal = percentToValue(positionToPercent(vertical ? ev.srcEvent.clientY : ev.srcEvent.clientX));
+      var closestVal = minMaxValidator(stepValidator(exactVal));
       scope.$apply(function() {
-        setModelValue( closestVal );
-        setSliderPercent( valueToPercent(closestVal));
+        setModelValue(closestVal);
+        setSliderPercent(valueToPercent(closestVal));
       });
     }
     function onPressUp(ev) {
-      if (isDisabled) return;
+      if (isDisabled()) return;
 
-      element.removeClass('_md-dragging _md-active');
+      element.removeClass('md-dragging');
 
-      var exactVal = percentToValue( positionToPercent( ev.pointer.x ));
-      var closestVal = minMaxValidator( stepValidator(exactVal) );
+      var exactVal = percentToValue(positionToPercent(vertical ? ev.srcEvent.clientY : ev.srcEvent.clientX));
+      var closestVal = minMaxValidator(stepValidator(exactVal));
       scope.$apply(function() {
         setModelValue(closestVal);
         ngModelRender();
       });
     }
     function onDragStart(ev) {
-      if (isDisabled) return;
+      if (isDisabled()) return;
       isDragging = true;
+
       ev.stopPropagation();
 
-      element.addClass('_md-dragging');
+      element.addClass('md-dragging');
       setSliderFromEvent(ev);
     }
     function onDrag(ev) {
@@ -345,17 +603,17 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     function setSliderFromEvent(ev) {
       // While panning discrete, update only the
       // visual positioning but not the model value.
-      if ( isDiscrete ) adjustThumbPosition( ev.pointer.x );
-      else              doSlide( ev.pointer.x );
+      if (discrete) adjustThumbPosition(vertical ? ev.srcEvent.clientY : ev.srcEvent.clientX);
+      else            doSlide(vertical ? ev.srcEvent.clientY : ev.srcEvent.clientX);
     }
 
     /**
      * Slide the UI by changing the model value
      * @param x
      */
-    function doSlide( x ) {
-      scope.$evalAsync( function() {
-        setModelValue( percentToValue( positionToPercent(x) ));
+    function doSlide(x) {
+      scope.$evalAsync(function() {
+        setModelValue(percentToValue(positionToPercent(x)));
       });
     }
 
@@ -363,11 +621,11 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
      * Slide the UI without changing the model (while dragging/panning)
      * @param x
      */
-    function adjustThumbPosition( x ) {
-      var exactVal = percentToValue( positionToPercent( x ));
-      var closestVal = minMaxValidator( stepValidator(exactVal) );
-      setSliderPercent( positionToPercent(x) );
-      thumbText.text( closestVal );
+    function adjustThumbPosition(x) {
+      var exactVal = percentToValue(positionToPercent(x));
+      var closestVal = minMaxValidator(stepValidator(exactVal));
+      setSliderPercent(positionToPercent(x));
+      thumbText.text(closestVal);
     }
 
     /**
@@ -380,12 +638,20 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
     }
 
     /**
-     * Convert horizontal position on slider to percentage value of offset from beginning...
-     * @param x
+     * Convert position on slider to percentage value of offset from beginning...
+     * @param position
      * @returns {number}
      */
-    function positionToPercent( x ) {
-      return Math.max(0, Math.min(1, (x - sliderDimensions.left) / (sliderDimensions.width)));
+    function positionToPercent(position) {
+      var offset = vertical ? sliderDimensions.top : sliderDimensions.left;
+      var size = vertical ? sliderDimensions.height : sliderDimensions.width;
+      var calc = (position - offset) / size;
+
+      if (!vertical && $mdUtil.isRtl(attr)) {
+        calc = 1 - calc;
+      }
+
+      return Math.max(0, Math.min(1, vertical ? 1 - calc : calc));
     }
 
     /**
@@ -393,12 +659,14 @@ function SliderDirective($$rAF, $window, $mdAria, $mdUtil, $mdConstant, $mdThemi
      * @param percent
      * @returns {*}
      */
-    function percentToValue( percent ) {
-      return (min + percent * (max - min));
+    function percentToValue(percent) {
+      var adjustedPercent = invert ? (1 - percent) : percent;
+      return (min + adjustedPercent * (max - min));
     }
 
-    function valueToPercent( val ) {
-      return (val - min)/(max - min);
+    function valueToPercent(val) {
+      var percent = (val - min) / (max - min);
+      return invert ? (1 - percent) : percent;
     }
   }
 }

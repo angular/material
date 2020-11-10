@@ -1,0 +1,52 @@
+<div class="md-padding" ng-cloak>
+  <div layout="row" layout-align="space-between">
+    <div ng-controller="AppCtrl as ctrl" layout="column" flex="40">
+      <div>
+        <h1 class="md-title">Without trackBy</h1>
+        <div layout="row">
+          <md-input-container>
+            <label>Items</label>
+            <md-select ng-model="ctrl.selectedItem"
+              ng-change="ctrl.modelHasChanged = true">
+              <md-option ng-repeat="item in ctrl.items" ng-value="item">
+                {{ item.name }}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+      </div>
+      <div layout="column">
+        <h5>Initial model</h5>
+        <code><pre>{{ ::ctrl.selectedItem | json }}</pre></code>
+        <h5>Current model</h5>
+        <code><pre>{{ ctrl.selectedItem | json }}</pre></code>
+        <span ng-show="ctrl.modelHasChanged">Model has changed</span>
+      </div>
+    </div>
+
+    <div ng-controller="AppCtrl as ctrl" layout="column" flex="40">
+      <div>
+        <h1 class="md-title">With trackBy</h1>
+        <div layout="row">
+          <md-input-container>
+            <label>Items</label>
+            <md-select ng-model="ctrl.selectedItem"
+              ng-change="ctrl.modelHasChanged = true"
+              ng-model-options="{ trackBy: '$value.id' }">
+              <md-option ng-repeat="item in ctrl.items" ng-value="item">
+                {{ item.name }}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+      </div>
+      <div layout="column">
+        <h5>Initial model</h5>
+        <code><pre>{{ ::ctrl.selectedItem | json }}</pre></code>
+        <h5>Current model</h5>
+        <code><pre>{{ ctrl.selectedItem | json }}</pre></code>
+        <span ng-show="ctrl.modelHasChanged">Model has changed</span>
+      </div>
+    </div>
+  </div>
+</div>

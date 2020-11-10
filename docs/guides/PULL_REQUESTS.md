@@ -4,13 +4,13 @@ Before you submit your pull request consider the following guidelines:
 * Search [GitHub](https://github.com/angular/material/pulls) for an open or closed Pull Request
   that relates to your submission. You don't want to duplicate effort.
 
-* Please sign our [Contributor License Agreement (CLA)](../../CONTRIBUTING.md#cla) before sending pull
+* Please sign our [Contributor License Agreement (CLA)](../../.github/CONTRIBUTING.md#cla) before sending pull
   requests. We cannot accept code without this.
 
 * Make your changes in a new git branch:
 
      ```shell
-     git checkout -b my-fix-branch master
+     git checkout -b wip/my-fix-branch master
      ```
 
 * Follow our [Coding Rules](CODING.md#rules).
@@ -19,11 +19,11 @@ Before you submit your pull request consider the following guidelines:
 
 * Create your patch.
 
-* Run the full Angular Material test suite, as described in the [developer documentation](BUILD.md),
+* Run the full AngularJS Material test suite, as described in the [developer documentation](BUILD.md),
   and ensure that all tests pass.
 
 * Commit your changes using a descriptive commit message that follows our
-  [commit message conventions](../../CONTRIBUTING.md#commit-message-format). Adherence to the [commit message conventions](../../CONTRIBUTING.md#commit-message-format) is required
+  [commit message conventions](../../.github/CONTRIBUTING.md#commit-message-format). Adherence to the [commit message conventions](../../.github/CONTRIBUTING.md#commit-message-format) is required
   because release notes are automatically generated from these messages.
 
      ```shell
@@ -34,13 +34,13 @@ Before you submit your pull request consider the following guidelines:
 * Build your changes locally to ensure all the tests pass:
 
     ```shell
-    gulp karma
+    npm run test:full
     ```
 
 * Push your branch to GitHub:
 
     ```shell
-    git push origin my-fix-branch
+    git push origin wip/my-fix-branch
     ```
 
 * In GitHub, send a pull request to `angular:master`.
@@ -48,13 +48,14 @@ Before you submit your pull request consider the following guidelines:
 * If we suggest changes then:
   * Make the required updates.
 
-  * Re-run the Angular Material test suite to ensure tests are still passing.
+  * Re-run the AngularJS Material test suite to ensure tests are still passing.
 
-  * Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
+  * Commit your new changes by [ammending your original commit](https://help.github.com/articles/changing-a-commit-message/#amending-older-or-multiple-commit-messages) to **squash your commits**, then **force push** to your GitHub repository
+    (this will update your Pull Request):
 
     ```shell
-    git rebase master -i
-    git push -f
+    git commit -a --amend
+    git push --force origin wip/my-fix-branch
     ```
 
 <br/>
@@ -69,10 +70,10 @@ That's it... thank you for your contribution!
 After your pull request is merged, you can safely delete your branch and pull the changes
 from the main (upstream) repository:
 
-* Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:
+* Delete the remote branch on GitHub either through a Git UI/IDE or your local shell as follows:
 
     ```shell
-    git push origin --delete my-fix-branch
+    git push origin --delete wip/my-fix-branch
     ```
 
 * Check out the master branch:
@@ -84,7 +85,7 @@ from the main (upstream) repository:
 * Delete the local branch:
 
     ```shell
-    git branch -D my-fix-branch
+    git branch -D wip/my-fix-branch
     ```
 
 * Update your master with the latest upstream version:

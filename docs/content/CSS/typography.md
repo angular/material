@@ -2,10 +2,45 @@
 @name Typography
 @description
 
-Angular Material provides typography CSS classes you can use to create visual
-consistency across your application.
+<h2 class="md-display-1">CSS classes are provided for typography</h2>
+<h3 class="md-headline">You can use them to create visual consistency across your application.</h3>
+<p class="md-subhead">You can find additional guidance in the 
+[Material Design Typography Specification](https://material.io/archive/guidelines/style/typography.html).
+</p>
 
-[Reference the Material Design specification for Typography.](http://www.google.com/design/spec/style/typography.html)
+<section class="demo-container">
+  <md-toolbar class="demo-toolbar">
+    <div class="md-toolbar-tools">
+      <h3>General Typography</h3>
+    </div>
+  </md-toolbar>
+  <div class="md-whiteframe-z1 docs-list">
+    <p>
+      AngularJS Material uses the [Roboto](https://fonts.google.com/specimen/Roboto)
+      font for all of its components.
+    </p>
+
+    <p>
+      The `Roboto` font will be <b>not</b> automatically loaded by AngularJS Material itself. The
+      developer is responsible for loading all fonts used in their application. Shown below is a
+      sample <i>link</i> markup used to load the `Roboto` font from a CDN.
+    </p>
+
+    <hljs lang="html">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+    </hljs>
+
+    <h4 class="md-title">Notes</h4>
+    <p>
+      When `Roboto` isn't loaded, the typography will fall back to the following fonts: 
+    </p>
+
+    <ul>
+      <li>- `Helvetica Neue`</li>
+      <li>- `sans-serif`</li>
+    </ul>
+  </div>
+</section>
 
 <section class="demo-container">
   <md-toolbar class="demo-toolbar">
@@ -14,7 +49,10 @@ consistency across your application.
     </div>
   </md-toolbar>
   <div class="md-whiteframe-z1 docs-list">
-    <p style="margin-top: 0;">To preserve <a href="http://webaim.org/techniques/semanticstructure/">semantic structures</a>, you should style the `<h1>` - `<h6>` heading tags with the styling classes shown below:</p>
+    <p style="margin-top: 0;">
+      To preserve <a href="http://webaim.org/techniques/semanticstructure/">semantic structures</a>, 
+      you should style the `<h1>` - `<h6>` heading tags with the styling classes shown below:
+    </p>
 
 	<div layout="row" class="docs-descriptions">
       <h4 class="md-body-1" flex="25" id="headings-selectors">Selectors</h4>
@@ -22,11 +60,11 @@ consistency across your application.
     </div>
     <md-divider></md-divider>
     <ul>
-      <li layout="column" layout-gt-md="row" layout-align="start center">
+      <li layout="row" layout-sm="column" layout-xs="column" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">
           <code>.md-display-4</code>
         </span>
-        <h5 aria-describedby="headings-output" class="md-display-4 docs-output">Light 112px</h5>
+        <h5 flex aria-describedby="headings-output" class="md-display-4 docs-output">Light 112px</h5>
       </li>
       <li layout="row" layout-align="start center">
         <span flex="25" class="docs-definition" aria-describedby="headings-selectors">

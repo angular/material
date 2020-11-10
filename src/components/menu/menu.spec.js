@@ -3,29 +3,67 @@ describe('material.components.menu', function() {
   var $mdMenu, $timeout, menuActionPerformed, $mdUtil;
 
   beforeEach(module('material.components.menu'));
-  beforeEach(inject(function(_$mdUtil_, _$mdMenu_, _$timeout_, $document) {
+  beforeEach(inject(function(_$mdUtil_, _$mdMenu_, _$timeout_) {
     $mdUtil = _$mdUtil_;
     $mdMenu = _$mdMenu_;
     $timeout = _$timeout_;
-    var abandonedMenus = $document[0].querySelectorAll('._md-open-menu-container');
-    angular.element(abandonedMenus).remove();
   }));
-  afterEach(function() {
+
+  afterEach(inject(function($document) {
     menuActionPerformed = false;
     attachedElements.forEach(function(element) {
       element.remove();
     });
     attachedElements = [];
-  });
+
+    var abandonedMenus = $document[0].querySelectorAll('.md-open-menu-container');
+    angular.element(abandonedMenus).remove();
+  }));
 
   describe('md-menu directive', function() {
 
-    it('errors on invalid markup', inject(function($compile, $rootScope) {
-      function buildBadMenu() {
-        $compile('<md-menu></md-menu>')($rootScope);
+    it('should have `._md` class indicator', function() {
+      var element = setup();
+      expect(element.hasClass('_md')).toBe(true);
+    });
+
+    it('should throw when trigger element is missing', inject(function($compile, $rootScope) {
+      function createInvalidMenu() {
+        $compile(
+          '<md-menu>' +
+          '  <md-menu-content>Menu Content</md-menu-content>' +
+          '</md-menu>'
+        )($rootScope);
       }
 
-      expect(buildBadMenu).toThrow();
+      expect(createInvalidMenu).toThrow();
+    }));
+
+    it('should throw when md-menu-content is missing', inject(function($compile, $rootScope) {
+      function createInvalidMenu() {
+        $compile(
+          '<md-menu>' +
+          '  <button ng-click="null">Trigger Element</button>' +
+          '</md-menu>'
+        )($rootScope);
+      }
+
+      expect(createInvalidMenu).toThrow();
+    }));
+
+    it('nested md-menu-content should be allowed', inject(function($compile, $rootScope) {
+        function createValidMenu() {
+            $compile(
+                '<md-menu>' +
+                '  <button ng-click="null">Trigger Element</button>' +
+                '  <some-custom-element>' +
+                '    <md-menu-content>Menu Content</md-menu-content>' +
+                '  </some-custom-element>' +
+                '</md-menu>'
+            )($rootScope);
+        }
+
+        expect(createValidMenu).not.toThrow();
     }));
 
     it('specifies button type', inject(function($compile, $rootScope) {
@@ -59,8 +97,7 @@ describe('material.components.menu', function() {
     });
 
     it('opens on click without $event', function() {
-      var noEvent = true;
-      var menu = setup('ng-click', noEvent);
+      var menu = setup('ng-click="$mdMenu.open()"');
       openMenu(menu);
       expect(getOpenMenuContainer(menu).length).toBe(1);
       closeMenu(menu);
@@ -68,7 +105,7 @@ describe('material.components.menu', function() {
     });
 
     it('opens on mouseEnter', function() {
-        var menu = setup('ng-mouseenter');
+        var menu = setup('ng-mouseenter="$mdMenu.open($event)"');
         openMenu(menu, 'mouseenter');
         expect(getOpenMenuContainer(menu).length).toBe(1);
         closeMenu(menu);
@@ -76,8 +113,7 @@ describe('material.components.menu', function() {
       });
 
     it('opens on mouseEnter without $event', function() {
-        var noEvent = true;
-        var menu = setup('ng-mouseenter', noEvent);
+        var menu = setup('ng-mouseenter="$mdMenu.open()"');
         openMenu(menu, 'mouseenter');
         expect(getOpenMenuContainer(menu).length).toBe(1);
         closeMenu(menu);
@@ -104,6 +140,17 @@ describe('material.components.menu', function() {
 
       menu.remove();
 
+      expect($document.find('md-backdrop').length).toBe(0);
+    }));
+
+    it('should remove the backdrop if the container scope got destroyed', inject(function($document, $rootScope) {
+      var scope = $rootScope.$new();
+      var menu = setup(null, scope);
+
+      openMenu(menu);
+      expect($document.find('md-backdrop').length).not.toBe(0);
+
+      scope.$destroy();
       expect($document.find('md-backdrop').length).toBe(0);
     }));
 
@@ -134,6 +181,113 @@ describe('material.components.menu', function() {
       expect(getOpenMenuContainer(menu).length).toBe(0);
     }));
 
+    it('closes on tab', inject(function($document, $mdConstant) {
+      var menu = setup();
+      openMenu(menu);
+      expect(getOpenMenuContainer(menu).length).toBe(1);
+
+      var openMenuEl = $document[0].querySelector('md-menu-content');
+
+      pressKey(openMenuEl, $mdConstant.KEY_CODE.TAB);
+      waitForMenuClose();
+
+      expect(getOpenMenuContainer(menu).length).toBe(0);
+    }));
+
+    describe('default focus', function() {
+      it('should focus on first item automatically', inject(function($compile, $rootScope, $document) {
+        var menu = $compile(
+          '<md-menu>' +
+            '<button ng-click="$mdMenu.open($event)">Hello World</button>' +
+            '<md-menu-content>' +
+              '<md-menu-item>' +
+                '<button id="menuItem0" ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+              '<md-menu-item>' +
+                '<button ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+            '</md-menu-content>' +
+          '</md-menu>'
+        )($rootScope);
+
+        openMenu(menu);
+
+        var menuTarget = $document[0].querySelector('#menuItem0');
+
+        expect(document.activeElement).toBe(menuTarget);
+      }));
+
+      it('should focus on first non-disabled item', inject(function($compile, $rootScope, $document) {
+        var menu = $compile(
+          '<md-menu>' +
+            '<button ng-click="$mdMenu.open($event)">Hello World</button>' +
+            '<md-menu-content>' +
+              '<md-menu-item>' +
+                '<button disabled ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+              '<md-menu-item>' +
+                '<button id="menuItem1" ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+            '</md-menu-content>' +
+          '</md-menu>'
+        )($rootScope);
+
+        openMenu(menu);
+
+        var menuTarget = $document[0].querySelector('#menuItem1');
+
+        expect(document.activeElement).toBe(menuTarget);
+      }));
+    });
+
+    describe('autofocus', function() {
+
+      it('should focus a button with md-menu-focus-target', inject(function($compile, $rootScope, $document) {
+        var menu = $compile(
+          '<md-menu>' +
+            '<button ng-click="$mdMenu.open($event)">Hello World</button>' +
+            '<md-menu-content>' +
+              '<md-menu-item>' +
+                '<button ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+              '<md-menu-item>' +
+                '<button id="menuFocus" md-menu-focus-target ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+            '</md-menu-content>' +
+          '</md-menu>'
+        )($rootScope);
+
+        openMenu(menu);
+
+        var menuTarget = $document[0].querySelector('#menuFocus');
+
+        expect(document.activeElement).toBe(menuTarget);
+      }));
+
+      it('should focus a button with md-autofocus', inject(function($compile, $rootScope, $document) {
+        var menu = $compile(
+          '<md-menu>' +
+            '<button ng-click="$mdMenu.open($event)">Hello World</button>' +
+            '<md-menu-content>' +
+              '<md-menu-item>' +
+                '<button ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+              '<md-menu-item>' +
+                '<button id="menuFocus" md-autofocus ng-click="doSomething($event)"></button>' +
+              '</md-menu-item>' +
+            '</md-menu-content>' +
+          '</md-menu>'
+        )($rootScope);
+
+        openMenu(menu);
+
+        var menuTarget = $document[0].querySelector('#menuFocus');
+
+        expect(document.activeElement).toBe(menuTarget);
+      }));
+
+    });
+
     describe('closes with -', function() {
       it('closes on normal option click', function() {
 
@@ -154,6 +308,18 @@ describe('material.components.menu', function() {
         expect(getOpenMenuContainer(menu).length).toBe(0);
       });
 
+      it('closes via the scope method', function() {
+        var menu = setup('ng-mouseenter="$mdMenu.open($event)" ng-mouseleave="$mdMenu.close()"');
+
+        expect(getOpenMenuContainer(menu).length).toBe(0);
+        openMenu(menu, 'mouseenter');
+        expect(getOpenMenuContainer(menu).length).toBe(1);
+
+        menu.find('button').triggerHandler('mouseleave');
+        waitForMenuClose();
+        expect(getOpenMenuContainer(menu).length).toBe(0);
+      });
+
       itClosesWithAttributes([
         'data-ng-click', 'x-ng-click',
         'ui-sref', 'data-ui-sref', 'x-ui-sref',
@@ -166,10 +332,10 @@ describe('material.components.menu', function() {
         }
 
         function testAttribute(attr) {
-          return inject(function($rootScope, $compile, $timeout, $browser) {
+          return inject(function($rootScope, $compile, $timeout) {
             var template = '' +
               '<md-menu>' +
-              ' <button ng-click="$mdOpenMenu($event)">Hello World</button>' +
+              ' <button ng-click="$mdMenu.open($event)">Hello World</button>' +
               ' <md-menu-content>' +
               '  <md-menu-item>' +
               '    <md-button ' + attr + '=""></md-button>' +
@@ -195,17 +361,17 @@ describe('material.components.menu', function() {
       }
     });
 
-    function setup(triggerType, noEvent, scope) {
+    function setup(buttonAttrs, scope) {
       var menu,
         template = $mdUtil.supplant('' +
           '<md-menu>' +
-          ' <button {0}="$mdOpenMenu({1})">Hello World</button>' +
+          ' <button {0}>Hello World</button>' +
           ' <md-menu-content>' +
           '  <md-menu-item>' +
           '    <md-button ng-click="doSomething($event)"></md-button>' +
           '  </md-menu-item>' +
           ' </md-menu-content>' +
-          '</md-menu>',[ triggerType || 'ng-click', noEvent ? '' : "$event" ]);
+          '</md-menu>', [buttonAttrs || 'ng-click="$mdMenu.open($event)"']);
 
       inject(function($compile, $rootScope) {
         $rootScope.doSomething = function($event) {
@@ -219,6 +385,59 @@ describe('material.components.menu', function() {
     }
   });
 
+  describe('with $mdMenu service', function() {
+
+    var $mdMenu, $rootScope, $compile, $timeout, $log = null;
+
+    beforeEach(inject(function($injector) {
+      $mdMenu = $injector.get('$mdMenu');
+      $rootScope = $injector.get('$rootScope');
+      $compile = $injector.get('$compile');
+      $timeout = $injector.get('$timeout');
+      $log = $injector.get('$log');
+    }));
+
+    it('should warn when the md-menu-content element is missing', function() {
+      spyOn($log, 'warn');
+
+      var parent = angular.element('<div>');
+      var menuEl = angular.element(
+        '<md-menu>' +
+        '  <button ng-click="null">Trigger</button>' +
+        '</md-menu>'
+      );
+
+      expect($log.warn).not.toHaveBeenCalled();
+
+      $mdMenu.show({
+        scope: $rootScope,
+        mdMenuCtrl: createFakeMenuController(),
+        element: menuEl,
+        target: document.body,
+        preserveElement: true,
+        parent: parent
+      });
+
+      $timeout.flush();
+
+      expect($log.warn).toHaveBeenCalledTimes(1);
+
+      // Close the menu and remove the parent container
+      $mdMenu.hide();
+      parent.remove();
+    });
+
+    function createFakeMenuController() {
+      return {
+        open: function() {},
+        close: function() { $mdMenu.hide(); },
+        positionMode: function() { return { left: 'left', top: 'target' }; },
+        offsets: function() { return { top: 0, left: 0 }; }
+      }
+    }
+
+  });
+
 
   // ********************************************
   // Internal methods
@@ -228,7 +447,7 @@ describe('material.components.menu', function() {
     var res;
     el = (el instanceof angular.element) ? el[0] : el;
     inject(function($document) {
-      var container = $document[0].querySelector('._md-open-menu-container');
+      var container = $document[0].querySelector('.md-open-menu-container');
       if (container && container.style.display == 'none') {
         res = [];
       } else {
@@ -245,7 +464,6 @@ describe('material.components.menu', function() {
 
   function closeMenu() {
     inject(function($document) {
-      $document.find('md-backdrop');
       $document.find('md-backdrop').triggerHandler('click');
       waitForMenuClose();
     });

@@ -1,19 +1,17 @@
 md-input-container.md-THEME_NAME-theme {
   .md-input {
-    @include input-placeholder-color('{{foreground-3}}');
-    color: '{{foreground-1}}';
-    border-color: '{{foreground-4}}';
-    text-shadow: '{{foreground-shadow}}';
+    @include input-placeholder-color('\'{{background-default-contrast-secondary}}\'');
+    color: '{{background-default-contrast}}';
+    border-color: '{{background-default-contrast-divider}}';
   }
 
   > md-icon {
-    color: '{{foreground-1}}';
+    color: '{{background-default-contrast}}';
   }
 
   label,
-  ._md-placeholder {
-    text-shadow: '{{foreground-shadow}}';
-    color: '{{foreground-3}}';
+  .md-placeholder {
+    color: '{{background-default-contrast-secondary}}';
   }
 
   label.md-required:after {
@@ -21,47 +19,55 @@ md-input-container.md-THEME_NAME-theme {
   }
 
   &:not(.md-input-focused):not(.md-input-invalid) label.md-required:after {
-    color: '{{foreground-2}}';
+    color: '{{background-default-contrast-secondary}}';
   }
 
-  ng-messages, [ng-messages],
-  ng-message, data-ng-message, x-ng-message,
-  [ng-message], [data-ng-message], [x-ng-message],
-  [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp] {
-    :not(.md-char-counter) {
-      color: '{{warn-A700}}';
+  .md-input-messages-animation, .md-input-message-animation {
+    color: '{{warn-A700}}';
+    .md-char-counter {
+      color: '{{background-default-contrast}}';
+    }
+  }
+
+  &.md-input-focused {
+    .md-input {
+      @include input-placeholder-color('\'{{background-default-contrast-secondary}}\'');
     }
   }
 
   &:not(.md-input-invalid) {
     &.md-input-has-value {
       label {
-        color: '{{foreground-2}}';
+        color: '{{background-default-contrast-secondary}}';
       }
     }
-    &.md-input-focused {
+    &.md-input-focused,
+    &.md-input-resized {
       .md-input {
-        border-color: '{{primary-500}}';
+        border-color: '{{primary-color}}';
       }
-      label {
-        color: '{{primary-500}}';
-      }
+    }
+
+    &.md-input-focused {
+      label,
       md-icon {
-        color: '{{primary-500}}';
+        color: '{{primary-color}}';
       }
       &.md-accent {
         .md-input {
-          border-color: '{{accent-500}}';
+          border-color: '{{accent-color}}';
         }
-        label {
-          color: '{{accent-500}}';
+        label,
+        md-icon {
+          color: '{{accent-color}}';
         }
       }
       &.md-warn {
         .md-input {
           border-color: '{{warn-A700}}';
         }
-        label {
+        label,
+        md-icon {
           color: '{{warn-A700}}';
         }
       }
@@ -71,23 +77,19 @@ md-input-container.md-THEME_NAME-theme {
     .md-input {
       border-color: '{{warn-A700}}';
     }
-    label {
-      color: '{{warn-A700}}';
-    }
-    ng-message, data-ng-message, x-ng-message,
-    [ng-message], [data-ng-message], [x-ng-message],
-    [ng-message-exp], [data-ng-message-exp], [x-ng-message-exp],
+    label,
+    .md-input-message-animation,
     .md-char-counter {
       color: '{{warn-A700}}';
     }
   }
   .md-input {
     &[disabled],
-    [disabled] {
+    [disabled] & {
       border-bottom-color: transparent;
-      color: '{{foreground-3}}';
-      background-image: linear-gradient(to right, '{{foreground-3}}' 0%, '{{foreground-3}}' 33%, transparent 0%);
-      background-image: -ms-linear-gradient(left, transparent 0%, '{{foreground-3}}' 100%);
+      color: '{{background-default-contrast-disabled}}';
+      background-image: linear-gradient(to right, '{{background-default-contrast-disabled}}' 0%, '{{background-default-contrast-disabled}}' 33%, transparent 0%);
+      background-image: -ms-linear-gradient(left, transparent 0%, '{{background-default-contrast-disabled}}' 100%);
     }
   }
 }

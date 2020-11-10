@@ -83,7 +83,7 @@ describe('$mdGesture', function() {
       expect(endSpy1).toHaveBeenCalled();
     }));
 
-    it('gesture{down,move,up,cancel}', inject(function($document) {
+    it('gesture{down,move,up}', inject(function($document) {
       $document.triggerHandler({
         type: 'pointerdown',
         target: childEl[0]
@@ -106,7 +106,7 @@ describe('$mdGesture', function() {
       $document.triggerHandler('pointermove');
       expect(moveSpy1).toHaveBeenCalled();
       $document.triggerHandler('pointercancel');
-      expect(endSpy1).toHaveBeenCalled();
+      expect(endSpy1).not.toHaveBeenCalled();
     }));
 
     it('mouse{down,move,up,leave}', inject(function($document) {
@@ -168,7 +168,7 @@ describe('$mdGesture', function() {
     // Click tests should only be enabled when `$$hijackClicks == true` (for mobile)
 
     it('should click if distance < options.maxDistance', inject(function($document, $mdGesture) {
-      if ( $mdGesture.$$hijackClicks ) {
+      if ($mdGesture.$$hijackClicks) {
         var spy = jasmine.createSpy('click');
         var el = angular.element('<div>');
 
@@ -192,7 +192,7 @@ describe('$mdGesture', function() {
     }));
 
     it('should not click if distance > options.maxDistance', inject(function($mdGesture, $document) {
-      if ( $mdGesture.$$hijackClicks ) {
+      if ($mdGesture.$$hijackClicks) {
         var spy = jasmine.createSpy('click');
         var el = angular.element('<div>');
 
@@ -295,6 +295,7 @@ describe('$mdGesture', function() {
         maxDistance: 10
       });
 
+      // Setup our spies and trigger our first action (touchstart)
       el.on('$md.hold', holdSpy);
       spyOn($timeout, 'cancel').and.callThrough();
 
@@ -303,7 +304,12 @@ describe('$mdGesture', function() {
         target: el[0],
         touches: [{pageX: 100, pageY: 100}]
       });
+
+      // The $md.hold spy should NOT have been called since the user has not lifted their finger
       expect(holdSpy).not.toHaveBeenCalled();
+
+      // Reset calls to $timeout.cancel so that we can ensure (below) that it is called and
+      // trigger our second action (touchmove)
       $timeout.cancel.calls.reset();
 
       $document.triggerHandler({
@@ -311,10 +317,14 @@ describe('$mdGesture', function() {
         target: el[0],
         touches: [{pageX: 90, pageY: 90}]
       });
+
+      // Because the user moves their finger instead of lifting, expect cancel to have been called
+      // and the $md.hold spy NOT to have been called
       expect($timeout.cancel).toHaveBeenCalled();
       expect(holdSpy).not.toHaveBeenCalled();
 
-      $timeout.verifyNoPendingTasks();
+      // We originally also called `$timeout.verifyNoPendingTasks();` here, however, changes made to
+      // $timeout.cancel() in 1.6 adds more tasks to the deferredQueue, so this will fail.
     }));
 
     it('should not reset timeout if moving < options.maxDistance', inject(function($mdGesture, $document, $timeout) {
@@ -354,17 +364,18 @@ describe('$mdGesture', function() {
 
   describe('drag', function() {
 
-    var startDragSpy, el, dragSpy, endDragSpy, doc;
+    var startDragSpy, el, dragSpy, endDragSpy, doc, deRegisterEvents, touchAction;
 
     beforeEach(function() {
-      inject(function($mdGesture, $document) {
+      inject(function($mdGesture, $document, $mdUtil) {
         doc = $document;
         startDragSpy = jasmine.createSpy('dragstart');
         dragSpy = jasmine.createSpy('drag');
         endDragSpy = jasmine.createSpy('dragend');
         el = angular.element('<div>');
 
-        $mdGesture.register(el, 'drag');
+        touchAction = $mdUtil.getTouchAction();
+        deRegisterEvents = $mdGesture.register(el, 'drag');
         el.on('$md.dragstart', startDragSpy)
           .on('$md.drag'     , dragSpy)
           .on('$md.dragend'  , endDragSpy);
@@ -438,6 +449,12 @@ describe('$mdGesture', function() {
       });
     }));
 
+
+    it('should clean up styles when de-registered', inject(function($mdGesture, $document) {
+      deRegisterEvents();
+      // Ensure that no 'pan-x' or 'pan-y' values are left behind.
+      expect(el[0].style[touchAction]).toBe('');
+    }));
   });
 
   describe('swipe', function() {
@@ -596,7 +613,7 @@ describe('$mdGesture', function() {
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
       now = 1;
-      //10 distance = boundary. no swipe.
+      // 10 distance = boundary. no swipe.
       $document.triggerHandler({
         type: 'touchend', target: el[0], pageX: 10, pageY: 0
       });
@@ -608,7 +625,7 @@ describe('$mdGesture', function() {
       $document.triggerHandler({
         type: 'touchstart', target: el[0], pageX: 0, pageY: 0
       });
-      //11 distance = enough. swipe.
+      // 11 distance = enough. swipe.
       $document.triggerHandler({
         type: 'touchend', target: el[0], pageX: 11, pageY: 0
       });

@@ -1,0 +1,41 @@
+<div ng-controller="AppCtrl" ng-cloak>
+  <md-content class="md-padding">
+    <md-nav-bar
+      md-no-ink-bar="disableInkBar"
+      md-selected-nav-item="currentNavItem"
+      nav-bar-aria-label="navigation links">
+      <md-nav-item md-nav-click="goto('page1')" name="page1">
+        Page One
+      </md-nav-item>
+      <md-nav-item md-nav-click="goto('page2')" name="page2" ng-disabled="secondTabDisabled">
+        Page Two
+      </md-nav-item>
+      <md-nav-item md-nav-click="goto('page3')" name="page3">
+        Page Three
+      </md-nav-item>
+      <md-nav-item md-nav-click="goto('page4')" name="page4" disabled>
+        Page Four
+      </md-nav-item>
+      <!-- these require actual routing with ui-router or ng-route, so they
+      won't work in the demo
+      <md-nav-item md-nav-href="#page4" name="page5">Page Four</md-nav-item>
+      <md-nav-item md-nav-sref="app.page5" name="page4">Page Five</md-nav-item>
+      You can also add options for the <code>ui-sref-opts</code> attribute.
+      <md-nav-item md-nav-sref="page6" sref-opts="{reload:true, notify:true}">
+        Page Six
+      </md-nav-item>
+      -->
+    </md-nav-bar>
+    <span>{{status}}</span>
+    <div class="ext-content">
+      External content for `<span>{{currentNavItem}}</span>`.
+    </div>
+
+    <md-checkbox ng-model="disableInkBar">Disable Ink Bar</md-checkbox>
+
+    <md-checkbox ng-model="secondTabDisabled" aria-label="Disable Second Tab" style="margin: 5px;">
+      Disable Second Tab
+    </md-checkbox>
+
+  </md-content>
+</div>

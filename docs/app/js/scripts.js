@@ -1,5 +1,5 @@
 (function() {
-  DocsApp
+  angular.module('docsApp')
     .factory('$demoAngularScripts', ['BUILDCONFIG', DemoAngularScripts]);
 
   function DemoAngularScripts(BUILDCONFIG) {
@@ -17,10 +17,10 @@
 
     function allAngularScripts() {
       return scripts.map(fullPathToScript);
-    };
+    }
 
     function fullPathToScript(script) {
       return "https://ajax.googleapis.com/ajax/libs/angularjs/" + BUILDCONFIG.ngVersion + "/" + script;
-    };
-  };
+    }
+  }
 })();

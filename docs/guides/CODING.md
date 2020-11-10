@@ -46,6 +46,7 @@ Additionally, all component modules are compiled and deployed as a library to:
 > NOTE: the `dist` directory is **not** version controlled.
 
 <br/>
+
 ## <a name="rules"></a> Coding Rules
 
 #### Coding conventions:
@@ -56,9 +57,6 @@ understandable, concise, and DRY fashion.
 Below is a sample code that demonstrates some of our rules and conventions:
 
 ```js
-(function() {
-'use strict';
-
 /**
  * @ngdoc module
  * @name material.components.slider
@@ -110,11 +108,10 @@ function SliderDirective($mdTheming) {
   //...
 }
 
-})();
 ```
 
 *  With the exceptions listed in this document, follow the rules contained in
-   [Google's JavaScript Style Guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml).
+   [Google's JavaScript Style Guide](https://google.github.io/styleguide/javascriptguide.xml).
 *  All components must have unique, understandable module names; prefixed with
    'material.components.'.
 *  All components must depend upon the 'material.core' module.
@@ -149,9 +146,9 @@ function SliderDirective($mdTheming) {
 
 #### Patterns
 
-* All components should be wrapped in an anonymous closure using the Module Pattern.
+* All source files will be automatically wrapped inside an anonymous closure using the Module Pattern.
 * Use the **Revealing Pattern** as a coding style.
-* Do **not** use the global variable namespace, export our API explicitly via Angular DI.
+* Do **not** use the global variable namespace, export our API explicitly via AngularJS DI.
 * Instead of complex inheritance hierarchies, use **simple** objects.
 * Avoid prototypal inheritance unless warranted by performance or other considerations.
 * We **love** functions and closures and, whenever possible, prefer them over objects.<br/>
@@ -164,4 +161,4 @@ function SliderDirective($mdTheming) {
 * To write concise code that can be better minified, we **use aliases internally** that map to the
   external API.
 * Use of argument **type annotations** for private internal APIs is not encouraged, unless it's an
-  internal API that is used throughout Angular Material.
+  internal API that is used throughout AngularJS Material.

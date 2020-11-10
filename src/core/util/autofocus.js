@@ -1,9 +1,5 @@
 angular.module('material.core')
-  .directive('mdAutofocus', MdAutofocusDirective)
-
-  // Support the deprecated md-auto-focus and md-sidenav-focus as well
-  .directive('mdAutoFocus', MdAutofocusDirective)
-  .directive('mdSidenavFocus', MdAutofocusDirective);
+  .directive('mdAutofocus', MdAutofocusDirective);
 
 /**
  * @ngdoc directive
@@ -13,7 +9,7 @@ angular.module('material.core')
  * @description
  *
  * `[md-autofocus]` provides an optional way to identify the focused element when a `$mdDialog`,
- * `$mdBottomSheet`, or `$mdSidenav` opens or upon page load for input-like elements.
+ * `$mdBottomSheet`, `$mdMenu` or `$mdSidenav` opens or upon page load for input-like elements.
  *
  * When one of these opens, it will find the first nested element with the `[md-autofocus]`
  * attribute directive and optional expression. An expression may be specified as the directive
@@ -90,19 +86,40 @@ angular.module('material.core')
  * </div>
  * </hljs>
  **/
-function MdAutofocusDirective() {
+function MdAutofocusDirective($parse) {
   return {
     restrict: 'A',
+    link: {
+      pre: preLink
+    }
+  };
 
-    link: postLink
+  function preLink(scope, element, attr) {
+    var attrExp = attr.mdAutoFocus || attr.mdAutofocus || attr.mdSidenavFocus;
+
+    // Initially update the expression by manually parsing the expression as per $watch source.
+    updateExpression($parse(attrExp)(scope));
+
+    // Only watch the expression if it is not empty.
+    if (attrExp) {
+      scope.$watch(attrExp, updateExpression);
+    }
+
+    /**
+     * Updates the autofocus class which is used to determine whether the attribute
+     * expression evaluates to true or false.
+     * @param {string|boolean} value Attribute Value
+     */
+    function updateExpression(value) {
+
+      // Rather than passing undefined to the jqLite toggle class function we explicitly set the
+      // value to true. Otherwise the class will be just toggled instead of being forced.
+      if (angular.isUndefined(value)) {
+        value = true;
+      }
+
+      element.toggleClass('md-autofocus', !!value);
+    }
   }
-}
 
-function postLink(scope, element, attrs) {
-  var attr = attrs.mdAutoFocus || attrs.mdAutofocus || attrs.mdSidenavFocus;
-
-  // Setup a watcher on the proper attribute to update a class we can check for in $mdUtil
-  scope.$watch(attr, function(canAutofocus) {
-    element.toggleClass('_md-autofocus', canAutofocus);
-  });
 }

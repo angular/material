@@ -1,0 +1,16 @@
+{
+  // See http://go.microsoft.com/fwlink/?LinkId=827846 to learn about workspace recommendations.
+  // Extension identifier format: ${publisher}.${name}. Example: firefox-devtools.vscode-firefox-debug
+
+  // List of extensions which should be recommended for users of this workspace.
+  "recommendations": [
+    "editorconfig.editorconfig",
+    "dbaeumer.vscode-eslint",
+    "christian-kohler.path-intellisense",
+    "eg2.vscode-npm-script",
+    "firefox-devtools.vscode-firefox-debug",
+    "dbaeumer.jshint",
+    "msjsdiag.debugger-for-chrome",
+    "pkief.material-icon-theme"
+  ]
+}

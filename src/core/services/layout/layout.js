@@ -6,10 +6,10 @@
   var SUFFIXES = /(-gt)?-(sm|md|lg|print)/g;
   var WHITESPACE = /\s+/g;
 
-  var FLEX_OPTIONS = ['grow', 'initial', 'auto', 'none', 'noshrink', 'nogrow' ];
+  var FLEX_OPTIONS = ['grow', 'initial', 'auto', 'none', 'noshrink', 'nogrow'];
   var LAYOUT_OPTIONS = ['row', 'column'];
-  var ALIGNMENT_MAIN_AXIS= [ "", "start", "center", "end", "stretch", "space-around", "space-between" ];
-  var ALIGNMENT_CROSS_AXIS= [ "", "start", "center", "end", "stretch" ];
+  var ALIGNMENT_MAIN_AXIS= ["", "start", "center", "end", "stretch", "space-around", "space-between"];
+  var ALIGNMENT_CROSS_AXIS= ["", "start", "center", "end", "stretch"];
 
   var config = {
     /**
@@ -21,7 +21,6 @@
 
     /**
      * List of mediaQuery breakpoints and associated suffixes
-     *
      *   [
      *    { suffix: "sm", mediaQuery: "screen and (max-width: 599px)" },
      *    { suffix: "md", mediaQuery: "screen and (min-width: 600px) and (max-width: 959px)" }
@@ -30,12 +29,12 @@
     breakpoints: []
   };
 
-  registerLayoutAPI( angular.module('material.core.layout', ['ng']) );
+  registerLayoutAPI(angular.module('material.core.layout', ['ng']));
 
   /**
    *   registerLayoutAPI()
    *
-   *   The original ngMaterial Layout solution used attribute selectors and CSS.
+   *   The original AngularJS Material Layout solution used attribute selectors and CSS.
    *
    *  ```html
    *  <div layout="column"> My Content </div>
@@ -55,12 +54,12 @@
    *  browsers... mainly IE.
    *
    *  This module registers directives that allow the same layout attributes to be
-   *  interpreted and converted to class selectors. The directive will add equivalent classes to each element that
-   *  contains a Layout directive.
+   *  interpreted and converted to class selectors. The directive will add equivalent classes to
+   *  each element that contains a Layout directive.
    *
    * ```html
    *   <div layout="column" class="layout layout-column"> My Content </div>
-   *```
+   * ```
    *
    *  ```css
    *  .layout {
@@ -73,60 +72,60 @@
    *  ```
    */
   function registerLayoutAPI(module){
-    var PREFIX_REGEXP = /^((?:x|data)[\:\-_])/i;
-    var SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g;
+    var PREFIX_REGEXP = /^((?:x|data)[:\-_])/i;
+    var SPECIAL_CHARS_REGEXP = /([:\-_]+(.))/g;
 
     // NOTE: these are also defined in constants::MEDIA_PRIORITY and constants::MEDIA
-    var BREAKPOINTS     = [ "", "xs", "gt-xs", "sm", "gt-sm", "md", "gt-md", "lg", "gt-lg", "xl", "print" ];
-    var API_WITH_VALUES = [ "layout", "flex", "flex-order", "flex-offset", "layout-align" ];
-    var API_NO_VALUES   = [ "show", "hide", "layout-padding", "layout-margin" ];
+    var BREAKPOINTS     = ["", "xs", "gt-xs", "sm", "gt-sm", "md", "gt-md", "lg", "gt-lg", "xl", "print"];
+    var API_WITH_VALUES = ["layout", "flex", "flex-order", "flex-offset", "layout-align"];
+    var API_NO_VALUES   = ["show", "hide", "layout-padding", "layout-margin"];
 
 
     // Build directive registration functions for the standard Layout API... for all breakpoints.
     angular.forEach(BREAKPOINTS, function(mqb) {
 
       // Attribute directives with expected, observable value(s)
-      angular.forEach( API_WITH_VALUES, function(name){
+      angular.forEach(API_WITH_VALUES, function(name){
         var fullName = mqb ? name + "-" + mqb : name;
-        module.directive( directiveNormalize(fullName), attributeWithObserve(fullName));
+        module.directive(directiveNormalize(fullName), attributeWithObserve(fullName));
       });
 
       // Attribute directives with no expected value(s)
-      angular.forEach( API_NO_VALUES, function(name){
+      angular.forEach(API_NO_VALUES, function(name){
         var fullName = mqb ? name + "-" + mqb : name;
-        module.directive( directiveNormalize(fullName), attributeWithoutValue(fullName));
+        module.directive(directiveNormalize(fullName), attributeWithoutValue(fullName));
       });
 
     });
 
     // Register other, special directive functions for the Layout features:
     module
-      .directive('mdLayoutCss'  , disableLayoutDirective )
-      .directive('ngCloak'      ,  buildCloakInterceptor('ng-cloak'))
+      .provider('$$mdLayout', function() {
+        // Publish internal service for Layouts
+        return {
+          $get : angular.noop,
+          validateAttributeValue : validateAttributeValue,
+          validateAttributeUsage : validateAttributeUsage,
+          /**
+           * Easy way to disable/enable the Layout API.
+           * When disabled, this stops all attribute-to-classname generations
+           */
+          disableLayouts  : function(isDisabled) {
+            config.enabled =  (isDisabled !== true);
+          }
+        };
+      })
+
+      .directive('mdLayoutCss'        , disableLayoutDirective)
+      .directive('ngCloak'            , buildCloakInterceptor('ng-cloak'))
 
       .directive('layoutWrap'   , attributeWithoutValue('layout-wrap'))
       .directive('layoutNowrap' , attributeWithoutValue('layout-nowrap'))
       .directive('layoutNoWrap' , attributeWithoutValue('layout-no-wrap'))
       .directive('layoutFill'   , attributeWithoutValue('layout-fill'))
 
-      // !! Deprecated attributes: use the `-lt` (aka less-than) notations
-
-      .directive('layoutLtMd'     , warnAttrNotSupported('layout-lt-md', true))
-      .directive('layoutLtLg'     , warnAttrNotSupported('layout-lt-lg', true))
-      .directive('flexLtMd'       , warnAttrNotSupported('flex-lt-md', true))
-      .directive('flexLtLg'       , warnAttrNotSupported('flex-lt-lg', true))
-
-      .directive('layoutAlignLtMd', warnAttrNotSupported('layout-align-lt-md'))
-      .directive('layoutAlignLtLg', warnAttrNotSupported('layout-align-lt-lg'))
-      .directive('flexOrderLtMd'  , warnAttrNotSupported('flex-order-lt-md'))
-      .directive('flexOrderLtLg'  , warnAttrNotSupported('flex-order-lt-lg'))
-      .directive('offsetLtMd'     , warnAttrNotSupported('flex-offset-lt-md'))
-      .directive('offsetLtLg'     , warnAttrNotSupported('flex-offset-lt-lg'))
-
-      .directive('hideLtMd'       , warnAttrNotSupported('hide-lt-md'))
-      .directive('hideLtLg'       , warnAttrNotSupported('hide-lt-lg'))
-      .directive('showLtMd'       , warnAttrNotSupported('show-lt-md'))
-      .directive('showLtLg'       , warnAttrNotSupported('show-lt-lg'));
+      // Determine if
+      .config(detectDisabledLayouts);
 
     /**
      * Converts snake_case to camelCase.
@@ -140,8 +139,20 @@
           return offset ? letter.toUpperCase() : letter;
         });
     }
-
   }
+
+
+  /**
+    * Detect if any of the HTML tags has a [md-layouts-disabled] attribute;
+    * If yes, then immediately disable all layout API features
+    *
+    * Note: this attribute should be specified on either the HTML or BODY tags
+    * @ngInject
+    */
+   function detectDisabledLayouts() {
+     var isDisabled = !!document.querySelector('[md-layouts-disabled]');
+     config.enabled = !isDisabled;
+   }
 
   /**
    * Special directive that will disable ALL Layout conversions of layout
@@ -161,39 +172,37 @@
    *
    * Another option is to use the LayoutProvider to configure and disable the attribute
    * conversions; this would obviate the use of the `md-layout-css` directive
-   *
    */
   function disableLayoutDirective() {
+    // Return a 1x-only, first-match attribute directive
+    config.enabled = false;
+
     return {
       restrict : 'A',
-      priority : '900',
-      compile  : function(element, attr) {
-        config.enabled = false;
-        return angular.noop;
-      }
+      priority : '900'
     };
   }
 
   /**
    * Tail-hook ngCloak to delay the uncloaking while Layout transformers
-   * finish processing. Eliminates flicker with Material.Layoouts
+   * finish processing. Eliminates flicker with Material.Layouts
    */
   function buildCloakInterceptor(className) {
-    return [ '$timeout', function($timeout){
+    return ['$timeout', function($timeout){
       return {
         restrict : 'A',
         priority : -10,   // run after normal ng-cloak
-        compile  : function( element ) {
+        compile  : function(element) {
           if (!config.enabled) return angular.noop;
 
           // Re-add the cloak
           element.addClass(className);
 
-          return function( scope, element ) {
+          return function(scope, element) {
             // Wait while layout injectors configure, then uncloak
             // NOTE: $rAF does not delay enough... and this is a 1x-only event,
             //       $timeout is acceptable.
-            $timeout( function(){
+            $timeout(function(){
               element.removeClass(className);
             }, 10, false);
           };
@@ -205,10 +214,9 @@
 
   // *********************************************************************************
   //
-  // These functions create registration functions for ngMaterial Layout attribute directives
-  // This provides easy translation to switch ngMaterial attribute selectors to
-  // CLASS selectors and directives; which has huge performance implications
-  // for IE Browsers
+  // These functions create registration functions for AngularJS Material Layout attribute
+  // directives. This provides easy translation to switch AngularJS Material attribute selectors to
+  // CLASS selectors and directives; which has huge performance implications for IE Browsers.
   //
   // *********************************************************************************
 
@@ -233,7 +241,7 @@
 
             validateAttributeUsage(className, attr, element, $log);
 
-            validateAttributeValue( className,
+            validateAttributeValue(className,
               getNormalizedAttrValue(className, attr, ""),
               buildUpdateFn(element, className, attr)
             );
@@ -248,22 +256,21 @@
     }];
 
     /**
-     * Add as transformed class selector(s), then
-     * remove the deprecated attribute selector
+     * Observe deprecated layout attributes and update the element's layout classes to match.
      */
     function translateWithValueToCssClass(scope, element, attrs) {
       var updateFn = updateClassWithValue(element, className, attrs);
       var unwatch = attrs.$observe(attrs.$normalize(className), updateFn);
 
       updateFn(getNormalizedAttrValue(className, attrs, ""));
-      scope.$on("$destroy", function() { unwatch() });
+      scope.$on("$destroy", function() { unwatch(); });
     }
   }
 
   /**
-   * Creates a registration function for ngMaterial Layout attribute directive.
+   * Creates a registration function for AngularJS Material Layout attribute directive.
    * This is a `simple` transpose of attribute usage to class usage; where we ignore
-   * any attribute value
+   * any attribute value.
    */
   function attributeWithoutValue(className) {
     return ['$mdUtil', '$interpolate', "$log", function(_$mdUtil_, _$interpolate_, _$log_) {
@@ -278,7 +285,7 @@
           if (config.enabled) {
             // immediately replace static (non-interpolated) invalid values...
 
-            validateAttributeValue( className,
+            validateAttributeValue(className,
               getNormalizedAttrValue(className, attr, ""),
               buildUpdateFn(element, className, attr)
             );
@@ -295,15 +302,12 @@
     }];
 
     /**
-     * Add as transformed class selector, then
-     * remove the deprecated attribute selector
+     * Add transformed class selector.
      */
     function translateToCssClass(scope, element) {
       element.addClass(className);
     }
   }
-
-
 
   /**
    * After link-phase, do NOT remove deprecated layout attribute selector.
@@ -317,31 +321,18 @@
    * NOTE: The value must match one of the specified styles in the CSS.
    * For example `flex-gt-md="{{size}}`  where `scope.size == 47` will NOT work since
    * only breakpoints for 0, 5, 10, 15... 100, 33, 34, 66, 67 are defined.
-   *
    */
   function updateClassWithValue(element, className) {
     var lastClass;
 
     return function updateClassFn(newValue) {
       var value = validateAttributeValue(className, newValue || "");
-      if ( angular.isDefined(value) ) {
+      if (angular.isDefined(value)) {
         if (lastClass) element.removeClass(lastClass);
-        lastClass = !value ? className : className + "-" + value.replace(WHITESPACE, "-");
+        lastClass = !value ? className : className + "-" + value.trim().replace(WHITESPACE, "-");
         element.addClass(lastClass);
       }
     };
-  }
-
-  /**
-   * Provide console warning that this layout attribute has been deprecated
-   *
-   */
-  function warnAttrNotSupported(className) {
-    var parts = className.split("-");
-    return ["$log", function($log) {
-      $log.warn(className + "has been deprecated. Please use a `" + parts[0] + "-gt-<xxx>` variant.");
-      return angular.noop;
-    }];
   }
 
   /**
@@ -351,9 +342,9 @@
     var message, usage, url;
     var nodeName = element[0].nodeName.toLowerCase();
 
-    switch(className.replace(SUFFIXES,"")) {
+    switch (className.replace(SUFFIXES,"")) {
       case "flex":
-        if ((nodeName == "md-button") || (nodeName == "fieldset")){
+        if ((nodeName === "md-button") || (nodeName === "fieldset")){
           // @see https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers
           // Use <div flex> wrapper inside (preferred) or outside
 
@@ -361,16 +352,14 @@
           url = "https://github.com/philipwalton/flexbugs#9-some-html-elements-cant-be-flex-containers";
           message = "Markup '{0}' may not work as expected in IE Browsers. Consult '{1}' for details.";
 
-          $log.warn( $mdUtil.supplant(message, [usage, url]) );
+          $log.warn($mdUtil.supplant(message, [usage, url]));
         }
     }
-
   }
 
 
   /**
-   * For the Layout attribute value, validate or replace with default
-   * fallback value
+   * For the Layout attribute value, validate or replace with default fallback value.
    */
   function validateAttributeValue(className, value, updateFn) {
     var origValue = value;
@@ -378,7 +367,7 @@
     if (!needsInterpolation(value)) {
       switch (className.replace(SUFFIXES,"")) {
         case 'layout'        :
-          if ( !findIn(value, LAYOUT_OPTIONS) ) {
+          if (!findIn(value, LAYOUT_OPTIONS)) {
             value = LAYOUT_OPTIONS[0];    // 'row';
           }
           break;
@@ -407,18 +396,17 @@
         case 'layout-margin'  :
         case 'layout-fill'    :
         case 'layout-wrap'    :
-        case 'layout-nowrap'  :
         case 'layout-nowrap' :
           value = '';
           break;
       }
 
-      if (value != origValue) {
+      if (value !== origValue) {
         (updateFn || angular.noop)(value);
       }
     }
 
-    return value;
+    return value ? value.trim() : "";
   }
 
   /**
@@ -445,7 +433,8 @@
 
   function getNormalizedAttrValue(className, attrs, defaultVal) {
     var normalizedAttr = attrs.$normalize(className);
-    return attrs[normalizedAttr] ? attrs[normalizedAttr].replace(WHITESPACE, "-") : defaultVal || null;
+    return attrs[normalizedAttr] ? attrs[normalizedAttr].trim().replace(WHITESPACE, "-") :
+      defaultVal || null;
   }
 
   function findIn(item, list, replaceWith) {
@@ -469,25 +458,23 @@
 
     attrValue = (attrValue || "");
 
-    if ( attrValue.indexOf("-") == 0 || attrValue.indexOf(" ") == 0) {
+    if (attrValue.indexOf("-") === 0 || attrValue.indexOf(" ") === 0) {
       // For missing main-axis values
       attrValue = "none" + attrValue;
     }
 
     values = attrValue.toLowerCase().trim().replace(WHITESPACE, "-").split("-");
-    if ( values.length && (values[0] === "space") ) {
+    if (values.length && (values[0] === "space")) {
       // for main-axis values of "space-around" or "space-between"
-      values = [ values[0]+"-"+values[1],values[2] ];
+      values = [values[0]+"-"+values[1],values[2]];
     }
 
-    if ( values.length > 0 ) axis.main  = values[0] || axis.main;
-    if ( values.length > 1 ) axis.cross = values[1] || axis.cross;
+    if (values.length > 0) axis.main  = values[0] || axis.main;
+    if (values.length > 1) axis.cross = values[1] || axis.cross;
 
-    if ( ALIGNMENT_MAIN_AXIS.indexOf(axis.main) < 0 )   axis.main = "start";
-    if ( ALIGNMENT_CROSS_AXIS.indexOf(axis.cross) < 0 ) axis.cross = "stretch";
+    if (ALIGNMENT_MAIN_AXIS.indexOf(axis.main) < 0)   axis.main = "start";
+    if (ALIGNMENT_CROSS_AXIS.indexOf(axis.cross) < 0) axis.cross = "stretch";
 
     return axis;
   }
-
-
 })();

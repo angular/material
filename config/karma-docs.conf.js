@@ -1,14 +1,14 @@
+const path = require('path');
+
 // Used for running unit tests against the docs site
 // Unit tests can be run using gulp docs-karma
 module.exports = function(config) {
 
-  var UNCOMPILED_SRC = [
+  // releaseMode is a custom configuration option.
+  const testSrc = [
     'docs/spec/**/*.spec.js'
   ];
-
-  // releaseMode is a custom configuration option.
-  var testSrc = UNCOMPILED_SRC;
-  var dependencies = process.env.KARMA_TEST_JQUERY ?
+  let dependencies = process.env.KARMA_TEST_JQUERY ?
     ['node_modules/jquery/dist/jquery.js'] : [];
 
   dependencies = dependencies.concat([
@@ -18,6 +18,7 @@ module.exports = function(config) {
     'node_modules/angular-messages/angular-messages.js',
     'node_modules/angular-route/angular-route.js',
     'node_modules/angular-mocks/angular-mocks.js',
+    'node_modules/moment/moment.js',
     'dist/angular-material.js',
     'config/test-utils.js',
     'dist/docs/docs.js',
@@ -26,7 +27,7 @@ module.exports = function(config) {
 
   config.set({
 
-    basePath: __dirname + '/..',
+    basePath: path.join(__dirname, '/..'),
     frameworks: ['jasmine'],
     files: dependencies.concat(testSrc),
 

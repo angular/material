@@ -6,9 +6,11 @@
  * @restrict E
  *
  * @description
- * The `<md-tabs>` directive serves as the container for 1..n `<md-tab>` child directives to produces a Tabs components.
- * In turn, the nested `<md-tab>` directive is used to specify a tab label for the **header button** and a [optional] tab view
- * content that will be associated with each tab button.
+ * The `<md-tabs>` directive serves as the container for 1..n
+ * <a ng-href="api/directive/mdTab">`<md-tab>`</a> child directives.
+ * In turn, the nested `<md-tab>` directive is used to specify a tab label for the
+ * **header button** and <i>optional</i> tab view content that will be associated with each tab
+ * button.
  *
  * Below is the markup for its simplest usage:
  *
@@ -20,30 +22,58 @@
  *  </md-tabs>
  *  </hljs>
  *
- * Tabs supports three (3) usage scenarios:
+ * Tabs support three (3) usage scenarios:
  *
  *  1. Tabs (buttons only)
  *  2. Tabs with internal view content
  *  3. Tabs with external view content
  *
- * **Tab-only** support is useful when tab buttons are used for custom navigation regardless of any other components, content, or views.
- * **Tabs with internal views** are the traditional usages where each tab has associated view content and the view switching is managed internally by the Tabs component.
- * **Tabs with external view content** is often useful when content associated with each tab is independently managed and data-binding notifications announce tab selection changes.
+ * **Tabs-only** support is useful when tab buttons are used for custom navigation regardless of any
+ * other components, content, or views.
  *
- * Additional features also include:
+ * <blockquote><b>Note:</b> If you are using the Tabs component for page-level navigation, please
+ * use the <a ng-href="./api/directive/mdNavBar">NavBar component</a> instead. It handles this
+ * case a more natively and more performantly.</blockquote>
+ *
+ * **Tabs with internal views** are the traditional usage where each tab has associated view
+ * content and the view switching is managed internally by the Tabs component.
+ *
+ * **Tabs with external view content** is often useful when content associated with each tab is
+ * independently managed and data-binding notifications announce tab selection changes.
+ *
+ * Additional features include:
  *
  * *  Content can include any markup.
  * *  If a tab is disabled while active/selected, then the next tab will be auto-selected.
  *
+ * ### Theming
+ *
+ * By default, tabs use your app's accent color for the selected tab's text and ink bar.
+ *
+ * You can use the theming classes to change the color of the `md-tabs` background:
+ * * Applying `class="md-primary"` will use your app's primary color for the background, your
+ *   accent color for the ink bar, and your primary palette's contrast color for the text of the
+ *   selected tab.
+ *   * When using the `md-primary` class, you can add the `md-no-ink-bar-color` class to make the
+ *     ink bar use your theme's primary contrast color instead of the accent color.
+ * * Applying `class="md-accent"` will use your app's accent color for the background and your
+ *   accent palette's contrast color for the text and ink bar of the selected tab.
+ * * Applying `class="md-warn"` will use your app's warn color for the background and your
+ *   warn palette's contrast color for the text and ink bar of the selected tab.
+ *
  * ### Explanation of tab stretching
  *
- * Initially, tabs will have an inherent size.  This size will either be defined by how much space is needed to accommodate their text or set by the user through CSS.  Calculations will be based on this size.
+ * Initially, tabs will have an inherent size.  This size will either be defined by how much space
+ * is needed to accommodate their text or set by the user through CSS.
+ * Calculations will be based on this size.
  *
- * On mobile devices, tabs will be expanded to fill the available horizontal space.  When this happens, all tabs will become the same size.
+ * On mobile devices, tabs will be expanded to fill the available horizontal space.
+ * When this happens, all tabs will become the same size.
  *
  * On desktops, by default, stretching will never occur.
  *
- * This default behavior can be overridden through the `md-stretch-tabs` attribute.  Here is a table showing when stretching will occur:
+ * This default behavior can be overridden through the `md-stretch-tabs` attribute.
+ * Here is a table showing when stretching will occur:
  *
  * `md-stretch-tabs` | mobile    | desktop
  * ------------------|-----------|--------
@@ -51,23 +81,38 @@
  * `always`          | stretched | stretched
  * `never`           | ---       | ---
  *
- * @param {integer=} md-selected Index of the active/selected tab
- * @param {boolean=} md-no-ink If present, disables ink ripple effects.
- * @param {boolean=} md-no-ink-bar If present, disables the selection ink bar.
- * @param {string=}  md-align-tabs Attribute to indicate position of tab buttons: `bottom` or `top`; default is `top`
- * @param {string=} md-stretch-tabs Attribute to indicate whether or not to stretch tabs: `auto`, `always`, or `never`; default is `auto`
- * @param {boolean=} md-dynamic-height When enabled, the tab wrapper will resize based on the contents of the selected tab
- * @param {boolean=} md-border-bottom If present, shows a solid `1px` border between the tabs and their content
- * @param {boolean=} md-center-tabs When enabled, tabs will be centered provided there is no need for pagination
- * @param {boolean=} md-no-pagination When enabled, pagination will remain off
- * @param {boolean=} md-swipe-content When enabled, swipe gestures will be enabled for the content area to jump between tabs
- * @param {boolean=} md-enable-disconnect When enabled, scopes will be disconnected for tabs that are not being displayed.  This provides a performance boost, but may also cause unexpected issues and is not recommended for most users.
- * @param {boolean=} md-autoselect When present, any tabs added after the initial load will be automatically selected
+ * @param {number=} md-selected Index of the active/selected tab.
+ * @param {expression=} md-no-ink-bar If `true` or no value, disables the selection ink bar.
+ * @param {string=} md-align-tabs Attribute to indicate position of tab buttons: `bottom` or `top`;
+ *  Default is `top`.
+ * @param {string=} md-stretch-tabs Attribute to indicate whether or not to stretch tabs: `auto`,
+ *  `always`, or `never`; Default is `auto`.
+ * @param {expression=} md-dynamic-height If `true` or no value, the tab wrapper will resize based
+ *  on the contents of the selected tab.
+ * @param {boolean=} md-border-bottom If the attribute is present, shows a solid `1px` border
+ *  between the tabs and their content.
+ * @param {boolean=} md-center-tabs If the attribute is present, tabs will be centered provided
+ *  there is no need for pagination.
+ * @param {boolean=} md-no-pagination If the attribute is present, pagination will remain off.
+ * @param {expression=} md-swipe-content When enabled, swipe gestures will be enabled for the content
+ *  area to allow swiping between tabs.
+ * @param {boolean=} md-enable-disconnect When enabled, scopes will be disconnected for tabs that
+ *  are not being displayed. This provides a performance boost, but may also cause unexpected
+ *  issues. It is not recommended for most users.
+ * @param {boolean=} md-autoselect If the attribute is present, any tabs added after the initial
+ *  load will be automatically selected.
+ * @param {boolean=} md-no-select-click When true, click events will not be fired when the value of
+ *  `md-active` on an `md-tab` changes. This is useful when using tabs with UI-Router's child
+ *  states, as triggering a click event in that case can cause an extra tab change to occur.
+ * @param {string=} md-navigation-hint Attribute to override the default `tablist` navigation hint
+ *  that screen readers will announce to provide instructions for navigating between tabs. This is
+ *  desirable when you want the hint to be in a different language. Default is "Use the left and
+ *  right arrow keys to navigate between tabs".
  *
  * @usage
  * <hljs lang="html">
- * <md-tabs md-selected="selectedIndex" >
- *   <img ng-src="img/angular.png" class="centered">
+ * <md-tabs md-selected="selectedIndex">
+ *   <img ng-src="img/angular.png" class="centered" alt="Angular icon">
  *   <md-tab
  *       ng-repeat="tab in tabs | orderBy:predicate:reversed"
  *       md-on-select="onTabSelected(tab)"
@@ -75,7 +120,7 @@
  *       ng-disabled="tab.disabled">
  *     <md-tab-label>
  *       {{tab.title}}
- *       <img src="img/removeTab.png" ng-click="removeTab(tab)" class="delete">
+ *       <img src="img/removeTab.png" ng-click="removeTab(tab)" class="delete" alt="Remove tab">
  *     </md-tab-label>
  *     <md-tab-body>
  *       {{tab.content}}
@@ -89,13 +134,14 @@ angular
     .module('material.components.tabs')
     .directive('mdTabs', MdTabs);
 
-function MdTabs () {
+function MdTabs ($$mdSvgRegistry) {
   return {
     scope:            {
+      navigationHint: '@?mdNavigationHint',
       selectedIndex: '=?mdSelected'
     },
     template:         function (element, attr) {
-      attr[ "$mdTabsTemplate" ] = element.html();
+      attr.$mdTabsTemplate = element.html();
       return '' +
         '<md-tabs-wrapper> ' +
           '<md-tab-data></md-tab-data> ' +
@@ -107,7 +153,7 @@ function MdTabs () {
               'ng-class="{ \'md-disabled\': !$mdTabsCtrl.canPageBack() }" ' +
               'ng-if="$mdTabsCtrl.shouldPaginate" ' +
               'ng-click="$mdTabsCtrl.previousPage()"> ' +
-            '<md-icon md-svg-icon="md-tabs-arrow"></md-icon> ' +
+            '<md-icon md-svg-src="'+ $$mdSvgRegistry.mdTabsArrow +'"></md-icon> ' +
           '</md-prev-button> ' +
           '<md-next-button ' +
               'tabindex="-1" ' +
@@ -117,30 +163,33 @@ function MdTabs () {
               'ng-class="{ \'md-disabled\': !$mdTabsCtrl.canPageForward() }" ' +
               'ng-if="$mdTabsCtrl.shouldPaginate" ' +
               'ng-click="$mdTabsCtrl.nextPage()"> ' +
-            '<md-icon md-svg-icon="md-tabs-arrow"></md-icon> ' +
+            '<md-icon md-svg-src="'+ $$mdSvgRegistry.mdTabsArrow +'"></md-icon> ' +
           '</md-next-button> ' +
           '<md-tabs-canvas ' +
               'tabindex="{{ $mdTabsCtrl.hasFocus ? -1 : 0 }}" ' +
-              'aria-activedescendant="tab-item-{{$mdTabsCtrl.tabs[$mdTabsCtrl.focusIndex].id}}" ' +
               'ng-focus="$mdTabsCtrl.redirectFocus()" ' +
               'ng-class="{ ' +
                   '\'md-paginated\': $mdTabsCtrl.shouldPaginate, ' +
                   '\'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs ' +
               '}" ' +
-              'ng-keydown="$mdTabsCtrl.keydown($event)" ' +
-              'role="tablist"> ' +
+              'ng-keydown="$mdTabsCtrl.keydown($event)"> ' +
             '<md-pagination-wrapper ' +
                 'ng-class="{ \'md-center-tabs\': $mdTabsCtrl.shouldCenterTabs }" ' +
-                'md-tab-scroll="$mdTabsCtrl.scroll($event)"> ' +
+                'md-tab-scroll="$mdTabsCtrl.scroll($event)" ' +
+                'role="tablist" ' +
+                'aria-label="{{::$mdTabsCtrl.navigationHint}}">' +
               '<md-tab-item ' +
-                  'tabindex="-1" ' +
-                  'class="md-tab" ' +
+                  'tabindex="{{ tab.isActive() ? 0 : -1 }}" ' +
+                  'class="md-tab {{::tab.scope.tabClass}}" ' +
                   'ng-repeat="tab in $mdTabsCtrl.tabs" ' +
                   'role="tab" ' +
-                  'aria-controls="tab-content-{{::tab.id}}" ' +
+                  'id="tab-item-{{::tab.id}}" ' +
+                  'md-tab-id="{{::tab.id}}" ' +
                   'aria-selected="{{tab.isActive()}}" ' +
                   'aria-disabled="{{tab.scope.disabled || \'false\'}}" ' +
                   'ng-click="$mdTabsCtrl.select(tab.getIndex())" ' +
+                  'ng-focus="$mdTabsCtrl.hasFocus = true" ' +
+                  'ng-blur="$mdTabsCtrl.hasFocus = false" ' +
                   'ng-class="{ ' +
                       '\'md-active\':    tab.isActive(), ' +
                       '\'md-focused\':   tab.hasFocus(), ' +
@@ -153,31 +202,27 @@ function MdTabs () {
                   'md-scope="::tab.parent"></md-tab-item> ' +
               '<md-ink-bar></md-ink-bar> ' +
             '</md-pagination-wrapper> ' +
-            '<div class="_md-visually-hidden md-dummy-wrapper"> ' +
+            '<md-tabs-dummy-wrapper aria-hidden="true" class="md-visually-hidden md-dummy-wrapper"> ' +
               '<md-dummy-tab ' +
                   'class="md-tab" ' +
                   'tabindex="-1" ' +
-                  'id="tab-item-{{::tab.id}}" ' +
-                  'role="tab" ' +
-                  'aria-controls="tab-content-{{::tab.id}}" ' +
-                  'aria-selected="{{tab.isActive()}}" ' +
-                  'aria-disabled="{{tab.scope.disabled || \'false\'}}" ' +
                   'ng-focus="$mdTabsCtrl.hasFocus = true" ' +
                   'ng-blur="$mdTabsCtrl.hasFocus = false" ' +
                   'ng-repeat="tab in $mdTabsCtrl.tabs" ' +
                   'md-tabs-template="::tab.label" ' +
                   'md-scope="::tab.parent"></md-dummy-tab> ' +
-            '</div> ' +
+            '</md-tabs-dummy-wrapper> ' +
           '</md-tabs-canvas> ' +
         '</md-tabs-wrapper> ' +
-        '<md-tabs-content-wrapper ng-show="$mdTabsCtrl.hasContent && $mdTabsCtrl.selectedIndex >= 0"> ' +
+        '<md-tabs-content-wrapper ng-show="$mdTabsCtrl.hasContent && $mdTabsCtrl.selectedIndex >= 0" class="_md"> ' +
           '<md-tab-content ' +
-              'id="tab-content-{{::tab.id}}" ' +
+              'id="{{:: $mdTabsCtrl.tabContentPrefix + tab.id}}" ' +
+              'class="_md" ' +
               'role="tabpanel" ' +
               'aria-labelledby="tab-item-{{::tab.id}}" ' +
               'md-swipe-left="$mdTabsCtrl.swipeContent && $mdTabsCtrl.incrementIndex(1)" ' +
               'md-swipe-right="$mdTabsCtrl.swipeContent && $mdTabsCtrl.incrementIndex(-1)" ' +
-              'ng-if="$mdTabsCtrl.hasContent" ' +
+              'ng-if="tab.hasContent" ' +
               'ng-repeat="(index, tab) in $mdTabsCtrl.tabs" ' +
               'ng-class="{ ' +
                 '\'md-no-transition\': $mdTabsCtrl.lastSelectedIndex == null, ' +

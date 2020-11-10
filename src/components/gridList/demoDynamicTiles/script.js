@@ -10,7 +10,7 @@ angular
           });
 
     function buildGridModel(tileTmpl){
-      var it, results = [ ];
+      var it, results = [];
 
       for (var j=0; j<11; j++) {
 
@@ -19,7 +19,7 @@ angular
         it.title = it.title + (j+1);
         it.span  = { row : 1, col : 1 };
 
-        switch(j+1) {
+        switch (j+1) {
           case 1:
             it.background = "red";
             it.span.row = it.span.col = 2;
@@ -50,6 +50,6 @@ angular
       return results;
     }
   })
-  .config( function( $mdIconProvider ){
+  .config(function($mdIconProvider){
     $mdIconProvider.iconSet("avatar", 'icons/avatar-icons.svg', 128);
   });

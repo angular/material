@@ -1,9 +1,10 @@
-$dialog-padding: $baseline-grid * 3;
+$dialog-padding: $baseline-grid * 3 !default;
 
 .md-dialog-is-showing {
   max-height: 100%;
 }
-._md-dialog-container {
+
+.md-dialog-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,12 +19,12 @@ $dialog-padding: $baseline-grid * 3;
 
 md-dialog {
 
-  &._md-transition-in {
+  &.md-transition-in {
     opacity: 1;
     transition: $swift-ease-out;
     transform: translate(0,0) scale(1.0);
   }
-  &._md-transition-out {
+  &.md-transition-out {
     opacity: 0;
     transition: $swift-ease-out;
     transform: translate(0,100%) scale(0.2);
@@ -69,7 +70,7 @@ md-dialog {
       margin: 0;
     }
 
-    ._md-dialog-content-body {
+    .md-dialog-content-body {
       width:100%;
     }
 
@@ -79,7 +80,7 @@ md-dialog {
     }
   }
 
-  .md-actions, md-dialog-actions {
+  md-dialog-actions {
     display: flex;
     order: 2;
     box-sizing: border-box;
@@ -99,12 +100,11 @@ md-dialog {
     }
   }
   &.md-content-overflow {
-    .md-actions, md-dialog-actions {
+    md-dialog-actions {
       border-top-width: 1px;
       border-top-style: solid;
     }
   }
-
 }
 
 @media screen and (-ms-high-contrast: active) {

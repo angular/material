@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: AngularJS Material on StackOverflow
+    url: https://stackoverflow.com/unanswered/tagged/angularjs-material
+    about: Please ask and answer questions about your app or usage here.
+  - name: AngularJS Material Gitter
+    url: https://gitter.im/angular/material
+    about: Please contribute to the community discussion about AngularJS Material usage here.
+  - name: AngularJS Material Forum
+    url: https://groups.google.com/forum/?pli=1#!forum/ngmaterial
+    about: Please ask questions about the library, roadmap, and releases here.

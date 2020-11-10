@@ -26,7 +26,7 @@ describe('$mdSticky service', function() {
       } else {
         expect(contentEl.children().length).toBe(2);
 
-        var stickyClone = contentEl[0].getElementsByClassName('_md-sticky-clone')[0];
+        var stickyClone = contentEl[0].querySelector('.md-sticky-clone');
         expect(stickyClone).toBeTruthy();
 
         expect(angular.element(stickyClone).scope()).toBe(scope);
@@ -68,7 +68,7 @@ describe('$mdSticky service', function() {
       } else {
         expect(contentEl.children().length).toBe(2);
 
-        var stickyClone = contentEl[0].getElementsByClassName('_md-sticky-clone')[0];
+        var stickyClone = contentEl[0].querySelector('.md-sticky-clone');
         expect(stickyClone).toBeTruthy();
 
         expect(angular.element(stickyClone).scope()).toBe(cloneScope);

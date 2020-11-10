@@ -1,4 +1,4 @@
-<div ng-controller="DemoCtrl" ng-cloak layout="column" layout-margin  ng-cloak>
+<div ng-controller="DemoCtrl" ng-cloak layout="column" layout-margin>
     <p>The simplest way to display a single SVG icon is by referencing it by URL:</p>
     <p>
         <md-icon md-svg-src="{{ insertDriveIconURL }}"
@@ -11,6 +11,28 @@
       <md-icon md-svg-src="img/icons/cake.svg"            class="s24" aria-label="Cake"    ></md-icon>
       <md-icon md-svg-src="{{ getAndroid() }}"            class="s36" aria-label="Android "></md-icon>
       <md-icon md-svg-src="img/icons/addShoppingCart.svg" class="s48" aria-label="Cart"    ></md-icon>
+    </p>
+
+    <p>Use data URLs (base64 or un-encoded):</p>
+    <p>
+      <md-icon
+        md-svg-src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PGcgaWQ9ImNha2UiPjxwYXRoIGQ9Ik0xMiA2YzEuMTEgMCAyLS45IDItMiAwLS4zOC0uMS0uNzMtLjI5LTEuMDNMMTIgMGwtMS43MSAyLjk3Yy0uMTkuMy0uMjkuNjUtLjI5IDEuMDMgMCAxLjEuOSAyIDIgMnptNC42IDkuOTlsLTEuMDctMS4wNy0xLjA4IDEuMDdjLTEuMyAxLjMtMy41OCAxLjMxLTQuODkgMGwtMS4wNy0xLjA3LTEuMDkgMS4wN0M2Ljc1IDE2LjY0IDUuODggMTcgNC45NiAxN2MtLjczIDAtMS40LS4yMy0xLjk2LS42MVYyMWMwIC41NS40NSAxIDEgMWgxNmMuNTUgMCAxLS40NSAxLTF2LTQuNjFjLS41Ni4zOC0xLjIzLjYxLTEuOTYuNjEtLjkyIDAtMS43OS0uMzYtMi40NC0xLjAxek0xOCA5aC01VjdoLTJ2Mkg2Yy0xLjY2IDAtMyAxLjM0LTMgM3YxLjU0YzAgMS4wOC44OCAxLjk2IDEuOTYgMS45Ni41MiAwIDEuMDItLjIgMS4zOC0uNTdsMi4xNC0yLjEzIDIuMTMgMi4xM2MuNzQuNzQgMi4wMy43NCAyLjc3IDBsMi4xNC0yLjEzIDIuMTMgMi4xM2MuMzcuMzcuODYuNTcgMS4zOC41NyAxLjA4IDAgMS45Ni0uODggMS45Ni0xLjk2VjEyQzIxIDEwLjM0IDE5LjY2IDkgMTggOXoiLz48L2c+PC9zdmc+"
+        class="s24"
+        aria-label="Cake">
+      </md-icon>
+
+      <md-icon
+        md-svg-src="data:image/svg+xml;base64,{{ getAndroidEncoded() }}"
+        class="s36"
+        aria-label="Android">
+      </md-icon>
+
+      <!-- un-encoded -->
+      <md-icon
+        md-svg-src="data:image/svg+xml, {{ getCartDecoded() }}"
+        class="s48"
+        aria-label="Cart">
+      </md-icon>
     </p>
 </div>
 

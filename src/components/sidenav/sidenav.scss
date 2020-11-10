@@ -12,65 +12,92 @@ md-sidenav {
   max-width: $sidenav-mobile-width;
   bottom: 0;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 
   ul {
     list-style: none;
   }
 
-  &._md-closed {
+  // Animation Comment Syntax: [mdLockedOpen]|[mdClosed]
+  // mdLockedOpen states: unlocked, locked, any
+  // mdClosed states: open, closed, any
+  // Default state: unlocked|open
+
+  // unlocked|closed
+  &.md-closed {
     display: none;
   }
-  &._md-closed-add,
-  &._md-closed-remove {
+
+  // any|open <=> any|closed
+  &.md-closed-add,
+  &.md-closed-remove {
     display: flex;
     transition: 0.2s ease-in all;
   }
 
-  &._md-closed-add._md-closed-add-active,
-  &._md-closed-remove._md-closed-remove-active {
+  // any|open <=> any|closed (animating)
+  &.md-closed-add.md-closed-add-active,
+  &.md-closed-remove.md-closed-remove-active {
     transition: $swift-ease-out;
   }
 
-  &._md-locked-open-add,
-  &._md-locked-open-remove {
+  // unlocked|any <=> locked|any
+  &.md-locked-open-add,
+  &.md-locked-open-remove {
     position: static;
     display: flex;
     transform: translate3d(0, 0, 0);
   }
 
-  &._md-locked-open,
-  &._md-locked-open._md-closed,
-  &._md-locked-open._md-closed.md-sidenav-left,
-  &._md-locked-open._md-closed.md-sidenav-right,
-  &._md-locked-open-remove._md-closed {
+  // locked|any
+  &.md-locked-open,
+  &.md-locked-open.md-closed,
+  &.md-locked-open.md-closed.md-sidenav-left,
+  &.md-locked-open.md-closed.md-sidenav-right {
     position: static;
     display: flex;
     transform: translate3d(0, 0, 0);
   }
-  &._md-locked-open-remove-active {
-    transition: width $swift-ease-in-duration $swift-ease-in-timing-function,
-                min-width $swift-ease-in-duration $swift-ease-in-timing-function;
-    width: 0;
-    min-width: 0;
+
+  // locked|closed => unlock|closed
+  &.md-locked-open-remove.md-closed {
+    position: static;
+    display: flex;
+    transform: translate3d(0, 0, 0);
   }
 
-  &._md-closed._md-locked-open-add {
-    width: 0;
-    min-width: 0;
+  // unlocked|closed => locked|closed
+  &.md-closed.md-locked-open-add {
+    position: static;
+    display: flex;
     transform: translate3d(0%, 0, 0);
   }
 
-  &._md-closed._md-locked-open-add-active {
+  // unlocked|closed => locked|closed (pre-animation)
+  &.md-closed.md-locked-open-add:not(.md-locked-open-add-active) {
     transition: width $swift-ease-in-duration $swift-ease-in-timing-function,
                 min-width $swift-ease-in-duration $swift-ease-in-timing-function;
-    width: $sidenav-mobile-width;
-    min-width: $sidenav-mobile-width;
-    transform: translate3d(0%, 0, 0);
+    width: 0 !important;
+    min-width: 0 !important;
+  }
+
+  // unlocked|closed => locked|closed (animating)
+  &.md-closed.md-locked-open-add-active {
+    transition: width $swift-ease-in-duration $swift-ease-in-timing-function,
+                min-width $swift-ease-in-duration $swift-ease-in-timing-function;
+  }
+
+  // locked|any => unlocked|any (animating)
+  &.md-locked-open-remove-active {
+    transition: width $swift-ease-in-duration $swift-ease-in-timing-function,
+                min-width $swift-ease-in-duration $swift-ease-in-timing-function;
+    width: 0 !important;
+    min-width: 0 !important;
   }
 
   @extend .md-sidenav-left;
 }
-.md-sidenav-backdrop._md-locked-open {
+.md-sidenav-backdrop.md-locked-open {
   display: none;
 }
 
@@ -78,7 +105,7 @@ md-sidenav {
   left: 0;
   top: 0;
   transform: translate3d(0%, 0, 0);
-  &._md-closed {
+  &.md-closed {
     transform: translate3d(-100%, 0, 0);
   }
 }
@@ -86,9 +113,9 @@ md-sidenav {
 .md-sidenav-right {
   left: 100%;
   top: 0;
-  transform: translate3d(-100%, 0, 0);
-  &._md-closed {
-    transform: translate3d(0%, 0, 0);
+  transform: translate(-100%, 0);
+  &.md-closed {
+    transform: translate(0%, 0);
   }
 }
 

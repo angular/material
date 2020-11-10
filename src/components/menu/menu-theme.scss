@@ -1,5 +1,22 @@
 md-menu-content.md-THEME_NAME-theme {
-  background-color: '{{background-color}}';
+  background-color: '{{background-hue-1}}';
+
+  md-menu-item {
+    color: '{{foreground-1}}';
+
+    md-icon {
+      color: '{{foreground-2}}';
+    }
+
+    .md-button[disabled] {
+      color: '{{foreground-3}}';
+
+      md-icon {
+        color: '{{foreground-3}}';
+      }
+    }
+
+  }
 
   md-menu-divider {
     background-color: '{{foreground-4}}';

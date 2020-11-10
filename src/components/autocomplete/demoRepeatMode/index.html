@@ -1,0 +1,101 @@
+<md-content class="md-padding" ng-cloak>
+  <div layout="row" layout-xs="column">
+    <div class="instance-wrapper" flex-gt-xs="50" ng-controller="DemoCtrl as ctrl">
+      <form ng-submit="$event.preventDefault()">
+        <p id="standard-autocomplete-description">
+          Specify the <code>md-mode</code> as <code>standard</code> to fall back to
+          <code>ng-repeat</code> for the autocomplete options. This allows
+          options in the list to have varying heights. Note that large lists in
+          <code>standard</code> mode will have a negative performance impact
+          on your application.
+        </p>
+        <h4>Standard mode</h4>
+        <md-autocomplete
+            id="standard-autocomplete"
+            ng-disabled="ctrl.isDisabled"
+            md-no-cache="ctrl.noCache"
+            md-selected-item="ctrl.selectedItem"
+            md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+            md-search-text="ctrl.searchText"
+            md-selected-item-change="ctrl.selectedItemChange(item)"
+            md-items="item in ctrl.querySearch(ctrl.searchText)"
+            md-item-text="item.name"
+            md-min-length="0"
+            md-escape-options="clear"
+            input-aria-describedby="standard-autocomplete-description"
+            input-aria-label="Current Repository"
+            placeholder="Pick an Angular repository"
+            md-menu-class="autocomplete-standard-template"
+            md-menu-container-class="standard-container"
+            md-mode="standard">
+          <md-item-template>
+            <span class="item-title">
+              <md-icon md-svg-icon="img/icons/octicon-repo.svg" aria-hidden="true"></md-icon>
+              <span> {{item.name}} </span>
+            </span>
+            <p class="item-desc">{{item.desc}}</p>
+            <span class="item-metadata">
+              <span>
+                <strong>{{item.watchers}}</strong> watchers
+              </span>
+              <span>
+                <strong>{{item.forks}}</strong> forks
+              </span>
+            </span>
+          </md-item-template>
+        </md-autocomplete>
+      </form>
+    </div>
+
+    <div class="instance-wrapper" flex-gt-xs="50" ng-controller="DemoCtrl as ctrl">
+      <form ng-submit="$event.preventDefault()">
+        <p id="virtual-autocomplete-description">
+          Omit the <code>md-mode</code> attribute (or specify <code>virtual</code>) to
+          use <code>md-virtual-repeat</code> for the autocomplete options.
+          <a ng-href="api/directive/mdVirtualRepeat">Virtual repeat</a>
+          renders only enough DOM nodes to fill the container, recycling them as the
+          user scrolls. This provides smooth and performant scrolling through large
+          lists of options. Note that all options in a <code>md-virtual-repeat</code>
+          list must have the same height.
+        </p>
+        <h4>Virtual mode</h4>
+        <md-autocomplete
+            id="virtual-autocomplete"
+            ng-disabled="ctrl.isDisabled"
+            md-no-cache="ctrl.noCache"
+            md-selected-item="ctrl.selectedItem"
+            md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+            md-search-text="ctrl.searchText"
+            md-selected-item-change="ctrl.selectedItemChange(item)"
+            md-items="item in ctrl.querySearch(ctrl.searchText)"
+            md-item-text="item.name"
+            md-min-length="0"
+            md-escape-options="clear"
+            input-aria-describedby="virtual-autocomplete-description"
+            input-aria-label="Current Repository"
+            placeholder="Pick an Angular repository"
+            md-menu-class="autocomplete-virtual-template"
+            md-menu-container-class="virtual-container"
+            md-mode="virtual">
+          <md-item-template>
+            <span class="item-title">
+              <md-icon md-svg-icon="img/icons/octicon-repo.svg" aria-hidden="true"></md-icon>
+              <span> {{item.name}} </span>
+            </span>
+            <p class="item-desc">
+              {{item.desc | limitTo:40}}{{item.desc.length > 40 ? '...': ''}}
+            </p>
+            <span class="item-metadata">
+              <span>
+                <strong>{{item.watchers}}</strong> watchers
+              </span>
+              <span>
+                <strong>{{item.forks}}</strong> forks
+              </span>
+            </span>
+          </md-item-template>
+        </md-autocomplete>
+      </form>
+    </div>
+  </div>
+</md-content>

@@ -1,0 +1,19 @@
+<div layout="row" layout-padding layout-wrap layout-margin ng-cloak layout-align="space-around" ng-controller="DemoCtrl as ctrl">
+  <div class="padded" md-whiteframe="{{ctrl.elevation}}" flex="100" flex-gt-sm="50" layout="column" layout-align="center center">
+    <span ng-non-bindable>md-whiteframe="{{ctrl.elevation}}"</span>
+    <span>md-whiteframe="{{ctrl.elevation}}"</span>
+    <span>Increments through the available elevations</span>
+  </div>
+  <div class="padded" md-whiteframe="{{height}}" flex="100" flex-gt-sm="50" layout="column" layout-align="center center"
+      ng-init="height = 3" ng-mouseenter="height = 6" ng-mouseleave="height = 3">
+    <span ng-non-bindable>md-whiteframe="{{height}}"</span>
+    <span>md-whiteframe="{{height}}"</span>
+    <span>Hover to toggle</span>
+  </div>
+  <div class="padded" md-whiteframe="{{ctrl.showFrame}}" flex="100" flex-gt-sm="50" layout="column" layout-align="center center"
+      ng-click="ctrl.toggleFrame()">
+    <span ng-non-bindable>md-whiteframe="{{ctrl.showFrame}}"</span>
+    <span>md-whiteframe="{{ctrl.showFrame}}"</span>
+    <span>Set to -1 to remove elevation shadow, click to toggle</span>
+  </div>
+</div>

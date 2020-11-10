@@ -3,46 +3,45 @@
   color: rgb(221,44,0);
   margin-top: 10px;
 }
-
+.demo-long-fruit-input {
+  min-width: 340px;
+}
 .custom-chips {
   md-chip {
     position: relative;
-    ._md-chip-remove-container {
+    padding-right: 24px;
+
+    .md-chip-remove-container {
       position: absolute;
       right: 4px;
       top: 4px;
       margin-right: 0;
-      height: 24px;
-      button.vegetablechip {
+      height: 26px;
+      display: none;
+
+      button.demo-remove-vegetable-chip {
         position: relative;
         height: 24px;
         width: 24px;
         line-height: 30px;
-        text-align: center;
-        background: rgba(black, 0.3);
-        border-radius: 50%;
+        background: transparent;
         border: none;
-        box-shadow: none;
         padding: 0;
-        margin: 0;
-        transition: background 0.15s linear;
-        display: block;
+
         md-icon {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate3d(-50%, -50%, 0) scale(0.7);
-          color: white;
-          fill: white;
-        }
-        &:hover, &:focus {
-          background: rgba(red, 0.8);
+          transform: translate(0, -3px) scale(0.75);
+          fill: rgba(0, 0, 0, 0.33);
         }
       }
     }
-    &:not(.md-readonly) {
-      md-chip-template {
-        padding-right: 5px;
+    &:hover:not(.md-readonly) .md-chip-remove-container {
+      display: block;
+    }
+    &.md-focused:not(.md-readonly) .md-chip-remove-container {
+      display: block;
+
+      button.demo-remove-vegetable-chip md-icon {
+        fill: rgba(255, 255, 255, 0.87);
       }
     }
   }

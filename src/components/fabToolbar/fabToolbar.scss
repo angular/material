@@ -12,7 +12,7 @@ md-fab-toolbar {
   /*
    * Closed styling
    */
-  ._md-fab-toolbar-wrapper {
+  .md-fab-toolbar-wrapper {
     display: block;
     position: relative;
     overflow: hidden;
@@ -29,7 +29,7 @@ md-fab-toolbar {
       overflow: visible !important;
     }
 
-    ._md-fab-toolbar-background {
+    .md-fab-toolbar-background {
       display: block;
       position: absolute;
       z-index: $z-index-fab + 1;
@@ -51,23 +51,23 @@ md-fab-toolbar {
 
   &.md-left {
     md-fab-trigger {
-      @include rtl-prop(right, left, 0);
+      @include rtl-prop(right, left, 0, auto);
     }
 
     .md-toolbar-tools {
       flex-direction: row-reverse;
 
       > .md-button:first-child {
-        @include rtl-prop(margin-right, margin-left, 0.6rem)
+        @include rtl-prop(margin-right, margin-left, 0.6rem, auto)
       }
 
       > .md-button:first-child {
-        @include rtl-prop(margin-left, margin-right, -0.8rem);
+        @include rtl-prop(margin-left, margin-right, -0.8rem, auto);
       }
 
 
       > .md-button:last-child {
-        @include rtl-prop(margin-right, margin-left, 8px);
+        @include rtl-prop(margin-right, margin-left, 8px, auto);
       }
 
     }
@@ -75,7 +75,7 @@ md-fab-toolbar {
 
   &.md-right {
     md-fab-trigger {
-      @include rtl-prop(left, right, 0);
+      @include rtl-prop(left, right, 0, auto);
     }
 
     .md-toolbar-tools {

@@ -1,6 +1,12 @@
 demo-include {
   display: block;
-  background-color:white;
+}
+
+/* For documentation printing purposes, set background color */
+@media print {
+  .demo-content {
+    background-color: white !important;
+  }
 }
 
 .colorNested .demo-content > div div  {
@@ -70,7 +76,6 @@ demo-include {
 }
 [ng-panel] {
   transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
-  -webkit-transition: 0.45s cubic-bezier(0.35, 0, 0.25, 1);
   position: absolute;
   left: 0;
   top: 0;

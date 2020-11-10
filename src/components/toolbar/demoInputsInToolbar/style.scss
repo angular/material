@@ -1,0 +1,14 @@
+md-toolbar {
+  header {
+    margin-top: 16px;
+
+    >span {
+      height: 58px;
+      margin: 18px 0;
+    }
+
+    md-input-container {
+      width: 160px;
+    }
+  }
+}

@@ -9,7 +9,7 @@
    *
    * @description
    * `<md-chips>` is an input component for building lists of strings or objects. The list items are
-   * displayed as 'chips'. This component can make use of an `<input>` element or an 
+   * displayed as 'chips'. This component can make use of an `<input>` element or an
    * `<md-autocomplete>` element.
    *
    * ### Custom templates
@@ -26,16 +26,19 @@
    * is also placed as a sibling to the chip content (on which there are also click listeners) to
    * avoid a nested ng-click situation.
    *
+   * <!-- Note: We no longer want to include this in the site docs; but it should remain here for
+   * future developers and those looking at the documentation.
+   *
    * <h3> Pending Features </h3>
    * <ul style="padding-left:20px;">
    *
    *   <ul>Style
-   *     <li>Colours for hover, press states (ripple?).</li>
+   *     <li>Colors for hover, press states (ripple?).</li>
    *   </ul>
    *
    *   <ul>Validation
    *     <li>allow a validation callback</li>
-   *     <li>hilighting style for invalid chips</li>
+   *     <li>highlighting style for invalid chips</li>
    *   </ul>
    *
    *   <ul>Item mutation
@@ -56,37 +59,133 @@
    *   </ul>
    * </ul>
    *
-   *  <span style="font-size:.8em;text-align:center">
-   *    Warning: This component is a WORK IN PROGRESS. If you use it now,
-   *    it will probably break on you in the future.
-   *  </span>
+   * //-->
    *
-   * @param {string=|object=} ng-model A model to bind the list of items to
+   * Sometimes developers want to limit the amount of possible chips.<br/>
+   * You can specify the maximum amount of chips by using the following markup.
+   *
+   * <hljs lang="html">
+   *   <md-chips
+   *       ng-model="myItems"
+   *       placeholder="Add an item"
+   *       md-max-chips="5">
+   *   </md-chips>
+   * </hljs>
+   *
+   * In some cases, you have an autocomplete inside of the `md-chips`.<br/>
+   * When the maximum amount of chips has been reached, you can also disable the autocomplete
+   * selection.<br/>
+   * Here is an example markup.
+   *
+   * <hljs lang="html">
+   *   <md-chips ng-model="myItems" md-max-chips="5">
+   *     <md-autocomplete ng-hide="myItems.length > 5" ...></md-autocomplete>
+   *   </md-chips>
+   * </hljs>
+   *
+   * ### Accessibility
+   *
+   * The `md-chips` component supports keyboard and screen reader users since Version 1.1.2. In
+   * order to achieve this, we modified the chips behavior to select newly appended chips for
+   * `300ms` before re-focusing the input and allowing the user to type.
+   *
+   * For most users, this delay is small enough that it will not be noticeable but allows certain
+   * screen readers to function properly (JAWS and NVDA in particular).
+   *
+   * We introduced a new `md-chip-append-delay` option to allow developers to better control this
+   * behavior.
+   *
+   * Please refer to the documentation of this option (below) for more information.
+   *
+   * @param {expression} ng-model Assignable AngularJS expression to be data-bound to the list of
+   *    chips. The expression should evaluate to a `string` or `Object` Array. The type of this
+   *    array should align with the return value of `md-transform-chip`.
+   * @param {expression=} ng-change AngularJS expression to be executed on chip addition, removal,
+   *    or content change.
    * @param {string=} placeholder Placeholder text that will be forwarded to the input.
    * @param {string=} secondary-placeholder Placeholder text that will be forwarded to the input,
-   *    displayed when there is at least on item in the list
+   *    displayed when there is at least one item in the list
+   * @param {boolean=} md-removable Enables or disables the deletion of chips through the
+   *    removal icon or the Delete/Backspace key. Defaults to true.
    * @param {boolean=} readonly Disables list manipulation (deleting or adding list items), hiding
-   *    the input and delete buttons
+   *    the input and delete buttons. If no `ng-model` is provided, the chips will automatically be
+   *    marked as readonly.<br/><br/>
+   *    When `md-removable` is not defined, the `md-remove` behavior will be overwritten and
+   *    disabled.
+   * @param {boolean=} md-enable-chip-edit Set this to `"true"` to enable editing of chip contents.
+   *    The user can go into edit mode by pressing the `space` or `enter` keys, or by double
+   *    clicking on the chip. Chip editing is only supported for chips using the basic template.
+   *    **Note:** This attribute is only evaluated once; it is not watched.
+   * @param {boolean=} ng-required Whether ng-model is allowed to be empty or not.
    * @param {number=} md-max-chips The maximum number of chips allowed to add through user input.
    *    <br/><br/>The validation property `md-max-chips` can be used when the max chips
    *    amount is reached.
-   * @param {expression} md-transform-chip An expression of form `myFunction($chip)` that when called
-   *    expects one of the following return values:
+   * @param {boolean=} md-add-on-blur When set to `"true"`, the remaining text inside of the input
+   *    will be converted into a new chip on blur.
+   *    **Note:** This attribute is only evaluated once; it is not watched.
+   * @param {expression} md-transform-chip An expression of form `myFunction($chip)` that when
+   *    called expects one of the following return values:
    *    - an object representing the `$chip` input string
    *    - `undefined` to simply add the `$chip` input string, or
    *    - `null` to prevent the chip from being appended
    * @param {expression=} md-on-add An expression which will be called when a chip has been
-   *    added.
+   *    added with `$chip` and `$index` available as parameters.
    * @param {expression=} md-on-remove An expression which will be called when a chip has been
-   *    removed.
+   *    removed with `$chip`, `$index`, and `$event` available as parameters.
    * @param {expression=} md-on-select An expression which will be called when a chip is selected.
-   * @param {boolean} md-require-match If true, and the chips template contains an autocomplete,
+   * @param {boolean=} md-require-match If true, and the chips template contains an autocomplete,
    *    only allow selection of pre-defined chips (i.e. you cannot add new ones).
+   * @param {string=} md-input-class This class will be applied to the child input for custom
+   *    styling. If you are using an `md-autocomplete`, then you need to put this attribute on the
+   *    `md-autocomplete` rather than the `md-chips`.
+   * @param {string=} input-aria-describedby A space-separated list of element IDs. This should
+   *     contain the IDs of any elements that describe this autocomplete. Screen readers will read
+   *     the content of these elements at the end of announcing that the chips input has been
+   *     selected and describing its current state. The descriptive elements do not need to be
+   *     visible on the page.
+   * @param {string=} input-aria-labelledby A space-separated list of element IDs. The ideal use
+   *    case is that this would contain the ID of a `<label>` element that is associated with these
+   *    chips.<br><br>
+   *    For `<label id="state">US State</label>`, you would set this to
+   *    `input-aria-labelledby="state"`.
+   * @param {string=} input-aria-label A string read by screen readers to identify the input.
+   *    For static chips, this will be applied to the chips container.
+   * @param {string=} container-hint A string read by screen readers informing users of how to
+   *    navigate the chips when there are chips. Only applies when `ng-model` is defined.
+   * @param {string=} container-empty-hint A string read by screen readers informing users of how to
+   *    add chips when there are no chips. You will want to use this to override the default when
+   *    in a non-English locale. Only applies when `ng-model` is defined.
    * @param {string=} delete-hint A string read by screen readers instructing users that pressing
-   *    the delete key will remove the chip.
-   * @param {string=} delete-button-label A label for the delete button. Also hidden and read by
-   *    screen readers.
+   *    the delete key will remove the chip. You will want to use this to override the default when
+   *    in a non-English locale.
+   * @param {string=} delete-button-label Text for the `aria-label` of the button with the
+   *    `md-chip-remove` class. If the chip is an Object, then this will be the only text in the
+   *    label. Otherwise, this is prepended to the string representation of the chip. Defaults to
+   *    "Remove", which would be "Remove Apple" for a chip that contained the string "Apple".
+   *    You will want to use this to override the default when in a non-English locale.
+   * @param {string=} md-removed-message Screen readers will announce this message following the
+   *    chips contents. The default is `"removed"`. If a chip with the content of "Apple" was
+   *    removed, the screen reader would read "Apple removed". You will want to use this to override
+   *    the default when in a non-English locale.
+   * @param {string=} md-added-message Screen readers will announce this message following the
+   *    chips contents. The default is `"added"`. If a chip with the content of "Apple" was
+   *    created, the screen reader would read "Apple added". You will want to use this to override
+   *    the default when in a non-English locale.
    * @param {expression=} md-separator-keys An array of key codes used to separate chips.
+   * @param {string=} md-chip-append-delay The number of milliseconds that the component will select
+   *    a newly appended chip before allowing a user to type into the input. This is **necessary**
+   *    for keyboard accessibility for screen readers. It defaults to 300ms and any number less than
+   *    300 can cause issues with screen readers (particularly JAWS and sometimes NVDA).
+   *
+   *    _Available since Version 1.1.2._
+   *
+   *    **Note:** You can safely set this to `0` in one of the following two instances:
+   *
+   *    1. You are targeting an iOS or Safari-only application (where users would use VoiceOver) or
+   *    only ChromeVox users.
+   *
+   *    2. If you have utilized the `md-separator-keys` to disable the `enter` keystroke in
+   *    favor of another one (such as `,` or `;`).
    *
    * @usage
    * <hljs lang="html">
@@ -116,37 +215,47 @@
    *
    */
 
-
+  // TODO add a way for developers to specify which field of the object should used in the
+  // aria-label.
   var MD_CHIPS_TEMPLATE = '\
       <md-chips-wrap\
-          ng-if="!$mdChipsCtrl.readonly || $mdChipsCtrl.items.length > 0"\
+          id="{{$mdChipsCtrl.wrapperId}}"\
+          tabindex="{{$mdChipsCtrl.readonly ? 0 : -1}}"\
           ng-keydown="$mdChipsCtrl.chipKeydown($event)"\
-          ng-class="{ \'md-focused\': $mdChipsCtrl.hasFocus(), \'md-readonly\': !$mdChipsCtrl.ngModelCtrl }"\
+          ng-class="{ \'md-focused\': $mdChipsCtrl.hasFocus(), \
+                      \'md-readonly\': !$mdChipsCtrl.ngModelCtrl || $mdChipsCtrl.readonly,\
+                      \'md-removable\': $mdChipsCtrl.isRemovable() }"\
           class="md-chips">\
         <md-chip ng-repeat="$chip in $mdChipsCtrl.items"\
-            index="{{$index}}"\
-            ng-class="{\'md-focused\': $mdChipsCtrl.selectedChip == $index, \'md-readonly\': $mdChipsCtrl.readonly}">\
-          <div class="_md-chip-content"\
-              tabindex="-1"\
-              aria-hidden="true"\
+            index="{{$index}}" \
+            ng-class="{\'md-focused\': $mdChipsCtrl.selectedChip == $index, \'md-readonly\': !$mdChipsCtrl.ngModelCtrl || $mdChipsCtrl.readonly}">\
+          <div class="md-chip-content"\
+              tabindex="{{$mdChipsCtrl.ariaTabIndex === $index ? 0 : -1}}"\
+              id="{{$mdChipsCtrl.contentIdFor($index)}}"\
+              role="option"\
+              aria-selected="{{$mdChipsCtrl.selectedChip === $index}}"\
+              aria-setsize="{{$mdChipsCtrl.items.length}}"\
+              aria-posinset="{{$index+1}}"\
+              ng-click="!$mdChipsCtrl.readonly && $mdChipsCtrl.focusChip($index)"\
+              aria-label="{{$mdChipsCtrl._isChipObject($chip) ? \'\' : $chip + \'. \'}}{{$mdChipsCtrl.isRemovable() ? \'\' + $mdChipsCtrl.deleteHint : \'\'}}" \
               ng-focus="!$mdChipsCtrl.readonly && $mdChipsCtrl.selectChip($index)"\
               md-chip-transclude="$mdChipsCtrl.chipContentsTemplate"></div>\
-          <div ng-if="!$mdChipsCtrl.readonly"\
-               class="_md-chip-remove-container"\
+          <div ng-if="$mdChipsCtrl.isRemovable()"\
+               class="md-chip-remove-container"\
+               tabindex="-1"\
                md-chip-transclude="$mdChipsCtrl.chipRemoveTemplate"></div>\
         </md-chip>\
-        <div ng-if="!$mdChipsCtrl.readonly && $mdChipsCtrl.ngModelCtrl"\
-            class="_md-chip-input-container"\
-            md-chip-transclude="$mdChipsCtrl.chipInputTemplate"></div>\
+        <div class="md-chip-input-container" ng-if="!$mdChipsCtrl.readonly && $mdChipsCtrl.ngModelCtrl">\
+          <div md-chip-transclude="$mdChipsCtrl.chipInputTemplate"></div>\
         </div>\
       </md-chips-wrap>';
 
   var CHIP_INPUT_TEMPLATE = '\
         <input\
-            class="md-input"\
+            class="md-input{{ $mdChipsCtrl.inputClass ? \' \' + $mdChipsCtrl.inputClass: \'\'}}"\
             tabindex="0"\
+            aria-label="{{$mdChipsCtrl.inputAriaLabel}}"\
             placeholder="{{$mdChipsCtrl.getPlaceholder()}}"\
-            aria-label="{{$mdChipsCtrl.getPlaceholder()}}"\
             ng-model="$mdChipsCtrl.chipBuffer"\
             ng-focus="$mdChipsCtrl.onInputFocus()"\
             ng-blur="$mdChipsCtrl.onInputBlur()"\
@@ -157,29 +266,26 @@
 
   var CHIP_REMOVE_TEMPLATE = '\
       <button\
-          class="_md-chip-remove"\
-          ng-if="!$mdChipsCtrl.readonly"\
-          ng-click="$mdChipsCtrl.removeChipAndFocusInput($$replacedScope.$index)"\
+          class="md-chip-remove"\
+          ng-if="$mdChipsCtrl.isRemovable()"\
+          ng-click="$mdChipsCtrl.removeChipAndFocusInput($$replacedScope.$index, $event)"\
           type="button"\
-          aria-hidden="true"\
-          tabindex="-1">\
-        <md-icon md-svg-icon="md-close"></md-icon>\
-        <span class="_md-visually-hidden">\
-          {{$mdChipsCtrl.deleteButtonLabel}}\
-        </span>\
+          tabindex="-1"\
+          aria-label="{{$mdChipsCtrl.deleteButtonLabel}}{{$mdChipsCtrl._isChipObject($chip) ? \'\' : \' \' + $chip}}">\
+        <md-icon md-svg-src="{{$mdChipsCtrl.mdCloseIcon}}" aria-hidden="true"></md-icon>\
       </button>';
 
   /**
    * MDChips Directive Definition
    */
-  function MdChips ($mdTheming, $mdUtil, $compile, $log, $timeout) {
+  function MdChips ($mdTheming, $mdUtil, $compile, $log, $timeout, $$mdSvgRegistry) {
     // Run our templates through $mdUtil.processTemplate() to allow custom start/end symbols
     var templates = getTemplates();
 
     return {
       template: function(element, attrs) {
         // Clone the element into an attribute. By prepending the attribute
-        // name with '$', Angular won't write it into the DOM. The cloned
+        // name with '$', AngularJS won't write it into the DOM. The cloned
         // element propagates to the link function via the attrs argument,
         // where various contained-elements can be consumed.
         attrs['$mdUserTemplate'] = element.clone();
@@ -192,19 +298,29 @@
       bindToController: true,
       compile: compile,
       scope: {
-        readonly: '=readonly',
-        placeholder: '@',
-        secondaryPlaceholder: '@',
-        maxChips: '@mdMaxChips',
+        readonly: '=?readonly',
+        removable: '=?mdRemovable',
+        placeholder: '@?',
+        secondaryPlaceholder: '@?',
+        maxChips: '@?mdMaxChips',
         transformChip: '&mdTransformChip',
-        onAppend: '&mdOnAppend',
-        onAdd: '&mdOnAdd',
-        onRemove: '&mdOnRemove',
-        onSelect: '&mdOnSelect',
-        deleteHint: '@',
-        deleteButtonLabel: '@',
+        onAdd: '&?mdOnAdd',
+        onRemove: '&?mdOnRemove',
+        addedMessage: '@?mdAddedMessage',
+        removedMessage: '@?mdRemovedMessage',
+        onSelect: '&?mdOnSelect',
+        inputClass: '@?mdInputClass',
+        inputAriaDescribedBy: '@?inputAriaDescribedby',
+        inputAriaLabelledBy: '@?inputAriaLabelledby',
+        inputAriaLabel: '@?',
+        containerHint: '@?',
+        containerEmptyHint: '@?',
+        deleteHint: '@?',
+        deleteButtonLabel: '@?',
         separatorKeys: '=?mdSeparatorKeys',
-        requireMatch: '=?mdRequireMatch'
+        requireMatch: '=?mdRequireMatch',
+        chipAppendDelayString: '@?mdChipAppendDelay',
+        ngChange: '&?'
       }
     };
 
@@ -241,10 +357,20 @@
       var userTemplate = attr['$mdUserTemplate'];
       attr['$mdUserTemplate'] = null;
 
+      var chipTemplate = getTemplateByQuery('md-chips>md-chip-template');
+
+      var chipRemoveSelector = $mdUtil
+        .prefixer()
+        .buildList('md-chip-remove')
+        .map(function(attr) {
+          return 'md-chips>*[' + attr + ']';
+        })
+        .join(',');
+
       // Set the chip remove, chip contents and chip input templates. The link function will put
       // them on the scope for transclusion later.
-      var chipRemoveTemplate   = getTemplateByQuery('md-chips>*[md-chip-remove]') || templates.remove,
-          chipContentsTemplate = getTemplateByQuery('md-chips>md-chip-template') || templates.default,
+      var chipRemoveTemplate   = getTemplateByQuery(chipRemoveSelector) || templates.remove,
+          chipContentsTemplate = chipTemplate || templates.default,
           chipInputTemplate    = getTemplateByQuery('md-chips>md-autocomplete')
               || getTemplateByQuery('md-chips>input')
               || templates.input,
@@ -269,13 +395,25 @@
 
         $mdTheming(element);
         var mdChipsCtrl = controllers[0];
+        if (chipTemplate) {
+          // Chip editing functionality assumes we are using the default chip template.
+          mdChipsCtrl.enableChipEdit = false;
+        }
+
         mdChipsCtrl.chipContentsTemplate = chipContentsTemplate;
         mdChipsCtrl.chipRemoveTemplate   = chipRemoveTemplate;
         mdChipsCtrl.chipInputTemplate    = chipInputTemplate;
 
+        mdChipsCtrl.mdCloseIcon = $$mdSvgRegistry.mdCancel;
+
         element
-            .attr({ 'aria-hidden': true, tabindex: -1 })
-            .on('focus', function () { mdChipsCtrl.onFocus(); });
+            .attr({ tabindex: -1 })
+            .on('focus', function () { mdChipsCtrl.onFocus(); })
+            .on('click', function () {
+              if (!mdChipsCtrl.readonly && mdChipsCtrl.selectedChip === -1) {
+                mdChipsCtrl.onFocus();
+              }
+            });
 
         if (attr.ngModel) {
           mdChipsCtrl.configureNgModel(element.controller('ngModel'));
@@ -283,12 +421,6 @@
           // If an `md-transform-chip` attribute was set, tell the controller to use the expression
           // before appending chips.
           if (attrs.mdTransformChip) mdChipsCtrl.useTransformChipExpression();
-
-          // If an `md-on-append` attribute was set, tell the controller to use the expression
-          // when appending chips.
-          //
-          // DEPRECATED: Will remove in official 1.0 release
-          if (attrs.mdOnAppend) mdChipsCtrl.useOnAppendExpression();
 
           // If an `md-on-add` attribute was set, tell the controller to use the expression
           // when adding chips.
@@ -305,18 +437,21 @@
           // The md-autocomplete and input elements won't be compiled until after this directive
           // is complete (due to their nested nature). Wait a tick before looking for them to
           // configure the controller.
-          if (chipInputTemplate != templates.input) {
+          if (chipInputTemplate !== templates.input) {
             // The autocomplete will not appear until the readonly attribute is not true (i.e.
             // false or undefined), so we have to watch the readonly and then on the next tick
             // after the chip transclusion has run, we can configure the autocomplete and user
             // input.
             scope.$watch('$mdChipsCtrl.readonly', function(readonly) {
               if (!readonly) {
+
                 $mdUtil.nextTick(function(){
-                  if (chipInputTemplate.indexOf('<md-autocomplete') === 0)
-                    mdChipsCtrl
-                        .configureAutocomplete(element.find('md-autocomplete')
-                            .controller('mdAutocomplete'));
+
+                  if (chipInputTemplate.indexOf('<md-autocomplete') === 0) {
+                    var autocompleteEl = element.find('md-autocomplete');
+                    mdChipsCtrl.configureAutocomplete(autocompleteEl.controller('mdAutocomplete'));
+                  }
+
                   mdChipsCtrl.configureUserInput(element.find('input'));
                 });
               }
@@ -327,7 +462,10 @@
           $mdUtil.nextTick(function() {
             var input = element.find('input');
 
-            input && input.toggleClass('md-input', true);
+            if (input) {
+              mdChipsCtrl.configureInput(input);
+              input.toggleClass('md-input', true);
+            }
           });
         }
 

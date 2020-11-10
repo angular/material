@@ -1,8 +1,7 @@
-var karma = require('karma').server;
-var ROOT = require('../const').ROOT;
-var args = require('../util').args;
-var Server = require('karma').Server;
-var config = {
+const ROOT = require('../const').ROOT;
+const args = require('../util').args;
+const Server = require('karma').Server;
+const config = {
       singleRun: false,
       autoWatch: true,
       configFile: ROOT + '/config/karma.conf.js',
@@ -13,6 +12,6 @@ var config = {
 exports.dependencies = ['build'];
 
 exports.task = function(done) {
-  var server = new Server(config, done);
-  server. start();
+  const server = new Server(config, done);
+  server.start();
 };

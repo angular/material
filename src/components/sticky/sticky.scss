@@ -1,4 +1,4 @@
-._md-sticky-clone {
+.md-sticky-clone {
   z-index: 2;
   top: 0;
   left: 0;
@@ -9,7 +9,7 @@
 
   &[sticky-state="active"] {
     transform: translate3d(0, 0, 0);
-    &:not(.md-sticky-no-effect) ._md-subheader-inner {
+    &:not(.md-sticky-no-effect) .md-subheader-inner {
       animation: subheaderStickyHoverIn 0.3s ease-out both;
     }
   }

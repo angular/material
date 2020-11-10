@@ -24,7 +24,7 @@ angular
  * <hljs lang="html">
  * <input placeholder="Enter a search term..." ng-model="searchTerm" type="text" />
  * <ul>
- *   <li ng-repeat="result in results" md-highlight-text="searchTerm">
+ *   <li ng-repeat="result in results" md-highlight-text="searchTerm" md-highlight-flags="i">
  *     {{result.text}}
  *   </li>
  * </ul>
@@ -37,10 +37,10 @@ function MdHighlight ($interpolate, $parse) {
     controller: 'MdHighlightCtrl',
     compile: function mdHighlightCompile(tElement, tAttr) {
       var termExpr = $parse(tAttr.mdHighlightText);
-      var unsafeTextExpr = $interpolate(tElement.html());
+      var unsafeContentExpr = $interpolate(tElement.html());
 
       return function mdHighlightLink(scope, element, attr, ctrl) {
-        ctrl.init(termExpr, unsafeTextExpr);
+        ctrl.init(termExpr, unsafeContentExpr);
       };
     }
   };

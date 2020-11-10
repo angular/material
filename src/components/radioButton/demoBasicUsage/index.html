@@ -1,21 +1,19 @@
 <div>
   <form ng-submit="submit()" ng-controller="AppCtrl" ng-cloak>
-    <p>Selected Value: <span class="radioValue">{{ data.group1 }}</span> </p>
-
-    <md-radio-group ng-model="data.group1">
-
+    <p>
+      <label id="favoriteFruit">Favorite Fruit:</label> <span class="radioValue">{{ data.group1 }}</span>
+    </p>
+    <md-radio-group ng-model="data.group1" aria-labelledby="favoriteFruit">
       <md-radio-button value="Apple" class="md-primary">Apple</md-radio-button>
-      <md-radio-button value="Banana"> Banana </md-radio-button>
+      <md-radio-button value="Banana">Banana</md-radio-button>
       <md-radio-button value="Mango">Mango</md-radio-button>
-
     </md-radio-group>
-
     <hr />
 
-    <p>Selected Value: <span class="radioValue">{{ data.group2 }}</span></p>
-
-    <md-radio-group ng-model="data.group2" class="md-primary">
-
+    <p>
+      <label id="selectedValue">Selected Value:</label> <span class="radioValue">{{ data.group2 }}</span>
+    </p>
+    <md-radio-group ng-model="data.group2" class="md-primary" aria-labelledby="selectedValue">
         <md-radio-button ng-repeat="d in radioData"
                          ng-value="d.value"
                          ng-disabled=" d.isDisabled "
@@ -27,22 +25,20 @@
             Vestibulum tempor, ligula id laoreet hendrerit, massa augue iaculis magna,
             sit amet dapibus tortor ligula non nibh.
           </span>
-
         </md-radio-button>
-
     </md-radio-group>
-
     <p>
       <md-button class="md-raised" ng-click="addItem()" type="button">Add</md-button>
       <md-button class="md-raised" ng-click="removeItem()" type="button">Remove</md-button>
     </p>
-
     <hr />
 
-    <p style="margin-bottom: 0;">Graphic radio buttons need to be labeled with the <code>aria-label</code> attribute.</p>
-    <p style="margin-top: 0;">Selected Avatar: <span class="radioValue">{{ data.group3 }}</span></p>
+    <p class="demo-description">Graphic radio buttons need to be labeled with the <code>aria-label</code> attribute.</p>
+    <p>
+      <label id="selectedAvatar">Selected Avatar:</label> <span class="radioValue">{{ data.group3 }}</span>
+    </p>
 
-    <md-radio-group ng-model="data.group3">
+    <md-radio-group ng-model="data.group3" aria-labelledby="selectedAvatar">
       <md-radio-button ng-repeat="it in avatarData"
                        ng-value="it.value"
                        aria-label="{{it.title}}">

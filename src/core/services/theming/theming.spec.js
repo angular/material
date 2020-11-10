@@ -163,7 +163,7 @@ describe('$mdThemingProvider', function() {
       expect(themingProvider._PALETTES.extended['100']).toEqual(testPalette['100']);
       expect(themingProvider._PALETTES.extended['50']).toEqual('newValue');
     });
-  }); 
+  });
 
   describe('css template parsing', function() {
     beforeEach(setup);
@@ -171,12 +171,12 @@ describe('$mdThemingProvider', function() {
     function parse(str) {
       return themingProvider._parseRules(testTheme, 'primary', str)
         .join('')
-        .split(/\}(?!(\}|'|"|;))/)
+        .split(/}(?!(}|'|"|;))/)
         .filter(function(val) { return !!val; })
         .map(function(rule) {
           rule += '}';
           return {
-            content: (rule.match(/\{\s*(.*?)\s*\}/) || [])[1] || null,
+            content: (rule.match(/{\s*(.*?)\s*}/) || [])[1] || null,
             hue: (rule.match(/md-(hue-\d)/) || [])[1] || null,
             type: (rule.match(/(primary)/) || [])[1] || null
           };
@@ -202,6 +202,40 @@ describe('$mdThemingProvider', function() {
       ).join('')).toContain('.md-test-theme {}');
     });
 
+    describe('background palette', function() {
+
+      function getRgbaBackgroundHue(hue) {
+        return themingProvider._rgba(themingProvider._PALETTES.testPalette[hue].value);
+      }
+
+      it('should parse for a light theme probably', function() {
+        testTheme.dark(false);
+
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('50') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-1}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A100') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-2}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('100') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-3}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('300') + ';');
+      });
+
+      it('should parse for a dark theme probably', function() {
+        testTheme.dark(true);
+
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A400') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-1}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('800') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-2}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('900') + ';');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-hue-3}}"; }')[0].content)
+          .toEqual('color: ' + getRgbaBackgroundHue('A200') + ';');
+      });
+
+    });
+
     describe('parses foreground text and shadow', function() {
       it('for a light theme', function() {
         testTheme.dark(false);
@@ -210,26 +244,117 @@ describe('$mdThemingProvider', function() {
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
           .toEqual('color: rgba(0,0,0,0.54);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
-          .toEqual('color: rgba(0,0,0,0.26);');
+          .toEqual('color: rgba(0,0,0,0.38);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
           .toEqual('color: rgba(0,0,0,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
           .toEqual('color: ;');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.54);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.54);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-disabled}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.38);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-hint}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.38);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-divider}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.12);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-0.05}}"; }')[0].content)
+          .toEqual('color: rgba(0,0,0,0.05);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
       });
+
       it('for a dark theme', function() {
         testTheme.dark();
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-1}}"; }')[0].content)
-          .toEqual('color: rgba(255,255,255,1.0);');
+          .toEqual('color: rgba(255,255,255,0.87);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.7);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
-          .toEqual('color: rgba(255,255,255,0.3);');
+          .toEqual('color: rgba(255,255,255,0.5);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
           .toEqual('color: rgba(255,255,255,0.12);');
         expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
           .toEqual('color: 1px 1px 0px rgba(0,0,0,0.4), -1px -1px 0px rgba(0,0,0,0.4);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-disabled}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.5);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-hint}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.5);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-divider}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.12);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-0.05}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.05);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-900-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-900-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,1);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
+      });
+      it('override foreground color', function() {
+        testTheme.dark(false);
+        testTheme.foregroundPalette = {
+          '1': 'ff0000',
+          '2': '00ff00',
+          '3': '0000ff',
+          '4': 'ffff00'
+        };
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-1}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-2}}"; }')[0].content)
+          .toEqual('color: rgb(0,255,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-3}}"; }')[0].content)
+          .toEqual('color: rgb(0,0,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-4}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{foreground-shadow}}"; }')[0].content)
+          .toEqual('color: ;');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-icon}}"; }')[0].content)
+          .toEqual('color: rgb(0,255,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgb(0,255,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-disabled}}"; }')[0].content)
+          .toEqual('color: rgb(0,0,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-hint}}"; }')[0].content)
+          .toEqual('color: rgb(0,0,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-default-contrast-divider}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,0);');
+
+        // override colors of same contrast type
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-50-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-100-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-200-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,0,0);');
+
+        // should not override the following
+        expect(parse('.md-THEME_NAME-theme { color: "{{background-900-contrast}}"; }')[0].content)
+          .toEqual('color: rgb(255,255,255);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.87);');
+        expect(parse('.md-THEME_NAME-theme { color: "{{primary-contrast-secondary}}"; }')[0].content)
+          .toEqual('color: rgba(255,255,255,0.7);');
       });
     });
+
     it('parses contrast colors', function() {
       testTheme.primaryPalette('testPalette', {
         'default': '50'
@@ -249,6 +374,7 @@ describe('$mdThemingProvider', function() {
       expect(parse('{ color: "{{primary-contrast}}"; }')[0].content)
         .toEqual('color: rgb(255,255,255);');
     });
+
     it('generates base, non-colorType-specific, rules', function() {
       var accent100 = themingProvider._rgba(themingProvider._PALETTES.testPalette['100'].value);
       var result = parse('.md-THEME_NAME-theme { color: "{{accent-100}}"; }');
@@ -262,6 +388,7 @@ describe('$mdThemingProvider', function() {
       expect(result[3].hue).toBe('hue-3');
       expect(result.length).toBe(4);
     });
+
     it('generates colorType-specific rules for each hue', function() {
       var primary = themingProvider._rgba(themingProvider._PALETTES.testPalette['500'].value);
       var hue1 = themingProvider._rgba(themingProvider._PALETTES.testPalette['300'].value);
@@ -273,6 +400,14 @@ describe('$mdThemingProvider', function() {
       expect(result[2]).toEqual({content: 'color: ' + hue2 + ';', hue: 'hue-2', type: 'primary'});
       expect(result[3]).toEqual({content: 'color: ' + hue3 + ';', hue: 'hue-3', type: 'primary'});
       expect(result.length).toEqual(4);
+    });
+
+    it('should generate styles when a md-something selector has an expression for a different palette', function() {
+      // The selector has `md-primary` in the name, but the expression is for md-warn.
+      var result = parse('.md-THEME_NAME-theme.md-primary { color: "{{warn-color}}"; }');
+
+      // This should not leave an unevaluated expression in the output.
+      expect(result.join(' ')).not.toContain('{{');
     });
 
     it('generates colorType-specific rules for each hue with opacity', function() {
@@ -309,6 +444,118 @@ describe('$mdThemingProvider', function() {
     });
   });
 
+  describe('browser color', function () {
+    beforeEach(function () {
+      setup();
+      angular.element(document.getElementsByTagName('meta')).remove();
+    });
+
+    it('should use default primary color at the meta tag', function () {
+      var name = 'theme-color';
+      var content = '#' + themingProvider._PALETTES.testPalette['800'].hex;
+
+      expect(document.getElementsByName(name).length).toBe(0);
+
+      themingProvider.enableBrowserColor();
+
+      expect(document.getElementsByName(name).length).toBe(1);
+      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+    });
+
+    it('should use default primary color with hue `200`', function () {
+      var name = 'theme-color';
+
+      var hue = '200';
+
+      var content = '#' + themingProvider._PALETTES.testPalette[hue].hex;
+
+      expect(document.getElementsByName(name).length).toBe(0);
+
+      themingProvider.enableBrowserColor({ hue: hue });
+
+      expect(document.getElementsByName(name).length).toBe(1);
+      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+    });
+
+    it('should use red palette', function () {
+      var name = 'theme-color';
+
+      var content = themingProvider._PALETTES.red['800'].hex;
+
+      expect(document.getElementsByName(name).length).toBe(0);
+
+      themingProvider.enableBrowserColor({ palette: 'red' });
+
+      expect(document.getElementsByName(name).length).toBe(1);
+      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+    });
+
+    it('should use test theme', function () {
+      var name = 'theme-color';
+
+      var content = '#' + themingProvider._PALETTES.testPalette['800'].hex;
+
+      expect(document.getElementsByName(name).length).toBe(0);
+
+      themingProvider.enableBrowserColor({ theme: 'test' });
+
+      expect(document.getElementsByName(name).length).toBe(1);
+      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(content);
+    });
+  });
+
+  describe('configuration', function () {
+    beforeEach(function () {
+      module('material.core', function($mdThemingProvider) {
+            themingProvider = $mdThemingProvider;
+      });
+      startAngular();
+    });
+
+    it('should have access to read-only configuration', function () {
+      var config = themingProvider.configuration();
+
+      expect(config.disableTheming).toBe(false);
+      expect(config.generateOnDemand).toBe(false);
+      expect(config.registeredStyles.length).toBe(0);
+      expect(config.nonce).toBe(null);
+      expect(config.alwaysWatchTheme).toBe(false);
+
+      // Change local copies
+      config.disableTheming = true;
+      config.generateOnDemand = true;
+      config.registeredStyles.push("Something");
+      config.nonce = 'myNonce';
+      config.alwaysWatchTheme = true;
+
+      var config2 = themingProvider.configuration();
+
+      // Confirm provider returned values are not altered
+      expect(config2.disableTheming).toBe(false);
+      expect(config2.generateOnDemand).toBe(false);
+      expect(config2.registeredStyles.length).toBe(0);
+      expect(config2.nonce).toBe(null);
+      expect(config2.alwaysWatchTheme).toBe(false);
+    });
+  });
+});
+
+describe('$mdThemeProvider with custom styles', function() {
+  it('appends the custom styles to the end of the $MD_THEME_CSS string', function() {
+    module('material.core', function($mdThemingProvider) {
+      $mdThemingProvider.registerStyles('/*test*/');
+      $mdThemingProvider.theme('register-custom-styles');
+    });
+
+    inject(function($MD_THEME_CSS) {
+      // Verify that $MD_THEME_CSS is still set to '/**/' in the test environment.
+      // Check angular-material-mocks.js for $MD_THEME_CSS latest value if this test starts to fail.
+      expect($MD_THEME_CSS).toBe('/**/');
+    });
+
+    // Find the string '/**//*test*/' in the head tag.
+    expect(document.head.innerHTML).toContain('/*test*/');
+  });
 });
 
 describe('$mdThemeProvider with on-demand generation', function() {
@@ -366,6 +613,100 @@ describe('$mdThemeProvider with on-demand generation', function() {
     expect(styles.length).toBe(8);
     expect(document.head.innerHTML).toMatch(/md-sweden-theme/);
     expect(document.head.innerHTML).toMatch(/md-belarus-theme/);
+  });
+});
+
+describe('$mdThemeProvider with a theme that ends in a newline', function() {
+  beforeEach(function() {
+    module('material.core', function($provide) {
+      // Note that it should end with a newline
+      $provide.constant('$MD_THEME_CSS', "sparkle.md-THEME_NAME-theme { color: '{{primary-color}}' }\n");
+    });
+
+    inject(function($mdTheming) {});
+  });
+
+  it('should not add an extra closing bracket if the stylesheet ends with a newline', function() {
+    var style = document.head.querySelector('style[md-theme-style]');
+    expect(style.innerText).not.toContain('}}');
+    style.parentNode.removeChild(style);
+  });
+});
+
+describe('$mdThemeProvider with disabled themes', function() {
+
+  function getThemeStyleElements() {
+    return document.head.querySelectorAll('style[md-theme-style]');
+  }
+
+  function cleanThemeStyleElements() {
+    angular.forEach(getThemeStyleElements(), function(style) {
+      document.head.removeChild(style);
+    });
+  }
+  beforeEach(function() {
+
+    module('material.core', function($provide, $mdThemingProvider) {
+      // Use a single simple style rule for which we can check presence / absense.
+      $provide.constant('$MD_THEME_CSS', "sparkle.md-THEME_NAME-theme { color: '{{primary-color}}' }");
+
+      $mdThemingProvider
+        .theme('belarus')
+        .primaryPalette('red')
+        .accentPalette('green');
+
+    });
+  });
+
+  afterEach(function() {
+    cleanThemeStyleElements();
+  });
+
+  describe('can disable themes programmatically', function() {
+    beforeEach(function() {
+      cleanThemeStyleElements();
+
+      module('material.core', function($mdThemingProvider) {
+        $mdThemingProvider.disableTheming();
+      });
+    });
+
+    it('should not add any theme styles', function() {
+      var styles = getThemeStyleElements();
+      expect(styles.length).toBe(0);
+    });
+  });
+
+  describe('can disable themes declaratively', function() {
+    beforeEach(function() {
+      // Set the body attribute BEFORE the theming module is loaded
+      var el = document.body;
+          el.setAttribute('md-themes-disabled', '');
+    });
+
+    afterEach(function() {
+      var el = document.body;
+          el.removeAttribute('md-themes-disabled');
+    });
+
+    it('should not set any classnames', function() {
+      inject(function($rootScope, $compile, $mdTheming) {
+        var el = $compile('<h1>Test</h1>')($rootScope);
+        $mdTheming(el);
+        expect(el.hasClass('md-default-theme')).toBe(false);
+      });
+    });
+
+    it('should not inject any styles', function() {
+      inject(function($rootScope, $compile, $mdTheming) {
+        var el = $compile('<h1>Test</h1>')($rootScope);
+        $mdTheming(el);
+
+        var styles = getThemeStyleElements();
+        expect(styles.length).toBe(0);
+      });
+    });
+
   });
 });
 
@@ -493,37 +834,180 @@ describe('$mdTheming service', function() {
   it('exposes a getter for the default theme', inject(function($mdTheming) {
     expect($mdTheming.defaultTheme()).toBe('default');
   }));
+
+  it('supports registering theme on the fly', inject(function ($mdTheming) {
+    expect($mdTheming.THEMES.hasOwnProperty('test')).toBeFalsy();
+
+    $mdTheming.defineTheme('test', {
+      primary: 'red',
+      warn: 'yellow'
+    });
+
+    expect($mdTheming.THEMES.hasOwnProperty('test')).toBeTruthy();
+  }));
+
+  it('supports setting palette options when registering theme on the fly', inject(function ($mdTheming) {
+    expect($mdTheming.THEMES.hasOwnProperty('testHues')).toBeFalsy();
+
+    $mdTheming.defineTheme('testHues', {
+      primary: 'red',
+      primaryHues: {
+        default: '300'
+      },
+      accent: 'blue',
+      accentHues: {
+        default: '600'
+      },
+      warn: 'yellow',
+      warnHues: {
+        default: '200'
+      },
+      background: 'amber',
+      backgroundHues: {
+        default: '800'
+      },
+    });
+
+    expect($mdTheming.THEMES.hasOwnProperty('testHues')).toBeTruthy();
+    expect($mdTheming.THEMES.testHues.colors.primary.hues.default).toBe('300');
+    expect($mdTheming.THEMES.testHues.colors.accent.hues.default).toBe('600');
+    expect($mdTheming.THEMES.testHues.colors.warn.hues.default).toBe('200');
+    expect($mdTheming.THEMES.testHues.colors.background.hues.default).toBe('800');
+  }));
+
+  it('supports changing browser color on the fly', function() {
+    var name = 'theme-color';
+    var primaryPalette = $mdThemingProvider._THEMES.default.colors.primary.name;
+    var primaryColor = $mdThemingProvider._PALETTES[primaryPalette]['800'].hex;
+    var redColor = $mdThemingProvider._PALETTES.red['800'].hex;
+
+    $mdThemingProvider.enableBrowserColor();
+
+    expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(primaryColor);
+
+    inject(function($mdTheming) {
+      $mdTheming.setBrowserColor({ palette: 'red' });
+
+      expect(angular.element(document.getElementsByName(name)[0]).attr('content')).toBe(redColor);
+    });
+  });
 });
 
 describe('md-theme directive', function() {
   beforeEach(module('material.core'));
 
-  it('should observe and set mdTheme controller', inject(function($compile, $rootScope) {
-    $rootScope.themey = 'red';
-    var el = $compile('<div md-theme="{{themey}}">')($rootScope);
+  it('should watch and set mdTheme controller',
+    inject(function ($compile, $rootScope) {
+      $rootScope.themey = 'red';
+      var el = $compile('<div md-theme="{{themey}}">')($rootScope);
+      $rootScope.$apply();
+      var ctrl = el.data('$mdThemeController');
+      expect(ctrl.$mdTheme).toBe('red');
+      $rootScope.$apply('themey = "blue"');
+      expect(ctrl.$mdTheme).toBe('blue');
+    })
+  );
+
+  it('warns when an unregistered theme is used', inject(function ($log, $compile, $rootScope) {
+    spyOn($log, 'warn');
+    $compile('<div md-theme="unregistered"></div>')($rootScope);
     $rootScope.$apply();
-    var ctrl = el.data('$mdThemeController');
-    expect(ctrl.$mdTheme).toBe('red');
-    $rootScope.$apply('themey = "blue"');
-    expect(ctrl.$mdTheme).toBe('blue');
+    expect($log.warn).toHaveBeenCalled();
   }));
 
-  it('warns when an unregistered theme is used', function() {
-    inject(function($log, $compile, $rootScope) {
-      spyOn($log, 'warn');
-      $compile('<div md-theme="unregistered"></div>')($rootScope);
-      $rootScope.$apply();
-      expect($log.warn).toHaveBeenCalled();
-    });
-  });
+  it('does not warn when a registered theme is used', inject(function($log, $compile, $rootScope) {
+    spyOn($log, 'warn');
+    $compile('<div md-theme="default"></div>')($rootScope);
+    $rootScope.$apply();
+    expect($log.warn.calls.count()).toBe(0);
+  }));
 
-  it('does not warn when a registered theme is used', function() {
-    inject(function($log, $compile, $rootScope) {
-      spyOn($log, 'warn');
-      $compile('<div md-theme="default"></div>')($rootScope);
+  it('should accept string as a theme', inject(function($compile, $rootScope, $mdTheming) {
+    var el = $compile('<div md-theme="red"></div>')($rootScope);
+    $rootScope.$apply();
+    $mdTheming(el);
+    expect(el.hasClass('md-default-theme')).toBeFalsy();
+    expect(el.hasClass('md-red-theme')).toBeTruthy();
+  }));
+
+  it('should accept interpolation string as a theme and automatically watch changes',
+    inject(function ($compile, $rootScope, $mdTheming) {
+      $rootScope.themey = 'red';
+      var el = $compile('<div md-theme="{{themey}}">')($rootScope);
+      $mdTheming(el);
       $rootScope.$apply();
-      expect($log.warn.calls.count()).toBe(0);
-    });
+      expect(el.hasClass('md-red-theme')).toBeTruthy();
+      $rootScope.$apply('themey = "blue"');
+      expect(el.hasClass('md-blue-theme')).toBeTruthy();
+    })
+  );
+
+  it('should accept onetime bind interpolation string as a theme and not watch changes',
+    inject(function ($compile, $rootScope, $mdTheming) {
+      $rootScope.themey = 'red';
+      var el = $compile('<div md-theme="{{::themey}}">')($rootScope);
+      $mdTheming(el);
+      $rootScope.$apply();
+      expect(el.hasClass('md-red-theme')).toBeTruthy();
+      $rootScope.$apply('themey = "blue"');
+      expect(el.hasClass('md-blue-theme')).toBeFalsy();
+      expect(el.hasClass('md-red-theme')).toBeTruthy();
+    })
+  );
+
+  it('should accept $q promise as a theme', inject(function($compile, $rootScope, $q, $mdTheming) {
+    $rootScope.promise = $mdTheming.defineTheme('red', { primary: 'red' });
+    var el = $compile('<div md-theme="promise"></div>')($rootScope);
+    $mdTheming(el);
+    $rootScope.$apply();
+    expect(el.hasClass('md-default-theme')).toBeFalsy();
+    expect(el.hasClass('md-red-theme')).toBeTruthy();
+  }));
+
+  it('should accept a function that returns a promise as a theme',
+    inject(function ($compile, $rootScope, $q, $mdTheming) {
+      $rootScope.func = function () {
+        return $mdTheming.defineTheme('red', {primary: 'red'});
+      };
+      var el = $compile('<div md-theme="func"></div>')($rootScope);
+      $mdTheming(el);
+      $rootScope.$apply();
+      expect(el.hasClass('md-default-theme')).toBeFalsy();
+      expect(el.hasClass('md-red-theme')).toBeTruthy();
+    }));
+
+  describe('$shouldWatch controller property', function () {
+    it('should set to true if there\'s a md-theme-watch attribute',
+      inject(function ($mdTheming, $compile, $rootScope) {
+        var el = $compile('<div md-theme="default" md-theme-watch></div>')($rootScope);
+        $mdTheming(el);
+        $rootScope.$apply();
+
+        expect(el.controller('mdTheme').$shouldWatch).toBeTruthy();
+      })
+    );
+
+    it('should set to true if there\'s an interpolation',
+      inject(function ($mdTheming, $compile, $rootScope) {
+        $rootScope.theme = 'default';
+        var el = $compile('<div md-theme="{{theme}}"></div>')($rootScope);
+        $mdTheming(el);
+        $rootScope.$apply();
+
+        expect(el.controller('mdTheme').$shouldWatch).toBeTruthy();
+      })
+    );
+
+    it('should set to false if there\'s an interpolation with one way binding',
+      inject(function ($mdTheming, $compile, $rootScope) {
+        $rootScope.theme = 'default';
+        var el = $compile('<div md-theme="{{::theme}}"></div>')($rootScope);
+        $mdTheming(el);
+        $rootScope.$apply();
+
+        expect(el.controller('mdTheme').$shouldWatch).toBeFalsy();
+      })
+    );
   });
 });
 
@@ -543,36 +1027,23 @@ describe('md-themable directive', function() {
     $rootScope.themey = 'red';
     var el = $compile('<div md-theme="{{themey}}"><span md-themable md-theme-watch></span></div>')($rootScope);
     $rootScope.$apply();
-    
+
     expect(el.children().hasClass('md-red-theme')).toBe(true);
     $rootScope.$apply('themey = "blue"');
     expect(el.children().hasClass('md-blue-theme')).toBe(true);
     expect(el.children().hasClass('md-red-theme')).toBe(false);
   }));
 
-  it('should not watch parent theme by default', inject(function($compile, $rootScope) {
+  it('should watch parent theme by default', inject(function($compile, $rootScope) {
     $rootScope.themey = 'red';
     var el = $compile('<div md-theme="{{themey}}"><span md-themable></span></div>')($rootScope);
     $rootScope.$apply();
-    
+
     expect(el.children().hasClass('md-red-theme')).toBe(true);
     $rootScope.$apply('themey = "blue"');
-    expect(el.children().hasClass('md-blue-theme')).toBe(false);
-    expect(el.children().hasClass('md-red-theme')).toBe(true);
+    expect(el.children().hasClass('md-blue-theme')).toBe(true);
+    expect(el.children().hasClass('md-red-theme')).toBe(false);
   }));
-
-  it('should support watching parent theme by default', function() {
-    $mdThemingProvider.alwaysWatchTheme(true);
-    inject(function($rootScope, $compile) {
-      $rootScope.themey = 'red';
-      var el = $compile('<div md-theme="{{themey}}"><span md-themable></span></div>')($rootScope);
-      $rootScope.$apply();
-      expect(el.children().hasClass('md-red-theme')).toBe(true);
-      $rootScope.$apply('themey = "blue"');
-      expect(el.children().hasClass('md-blue-theme')).toBe(false);
-      expect(el.children().hasClass('md-red-theme')).toBe(true);
-    });
-  });
 
   it('should not apply a class for an unnested default theme', inject(function($rootScope, $compile) {
     var el = $compile('<div md-themable></div>')($rootScope);

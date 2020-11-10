@@ -1,7 +1,7 @@
-var gulp = require('gulp');
+const gulp = require('gulp');
 
 exports.dependencies = ['docs'];
 
 exports.task = function() {
-  gulp.watch(['docs/**/*', 'src/**/*'], ['docs']);
+  gulp.watch(['docs/**/*', 'src/**/!(*.spec)'], ['docs']);
 };

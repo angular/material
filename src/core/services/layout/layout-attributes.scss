@@ -1,5 +1,4 @@
 /*
-*
 *  Responsive attributes
 *
 *  References:
@@ -8,7 +7,6 @@
 *  3) https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 *  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
 *  5) http://godban.com.ua/projects/flexgrid
-*
 */
 
 // Layout
@@ -136,19 +134,6 @@ $layout-breakpoint-lg:     1920px !default;
 
   [#{$flexName}]             { flex: 1;         box-sizing: border-box; }  // === flex: 1 1 0%;
 
-  // IE mediaQuery hack for 8,9,10 to set the flex-basis properly for 'flex' values
-  // Details:
-  // Do not use unitless flex-basis values in the flex shorthand because IE 10-11 will error.
-  // Also use 0% instead of 0px since minifiers will often convert 0px to 0 (which is unitless and will have the same problem).
-  // Safari, however, fails with flex-basis : 0% and requires flex-basis : 0px
-  @if $name != '-print' { 
-    @media screen\0 {
-        [#{$flexName}] {
-          flex: 1 1 0%;
-        }
-    }
-  }
-
   [#{$flexName}-grow]        { flex: 1 1 100%;  box-sizing: border-box; }
   [#{$flexName}-initial]     { flex: 0 1 auto;  box-sizing: border-box; }
   [#{$flexName}-auto]        { flex: 1 1 auto;  box-sizing: border-box; }
@@ -165,7 +150,30 @@ $layout-breakpoint-lg:     1920px !default;
       box-sizing: border-box;
     }
 
-    [layout="row"] > [#{$flexName}="#{$i * 5}"],
+    [layout="row"] > [#{$flexName}="#{$i * 5}"] {
+      flex: 1 1 #{$value};
+      max-width: #{$value};
+      max-height: 100%;
+      box-sizing: border-box;
+    }
+
+    [layout="column"] > [#{$flexName}="#{$i * 5}"] {
+      flex: 1 1 #{$value};
+      max-width: 100%;
+      max-height: #{$value};
+      box-sizing: border-box;
+    }
+
+    [layout="row"] {
+	    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33.33%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
+	    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66.66%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
+	  }
+
+	  [layout="column"] {
+	    > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33.33%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
+	    > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66.66%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
+	  }
+
     [layout#{$name}="row"] > [#{$flexName}="#{$i * 5}"] {
       flex: 1 1 #{$value};
       max-width: #{$value};
@@ -173,7 +181,6 @@ $layout-breakpoint-lg:     1920px !default;
       box-sizing: border-box;
     }
 
-    [layout="column"] > [#{$flexName}="#{$i * 5}"],
     [layout#{$name}="column"] > [#{$flexName}="#{$i * 5}"] {
       flex: 1 1 #{$value};
       max-width: 100%;
@@ -182,11 +189,12 @@ $layout-breakpoint-lg:     1920px !default;
     }
   }
 
-  [layout="row"], [layout#{$name}="row"] {
+  [layout#{$name}="row"] {
     > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33.33%;  max-width: 33.33%;  max-height: 100%; box-sizing: border-box; }
     > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66.66%;  max-width: 66.66%;  max-height: 100%; box-sizing: border-box; }
   }
-  [layout="column"], [layout#{$name}="column"] {
+
+  [layout#{$name}="column"] {
     > [#{$flexName}="33"]   , > [#{$flexName}="33"]     {  flex: 1 1 33.33%;  max-width: 100%;  max-height: 33.33%; box-sizing: border-box; }
     > [#{$flexName}="66"]   , > [#{$flexName}="66"]     {  flex: 1 1 66.66%;  max-width: 100%;  max-height: 66.66%; box-sizing: border-box; }
   }
@@ -204,7 +212,7 @@ $layout-breakpoint-lg:     1920px !default;
   @if $suffix != null {
     $name: 'layout-align-#{$suffix}';
   }
-  
+
   [#{$name}],
   [#{$name}="start stretch"] // defaults
   {
@@ -326,14 +334,13 @@ $layout-breakpoint-lg:     1920px !default;
 }
 @mixin layout-padding-margin() {
 
-  [layout-padding] > [flex-sm],   [layout-padding] > [flex-lt-md] {
+  [layout-padding] > [flex-sm] {
     padding: $layout-gutter-width / 4;
   }
   [layout-padding],
   [layout-padding] > [flex],
   [layout-padding] > [flex-gt-sm],
-  [layout-padding] > [flex-md],
-  [layout-padding] > [flex-lt-lg]
+  [layout-padding] > [flex-md]
   {
     padding: $layout-gutter-width / 2;
   }
@@ -343,8 +350,7 @@ $layout-breakpoint-lg:     1920px !default;
     padding: $layout-gutter-width / 1;
   }
 
-  [layout-margin] > [flex-sm],
-  [layout-margin] > [flex-lt-md]
+  [layout-margin] > [flex-sm]
   {
     margin: $layout-gutter-width / 4;
   }
@@ -352,8 +358,7 @@ $layout-breakpoint-lg:     1920px !default;
   [layout-margin],
   [layout-margin]  > [flex],
   [layout-margin]  > [flex-gt-sm],
-  [layout-margin]  > [flex-md],
-  [layout-margin]  > [flex-lt-lg]
+  [layout-margin]  > [flex-md]
   {
     margin: $layout-gutter-width / 2;
   }
@@ -431,12 +436,12 @@ $layout-breakpoint-lg:     1920px !default;
 
 @media (min-width: $layout-breakpoint-xs) and (max-width: $layout-breakpoint-sm - 1) {
   // SMALL SCREEN
-  [hide-sm], [hide-gt-xs] {
+  [hide], [hide-gt-xs] {
     &:not([show-gt-xs]):not([show-sm]):not([show]) {
       display: none;
     }
   }
-  [hide-sm]:not([show-sm]):not([show]) {
+  [hide-sm]:not([show-gt-xs]):not([show-sm]):not([show]) {
     display: none;
   }
   @include layouts_for_breakpoint(sm);
@@ -499,7 +504,7 @@ $layout-breakpoint-lg:     1920px !default;
 @media print {
   // PRINT
   @include layouts_for_breakpoint(print);
-  
+
   [hide-print]:not([show-print]):not([show]) {
     display: none;
   }

@@ -1,13 +1,11 @@
 // Polyfill angular < 1.4 (provide $animateCss)
 angular
   .module('material.core')
-  .factory('$$mdAnimate', function($q, $timeout, $mdConstant, $animateCss){
-
+  .factory('$$mdAnimate', function($q, $timeout, $mdConstant, $animateCss) {
      // Since $$mdAnimate is injected into $mdUtil... use a wrapper function
      // to subsequently inject $mdUtil as an argument to the AnimateDomUtils
-
      return function($mdUtil) {
-       return AnimateDomUtils( $mdUtil, $q, $timeout, $mdConstant, $animateCss);
+       return AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss);
      };
    });
 
@@ -17,17 +15,16 @@ angular
 function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
   var self;
   return self = {
-    /**
-     *
-     */
-    translate3d : function( target, from, to, options ) {
-      return $animateCss(target,{
-        from:from,
-        to:to,
-        addClass:options.transitionInClass
+    translate3d : function(target, from, to, options) {
+      return $animateCss(target, {
+        from: from,
+        to: to,
+        addClass: options.transitionInClass,
+        removeClass: options.transitionOutClass,
+        duration: options.duration
       })
       .start()
-      .then(function(){
+      .then(function() {
           // Resolve with reverser function...
           return reverseTranslate;
       });
@@ -39,42 +36,94 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
         return $animateCss(target, {
            to: newFrom || from,
            addClass: options.transitionOutClass,
-           removeClass: options.transitionInClass
+           removeClass: options.transitionInClass,
+           duration: options.duration
         }).start();
-
       }
-  },
+    },
 
     /**
      * Listen for transitionEnd event (with optional timeout)
      * Announce completion or failure via promise handlers
      */
     waitTransitionEnd: function (element, opts) {
-        var TIMEOUT = 3000; // fallback is 3 secs
+      var TIMEOUT = 3000; // fallback is 3 secs
 
-        return $q(function(resolve, reject){
-          opts = opts || { };
+      return $q(function(resolve, reject){
+        opts = opts || { };
 
-          var timer = $timeout(finished, opts.timeout || TIMEOUT);
-          element.on($mdConstant.CSS.TRANSITIONEND, finished);
+        // If there is no transition is found, resolve immediately
+        //
+        // NOTE: using $mdUtil.nextTick() causes delays/issues
+        if (noTransitionFound(opts.cachedTransitionStyles)) {
+          TIMEOUT = 0;
+        }
 
-          /**
-           * Upon timeout or transitionEnd, reject or resolve (respectively) this promise.
-           * NOTE: Make sure this transitionEnd didn't bubble up from a child
-           */
-          function finished(ev) {
-            if ( ev && ev.target !== element[0]) return;
+        var timer = $timeout(finished, opts.timeout || TIMEOUT);
+        element.on($mdConstant.CSS.TRANSITIONEND, finished);
 
-            if ( ev  ) $timeout.cancel(timer);
-            element.off($mdConstant.CSS.TRANSITIONEND, finished);
+        /**
+         * Upon timeout or transitionEnd, reject or resolve (respectively) this promise.
+         * NOTE: Make sure this transitionEnd didn't bubble up from a child
+         */
+        function finished(ev) {
+          if (ev && ev.target !== element[0]) return;
 
-            // Never reject since ngAnimate may cause timeouts due missed transitionEnd events
-            resolve();
+          if (ev) $timeout.cancel(timer);
+          element.off($mdConstant.CSS.TRANSITIONEND, finished);
 
-          }
+          // Never reject since ngAnimate may cause timeouts due missed transitionEnd events
+          resolve();
+        }
 
-        });
-      },
+        /**
+         * Checks whether or not there is a transition.
+         *
+         * @param styles The cached styles to use for the calculation. If null, getComputedStyle()
+         * will be used.
+         *
+         * @returns {boolean} True if there is no transition/duration; false otherwise.
+         */
+        function noTransitionFound(styles) {
+          styles = styles || window.getComputedStyle(element[0]);
+
+          return styles.transitionDuration === '0s' ||
+            (!styles.transition && !styles.transitionProperty);
+        }
+      });
+    },
+
+    calculateTransformValues: function (element, originator) {
+      var origin = originator.element;
+      var bounds = originator.bounds;
+
+      if (origin || bounds) {
+        var originBnds = origin ? self.clientRect(origin) || currentBounds() : self.copyRect(bounds);
+        var dialogRect = self.copyRect(element[0].getBoundingClientRect());
+        var dialogCenterPt = self.centerPointFor(dialogRect);
+        var originCenterPt = self.centerPointFor(originBnds);
+
+        return {
+          centerX: originCenterPt.x - dialogCenterPt.x,
+          centerY: originCenterPt.y - dialogCenterPt.y,
+          scaleX: Math.round(100 * Math.min(0.5, originBnds.width / dialogRect.width)) / 100,
+          scaleY: Math.round(100 * Math.min(0.5, originBnds.height / dialogRect.height)) / 100
+        };
+      }
+      return {centerX: 0, centerY: 0, scaleX: 0.5, scaleY: 0.5};
+
+      /**
+       * This is a fallback if the origin information is no longer valid, then the
+       * origin bounds simply becomes the current bounds for the dialogContainer's parent.
+       * @returns {null|DOMRect}
+       */
+      function currentBounds() {
+        var container = element ? element.parent() : null;
+        var parent = container ? container.parent() : null;
+
+        return parent ? self.clientRect(parent) : null;
+      }
+    },
 
     /**
      * Calculate the zoom transform from dialog to origin.
@@ -86,54 +135,34 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
      * NOTE: all values are rounded to the nearest integer
      */
     calculateZoomToOrigin: function (element, originator) {
-      var origin = originator.element;
-      var bounds = originator.bounds;
-
       var zoomTemplate = "translate3d( {centerX}px, {centerY}px, 0 ) scale( {scaleX}, {scaleY} )";
       var buildZoom = angular.bind(null, $mdUtil.supplant, zoomTemplate);
-      var zoomStyle = buildZoom({centerX: 0, centerY: 0, scaleX: 0.5, scaleY: 0.5});
 
-      if (origin || bounds) {
-        var originBnds = origin ? self.clientRect(origin) || currentBounds() : self.copyRect(bounds);
-        var dialogRect = self.copyRect(element[0].getBoundingClientRect());
-        var dialogCenterPt = self.centerPointFor(dialogRect);
-        var originCenterPt = self.centerPointFor(originBnds);
+      return buildZoom(self.calculateTransformValues(element, originator));
+    },
 
-        // Build the transform to zoom from the dialog center to the origin center
+    /**
+     * Calculate the slide transform from panel to origin.
+     * NOTE: all values are rounded to the nearest integer
+     */
+    calculateSlideToOrigin: function (element, originator) {
+      var slideTemplate = "translate3d( {centerX}px, {centerY}px, 0 )";
+      var buildSlide = angular.bind(null, $mdUtil.supplant, slideTemplate);
 
-        zoomStyle = buildZoom({
-          centerX: originCenterPt.x - dialogCenterPt.x,
-          centerY: originCenterPt.y - dialogCenterPt.y,
-          scaleX: Math.round(100 * Math.min(0.5, originBnds.width / dialogRect.width))/100,
-          scaleY: Math.round(100 * Math.min(0.5, originBnds.height / dialogRect.height))/100
-        });
-      }
-
-      return zoomStyle;
-
-      /**
-       * This is a fallback if the origin information is no longer valid, then the
-       * origin bounds simply becomes the current bounds for the dialogContainer's parent
-       */
-      function currentBounds() {
-        var cntr = element ? element.parent() : null;
-        var parent = cntr ? cntr.parent() : null;
-
-        return parent ? self.clientRect(parent) : null;
-      }
+      return buildSlide(self.calculateTransformValues(element, originator));
     },
 
     /**
      * Enhance raw values to represent valid css stylings...
      */
-    toCss : function( raw ) {
+    toCss : function(raw) {
       var css = { };
       var lookups = 'left top right bottom width height x y min-width min-height max-width max-height';
 
       angular.forEach(raw, function(value,key) {
-        if ( angular.isUndefined(value) ) return;
+        if (angular.isUndefined(value)) return;
 
-        if ( lookups.indexOf(key) >= 0 ) {
+        if (lookups.indexOf(key) >= 0) {
           css[key] = value + 'px';
         } else {
           switch (key) {
@@ -145,6 +174,9 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
               break;
             case 'transformOrigin':
               convertToVendor(key, $mdConstant.CSS.TRANSFORM_ORIGIN, value);
+              break;
+            case 'font-size':
+              css['font-size'] = value; // font sizes aren't always in px
               break;
           }
         }
@@ -161,6 +193,10 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
 
     /**
      * Convert the translate CSS value to key/value pair(s).
+     * @param {string} transform
+     * @param {boolean=} addTransition
+     * @param {string=} transition
+     * @return {Object} object containing CSS translate key/value pair(s)
      */
     toTransformCss: function (transform, addTransition, transition) {
       var css = {};
@@ -170,14 +206,17 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
 
       if (addTransition) {
         transition = transition || "all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important";
-        css['transition'] = transition;
+        css.transition = transition;
       }
 
       return css;
     },
 
     /**
-     *  Clone the Rect and calculate the height/width if needed
+     * Clone the Rect and calculate the height/width if needed.
+     * @param {DOMRect} source
+     * @param {DOMRect=} destination
+     * @returns {null|DOMRect}
      */
     copyRect: function (source, destination) {
       if (!source) return null;
@@ -185,7 +224,7 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
       destination = destination || {};
 
       angular.forEach('left top right bottom width height'.split(' '), function (key) {
-        destination[key] = Math.round(source[key])
+        destination[key] = Math.round(source[key]);
       });
 
       destination.width = destination.width || (destination.right - destination.left);
@@ -195,7 +234,9 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
     },
 
     /**
-     * Calculate ClientRect of element; return null if hidden or zero size
+     * Calculate ClientRect of element; return null if hidden or zero size.
+     * @param {Element|string} element
+     * @returns {null|DOMRect}
      */
     clientRect: function (element) {
       var bounds = angular.element(element)[0].getBoundingClientRect();
@@ -208,7 +249,9 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
     },
 
     /**
-     *  Calculate 'rounded' center point of Rect
+     * Calculate 'rounded' center point of Rect
+     * @param {DOMRect} targetRect
+     * @returns {{x: number, y: number}}
      */
     centerPointFor: function (targetRect) {
       return targetRect ? {
@@ -216,7 +259,6 @@ function AnimateDomUtils($mdUtil, $q, $timeout, $mdConstant, $animateCss) {
         y: Math.round(targetRect.top + (targetRect.height / 2))
       } : { x : 0, y : 0 };
     }
-
   };
-};
+}
 

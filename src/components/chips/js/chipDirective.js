@@ -1,6 +1,6 @@
 angular
-    .module('material.components.chips')
-    .directive('mdChip', MdChip);
+  .module('material.components.chips')
+  .directive('mdChip', MdChip);
 
 /**
  * @ngdoc directive
@@ -8,51 +8,63 @@ angular
  * @module material.components.chips
  *
  * @description
- * `<md-chip>` is a component used within `<md-chips>` and is responsible for rendering individual
- * chips.
+ * `<md-chip>` is a component used within `<md-chips>`. It is responsible for rendering an
+ * individual chip.
  *
  *
  * @usage
  * <hljs lang="html">
- *   <md-chip>{{$chip}}</md-chip>
+ *   <md-chips>
+ *     <md-chip>{{$chip}}</md-chip>
+ *   </md-chips>
  * </hljs>
  *
  */
-
-// This hint text is hidden within a chip but used by screen readers to
-// inform the user how they can interact with a chip.
-var DELETE_HINT_TEMPLATE = '\
-    <span ng-if="!$mdChipsCtrl.readonly" class="_md-visually-hidden">\
-      {{$mdChipsCtrl.deleteHint}}\
-    </span>';
 
 /**
  * MDChip Directive Definition
  *
  * @param $mdTheming
- * @param $mdInkRipple
+ * @param $mdUtil
+ * @param $compile
+ * @param $timeout
  * @ngInject
  */
-function MdChip($mdTheming, $mdUtil) {
-  var hintTemplate = $mdUtil.processTemplate(DELETE_HINT_TEMPLATE);
-
+function MdChip($mdTheming, $mdUtil, $compile, $timeout) {
   return {
     restrict: 'E',
-    require: '^?mdChips',
-    compile:  compile
+    require: ['^?mdChips', 'mdChip'],
+    link: postLink,
+    controller: 'MdChipCtrl'
   };
 
-  function compile(element, attr) {
-    // Append the delete template
-    element.append($mdUtil.processTemplate(hintTemplate));
+  function postLink(scope, element, attr, ctrls) {
+    var chipsController = ctrls.shift();
+    var chipController = ctrls.shift();
+    var chipContentElement = angular.element(element[0].querySelector('.md-chip-content'));
 
-    return function postLink(scope, element, attr, ctrl) {
-      $mdTheming(element);
+    $mdTheming(element);
 
-      if (ctrl) angular.element(element[0].querySelector('._md-chip-content'))
-          .on('blur', function () {
-            ctrl.selectedChip = -1;
-          });
-    };
+    if (chipsController) {
+      chipController.init(chipsController);
+
+      // When a chip is blurred, make sure to unset (or reset) the selected chip so that tabbing
+      // through elements works properly
+      chipContentElement.on('blur', function() {
+        chipsController.resetSelectedChip();
+        chipsController.$scope.$applyAsync();
+      });
+    }
+
+    // Use $timeout to ensure we run AFTER the element has been added to the DOM so we can focus it.
+    $timeout(function() {
+      if (!chipsController) {
+        return;
+      }
+
+      if (chipsController.shouldFocusLastChip) {
+        chipsController.focusLastChipThenInput();
+      }
+    });
   }
 }

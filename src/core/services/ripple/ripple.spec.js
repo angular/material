@@ -135,3 +135,17 @@ describe('mdInkRipple directive', function() {
     }));
   });
 });
+
+describe('disabling ripples globally', function() {
+  beforeEach(function() {
+    module('material.core', function($mdInkRippleProvider) {
+      $mdInkRippleProvider.disableInkRipple();
+    });
+  });
+
+  it('should not instantiate the ripple controller', inject(function ($compile, $rootScope) {
+    var elem = $compile('<div md-ink-ripple="true"></div>')($rootScope.$new());
+    var controller = elem.controller('mdInkRipple');
+    expect(Object.keys(controller).length).toBe(0);
+  }));
+});

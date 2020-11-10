@@ -1,3 +1,5 @@
 md-sidenav.md-THEME_NAME-theme {
-  background-color: '{{background-color}}';
+  &, md-content {
+    background-color: '{{background-hue-1}}';    
+  }
 }

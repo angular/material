@@ -1,7 +1,8 @@
 <div ng-controller="AppCtrl" ng-cloak>
   <md-content class="md-padding">
-    <md-tabs class="md-accent" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}">
-      <md-tab id="tab1">
+    <md-tabs class="md-primary md-no-ink-bar-color" md-selected="data.selectedIndex"
+             md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}">
+      <md-tab id="tab1" md-tab-class="example-selector-tab1">
         <md-tab-label>Item One</md-tab-label>
         <md-tab-body>
           View for Item #1 <br/>
@@ -20,6 +21,20 @@
         <md-tab-body>
           View for Item #3 <br/>
           data.selectedIndex = 2;
+        </md-tab-body>
+      </md-tab>
+      <md-tab id="tab4">
+        <md-tab-label><md-icon md-svg-icon="communication:phone"></md-icon></md-tab-label>
+        <md-tab-body>
+          View for Item #4 <br/>
+          data.selectedIndex = 3;
+        </md-tab-body>
+      </md-tab>
+      <md-tab id="tab5">
+        <md-tab-label><md-icon md-svg-icon="favorite"></md-icon></md-tab-label>
+        <md-tab-body>
+          View for Item #5 <br/>
+          data.selectedIndex = 4;
         </md-tab-body>
       </md-tab>
     </md-tabs>

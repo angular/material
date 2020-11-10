@@ -1,17 +1,17 @@
 angular
-  .module('radioDemo2', ['ngMaterial'])
-  .controller('ContactController', function($scope) {
+  .module('radioMultiColumnDemo', ['ngMaterial'])
+  .controller('ContactController', function($scope, $filter) {
     var self = this;
 
     self.contacts = [{
       'id': 1,
-      'fullName': 'Maria Guadalupe',
+      'fullName': 'María Guadalupe',
       'lastName': 'Guadalupe',
       'title': "CEO, Found"
     }, {
       'id': 2,
-      'fullName': 'Gabriel García Marquéz',
-      'lastName': 'Marquéz',
+      'fullName': 'Gabriel García Márquez',
+      'lastName': 'Márquez',
       'title': "VP Sales & Marketing"
     }, {
       'id': 3,
@@ -24,8 +24,8 @@ angular
       'lastName': 'Castel',
       'title': "Security"
     }];
-    self.selectedIndex = 2;
+    self.selectedId = 2;
     self.selectedUser = function() {
-      return self.contacts[self.selectedIndex].lastName;
-    }
+      return $filter('filter')(self.contacts, { id: self.selectedId })[0].lastName;
+    };
   });

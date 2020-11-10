@@ -1,37 +1,7 @@
-$autocomplete-option-height: 48px;
-$input-container-padding: 2px !default;
-$input-error-height: 24px !default;
-
-@keyframes md-autocomplete-list-out {
-  0% {
-    animation-timing-function: linear;
-  }
-  50% {
-    opacity: 0;
-    height: 40px;
-    animation-timing-function: ease-in;
-  }
-  100% {
-    height: 0;
-    opacity: 0;
-  }
-}
-
-@keyframes md-autocomplete-list-in {
-  0% {
-    opacity: 0;
-    height: 0;
-    animation-timing-function: ease-out;
-  }
-  50% {
-    opacity: 0;
-    height: 40px;
-  }
-  100% {
-    opacity: 1;
-    height: 40px;
-  }
-}
+// The default item height is also specified in the JavaScript.
+$md-autocomplete-item-height: 48px !default;
+$md-autocomplete-clear-size: 30px !default;
+$md-autocomplete-input-offset: 20px !default;
 
 md-autocomplete {
   border-radius: 2px;
@@ -51,35 +21,49 @@ md-autocomplete {
     height: auto;
 
     md-input-container {
-      padding-bottom: $input-container-padding + $input-error-height;
-
-      // When we have ng-messages, remove the input error height from our bottom padding, since the
-      // ng-messages wrapper has a min-height of 1 error (so we don't adjust height as often; see
-      // input.scss file)
-      &.md-input-has-messages {
-        padding-bottom: $input-container-padding;
-      }
+      padding-bottom: 0;
     }
     md-autocomplete-wrap {
       height: auto;
     }
-    button {
-      position: absolute;
-      top: auto;
-      bottom: 0;
-      right: 0;
-      width: 30px;
-      height: 30px;
+
+    .md-show-clear-button {
+      button {
+        display: block;
+        position: absolute;
+        right: 0;
+        top: $md-autocomplete-input-offset;
+        width: $md-autocomplete-clear-size;
+        height: $md-autocomplete-clear-size;
+      }
+
+      input {
+        // Add padding to the end of the input to avoid overlapping with the clear button.
+        @include rtl-prop(padding-right, padding-left, $md-autocomplete-clear-size, 0);
+      }
     }
   }
   md-autocomplete-wrap {
-    display: block;
+    // Layout [layout='row']
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+
     position: relative;
     overflow: visible;
     height: 40px;
     &.md-menu-showing {
       z-index: $z-index-backdrop + 1;
     }
+
+    md-input-container,
+    input {
+      // Layout [flex]
+      flex: 1 1 0;
+      box-sizing: border-box;
+      min-width : 0;
+    }
+
     md-progress-linear {
       position: absolute;
       bottom: -2px;
@@ -125,12 +109,12 @@ md-autocomplete {
     line-height: 40px;
     height: 40px;
   }
-  button {
+  .md-show-clear-button button {
     position: relative;
     line-height: 20px;
     text-align: center;
-    width: 30px;
-    height: 30px;
+    width: $md-autocomplete-clear-size;
+    height: $md-autocomplete-clear-size;
     cursor: pointer;
     border: none;
     border-radius: 50%;
@@ -188,34 +172,52 @@ md-autocomplete {
     input {
       border: 1px solid $border-color;
     }
-    li:focus {
+    .md-autocomplete-suggestion:focus {
       color: #fff;
     }
   }
 }
 
-.md-virtual-repeat-container.md-autocomplete-suggestions-container {
+.md-virtual-repeat-container.md-autocomplete-suggestions-container,
+.md-standard-list-container.md-autocomplete-suggestions-container {
   position: absolute;
   box-shadow: 0 2px 5px rgba(black, 0.25);
-  height: 41px * 5.5;
-  max-height: 41px * 5.5;
   z-index: $z-index-tooltip;
+
+  // Expand the virtualRepeatContainer as much as the max-height from the JavaScript allows.
+  // This is necessary for the virtualRepeatContainer to be able to grow back.
+  height: 100%;
+
+  .highlight {
+    font-weight: bold;
+  }
 }
 
-.md-virtual-repeat-container.md-not-found {
-  height: 48px;
+.md-standard-list-container {
+  box-sizing: border-box;
+  display: block;
+  margin: 0;
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.md-virtual-repeat-container.md-not-found,
+.md-standard-list-container.md-not-found {
+  height: $md-autocomplete-item-height;
 }
 
 .md-autocomplete-suggestions {
   margin: 0;
   list-style: none;
   padding: 0;
-  li {
+
+  .md-autocomplete-suggestion {
     font-size: 14px;
     overflow: hidden;
     padding: 0 15px;
-    line-height: $autocomplete-option-height;
-    height: $autocomplete-option-height;
+    line-height: $md-autocomplete-item-height;
+    height: $md-autocomplete-item-height;
     transition: background 0.15s linear;
     margin: 0;
     white-space: nowrap;
