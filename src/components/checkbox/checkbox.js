@@ -245,15 +245,27 @@ function MdCheckboxDirective(inputDirective, $mdAria, $mdConstant, $mdTheming, $
 
       function render() {
         // Cast the $viewValue to a boolean since it could be undefined
-        element.toggleClass('md-checked', !!ngModelCtrl.$viewValue && !isIndeterminate);
+        var checked = !!ngModelCtrl.$viewValue && !isIndeterminate;
+        element.toggleClass('md-checked', checked);
+        if (!isIndeterminate) {
+          if (checked) {
+            element.attr('aria-checked', 'true');
+          } else {
+            element.attr('aria-checked', 'false');
+          }
+        }
       }
 
+      /**
+       * @param {string=} newValue
+       */
       function setIndeterminateState(newValue) {
         isIndeterminate = newValue !== false;
         if (isIndeterminate) {
           element.attr('aria-checked', 'mixed');
         }
         element.toggleClass('md-indeterminate', isIndeterminate);
+        ngModelCtrl.$render();
       }
     }
   }

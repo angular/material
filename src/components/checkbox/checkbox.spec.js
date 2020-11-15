@@ -650,18 +650,39 @@ describe('mdCheckbox', function() {
       it('should change from the indeterminate to checked state correctly', function() {
         var checked = false;
         pageScope.isChecked = function() { return checked; };
-        pageScope.isIndet = function() { return !checked; };
+        pageScope.isIndeterminate = function() { return !checked; };
 
-        var checkbox = compileAndLink('<md-checkbox md-indeterminate="isIndet()" ng-checked="isChecked()"></md-checkbox>');
+        var checkbox = compileAndLink('<md-checkbox md-indeterminate="isIndeterminate()" ng-checked="isChecked()"></md-checkbox>');
 
         expect(checkbox).toHaveClass(INDETERMINATE_CSS);
         expect(checkbox).not.toHaveClass(CHECKED_CSS);
+        expect(checkbox.attr('aria-checked')).toEqual('mixed');
 
         checked = true;
         pageScope.$apply();
 
         expect(checkbox).not.toHaveClass(INDETERMINATE_CSS);
         expect(checkbox).toHaveClass(CHECKED_CSS);
+        expect(checkbox.attr('aria-checked')).toEqual('true');
+      });
+
+      it('should change from the indeterminate to unchecked state correctly', function() {
+        var checked = true;
+        pageScope.isChecked = function() { return checked; };
+        pageScope.isIndeterminate = function() { return checked; };
+
+        var checkbox = compileAndLink('<md-checkbox md-indeterminate="isIndeterminate()" ng-checked="isChecked()"></md-checkbox>');
+
+        expect(checkbox).toHaveClass(INDETERMINATE_CSS);
+        expect(checkbox).not.toHaveClass(CHECKED_CSS);
+        expect(checkbox.attr('aria-checked')).toEqual('mixed');
+
+        checked = false;
+        pageScope.$apply();
+
+        expect(checkbox).not.toHaveClass(INDETERMINATE_CSS);
+        expect(checkbox).not.toHaveClass(CHECKED_CSS);
+        expect(checkbox.attr('aria-checked')).toEqual('false');
       });
 
       it('should mark the checkbox as selected, if the model is true and "md-indeterminate" is false', function() {
@@ -670,6 +691,7 @@ describe('mdCheckbox', function() {
 
         expect(checkbox).toHaveClass(CHECKED_CSS);
         expect(checkbox).not.toHaveClass(INDETERMINATE_CSS);
+        expect(checkbox.attr('aria-checked')).toEqual('true');
       });
 
     });
