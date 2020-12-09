@@ -59,16 +59,18 @@ var_9: &publish_branches_filter
 # -----------------------------
 version: 2.1
 
+orbs:
+  build-tools: circleci/build-tools@2.7.0
+
 commands:
   # Command for checking out the source code from GitHub. This also ensures that the source code
-  # is rebased on top of master.
+  # can be merged to the master branch without conflicts.
   checkout_and_rebase:
-    description: Checkout and rebase the repository
+    description: Checkout and verify clean merge with master
     steps:
       - checkout
-      # After checkout, rebase on top of master. By default, PRs are not rebased on top of master,
-      # which we want. See https://discuss.circleci.com/t/1662
-      - run: git pull --ff-only origin "refs/pull/${CIRCLE_PULL_REQUEST//*pull\//}/merge"
+      - build-tools/merge-with-parent:
+          parent: master
 
 # -----------------------------------------------------------------------------------------
 # Job definitions. Jobs which are defined just here, will not run automatically. Each job
