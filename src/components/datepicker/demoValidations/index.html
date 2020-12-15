@@ -25,9 +25,9 @@
       <h4>Inside a md-input-container</h4>
 
       <md-input-container>
-        <label>Enter date</label>
+        <label id="enter-date-label">Enter date</label>
         <md-datepicker ng-model="ctrl.myDate" name="dateField" md-min-date="ctrl.minDate"
-          md-max-date="ctrl.maxDate"></md-datepicker>
+          md-max-date="ctrl.maxDate" input-aria-labelledby="enter-date-label"></md-datepicker>
 
         <div ng-messages="myForm.dateField.$error">
           <div ng-message="valid">Use a valid date format</div>

@@ -1,8 +1,14 @@
 <md-content ng-controller="AppCtrl as ctrl" layout-padding ng-cloak>
   <div layout-gt-xs="row">
     <div flex-gt-xs>
-      <h4>Standard date-picker</h4>
-      <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"></md-datepicker>
+      <h4 id="datepicker-header">Standard date-picker</h4>
+      <md-datepicker ng-model="ctrl.myDate" md-placeholder="Enter date"
+                     input-aria-describedby="datepicker-description"
+                     input-aria-labelledby="datepicker-header "></md-datepicker>
+      <p style="display: none" id="datepicker-description">
+        You can use input-aria-describedby to have screen readers provide a more detailed
+        description of a datepicker or its interactions.
+      </p>
     </div>
 
     <div flex-gt-xs>
