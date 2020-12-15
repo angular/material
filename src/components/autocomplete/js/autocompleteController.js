@@ -54,6 +54,10 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   ctrl.isReadonly = null;
   ctrl.hasNotFound = false;
   ctrl.selectedMessage = $scope.selectedMessage || 'selected';
+  ctrl.noMatchMessage = $scope.noMatchMessage || 'There are no matches available.';
+  ctrl.singleMatchMessage = $scope.singleMatchMessage || 'There is 1 match available.';
+  ctrl.multipleMatchStartMessage = $scope.multipleMatchStartMessage || 'There are ';
+  ctrl.multipleMatchEndMessage = $scope.multipleMatchEndMessage || ' matches available.';
   ctrl.defaultEscapeOptions = 'clear';
 
   // Public Exported Methods
@@ -1024,11 +1028,11 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
   function getCountMessage () {
     switch (ctrl.matches.length) {
       case 0:
-        return 'There are no matches available.';
+        return ctrl.noMatchMessage;
       case 1:
-        return 'There is 1 match available.';
+        return ctrl.singleMatchMessage;
       default:
-        return 'There are ' + ctrl.matches.length + ' matches available.';
+        return ctrl.multipleMatchStartMessage + ctrl.matches.length + ctrl.multipleMatchEndMessage;
     }
   }
 
