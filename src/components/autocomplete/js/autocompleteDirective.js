@@ -151,7 +151,23 @@ angular
  * @param {string=} md-selected-message Attribute to specify the text that the screen reader will
  *    announce after a value is selected. Default is: "selected". If `Alaska` is selected in the
  *    options panel, it will read "Alaska selected". You will want to override this when your app
- *    is running in a non-English locale.
+ *    runs in a non-English locale.
+ * @param {string=} md-no-match-message Attribute to specify the text that the screen reader will
+ *    announce after a query returns no matching results.
+ *    Default is: "There are no matches available.". You will want to override this when your app
+ *    runs in a non-English locale.
+ * @param {string=} md-single-match-message Attribute to specify the text that the screen reader
+ *    will announce after a query returns a single matching result.
+ *    Default is: "There is 1 match available.". You will want to override this when your app
+ *    runs in a non-English locale.
+ * @param {string=} md-multiple-match-start-message Attribute to specify the text that the screen
+ *    reader will announce after a query returns multiple matching results. The number of matching
+ *    results will be read after this text. Default is: "There are ". You will want to override this
+ *    when your app runs in a non-English locale.
+ * @param {string=} md-multiple-match-end-message Attribute to specify the text that the screen
+ *    reader will announce after a query returns multiple matching results. The number of matching
+ *    results will be read before this text. Default is: " matches available.". You will want to
+ *    override this when your app runs in a non-English locale.
  * @param {boolean=} ng-trim If set to false, the search text will be not trimmed automatically.
  *     Defaults to true.
  * @param {string=} ng-pattern Adds the pattern validator to the ngModel of the search text.
@@ -336,6 +352,10 @@ function MdAutocomplete ($$mdSvgRegistry) {
       dropdownPosition:   '@?mdDropdownPosition',
       clearButton:        '=?mdClearButton',
       selectedMessage:    '@?mdSelectedMessage',
+      noMatchMessage:     '@?mdNoMatchMessage',
+      singleMatchMessage: '@?mdSingleMatchMessage',
+      multipleMatchStartMessage: '@?mdMultipleMatchStartMessage',
+      multipleMatchEndMessage: '@?mdMultipleMatchEndMessage',
       mdMode: '=?mdMode'
     },
     compile: function(tElement, tAttrs) {
