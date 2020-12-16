@@ -280,6 +280,7 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
       var stopMdMultipleWatch;
       var userDefinedLabelledby = angular.isDefined(attrs.ariaLabelledby);
       var listboxContentElement = element.find('md-content');
+      var initialPlaceholder = element.attr('placeholder');
 
       if (disableAsterisk) {
         element.addClass('md-no-asterisk');
@@ -291,24 +292,25 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
         };
 
         if (containerCtrl.input) {
-          // We ignore inputs that are in the md-select-header (one
-          // case where this might be useful would be adding as searchbox)
+          // We ignore inputs that are in the md-select-header.
+          // One case where this might be useful would be adding as searchbox.
           if (element.find('md-select-header').find('input')[0] !== containerCtrl.input[0]) {
-            throw new Error("<md-input-container> can only have *one* child <input>, <textarea> or <select> element!");
+            throw new Error("<md-input-container> can only have *one* child <input>, <textarea>, or <select> element!");
           }
         }
 
         containerCtrl.input = element;
         if (!containerCtrl.label) {
-          $mdAria.expect(element, 'aria-label', element.attr('placeholder'));
+          $mdAria.expect(element, 'aria-label', initialPlaceholder);
           var selectLabel = element.attr('aria-label');
           if (!selectLabel) {
-            selectLabel = element.attr('placeholder');
+            selectLabel = initialPlaceholder;
           }
           listboxContentElement.attr('aria-label', selectLabel);
         } else {
           containerCtrl.label.attr('aria-hidden', 'true');
           listboxContentElement.attr('aria-label', containerCtrl.label.text());
+          containerCtrl.setHasPlaceholder(!!initialPlaceholder);
         }
 
         var stopInvalidWatch = scope.$watch(isErrorGetter, containerCtrl.setInvalid);
@@ -407,17 +409,18 @@ function SelectDirective($mdSelect, $mdUtil, $mdConstant, $mdTheming, $mdAria, $
        *  false to remove those classes.
        */
       mdSelectCtrl.setIsPlaceholder = function(isPlaceholder) {
-        if (isPlaceholder) {
-          selectValueElement.addClass('md-select-placeholder');
-          if (containerCtrl && containerCtrl.label) {
-            containerCtrl.label.addClass('md-placeholder');
+          if (isPlaceholder) {
+            selectValueElement.addClass('md-select-placeholder');
+            // Don't hide the floating label if the md-select has a placeholder.
+            if (containerCtrl && containerCtrl.label && !element.attr('placeholder')) {
+              containerCtrl.label.addClass('md-placeholder');
+            }
+          } else {
+            selectValueElement.removeClass('md-select-placeholder');
+            if (containerCtrl && containerCtrl.label && !element.attr('placeholder')) {
+              containerCtrl.label.removeClass('md-placeholder');
+            }
           }
-        } else {
-          selectValueElement.removeClass('md-select-placeholder');
-          if (containerCtrl && containerCtrl.label) {
-            containerCtrl.label.removeClass('md-placeholder');
-          }
-        }
       };
 
       if (!isReadonly) {
