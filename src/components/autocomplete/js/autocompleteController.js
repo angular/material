@@ -601,6 +601,8 @@ function MdAutocompleteCtrl ($scope, $element, $mdUtil, $mdConstant, $mdTheming,
     if (!noBlur) {
       ctrl.hidden = shouldHide();
       evalAttr('ngBlur', { $event: $event });
+    } else {
+      $event.stopImmediatePropagation();
     }
   }
 
