@@ -27,7 +27,7 @@ md-input-container {
   }
   &.md-input-focused {
     &:not([md-no-float]) {
-      .md-select-placeholder span:first-child {
+      md-select:not([placeholder]) .md-select-placeholder span:first-child {
         transform: translate(-2px, -22px) scale(0.75);
       }
     }
