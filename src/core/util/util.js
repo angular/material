@@ -622,8 +622,9 @@ function UtilFactory($document, $timeout, $compile, $rootScope, $$mdAnimate, $in
       });
     },
 
-    /*
-     * getClosest replicates jQuery.closest() to walk up the DOM tree until it finds a matching nodeName
+    /**
+     * getClosest replicates jQuery.closest() to walk up the DOM tree until it finds a matching
+     * nodeName.
      *
      * @param {Node} el Element to start walking the DOM from
      * @param {string|function} validateWith If a string is passed, it will be evaluated against

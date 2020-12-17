@@ -145,7 +145,7 @@
 
         styles.transform = styles.webkitTransform = '';
         styles.transitionDelay = '';
-        styles.opacity = 1;
+        styles.opacity = ctrl.isOpen ? 1 : 0;
 
         // Make the items closest to the trigger have the highest z-index
         styles.zIndex = (items.length - index) + startZIndex;

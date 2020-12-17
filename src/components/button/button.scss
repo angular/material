@@ -145,6 +145,10 @@ button.md-button::-moz-focus-inner {
     &.ng-hide, &.ng-leave {
       transition: none;
     }
+
+    &[disabled] {
+      box-shadow: none;
+    }
   }
 
   &:not([disabled]) {
