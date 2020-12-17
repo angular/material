@@ -2,4 +2,12 @@ md-fab-speed-dial.md-THEME_NAME-theme {
   md-fab-trigger .md-fab.md-button[disabled] {
     background-color: '{{foreground-4}}';
   }
+  md-fab-actions .md-fab-action-item {
+    .md-button.md-fab.md-raised.md-mini {
+      &:hover,
+      &.md-focused {
+        background-color: '{{background-500}}';
+      }
+    }
+  }
 }

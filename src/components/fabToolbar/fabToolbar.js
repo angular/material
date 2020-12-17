@@ -86,7 +86,7 @@
 
       bindToController: true,
       controller: 'MdFabController',
-      controllerAs: 'vm',
+      controllerAs: 'ctrl',
 
       link: link
     };
