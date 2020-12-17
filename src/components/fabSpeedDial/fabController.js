@@ -11,12 +11,12 @@
     // NOTE: We use async eval(s) below to avoid conflicts with any existing digest loops
 
     ctrl.open = function() {
-      $scope.$evalAsync("vm.isOpen = true");
+      $scope.$evalAsync("ctrl.isOpen = true");
     };
 
     ctrl.close = function() {
       // Async eval to avoid conflicts with existing digest loops
-      $scope.$evalAsync("vm.isOpen = false");
+      $scope.$evalAsync("ctrl.isOpen = false");
 
       // Focus the trigger when the element closes so users can still tab to the next item
       $element.find('md-fab-trigger')[0].focus();
@@ -24,7 +24,7 @@
 
     // Toggle the open/close state when the trigger is clicked
     ctrl.toggle = function() {
-      $scope.$evalAsync("vm.isOpen = !vm.isOpen");
+      $scope.$evalAsync("ctrl.isOpen = !ctrl.isOpen");
     };
 
     /*
@@ -113,7 +113,7 @@
 
     function setupWatchers() {
       // Watch for changes to the direction and update classes/attributes
-      $scope.$watch('vm.direction', function(newDir, oldDir) {
+      $scope.$watch('ctrl.direction', function(newDir, oldDir) {
         // Add the appropriate classes so we can target the direction in the CSS
         $animate.removeClass($element, 'md-' + oldDir);
         $animate.addClass($element, 'md-' + newDir);
@@ -125,7 +125,7 @@
       var trigger, actions;
 
       // Watch for changes to md-open
-      $scope.$watch('vm.isOpen', function(isOpen) {
+      $scope.$watch('ctrl.isOpen', function(isOpen) {
         // Reset the action index since it may have changed
         resetActionIndex();
 
@@ -182,10 +182,6 @@
       $mdUtil.nextTick(function() {
         angular.element(document).on('click touchend', checkForOutsideClick);
       });
-
-      // TODO: On desktop, we should be able to reset the indexes so you cannot tab through, but
-      //   this breaks accessibility, especially on mobile, since you have no arrow keys to press
-      //   resetActionTabIndexes();
     }
 
     function disableKeyboard() {
@@ -204,6 +200,10 @@
       }
     }
 
+    /**
+     * @param {KeyboardEvent} event
+     * @returns {boolean}
+     */
     function keyPressed(event) {
       switch (event.which) {
         case $mdConstant.KEY_CODE.ESCAPE: ctrl.close(); event.preventDefault(); return false;
@@ -211,6 +211,7 @@
         case $mdConstant.KEY_CODE.UP_ARROW: doKeyUp(event); return false;
         case $mdConstant.KEY_CODE.RIGHT_ARROW: doKeyRight(event); return false;
         case $mdConstant.KEY_CODE.DOWN_ARROW: doKeyDown(event); return false;
+        case $mdConstant.KEY_CODE.TAB: doShift(event); return false;
       }
     }
 
@@ -223,33 +224,25 @@
     }
 
     function focusAction(event, direction) {
-      var actions = resetActionTabIndexes();
+      var actions = getActionsElement()[0].querySelectorAll('.md-fab-action-item');
+      var previousActionIndex = ctrl.currentActionIndex;
 
       // Increment/decrement the counter with restrictions
       ctrl.currentActionIndex = ctrl.currentActionIndex + direction;
       ctrl.currentActionIndex = Math.min(actions.length - 1, ctrl.currentActionIndex);
       ctrl.currentActionIndex = Math.max(0, ctrl.currentActionIndex);
 
-      // Focus the element
-      var focusElement =  angular.element(actions[ctrl.currentActionIndex]).children()[0];
-      angular.element(focusElement).attr('tabindex', 0);
-      focusElement.focus();
+      // Let Tab and Shift+Tab escape if we're trying to move past the start/end.
+      if (event.which !== $mdConstant.KEY_CODE.TAB ||
+          previousActionIndex !== ctrl.currentActionIndex) {
+        // Focus the element
+        var focusElement = angular.element(actions[ctrl.currentActionIndex]).children()[0];
+        focusElement.focus();
 
-      // Make sure the event doesn't bubble and cause something else
-      event.preventDefault();
-      event.stopImmediatePropagation();
-    }
-
-    function resetActionTabIndexes() {
-      // Grab all of the actions
-      var actions = getActionsElement()[0].querySelectorAll('.md-fab-action-item');
-
-      // Disable all other actions for tabbing
-      angular.forEach(actions, function(action) {
-        angular.element(angular.element(action).children()[0]).attr('tabindex', -1);
-      });
-
-      return actions;
+        // Make sure the event doesn't bubble and cause something else
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      }
     }
 
     function doKeyLeft(event) {
@@ -284,6 +277,14 @@
       }
     }
 
+    function doShift(event) {
+      if (event.shiftKey) {
+        doActionPrev(event);
+      } else {
+        doActionNext(event);
+      }
+    }
+
     /**
      * @param {Node} element
      * @returns {Node|null}
@@ -309,7 +310,7 @@
     }
 
     /**
-     * @param {MouseEvent} event
+     * @param {MouseEvent|FocusEvent} event
      */
     function handleItemClick(event) {
       var closestButton = event.target ? getClosestButton(event.target) : null;
