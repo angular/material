@@ -29,6 +29,23 @@ describe('<md-fab-actions> directive', function() {
     expect(element.find("md-fab-actions").children()).toHaveClass('md-fab-action-item');
   }));
 
+  it('applies tabindex of -1 to all action item buttons', inject(function() {
+    build(
+      '<md-fab-speed-dial>' +
+      '  <md-fab-actions>' +
+      '    <md-button>1</md-button>' +
+      '    <md-button>2</md-button>' +
+      '    <md-button>3</md-button>' +
+      '  </md-fab-actions>' +
+      '</md-fab-speed-dial>'
+    );
+
+    expect(element.find("md-button").length).toBe(3);
+    angular.forEach(element.find("md-button"), function(button) {
+      expect(button.getAttribute('tabindex')).toEqual('-1');
+    });
+  }));
+
   angular.forEach(['ng-repeat', 'data-ng-repeat', 'x-ng-repeat'], function(attr) {
     it('supports actions created by ' + attr, inject(function() {
       build(
