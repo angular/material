@@ -53,7 +53,7 @@ describe('<md-fab-speed-dial> directive', function() {
     build(
      '<md-fab-speed-dial>' +
       '  <md-fab-trigger>' +
-      '    <md-button></md-button>' +
+      '    <md-button class="md-fab"></md-button>' +
       '  </md-fab-trigger>' +
       '</md-fab-speed-dial>'
     );
@@ -62,6 +62,35 @@ describe('<md-fab-speed-dial> directive', function() {
     var clickEvent = {
       type: 'click',
       target: element.find('md-button')
+    };
+    element.triggerHandler(clickEvent);
+    pageScope.$digest();
+
+    expect(controller.isOpen).toBe(true);
+
+    // Make sure to flush the timeout that ignores other events
+    $timeout.flush();
+
+    // Click to close
+    element.triggerHandler(clickEvent);
+    pageScope.$digest();
+
+    expect(controller.isOpen).toBe(false);
+  }));
+
+  it('toggles the menu when the trigger icon is clicked', inject(function() {
+    build(
+      '<md-fab-speed-dial>' +
+      '  <md-fab-trigger>' +
+      '    <md-button class="md-fab"><md-icon md-svg-src="img/icons/menu.svg"></md-icon></md-button>' +
+      '  </md-fab-trigger>' +
+      '</md-fab-speed-dial>'
+    );
+
+    // Click to open
+    var clickEvent = {
+      type: 'click',
+      target: element.find('md-icon')
     };
     element.triggerHandler(clickEvent);
     pageScope.$digest();
