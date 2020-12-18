@@ -1,3 +1,41 @@
+## [1.2.2](https://github.com/angular/material/compare/v1.2.1...v1.2.2) (2020-12-17)
+
+
+### Bug Fixes
+
+* **aria:** radio buttons throw argument not optional errors in IE11 ([eab5c81](https://github.com/angular/material/commit/eab5c815846c91fdda3cf2a369aee28169ca6272))
+* **autocomplete:** prevent flashing of invalid state ([#12064](https://github.com/angular/material/issues/12064)) ([a4732a9](https://github.com/angular/material/commit/a4732a9808db5ccaf062ec50ef314bf124ee2feb)), closes [#10975](https://github.com/angular/material/issues/10975)
+* **checkbox:** aria-checked state is not computed correctly in all cases ([c609385](https://github.com/angular/material/commit/c60938552c1a007b24b0cd2de5248453161ae012)), closes [#12046](https://github.com/angular/material/issues/12046)
+* **datepicker:** null model with timezone throws exception ([7856883](https://github.com/angular/material/commit/78568835c283ac327c85016f5d43f5ec57ff9c73)), closes [#12025](https://github.com/angular/material/issues/12025)
+* **datepicker:** time is modified before even selecting a date ([b406623](https://github.com/angular/material/commit/b406623f08cd229ea76cc06298eea764bd51ab84)), closes [#12028](https://github.com/angular/material/issues/12028) [#12026](https://github.com/angular/material/issues/12026)
+* **dialog:** shift+tab does not cycle through tabbable elements ([7d5e262](https://github.com/angular/material/commit/7d5e262b5606f0e83faac86966aa6947bc6125c0)), closes [#10963](https://github.com/angular/material/issues/10963)
+* **fab-speed-dial:** action items are in tab order when closed ([da86e62](https://github.com/angular/material/commit/da86e6282ce01c6ec31758350946b9ee1e8536f5)), closes [#10101](https://github.com/angular/material/issues/10101)
+* **fab-speed-dial:** keyboard navigation issues with tab and shift+tab ([41c71ed](https://github.com/angular/material/commit/41c71ed1eb7826c1927902f19dc8d8ea5bbfda22)), closes [#12043](https://github.com/angular/material/issues/12043)
+* **fab-speed-dial:** opens when trigger button is disabled ([e7dfcc1](https://github.com/angular/material/commit/e7dfcc166a8dbb7cb07d5c5f339a41e396025733)), closes [#9467](https://github.com/angular/material/issues/9467)
+* **input:** check that containerCtrl.label is defined before accessing it ([f79186f](https://github.com/angular/material/commit/f79186faaca9ff477720a976bd9cf10b8047a4ec)), closes [#10831](https://github.com/angular/material/issues/10831)
+* **menu:** menu focus is lost when menu-item has custom content ([6391b13](https://github.com/angular/material/commit/6391b13af979e63430b0c5f162cc1389bccdef0c)), closes [#12054](https://github.com/angular/material/issues/12054)
+* **select:** floating label hidden w/ placeholder and no value ([3ea5630](https://github.com/angular/material/commit/3ea56303a284d1c3987ec760a9b781895b39ca00)), closes [#10116](https://github.com/angular/material/issues/10116)
+* **select:** form remains valid after empty option is selected ([61412b4](https://github.com/angular/material/commit/61412b4b73a05c384c86fcd272d6e7d1ce78623c)), closes [#10005](https://github.com/angular/material/issues/10005)
+* **tabs:** md-align-tabs should only affect the current component ([d77fbc4](https://github.com/angular/material/commit/d77fbc4dad198e22cb4ada396b15512f3daa3b03)), closes [#10541](https://github.com/angular/material/issues/10541)
+* **theming:** fix CSS with nested rules parsing when registering a theme ([71dc4eb](https://github.com/angular/material/commit/71dc4eb38d8120ba1e49a9420debfe7aaf0c8e34)), closes [#9869](https://github.com/angular/material/issues/9869)
+
+
+### Features
+
+* **autocomplete:** allow localization of query result announcements ([5157f94](https://github.com/angular/material/commit/5157f94f192f64cc948adafe033361539d945408)), closes [#11789](https://github.com/angular/material/issues/11789)
+* **chips:** md-max-chips support for md-contact-chips ([e6b5482](https://github.com/angular/material/commit/e6b5482231520a69ab196a2e508f1c1dc1f3a081)), closes [#10827](https://github.com/angular/material/issues/10827)
+* **datepicker:** add input-aria-describedby and input-aria-labelledby ([5f8472c](https://github.com/angular/material/commit/5f8472c433d175c39019acc271f80344d6a58ed3)), closes [#11762](https://github.com/angular/material/issues/11762)
+
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.2.2 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="FreedCapybara" src="https://avatars2.githubusercontent.com/u/7003723?v=4&s=117" width="117">](https://github.com/FreedCapybara) |[<img alt="shishkinilya" src="https://avatars0.githubusercontent.com/u/20458127?v=4&s=117" width="117">](https://github.com/shishkinilya) |[<img alt="kylekatarnls" src="https://avatars1.githubusercontent.com/u/5966783?v=4&s=117" width="117">](https://github.com/kylekatarnls) |[<img alt="natete" src="https://avatars2.githubusercontent.com/u/4098303?v=4&s=117" width="117">](https://github.com/natete) |
+:---: |:---: |:---: |:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[FreedCapybara](https://github.com/FreedCapybara) |[shishkinilya](https://github.com/shishkinilya) |[kylekatarnls](https://github.com/kylekatarnls) |[natete](https://github.com/natete) |
+
+
 <a name="1.2.1"></a>
 ## [1.2.1](https://github.com/angular/material/compare/v1.2.0...v1.2.1) (2020-09-23)
 

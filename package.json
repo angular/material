@@ -1,6 +1,6 @@
 {
   "name": "angular-material-source",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "The AngularJS Material project is an implementation of Material Design in AngularJS. This project provides a set of reusable, well-tested, and accessible Material Design UI components. AngularJS Material is supported internally at Google by the AngularJS, Angular Components, and other product teams.",
   "keywords": [
     "client-side",
