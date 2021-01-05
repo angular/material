@@ -310,8 +310,8 @@
      }
 
     /**
-     * @param {Date} value
-     * @return {boolean|boolean}
+     * @param {Date} value date in local timezone
+     * @return {Date} date with local timezone offset removed
      */
     function removeLocalTzAndReparseDate(value) {
       var dateValue, formattedDate;
