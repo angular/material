@@ -100,6 +100,7 @@
   "resolutions": {
     "graceful-fs": "^4.2.4",
     "node-sass": "^4.14.1",
+    "socket.io": "^2.4.1",
     "websocket-extensions": "~0.1.4"
   },
   "scripts": {
