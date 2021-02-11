@@ -16,7 +16,7 @@ describe('MdTooltip Component', function() {
     return function(user) {
         // Intentionally dereference user without checking whether it is defined. Do not change!
         return user.name.first + ' ' + user.name.last;
-    }
+    };
   });
 
   beforeEach(function() {
