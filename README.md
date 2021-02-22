@@ -10,11 +10,11 @@ material design specification for use in AngularJS single-page applications (SPA
 
 **AngularJS Material** is an implementation of Google's 
 [Material Design Specification (2014-2017)](https://material.io/archive/guidelines/material-design/)
-for [AngularJS](https://angularjs.org) developers.
+for [AngularJS](https://angularjs.org) (v1.x) developers.
 
 For an implementation of the [Material Design Specification (2018+)](https://material.io/design/),
-please see the [Angular Material](https://github.com/angular/components) project which is built for
-[Angular](https://angular.io) developers.
+please see the [Angular Material](https://material.angular.io/) project which is built for
+[Angular](https://angular.io) (v2+) developers.
 
 ### <a name="lts"></a> Long Term Support
 
