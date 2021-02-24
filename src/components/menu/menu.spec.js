@@ -397,6 +397,34 @@ describe('material.components.menu', function() {
       $log = $injector.get('$log');
     }));
 
+    it('backdrop should attach to backdropParent', function() {
+      var parent = angular.element('<div>');
+      var menuEl = angular.element(
+        '<md-menu>' +
+        '  <button ng-click="null">Trigger</button>' +
+        '</md-menu>'
+      );
+      var backdropParent = angular.element('<div>');
+
+      $mdMenu.show({
+        scope: $rootScope,
+        element: menuEl,
+        target: document.body,
+        preserveElement: true,
+        parent: parent,
+        backdropParent: backdropParent,
+      });
+
+      $timeout.flush();
+
+      expect(backdropParent.find('md-backdrop').length).toBe(1);
+
+      // Close the menu and remove the containers
+      $mdMenu.hide();
+      parent.remove();
+      backdropParent.remove();
+    });
+
     it('should warn when the md-menu-content element is missing', function() {
       spyOn($log, 'warn');
 
