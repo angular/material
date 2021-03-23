@@ -5,6 +5,7 @@ $sidenav-min-space: 56px !default;
 md-sidenav {
   box-sizing: border-box;
   position: absolute;
+  display: flex;
   flex-direction: column;
   z-index: $z-index-sidenav;
 
