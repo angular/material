@@ -249,7 +249,7 @@ function filterNonCodeFiles() {
 // builds the theming related css and provides it as a JS const for angular
 function themeBuildStream() {
   // Make a copy so that we don't modify the actual config that is used by other functions
-  var paths = config.themeBaseFiles.slice(0);
+  const paths = config.themeBaseFiles.slice(0);
   config.componentPaths.forEach(component => paths.push(path.join(component, '*-theme.scss')));
   paths.push(config.themeCore);
 
