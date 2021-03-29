@@ -1,7 +1,7 @@
 {
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": 8
+    "ecmaVersion": 2021
   },
   "rules": {
     "accessor-pairs": "error",
@@ -289,10 +289,12 @@
     },
     {
       "files": [
-        "**/*.spec.js"
+        "**/*.spec.js",
+        "test/*.js"
       ],
       "env": {
-        "jasmine": true
+        "jasmine": true,
+        "browser": true
       },
       "rules": {
         "no-native-reassign": "off",

@@ -2,14 +2,13 @@
  * angular-material-spec.js
  *
  * This Jasmine configuration file is used internally for testing the
- * unit test files: "\angular\material\src\**\*.spec.js"
- *
+ * unit test files: "\angular\material\src\**\*.spec.js".
  */
 (function() {
 
-  var enableAnimations;
+  let enableAnimations;
 
-  beforeAll(function () {
+  beforeAll(function() {
     /**
      * Add special matchers used in the AngularJS-Material spec.
      */
@@ -25,21 +24,21 @@
       toHaveClass: function() {
         return {
           compare: function(actual, expected) {
-            var results = {pass: true};
-            var classes = expected.trim().split(/\s+/);
+            const results = {pass: true};
+            const classes = expected.trim().split(/\s+/);
 
-            for (var i = 0; i < classes.length; ++i) {
+            for (let i = 0; i < classes.length; ++i) {
               if (!getElement(actual).hasClass(classes[i])) {
                 results.pass = false;
               }
             }
 
-            var negation = !results.pass ? "" : " not ";
+            const negation = !results.pass ? '' : ' not ';
 
-            results.message = "";
-            results.message += "Expected '";
+            results.message = '';
+            results.message += 'Expected \'';
             results.message += angular.mock.dump(actual);
-            results.message += "'" + negation + "to have class '" + expected + "'.";
+            results.message += '\'' + negation + 'to have class \'' + expected + '\'.';
 
             return results;
           }
@@ -53,17 +52,15 @@
       toBeOfType: function(type) {
         return {
           compare: function(actual, expected) {
-            var results = {
-              pass: typeof actual == expected
-            };
+            const results = {pass: typeof actual == expected};
 
-            var negation = !results.pass ? "" : " not ";
+            const negation = !results.pass ? '' : ' not ';
 
-            results.message = "";
-            results.message += "Expected ";
-            results.message += angular.mock.dump(actual) + " of type ";
+            results.message = '';
+            results.message += 'Expected ';
+            results.message += angular.mock.dump(actual) + ' of type ';
             results.message += (typeof actual);
-            results.message += negation + "to have type '" + type + "'.";
+            results.message += negation + 'to have type \'' + type + '\'.';
 
             return results;
           }
@@ -73,21 +70,22 @@
       toHaveFields: function() {
         return {
           compare: function(actual, expected) {
-            var results = {pass: true};
+            const results = {pass: true};
 
-            for (var key in expected) {
-              if (!(actual || {}).hasOwnProperty(key) || !angular.equals(actual[key], expected[key])) {
+            for (const key in expected) {
+              if (!(actual || {}).hasOwnProperty(key) ||
+                  !angular.equals(actual[key], expected[key])) {
                 results.pass = false;
               }
             }
 
-            var negation = !results.pass ? "" : " not ";
+            const negation = !results.pass ? '' : ' not ';
 
-            results.message = "";
-            results.message += "Expected ";
-            results.message += angular.mock.dump(actual) + " of type ";
+            results.message = '';
+            results.message += 'Expected ';
+            results.message += angular.mock.dump(actual) + ' of type ';
             results.message += (typeof actual);
-            results.message += negation + "to have fields matching '" + angular.mock.dump(expected);
+            results.message += negation + 'to have fields matching \'' + angular.mock.dump(expected);
 
             return results;
           }
@@ -104,12 +102,9 @@
       toBeFocused: function() {
         return {
           'compare': function(actual) {
-            var pass =  getElement(actual)[0] === document.activeElement;
-            var not = pass ? 'not ' : '';
-            return {
-              'pass': pass,
-              'message': 'Expected element ' + not + 'to have focus.'
-            };
+            const pass = getElement(actual)[0] === document.activeElement;
+            const not = pass ? 'not ' : '';
+            return {'pass': pass, 'message': 'Expected element ' + not + 'to have focus.'};
           }
         };
       },
@@ -124,16 +119,14 @@
       toExist: function() {
         return {
           compare: function(actual) {
-            var el = getElement(actual);
-            var pass = el.length > 0;
-            var not = pass ? 'not ' : '';
+            const el = getElement(actual);
+            const pass = el.length > 0;
+            const not = pass ? 'not ' : '';
 
             return {
               pass: pass,
-              message: 'Expected "' + actual +
-              '" ' + not + 'to match element(s), ' +
-              'but found ' + el.length +
-              ' items in the DOM'
+              message: 'Expected "' + actual + '" ' + not + 'to match element(s), ' +
+                  'but found ' + el.length + ' items in the DOM'
             };
           }
         };
@@ -150,15 +143,15 @@
       toContainHtml: function() {
         return {
           compare: function(actual, expected) {
-            var el = getElement(actual);
-            var html = el.html();
-            var pass = html.indexOf(expected) !== -1;
-            var not = pass ? 'not ' : '';
+            const el = getElement(actual);
+            const html = el.html();
+            const pass = html.indexOf(expected) !== -1;
+            const not = pass ? 'not ' : '';
 
             return {
               pass: pass,
               message: 'Expected element ' + not + 'to contain the html ' +
-              '[' + expected + '] in [' + html + ']'
+                  '[' + expected + '] in [' + html + ']'
             };
           }
         };
@@ -181,10 +174,9 @@
      *   expect($document.activeElement).toBe(someElement[0]);
      *
      * }));
-     *
      */
     jasmine.mockElementFocus = function() {
-      var _focusFn = HTMLElement.prototype.focus;
+      const _focusFn = HTMLElement.prototype.focus;
 
       inject(function($document) {
         HTMLElement.prototype.focus = function() {
@@ -196,17 +188,15 @@
       afterEach(function() {
         HTMLElement.prototype.focus = _focusFn;
       });
-
     };
 
     /**
      * Returns the angular element associated with a css selector or element.
-     * @param el {string|!angular.JQLite|!Element}
-     * @returns {!angular.JQLite}
+     * @param el {string|!JQLite|!Element}
+     * @returns {JQLite}
      */
     function getElement(el) {
-      var queryResult = angular.isString(el) ?
-          document.querySelector(el) : el;
+      const queryResult = angular.isString(el) ? document.querySelector(el) : el;
       return angular.element(queryResult);
     }
   });
@@ -217,26 +207,24 @@
   });
 
   beforeEach(function() {
-
     /**
      * Before each test, require that the 'ngMaterial-mock' module is ready for injection
      * NOTE: assumes that angular-material-mocks.js has been loaded.
      */
-
     module('ngAnimate');
     module('ngMaterial-mock');
 
     module(function() {
       return function($mdUtil, $rootElement, $document, $animate) {
-        var DISABLE_ANIMATIONS = 'disable_animations';
+        const DISABLE_ANIMATIONS = 'disable_animations';
 
         // Create special animation 'stop' function used
         // to set 0ms durations for all animations and transitions
 
         window.disableAnimations = function disableAnimations() {
-          var body = angular.element($document[0].body);
-          var head = angular.element($document[0].getElementsByTagName('head')[0]);
-          var styleSheet = angular.element( buildStopTransitions() );
+          const body = angular.element($document[0].body);
+          const head = angular.element($document[0].getElementsByTagName('head')[0]);
+          const styleSheet = angular.element(buildStopTransitions());
 
           $animate.enabled(false);
 
@@ -255,22 +243,18 @@
          * durations' to zero.
          */
         function buildStopTransitions() {
-          var style = "<style> .{0} * { {1} }</style>";
+          const style = '<style> .{0} * { {1} }</style>';
 
-          return $mdUtil.supplant(style,[ DISABLE_ANIMATIONS,
-            "transition -webkit-transition animation -webkit-animation"
-                .split(" ")
-                .map(function(key){
-                  return $mdUtil.supplant("{0}: 0s none !important",[key]);
+          return $mdUtil.supplant(style, [
+            DISABLE_ANIMATIONS,
+            'transition -webkit-transition animation -webkit-animation'.split(' ')
+                .map(function(key) {
+                  return $mdUtil.supplant('{0}: 0s none !important', [key]);
                 })
-                .join("; ")
+                .join('; ')
           ]);
-
         }
-
       };
     });
-
   });
-
 })();
