@@ -19,6 +19,12 @@ Please submit Angular Material and CDK questions
 [here](https://groups.google.com/forum/#!forum/angular-material2)
 and issues [here](https://github.com/angular/components/issues).
 -->
+# AngularJS Material is in LTS mode
+
+We are no longer accepting changes that are not critical bug fixes into this project.
+See [Long Term Support](https://material.angularjs.org/latest/#long-term-support) for more detail.
+
+
 ## Bug Report
 
 <!-- Please note that we are not accepting major feature requests, i.e. requests for new components, at this time. -->

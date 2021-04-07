@@ -10,6 +10,11 @@
  - [Developer Commits Levels](#pr_forks)
  - [Submission Guidelines](#submit)
 
+## AngularJS Material is in LTS mode
+
+We are no longer accepting changes that are not critical bug fixes into this project.
+See [Long Term Support](https://material.angularjs.org/latest/#long-term-support) for more detail.
+
 ## <a name="coc"></a> Code of Conduct
 
 Please help us keep AngularJS Material open and inclusive by reading and following our
