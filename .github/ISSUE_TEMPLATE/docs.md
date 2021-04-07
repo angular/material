@@ -3,6 +3,10 @@ name: Documentation
 about: Suggest an improvement to our documentation at material.angularjs.org
 labels: "type: docs, needs triage"
 ---
+# AngularJS Material is in LTS mode
+
+We are no longer accepting changes that are not critical bug fixes into this project.
+See [Long Term Support](https://material.angularjs.org/latest/#long-term-support) for more detail.
 
 ## Documentation Feedback
 

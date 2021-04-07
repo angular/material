@@ -2,13 +2,21 @@
 Filling out this template is required! Do not delete it when submitting a Pull Request!
 Without this information, your Pull Request may be auto-closed.
 -->
+# AngularJS Material is in LTS mode
+
+We are no longer accepting changes that are not critical bug fixes into this project.
+See [Long Term Support](https://material.angularjs.org/latest/#long-term-support) for more detail.
+
 ## PR Checklist
+
 Please check your PR fulfills the following requirements:
+- [ ] Does this PR fix a regression since 1.2.0, a security flaw, or a problem caused by a new browser version?
 - [ ] The commit message follows [our guidelines](https://github.com/angular/material/blob/master/.github/CONTRIBUTING.md#-commit-message-format)
 - [ ] Tests for the changes have been added or this is not a bug fix / enhancement
 - [ ] Docs have been added, updated, or were not required
 
 ## PR Type
+
 What kind of change does this PR introduce?
 <!-- Please check the one that applies to this PR using "x". -->
 ```
