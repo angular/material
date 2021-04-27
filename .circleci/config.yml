@@ -7,7 +7,7 @@
 # To validate changes, use an online parser, eg. http://yaml-online-parser.appspot.com/
 
 # Find the latest version here: https://github.com/CircleCI-Public/circleci-dockerfiles/tree/master/node/images
-var_1: &docker_image circleci/node:14.15.1-browsers
+var_1: &docker_image circleci/node:14.16.1-browsers
 var_2: &cache_key angularjs-material-{{ checksum "package-lock.json" }}
 
 # Settings common to each job
@@ -60,7 +60,7 @@ var_9: &publish_branches_filter
 version: 2.1
 
 orbs:
-  build-tools: circleci/build-tools@2.7.0
+  build-tools: circleci/build-tools@2.9.0
 
 commands:
   # Command for checking out the source code from GitHub. This also ensures that the source code
@@ -69,6 +69,12 @@ commands:
     description: Checkout and verify clean merge with master
     steps:
       - checkout
+      - run:
+          name: Set git user.name and user.email for rebase.
+          # User is required for rebase.
+          command: |
+            git config user.name "angular-ci"
+            git config user.email "angular-ci"
       - build-tools/merge-with-parent:
           parent: master
 
