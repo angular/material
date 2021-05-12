@@ -91,7 +91,7 @@
     "minimist": "^1.2.5",
     "mkdirp": "0.5.1",
     "moment": "^2.29.1",
-    "postcss": "^8.2.8",
+    "postcss": "^8.2.10",
     "prompt-sync": "^4.2.0",
     "q": "^1.5.1",
     "stream-series": "^0.1.1",
