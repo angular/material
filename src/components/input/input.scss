@@ -1,3 +1,5 @@
+@use "sass:math";
+
 md-input-container {
   @include pie-clearfix();
   display: inline-block;
@@ -354,7 +356,7 @@ md-input-container {
 
 .md-resize-handle {
   position: absolute;
-  bottom: $input-resize-handle-height / -2;
+  bottom: math.div($input-resize-handle-height, -2);
   left: 0;
   height: $input-resize-handle-height;
   background: transparent;

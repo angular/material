@@ -1,3 +1,5 @@
+@use "sass:math";
+
 $bottom-sheet-horizontal-padding: 2 * $baseline-grid !default;
 $bottom-sheet-vertical-padding: 1 * $baseline-grid !default;
 $bottom-sheet-icon-after-margin: 4 * $baseline-grid !default;
@@ -102,7 +104,7 @@ md-bottom-sheet {
 
       /* Mixin for how many grid items to show per row */
       @mixin grid-items-per-row($num, $alignEdges: false) {
-        $width: 100% / $num;
+        $width: math.div(100%, $num);
         flex: 1 1 $width;
         max-width: $width;
 

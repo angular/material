@@ -1,11 +1,13 @@
 // Material Design Button: https://material.io/archive/guidelines/components/buttons.html
 
+@use "sass:math";
+
 $button-border-radius: 2px !default;
 $button-fab-border-radius: 50% !default;
 $button-icon-border-radius: $button-fab-border-radius !default;
 
 $button-font-size: $body-font-size-base !default;
-$button-font-size-dense: $body-font-size-base * 13/14 !default;
+$button-font-size-dense: math.div($body-font-size-base * 13, 14) !default;
 
 $button-line-height: rem(3.60) !default;
 $button-line-height-dense: rem(3.20) !default;
