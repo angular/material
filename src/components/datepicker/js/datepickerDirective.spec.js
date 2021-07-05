@@ -22,6 +22,22 @@ var DATEPICKER_TEMPLATE =
   'ng-disabled="isDisabled">' +
   '</md-datepicker>';
 
+var DATEPICKER_FORM_TEMPLATE =
+  '<form name="birthdayForm">' +
+  '  <md-datepicker name="birthday" ' +
+  '    md-max-date="maxDate" ' +
+  '    md-min-date="minDate" ' +
+  '    md-date-filter="dateFilter" ' +
+  '    md-month-filter="monthFilter" ' +
+  '    ng-model="myDate" ' +
+  '    ng-change="dateChangedHandler()" ' +
+  '    ng-focus="focusHandler()" ' +
+  '    ng-blur="blurHandler()" ' +
+  '    ng-required="isRequired" ' +
+  '    ng-disabled="isDisabled">' +
+  '  </md-datepicker>' +
+  '</form>';
+
 /**
  * Compile and link the given template and store values for element, scope, and controller.
  * @param {string} template
@@ -134,6 +150,35 @@ describe('md-datepicker', function() {
       pageScope.$apply();
     }).not.toThrow();
   });
+
+  it('should support null, undefined, and values that can be parsed into a date in a form',
+      function() {
+        var formElement = createDatepickerInstance(DATEPICKER_FORM_TEMPLATE);
+        var datepickerInputContainer =
+            formElement[0].querySelector('md-datepicker .md-datepicker-input-container');
+
+        pageScope.myDate = null;
+        pageScope.$apply();
+        $timeout.flush();
+        expect(datepickerInputContainer.classList.contains('md-datepicker-invalid')).toBeFalsy();
+
+        pageScope.myDate = undefined;
+        pageScope.$apply();
+        $timeout.flush();
+        expect(datepickerInputContainer.classList.contains('md-datepicker-invalid')).toBeFalsy();
+
+        pageScope.myDate = '2016-09-08';
+        pageScope.$apply();
+        $timeout.flush();
+        expect(pageScope.myDate).toEqual('2016-09-08');
+        expect(datepickerInputContainer.classList.contains('md-datepicker-invalid')).toBeFalsy();
+
+        pageScope.myDate = '2021-01-20T07:00:00Z';
+        pageScope.$apply();
+        $timeout.flush();
+        expect(pageScope.myDate).toEqual('2021-01-20T07:00:00Z');
+        expect(datepickerInputContainer.classList.contains('md-datepicker-invalid')).toBeFalsy();
+      });
 
   it('should set the element type as "date"', function() {
     expect(ngElement.attr('type')).toBe('date');
@@ -448,7 +493,7 @@ describe('md-datepicker', function() {
       expect(controller.ngModelCtrl.$touched).toBe(true);
     });
 
-    it('should not update the input string is not "complete"', function() {
+    it('should not update the input string if not "complete"', function() {
       var date = new Date(2015, DEC, 1);
       pageScope.myDate = date;
 
