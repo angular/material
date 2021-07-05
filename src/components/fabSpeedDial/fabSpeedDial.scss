@@ -1,3 +1,5 @@
+@use "sass:math";
+
 md-fab-speed-dial {
   position: relative;
   display: flex;
@@ -138,7 +140,7 @@ md-fab-speed-dial {
       transition: $swift-ease-in;
 
       // Make the scale animation a bit faster since we are delaying each item
-      transition-duration: $swift-ease-in-duration / 2.1;
+      transition-duration: math.div($swift-ease-in-duration, 2.1);
     }
   }
 }

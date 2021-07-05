@@ -99,7 +99,7 @@ md-fab-toolbar {
       transition: $swift-ease-in;
 
       // Cut the action item's animation time in half since we delay it in the JS
-      transition-duration: $swift-ease-in-duration / 2;
+      transition-duration: $swift-ease-in-duration * 0.5;
     }
   }
 

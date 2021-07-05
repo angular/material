@@ -79,14 +79,14 @@ md-switch {
   .md-bar {
     left: 1px;
     width: $switch-width - 2px;
-    top: $switch-height / 2 - $switch-bar-height / 2;
+    top: $switch-height * 0.5 - $switch-bar-height * 0.5;
     height: $switch-bar-height;
     border-radius: 8px;
     position: absolute;
   }
 
   .md-thumb-container {
-    top: $switch-height / 2 - $switch-thumb-size / 2;
+    top: $switch-height * 0.5 - $switch-thumb-size * 0.5;
     left: 0;
     width: $switch-width - $switch-thumb-size;
     position: absolute;
