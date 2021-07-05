@@ -652,7 +652,11 @@
     if (opt_date) {
       date = new Date(opt_date.valueOf());
     } else {
-      date = angular.copy(this.ngModelCtrl.$modelValue);
+      if (angular.isString(this.ngModelCtrl.$modelValue)) {
+        date = new Date(this.ngModelCtrl.$modelValue);
+      } else {
+        date = angular.copy(this.ngModelCtrl.$modelValue);
+      }
     }
 
     // Clear any existing errors to get rid of anything that's no longer relevant.
