@@ -1,3 +1,25 @@
+## [1.2.3](https://github.com/angular/material/compare/v1.2.2...v1.2.3) (2021-07-14)
+
+
+### Bug Fixes
+
+* **datepicker:** ISO 8601 dates decorated as invalid in forms ([0a06f99](https://github.com/angular/material/commit/0a06f995be1f9cbaf963d60e848f2006309fcf12)), closes [#12075](https://github.com/angular/material/issues/12075)
+
+
+### Features
+
+* **menu:** add a new backdropParent option ([78b1073](https://github.com/angular/material/commit/78b107331e9903874cbb71404683f191f9172f7e))
+
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.2.3 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="atfzls" src="https://avatars2.githubusercontent.com/u/55975318?v=4&s=117" width="117">](https://github.com/atfzls) |
+:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[atfzls](https://github.com/atfzls) |
+
+
 ## [1.2.2](https://github.com/angular/material/compare/v1.2.1...v1.2.2) (2020-12-17)
 
 
