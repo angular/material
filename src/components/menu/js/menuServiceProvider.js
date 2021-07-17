@@ -2,14 +2,56 @@ angular
   .module('material.components.menu')
   .provider('$mdMenu', MenuProvider);
 
+/** Handles behavior for a menu while it is open, including:
+*
+*  - handling animating the menu opening/closing
+*  - handling key/mouse events on the menu element
+*  - handling enabling/disabling scroll while the menu is open
+*  - handling redrawing during resizes and orientation changes
+*/
+
 /**
- * Interim element provider for the menu.
- * Handles behavior for a menu while it is open, including:
- *    - handling animating the menu opening/closing
- *    - handling key/mouse events on the menu element
- *    - handling enabling/disabling scroll while the menu is open
- *    - handling redrawing during resizes and orientation changes
+ * @ngdoc service
+ * @name $mdMenu
+ * @module material.components.menu
  *
+ * @description
+ * `$mdMenu` is a service that is available within the scope of an `md-menu` directive.
+ *
+ * ## Usage
+ *
+ * <hljs lang="html">
+ *   <md-menu>
+ *      <!--Clicking the button will open the menu-->
+ *     <md-button ng-click="$mdMenu.open($event)">
+ *       Open
+ *     </md-button>
+ *     <!--Moving the mouse off will close the menu-->
+ *     <md-menu-content ng-mouseleave="$mdMenu.close()">
+ *       <md-menu-item>
+ *           <md-button ng-click="$mdMenu.close()">Clicking me will also close the menu</md-button>
+ *       </md-menu-item>
+ *     </md-menu-content>
+ *   </md-menu>
+ * </hljs>
+ */
+
+/**
+ * @ngdoc method
+ * @name $mdMenu#open
+ * @param {$event} $event By passing $event as argument, the corresponding event is stopped from propagating up the
+ * DOM-tree
+ *
+ * @description
+ * Opens the menu within the `md-menu` scope
+ */
+
+/**
+ * @ngdoc method
+ * @name $mdMenu#close
+ *
+ * @description
+ * Closes the menu within the `md-menu` scope
  */
 
 function MenuProvider($$interimElementProvider) {
