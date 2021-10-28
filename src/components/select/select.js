@@ -12,8 +12,7 @@
 
 var SELECT_EDGE_MARGIN = 8;
 var selectNextId = 0;
-var CHECKBOX_SELECTION_INDICATOR =
-  angular.element('<div class="md-container"><div class="md-icon"></div></div>');
+var CHECKBOX_SELECTION_INDICATOR;
 
 angular.module('material.components.select', [
     'material.core',
@@ -1270,6 +1269,13 @@ function OptionDirective($mdButtonInkRipple, $mdUtil, $mdTheming) {
 
     if (selectMenuCtrl.isMultiple) {
       element.addClass('md-checkbox-enabled');
+      if (!CHECKBOX_SELECTION_INDICATOR) {
+        var indicator = document.createElement('div');
+        indicator.className = 'md-container';
+        indicator.appendChild(document.createElement('div'));
+        indicator.firstChild.className = 'md-icon';
+        CHECKBOX_SELECTION_INDICATOR = angular.element(indicator);
+      }
       element.prepend(CHECKBOX_SELECTION_INDICATOR.clone());
     }
 

@@ -869,8 +869,7 @@ angular
 
 var MD_PANEL_Z_INDEX = 80;
 var MD_PANEL_HIDDEN = '_md-panel-hidden';
-var FOCUS_TRAP_TEMPLATE = angular.element(
-    '<div class="_md-panel-focus-trap" tabindex="0"></div>');
+var FOCUS_TRAP_TEMPLATE;
 
 var _presets = {};
 
@@ -2107,6 +2106,12 @@ MdPanelRef.prototype._configureTrapFocus = function() {
     var element = this.panelEl;
     // Set up elements before and after the panel to capture focus and
     // redirect back into the panel.
+    if (!FOCUS_TRAP_TEMPLATE) {
+      var template = document.createElement('div');
+      template.className = '_md-panel-focus-trap';
+      template.tabIndex = 0;
+      FOCUS_TRAP_TEMPLATE = angular.element(template);
+    }
     this._topFocusTrap = FOCUS_TRAP_TEMPLATE.clone()[0];
     this._bottomFocusTrap = FOCUS_TRAP_TEMPLATE.clone()[0];
 
