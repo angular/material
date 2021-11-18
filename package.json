@@ -54,7 +54,7 @@
     "conventional-changelog": "^3.1.24",
     "cssnano": "^5.0.5",
     "dgeni": "^0.4.14",
-    "dgeni-packages": "^0.29.1",
+    "dgeni-packages": "^0.29.2",
     "eslint": "^7.23.0",
     "github-contributors-list": "^1.2.5",
     "glob": "^7.1.6",
@@ -99,6 +99,7 @@
   },
   "resolutions": {
     "graceful-fs": "^4.2.8",
+    "marked": "0.3.6",
     "node-sass": "^4.14.1",
     "websocket-extensions": "~0.1.4"
   },
