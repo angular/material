@@ -72,7 +72,7 @@
     "gulp-plumber": "^1.2.1",
     "gulp-postcss": "^9.0.0",
     "gulp-rename": "^2.0.0",
-    "gulp-sass": "^4.1.0",
+    "gulp-sass": "^5.0.0",
     "gulp-uglify": "^3.0.2",
     "gulp-util": "^3.0.8",
     "jasmine-core": "2.8.0",
@@ -94,13 +94,13 @@
     "postcss": "^8.3.0",
     "prompt-sync": "^4.2.0",
     "q": "^1.5.1",
+    "sass": "^1.43.4",
     "stream-series": "^0.1.1",
     "through2": "^4.0.2"
   },
   "resolutions": {
     "graceful-fs": "^4.2.8",
     "marked": "0.3.6",
-    "node-sass": "^4.14.1",
     "websocket-extensions": "~0.1.4"
   },
   "scripts": {
