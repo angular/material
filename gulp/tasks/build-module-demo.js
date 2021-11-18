@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const through2 = require('through2');
 const lazypipe = require('lazypipe');
-const sass = require('gulp-sass');
+const sass = require('gulp-sass')(require('sass'));
 const gulpif = require('gulp-if');
 const _ = require('lodash');
 

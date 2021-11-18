@@ -39,17 +39,14 @@ var_5: &save_cache
 var_6: &npm_install
   run: npm ci
 
-var_7: &rebuild_node_sass
-  run: npm rebuild node-sass
-
-var_8: &store_junit_test_results
+var_7: &store_junit_test_results
   store_test_results:
     path: ./artifacts/junit
 
 # Branch filter that we can specify for jobs that should only run on publish branches. This filter
 # is used to ensure that not all upstream branches will be published as Github builds
 # (e.g. revert branches, feature branches)
-var_9: &publish_branches_filter
+var_8: &publish_branches_filter
   branches:
     only:
       - master
@@ -93,7 +90,6 @@ jobs:
       - checkout_and_rebase
       - *restore_cache
       - *npm_install
-      - *rebuild_node_sass
       - run: npm run lint
 
   # -----------------------------------
@@ -105,7 +101,6 @@ jobs:
       - checkout_and_rebase
       - *restore_cache
       - *npm_install
-      - *rebuild_node_sass
       - run: npm run build
       - *save_cache
 
