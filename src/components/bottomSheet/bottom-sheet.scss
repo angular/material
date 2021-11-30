@@ -102,7 +102,7 @@ md-bottom-sheet {
 
       /* Mixin for how many grid items to show per row */
       @mixin grid-items-per-row($num, $alignEdges: false) {
-        $width: 100% / $num;
+        $width: math.div(100%, $num);
         flex: 1 1 $width;
         max-width: $width;
 

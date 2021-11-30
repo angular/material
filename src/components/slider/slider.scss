@@ -22,7 +22,7 @@ $slider-arrow-width: 28px !default;
 
 $slider-sign-height: 28px !default;
 $slider-sign-width: 28px !default;
-$slider-sign-top: ($slider-size / 2) - ($slider-thumb-default-scale * $slider-thumb-height / 2) - ($slider-sign-height) - ($slider-arrow-height) + 10px !default;
+$slider-sign-top: ($slider-size * 0.5) - ($slider-thumb-default-scale * $slider-thumb-height * 0.5) - ($slider-sign-height) - ($slider-arrow-height) + 10px !default;
 
 @keyframes sliderFocusThumb {
   0% {
@@ -64,8 +64,8 @@ $slider-sign-top: ($slider-size / 2) - ($slider-thumb-default-scale * $slider-th
 
 @mixin slider-thumb-position($width: $slider-thumb-width, $height: $slider-thumb-height) {
   position: absolute;
-  @include rtl-prop(left, right, (-$width / 2), auto);
-  top: ($slider-size / 2) - ($height / 2);
+  @include rtl-prop(left, right, (-$width * 0.5), auto);
+  top: ($slider-size * 0.5) - ($height * 0.5);
   width: $width;
   height: $height;
   border-radius: max($width, $height);
@@ -101,7 +101,7 @@ md-slider {
   .md-track-container {
     width: 100%;
     position: absolute;
-    top: ($slider-size / 2) - ($slider-track-height) / 2;
+    top: ($slider-size * 0.5) - ($slider-track-height) * 0.5;
     height: $slider-track-height;
   }
   .md-track {
@@ -171,24 +171,24 @@ md-slider {
     justify-content: center;
 
     position: absolute;
-    left: -($slider-sign-height / 2);
+    left: -($slider-sign-height * 0.5);
     top: $slider-sign-top;
     width: $slider-sign-width;
     height: $slider-sign-height;
     border-radius: max($slider-sign-height, $slider-sign-width);
 
-    transform: scale(0.4) translate3d(0,(-$slider-sign-top + 10) / 0.4,0);
+    transform: scale(0.4) translate3d(0,math.div(-$slider-sign-top + 10, 0.4),0);
     transition: all 0.3s $swift-ease-in-out-timing-function;
 
     /* The arrow pointing down under the sign */
     &:after {
       position: absolute;
       content: '';
-      @include rtl-prop(left, right, -($slider-sign-width / 2 - $slider-arrow-width / 2), auto);
+      @include rtl-prop(left, right, -(math.div($slider-sign-width, 2) - math.div($slider-arrow-width, 2)), auto);
       border-radius: $slider-arrow-height;
       top: 19px;
-      border-left: $slider-arrow-width / 2 solid transparent;
-      border-right: $slider-arrow-width / 2 solid transparent;
+      border-left: $slider-arrow-width * 0.5 solid transparent;
+      border-right: $slider-arrow-width * 0.5 solid transparent;
       border-top-width: $slider-arrow-height;
       border-top-style: solid;
 
@@ -212,7 +212,7 @@ md-slider {
     transform: scale(.7);
     opacity: 0;
     // using a custom duration to match the spec example video
-    transition: all ($slider-thumb-focus-duration / 2) $swift-ease-in-out-timing-function;
+    transition: all ($slider-thumb-focus-duration * 0.5) $swift-ease-in-out-timing-function;
   }
   .md-disabled-thumb {
     @include slider-thumb-position(
@@ -357,7 +357,7 @@ md-slider {
 
     .md-thumb-container {
       top: auto;
-      margin-bottom: ($slider-size / 2) - ($slider-track-height) / 2;
+      margin-bottom: ($slider-size * 0.5) - ($slider-track-height) * 0.5;
       left: calc(50% - 1px);
       bottom: 0;
 
@@ -366,7 +366,7 @@ md-slider {
       }
 
       .md-focus-ring {
-        left: -(($slider-focus-thumb-width / 2) - ($slider-track-height / 2));
+        left: -(math.div($slider-focus-thumb-width, 2) - math.div($slider-track-height, 2));
       }
     }
 
@@ -376,20 +376,20 @@ md-slider {
 
     &[md-discrete] {
       .md-sign {
-        $sign-top: -($slider-sign-top / 2) + 1;
+        $sign-top: -($slider-sign-top * 0.5) + 1;
 
         left: -$slider-sign-height - 12;
         top: $sign-top;
 
-        transform: scale(0.4) translate3d((-$slider-sign-top + 10) / 0.4, 0 ,0);
+        transform: scale(0.4) translate3d(math.div(-$slider-sign-top + 10, 0.4), 0 ,0);
 
         /* The arrow pointing left next the sign */
         &:after {
           top: $sign-top;
           left: 19px;
-          border-top: $slider-arrow-width / 2 solid transparent;
+          border-top: $slider-arrow-width * 0.5 solid transparent;
           border-right: 0;
-          border-bottom: $slider-arrow-width / 2 solid transparent;
+          border-bottom: $slider-arrow-width * 0.5 solid transparent;
           border-left-width: $slider-arrow-height;
           border-left-style: solid;
 

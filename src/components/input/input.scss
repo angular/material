@@ -354,7 +354,7 @@ md-input-container {
 
 .md-resize-handle {
   position: absolute;
-  bottom: $input-resize-handle-height / -2;
+  bottom: math.div($input-resize-handle-height, -2);
   left: 0;
   height: $input-resize-handle-height;
   background: transparent;

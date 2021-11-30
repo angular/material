@@ -12,6 +12,7 @@
 // Layout
 // ------------------------------
 
+
 $baseline-grid:            8px !default;
 $layout-gutter-width:      ($baseline-grid * 2) !default;
 
@@ -335,24 +336,24 @@ $layout-breakpoint-lg:     1920px !default;
 @mixin layout-padding-margin() {
 
   [layout-padding] > [flex-sm] {
-    padding: $layout-gutter-width / 4;
+    padding: $layout-gutter-width * 0.25;
   }
   [layout-padding],
   [layout-padding] > [flex],
   [layout-padding] > [flex-gt-sm],
   [layout-padding] > [flex-md]
   {
-    padding: $layout-gutter-width / 2;
+    padding: $layout-gutter-width * 0.5;
   }
   [layout-padding] > [flex-gt-md],
   [layout-padding] > [flex-lg]
   {
-    padding: $layout-gutter-width / 1;
+    padding: math.div($layout-gutter-width, 1);
   }
 
   [layout-margin] > [flex-sm]
   {
-    margin: $layout-gutter-width / 4;
+    margin: $layout-gutter-width * 0.25;
   }
 
   [layout-margin],
@@ -360,13 +361,13 @@ $layout-breakpoint-lg:     1920px !default;
   [layout-margin]  > [flex-gt-sm],
   [layout-margin]  > [flex-md]
   {
-    margin: $layout-gutter-width / 2;
+    margin: $layout-gutter-width * 0.5;
   }
 
   [layout-margin]  > [flex-gt-md],
   [layout-margin]  > [flex-lg]
   {
-    margin: $layout-gutter-width / 1;
+    margin: math.div($layout-gutter-width, 1);
   }
 
   [layout-wrap] {

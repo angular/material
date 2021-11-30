@@ -346,8 +346,8 @@ md-select-menu[multiple] {
     @include checkbox-container('[selected]');
 
     .md-container {
-      @include rtl(margin-left, $select-option-padding * (2 / 3), auto);
-      @include rtl(margin-right, auto, $select-option-padding * (2 / 3));
+      @include rtl(margin-left, $select-option-padding * math.div(2, 3), auto);
+      @include rtl(margin-right, auto, $select-option-padding * math.div(2, 3));
     }
   }
 }

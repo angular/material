@@ -158,19 +158,19 @@ md-progress-linear {
 }
 @keyframes md-progress-linear-indeterminate-1 {
   0% {
-    left: -378.6 * 100% / 360;
+    left: math.div(-378.6 * 100%, 360);
     animation-timing-function: linear;
   }
   20% {
-    left: -378.6 * 100% / 360;
+    left: math.div(-378.6 * 100%, 360);
     animation-timing-function: cubic-bezier(0.5, 0, 0.701732, 0.495818703);
   }
   69.15% {
-    left: 77.4 * 100% / 360;
+    left: math.div(77.4 * 100%, 360);
     animation-timing-function: cubic-bezier(0.302435, 0.38135197, 0.55, 0.956352125);
   }
   100% {
-    left: 343.6 * 100% / 360;
+    left: math.div(343.6 * 100%, 360);
   }
 }
 @keyframes md-progress-linear-indeterminate-scale-2 {
@@ -192,19 +192,19 @@ md-progress-linear {
 }
 @keyframes md-progress-linear-indeterminate-2 {
   0% {
-    left: -197.6 * 100% / 360;
+    left: math.div(-197.6 * 100%, 360);
     animation-timing-function: cubic-bezier(0.15, 0, 0.5150584, 0.409684966);
   }
   25% {
-    left: -62.1 * 100% / 360;
+    left: math.div(-62.1 * 100%, 360);
     animation-timing-function: cubic-bezier(0.3103299, 0.284057684, 0.8, 0.733718979);
   }
   48.35% {
-    left: 106.2 * 100% / 360;
+    left: math.div(106.2 * 100%, 360);
     animation-timing-function: cubic-bezier(0.4, 0.627034903, 0.6, 0.902025796);
   }
   100% {
-    left: 422.6 * 100% / 360;
+    left: math.div(422.6 * 100%, 360);
   }
 }
 

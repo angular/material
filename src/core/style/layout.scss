@@ -8,6 +8,7 @@
 *  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
 *  5) http://godban.com.ua/projects/flexgrid
 */
+
 @mixin flex-order-for-name($sizes:null) {
   @if $sizes == null {
     $sizes : '';
@@ -345,7 +346,7 @@
   .layout-padding-sm > *,
   .layout-padding    > .flex-sm
   {
-    padding: $layout-gutter-width / 4;
+    padding: $layout-gutter-width * 0.25;
   }
 
   .layout-padding,
@@ -361,7 +362,7 @@
   .layout-padding        > .flex-gt-sm,
   .layout-padding        > .flex-md
   {
-    padding: $layout-gutter-width / 2;
+    padding: $layout-gutter-width * 0.5;
   }
 
   // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
@@ -374,7 +375,7 @@
   .layout-padding        > .flex-lg,
   .layout-padding        > .flex-gt-lg
   {
-    padding: $layout-gutter-width / 1;
+    padding: math.div($layout-gutter-width, 1);
   }
 
   // Margin enhancements
@@ -382,7 +383,7 @@
   .layout-margin-sm      > *,
   .layout-margin         > .flex-sm
   {
-    margin: $layout-gutter-width / 4;
+    margin: $layout-gutter-width * 0.25;
   }
 
   .layout-margin,
@@ -398,7 +399,7 @@
   .layout-margin         > .flex-gt-sm,
   .layout-margin         > .flex-md
   {
-    margin: $layout-gutter-width / 2;
+    margin: $layout-gutter-width * 0.5;
   }
 
   // NOTE: these`> *` selectors should only be applied for layout="row" or layout="column" children !!
@@ -410,7 +411,7 @@
   .layout-margin        > .flex-lg,
   .layout-margin        > .flex-gt-lg
   {
-    margin: $layout-gutter-width / 1;
+    margin: math.div($layout-gutter-width, 1);
   }
 
   .layout-wrap {

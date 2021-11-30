@@ -23,7 +23,7 @@ $error-padding-top: $baseline-grid !default;
 
 $icon-offset: 36px !default;
 
-$icon-top-offset: ($icon-offset - $input-padding-top - $input-border-width-focused) / 4 !default;
+$icon-top-offset: ($icon-offset - $input-padding-top - $input-border-width-focused) * 0.25 !default;
 
 $icon-float-focused-top: -8px !default;
 
