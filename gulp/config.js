@@ -95,7 +95,6 @@ module.exports = {
   ],
   themeCore: 'src/core/style/core-theme.scss',
   scssBaseFiles: [
-    'src/core/style/color-palette.scss',
     'src/core/style/_variables.scss',
     'src/components/input/_input-variables.scss',
     'src/core/style/_mixins.scss',
