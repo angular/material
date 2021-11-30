@@ -8,7 +8,6 @@
 *  4) https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items
 *  5) http://godban.com.ua/projects/flexgrid
 */
-@use "sass:math";
 
 @mixin flex-order-for-name($sizes:null) {
   @if $sizes == null {

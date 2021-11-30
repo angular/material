@@ -1,5 +1,3 @@
-@use "sass:math";
-
 $slider-background-color:  rgb(200, 200, 200) !default;
 $slider-size:  48px !default;
 $slider-min-size:  128px !default;
@@ -186,7 +184,7 @@ md-slider {
     &:after {
       position: absolute;
       content: '';
-      @include rtl-prop(left, right, -($slider-sign-width / 2 - $slider-arrow-width / 2), auto);
+      @include rtl-prop(left, right, -(math.div($slider-sign-width, 2) - math.div($slider-arrow-width, 2)), auto);
       border-radius: $slider-arrow-height;
       top: 19px;
       border-left: $slider-arrow-width * 0.5 solid transparent;
@@ -368,7 +366,7 @@ md-slider {
       }
 
       .md-focus-ring {
-        left: -(($slider-focus-thumb-width / 2) - ($slider-track-height / 2));
+        left: -(math.div($slider-focus-thumb-width, 2) - math.div($slider-track-height, 2));
       }
     }
 
