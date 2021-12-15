@@ -6,7 +6,7 @@
 # See http://blog.daemonl.com/2016/02/yaml.html
 # To validate changes, use an online parser, eg. http://yaml-online-parser.appspot.com/
 
-# Find the latest version here: https://github.com/CircleCI-Public/circleci-dockerfiles/tree/master/node/images
+# Find the latest version and SHA here: https://hub.docker.com/r/circleci/node/tags
 var_1: &docker_image circleci/node:14.16.1-browsers
 var_2: &cache_key angularjs-material-{{ checksum "package-lock.json" }}
 
@@ -44,7 +44,7 @@ var_7: &store_junit_test_results
     path: ./artifacts/junit
 
 # Branch filter that we can specify for jobs that should only run on publish branches. This filter
-# is used to ensure that not all upstream branches will be published as Github builds
+# is used to ensure that not all upstream branches will be published as GitHub builds
 # (e.g. revert branches, feature branches)
 var_8: &publish_branches_filter
   branches:
@@ -102,6 +102,24 @@ jobs:
       - *restore_cache
       - *npm_install
       - run: npm run build
+      - *save_cache
+
+  build_js_modules:
+    <<: *job_defaults
+    steps:
+      - checkout_and_rebase
+      - *restore_cache
+      - *npm_install
+      - run: npm run build:modules
+      - *save_cache
+
+  build_closure_modules:
+    <<: *job_defaults
+    steps:
+      - checkout_and_rebase
+      - *restore_cache
+      - *npm_install
+      - run: npm run build:closure
       - *save_cache
 
   # ------------------------------------------------------------------------------------------
@@ -180,9 +198,17 @@ workflows:
       - test_angularjs_snapshot:
           requires:
             - build
+      - build_js_modules:
+          requires:
+            - build
+      - build_closure_modules:
+          requires:
+            - build
       - update_and_snapshot_docs:
             filters: *publish_branches_filter
             requires:
               - test_angularjs_1_7
               - test_angularjs_1_8
               - test_angularjs_snapshot
+              - build_js_modules
+              - build_closure_modules

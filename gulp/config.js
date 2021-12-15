@@ -94,7 +94,9 @@ module.exports = {
     'src/core/style/_mixins.scss'
   ],
   themeCore: 'src/core/style/core-theme.scss',
+  scssModules: 'src/core/style/_modules.scss',
   scssBaseFiles: [
+    'src/core/style/_modules.scss',
     'src/core/style/_variables.scss',
     'src/components/input/_input-variables.scss',
     'src/core/style/_mixins.scss',
@@ -105,12 +107,14 @@ module.exports = {
   ],
   scssServicesLayout: 'src/core/services/layout/layout.scss',
   scssLayoutFiles: [
+    'src/core/style/_modules.scss',
     'src/core/style/_variables.scss',
     'src/core/style/_mixins.scss',
     'src/core/style/layout.scss',
     'src/core/services/layout/layout.scss'
   ],
   scssLayoutAttributeFiles: [
+    'src/core/style/_modules.scss',
     'src/core/style/_variables.scss',
     'src/core/style/_mixins.scss',
     'src/core/services/layout/layout-attributes.scss'
