@@ -202,12 +202,24 @@ function buildModule(module, opts) {
       return fs.readFileSync(fileName, 'utf8').toString();
     }).join('\n');
 
+    let sassModules;
+    // Don't add the Sass modules to core since they get automatically included already.
+    if (name === 'core') {
+      sassModules = '';
+    } else {
+      sassModules = fs.readFileSync(config.scssModules, 'utf8').toString();
+    }
+
     return lazypipe()
     .pipe(insert.prepend, baseStyles)
     .pipe(gulpif, /theme.scss/, rename(name + '-default-theme.scss'), concat(name + '.scss'))
     // Theme files are suffixed with the `default-theme.scss` string.
     // In some cases there are multiple theme SCSS files, which should be concatenated together.
     .pipe(gulpif, /default-theme.scss/, concat(name + '-default-theme.scss'))
+    // We can't prepend these earlier, or they get duplicated in a way that hoistScssAtUseStatements
+    // can't deduplicate them.
+    .pipe(insert.prepend, sassModules)
+    .pipe(utils.hoistScssAtUseStatements)
     .pipe(sass)
     .pipe(dedupeCss)
     .pipe(utils.autoprefix)
@@ -246,7 +258,7 @@ function filterNonCodeFiles() {
   });
 }
 
-// builds the theming related css and provides it as a JS const for angular
+// builds the theming related css and provides it as a JS const for AngularJS
 function themeBuildStream() {
   // Make a copy so that we don't modify the actual config that is used by other functions
   const paths = config.themeBaseFiles.slice(0);

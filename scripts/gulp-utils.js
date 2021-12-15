@@ -289,6 +289,45 @@ exports.hoistScssVariables = function() {
   });
 };
 
+/**
+ * Find Sass @use module imports and ensure that they are at the very top of the Sass prior to
+ * running it through the Sass compiler. This also deduplicates @use statements to avoid errors.
+ */
+exports.hoistScssAtUseStatements = function() {
+  return through2.obj(function(file, enc, next) {
+    const contents = file.contents.toString().split('\n');
+    let lastAtUseLineNumber = -1;
+    const atUseStatements = [];
+
+    let openCount = 0;
+    let closeCount = 0;
+    let openBlock = false;
+
+    for (let currentLineNumber = 0; currentLineNumber < contents.length; ++currentLineNumber) {
+      const line = contents[currentLineNumber];
+
+      if (openBlock || /^\s*@use\s/.test(line) && !/^\s+/.test(line)) {
+        openCount += (line.match(/\(/g) || []).length;
+        closeCount += (line.match(/\)/g) || []).length;
+        openBlock = openCount !== closeCount;
+        // Don't move statements from line 0 to line 0.
+        if (currentLineNumber > 0) {
+          const atUseStatement = contents.splice(currentLineNumber, 1)[0];
+          // Don't write duplicate @use statements to avoid
+          // 'There's already a module with namespace x' errors.
+          if (!atUseStatements.includes(atUseStatement)) {
+            atUseStatements.push(atUseStatement);
+            contents.splice(++lastAtUseLineNumber, 0, atUseStatement);
+          }
+        }
+      }
+    }
+    file.contents = Buffer.from(contents.join('\n'));
+    this.push(file);
+    next();
+  });
+};
+
 exports.cssToNgConstant = function(ngModule, factoryName) {
   return through2.obj(function(file, enc, next) {
 
