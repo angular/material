@@ -1,3 +1,30 @@
+## [1.2.4](https://github.com/angular/material/compare/v1.2.3...v1.2.4) (2021-12-16)
+
+
+### Bug Fixes
+
+* **panel, select:** fix Trusted Types violations during initialization ([#12128](https://github.com/angular/material/issues/12128)) ([4e354a6](https://github.com/angular/material/commit/4e354a6ef15362920f23167194e52fb40cb70ea9))
+
+### Code Refactoring
+
+* **sass:** migrate from node-sass to sass ([5e2d213](https://github.com/angular/material/commit/5e2d21350cd0278f210c1e2bb951786c4047bbb6))
+    * If you consume our `.scss` files directly in your build, you will need to switch
+      from the deprecated `node-sass` package to the `sass` package for compiling your Sass.
+* **sass:** fix division deprecation warnings ([b5a1a02](https://github.com/angular/material/commit/b5a1a026202f9544847f2fba8e039c3abf1cdb1c))
+
+### Documentation
+
+* fix API docs issues related to `marked` Markdown rendering ([441a912](https://github.com/angular/material/commit/441a9127676ba4a28aa0c5bc18a70c09815c7221))
+
+### Contributors
+
+Thank you to the contributors who helped with the v1.2.4 release:
+
+[<img alt="Splaktar" src="https://avatars1.githubusercontent.com/u/3506071?v=4&s=117" width="117">](https://github.com/Splaktar) |[<img alt="bjarkler" src="https://avatars.githubusercontent.com/u/66124740?v=4&s=117" width="117">](https://github.com/bjarkler) |[<img alt="superheri" src="https://avatars.githubusercontent.com/u/30275781?v=4&s=117" width="117">](https://github.com/superheri) |
+:---: |:---: |:---: |
+[Splaktar](https://github.com/Splaktar) |[bjarkler](https://github.com/bjarkler) |[superheri](https://github.com/superheri) |
+
+
 ## [1.2.3](https://github.com/angular/material/compare/v1.2.2...v1.2.3) (2021-07-14)
 
 
