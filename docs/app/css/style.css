@@ -597,6 +597,17 @@ md-toolbar.demo-toolbar .md-button {
 
 }
 
+/***************************
+ * End Of Life (EOL) Banner
+ ***************************/
+.eol-notice {
+  background: #ECEFF1;
+  padding: 4px 16px;
+  text-align: center;
+  font-size: 13px;
+  margin: 0;
+}
+
 /***************
  * Landing Page
  ***************/
