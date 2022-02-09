@@ -178,7 +178,7 @@ function MdDialogDirective($$rAF, $mdTheming, $mdDialog) {
  *          locals: {
  *            items: ctrl.items
  *          },
- *          controller: DialogController
+ *          controller: DialogController,
  *          controllerAs: 'ctrl'
  *       });
  *       function DialogController($mdDialog) {
