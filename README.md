@@ -1,7 +1,6 @@
 # Material Design for AngularJS Apps
 [![npm version](https://badge.fury.io/js/angular-material.svg)](https://www.npmjs.com/package/angular-material)
 [![Build Status](https://travis-ci.org/angular/material.svg)](https://travis-ci.org/angular/material)
-[![Gitter](https://badges.gitter.im/angular/material2.svg)](https://gitter.im/angular/material?utm_source=badge&utm_medium=badge)
 
 [Material Design](https://material.io/archive/guidelines/) is a specification for a
 unified system of visual, motion, and interaction design that adapts across different devices. Our
@@ -16,24 +15,14 @@ For an implementation of the [Material Design Specification (2018+)](https://mat
 please see the [Angular Material](https://material.angular.io/) project which is built for
 [Angular](https://angular.io) (v2+) developers.
 
-### <a name="lts"></a> Long Term Support
+### <a name="lts"></a> End-of-Life
 
-AngularJS Material has entered a Long Term Support (LTS) period which ends on December 31st, 2021.
-This date aligns with the
-[AngularJS LTS](https://docs.angularjs.org/misc/version-support-status) period.
+**AngularJS Material support has officially ended as of January 2022.**
+[See what ending support means](https://docs.angularjs.org/misc/version-support-status)
+and [read the end of life announcement](https://goo.gle/angularjs-end-of-life). Visit
+[material.angular.io](https://material.angular.io) for the actively supported Angular Material.
 
-We now focus exclusively on providing fixes to bugs, in the 1.2.x branch of the library, that
-satisfy at least one of the following criteria:
-  - We receive a report of, or detect, a security weakness which is then verified
-  - A major browser releases a version that will cause current production applications
-    to stop working
-  - The [jQuery library](https://jquery.com/) releases a version that will cause
-    current production applications to stop working
-
-AngularJS Material 1.1.x will get a new version, if and only if, we verify a new severe security
-weakness.
-
-Learn how to report security issues
+Find details on reporting security issues
 [here](https://github.com/angular/material/blob/master/SECURITY.md).
 
 ![venn diagram](https://cloud.githubusercontent.com/assets/210413/5077572/30dfc2f0-6e6a-11e4-9723-07c918128f4f.png)
@@ -43,7 +32,6 @@ AngularJS Material includes a rich set of reusable, well-tested, and accessible 
 Quick Links:
 
 *  [API & Demos](#demos)
-*  [Contributing](#contributing)
 *  [Building](#building)
 *  [Installing](#installing)
 
@@ -69,54 +57,6 @@ AngularJS Material supports the screen reader versions listed
   theming system, typography, and more.
 - Or you can build the documentation and demos locally; see
   [Build Docs & Demos](https://github.com/angular/material/tree/master/docs/README.md) for details.
-
-
-## <a name="releasing"></a> Our Release Processes
-
-To preserve stability with applications currently using AngularJS Material, we do not follow semver.
-We have three types of releases:
-
-*  `major` :  major releases will be done in the separate [Angular Material](https://github.com/angular/components) repo.
- This type of release will not be used within AngularJS Material.
-*  `minor`:  contain breaking changes in addition to patch release changes.
-*  `patch`:  non-breaking changes (no API, CSS, UX changes that will cause breaks in existing AngularJS Material applications).
-
-##### Patch Releases
-
-The patch builds (1.2.1, 1.2.2, etc.) are prepared based on commits in the `master` branch;
-which contains only non-breaking changes (I.e. bug fixes, new features, API additions, and minimal
-non-breaking CSS changes). We are targeting `patch` releases every 2 weeks.
-
-##### Minor Releases
-
-The minor builds (1.1.0, 1.2.0, 1.3.0) can contain breaking changes to CSS, APIs, and UX.
-Our formal release of `minor` builds is much less frequent. The release process for `minor` builds is currently
-being re-evaluated.
-
-> For the purposes of AngularJS Material, you *could* think of the patch releases as being *minor* changes,
-  and the 'minor' releases as being *major* changes according to semver.
-
-## <a name="contributing"></a> Contributing
-
-Developers interested in contributing should read the following guidelines:
-
-- [Issue Guidelines](.github/CONTRIBUTING.md#submit)
-- [Contributing Guidelines](.github/CONTRIBUTING.md)
-- [Coding Guidelines](docs/guides/CODING.md)
-- [Pull Request Guide](docs/guides/PULL_REQUESTS.md)
-- [Software Process](docs/guides/COMMIT_LEVELS.md)
-- [Change Log](CHANGELOG.md)
-
-> Please do **not** ask general questions in an issue. Issues are only to report bugs, request
-  enhancements, or request new features. For general questions and discussions, use the
-  [AngularJS Material Forum](https://groups.google.com/forum/#!forum/ngmaterial).
-
-It is important to note that for each release, the [ChangeLog](CHANGELOG.md) is a resource that will
-itemize all:
-
-- Bug Fixes
-- New Enhancements
-- Breaking Changes
 
 ## <a name="building"></a> Building
 
