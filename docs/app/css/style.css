@@ -603,9 +603,12 @@ md-toolbar.demo-toolbar .md-button {
 .eol-notice {
   background: #ECEFF1;
   padding: 4px 16px;
-  text-align: center;
   font-size: 13px;
   margin: 0;
+}
+.eol-notice div {
+  max-width: 864px;
+  text-align: center;
 }
 
 /***************
