@@ -717,7 +717,8 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
         }
         return;
       } else if (option.hasAttribute('disabled')) {
-        mouseEvent.stopImmediatePropagation();
+        // just commented  for closing the options popover
+        // mouseEvent.stopImmediatePropagation();
         return;
       }
 
