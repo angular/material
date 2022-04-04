@@ -147,8 +147,10 @@ function MenuProvider($$interimElementProvider) {
        * Place the menu into the DOM and call positioning related functions
        */
       function showMenu() {
-        opts.parent.append(element);
-        element[0].style.display = '';
+        if (element.children().first().children()[0]) {
+          opts.parent.append(element);
+          element[0].style.display = '';
+        }
 
         return $q(function(resolve) {
           var position = calculateMenuPosition(element, opts);
