@@ -1,3 +1,7 @@
+## [1.2.5](https://github.com/angular/material/compare/v1.2.4...v1.2.5) (2022-04-11)
+
+One final release of AngularJS in order to update package README files on npm.
+
 ## [1.2.4](https://github.com/angular/material/compare/v1.2.3...v1.2.4) (2021-12-16)
 
 
