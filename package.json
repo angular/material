@@ -1,6 +1,6 @@
 {
   "name": "angular-material-source",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "The AngularJS Material project is an implementation of Material Design in AngularJS. This project provides a set of reusable, well-tested, and accessible Material Design UI components. AngularJS Material is supported internally at Google by the AngularJS, Angular Components, and other product teams.",
   "keywords": [
     "client-side",
@@ -50,6 +50,7 @@
     "autoprefixer": "^10.2.6",
     "canonical-path": "^1.0.0",
     "cli-color": "^2.0.0",
+    "cliui": "^7.0.4",
     "colors": "^1.4.0",
     "conventional-changelog": "^3.1.24",
     "cssnano": "^5.0.5",
@@ -79,7 +80,7 @@
     "jquery": "^3.6.0",
     "jshint": "^2.12.0",
     "jshint-summary": "^0.4.0",
-    "karma": "^6.3.3",
+    "karma": "^6.3.17",
     "karma-browserstack-launcher": "^1.6.0",
     "karma-chrome-launcher": "^3.1.0",
     "karma-firefox-launcher": "^2.1.1",
@@ -91,6 +92,7 @@
     "minimist": "^1.2.5",
     "mkdirp": "0.5.1",
     "moment": "^2.29.1",
+    "path-type": "^5.0.0",
     "postcss": "^8.3.0",
     "prompt-sync": "^4.2.0",
     "q": "^1.5.1",
@@ -99,9 +101,9 @@
     "through2": "^4.0.2"
   },
   "resolutions": {
-    "graceful-fs": "^4.2.8",
+    "graceful-fs": "4.2.9",
     "marked": "0.3.6",
-    "websocket-extensions": "~0.1.4"
+    "websocket-extensions": "0.1.4"
   },
   "scripts": {
     "build": "gulp build",
