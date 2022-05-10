@@ -1,0 +1,32 @@
+<md-content ng-controller="AppCtrl as ctrl" layout="row" layout-padding ng-cloak>
+  <md-calendar ng-model="ctrl.calendarDate" ng-model-options="{timezone: 'UTC'}">
+  </md-calendar>
+
+  <div layout="column" layout-padding>
+    <div>
+      <h4>Calendar Values</h4>
+      <div>
+        <strong>Date in local timezone:</strong>
+        {{ctrl.calendarDate|date:"yyyy-MM-dd HH:mm Z"}}
+      </div>
+      <div>
+        <strong>Date in UTC timezone:</strong>
+        {{ctrl.calendarDate|date:"yyyy-MM-dd HH:mm Z":"UTC"}}
+      </div>
+    </div>
+    <md-divider></md-divider>
+    <md-datepicker ng-model="ctrl.datepickerDate" ng-model-options="{timezone: 'UTC'}">
+    </md-datepicker>
+    <div>
+      <h4>Datepicker Values</h4>
+      <div>
+        <strong>Date in local timezone:</strong>
+        {{ctrl.datepickerDate|date:"yyyy-MM-dd HH:mm Z"}}
+      </div>
+      <div>
+        <strong>Date in UTC timezone:</strong>
+        {{ctrl.datepickerDate|date:"yyyy-MM-dd HH:mm Z":"UTC"}}
+      </div>
+    </div>
+  </div>
+</md-content>
