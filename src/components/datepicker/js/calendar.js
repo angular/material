@@ -364,11 +364,23 @@
   CalendarCtrl.prototype.setNgModelValue = function(date) {
     var timezone = this.$mdUtil.getModelOption(this.ngModelCtrl, 'timezone');
     var value = this.dateUtil.createDateAtMidnight(date);
+
+    if (timezone != null && timezone != "") {
+      // If timezone is specified - then convert to midnight of specified timezone to display
+      var offset = value.getTimezoneOffset();
+      if (offset < 0) {
+        // Convert negative offset to positive
+        value.setMinutes(-1*(offset), 0, 0);
+      }
+      else {
+        value.setMinutes(offset, 0, 0);
+      }
+    }
+
     this.focusDate(value);
     this.$scope.$emit('md-calendar-change', value);
-    // Using the timezone when the offset is negative (GMT+X) causes the previous day to be
-    // selected here. This check avoids that.
-    if (timezone == null || value.getTimezoneOffset() < 0) {
+
+    if (timezone == null || timezone == "") {
       this.ngModelCtrl.$setViewValue(this.ngDateFilter(value, 'yyyy-MM-dd'), 'default');
     } else {
       this.ngModelCtrl.$setViewValue(this.ngDateFilter(value, 'yyyy-MM-dd', timezone), 'default');
