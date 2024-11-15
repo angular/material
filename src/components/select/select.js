@@ -696,7 +696,7 @@ function SelectMenuDirective($parse, $mdUtil, $mdConstant, $mdTheming) {
      * @param {KeyboardEvent} keyboardEvent
      */
     function keyListener(keyboardEvent) {
-      if (keyboardEvent.keyCode === 13 || keyboardEvent.keyCode === 32) {
+      if (keyboardEvent.key.toLowerCase() === 'enter' || keyboardEvent.key.toLowerCase() === 'space') {
         clickListener(keyboardEvent);
       }
     }
